@@ -1,8 +1,21 @@
 package com.jnhyxx.html5.net;
 
+import com.jnhyxx.html5.BuildConfig;
+
 public class Api {
 
-    public static final String HOST = "http://app1.jnhyxx.com";
+    public static String HOST = "http://www.jnhyxx.com";
+
+    static {
+        switch (BuildConfig.FLAVOR) {
+            case "app1":
+                HOST = "http://app1.jnhyxx.com";
+                break;
+            default:
+                HOST = "http://www.jnhyxx.com";
+                break;
+        }
+    }
 
     //public static final String HOST0 = "http://www.jnhyxx.com";
 

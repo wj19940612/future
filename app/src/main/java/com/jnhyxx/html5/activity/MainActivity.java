@@ -1,12 +1,10 @@
 package com.jnhyxx.html5.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -23,12 +21,10 @@ import com.jnhyxx.html5.utils.ToastUtil;
 
 import java.net.URISyntaxException;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = "Web";
+public class MainActivity extends BaseActivity {
 
     private ProgressBar mProgressBar;
-    private WebView mWebView;
+    protected WebView mWebView;
 
     private Handler mHandler;
 
@@ -42,20 +38,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        mProgressBar.setIndeterminateDrawable(new ColorDrawable(Color.BLACK));
-        mProgressBar.setMax(100);
 
         mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.loadUrl(Api.getMainUrl());
 
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-
+        // init webSettings
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setUserAgentString(getString(R.string.android_web_agent));
         //mWebView.getSettings().setAppCacheEnabled(true);
-        mWebView.getSettings().setAppCachePath(getExternalCacheDir().getPath());
-        mWebView.getSettings().setDomStorageEnabled(true);
-        mWebView.getSettings().setAllowFileAccess(true);
+        webSettings.setAppCachePath(getExternalCacheDir().getPath());
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAllowFileAccess(true);
+
         mWebView.clearHistory();
         mWebView.clearCache(true);
         mWebView.clearFormData();
@@ -64,20 +60,8 @@ public class MainActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                //Log.i("onPageStarted", " url = " + url);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                //Log.i("onPageFinished", " url = " + url);
-            }
-
-            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                //Log.i(TAG, " url = " + url);
+                Log.i(getTAG(), " url = " + url);
                 if (url.contains("qr.alipay.com")) {
                     openAlipay(view, url);
                     return true;
@@ -106,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mWebView.loadUrl(Api.getMainUrl());
     }
 
     private void openQQChat(WebView webView, String url) {

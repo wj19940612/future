@@ -37,6 +37,8 @@
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
+-keep public class * extends java.lang.Throwable {*;}
+-keep public class * extends java.lang.Exception {*;}
 
 ## Serializable
 -keepclassmembers class * implements java.io.Serializable {
@@ -50,3 +52,7 @@
 
 ## Attributes
 -keepattributes SourceFile,LineNumberTable,Signature,InnerClasses
+
+# Jar: via sdk v1
+-keep class com.wo.**{*;}
+-keep public class org.eclipse.paho.**{*;}

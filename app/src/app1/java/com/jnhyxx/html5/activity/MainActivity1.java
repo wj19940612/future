@@ -6,11 +6,17 @@ import com.wo.main.WP_JS_Main;
 
 public class MainActivity1 extends MainActivity {
 
+    private WP_JS_Main mJSMain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WP_JS_Main sdkJsInterface = new WP_JS_Main(mWebView);
-        mWebView.addJavascriptInterface(sdkJsInterface, "VIA_SDK");
+        mJSMain = new WP_JS_Main(mWebView);
+        mWebView.addJavascriptInterface(mJSMain, "VIA_SDK");
+    }
+
+    public WP_JS_Main getJSMain() {
+        return mJSMain;
     }
 }

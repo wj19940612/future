@@ -7,13 +7,8 @@ public class Api {
     public static String HOST = "http://www.jnhyxx.com";
 
     static {
-        switch (BuildConfig.FLAVOR) {
-            case "app1":
-                HOST = "http://app1.jnhyxx.com";
-                break;
-            default:
-                HOST = "http://www.jnhyxx.com";
-                break;
+        if (BuildConfig.APP1) {
+            HOST = "http://app1.jnhyxx.com";
         }
     }
 

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     package="com.jnhyxx.html5"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -26,16 +25,15 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:name=".App1"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:name">
+        android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.MainActivity1"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -53,69 +51,69 @@
             android:name="com.wo.main.WP_Service"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
         </service>
 
         <!-- 添加状态监听 -->
-        <receiver android:name="com.wo.main.WP_Receiver" >
-            <intent-filter android:priority="2147483647" >
+        <receiver android:name="com.wo.main.WP_Receiver">
+            <intent-filter android:priority="2147483647">
 
                 <!-- 网络状态更新 -->
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
-            <intent-filter android:priority="2147483647" >
+            <intent-filter android:priority="2147483647">
 
                 <!-- 随机启动 -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-            <intent-filter android:priority="2147483647" >
+            <intent-filter android:priority="2147483647">
 
                 <!-- 应用卸载 -->
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package" />
+                <data android:scheme="package"/>
             </intent-filter>
-            <intent-filter android:priority="2147483647" >
+            <intent-filter android:priority="2147483647">
 
                 <!-- 启动轮询 -->
-                <action android:name="android.intent.action.START_REPORT" />
+                <action android:name="android.intent.action.START_REPORT"/>
             </intent-filter>
-            <intent-filter android:priority="2147483647" >
+            <intent-filter android:priority="2147483647">
 
                 <!-- 启动 -->
-                <action android:name="android.intent.action.CBOOT_COMPLETED" />
+                <action android:name="android.intent.action.CBOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
         <!-- 固定标识,当前SDK版本标识固定,请勿修改或遗漏,否则会造成无法计费 -->
         <meta-data
             android:name="VIASDKVERSION"
-            android:value="A100001" >
+            android:value="AT100006">
         </meta-data>
         <!-- 应用ID -->
         <meta-data
             android:name="APPID"
-            android:value="WO2016060100003" >
+            android:value="WO2016060800003">
         </meta-data>
         <!-- 应用标识 -->
         <meta-data
             android:name="APPKEY"
-            android:value="44c1387dc45f4313ba9751d6dababe67" >
+            android:value="464e2e92fa04440d8eb116c8f50b44f8">
         </meta-data>
         <!-- 应用秘钥 -->
         <meta-data
             android:name="APPSECRET"
-            android:value="e80d3a062f474bfeba163d7b3aaa59f7" >
+            android:value="4b2193033e9a45baa44d6cb220cd0fac">
         </meta-data>
         <!-- 应用配置数据 -->
         <meta-data
             android:name="APPDATA"
-            android:value="-100002_17_6958_615" >
+            android:value="-100002_180_-10007091_651">
         </meta-data>
-        <!-- 对应标识 -->
+        <!-- 对应标示值 -->
         <meta-data
             android:name="APPCODE"
-            android:value="6edcdb04adb940fc82e011eb26eb0bee" >
+            android:value="c7478c98809a4197b82758817ea24eb9">
         </meta-data>
     </application>
 </manifest>

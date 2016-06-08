@@ -3,6 +3,8 @@ package com.jnhyxx.html5;
 import android.app.Application;
 import android.content.Context;
 
+import com.wo.main.WP_App;
+
 public class App extends Application {
 
     private static Context sContext;
@@ -11,6 +13,14 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = this;
+
+        if (BuildConfig.APP1) {
+            try {
+                WP_App.on_AppInit(getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static Context getAppContext() {

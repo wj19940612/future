@@ -27,7 +27,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void gotoMain(){
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         supportFinishAfterTransition();
     }
 

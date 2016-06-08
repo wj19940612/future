@@ -1,9 +1,11 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -12,34 +14,103 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.jnhyxx.html5.AppJs;
+import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
 
 public class MainActivity extends BaseActivity {
 
-    private ProgressBar mProgressBar;
-    protected WebView mWebView;
+    private static final String TAG = "WebView";
 
-    private Handler mHandler;
+    private ProgressBar mProgressBar;
+    private WebView mWebView;
+    private LinearLayout mErrorPage;
+    private Button mRefreshButton;
+
+    private WebHandler mHandler;
+    private boolean mLoadSuccess;
+
+    private static class WebHandler extends Handler {
+
+        private Context mContext;
+
+        public WebHandler(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+
+        }
+    }
+
+    private class WebVClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Log.i(TAG, " url = " + url);
+            if (url.contains("qr.alipay.com")) {
+                openAlipay(view, url);
+                return true;
+            }
+
+            if (url.startsWith("mqqwpa:")) {
+                openQQChat(view, url);
+                return true;
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            Log.d(TAG, "onPageStarted: " + url);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            Log.d(TAG, "onPageFinished: " + url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+            if (errorCode <= ERROR_UNKNOWN) {
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        mHandler = new Handler();
+
+        mHandler = new WebHandler(this);
     }
 
     private void initView() {
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-
+        mErrorPage = (LinearLayout) findViewById(R.id.errorPage);
         mWebView = (WebView) findViewById(R.id.webView);
+
+        mRefreshButton = (Button) findViewById(R.id.refreshButton);
+        mRefreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWebView.reload();
+            }
+        });
 
         // init webSettings
         WebSettings webSettings = mWebView.getSettings();
@@ -57,26 +128,14 @@ public class MainActivity extends BaseActivity {
         mWebView.clearFormData();
         mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
 
-        mWebView.setWebViewClient(new WebViewClient() {
+        if (BuildConfig.APP1) {
+            WP_JS_Main wpJsMain = new WP_JS_Main(mWebView);
+            mWebView.addJavascriptInterface(wpJsMain, "VIA_SDK");
+        }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.i(getTAG(), " url = " + url);
-                if (url.contains("qr.alipay.com")) {
-                    openAlipay(view, url);
-                    return true;
-                }
-
-                if (url.startsWith("mqqwpa:")) {
-                    openQQChat(view, url);
-                    return true;
-                }
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-        });
+        mWebView.setWebViewClient(new WebVClient());
 
         mWebView.setWebChromeClient(new WebChromeClient() {
-
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
@@ -90,11 +149,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-    }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
         mWebView.loadUrl(Api.getMainUrl());
     }
 
@@ -161,6 +216,8 @@ public class MainActivity extends BaseActivity {
         }
         cleanCookie();
         super.onDestroy();
+
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     private void cleanCookie() {

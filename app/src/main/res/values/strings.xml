@@ -2,4 +2,8 @@
     <string name="app_name">恒运操盘手</string>
     <string name="install_qq_first">请先安装QQ</string>
     <string name="android_web_agent">ANDROID_AGENT</string>
+
+    <!-- WebView network error -->
+    <string name="network_error_please_reload">网络连接失败 请重新加载</string>
+    <string name="refresh">刷新</string>
 </resources>

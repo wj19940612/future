@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -120,13 +121,24 @@ public class MainActivity extends BaseActivity {
         webSettings.setUserAgentString(getString(R.string.android_web_agent));
         //mWebView.getSettings().setAppCacheEnabled(true);
         webSettings.setAppCachePath(getExternalCacheDir().getPath());
-        webSettings.setDomStorageEnabled(true);
         webSettings.setAllowFileAccess(true);
+
+        // performance improve
+        webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        webSettings.setEnableSmoothTransition(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setUseWideViewPort(true);
 
         mWebView.clearHistory();
         mWebView.clearCache(true);
         mWebView.clearFormData();
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
+        if (Build.VERSION.SDK_INT >= 19) {
+            mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else {
+            mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
 
         if (BuildConfig.APP1) {
             WP_JS_Main wpJsMain = new WP_JS_Main(mWebView);
@@ -134,7 +146,6 @@ public class MainActivity extends BaseActivity {
         }
 
         mWebView.setWebViewClient(new WebVClient());
-
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -149,7 +160,6 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
         mWebView.loadUrl(Api.getMainUrl());
     }
 

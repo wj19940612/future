@@ -12,6 +12,8 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,6 +25,7 @@ import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.net.Api;
+import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.wo.main.WP_JS_Main;
 
@@ -39,6 +42,7 @@ public class MainActivity extends BaseActivity {
 
     private WebHandler mHandler;
     private boolean mLoadSuccess;
+    private String mPageUrl;
 
     private static class WebHandler extends Handler {
 
@@ -58,7 +62,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.i(TAG, " url = " + url);
+            Log.d(TAG, " url = " + url);
             if (url.contains("qr.alipay.com")) {
                 openAlipay(view, url);
                 return true;
@@ -75,18 +79,46 @@ public class MainActivity extends BaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             Log.d(TAG, "onPageStarted: " + url);
+
+            mLoadSuccess = true;
+            mPageUrl = url;
+
+            if (!Network.isNetworkAvailable()) {
+                mLoadSuccess = false;
+                mWebView.stopLoading();
+            }
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             Log.d(TAG, "onPageFinished: " + url);
+
+            if (mLoadSuccess) {
+                mWebView.setVisibility(View.VISIBLE);
+                mErrorPage.setVisibility(View.GONE);
+            } else {
+                mWebView.setVisibility(View.GONE);
+                mErrorPage.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String requestUrl = request.getUrl().toString();
+                if (mPageUrl.equalsIgnoreCase(requestUrl) && error.getErrorCode() <= ERROR_UNKNOWN) {
+                    mLoadSuccess = false;
+                }
+            }
         }
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            if (errorCode <= ERROR_UNKNOWN) {
+            if (mPageUrl.equalsIgnoreCase(failingUrl) && errorCode <= ERROR_UNKNOWN) {
+                mLoadSuccess = false;
             }
         }
     }

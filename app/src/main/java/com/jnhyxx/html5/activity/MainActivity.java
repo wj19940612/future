@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,6 +32,8 @@ import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
 
+import static com.jnhyxx.html5.utils.Network.*;
+
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "WebView";
@@ -40,9 +43,12 @@ public class MainActivity extends BaseActivity {
     private LinearLayout mErrorPage;
     private Button mRefreshButton;
 
+    private BroadcastReceiver mNetworkChangeReceiver;
+
     private WebHandler mHandler;
     private boolean mLoadSuccess;
     private String mPageUrl;
+
 
     private static class WebHandler extends Handler {
 
@@ -83,7 +89,7 @@ public class MainActivity extends BaseActivity {
             mLoadSuccess = true;
             mPageUrl = url;
 
-            if (!Network.isNetworkAvailable()) {
+            if (!isNetworkAvailable()) {
                 mLoadSuccess = false;
                 mWebView.stopLoading();
             }
@@ -130,6 +136,20 @@ public class MainActivity extends BaseActivity {
         initView();
 
         mHandler = new WebHandler(this);
+        mNetworkChangeReceiver = new NetworkReceiver();
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
     }
 
     private void initView() {
@@ -266,5 +286,17 @@ public class MainActivity extends BaseActivity {
         CookieSyncManager.createInstance(this.getApplicationContext());
         CookieManager.getInstance().removeAllCookie();
         CookieSyncManager.getInstance().sync();
+    }
+
+    private class NetworkReceiver extends Network.NetworkChangeReceiver {
+
+        @Override
+        protected void onNetworkChanged(int availableNetworkType) {
+            if (availableNetworkType > Network.NET_NONE && !mLoadSuccess) {
+                if (mWebView != null) {
+                    mWebView.reload();
+                }
+            }
+        }
     }
 }

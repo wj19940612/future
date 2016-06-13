@@ -33,7 +33,9 @@ import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
 
-import static com.jnhyxx.html5.utils.Network.*;
+import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
+import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
+import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class MainActivity extends BaseActivity {
 
@@ -139,12 +141,14 @@ public class MainActivity extends BaseActivity {
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ShareUtil.getInstance().setShare("title", "content", "http://baidu.com", R.mipmap.ic_launcher);
-            }
-        }, 3000);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                ShareUtil.getInstance().setShare("title", "content", "http://baidu.com", R.mipmap.ic_launcher);
+//                ShareUtil.getInstance().openShareBoard(getActivity(),
+//                        new ShareUtil.ShareResultListener(getActivity()));
+//            }
+//        }, 3000);
     }
 
 

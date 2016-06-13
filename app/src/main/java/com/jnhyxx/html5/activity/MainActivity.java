@@ -28,6 +28,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.umenglibrary.utils.ShareUtil;
 import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
@@ -137,6 +138,13 @@ public class MainActivity extends BaseActivity {
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ShareUtil.getInstance().setShare("title", "content", "http://baidu.com", R.mipmap.ic_launcher);
+            }
+        }, 3000);
     }
 
 

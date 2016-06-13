@@ -3,6 +3,7 @@ package com.jnhyxx.html5;
 import android.app.Application;
 import android.content.Context;
 
+import com.jnhyxx.umenglibrary.UmengLib;
 import com.wo.main.WP_App;
 
 public class App extends Application {
@@ -21,6 +22,8 @@ public class App extends Application {
                 e.printStackTrace();
             }
         }
+
+        UmengLib.init();
     }
 
     public static Context getAppContext() {

@@ -11,7 +11,7 @@ public class UmengLib {
         PlatformConfig.setWeixin("wx1de55e278c2a76db", "22632d783963e97c1446f08851932962");
         //豆瓣RENREN平台目前只能在服务器端配置
         //新浪微博
-        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad");
+        PlatformConfig.setSinaWeibo("546184142", "ae5b3c3c2cc18ab7d4b5a451c10aef29");
         //易信
         //PlatformConfig.setYixin("yxc0614e80c9304c11b0391514d09f13bf");
         PlatformConfig.setQQZone("1105469310", "DcEYIGxqIN07krsr");

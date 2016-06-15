@@ -9,6 +9,8 @@ public class Api {
     static {
         if (BuildConfig.APP1) {
             HOST = "http://app1.jnhyxx.com";
+        } else if (BuildConfig.TEST) {
+            HOST = "http://test.jnhyxx.com";
         }
     }
 

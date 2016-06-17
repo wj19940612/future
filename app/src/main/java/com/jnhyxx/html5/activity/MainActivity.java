@@ -38,7 +38,7 @@ import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String TAG = "WebView";
+    private static final String TAG = "TEST";
 
     private ProgressBar mProgressBar;
     private WebView mWebView;
@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity {
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Log.d(TAG, "onReceivedError: >= M");
                 String requestUrl = request.getUrl().toString();
                 if (mPageUrl.equalsIgnoreCase(requestUrl) && error.getErrorCode() <= ERROR_UNKNOWN) {
                     mLoadSuccess = false;
@@ -125,6 +126,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
+            Log.d(TAG, "onReceivedError: ");
             if (mPageUrl.equalsIgnoreCase(failingUrl) && errorCode <= ERROR_UNKNOWN) {
                 mLoadSuccess = false;
             }
@@ -139,6 +141,7 @@ public class MainActivity extends BaseActivity {
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
+        mLoadSuccess = true;
     }
 
 

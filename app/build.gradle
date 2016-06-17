@@ -22,7 +22,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro',
-                    'proguard-rules.txt'
+                    'proguard-umeng.txt'
 
             signingConfig signingConfigs.release
         }
@@ -67,5 +67,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     app1Compile files('libs/via_sdk_v1.jar')
+    provided files('libs/via_sdk_v1.jar')
     compile project(':umenglibrary')
 }

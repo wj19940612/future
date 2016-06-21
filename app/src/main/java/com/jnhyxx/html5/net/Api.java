@@ -1,15 +1,15 @@
 package com.jnhyxx.html5.net;
 
-import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.Variant;
 
 public class Api {
 
     public static String HOST = "http://www.jnhyxx.com";
 
     static {
-        if (BuildConfig.APP1) {
+        if (Variant.isApp1()) {
             HOST = "http://app1.jnhyxx.com";
-        } else if (BuildConfig.TEST) {
+        } else if (Variant.isForH5()) {
             HOST = "http://test.jnhyxx.com";
         }
     }

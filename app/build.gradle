@@ -38,24 +38,19 @@ android {
             targetSdkVersion 23
             versionCode 2
             versionName '1.0.1'
-            buildConfigField('boolean', 'APP1', 'false');
-            buildConfigField('boolean', 'TEST', 'false');
         }
         app1 {
             minSdkVersion 14
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
-            buildConfigField('boolean', 'APP1', 'true');
-            buildConfigField('boolean', 'TEST', 'false');
         }
         forH5 {
+            applicationIdSuffix '.test'
             minSdkVersion 14
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
-            buildConfigField('boolean', 'APP1', 'false');
-            buildConfigField('boolean', 'TEST', 'true');
         }
     }
 }

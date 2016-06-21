@@ -15,7 +15,7 @@ public class App extends Application {
         super.onCreate();
         sContext = this;
 
-        if (BuildConfig.APP1) {
+        if (Variant.isApp1()) {
             try {
                 WP_App.on_AppInit(getApplicationContext());
             } catch (Exception e) {

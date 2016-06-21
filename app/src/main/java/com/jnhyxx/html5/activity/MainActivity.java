@@ -23,8 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.jnhyxx.html5.AppJs;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.Variant;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity {
             mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        if (BuildConfig.APP1) {
+        if (Variant.isApp1()) {
             WP_JS_Main wpJsMain = new WP_JS_Main(mWebView);
             mWebView.addJavascriptInterface(wpJsMain, "VIA_SDK");
         }

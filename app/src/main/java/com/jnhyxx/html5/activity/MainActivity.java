@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        webSettings.setUserAgentString(getString(R.string.android_web_agent));
+        webSettings.setUserAgentString(getString(R.string.android_web_agent) + "/1.0");
         //mWebView.getSettings().setAppCacheEnabled(true);
         webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);

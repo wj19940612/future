@@ -69,7 +69,6 @@ public class ShareUtil {
                         .setDisplayList(SHARE_MEDIA.WEIXIN,
                                 SHARE_MEDIA.WEIXIN_CIRCLE,
                                 SHARE_MEDIA.QZONE,
-                                SHARE_MEDIA.SINA,
                                 SHARE_MEDIA.QQ)
                         .setShareboardclickCallback(new ShareBoardlistener() {
                             @Override

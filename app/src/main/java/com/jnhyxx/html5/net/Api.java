@@ -11,6 +11,8 @@ public class Api {
             HOST = "http://app1.jnhyxx.com";
         } else if (Variant.isForH5()) {
             HOST = "http://test.jnhyxx.com";
+        } else if (Variant.isMicroil()) {
+            HOST = "http://wp7.jnhyxx.com";
         }
     }
 

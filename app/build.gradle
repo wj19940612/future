@@ -45,6 +45,13 @@ android {
             versionCode 1
             versionName '1.0'
         }
+        microil {
+            applicationId 'com.jnhyxx.microil'
+            minSdkVersion 14
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
         forH5 {
             applicationIdSuffix '.test'
             minSdkVersion 14

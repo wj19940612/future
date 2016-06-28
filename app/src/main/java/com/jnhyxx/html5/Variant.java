@@ -4,6 +4,7 @@ public class Variant {
     public static final String FLAVOR_APP1 = "app1";
     public static final String FLAVOR_ORIGIN = "origin";
     public static final String FLAVOR_H5 = "forH5";
+    public static final String FLAVOR_MICROIL = "microil";
 
     public static boolean isApp1() {
         return BuildConfig.FLAVOR.equals(FLAVOR_APP1);
@@ -15,6 +16,10 @@ public class Variant {
 
     public static boolean isForH5() {
         return BuildConfig.FLAVOR.equals(FLAVOR_H5);
+    }
+
+    public static boolean isMicroil() {
+        return BuildConfig.FLAVOR.equals(FLAVOR_MICROIL);
     }
 }
 

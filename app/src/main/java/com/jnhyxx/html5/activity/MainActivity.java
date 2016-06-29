@@ -28,6 +28,7 @@ import com.jnhyxx.html5.Variant;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.Launcher;
 import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
@@ -138,12 +139,41 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initListener();
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
     }
 
+    private void initListener() {
+        mWebView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                WebView.HitTestResult result = mWebView.getHitTestResult();
+                if (result != null) {
+                    int type = result.getType();
+                    Log.d(TAG, "onLongClick: " + type);
+                    if (type == WebView.HitTestResult.IMAGE_TYPE) {
+                        showSaveImageDialog(result);
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void showSaveImageDialog(WebView.HitTestResult result) {
+        final String imageUrl = result.getExtra();
+        Launcher.with(this, SaveImageActivity.class)
+                .setPreExecuteListener(new Launcher.PreExecuteListener() {
+                    @Override
+                    public void preExecute(Intent intent) {
+                        intent.putExtra(SaveImageActivity.EXTRA_IMAGE_URL, imageUrl);
+                    }
+                })
+                .execute();
+    }
 
     @Override
     protected void onPostResume() {

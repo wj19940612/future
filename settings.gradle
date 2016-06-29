@@ -1,1 +1,1 @@
-include ':app', ':umenglibrary'
+include ':app', ':umenglibrary', ':kutils'

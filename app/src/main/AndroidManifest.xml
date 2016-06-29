@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.jnhyxx.html5"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.jnhyxx.html5"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -21,7 +20,8 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
 
     <permission android:name="${applicationId}.permission.TEST"/>
-    <uses-permission android:name="${applicationId}.permission.TEST" />
+
+    <uses-permission android:name="${applicationId}.permission.TEST"/>
 
     <application
         android:name=".App"
@@ -31,11 +31,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
@@ -47,17 +45,17 @@
         </activity>
 
         <!-- Share related -->
-        <!-- sina weibo callback-->
+        <!-- sina weibo callback -->
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -65,7 +63,7 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
 
-        <!-- wechat callback-->
+        <!-- wechat callback -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -73,5 +71,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <!-- Necessary -->
+        <activity
+            android:theme="@style/DialogTheme.NoTitle"
+            android:name=".activity.SaveImageActivity"
+            android:screenOrientation="portrait"/>
     </application>
+
 </manifest>

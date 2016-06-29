@@ -68,4 +68,6 @@ dependencies {
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
     compile project(':umenglibrary')
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile project(':kutils')
 }

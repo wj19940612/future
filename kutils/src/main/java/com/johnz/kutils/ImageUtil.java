@@ -48,7 +48,7 @@ public class ImageUtil {
     public File saveGalleryBitmap(Context context, Bitmap bitmap, String fileName) {
         File file = saveBitmap(bitmap, fileName);
         String[] paths = {file.getAbsolutePath()};
-        String[] mimeTypes = null;
+        String[] mimeTypes = {"image/jpeg"};
         MediaScannerConnection.scanFile(context, paths, mimeTypes, new MediaScannerConnection.OnScanCompletedListener() {
             @Override
             public void onScanCompleted(String path, Uri uri) {

@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.utils.AppInfo;
+import com.johnz.kutils.AppInfo;
+import com.umeng.onlineconfig.OnlineConfigAgent;
 
 public class SplashActivity extends BaseActivity {
 
@@ -19,7 +21,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
 
         mVersionName = (TextView) findViewById(R.id.versionName);
-        mVersionName.setText(AppInfo.getVersionName());
+        mVersionName.setText(AppInfo.getVersionName(this));
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -40,6 +42,9 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }).start();
+
+        OnlineConfigAgent.getInstance().setDebugMode(BuildConfig.DEBUG);
+        OnlineConfigAgent.getInstance().updateOnlineConfig(this);
     }
 
     private void gotoMain(){

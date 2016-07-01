@@ -16,16 +16,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    publishNonDefault true
+
+    productFlavors {
+        origin {
+            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
+        }
+        microil {
+            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
     compile files('libs/SocialSDK_Sina.jar')
     compile files('libs/SocialSDK_WeiXin_1.jar')
     compile files('libs/SocialSDK_WeiXin_2.jar')
     compile files('libs/weiboSDKCore_3.1.4.jar')
     compile files('libs/umeng_social_sdk.jar')
+    compile files('libs/umeng-onlineconfig_v1.0.0.jar')
 }

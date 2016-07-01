@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -25,9 +26,11 @@ import android.widget.ProgressBar;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.Variant;
+import com.jnhyxx.html5.fragment.UpgradeDialog;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.johnz.kutils.Launcher;
 import com.wo.main.WP_JS_Main;
 
@@ -140,10 +143,19 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initView();
         initListener();
+        checkVersion();
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
+    }
+
+    private void checkVersion() {
+        if (UpgradeUtil.hasNewVersion(this)) {
+            boolean forceUpgrade = UpgradeUtil.isForceUpgrade(this);
+            DialogFragment dialogFragment = UpgradeDialog.newInstance(forceUpgrade);
+            dialogFragment.show(getSupportFragmentManager(), "upgrade");
+        }
     }
 
     private void initListener() {

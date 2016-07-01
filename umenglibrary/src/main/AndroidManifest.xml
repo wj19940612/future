@@ -53,7 +53,7 @@
         <!-- umengAppKey，replace to yours -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="561cae6ae0f55abd990035bf">
+            android:value="${UMENG_APPKEY}">
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"

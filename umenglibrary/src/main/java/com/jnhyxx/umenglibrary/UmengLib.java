@@ -1,10 +1,22 @@
 package com.jnhyxx.umenglibrary;
 
+import android.content.Context;
+
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.PlatformConfig;
 
 public class UmengLib {
 
-    public static void init() {
+    public static void init(Context context) {
+        initShare();
+        initAnalysis(context);
+    }
+
+    private static void initAnalysis(Context context) {
+        MobclickAgent.setScenarioType(context, MobclickAgent.EScenarioType.E_UM_NORMAL);
+    }
+
+    private static void initShare() {
         //各个平台的配置，建议放在全局Application或者程序入口
 
         //微信    wx12342956d1cab4f9,a5ae111de7d9ea137e88a5e02c07c94d

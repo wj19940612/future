@@ -11,5 +11,9 @@
     <string name="save_image">保存图片</string>
     <string name="save_qrcode_to">二维码保存至%1$s</string>
     <string name="save_qrcode_failure">二维码保存失败</string>
+    <string name="discovery_new_version">发现新版本</string>
+    <string name="upgrade_later">稍后再说</string>
+    <string name="download_and_install">下载安装</string>
+    <string name="install_immediately">已下载,直接安装</string>
 
 </resources>

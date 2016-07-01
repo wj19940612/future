@@ -65,9 +65,12 @@ android {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.squareup.picasso:picasso:2.3.2'
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
-    compile project(':umenglibrary')
-    compile 'com.squareup.picasso:picasso:2.3.2'
     compile project(':kutils')
+    microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
+    originCompile project(path: ':umenglibrary', configuration: 'originRelease')
+    app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
+    forH5Compile project(path: ':umenglibrary', configuration: 'originRelease')
 }

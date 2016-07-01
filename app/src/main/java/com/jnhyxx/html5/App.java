@@ -23,7 +23,7 @@ public class App extends Application {
             }
         }
 
-        UmengLib.init();
+        UmengLib.init(sContext);
     }
 
     public static Context getAppContext() {

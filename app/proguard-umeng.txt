@@ -81,3 +81,24 @@
 
 -keep class com.linkedin.** { *; }
 -keepattributes Signature
+
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keep public class com.jnhyxx.html5.R$*{
+public static final int *;
+}
+
+# Umeng online configs
+-keep class com.umeng.onlineconfig.OnlineConfigAgent {
+        public <fields>;
+        public <methods>;
+}
+-keep class com.umeng.onlineconfig.OnlineConfigLog {
+        public <fields>;
+        public <methods>;
+}
+-keep interface com.umeng.onlineconfig.UmengOnlineConfigureListener {
+        public <methods>;
+}

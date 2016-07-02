@@ -151,6 +151,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void checkVersion() {
+        UpgradeUtil.log(this);
         if (UpgradeUtil.hasNewVersion(this)) {
             boolean forceUpgrade = UpgradeUtil.isForceUpgrade(this);
             DialogFragment dialogFragment = UpgradeDialog.newInstance(forceUpgrade);

@@ -19,10 +19,6 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
 
-    <permission android:name="${applicationId}.permission.TEST"/>
-
-    <uses-permission android:name="${applicationId}.permission.TEST"/>
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -76,6 +72,8 @@
             android:theme="@style/DialogTheme.NoTitle"
             android:name=".activity.SaveImageActivity"
             android:screenOrientation="portrait"/>
+
+        <service android:name=".service.DownloadService"/>
     </application>
 
 </manifest>

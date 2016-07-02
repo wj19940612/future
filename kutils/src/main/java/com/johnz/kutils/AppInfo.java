@@ -1,7 +1,9 @@
 package com.johnz.kutils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 public class AppInfo {
 
@@ -19,5 +21,19 @@ public class AppInfo {
             e.printStackTrace();
         }
         return versionName;
+    }
+
+    public static String getMetaData(Context context, String name) {
+        PackageManager packageManager = context.getPackageManager();
+        String result = "";
+        try {
+            ApplicationInfo info = packageManager.getApplicationInfo(context.getPackageName(),
+                    PackageManager.GET_META_DATA);
+            result = info.metaData.get(name).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
     }
 }

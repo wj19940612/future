@@ -8,6 +8,13 @@
         </shape>
     </item>
 
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="5dp"/>
+            <solid android:color="@android:color/darker_gray"/>
+        </shape>
+    </item>
+
     <item>
         <shape>
             <corners android:radius="5dp"/>

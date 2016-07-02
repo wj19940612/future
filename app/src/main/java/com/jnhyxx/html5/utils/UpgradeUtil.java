@@ -3,6 +3,7 @@ package com.jnhyxx.html5.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.jnhyxx.html5.net.Api;
 import com.johnz.kutils.AppInfo;
 import com.umeng.onlineconfig.OnlineConfigAgent;
 
@@ -14,21 +15,26 @@ public class UpgradeUtil {
     public static final String FORCE_UPDATE = "force_update";
     public static final String UPDATE_LOG = "update_log";
     public static final String DOWNLOAD_URI = "download_uri";
+    public static final String DOMAIN = "domain";
 
-    private static void log(Context context) {
-        Log.d(TAG, "log: update" + isForceUpgrade(context));
-        Log.d(TAG, "log: log" + getUpdateLog(context));
-        Log.d(TAG, "log: download" + getDownloadURI(context));
+    public static final String ACTION_UPGRADE_COMPLETE = "com.jnhyxx.html5.ACTION_UPGRADE_COMPLETE";
+
+    public static void log(Context context) {
+        Log.d(TAG, "log: newVersion " + getVersionCode(context));
+        Log.d(TAG, "log: isForceUpgrade " + isForceUpgrade(context));
+        Log.d(TAG, "log: upgrade log " + getUpdateLog(context));
+        Log.d(TAG, "log: download uri " + getDownloadURI(context));
+        Log.d(TAG, "log: domain " + getDomain(context));
     }
 
     public static boolean hasNewVersion(Context context) {
-        log(context);
-
-        String newVersion = OnlineConfigAgent.getInstance().getConfigParams(context, VERSION_CODE);
-        String currentVersion = AppInfo.getVersionName(context);
-        Log.d(TAG, "hasNewVersion: " + newVersion);
-        if (newVersion.compareTo(currentVersion) > 0) {
-            return true;
+        String domain = getDomain(context);
+        if (domain.equals(Api.HOST)) {
+            String newVersion = getVersionCode(context);
+            String currentVersion = AppInfo.getVersionName(context);
+            if (newVersion.compareTo(currentVersion) > 0) {
+                return true;
+            }
         }
         return false;
     }
@@ -53,4 +59,7 @@ public class UpgradeUtil {
         return OnlineConfigAgent.getInstance().getConfigParams(context, VERSION_CODE);
     }
 
+    public static String getDomain(Context context) {
+        return OnlineConfigAgent.getInstance().getConfigParams(context, DOMAIN);
+    }
 }

@@ -23,5 +23,6 @@
     <string name="download_stop">下载停止</string>
     <string name="please_not_download_again">请勿重复下载</string>
     <string name="download_complete">下载完成</string>
+    <string name="permission_granted_success">权限授予成功</string>
 
 </resources>

@@ -1,10 +1,14 @@
 package com.johnz.kutils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 public class FileSystem {
 
@@ -55,6 +59,17 @@ public class FileSystem {
             } catch (IllegalArgumentException e) { // throw when receiver not register
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static boolean isStoragePermissionGranted(Activity activity, int requestCode) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(activity,
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+            return false;
         }
     }
 }

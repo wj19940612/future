@@ -13,6 +13,8 @@ public class Api {
             HOST = "http://test.jnhyxx.com";
         } else if (Variant.isMicroil()) {
             HOST = "http://wp7.jnhyxx.com";
+        } else if (Variant.isYcp()) {
+            HOST = "http://ycp.jnhyxx.com";
         }
     }
 

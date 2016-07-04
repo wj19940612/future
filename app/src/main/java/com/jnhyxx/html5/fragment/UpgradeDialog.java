@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
@@ -25,6 +24,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.service.DownloadService;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
+import com.johnz.kutils.FileSystem;
 
 public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -118,14 +118,7 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
     }
 
     private boolean isStoragePermissionGranted() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQ_CODE_ASK_PERMISSION);
-            return false;
-        }
+        return FileSystem.isStoragePermissionGranted(getActivity(), REQ_CODE_ASK_PERMISSION);
     }
 
     @Override

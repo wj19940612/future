@@ -1,18 +1,22 @@
 package com.jnhyxx.html5.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.FileSystem;
 import com.johnz.kutils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +57,15 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
         if (lastEqualSignIndex != -1) {
             return imageUrl.substring(lastEqualSignIndex + 1, imageUrl.length()) + ".jpg";
         }
+
+        // For some urls which have the extensions like '.jpg', '.jpeg', '.png'
+        if (imageUrl.indexOf(".jpg") > -1
+                || imageUrl.indexOf(".jpeg") > -1
+                || imageUrl.indexOf(".png") > -1) {
+            int lastLeftSlashIndex = imageUrl.lastIndexOf("/");
+            return imageUrl.substring(lastLeftSlashIndex + 1, imageUrl.length());
+        }
+
         return "QR" + System.currentTimeMillis() + ".jpg";
     }
 
@@ -102,13 +115,33 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private static final int REQ_CODE_ASK_PERMISSION = 1;
+
     private void saveImage() {
-        File file = ImageUtil.getUtil().saveGalleryBitmap(this, mBitmap, mFileName);
-        if (file != null && file.exists()) {
-            ToastUtil.show(getString(R.string.save_qrcode_to, file.getAbsolutePath()));
-            finish();
-        } else {
-            ToastUtil.show(R.string.save_qrcode_failure);
+        if (FileSystem.isStoragePermissionGranted(this, REQ_CODE_ASK_PERMISSION)) {
+            File file = ImageUtil.getUtil().saveGalleryBitmap(this, mBitmap, mFileName);
+            if (file != null && file.exists()) {
+                ToastUtil.show(getString(R.string.save_qrcode_to, file.getAbsolutePath()));
+                finish();
+            } else {
+                ToastUtil.show(R.string.save_qrcode_failure);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_CODE_ASK_PERMISSION) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    ToastUtil.show(R.string.permission_granted_success);
+                } else {
+                    ToastUtil.show(R.string.save_qrcode_failure);
+                }
+            }
         }
     }
 }

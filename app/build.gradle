@@ -59,6 +59,13 @@ android {
             versionCode 1
             versionName '1.0'
         }
+        ycp {
+            applicationIdSuffix '.ycp'
+            minSdkVersion 14
+            targetSdkVersion 23
+            versionCode 1
+            versionName '1.0'
+        }
     }
 }
 
@@ -73,4 +80,5 @@ dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     forH5Compile project(path: ':umenglibrary', configuration: 'originRelease')
+    ycpCompile project(path: ':umenglibrary', configuration: 'originRelease')
 }

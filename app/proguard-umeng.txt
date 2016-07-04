@@ -86,10 +86,6 @@
    public <init> (org.json.JSONObject);
 }
 
--keep public class com.jnhyxx.html5.R$*{
-public static final int *;
-}
-
 # Umeng online configs
 -keep class com.umeng.onlineconfig.OnlineConfigAgent {
         public <fields>;

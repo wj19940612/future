@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.jnhyxx.umenglibrary.UmengLib;
+import com.umeng.analytics.MobclickAgent;
 import com.wo.main.WP_App;
 
 public class App extends Application {
@@ -24,6 +25,8 @@ public class App extends Application {
         }
 
         UmengLib.init(sContext);
+        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
+        MobclickAgent.setCatchUncaughtExceptions(!BuildConfig.DEBUG);
     }
 
     public static Context getAppContext() {

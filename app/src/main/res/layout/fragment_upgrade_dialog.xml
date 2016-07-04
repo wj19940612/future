@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/discovery_new_version"
-        android:textColor="#DE4A4A"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"/>
 

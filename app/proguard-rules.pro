@@ -56,3 +56,6 @@
 # Jar: via sdk v1
 -keep class com.wo.**{*;}
 -keep public class org.eclipse.paho.**{*;}
+
+# Picasso
+-dontwarn com.squareup.okhttp.**

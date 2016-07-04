@@ -115,10 +115,8 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private static final int REQ_CODE_ASK_PERMISSION = 1;
-
     private void saveImage() {
-        if (FileSystem.isStoragePermissionGranted(this, REQ_CODE_ASK_PERMISSION)) {
+        if (FileSystem.isStoragePermissionGranted(this, FileSystem.REQ_CODE_ASK_PERMISSION)) {
             File file = ImageUtil.getUtil().saveGalleryBitmap(this, mBitmap, mFileName);
             if (file != null && file.exists()) {
                 ToastUtil.show(getString(R.string.save_qrcode_to, file.getAbsolutePath()));
@@ -132,7 +130,7 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQ_CODE_ASK_PERMISSION) {
+        if (requestCode == FileSystem.REQ_CODE_ASK_PERMISSION) {
             for (int i = 0; i < permissions.length; i++) {
                 String permission = permissions[i];
                 if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)

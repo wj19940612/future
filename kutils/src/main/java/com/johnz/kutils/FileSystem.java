@@ -62,6 +62,8 @@ public class FileSystem {
         }
     }
 
+    public static final int REQ_CODE_ASK_PERMISSION = 1;
+
     public static boolean isStoragePermissionGranted(Activity activity, int requestCode) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {

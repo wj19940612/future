@@ -28,8 +28,6 @@ import com.johnz.kutils.FileSystem;
 
 public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private static final int REQ_CODE_ASK_PERMISSION = 1;
-
     private TextView mUpgradeLog;
     private TextView mDownloadInstall;
     private TextView mUpgradeLater;
@@ -118,13 +116,13 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
     }
 
     private boolean isStoragePermissionGranted() {
-        return FileSystem.isStoragePermissionGranted(getActivity(), REQ_CODE_ASK_PERMISSION);
+        return FileSystem.isStoragePermissionGranted(getActivity(), FileSystem.REQ_CODE_ASK_PERMISSION);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQ_CODE_ASK_PERMISSION) {
+        if (requestCode == FileSystem.REQ_CODE_ASK_PERMISSION) {
             for (int i = 0; i < permissions.length; i++) {
                 String permission = permissions[i];
                 if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)

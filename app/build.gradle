@@ -9,8 +9,12 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-
+        buildConfigField('String', 'API_HOST', '\"http://www.jnhyxx.com\"')
     }
+
+    java.util.Properties properties = new Properties();
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
     signingConfigs {
         release {
             storeFile file(properties.get('keystroe_storeFile'))
@@ -45,6 +49,7 @@ android {
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://app1.jnhyxx.com\"')
         }
         microil {
             applicationId 'com.jnhyxx.microil'
@@ -52,6 +57,7 @@ android {
             targetSdkVersion 23
             versionCode 2
             versionName '1.0.1'
+            buildConfigField('String', 'API_HOST', '\"http://wp7.jnhyxx.com\"')
         }
         forH5 {
             applicationIdSuffix '.test'
@@ -59,6 +65,7 @@ android {
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://test.jnhyxx.com\"')
         }
         ycp {
             applicationIdSuffix '.ycp'
@@ -66,6 +73,7 @@ android {
             targetSdkVersion 23
             versionCode 1
             versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
         }
     }
 }

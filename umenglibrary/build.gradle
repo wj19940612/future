@@ -21,10 +21,14 @@ android {
 
     productFlavors {
         origin {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
+            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
+                                    UMENG_MESSAGE_SECRET: "opioate5srot9zyl1s0doda4ktijv6yr",
+                                    UMENG_CHANNEL: "http://www.jnhyxx.com"]
         }
         microil {
-            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
+            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12",
+                                    UMENG_MESSAGE_SECRET: "opioate5srot9zyl1s0doda4ktijv6yr",
+                                    UMENG_CHANNEL: "http://wp7.jnhyxx.com"]
         }
     }
 }

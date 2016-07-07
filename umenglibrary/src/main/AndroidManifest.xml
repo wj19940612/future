@@ -56,8 +56,12 @@
             android:value="${UMENG_APPKEY}">
         </meta-data>
         <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="${UMENG_MESSAGE_SECRET}" >
+        </meta-data>
+        <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Umeng">
+            android:value="${UMENG_CHANNEL}">
         </meta-data>
 
         <service

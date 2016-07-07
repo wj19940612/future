@@ -1,1 +1,1 @@
-include ':app', ':umenglibrary', ':kutils'
+include ':app', ':umenglibrary', ':kutils', ':PushSDK'

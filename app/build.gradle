@@ -9,13 +9,14 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
     }
     signingConfigs {
         release {
-            storeFile file("../../KeyStore/HengYun.jks")
-            storePassword "hy123qwe"
-            keyAlias "hengyun"
-            keyPassword "hy123qwe"
+            storeFile file(properties.get('keystroe_storeFile'))
+            storePassword properties.get('keystroe_storePassword')
+            keyAlias properties.get('keystroe_keyAlias')
+            keyPassword properties.get('keystroe_keyPassword')
         }
     }
     buildTypes {
@@ -81,4 +82,5 @@ dependencies {
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     forH5Compile project(path: ':umenglibrary', configuration: 'originRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'originRelease')
+    compile project(':PushSDK')
 }

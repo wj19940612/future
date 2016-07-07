@@ -89,6 +89,6 @@ dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     forH5Compile project(path: ':umenglibrary', configuration: 'originRelease')
-    ycpCompile project(path: ':umenglibrary', configuration: 'originRelease')
+    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     compile project(':PushSDK')
 }

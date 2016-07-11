@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.jnhyxx.html5.AppJs;
+import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.Variant;
 import com.jnhyxx.html5.fragment.UpgradeDialog;
@@ -32,6 +33,8 @@ import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
@@ -144,10 +147,23 @@ public class MainActivity extends BaseActivity {
         initView();
         initListener();
         checkVersion();
+        initPush();
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
+    }
+
+    private void initPush() {
+        PushAgent pushAgent = PushAgent.getInstance(this);
+        pushAgent.setDebugMode(BuildConfig.DEBUG);
+        pushAgent.setMessageChannel(Api.HOST);
+        pushAgent.enable(new IUmengRegisterCallback() {
+            @Override
+            public void onRegistered(String s) {
+                Log.d(TAG, "onRegistered: " + s);
+            }
+        });
     }
 
     private void checkVersion() {

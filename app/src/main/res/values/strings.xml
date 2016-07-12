@@ -25,4 +25,8 @@
     <string name="download_complete">下载完成</string>
     <string name="permission_granted_success">权限授予成功</string>
 
+    <!-- Important notification -->
+    <string name="i_get_it">我知道了</string>
+    <string name="check_detail">查看详情</string>
+
 </resources>

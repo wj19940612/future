@@ -29,6 +29,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SplashActivity"
@@ -69,9 +70,13 @@
 
         <!-- Necessary -->
         <activity
-            android:theme="@style/DialogTheme.NoTitle"
             android:name=".activity.SaveImageActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogTheme.NoTitle"/>
+        <activity
+            android:name=".activity.PopupDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogTheme.NoTitle"/>
 
         <service android:name=".service.DownloadService"/>
     </application>

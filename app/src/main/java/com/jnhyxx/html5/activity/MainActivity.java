@@ -34,7 +34,9 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.johnz.kutils.Launcher;
 import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.IUmengUnregisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengRegistrar;
 import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
@@ -148,23 +150,48 @@ public class MainActivity extends BaseActivity {
         initListener();
         checkVersion();
         initPush();
+        processIntent(getIntent());
 
         mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
     }
 
+    private void processIntent(Intent intent) {
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ToastUtil.show("onNewIntent");
+        processIntent(intent);
+    }
+
     private void initPush() {
         PushAgent pushAgent = PushAgent.getInstance(this);
         pushAgent.setDebugMode(BuildConfig.DEBUG);
         pushAgent.setMessageChannel(Api.HOST);
-        pushAgent.enable(new IUmengRegisterCallback() {
-            @Override
-            public void onRegistered(String s) {
-                Log.d(TAG, "onRegistered: " + s);
-            }
-        });
+        if (pushAgent.isEnabled() || UmengRegistrar.isRegistered(this)) {
+            Log.d(TAG, "initPush: disable first");
+            pushAgent.disable(mIUmengUnregisterCallback);
+        } else {
+            pushAgent.enable(mIUmengRegisterCallback);
+        }
     }
+
+    private IUmengUnregisterCallback mIUmengUnregisterCallback = new IUmengUnregisterCallback() {
+        @Override
+        public void onUnregistered(String s) {
+            Log.d(TAG, "onUnregistered: " + s);
+            PushAgent.getInstance(MainActivity.this).enable(mIUmengRegisterCallback);
+        }
+    };
+    private IUmengRegisterCallback mIUmengRegisterCallback = new IUmengRegisterCallback() {
+        @Override
+        public void onRegistered(String s) {
+            Log.d(TAG, "onRegistered: " + s);
+        }
+    };
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -233,7 +260,7 @@ public class MainActivity extends BaseActivity {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setUserAgentString(getString(R.string.android_web_agent) + "/1.0");
         //mWebView.getSettings().setAppCacheEnabled(true);
         webSettings.setAppCachePath(getExternalCacheDir().getPath());

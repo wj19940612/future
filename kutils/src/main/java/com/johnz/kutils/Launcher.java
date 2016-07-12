@@ -33,11 +33,6 @@ public class Launcher {
         return sInstance;
     }
 
-    public Launcher launch(Class<?> clazz) {
-        mIntent.setClass(mContext, clazz);
-        return this;
-    }
-
     public Launcher setPreExecuteListener(PreExecuteListener listener) {
         mPreExecuteListener = listener;
         return this;

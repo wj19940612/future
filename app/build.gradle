@@ -54,7 +54,7 @@ android {
             buildConfigField('String', 'API_HOST', '\"http://wp7.jnhyxx.com\"')
         }
         forH5 {
-            applicationIdSuffix '.test'
+            applicationId 'com.jnhyxx.test'
             versionCode 1
             versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://test.jnhyxx.com\"')
@@ -78,7 +78,7 @@ dependencies {
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
-    forH5Compile project(path: ':umenglibrary', configuration: 'originRelease')
+    forH5Compile project(path: ':umenglibrary', configuration: 'forH5Release')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     compile project(':PushSDK')
 }

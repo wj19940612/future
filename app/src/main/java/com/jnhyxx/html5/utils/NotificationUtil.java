@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.utils;
 
+import android.content.Intent;
+
 import java.util.Map;
 
 public class NotificationUtil {
@@ -34,13 +36,28 @@ public class NotificationUtil {
         return messageType;
     }
 
+    public static String getMessageType(Intent intent) {
+        String messageType = intent.getStringExtra(MESSAGE_TYPE);
+        return messageType;
+    }
+
     public static boolean isSystemMessage(Map<String, String> map) {
         String messageType = getMessageType(map);
         return messageType.equals(MESSAGE_TYPE_SYSTEM);
     }
 
+    public static boolean isSystemMessage(Intent intent) {
+        String messageType = getMessageType(intent);
+        return messageType.equals(MESSAGE_TYPE_SYSTEM);
+    }
+
     public static boolean isTradeMessage(Map<String, String> map) {
         String messageType = getMessageType(map);
+        return messageType.equals(MESSAGE_TYPE_TRADE);
+    }
+
+    public static boolean isTradeMessage(Intent intent) {
+        String messageType = getMessageType(intent);
         return messageType.equals(MESSAGE_TYPE_TRADE);
     }
 

@@ -10,6 +10,7 @@ public class Api {
 
     public static final String PATH_INDEX = "/index.html";
     public static final String PATH_MIME = "/mine.html";
+    public static final String PATH_MESSAGE_DETAIL = "/news/detailed.html?id=";
 
     public static String getMainUrl() {
         return HOST + PATH_INDEX;
@@ -17,5 +18,9 @@ public class Api {
 
     public static String getMime() {
         return HOST + PATH_MIME;
+    }
+
+    public static String getMessageDetial(String messageId) {
+        return HOST + PATH_MESSAGE_DETAIL + messageId;
     }
 }

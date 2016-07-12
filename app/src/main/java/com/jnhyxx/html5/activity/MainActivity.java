@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -30,6 +31,7 @@ import com.jnhyxx.html5.Variant;
 import com.jnhyxx.html5.fragment.UpgradeDialog;
 import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.johnz.kutils.Launcher;
@@ -158,12 +160,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void processIntent(Intent intent) {
+        final String messageId = intent.getStringExtra(NotificationUtil.MESSAGE_ID);
+        if (!TextUtils.isEmpty(messageId)) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl(Api.getMessageDetial(messageId));
+                }
+            });
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        ToastUtil.show("onNewIntent");
         processIntent(intent);
     }
 

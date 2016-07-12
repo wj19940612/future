@@ -3,6 +3,7 @@ package com.jnhyxx.html5;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.activity.PopupDialogActivity;
@@ -58,6 +59,7 @@ public class App extends Application {
 
             @Override
             public void dealWithNotificationMessage(Context context, final UMessage uMessage) {
+                Log.d("TEST", "dealWithNotificationMessage: ");
                 final Map<String, String> extra = uMessage.extra;
                 if (NotificationUtil.isImportant(extra)) {
                     if (Preference.get().isForeground()) {
@@ -76,28 +78,17 @@ public class App extends Application {
             public void openActivity(Context context, UMessage uMessage) {
                 final Map<String, String> extra = uMessage.extra;
                 final String messageType = NotificationUtil.getMessageType(extra);
-                if (NotificationUtil.isSystemMessage(extra)) {
-                    Launcher.with(context, MainActivity.class)
-                            .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                                @Override
-                                public void preExecute(Intent intent) {
-                                    final String messageId = NotificationUtil.getMessageId(extra);
-                                    intent.putExtra(NotificationUtil.MESSAGE_ID, messageId)
-                                            .putExtra(NotificationUtil.MESSAGE_TYPE, messageType)
-                                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                }
-                            }).execute();
+                final String messageId = NotificationUtil.getMessageId(extra);
 
-                } else if (NotificationUtil.isTradeMessage(uMessage.extra)) {
-                    Launcher.with(context, MainActivity.class)
-                            .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                                @Override
-                                public void preExecute(Intent intent) {
-                                    intent.putExtra(NotificationUtil.MESSAGE_TYPE, messageType)
-                                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                }
-                            }).execute();
-                }
+                Launcher.with(context, MainActivity.class)
+                        .setPreExecuteListener(new Launcher.PreExecuteListener() {
+                            @Override
+                            public void preExecute(Intent intent) {
+                                intent.putExtra(NotificationUtil.MESSAGE_ID, messageId)
+                                        .putExtra(NotificationUtil.MESSAGE_TYPE, messageType)
+                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
+                        }).execute();
             }
         };
         PushAgent.getInstance(sContext).setNotificationClickHandler(clickHandler);

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.utils.NotificationUtil;
+import com.johnz.kutils.Launcher;
 
 public class PopupDialogActivity extends Activity  {
 
@@ -21,6 +23,9 @@ public class PopupDialogActivity extends Activity  {
     private TextView mMessage;
     private TextView mNegative;
     private TextView mPosition;
+
+    private String mMessageType;
+    private String mMessageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,17 @@ public class PopupDialogActivity extends Activity  {
             @Override
             public void onClick(View v) {
 
+                Launcher.with(PopupDialogActivity.this, MainActivity.class)
+                        .setPreExecuteListener(new Launcher.PreExecuteListener() {
+                            @Override
+                            public void preExecute(Intent intent) {
+                                intent.putExtra(NotificationUtil.MESSAGE_ID, mMessageId)
+                                        .putExtra(NotificationUtil.MESSAGE_TYPE, mMessageType)
+                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
+                        }).execute();
+
+                finish();
             }
         });
     }
@@ -59,7 +75,8 @@ public class PopupDialogActivity extends Activity  {
         mTitle.setText(title);
         mMessage.setText(message);
 
-        // TODO: 7/11/16 system message and trade message
+        mMessageId = intent.getStringExtra(NotificationUtil.MESSAGE_ID);
+        mMessageType = intent.getStringExtra(NotificationUtil.MESSAGE_TYPE);
     }
 
     private void scaleDialogWindowWidth(double scale) {

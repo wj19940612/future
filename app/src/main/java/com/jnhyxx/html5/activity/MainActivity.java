@@ -36,9 +36,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.johnz.kutils.Launcher;
 import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.IUmengUnregisterCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengRegistrar;
 import com.wo.main.WP_JS_Main;
 
 import java.net.URISyntaxException;
@@ -181,21 +179,13 @@ public class MainActivity extends BaseActivity {
         PushAgent pushAgent = PushAgent.getInstance(this);
         pushAgent.setDebugMode(BuildConfig.DEBUG);
         pushAgent.setMessageChannel(Api.HOST);
-        if (pushAgent.isEnabled() || UmengRegistrar.isRegistered(this)) {
-            Log.d(TAG, "initPush: disable first");
-            pushAgent.disable(mIUmengUnregisterCallback);
+        if (pushAgent.isEnabled() && pushAgent.isRegistered()) {
+            Log.d(TAG, "initPush: push is enabled and registered");
         } else {
             pushAgent.enable(mIUmengRegisterCallback);
         }
     }
 
-    private IUmengUnregisterCallback mIUmengUnregisterCallback = new IUmengUnregisterCallback() {
-        @Override
-        public void onUnregistered(String s) {
-            Log.d(TAG, "onUnregistered: " + s);
-            PushAgent.getInstance(MainActivity.this).enable(mIUmengRegisterCallback);
-        }
-    };
     private IUmengRegisterCallback mIUmengRegisterCallback = new IUmengRegisterCallback() {
         @Override
         public void onRegistered(String s) {

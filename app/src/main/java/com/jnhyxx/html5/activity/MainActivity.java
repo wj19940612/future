@@ -179,11 +179,8 @@ public class MainActivity extends BaseActivity {
         PushAgent pushAgent = PushAgent.getInstance(this);
         pushAgent.setDebugMode(BuildConfig.DEBUG);
         pushAgent.setMessageChannel(Api.HOST);
-        if (pushAgent.isEnabled() && pushAgent.isRegistered()) {
-            Log.d(TAG, "initPush: push is enabled and registered");
-        } else {
-            pushAgent.enable(mIUmengRegisterCallback);
-        }
+        pushAgent.setResourcePackageName("com.jnhyxx.html5");
+        pushAgent.enable(mIUmengRegisterCallback);
     }
 
     private IUmengRegisterCallback mIUmengRegisterCallback = new IUmengRegisterCallback() {

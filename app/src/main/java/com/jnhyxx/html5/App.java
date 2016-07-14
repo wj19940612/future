@@ -59,10 +59,13 @@ public class App extends Application {
 
             @Override
             public void dealWithNotificationMessage(Context context, final UMessage uMessage) {
-                Log.d("TEST", "dealWithNotificationMessage: ");
+                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.extra);
+                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.after_open);
+                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.display_type);
                 final Map<String, String> extra = uMessage.extra;
                 if (NotificationUtil.isImportant(extra)) {
                     if (Preference.get().isForeground()) {
+                        Log.d("TEST", "dealWithNotificationMessage: " + "important message");
                         UTrack.getInstance(sContext).trackMsgClick(uMessage); // Record click event
                         showPopupDialog(context, uMessage, extra);
                         return;
@@ -79,7 +82,7 @@ public class App extends Application {
                 final Map<String, String> extra = uMessage.extra;
                 final String messageType = NotificationUtil.getMessageType(extra);
                 final String messageId = NotificationUtil.getMessageId(extra);
-
+                Log.d("TEST", "openActivity: " + uMessage.activity);
                 Launcher.with(context, MainActivity.class)
                         .setPreExecuteListener(new Launcher.PreExecuteListener() {
                             @Override

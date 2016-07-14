@@ -98,3 +98,35 @@
 -keep interface com.umeng.onlineconfig.UmengOnlineConfigureListener {
         public <methods>;
 }
+
+# Umeng push
+-dontwarn com.ut.mini.**
+-dontwarn okio.**
+-dontwarn com.xiaomi.**
+-dontwarn com.squareup.wire.**
+
+-keep class okio.** {*;}
+-keep class com.squareup.wire.** {*;}
+
+-keep class com.umeng.message.protobuffer.* {
+         public <fields>;
+         public <methods>;
+}
+
+-keep class com.umeng.message.* {
+         public <fields>;
+         public <methods>;
+}
+
+-keep class org.android.agoo.impl.* {
+         public <fields>;
+         public <methods>;
+}
+
+-keep class org.android.agoo.service.* {*;}
+
+-keep class org.android.spdy.**{*;}
+
+# Reflect code need keep resource class R unchanged
+-keep class com.jnhyxx.html5.R$*
+-keep class com.jnhyxx.html5.R

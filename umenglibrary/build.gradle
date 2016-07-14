@@ -26,9 +26,8 @@ android {
                                     UMENG_CHANNEL: "http://www.jnhyxx.com"]
         }
         microil {
-            // todo change UMENG_MESSAGE_SECRET
             manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12",
-                                    UMENG_MESSAGE_SECRET: "",
+                                    UMENG_MESSAGE_SECRET: "6b118415f8454750cf92fa27dff753df",
                                     UMENG_CHANNEL: "http://wp7.jnhyxx.com"]
         }
         ycp {

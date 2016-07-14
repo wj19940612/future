@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -122,6 +123,38 @@ public class AppInfo {
             }
             json.put("device_id", device_id);
             return json.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getDeviceHardwareId(Context context) {
+        try {
+            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            String typePrefix = "DEVICE_ID_";
+            String deviceId = tm.getDeviceId();
+
+            if (TextUtils.isEmpty(deviceId)) {
+                deviceId = android.os.Build.SERIAL;
+                typePrefix = "SERIAL_";
+            }
+
+            if (TextUtils.isEmpty(deviceId)) {
+                android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                String mac = wifi.getConnectionInfo().getMacAddress();
+                deviceId = mac;
+                typePrefix = "MAC_";
+            }
+
+            if (TextUtils.isEmpty(deviceId)) {
+                deviceId = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+                typePrefix = "ANDROID_ID_";
+            }
+
+            Log.d("AppInfo", "getDeviceHardwareId: " + (typePrefix + deviceId));
+            return SecurityUtil.md5Encrypt(typePrefix + deviceId);
         } catch (Exception e) {
             e.printStackTrace();
         }

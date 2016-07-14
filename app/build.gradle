@@ -39,8 +39,8 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 4
-            versionName '1.1.1'
+            versionCode 5
+            versionName '1.1.0'
         }
         app1 {
             versionCode 1
@@ -50,7 +50,7 @@ android {
         microil {
             applicationId 'com.jnhyxx.microil'
             versionCode 2
-            versionName '1.0.1'
+            versionName '1.0.2'
             buildConfigField('String', 'API_HOST', '\"http://wp7.jnhyxx.com\"')
         }
         forH5 {

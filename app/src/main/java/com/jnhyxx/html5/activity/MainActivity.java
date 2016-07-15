@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mWebView.loadUrl(Api.getMessageDetial(messageId));
+                    mWebView.loadUrl(Api.getMessageDetail(messageId));
                 }
             });
         }

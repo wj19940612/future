@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
 import com.jnhyxx.html5.activity.MainActivity;
+import com.jnhyxx.html5.net.Api;
 import com.jnhyxx.umenglibrary.utils.ShareUtil;
 
 import java.net.URISyntaxException;
@@ -54,5 +55,10 @@ public class AppJs {
         ClipData clipData = ClipData.newPlainText(copiedText, copiedText);
         clipboardManager.setPrimaryClip(clipData);
         return clipboardManager.hasPrimaryClip();
+    }
+
+    @JavascriptInterface
+    public void updateUmengDeviceId(String token) {
+        Api.updateUMDeviceId(token);
     }
 }

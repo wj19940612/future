@@ -7,6 +7,11 @@
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
 
+    <!-- Network error  -->
+    <string name="network_error">网络异常</string>
+    <string name="network_time_out">网络超时</string>
+    <string name="json_parse_error">数据解析异常</string>
+
     <!-- WebView promotion -->
     <string name="save_image">保存图片</string>
     <string name="save_qrcode_to">二维码保存至%1$s</string>

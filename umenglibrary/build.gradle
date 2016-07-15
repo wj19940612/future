@@ -36,10 +36,10 @@ android {
                                     UMENG_MESSAGE_SECRET: "",
                                     UMENG_CHANNEL: "http://ycp.jnhyxx.com"]
         }
-        forH5 {
+        tst {
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
                                     UMENG_MESSAGE_SECRET: "773b7ed07325d5cbf84e2fe0c691a312",
-                                    UMENG_CHANNEL: "http://test.jnhyxx.com"]
+                                    UMENG_CHANNEL: "http://139.129.205.244"]
         }
     }
 }

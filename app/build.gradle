@@ -53,11 +53,11 @@ android {
             versionName '1.0.2'
             buildConfigField('String', 'API_HOST', '\"http://wp7.jnhyxx.com\"')
         }
-        forH5 {
+        tst {
             applicationId 'com.jnhyxx.test'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://test.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://139.129.205.244\"')
         }
         ycp {
             applicationIdSuffix '.ycp'
@@ -72,13 +72,15 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.volley:volley:1.0.0'
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
     compile project(':kutils')
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
-    forH5Compile project(path: ':umenglibrary', configuration: 'forH5Release')
+    tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     compile project(':PushSDK')
 }

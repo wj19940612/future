@@ -89,8 +89,8 @@ public class App extends Application {
                         .setPreExecuteListener(new Launcher.PreExecuteListener() {
                             @Override
                             public void preExecute(Intent intent) {
-                                intent.putExtra(NotificationUtil.MESSAGE_ID, messageId)
-                                        .putExtra(NotificationUtil.MESSAGE_TYPE, messageType)
+                                intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
+                                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
                                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             }
                         }).execute();
@@ -106,8 +106,8 @@ public class App extends Application {
                 .setPreExecuteListener(new Launcher.PreExecuteListener() {
                     @Override
                     public void preExecute(Intent intent) {
-                        intent.putExtra(NotificationUtil.MESSAGE_ID, messageId)
-                                .putExtra(NotificationUtil.MESSAGE_TYPE, messageType)
+                        intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
+                                .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
                                 .putExtra(PopupDialogActivity.TITLE, uMessage.title)
                                 .putExtra(PopupDialogActivity.MESSAGE, uMessage.text)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

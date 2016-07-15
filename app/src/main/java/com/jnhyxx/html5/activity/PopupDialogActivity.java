@@ -58,8 +58,8 @@ public class PopupDialogActivity extends Activity  {
                         .setPreExecuteListener(new Launcher.PreExecuteListener() {
                             @Override
                             public void preExecute(Intent intent) {
-                                intent.putExtra(NotificationUtil.MESSAGE_ID, mMessageId)
-                                        .putExtra(NotificationUtil.MESSAGE_TYPE, mMessageType)
+                                intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, mMessageId)
+                                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, mMessageType)
                                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             }
                         }).execute();
@@ -75,8 +75,8 @@ public class PopupDialogActivity extends Activity  {
         mTitle.setText(title);
         mMessage.setText(message);
 
-        mMessageId = intent.getStringExtra(NotificationUtil.MESSAGE_ID);
-        mMessageType = intent.getStringExtra(NotificationUtil.MESSAGE_TYPE);
+        mMessageId = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_ID);
+        mMessageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
     }
 
     private void scaleDialogWindowWidth(double scale) {

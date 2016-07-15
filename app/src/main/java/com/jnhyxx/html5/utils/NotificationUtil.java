@@ -1,7 +1,5 @@
 package com.jnhyxx.html5.utils;
 
-import android.content.Intent;
-
 import java.util.Map;
 
 public class NotificationUtil {
@@ -12,53 +10,27 @@ public class NotificationUtil {
      * messageId:       系统消息id
      */
 
-    public static final String MESSAGE_TYPE = "message_type";
-    public static final String LEVEL = "level";
-    public static final String MESSAGE_ID = "messageId";
+    public static final String KEY_MESSAGE_TYPE = "message_type";
+    public static final String KEY_LEVEL = "level";
+    public static final String KEY_MESSAGE_ID = "messageId";
 
-    private static final String LEVEL_IMPORTANT = "1";
+    public static final String LEVEL_IMPORTANT = "1";
 
-    private static final String MESSAGE_TYPE_SYSTEM = "1";
-    private static final String MESSAGE_TYPE_TRADE = "2";
+    public static final String MESSAGE_TYPE_SYSTEM = "1";
+    public static final String MESSAGE_TYPE_TRADE = "2";
 
     public static boolean isImportant(Map<String, String> map) {
-        String isImportant = map.get(LEVEL);
+        String isImportant = map.get(KEY_LEVEL);
         return isImportant.equals(LEVEL_IMPORTANT);
     }
 
     public static String getMessageId(Map<String, String> map) {
-        String messageId = map.get(MESSAGE_ID);
+        String messageId = map.get(KEY_MESSAGE_ID);
         return messageId;
     }
 
     public static String getMessageType(Map<String, String> map) {
-        String messageType = map.get(MESSAGE_TYPE);
+        String messageType = map.get(KEY_MESSAGE_TYPE);
         return messageType;
     }
-
-    public static String getMessageType(Intent intent) {
-        String messageType = intent.getStringExtra(MESSAGE_TYPE);
-        return messageType;
-    }
-
-    public static boolean isSystemMessage(Map<String, String> map) {
-        String messageType = getMessageType(map);
-        return messageType.equals(MESSAGE_TYPE_SYSTEM);
-    }
-
-    public static boolean isSystemMessage(Intent intent) {
-        String messageType = getMessageType(intent);
-        return messageType.equals(MESSAGE_TYPE_SYSTEM);
-    }
-
-    public static boolean isTradeMessage(Map<String, String> map) {
-        String messageType = getMessageType(map);
-        return messageType.equals(MESSAGE_TYPE_TRADE);
-    }
-
-    public static boolean isTradeMessage(Intent intent) {
-        String messageType = getMessageType(intent);
-        return messageType.equals(MESSAGE_TYPE_TRADE);
-    }
-
 }

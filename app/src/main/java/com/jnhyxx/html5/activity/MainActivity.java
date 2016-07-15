@@ -158,12 +158,23 @@ public class MainActivity extends BaseActivity {
     }
 
     private void processIntent(Intent intent) {
-        final String messageId = intent.getStringExtra(NotificationUtil.MESSAGE_ID);
+        final String messageId = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_ID);
         if (!TextUtils.isEmpty(messageId)) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     mWebView.loadUrl(Api.getMessageDetail(messageId));
+                }
+            });
+            return;
+        }
+
+        final String messageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
+        if (!TextUtils.isEmpty(messageType)) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl(Api.getMessageList(messageType));
                 }
             });
         }

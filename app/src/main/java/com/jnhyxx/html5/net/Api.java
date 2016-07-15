@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.utils.NotificationUtil;
 import com.umeng.message.UmengRegistrar;
 
 public class Api {
@@ -15,6 +16,7 @@ public class Api {
     public static final String PATH_INDEX = "/index.html";
     public static final String PATH_MIME = "/mine.html";
     public static final String PATH_MESSAGE_DETAIL = "/news/detailed.html?id=";
+    public static final String PATH_MESSAGE_LIST = "/news/Message.html";
 
     public static final String API_UPDATE_UMCODE = "/user/user/updateUmCode";		//更新友盟设备号
 
@@ -28,6 +30,15 @@ public class Api {
 
     public static String getMessageDetail(String messageId) {
         return HOST + PATH_MESSAGE_DETAIL + messageId;
+    }
+
+    public static String getMessageList(String messageType) {
+        if (messageType.equals(NotificationUtil.MESSAGE_TYPE_SYSTEM)) {
+            return HOST + PATH_MESSAGE_LIST;
+        } else if (messageType.equals(NotificationUtil.MESSAGE_TYPE_TRADE)) {
+            return HOST + PATH_MESSAGE_LIST + "?key=trade";
+        }
+        return HOST + PATH_MESSAGE_LIST;
     }
 
     public static void updateUMDeviceId(String token) {

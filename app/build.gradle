@@ -39,7 +39,7 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 5
+            versionCode 6
             versionName '1.2.1'
         }
         app1 {

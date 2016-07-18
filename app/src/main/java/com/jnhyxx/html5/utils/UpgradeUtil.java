@@ -17,7 +17,7 @@ public class UpgradeUtil {
     public static final String DOWNLOAD_URI = "download_uri";
     public static final String DOMAIN = "domain";
     public static final String DEBUG = "debug";
-    public static final String DEBUG_DEVICE = "debug_device";
+    public static final String DEBUG_DEVICES = "debug_devices";
 
     public static final String ACTION_UPGRADE_COMPLETE = "com.jnhyxx.html5.ACTION_UPGRADE_COMPLETE";
 
@@ -28,19 +28,26 @@ public class UpgradeUtil {
         Log.d(TAG, "log: download uri " + getDownloadURI(context));
         Log.d(TAG, "log: domain " + getDomain(context));
         Log.d(TAG, "log: debug " + isDebug(context));
-        Log.d(TAG, "log: debug device " + getDebugDevice(context));
+        Log.d(TAG, "log: debug devices " + getDebugDevice(context));
     }
 
     public static boolean hasNewVersion(Context context) {
         if (isDebug(context)) {
-            String debugDevice = getDebugDevice(context);
+            String debugDevices = getDebugDevice(context);
             String currentDeviceId = AppInfo.getDeviceHardwareId(context);
 
             Log.d(TAG, "CurrentDevice: " + currentDeviceId);
 
-            if (debugDevice.equals(currentDeviceId)) {
-                ToastUtil.show("Debug Device");
-                return hasNewVersionCode(context);
+            String[] debugDeviceList = new String[] {debugDevices};
+            if (debugDevices.indexOf("##") > -1) {
+                debugDeviceList = debugDevices.split("##");
+            }
+
+            for (String debugDevice : debugDeviceList) {
+                if (debugDevice.equals(currentDeviceId)) {
+                    ToastUtil.show("Debug Device");
+                    return hasNewVersionCode(context);
+                }
             }
         } else {
             return hasNewVersionCode(context);
@@ -77,7 +84,7 @@ public class UpgradeUtil {
     }
 
     public static String getDebugDevice(Context context) {
-        return OnlineConfigAgent.getInstance().getConfigParams(context, DEBUG_DEVICE);
+        return OnlineConfigAgent.getInstance().getConfigParams(context, DEBUG_DEVICES);
     }
 
     public static String getUpdateLog(Context context) {

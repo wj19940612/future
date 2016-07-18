@@ -60,7 +60,6 @@ public class MainActivity extends BaseActivity {
     private boolean mLoadSuccess;
     private String mPageUrl;
 
-
     private static class WebHandler extends Handler {
 
         private Context mContext;

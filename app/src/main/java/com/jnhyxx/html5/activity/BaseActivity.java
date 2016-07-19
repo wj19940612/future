@@ -10,10 +10,14 @@ import com.umeng.message.PushAgent;
 
 public class BaseActivity extends AppCompatActivity {
 
+    protected static String TAG;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
+
+        TAG = this.getClass().getSimpleName();
     }
 
     @Override
@@ -26,10 +30,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Preference.get().setForeground(false);
-    }
-
-    protected String getTAG() {
-        return this.getClass().getSimpleName();
     }
 
     protected Activity getActivity() {

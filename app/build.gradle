@@ -59,6 +59,13 @@ android {
             versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://139.129.205.244\"')
         }
+
+        ryt {
+            applicationIdSuffix '.ryt'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://www.rytqh.com\"')
+        }
         ycp {
             applicationIdSuffix '.ycp'
             versionCode 1
@@ -82,5 +89,6 @@ dependencies {
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
+    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
     compile project(':PushSDK')
 }

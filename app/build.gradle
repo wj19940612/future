@@ -72,6 +72,12 @@ android {
             versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
         }
+        hyjr {
+            applicationIdSuffix '.hyjr'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://hyjr.jnhyxx.com/\"')
+        }
     }
 }
 
@@ -84,11 +90,14 @@ dependencies {
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
     compile project(':kutils')
+
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+    hyjrCompile project(path: ':umenglibrary', configuration: 'hyjrRelease')
+
     compile project(':PushSDK')
 }

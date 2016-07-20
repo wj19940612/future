@@ -36,16 +36,22 @@ android {
                                     UMENG_CHANNEL: "http://139.129.205.244"]
         }
         ycp {
-            // todo change UMENG_MESSAGE_SECRET
+            // todo add miss configuration
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
                                     UMENG_MESSAGE_SECRET: "",
-                                    UMENG_CHANNEL: "http://ycp.jnhyxx.com"]
+                                    UMENG_CHANNEL: ""]
         }
         ryt {
-            // todo change UMENG_MESSAGE_SECRET
+            // todo add miss configuration
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
                                     UMENG_MESSAGE_SECRET: "",
-                                    UMENG_CHANNEL: "http://www.rytqh.com"]
+                                    UMENG_CHANNEL: ""]
+        }
+        hyjr {
+            // todo add miss configuration
+            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
+                                    UMENG_MESSAGE_SECRET: "",
+                                    UMENG_CHANNEL: ""]
         }
     }
 }

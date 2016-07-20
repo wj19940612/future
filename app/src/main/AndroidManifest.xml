@@ -73,14 +73,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <!-- Necessary -->
+        <!-- dialog activity -->
         <activity
-            android:name=".activity.SaveImageActivity"
+            android:name=".activity.dialog.SaveImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme.NoTitle"/>
         <activity
-            android:name=".activity.PopupDialogActivity"
+            android:name=".activity.dialog.PopupDialogActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/DialogTheme.NoTitle"/>
+        <activity
+            android:name=".activity.dialog.ProgressActivity"
             android:theme="@style/DialogTheme.NoTitle"/>
 
         <service android:name=".service.DownloadService"/>

@@ -34,4 +34,24 @@
     <string name="i_get_it">我知道了</string>
     <string name="check_detail">查看详情</string>
 
+    <!-- API -->
+    <string name="api_error_null">服务器返回空数据</string>
+    <string name="api_error_timeout">网络请求超时</string>
+    <string name="api_error_network">网络异常</string>
+    <string name="api_error_parse">数据解析异常</string>
+    <string name="api_error_server">服务器异常</string>
+
+    <!-- Main -->
+    <string name="hall">大厅</string>
+    <string name="information">资讯</string>
+    <string name="account">账户</string>
+
+    <!-- Account -->
+    <string name="nickname">您好,请先登录</string>
+    <string name="account_balance">账户余额(元)</string>
+    <string name="account_score">我的积分</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册</string>
+
+
 </resources>

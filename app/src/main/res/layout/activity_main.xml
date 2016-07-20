@@ -1,48 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <WebView
-        android:id="@+id/webView"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:layout_above="@+id/bottomTabs"/>
 
-    <LinearLayout
-        android:id="@+id/errorPage"
+    <com.jnhyxx.html5.view.BottomTabs
+        android:id="@+id/bottomTabs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/network_error_please_reload"/>
-
-        <Button
-            android:id="@+id/refreshButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@drawable/btn_refresh"
-            android:text="@string/refresh"
-            android:textSize="16sp"/>
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressbar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_alignParentTop="true"
-        android:indeterminateDrawable="@android:color/black"
-        android:max="100"
-        android:progressDrawable="@drawable/progress_horizontal"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tab_background"
+        android:paddingTop="2dp"
+        app:interval="2dp"
+        app:textColor="@color/tab_text"
+        app:textSize="12sp"/>
 </RelativeLayout>

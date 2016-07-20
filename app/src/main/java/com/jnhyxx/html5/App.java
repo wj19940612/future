@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.jnhyxx.html5.activity.MainActivity;
-import com.jnhyxx.html5.activity.PopupDialogActivity;
-import com.jnhyxx.html5.net.RequestManager;
+import com.jnhyxx.html5.activity.dialog.PopupDialogActivity;
+import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.umenglibrary.UmengLib;
 import com.johnz.kutils.Launcher;
@@ -38,10 +38,13 @@ public class App extends Application {
             }
         }
 
-        RequestManager.init(sContext);
+        API.init(sContext.getCacheDir());
+
         UmengLib.init(sContext);
+
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
         MobclickAgent.setCatchUncaughtExceptions(!BuildConfig.DEBUG);
+
         initPushHandlers();
         handleUncaughtException();
     }

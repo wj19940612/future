@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.neenbedankt.android-apt'
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
@@ -77,18 +79,24 @@ android {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.android.volley:volley:1.0.0'
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
-    compile project(':kutils')
+
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+
     compile project(':PushSDK')
+    compile project(':kutils')
+
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    compile 'com.android.support:support-v4:24.0.0'
 }

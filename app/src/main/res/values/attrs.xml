@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PageIndicator">
+        <attr name="indicators" format="integer"/>
+        <attr name="indicatorsInterval" format="dimension"/>
+        <attr name="point" format="color|reference"/>
+        <attr name="selectedPoint" format="color|reference"/>
+        <attr name="pointRadius" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="BottomTabs">
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
+        <attr name="interval" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="IconTextRow">
+        <attr name="leftIcon" format="reference"/>
+        <attr name="rightIcon" format="reference"/>
+        <attr name="rowText" format="reference|string"/>
+        <attr name="rowTextSize" format="dimension"/>
+        <attr name="rowTextColor" format="color" />
+    </declare-styleable>
+</resources>

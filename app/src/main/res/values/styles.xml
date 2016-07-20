@@ -8,10 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="DialogTheme.NoTitle" parent="@style/Theme.AppCompat.DayNight.Dialog">
+    <style name="DialogTheme.NoTitle" parent="Theme.AppCompat.Dialog" >
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="SignInButton">
+        <item name="android:background">@drawable/btn_download_install</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

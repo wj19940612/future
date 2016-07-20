@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
 import com.jnhyxx.html5.activity.MainActivity;
-import com.jnhyxx.html5.net.Api;
+import com.jnhyxx.html5.net.API;
 import com.jnhyxx.umenglibrary.utils.ShareUtil;
 
 import java.net.URISyntaxException;
@@ -60,7 +60,7 @@ public class AppJs {
     @JavascriptInterface
     public void updateUmengDeviceId(String token) {
         if (Variant.isApp1() || Variant.isOrigin() || Variant.isTest()) {
-            Api.updateUMDeviceId(token);
+            API.Account.updateUMDeviceId(token).post();
         }
     }
 }

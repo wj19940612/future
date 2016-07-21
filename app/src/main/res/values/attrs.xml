@@ -21,4 +21,16 @@
         <attr name="rowTextSize" format="dimension"/>
         <attr name="rowTextColor" format="color" />
     </declare-styleable>
+    
+    <declare-styleable name="TitleBar">
+        <attr name="titleText" format="reference|string"/>
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="rightText" format="reference|string" />
+        <attr name="rightTextSize" format="dimension" />
+        <attr name="rightTextColor" format="color" />
+        <attr name="rightImage" format="reference" />
+        <attr name="backFeature" format="boolean" />
+        <attr name="backIcon" format="reference"/>
+    </declare-styleable>
 </resources>

@@ -3,15 +3,23 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#EDF0F5"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.fragment.AccountFragment">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="@string/account"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="22dp">
+
 
         <ImageView
             android:layout_width="wrap_content"
@@ -30,6 +38,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -50,7 +59,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_balance"/>
+                android:layout_marginTop="5dp"
+                android:text="@string/account_balance"
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <View
@@ -76,23 +87,29 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_score"/>
+                android:layout_marginTop="5dp"
+                android:text="@string/account_score"
+                android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <TextView
+            android:id="@+id/signIn"
             style="@style/SignInButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="32dp"
             android:layout_weight="1"
             android:text="@string/sign_in"/>
 
         <TextView
+            android:id="@+id/signUp"
             style="@style/SignInButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -101,10 +118,65 @@
     </LinearLayout>
 
     <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/messageCenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:background="@android:color/white"
         app:leftIcon="@drawable/ic_feedback"
-        app:rowText="消息中心"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/message_center"
+        app:rowTextColor="@android:color/black"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/fundDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:leftIcon="@drawable/ic_feedback"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/fund_detail"
+        app:rowTextColor="@android:color/black"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/splitLine"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/scoreDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:background="@android:color/white"
+        app:leftIcon="@drawable/ic_feedback"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/score_detail"
+        app:rowTextColor="@android:color/black"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/personalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:leftIcon="@drawable/ic_feedback"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/personal_info"
+        app:rowTextColor="@android:color/black"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/splitLine"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/paidToPromote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:leftIcon="@drawable/ic_feedback"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/paid_to_promote"
         app:rowTextColor="@android:color/black"/>
 
 </LinearLayout>

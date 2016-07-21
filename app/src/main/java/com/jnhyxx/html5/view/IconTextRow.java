@@ -30,12 +30,15 @@ public class IconTextRow extends LinearLayout {
     }
 
     private void processAttrs(AttributeSet attrs) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.PageIndicator);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.IconTextRow);
+
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14,
+                getResources().getDisplayMetrics());
 
         mLeftIcon = typedArray.getDrawable(R.styleable.IconTextRow_leftIcon);
         mRightIcon = typedArray.getDrawable(R.styleable.IconTextRow_rightIcon);
         mText = typedArray.getText(R.styleable.IconTextRow_rowText);
-        mTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowTextSize, 14);
+        mTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowTextSize, defaultFontSize);
         mTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_rowTextColor);
 
         typedArray.recycle();

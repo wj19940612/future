@@ -2,21 +2,30 @@ package com.jnhyxx.html5.fragment;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.SignInActivity;
+import com.jnhyxx.html5.activity.account.SignUpActivity;
+import com.jnhyxx.html5.domain.finance.FundInfo;
+import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.APIBase;
+import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
+import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends BaseFragment {
 
     @BindView(R.id.balance)
     TextView mBalance;
@@ -36,6 +45,16 @@ public class AccountFragment extends Fragment {
     IconTextRow mPersonalInfo;
     @BindView(R.id.paidToPromote)
     IconTextRow mPaidToPromote;
+    @BindView(R.id.nickname)
+    TextView mNickname;
+    @BindView(R.id.signArea)
+    LinearLayout mSignArea;
+    @BindView(R.id.recharge)
+    TextView mRecharge;
+    @BindView(R.id.withdraw)
+    TextView mWithdraw;
+    @BindView(R.id.fundArea)
+    LinearLayout mFundArea;
 
     private Unbinder mBinder;
 
@@ -53,9 +72,50 @@ public class AccountFragment extends Fragment {
         mBinder.unbind();
     }
 
-    @OnClick(R.id.signUp)
-    public void signUp() {
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateAccountInfoView();
     }
 
+    private void updateAccountInfoView() {
+        if (User.getUser().isLogin()) {
+            mNickname.setText(getString(R.string.nickname_logged,
+                    User.getUser().getLoginInfo().getUserInfo().getName()));
+            mSignArea.setVisibility(View.GONE);
+            mFundArea.setVisibility(View.VISIBLE);
+
+            requestFundInfo();
+
+        } else {
+            mSignArea.setVisibility(View.VISIBLE);
+            mFundArea.setVisibility(View.GONE);
+            mNickname.setText(R.string.nickname_unknown);
+        }
+    }
+
+    private void requestFundInfo() {
+        API.Finance.getFundInfo(User.getUser().getLoginInfo().getTokenInfo().getToken())
+                .setTag(TAG)
+                .setCallback(new Callback<APIBase.Resp<FundInfo>>() {
+                    @Override
+                    public void onSuccess(APIBase.Resp<FundInfo> fundInfoResp) {
+                        if (fundInfoResp.isSuccess()) {
+                            mBalance.setText();
+                        } else {
+                            ToastUtil.show(fundInfoResp.getMsg());
+                        }
+                    }
+                }).post();
+    }
+
+    @OnClick(R.id.signUp)
+    public void signUp() {
+        Launcher.with(getActivity(), SignUpActivity.class).execute();
+    }
+
+    @OnClick(R.id.signIn)
+    public void signIn() {
+        Launcher.with(getActivity(), SignInActivity.class).execute();
+    }
 }

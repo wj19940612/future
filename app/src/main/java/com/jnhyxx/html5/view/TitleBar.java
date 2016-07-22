@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -10,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,7 +60,7 @@ public class TitleBar extends LinearLayout {
 
         int defaultTitleSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18,
                 getResources().getDisplayMetrics());
-        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14,
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
                 getResources().getDisplayMetrics());
 
         mTitle = typedArray.getText(R.styleable.TitleBar_titleText);
@@ -79,19 +81,36 @@ public class TitleBar extends LinearLayout {
         setGravity(Gravity.CENTER_VERTICAL);
         setBackgroundResource(R.color.colorPrimary);
 
-        // add views
+        // left view
+        int paddingHorizontal = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                getResources().getDisplayMetrics());
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         mLeftView = new TextView(getContext());
-        mRightView = new TextView(getContext());
-        mTitleView = new TextView(getContext());
-        mTitleView.setGravity(Gravity.CENTER_HORIZONTAL);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.weight = 1;
-        addView(mLeftView);
-        addView(mTitleView, params);
-        addView(mRightView);
+        mLeftView.setGravity(Gravity.CENTER);
+        mLeftView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
+        addView(mLeftView, params);
 
+        // center view
+        mTitleView = new TextView(getContext());
+        mTitleView.setGravity(Gravity.CENTER);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        params.weight = 1;
+        addView(mTitleView, params);
+
+        // right view
+        mRightView = new TextView(getContext());
+        mRightView.setGravity(Gravity.CENTER);
+        mRightView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        addView(mRightView, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);
+            mRightView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackClick(view);
+                }
+            });
         }
         setTitle(mTitle);
         setTitleSize(mTitleSize);
@@ -100,6 +119,13 @@ public class TitleBar extends LinearLayout {
         setRightTextSize(mRightTextSize);
         setRightTextColor(mRightTextColor);
         setRightImage(mRightImage);
+    }
+
+    private void onBackClick(View view) {
+        if (getContext() instanceof Activity) {
+            Activity activity = (Activity) getContext();
+            activity.onBackPressed();
+        }
     }
 
     public void setBackButtonIcon(Drawable backIcon) {

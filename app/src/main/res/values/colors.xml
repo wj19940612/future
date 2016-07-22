@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="splitLine">#EDEDED</color>
+    <color name="colorDisable">#DDDDDD</color>
 </resources>

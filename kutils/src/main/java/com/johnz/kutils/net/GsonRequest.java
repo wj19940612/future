@@ -1,5 +1,7 @@
 package com.johnz.kutils.net;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -60,6 +62,8 @@ public class GsonRequest<T> extends Request<T> {
         String json;
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+
+            Log.d(getTag().toString(), "parseNetworkResponse: " + json);
 
             T result = new Gson().fromJson(json, type);
 

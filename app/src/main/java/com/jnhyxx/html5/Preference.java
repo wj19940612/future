@@ -9,6 +9,7 @@ public class Preference {
 
     public interface Key {
         String IS_FOREGROUND = "isForeground";
+        String USER_JSON = "userJson";
     }
 
     private static Preference sInstance;
@@ -36,5 +37,13 @@ public class Preference {
 
     public boolean isForeground() {
         return mPrefs.getBoolean(Key.IS_FOREGROUND, false);
+    }
+
+    public void setUserJson(String userJson) {
+        getEditor().putString(Key.USER_JSON, userJson).commit();
+    }
+
+    public String getUserJson() {
+        return mPrefs.getString(Key.USER_JSON, null);
     }
 }

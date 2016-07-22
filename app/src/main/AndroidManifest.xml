@@ -78,16 +78,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme.NoTitle"/>
         <activity
-            android:name=".activity.dialog.PopupDialogActivity"
+            android:name=".activity.dialog.MessageDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme.NoTitle"/>
         <activity
             android:name=".activity.dialog.ProgressActivity"
             android:theme="@style/DialogTheme.NoTitle"/>
 
+        <!-- account activity -->
+        <activity
+            android:name=".activity.account.SignUpActivity"
+            android:launchMode="singleTop"/>
+
         <service android:name=".service.DownloadService"/>
 
-        <activity android:name=".activity.account.SignUpActivity">
+        <activity android:name=".activity.account.SignInActivity">
         </activity>
     </application>
 

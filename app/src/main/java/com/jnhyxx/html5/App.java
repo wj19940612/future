@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.jnhyxx.html5.activity.MainActivity;
-import com.jnhyxx.html5.activity.dialog.PopupDialogActivity;
+import com.jnhyxx.html5.activity.dialog.MessageDialogActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.umenglibrary.UmengLib;
@@ -105,14 +105,14 @@ public class App extends Application {
     private void showPopupDialog(Context context, final UMessage uMessage, Map<String, String> extra) {
         final String messageId = NotificationUtil.getMessageId(extra);
         final String messageType = NotificationUtil.getMessageType(extra);
-        Launcher.with(context, PopupDialogActivity.class)
+        Launcher.with(context, MessageDialogActivity.class)
                 .setPreExecuteListener(new Launcher.PreExecuteListener() {
                     @Override
                     public void preExecute(Intent intent) {
                         intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
                                 .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
-                                .putExtra(PopupDialogActivity.TITLE, uMessage.title)
-                                .putExtra(PopupDialogActivity.MESSAGE, uMessage.text)
+                                .putExtra(MessageDialogActivity.TITLE, uMessage.title)
+                                .putExtra(MessageDialogActivity.MESSAGE, uMessage.text)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     }
                 }).execute();

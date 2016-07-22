@@ -96,7 +96,7 @@ public class APIBase extends RequestManager {
         }
     }
 
-    public class Response<T> {
+    public class Resp<T> {
 
         private int code;
         private String msg;

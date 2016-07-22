@@ -47,16 +47,32 @@
     <string name="account">账户</string>
 
     <!-- Account -->
-    <string name="nickname">您好,请先登录</string>
+    <string name="nickname_unknown">您好,请先登录</string>
+    <string name="nickname_logged">您好,%1$s</string>
     <string name="account_balance">账户余额(元)</string>
     <string name="account_score">我的积分</string>
     <string name="sign_in">登录</string>
-    <string name="sign_up">注册</string>
+    <string name="sign_up_free">免费注册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
     <string name="score_detail">积分明细</string>
     <string name="personal_info">个人信息</string>
     <string name="paid_to_promote">推广赚钱</string>
+    <string name="phone_number">手机号</string>
+    <string name="message_auth_code">短信验证</string>
+    <string name="password">密码</string>
+    <string name="promote_code">推广码</string>
+    <string name="obtain_auth_code">获取验证码</string>
+    <string name="read_and_agreed">我已阅读并同意</string>
+    <string name="service_protocol">《服务协议》</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="resend_after_n_seconds">%1$d秒后重发</string>
+    <string name="please_input_phone_num">请输入手机号</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="recharge">充值</string>
+    <string name="withdraw">提现</string>
 
 
 </resources>

@@ -16,7 +16,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.AccountFragment;
 import com.jnhyxx.html5.fragment.HallFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
-import com.jnhyxx.html5.fragment.UpgradeDialog;
+import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;

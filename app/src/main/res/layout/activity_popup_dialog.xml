@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="170dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_dialog_content"
         android:orientation="vertical"
         android:paddingBottom="16dp"
@@ -39,21 +40,21 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/doubleButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/negative"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn_popup_dialog"
+            android:background="@drawable/btn_dialog_left"
             android:clickable="true"
             android:gravity="center_horizontal"
             android:padding="12dp"
-            android:text="@string/i_get_it"
             android:textColor="@android:color/white"/>
 
         <View
@@ -66,11 +67,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn_popup_dialog"
+            android:background="@drawable/btn_dialog_right"
             android:gravity="center_horizontal"
             android:padding="12dp"
-            android:text="@string/check_detail"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/singleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_dialog_single"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:padding="12dp"
+        android:textColor="@android:color/white"/>
+</LinearLayout>

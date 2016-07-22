@@ -15,7 +15,7 @@ import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.johnz.kutils.Launcher;
 
-public class PopupDialogActivity extends Activity  {
+public class MessageDialogActivity extends Activity  {
 
     public static final String TITLE = "title";
     public static final String MESSAGE = "message";
@@ -40,10 +40,15 @@ public class PopupDialogActivity extends Activity  {
     }
 
     private void initView() {
+        findViewById(R.id.doubleButtons).setVisibility(View.VISIBLE);
+        findViewById(R.id.singleButton).setVisibility(View.GONE);
+
         mTitle = (TextView) findViewById(R.id.title);
         mMessage = (TextView) findViewById(R.id.message);
         mNegative = (TextView) findViewById(R.id.negative);
         mPosition = (TextView) findViewById(R.id.position);
+        mNegative.setText(R.string.i_get_it);
+        mPosition.setText(R.string.check_detail);
 
         mNegative.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +60,7 @@ public class PopupDialogActivity extends Activity  {
             @Override
             public void onClick(View v) {
 
-                Launcher.with(PopupDialogActivity.this, MainActivity.class)
+                Launcher.with(MessageDialogActivity.this, MainActivity.class)
                         .setPreExecuteListener(new Launcher.PreExecuteListener() {
                             @Override
                             public void preExecute(Intent intent) {

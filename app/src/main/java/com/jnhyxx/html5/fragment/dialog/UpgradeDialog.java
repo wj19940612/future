@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.fragment;
+package com.jnhyxx.html5.fragment.dialog;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;

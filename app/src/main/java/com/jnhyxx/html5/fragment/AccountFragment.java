@@ -18,6 +18,7 @@ import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -101,7 +102,9 @@ public class AccountFragment extends BaseFragment {
                     @Override
                     public void onSuccess(APIBase.Resp<FundInfo> fundInfoResp) {
                         if (fundInfoResp.isSuccess()) {
-                            mBalance.setText();
+                            FundInfo fundInfo = fundInfoResp.getData();
+                            mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
+                            mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
                         } else {
                             ToastUtil.show(fundInfoResp.getMsg());
                         }

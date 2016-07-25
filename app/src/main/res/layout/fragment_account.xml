@@ -102,7 +102,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/signIn"
+            android:id="@+id/signInButton"
             style="@style/SignInButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

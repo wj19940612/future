@@ -94,6 +94,8 @@
 
         <activity android:name=".activity.account.SignInActivity">
         </activity>
+        <activity android:name=".activity.account.FindPasswordActivity">
+        </activity>
     </application>
 
 </manifest>

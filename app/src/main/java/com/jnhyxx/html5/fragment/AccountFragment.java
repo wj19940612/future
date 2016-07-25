@@ -32,7 +32,7 @@ public class AccountFragment extends BaseFragment {
     TextView mBalance;
     @BindView(R.id.score)
     TextView mScore;
-    @BindView(R.id.signIn)
+    @BindView(R.id.signInButton)
     TextView mSignIn;
     @BindView(R.id.signUp)
     TextView mSignUp;
@@ -117,7 +117,7 @@ public class AccountFragment extends BaseFragment {
         Launcher.with(getActivity(), SignUpActivity.class).execute();
     }
 
-    @OnClick(R.id.signIn)
+    @OnClick(R.id.signInButton)
     public void signIn() {
         Launcher.with(getActivity(), SignInActivity.class).execute();
     }

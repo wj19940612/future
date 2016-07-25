@@ -49,6 +49,16 @@ public class API extends APIBase {
         }
 
         /**
+         * 找回密码时候获取短信验证码
+         * @param tele
+         */
+        public static API obtainAuthCodeWhenFindPassword(String tele) {
+            ApiParams params = new ApiParams()
+                    .put(TELE, tele);
+            return new API("/user/sms/findLoginPwdCode", params);
+        }
+
+        /**
          * 注册
          * @param phoneNum
          * @param password

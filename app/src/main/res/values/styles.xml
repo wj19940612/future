@@ -38,7 +38,7 @@
         <item name="android:maxLength">20</item>
     </style>
 
-    <style name="SignButton">
+    <style name="PrimaryRedButton">
         <item name="android:background">@drawable/btn_primary_red</item>
         <item name="android:clickable">true</item>
         <item name="android:enabled">false</item>

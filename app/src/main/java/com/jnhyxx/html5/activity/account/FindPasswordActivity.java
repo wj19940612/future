@@ -4,27 +4,21 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.LoginInfo;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignUpActivity extends BaseActivity {
+public class FindPasswordActivity extends BaseActivity {
 
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
@@ -32,16 +26,8 @@ public class SignUpActivity extends BaseActivity {
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
-    @BindView(R.id.password)
-    EditText mPassword;
-    @BindView(R.id.promoteCode)
-    EditText mPromoteCode;
-    @BindView(R.id.agree_protocol)
-    CheckBox mAgreeProtocol;
-    @BindView(R.id.service_protocol)
-    TextView mServiceProtocol;
-    @BindView(R.id.signUpButton)
-    TextView mSignUpButton;
+    @BindView(R.id.nextStepButton)
+    TextView mNextStepButton;
 
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
@@ -49,18 +35,11 @@ public class SignUpActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_find_password);
         ButterKnife.bind(this);
 
         mPhoneNum.addTextChangedListener(new ValidationWatcher());
         mMessageAuthCode.addTextChangedListener(new ValidationWatcher());
-        mPassword.addTextChangedListener(new ValidationWatcher());
-        mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                activeButtons();
-            }
-        });
     }
 
     private class ValidationWatcher implements TextWatcher {
@@ -85,13 +64,13 @@ public class SignUpActivity extends BaseActivity {
             mObtainAuthCode.setEnabled(enable);
         }
 
-        enable = checkSignUpButtonEnable();
-        if (enable != mSignUpButton.isEnabled()) {
-            mSignUpButton.setEnabled(enable);
+        enable = checkNextStepButtonEnable();
+        if (enable != mNextStepButton.isEnabled()) {
+            mNextStepButton.setEnabled(enable);
         }
     }
 
-    private boolean checkSignUpButtonEnable() {
+    private boolean checkNextStepButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
@@ -102,12 +81,7 @@ public class SignUpActivity extends BaseActivity {
             return false;
         }
 
-        String password = mPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
-            return false;
-        }
-
-        return true && mAgreeProtocol.isChecked();
+        return true;
     }
 
     private boolean checkObtainAuthCodeEnable() {
@@ -120,8 +94,8 @@ public class SignUpActivity extends BaseActivity {
 
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
-        String phoneNum = mPhoneNum.getText().toString();
-        API.Account.obtainAuthCode(phoneNum)
+        String phoneNum = mPhoneNum.getText().toString().trim();
+        API.Account.obtainAuthCodeWhenFindPassword(phoneNum)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<APIBase.Resp>() {
@@ -137,28 +111,6 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                        }
-                    }
-                }).post();
-    }
-
-    @OnClick(R.id.signUp)
-    void signUp() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
-        String authCode = mMessageAuthCode.getText().toString().trim();
-        API.Account.signUp(phoneNum, password, authCode)
-                .setIndeterminate(this)
-                .setTag(TAG)
-                .setCallback(new Callback<APIBase.Resp<LoginInfo>>() {
-                    @Override
-                    public void onSuccess(APIBase.Resp<LoginInfo> loginInfoResp) {
-                        Log.d(TAG, "onSuccess: " + loginInfoResp);
-                        if (loginInfoResp.isSuccess()) {
-                            User.getUser().setLoginInfo(loginInfoResp.getData());
-                            finish();
-                        } else {
-                            ToastUtil.show(loginInfoResp.getMsg());
                         }
                     }
                 }).post();

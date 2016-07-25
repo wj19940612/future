@@ -42,8 +42,8 @@
     <include layout="@layout/split_line_thick"/>
 
     <TextView
-        android:id="@+id/signIn"
-        style="@style/SignButton"
+        android:id="@+id/signInButton"
+        style="@style/PrimaryRedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

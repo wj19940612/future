@@ -73,6 +73,9 @@
     <string name="forget_password">忘记密码</string>
     <string name="recharge">充值</string>
     <string name="withdraw">提现</string>
+    <string name="next_step">下一步</string>
+    <string name="please_contact_service_if_issues_happen">如果遇到问题,请在首页联系客服</string>
+    <string name="find_password">密码找回</string>
 
 
 </resources>

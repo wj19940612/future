@@ -31,12 +31,12 @@ public class SignInActivity extends BaseActivity {
     EditText mPhoneNum;
     @BindView(R.id.password)
     EditText mPassword;
-    @BindView(R.id.signIn)
-    TextView mSignIn;
     @BindView(R.id.signUp)
     TextView mSignUp;
     @BindView(R.id.forgetPassword)
     TextView mForgetPassword;
+    @BindView(R.id.signInButton)
+    TextView mSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +60,11 @@ public class SignInActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mSignIn.setEnabled(checkSignInButton());
+            mSignInButton.setEnabled(checkSignInButtonEnable());
         }
     }
 
-    private boolean checkSignInButton() {
+    private boolean checkSignInButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
@@ -83,7 +83,7 @@ public class SignInActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick(R.id.signIn)
+    @OnClick(R.id.signInButton)
     void signIn() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
@@ -105,8 +105,13 @@ public class SignInActivity extends BaseActivity {
     }
 
     @OnClick(R.id.signUp)
-    void signUp() {
+    void openSignUpPage() {
         Launcher.with(this, SignUpActivity.class).execute();
         finish();
+    }
+
+    @OnClick(R.id.forgetPassword)
+    void openFindPasswordPage() {
+        Launcher.with(this, FindPasswordActivity.class).execute();
     }
 }

@@ -58,6 +58,13 @@ public class API extends APIBase {
             return new API("/user/sms/findLoginPwdCode", params);
         }
 
+        public static API authCodeWhenFindPassword(String tele, String code) {
+            ApiParams params = new ApiParams()
+                    .put(TELE, tele)
+                    .put("code", code);
+            return new API("/user/sms/authLoginPwdCode", params);
+        }
+
         /**
          * 注册
          * @param phoneNum

@@ -13,12 +13,13 @@ import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FindPasswordActivity extends BaseActivity {
+public class FindPwdActivity extends BaseActivity {
 
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
@@ -35,7 +36,7 @@ public class FindPasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_password);
+        setContentView(R.layout.activity_find_pwd);
         ButterKnife.bind(this);
 
         mPhoneNum.addTextChangedListener(new ValidationWatcher());
@@ -111,6 +112,27 @@ public class FindPasswordActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                        }
+                    }
+                }).post();
+    }
+
+    @OnClick(R.id.nextStepButton)
+    void doNextStepButtonClick() {
+        String phoneNum = mPhoneNum.getText().toString().trim();
+        String authCode = mMessageAuthCode.getText().toString().trim();
+        API.Account.authCodeWhenFindPassword(phoneNum, authCode)
+                .setIndeterminate(this).setTag(TAG)
+                .setCallback(new Callback<API.Resp>() {
+                    @Override
+                    public void onSuccess(API.Resp resp) {
+                        EasyDialog.newInstance(resp.getMsg())
+                                .setPositive(R.string.ok)
+                                .show(getActivity());
+
+                        if (resp.isSuccess()) {
+                            Launcher.with(getActivity(), ModifyPwdActivity.class).execute();
+                            finish();
                         }
                     }
                 }).post();

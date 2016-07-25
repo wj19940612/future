@@ -112,6 +112,6 @@ public class SignInActivity extends BaseActivity {
 
     @OnClick(R.id.forgetPassword)
     void openFindPasswordPage() {
-        Launcher.with(this, FindPasswordActivity.class).execute();
+        Launcher.with(this, FindPwdActivity.class).execute();
     }
 }

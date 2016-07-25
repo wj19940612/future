@@ -94,7 +94,9 @@
 
         <activity android:name=".activity.account.SignInActivity">
         </activity>
-        <activity android:name=".activity.account.FindPasswordActivity">
+        <activity android:name=".activity.account.FindPwdActivity">
+        </activity>
+        <activity android:name=".activity.account.ModifyPwdActivity">
         </activity>
     </application>
 

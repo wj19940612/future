@@ -32,7 +32,7 @@ public class App extends Application {
 
         if (Variant.isApp1()) {
             try {
-                WP_App.on_AppInit(getApplicationContext());
+                WP_App.on_AppInit(getApplicationContext(), BuildConfig.DEBUG);
             } catch (Exception e) {
                 e.printStackTrace();
             }

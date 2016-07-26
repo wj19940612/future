@@ -8,8 +8,10 @@
               tools:context="com.jnhyxx.html5.fragment.AccountFragment">
 
     <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rightText="@string/exit"
         app:titleText="@string/account"/>
 
     <LinearLayout

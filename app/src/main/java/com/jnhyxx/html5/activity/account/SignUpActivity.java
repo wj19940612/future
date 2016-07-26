@@ -1,10 +1,10 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -122,8 +122,7 @@ public class SignUpActivity extends BaseActivity {
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
         API.Account.obtainAuthCode(phoneNum)
-                .setIndeterminate(this)
-                .setTag(TAG)
+                .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<APIBase.Resp>() {
                     @Override
                     public void onSuccess(APIBase.Resp resp) {
@@ -148,15 +147,22 @@ public class SignUpActivity extends BaseActivity {
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
         API.Account.signUp(phoneNum, password, authCode)
-                .setIndeterminate(this)
-                .setTag(TAG)
+                .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<APIBase.Resp<LoginInfo>>() {
                     @Override
                     public void onSuccess(APIBase.Resp<LoginInfo> loginInfoResp) {
-                        Log.d(TAG, "onSuccess: " + loginInfoResp);
                         if (loginInfoResp.isSuccess()) {
                             User.getUser().setLoginInfo(loginInfoResp.getData());
-                            finish();
+
+                            EasyDialog.newInstance(loginInfoResp.getMsg())
+                                    .setCloseable(false)
+                                    .setPositive(R.string.ok, new EasyDialog.OnClickListener() {
+                                        @Override
+                                        public void onClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                            finish();
+                                        }
+                                    }).show(getActivity());
                         } else {
                             ToastUtil.show(loginInfoResp.getMsg());
                         }

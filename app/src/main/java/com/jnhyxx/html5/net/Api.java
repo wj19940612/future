@@ -13,6 +13,7 @@ public class API extends APIBase {
     public static final String CODE = "code";
     public static final String AUTH_CODE = "authCode";
     public static final String PASSWORD = "password";
+    public static final String SIGN = "sign";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -47,20 +48,34 @@ public class API extends APIBase {
 
             ApiParams params = new ApiParams()
                     .put(TELE, tele)
-                    .put("sign", sign);
+                    .put(SIGN, sign);
             return new API("/user/sms/getRegCode", params);
         }
 
         /**
-         * 找回密码时候获取短信验证码 /user/sms/authLoginPwdCode
+         * 找回密码时候获取短信验证码 /user/sms/findLoginPwdCode
          * @param tele
          */
         public static API obtainAuthCodeWhenFindPwd(String tele) {
+            String sign = null;
+            try {
+                sign = SecurityUtil.md5Encrypt(tele + "luckin");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
             ApiParams params = new ApiParams()
-                    .put(TELE, tele);
+                    .put(TELE, tele)
+                    .put(SIGN, sign);
             return new API("/user/sms/findLoginPwdCode", params);
         }
 
+        /**
+         * 找回登录密码 - 验证码验证 /user/sms/authLoginPwdCode
+         * @param tele
+         * @param code
+         * @return
+         */
         public static API authCodeWhenFindPassword(String tele, String code) {
             ApiParams params = new ApiParams()
                     .put(TELE, tele)

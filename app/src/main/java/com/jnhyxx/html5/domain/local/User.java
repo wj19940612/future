@@ -49,4 +49,9 @@ public class User {
     public boolean isLogin() {
         return mLoginInfo != null;
     }
+
+    public void logout() {
+        mLoginInfo = null;
+        saveToPreference();
+    }
 }

@@ -43,6 +43,7 @@ public class EasyDialog extends AppCompatDialogFragment {
     private OnClickListener mNegativeListener;
     private boolean mIsDoubleButtons;
     private String mMessageText;
+    private boolean mCloseable;
 
     public interface OnClickListener {
         void onClick(Dialog dialog);
@@ -85,6 +86,9 @@ public class EasyDialog extends AppCompatDialogFragment {
         scaleDialogWindowWidth(0.9);
         mTitle.setVisibility(View.INVISIBLE);
         mMessage.setText(mMessageText);
+        getDialog().setCancelable(mCloseable);
+        getDialog().setCanceledOnTouchOutside(mCloseable);
+
         if (mIsDoubleButtons) {
             mSingleButton.setVisibility(View.GONE);
             mDoubleButtons.setVisibility(View.VISIBLE);
@@ -155,6 +159,11 @@ public class EasyDialog extends AppCompatDialogFragment {
     public EasyDialog setNegative(int textId) {
         mNegativeId = textId;
         mIsDoubleButtons = true;
+        return this;
+    }
+
+    public EasyDialog setCloseable(boolean closeable) {
+        mCloseable = closeable;
         return this;
     }
 

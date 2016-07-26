@@ -30,6 +30,7 @@
         <attr name="rightTextSize" format="dimension" />
         <attr name="rightTextColor" format="color" />
         <attr name="rightImage" format="reference" />
+        <attr name="rightVisible" format="boolean" />
         <attr name="backFeature" format="boolean" />
         <attr name="backIcon" format="reference"/>
     </declare-styleable>

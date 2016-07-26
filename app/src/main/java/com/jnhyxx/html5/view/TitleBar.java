@@ -8,16 +8,15 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 
-public class TitleBar extends LinearLayout {
+public class TitleBar extends RelativeLayout {
 
     private CharSequence mTitle;
     private int mTitleSize;
@@ -26,6 +25,7 @@ public class TitleBar extends LinearLayout {
     private int mRightTextSize;
     private ColorStateList mRightTextColor;
     private Drawable mRightImage;
+    private boolean mRightVisible;
     private boolean mBackFeature;
     private Drawable mBackIcon;
 
@@ -39,20 +39,6 @@ public class TitleBar extends LinearLayout {
         processAttrs(attrs);
 
         init();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int measureWidth = getMeasuredWidth();
-        int measureHeight = getMeasuredHeight();
-
-        int fixedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
-                getResources().getDisplayMetrics());
-
-        Log.d("TEST", "onMeasure: " + measureWidth + ", " + measureHeight);
-
-        setMeasuredDimension(measureWidth, fixedHeight);
     }
 
     private void processAttrs(AttributeSet attrs) {
@@ -70,6 +56,7 @@ public class TitleBar extends LinearLayout {
         mRightTextSize = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_rightTextSize, defaultFontSize);
         mRightTextColor = typedArray.getColorStateList(R.styleable.TitleBar_rightTextColor);
         mRightImage = typedArray.getDrawable(R.styleable.TitleBar_rightImage);
+        mRightVisible = typedArray.getBoolean(R.styleable.TitleBar_rightVisible, false);
         mBackFeature = typedArray.getBoolean(R.styleable.TitleBar_backFeature, false);
         mBackIcon = typedArray.getDrawable(R.styleable.TitleBar_backIcon);
 
@@ -77,14 +64,15 @@ public class TitleBar extends LinearLayout {
     }
 
     private void init() {
-        setOrientation(HORIZONTAL);
-        setGravity(Gravity.CENTER_VERTICAL);
         setBackgroundResource(R.color.colorPrimary);
+        int fixedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
+                getResources().getDisplayMetrics());
 
         // left view
         int paddingHorizontal = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                 getResources().getDisplayMetrics());
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        LayoutParams params =  new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         mLeftView = new TextView(getContext());
         mLeftView.setGravity(Gravity.CENTER);
         mLeftView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
@@ -93,19 +81,19 @@ public class TitleBar extends LinearLayout {
         // center view
         mTitleView = new TextView(getContext());
         mTitleView.setGravity(Gravity.CENTER);
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        params.weight = 1;
+        params = new LayoutParams(LayoutParams.MATCH_PARENT, fixedHeight);
         addView(mTitleView, params);
 
         // right view
         mRightView = new TextView(getContext());
         mRightView.setGravity(Gravity.CENTER);
         mRightView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         addView(mRightView, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);
-            mRightView.setOnClickListener(new OnClickListener() {
+            mLeftView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onBackClick(view);
@@ -119,6 +107,7 @@ public class TitleBar extends LinearLayout {
         setRightTextSize(mRightTextSize);
         setRightTextColor(mRightTextColor);
         setRightImage(mRightImage);
+        setRightVisible(mRightVisible);
     }
 
     private void onBackClick(View view) {
@@ -160,6 +149,14 @@ public class TitleBar extends LinearLayout {
     public void setRightImage(Drawable rightImage) {
         mRightImage = rightImage;
         mRightView.setCompoundDrawables(mRightImage, null, null, null);
+    }
+
+    public void setRightVisible(boolean rightVisible) {
+        mRightView.setVisibility(rightVisible ? VISIBLE: INVISIBLE);
+    }
+
+    public void setRightViewClickListener(View.OnClickListener listener) {
+        mRightView.setOnClickListener(listener);
     }
 
     public void setTitleColor(ColorStateList titleColor) {

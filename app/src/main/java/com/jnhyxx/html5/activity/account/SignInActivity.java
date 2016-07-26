@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,7 +59,10 @@ public class SignInActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            mSignInButton.setEnabled(checkSignInButtonEnable());
+            boolean enable = checkSignInButtonEnable();
+            if (enable != mSignInButton.isEnabled()) {
+                mSignInButton.setEnabled(enable);
+            }
         }
     }
 
@@ -75,7 +77,7 @@ public class SignInActivity extends BaseActivity {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     @OnClick(R.id.closeButton)
@@ -93,7 +95,6 @@ public class SignInActivity extends BaseActivity {
                 .setCallback(new Callback<APIBase.Resp<LoginInfo>>() {
                     @Override
                     public void onSuccess(APIBase.Resp<LoginInfo> loginInfoResp) {
-                        Log.d(TAG, "onSuccess: " + loginInfoResp);
                         if (loginInfoResp.isSuccess()) {
                             User.getUser().setLoginInfo(loginInfoResp.getData());
                             finish();

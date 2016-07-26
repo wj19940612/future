@@ -18,6 +18,7 @@ import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
+import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
@@ -56,6 +57,8 @@ public class AccountFragment extends BaseFragment {
     TextView mWithdraw;
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
 
     private Unbinder mBinder;
 
@@ -85,6 +88,14 @@ public class AccountFragment extends BaseFragment {
                     User.getUser().getLoginInfo().getUserInfo().getName()));
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
+            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightViewClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    User.getUser().logout();
+                    updateAccountInfoView();
+                }
+            });
 
             requestFundInfo();
 
@@ -92,6 +103,7 @@ public class AccountFragment extends BaseFragment {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
             mNickname.setText(R.string.nickname_unknown);
+            mTitleBar.setRightVisible(false);
         }
     }
 

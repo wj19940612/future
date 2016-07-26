@@ -83,6 +83,7 @@
     <string name="please_input_msg_auth_code">请输入短信验证码</string>
     <string name="optional">没有可不填</string>
     <string name="please_repeat_new_password">请重复新密码</string>
+    <string name="exit">退出</string>
 
 
 </resources>

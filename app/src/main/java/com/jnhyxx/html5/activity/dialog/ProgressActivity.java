@@ -28,6 +28,7 @@ public class ProgressActivity extends AppCompatActivity {
 
         mMap = new ConcurrentHashMap<>();
 
+        Log.d("test", "onCreate: " + getIntent());
         processIntent(getIntent());
     }
 
@@ -43,7 +44,7 @@ public class ProgressActivity extends AppCompatActivity {
                 count++;
             }
             mMap.put(addTag, count);
-            Log.d("test", "processIntent: count+ = " + count);
+            Log.d("test", "add progress: count+= " + count);
         }
 
         if (!TextUtils.isEmpty(removeTag)) {
@@ -55,9 +56,9 @@ public class ProgressActivity extends AppCompatActivity {
                     mMap.remove(removeTag);
                 }
             }
-            Log.d("test", "processIntent: count- = " + count);
-
+            Log.d("test", "remove progress: count-= " + count);
             if (mMap.isEmpty()) {
+                Log.d("test", "finish()");
                 finish();
             }
         }
@@ -82,8 +83,8 @@ public class ProgressActivity extends AppCompatActivity {
 
     public static void show(Activity activity, String tag) {
         Intent intent = new Intent(activity, ProgressActivity.class);
-        intent.putExtra(EXTRA_ADD_TAG, tag);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra(EXTRA_ADD_TAG, tag);
         activity.startActivity(intent);
     }
 

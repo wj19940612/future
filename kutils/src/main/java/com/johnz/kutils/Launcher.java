@@ -6,15 +6,10 @@ import android.content.Intent;
 
 public class Launcher {
 
-    public interface PreExecuteListener {
-        void preExecute(Intent intent);
-    }
-
     private static Launcher sInstance;
 
     private Context mContext;
     private Intent mIntent;
-    private PreExecuteListener mPreExecuteListener;
 
     private Launcher() {
         mIntent = new Intent();
@@ -33,26 +28,29 @@ public class Launcher {
         return sInstance;
     }
 
-    public Launcher setPreExecuteListener(PreExecuteListener listener) {
-        mPreExecuteListener = listener;
+    public Launcher putExtra(String key, int value) {
+        mIntent.putExtra(key, value);
+        return this;
+    }
+
+    public Launcher putExtra(String key, String value) {
+        mIntent.putExtra(key, value);
+        return this;
+    }
+
+    public Launcher setFlags(int flag) {
+        mIntent.setFlags(flag);
         return this;
     }
 
     public void execute() {
-        if (mPreExecuteListener != null) {
-            mPreExecuteListener.preExecute(mIntent);
-        }
         mContext.startActivity(mIntent);
     }
 
     public void executeForResult(int requestCode) {
-        if (mPreExecuteListener != null) {
-            mPreExecuteListener.preExecute(mIntent);
-        }
         if (mContext instanceof Activity) {
             Activity activity = (Activity) mContext;
             activity.startActivityForResult(mIntent, requestCode);
         }
     }
-
 }

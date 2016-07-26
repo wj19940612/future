@@ -89,14 +89,10 @@ public class App extends Application {
                 final String messageId = NotificationUtil.getMessageId(extra);
                 Log.d("TEST", "openActivity: " + uMessage.activity);
                 Launcher.with(context, MainActivity.class)
-                        .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                            @Override
-                            public void preExecute(Intent intent) {
-                                intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
-                                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
-                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                        }).execute();
+                        .putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
+                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .execute();
             }
         };
         PushAgent.getInstance(sContext).setNotificationClickHandler(clickHandler);
@@ -106,16 +102,12 @@ public class App extends Application {
         final String messageId = NotificationUtil.getMessageId(extra);
         final String messageType = NotificationUtil.getMessageType(extra);
         Launcher.with(context, MessageDialogActivity.class)
-                .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                    @Override
-                    public void preExecute(Intent intent) {
-                        intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
-                                .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
-                                .putExtra(MessageDialogActivity.TITLE, uMessage.title)
-                                .putExtra(MessageDialogActivity.MESSAGE, uMessage.text)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    }
-                }).execute();
+                .putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
+                .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
+                .putExtra(MessageDialogActivity.TITLE, uMessage.title)
+                .putExtra(MessageDialogActivity.MESSAGE, uMessage.text)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .execute();
     }
 
     public static Context getAppContext() {

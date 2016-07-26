@@ -69,13 +69,20 @@
     <string name="cancel">取消</string>
     <string name="resend_after_n_seconds">%1$d秒后重发</string>
     <string name="please_input_phone_num">请输入手机号</string>
-    <string name="please_input_password">请输入密码</string>
+    <string name="please_input_password">请输入密码(6到20位数字英文)</string>
     <string name="forget_password">忘记密码</string>
     <string name="recharge">充值</string>
     <string name="withdraw">提现</string>
     <string name="next_step">下一步</string>
     <string name="please_contact_service_if_issues_happen">如果遇到问题,请在首页联系客服</string>
     <string name="find_password">密码找回</string>
+    <string name="modify_password">修改密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="please_input_new_password">请输入新密码(6到20位数字英文)</string>
+    <string name="please_input_msg_auth_code">请输入短信验证码</string>
+    <string name="optional">没有可不填</string>
+    <string name="please_repeat_new_password">请重复新密码</string>
 
 
 </resources>

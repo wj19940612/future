@@ -13,6 +13,7 @@ import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -96,7 +97,7 @@ public class FindPwdActivity extends BaseActivity {
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-        API.Account.obtainAuthCodeWhenFindPassword(phoneNum)
+        API.Account.obtainAuthCodeWhenFindPwd(phoneNum)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<APIBase.Resp>() {
@@ -119,20 +120,21 @@ public class FindPwdActivity extends BaseActivity {
 
     @OnClick(R.id.nextStepButton)
     void doNextStepButtonClick() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
-        String authCode = mMessageAuthCode.getText().toString().trim();
+        final String phoneNum = mPhoneNum.getText().toString().trim();
+        final String authCode = mMessageAuthCode.getText().toString().trim();
         API.Account.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<API.Resp>() {
                     @Override
                     public void onSuccess(API.Resp resp) {
-                        EasyDialog.newInstance(resp.getMsg())
-                                .setPositive(R.string.ok)
-                                .show(getActivity());
-
                         if (resp.isSuccess()) {
-                            Launcher.with(getActivity(), ModifyPwdActivity.class).execute();
+                            Launcher.with(getActivity(), ModifyPwdActivity.class)
+                                    .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
+                                    .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
+                                    .execute();
                             finish();
+                        } else {
+                            ToastUtil.show(resp.getMsg());
                         }
                     }
                 }).post();

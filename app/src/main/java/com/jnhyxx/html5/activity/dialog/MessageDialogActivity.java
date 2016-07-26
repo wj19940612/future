@@ -59,16 +59,11 @@ public class MessageDialogActivity extends Activity  {
         mPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Launcher.with(MessageDialogActivity.this, MainActivity.class)
-                        .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                            @Override
-                            public void preExecute(Intent intent) {
-                                intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, mMessageId)
-                                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, mMessageType)
-                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                        }).execute();
+                        .putExtra(NotificationUtil.KEY_MESSAGE_ID, mMessageId)
+                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, mMessageType)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .execute();
 
                 finish();
             }

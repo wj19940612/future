@@ -10,6 +10,9 @@ import java.security.NoSuchAlgorithmException;
 public class API extends APIBase {
 
     public static final String TELE = "tele";
+    public static final String CODE = "code";
+    public static final String AUTH_CODE = "authCode";
+    public static final String PASSWORD = "password";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -17,7 +20,7 @@ public class API extends APIBase {
 
     public static class Account {
         /**
-         * 更新友盟设备号
+         * 更新友盟设备号 /user/user/updateUmCode
          * @param token
          */
         public static API updateUMDeviceId(String token) {
@@ -31,7 +34,7 @@ public class API extends APIBase {
         }
 
         /**
-         * 获取注册短信验证码
+         * 获取注册短信验证码 /user/sms/getRegCode
          * @param tele
          */
         public static API obtainAuthCode(String tele) {
@@ -49,10 +52,10 @@ public class API extends APIBase {
         }
 
         /**
-         * 找回密码时候获取短信验证码
+         * 找回密码时候获取短信验证码 /user/sms/authLoginPwdCode
          * @param tele
          */
-        public static API obtainAuthCodeWhenFindPassword(String tele) {
+        public static API obtainAuthCodeWhenFindPwd(String tele) {
             ApiParams params = new ApiParams()
                     .put(TELE, tele);
             return new API("/user/sms/findLoginPwdCode", params);
@@ -61,12 +64,12 @@ public class API extends APIBase {
         public static API authCodeWhenFindPassword(String tele, String code) {
             ApiParams params = new ApiParams()
                     .put(TELE, tele)
-                    .put("code", code);
+                    .put(CODE, code);
             return new API("/user/sms/authLoginPwdCode", params);
         }
 
         /**
-         * 注册
+         * 注册 "/user/register
          * @param phoneNum
          * @param password
          * @param authCode
@@ -74,8 +77,8 @@ public class API extends APIBase {
         public static API signUp(String phoneNum, String password, String authCode) {
             ApiParams params = new ApiParams()
                     .put("tele", phoneNum)
-                    .put("password", password)
-                    .put("authCode", authCode);
+                    .put(PASSWORD, password)
+                    .put(AUTH_CODE, authCode);
             // TODO: 7/22/16 统计数据
                     /*.put("deviceModel", "deviceModel")
                     .put("deviceImei", "deviceImei")
@@ -87,14 +90,14 @@ public class API extends APIBase {
         }
 
         /**
-         * 登录
+         * 登录 /user/login
          * @param loginName
          * @param password
          */
         public static API signIn(String loginName, String password) {
             ApiParams params = new ApiParams()
                     .put("loginName", loginName)
-                    .put("password", password);
+                    .put(PASSWORD, password);
             // TODO: 7/22/16 统计数据
             /*      .put("deviceModel", deviceModel)
                     .put("deviceImei", deviceImei)
@@ -103,11 +106,25 @@ public class API extends APIBase {
                     .put("operator", operator);*/
             return new API("/user/login", params);
         }
+
+        /**
+         * 找回登录密码-修改登录密码 /user/user/findLoginPwd
+         * @param phone
+         * @param authCode
+         * @param newPwd
+         */
+        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
+            ApiParams params = new ApiParams()
+                    .put(TELE, phone)
+                    .put(AUTH_CODE, authCode)
+                    .put(PASSWORD, newPwd);
+            return new API("/user/user/findLoginPwd", params);
+        }
     }
 
     public static class Finance {
         /**
-         * 用户资金账户
+         * 用户资金账户 /financy/financy/apiFinancyMain
          * @param token
          */
         public static API getFundInfo(String token) {

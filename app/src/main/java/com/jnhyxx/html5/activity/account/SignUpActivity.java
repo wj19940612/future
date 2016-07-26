@@ -142,7 +142,7 @@ public class SignUpActivity extends BaseActivity {
                 }).post();
     }
 
-    @OnClick(R.id.signUp)
+    @OnClick(R.id.signUpButton)
     void signUp() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();

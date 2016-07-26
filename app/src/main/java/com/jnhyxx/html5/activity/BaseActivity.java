@@ -15,7 +15,7 @@ import com.umeng.message.PushAgent;
 
 import java.lang.ref.WeakReference;
 
-public class BaseActivity extends AppCompatActivity implements ApiIndeterminate{
+public class BaseActivity extends AppCompatActivity implements ApiIndeterminate {
 
     protected static String TAG;
 

@@ -19,10 +19,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(properties.get('keystroe_storeFile'))
-            storePassword properties.get('keystroe_storePassword')
-            keyAlias properties.get('keystroe_keyAlias')
-            keyPassword properties.get('keystroe_keyPassword')
+            storeFile file(properties.get('keystore_storeFile'))
+            storePassword properties.get('keystore_storePassword')
+            keyAlias properties.get('keystore_keyAlias')
+            keyPassword properties.get('keystore_keyPassword')
         }
     }
     buildTypes {
@@ -98,5 +98,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.jakewharton:butterknife:8.0.1'
-    compile 'com.android.support:support-v4:24.0.0'
 }

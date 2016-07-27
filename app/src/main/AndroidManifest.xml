@@ -33,7 +33,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SplashActivity"
@@ -81,23 +80,23 @@
             android:name=".activity.dialog.MessageDialogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme.NoTitle"/>
-        <activity
-            android:name=".activity.dialog.ProgressActivity"
-            android:theme="@style/DialogTheme.NoTitle"/>
 
         <!-- account activity -->
         <activity
             android:name=".activity.account.SignUpActivity"
-            android:launchMode="singleTop"/>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.SignInActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.FindPwdActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.ModifyPwdActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".service.DownloadService"/>
 
-        <activity android:name=".activity.account.SignInActivity">
-        </activity>
-        <activity android:name=".activity.account.FindPwdActivity">
-        </activity>
-        <activity android:name=".activity.account.ModifyPwdActivity">
-        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,8 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jnhyxx.html5.Preference;
-import com.jnhyxx.html5.activity.dialog.ProgressActivity;
-import com.jnhyxx.html5.net.APIBase;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.view.Progress;
 import com.johnz.kutils.net.ApiIndeterminate;
 import com.umeng.message.PushAgent;
 
@@ -20,12 +21,21 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
     protected static String TAG;
 
     private TimerHandler mTimerHandler;
+    private Progress mProgress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
+
         TAG = this.getClass().getSimpleName();
+
+        mProgress = new Progress(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                API.cancel(TAG);
+            }
+        });
     }
 
     @Override
@@ -43,7 +53,11 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        APIBase.cancel(TAG);
+
+        API.cancel(TAG);
+
+        mProgress.dismissAll();
+
         stopScheduleJob();
     }
 
@@ -53,12 +67,16 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
 
     @Override
     public void onShow(String tag) {
-        ProgressActivity.show(this, tag);
+        if (mProgress != null) {
+            mProgress.show(this);
+        }
     }
 
     @Override
     public void onDismiss(String tag) {
-        ProgressActivity.dismiss(this, tag);
+        if (mProgress != null) {
+            mProgress.dismiss();
+        }
     }
 
     private static class TimerHandler extends Handler {

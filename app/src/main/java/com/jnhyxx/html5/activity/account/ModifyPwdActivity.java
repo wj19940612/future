@@ -72,7 +72,7 @@ public class ModifyPwdActivity extends BaseActivity {
     private void activeButtons() {
         boolean enable = checkConfirmPasswordButtonEnable();
         if (enable != mConfirmButton.isEnabled()) {
-            mConfirmPassword.setEnabled(enable);
+            mConfirmButton.setEnabled(enable);
         }
     }
 

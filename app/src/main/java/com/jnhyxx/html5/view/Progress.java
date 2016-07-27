@@ -54,8 +54,10 @@ public class Progress {
     }
 
     public void dismissAll() {
-        mCounter.set(1);
-        dismiss();
+        mCounter.set(0);
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
     }
 
     private static class ProgressDialog {

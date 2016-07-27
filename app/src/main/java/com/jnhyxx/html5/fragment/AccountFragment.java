@@ -85,7 +85,7 @@ public class AccountFragment extends BaseFragment {
     private void updateAccountInfoView() {
         if (User.getUser().isLogin()) {
             mNickname.setText(getString(R.string.nickname_logged,
-                    User.getUser().getLoginInfo().getUserInfo().getName()));
+                    User.getUser().getLoginInfo().getUserInfo().getNick()));
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
@@ -104,6 +104,9 @@ public class AccountFragment extends BaseFragment {
             mFundArea.setVisibility(View.GONE);
             mNickname.setText(R.string.nickname_unknown);
             mTitleBar.setRightVisible(false);
+
+            mBalance.setText(R.string.zero);
+            mScore.setText(R.string.zero);
         }
     }
 

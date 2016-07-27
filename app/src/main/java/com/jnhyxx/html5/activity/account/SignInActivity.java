@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.LoginInfo;
@@ -92,14 +94,15 @@ public class SignInActivity extends BaseActivity {
         API.Account.signIn(phoneNum, password)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback<APIBase.Resp<LoginInfo>>() {
+                .setCallback(new Callback<APIBase.Resp<JsonObject>>() {
                     @Override
-                    public void onSuccess(APIBase.Resp<LoginInfo> loginInfoResp) {
-                        if (loginInfoResp.isSuccess()) {
-                            User.getUser().setLoginInfo(loginInfoResp.getData());
+                    public void onSuccess(APIBase.Resp<JsonObject> resp) {
+                        if (resp.isSuccess()) {
+                            LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
+                            User.getUser().setLoginInfo(info);
                             finish();
                         } else {
-                            ToastUtil.show(loginInfoResp.getMsg());
+                            ToastUtil.show(resp.getMsg());
                         }
                     }
                 }).post();

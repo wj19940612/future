@@ -110,6 +110,12 @@ public class API extends APIBase {
          * @param password
          */
         public static API signIn(String loginName, String password) {
+            try {
+                password = SecurityUtil.md5Encrypt(password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
             ApiParams params = new ApiParams()
                     .put("loginName", loginName)
                     .put(PASSWORD, password);

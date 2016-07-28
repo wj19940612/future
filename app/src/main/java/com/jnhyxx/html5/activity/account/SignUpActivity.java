@@ -4,21 +4,23 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.LoginInfo;
 import com.jnhyxx.html5.domain.local.User;
-import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,9 +54,9 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(new ValidationWatcher());
-        mMessageAuthCode.addTextChangedListener(new ValidationWatcher());
-        mPassword.addTextChangedListener(new ValidationWatcher());
+        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mMessageAuthCode.addTextChangedListener(mValidationWatcher);
+        mPassword.addTextChangedListener(mValidationWatcher);
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -63,21 +65,12 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private class ValidationWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             activeButtons();
         }
-    }
+    };
 
     private void activeButtons() {
         boolean enable = checkObtainAuthCodeEnable();
@@ -123,13 +116,10 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString();
         API.Account.obtainAuthCode(phoneNum)
                 .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Callback<APIBase.Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(APIBase.Resp resp) {
-                        EasyDialog.newInstance(resp.getMsg())
-                                .setPositive(R.string.ok)
-                                .show(getActivity());
-
+                    public void onSuccess(Resp resp) {
+                        ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -148,23 +138,24 @@ public class SignUpActivity extends BaseActivity {
         String authCode = mMessageAuthCode.getText().toString().trim();
         API.Account.signUp(phoneNum, password, authCode)
                 .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Callback<APIBase.Resp<LoginInfo>>() {
+                .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
-                    public void onSuccess(APIBase.Resp<LoginInfo> loginInfoResp) {
-                        if (loginInfoResp.isSuccess()) {
-                            User.getUser().setLoginInfo(loginInfoResp.getData());
+                    public void onSuccess(Resp<JsonObject> resp) {
+                        if (resp.isSuccess()) {
+                            LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
+                            User.getUser().setLoginInfo(info);
 
-                            EasyDialog.newInstance(loginInfoResp.getMsg())
-                                    .setCloseable(false)
-                                    .setPositive(R.string.ok, new EasyDialog.OnClickListener() {
+                            SmartDialog.with(getActivity())
+                                    .setMessage(resp.getMsg())
+                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {
                                             dialog.dismiss();
                                             finish();
                                         }
-                                    }).show(getActivity());
+                                    }).show();
                         } else {
-                            ToastUtil.show(loginInfoResp.getMsg());
+                            ToastUtil.show(resp.getMsg());
                         }
                     }
                 }).post();

@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity.account;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,9 +14,10 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.LoginInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -45,20 +45,11 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(new ValidationWatcher());
-        mPassword.addTextChangedListener(new ValidationWatcher());
+        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mPassword.addTextChangedListener(mValidationWatcher);
     }
 
-    private class ValidationWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSignInButtonEnable();
@@ -66,7 +57,7 @@ public class SignInActivity extends BaseActivity {
                 mSignInButton.setEnabled(enable);
             }
         }
-    }
+    };
 
     private boolean checkSignInButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
@@ -94,9 +85,9 @@ public class SignInActivity extends BaseActivity {
         API.Account.signIn(phoneNum, password)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback<APIBase.Resp<JsonObject>>() {
+                .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
-                    public void onSuccess(APIBase.Resp<JsonObject> resp) {
+                    public void onSuccess(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);

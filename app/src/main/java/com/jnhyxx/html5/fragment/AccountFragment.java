@@ -11,11 +11,12 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
+import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -89,7 +90,7 @@ public class AccountFragment extends BaseFragment {
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
-            mTitleBar.setRightViewClickListener(new View.OnClickListener() {
+            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     User.getUser().logout();
@@ -113,9 +114,9 @@ public class AccountFragment extends BaseFragment {
     private void requestFundInfo() {
         API.Finance.getFundInfo(User.getUser().getLoginInfo().getTokenInfo().getToken())
                 .setTag(TAG)
-                .setCallback(new Callback<APIBase.Resp<FundInfo>>() {
+                .setCallback(new Callback<Resp<FundInfo>>() {
                     @Override
-                    public void onSuccess(APIBase.Resp<FundInfo> fundInfoResp) {
+                    public void onSuccess(Resp<FundInfo> fundInfoResp) {
                         if (fundInfoResp.isSuccess()) {
                             FundInfo fundInfo = fundInfoResp.getData();
                             mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
@@ -135,5 +136,15 @@ public class AccountFragment extends BaseFragment {
     @OnClick(R.id.signInButton)
     public void signIn() {
         Launcher.with(getActivity(), SignInActivity.class).execute();
+    }
+
+    @OnClick(R.id.recharge)
+    public void recharge() {
+
+    }
+
+    @OnClick(R.id.withdraw)
+    public void withdraw() {
+        Launcher.with(getActivity(), WithdrawActivity.class).execute();
     }
 }

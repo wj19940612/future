@@ -10,7 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.view.Progress;
+import com.jnhyxx.html5.view.dialog.Progress;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.net.ApiIndeterminate;
 import com.umeng.message.PushAgent;
 
@@ -53,9 +54,9 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         API.cancel(TAG);
 
+        SmartDialog.dismiss(TAG, this);
         mProgress.dismissAll();
 
         stopScheduleJob();

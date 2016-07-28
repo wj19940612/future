@@ -32,12 +32,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/phone_number"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/phone_number"/>
 
             <EditText
                 android:id="@+id/phoneNum"
@@ -56,12 +54,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/message_auth_code"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/message_auth_code"/>
 
             <EditText
                 android:id="@+id/messageAuthCode"
@@ -69,8 +65,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="phone"
                 android:hint="@string/please_input_msg_auth_code"
+                android:inputType="phone"
                 android:maxLength="4"/>
 
             <TextView
@@ -97,20 +93,18 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/password"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/password"/>
 
             <EditText
                 android:id="@+id/password"
                 style="@style/SignEditText.Password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/please_input_password"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:hint="@string/please_input_password"/>
         </LinearLayout>
 
         <include layout="@layout/split_line_thick"/>
@@ -121,12 +115,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/promote_code"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/promote_code"/>
 
             <EditText
                 android:id="@+id/promoteCode"
@@ -134,8 +126,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/optional"
                 android:ems="10"
+                android:hint="@string/optional"
                 android:inputType="phone"/>
         </LinearLayout>
 

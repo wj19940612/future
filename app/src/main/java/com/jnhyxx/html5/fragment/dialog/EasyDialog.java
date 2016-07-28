@@ -18,6 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * @deprecated
+ */
 public class EasyDialog extends AppCompatDialogFragment {
 
     private static final String MESSAGE = "message";

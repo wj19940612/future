@@ -1,0 +1,69 @@
+package com.jnhyxx.html5.net;
+
+
+import com.jnhyxx.html5.utils.ToastUtil;
+
+public class Resp<T> {
+
+    private int code;
+    private String msg;
+    private Integer msgType;
+    private String errparam;
+    private T data;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(){
+        msg = "";
+    }
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public String getErrparam() {
+        return errparam;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public boolean isSuccess() {
+        return code == 200;
+    }
+
+    public boolean hasData() {
+        return data != null;
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", errparam='" + errparam + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
+    public abstract static class Callback<D> extends com.jnhyxx.html5.net.Callback<Resp<D>> {
+
+        @Override
+        public void onSuccess(Resp<D> resp) {
+            if (resp.isSuccess()) {
+                onRespSuccess(resp.getData());
+            } else {
+                ToastUtil.show(resp.getMsg());
+            }
+        }
+
+        protected abstract void onRespSuccess(D d);
+    }
+}

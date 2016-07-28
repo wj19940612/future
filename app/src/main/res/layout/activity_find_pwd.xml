@@ -31,12 +31,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/phone_number"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/phone_number"/>
 
             <EditText
                 android:id="@+id/phoneNum"
@@ -55,12 +53,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/message_auth_code"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/message_auth_code"/>
 
             <EditText
                 android:id="@+id/messageAuthCode"
@@ -103,9 +99,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/please_contact_service_if_issues_happen"/>
 
 </LinearLayout>

@@ -97,6 +97,14 @@
 
         <service android:name=".service.DownloadService"/>
 
+        <activity android:name=".activity.account.WithdrawActivity">
+        </activity>
+        <activity android:name=".activity.account.ProfileActivity">
+        </activity>
+        <activity android:name=".activity.account.NameAuthActivity">
+        </activity>
+        <activity android:name=".activity.account.BankcardAuthActivity">
+        </activity>
     </application>
 
 </manifest>

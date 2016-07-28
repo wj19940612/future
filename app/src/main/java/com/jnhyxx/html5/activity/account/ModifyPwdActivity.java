@@ -5,16 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,8 +43,8 @@ public class ModifyPwdActivity extends BaseActivity {
         setContentView(R.layout.activity_modify_pwd);
         ButterKnife.bind(this);
 
-        mNewPassword.addTextChangedListener(new ValidationWatcher());
-        mConfirmPassword.addTextChangedListener(new ValidationWatcher());
+        mNewPassword.addTextChangedListener(mValidationWatcher);
+        mConfirmPassword.addTextChangedListener(mValidationWatcher);
 
         processIntent(getIntent());
     }
@@ -53,28 +54,15 @@ public class ModifyPwdActivity extends BaseActivity {
         mAuthCode = intent.getStringExtra(EX_AUTH_CODE);
     }
 
-    private class ValidationWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            activeButtons();
+            boolean enable = checkConfirmPasswordButtonEnable();
+            if (enable != mConfirmButton.isEnabled()) {
+                mConfirmButton.setEnabled(enable);
+            }
         }
-    }
-
-    private void activeButtons() {
-        boolean enable = checkConfirmPasswordButtonEnable();
-        if (enable != mConfirmButton.isEnabled()) {
-            mConfirmButton.setEnabled(enable);
-        }
-    }
+    };
 
     private boolean checkConfirmPasswordButtonEnable() {
         mNewPwd = mNewPassword.getText().toString().trim();
@@ -95,21 +83,22 @@ public class ModifyPwdActivity extends BaseActivity {
     }
 
     @OnClick(R.id.confirmButton)
-    void doConfirmButtonClick() {
+    public void onClick() {
         API.Account.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
                 .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Callback<API.Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(API.Resp resp) {
+                    public void onSuccess(Resp resp) {
                         if (resp.isSuccess()) {
-                            EasyDialog.newInstance(resp.getMsg())
-                                    .setPositive(R.string.ok, new EasyDialog.OnClickListener() {
+                            SmartDialog.with(getActivity())
+                                    .setMessage(resp.getMsg())
+                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {
                                             dialog.dismiss();
                                             finish();
                                         }
-                                    }).show(getActivity());
+                                    }).show();
                         } else {
                             ToastUtil.show(resp.getMsg());
                         }

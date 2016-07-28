@@ -14,6 +14,7 @@ public class API extends APIBase {
     public static final String AUTH_CODE = "authCode";
     public static final String PASSWORD = "password";
     public static final String SIGN = "sign";
+    public static final String TOKEN = "token";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -141,6 +142,54 @@ public class API extends APIBase {
                     .put(PASSWORD, newPwd);
             return new API("/user/user/findLoginPwd", params);
         }
+
+        /**
+         * 验证银行卡是否绑定 /user/user/checkBankCard
+         * @param token
+         */
+        public static API getBankcardInfo(String token) {
+            ApiParams params = new ApiParams()
+                    .put(TOKEN, token);
+            return new API("/user/user/checkBankCard", params);
+        }
+
+
+        /**
+         * 获取简单的个人信息 /user/user/getAcountDetail
+         * @param token
+         * @return
+         */
+        public static API getProfileSummary(String token) {
+            ApiParams params = new ApiParams()
+                    .put(TOKEN, token);
+            return new API("/user/user/getAcountDetail", params);
+        }
+
+        /**
+         * /user/user/checkUserName 验证是否实名认证
+         * @param token
+         * @return
+         */
+        public static API getUserNameAuth(String token) {
+            ApiParams params = new ApiParams()
+                    .put(TOKEN, token);
+            return new API("/user/user/checkUserName", params);
+        }
+
+        /**
+         * /user/user/authUser 实名认证
+         * @param token
+         * @param realName
+         * @param identityNum
+         * @return
+         */
+        public static API authUserName(String token, String realName, String identityNum) {
+            ApiParams params = new ApiParams()
+                    .put(TOKEN, token)
+                    .put("realName", realName)
+                    .put("idCard", identityNum);
+            return new API("/user/user/authUser", params);
+        }
     }
 
     public static class Finance {
@@ -152,6 +201,18 @@ public class API extends APIBase {
             ApiParams params = new ApiParams()
                     .put("token", token);
             return new API("/financy/financy/apiFinancyMain", params);
+        }
+
+        /**
+         * 用户提现申请 /financy/financy/apiWithdraw
+         * @param token
+         * @param amount
+         */
+        public static API withdraw(String token, double amount) {
+            ApiParams params = new ApiParams()
+                    .put(TOKEN, token)
+                    .put("inoutAmt", amount);
+            return new API("/financy/financy/apiWithdraw", params);
         }
     }
 }

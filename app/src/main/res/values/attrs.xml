@@ -17,21 +17,29 @@
     <declare-styleable name="IconTextRow">
         <attr name="leftIcon" format="reference"/>
         <attr name="rightIcon" format="reference"/>
+        <attr name="rightIconVisibility">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="subText" format="reference|string"/>
+        <attr name="subTextSize" format="reference|string"/>
+        <attr name="subTextColor" format="reference|string"/>
         <attr name="rowText" format="reference|string"/>
         <attr name="rowTextSize" format="dimension"/>
-        <attr name="rowTextColor" format="color" />
+        <attr name="rowTextColor" format="color"/>
     </declare-styleable>
-    
+
     <declare-styleable name="TitleBar">
         <attr name="titleText" format="reference|string"/>
-        <attr name="titleTextSize" format="dimension" />
-        <attr name="titleTextColor" format="color" />
-        <attr name="rightText" format="reference|string" />
-        <attr name="rightTextSize" format="dimension" />
-        <attr name="rightTextColor" format="color" />
-        <attr name="rightImage" format="reference" />
-        <attr name="rightVisible" format="boolean" />
-        <attr name="backFeature" format="boolean" />
+        <attr name="titleTextSize" format="dimension"/>
+        <attr name="titleTextColor" format="color"/>
+        <attr name="rightText" format="reference|string"/>
+        <attr name="rightTextSize" format="dimension"/>
+        <attr name="rightTextColor" format="color"/>
+        <attr name="rightImage" format="reference"/>
+        <attr name="rightVisible" format="boolean"/>
+        <attr name="backFeature" format="boolean"/>
         <attr name="backIcon" format="reference"/>
     </declare-styleable>
 </resources>

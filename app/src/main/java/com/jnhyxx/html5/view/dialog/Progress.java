@@ -1,5 +1,6 @@
-package com.jnhyxx.html5.view;
+package com.jnhyxx.html5.view.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,10 +25,12 @@ public class Progress {
         mOnCancelListener = cancelListener;
     }
 
-    public void show(Context context) {
+    public void show(Activity activity) {
+        if (activity.isFinishing()) return;
+
         if (mCounter.get() == 0) {
             if (mDialog == null) {
-                mDialog = ProgressDialog.show(context, mOnCancelListener);
+                mDialog = ProgressDialog.show(activity, mOnCancelListener);
             } else {
                 mDialog.show();
             }

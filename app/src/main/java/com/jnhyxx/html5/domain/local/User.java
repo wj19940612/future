@@ -8,6 +8,10 @@ import com.jnhyxx.html5.domain.LoginInfo;
 
 public class User {
 
+    public interface AsyncCallback<T> {
+        void get(T t);
+    }
+
     private LoginInfo mLoginInfo;
 
     private static User sUser;
@@ -53,5 +57,9 @@ public class User {
     public void logout() {
         mLoginInfo = null;
         saveToPreference();
+    }
+
+    public String getToken() {
+        return getLoginInfo().getTokenInfo().getToken();
     }
 }

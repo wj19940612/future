@@ -125,6 +125,11 @@ public class TitleBar extends RelativeLayout {
         }
     }
 
+    public void setTitle(int resid) {
+        CharSequence title = getContext().getText(resid);
+        setTitle(title);
+    }
+
     public void setTitle(CharSequence title) {
         mTitle = title;
         if (TextUtils.isEmpty(mTitle)) return;
@@ -155,7 +160,7 @@ public class TitleBar extends RelativeLayout {
         mRightView.setVisibility(rightVisible ? VISIBLE: INVISIBLE);
     }
 
-    public void setRightViewClickListener(View.OnClickListener listener) {
+    public void setOnRightViewClickListener(View.OnClickListener listener) {
         mRightView.setOnClickListener(listener);
     }
 

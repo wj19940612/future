@@ -46,6 +46,13 @@
     <string name="information">资讯</string>
     <string name="account">账户</string>
 
+    <!-- Prompt -->
+    <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；
+        \n2、为防止套现和洗钱，单笔充值无消费者提现时需提供身份证和银行卡给风控进行核实。如信息核实无误，恒运将会在7-15个工作日内处理，银行收取2%的手续费自理，最低2元；
+        \n3、周一至周五09:00-17:00的提款申请当天处理，17:00以后的提款申请延至第二天处理。周五17:00后提款，延至下个工作日处理。提现到账时间最快2小时，最晚1个工作日，如遇节假日顺延。
+        \n4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</string>
+    <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
+
     <!-- Account -->
     <string name="nickname_unknown">您好,请先登录</string>
     <string name="nickname_logged">您好,%1$s</string>
@@ -59,6 +66,7 @@
     <string name="personal_info">个人信息</string>
     <string name="paid_to_promote">推广赚钱</string>
     <string name="phone_number">手机号</string>
+    <string name="phone_number2">手机号码</string>
     <string name="message_auth_code">短信验证</string>
     <string name="password">密码</string>
     <string name="promote_code">推广码</string>
@@ -85,6 +93,31 @@
     <string name="please_repeat_new_password">请重复新密码</string>
     <string name="exit">退出</string>
     <string name="zero">0</string>
-
+    <string name="withdraw_log">提现记录</string>
+    <string name="withdraw_amount">提现金额</string>
+    <string name="please_input_amount">请输入金额</string>
+    <string name="yuan">元</string>
+    <string name="withdraw_bankcard">提现银行卡</string>
+    <string name="add_bankcard_right_now">马上添加银行卡</string>
+    <string name="profile">个人信息</string>
+    <string name="real_name_authorize">实名认证</string>
+    <string name="unauthorized">未认证</string>
+    <string name="filled">已填写</string>
+    <string name="authorized">已认证</string>
+    <string name="bankcard">银行卡</string>
+    <string name="phone_authorize">手机认证</string>
+    <string name="name">姓名</string>
+    <string name="please_input_real_name">请输入真实姓名</string>
+    <string name="identity_num">身份证号</string>
+    <string name="please_input_identity_num">请输入身份证号</string>
+    <string name="cardholder">持卡人</string>
+    <string name="bankcard_num">银行卡号</string>
+    <string name="please_input_your_bankcard_num">请输入您的银行卡号</string>
+    <string name="paying_bank">支付银行</string>
+    <string name="please_choose_bank">请选择银行</string>
+    <string name="bank_reserved_phone_num">银行预留手机号码</string>
+    <string name="submit_to_auth">提交认证</string>
+    <string name="go_and_auth">去认证</string>
+    <string name="prompt_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
 
 </resources>

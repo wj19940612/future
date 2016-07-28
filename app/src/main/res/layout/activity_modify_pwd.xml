@@ -31,12 +31,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/new_password"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/new_password"/>
 
             <EditText
                 android:id="@+id/newPassword"
@@ -55,12 +53,10 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="80dp"
-                android:text="@string/confirm_password"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
+                android:text="@string/confirm_password"/>
 
             <EditText
                 android:id="@+id/confirmPassword"

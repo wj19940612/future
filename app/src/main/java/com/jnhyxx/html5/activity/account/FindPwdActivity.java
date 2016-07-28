@@ -3,17 +3,16 @@ package com.jnhyxx.html5.activity.account;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.fragment.dialog.EasyDialog;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -40,37 +39,25 @@ public class FindPwdActivity extends BaseActivity {
         setContentView(R.layout.activity_find_pwd);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(new ValidationWatcher());
-        mMessageAuthCode.addTextChangedListener(new ValidationWatcher());
+        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mMessageAuthCode.addTextChangedListener(mValidationWatcher);
     }
 
-    private class ValidationWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            activeButtons();
-        }
-    }
 
-    private void activeButtons() {
-        boolean enable = checkObtainAuthCodeEnable();
-        if (enable != mObtainAuthCode.isEnabled()) {
-            mObtainAuthCode.setEnabled(enable);
-        }
+            boolean enable = checkObtainAuthCodeEnable();
+            if (enable != mObtainAuthCode.isEnabled()) {
+                mObtainAuthCode.setEnabled(enable);
+            }
 
-        enable = checkNextStepButtonEnable();
-        if (enable != mNextStepButton.isEnabled()) {
-            mNextStepButton.setEnabled(enable);
+            enable = checkNextStepButtonEnable();
+            if (enable != mNextStepButton.isEnabled()) {
+                mNextStepButton.setEnabled(enable);
+            }
         }
-    }
+    };
 
     private boolean checkNextStepButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
@@ -100,13 +87,10 @@ public class FindPwdActivity extends BaseActivity {
         API.Account.obtainAuthCodeWhenFindPwd(phoneNum)
                 .setIndeterminate(this)
                 .setTag(TAG)
-                .setCallback(new Callback<APIBase.Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(APIBase.Resp resp) {
-                        EasyDialog.newInstance(resp.getMsg())
-                                .setPositive(R.string.ok)
-                                .show(getActivity());
-
+                    public void onSuccess(Resp resp) {
+                        ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -124,9 +108,9 @@ public class FindPwdActivity extends BaseActivity {
         final String authCode = mMessageAuthCode.getText().toString().trim();
         API.Account.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Callback<API.Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(API.Resp resp) {
+                    public void onSuccess(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
                                     .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)

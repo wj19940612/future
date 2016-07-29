@@ -20,6 +20,7 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivity {
 
+
     @BindView(R.id.nameAuth)
     IconTextRow mNameAuth;
     @BindView(R.id.bankcard)
@@ -33,9 +34,9 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
-        API.Account.getProfileSummary(User.getUser().getLoginInfo().getTokenInfo().getToken())
+        API.Account.getProfileSummary(User.getUser().getToken())
                 .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Resp.Callback<ProfileSummary>() {
+                .setCallback(new Resp.Callback<Resp<ProfileSummary>, ProfileSummary>() {
                     @Override
                     protected void onRespSuccess(ProfileSummary profileSummary) {
                         updateProfileView(profileSummary);

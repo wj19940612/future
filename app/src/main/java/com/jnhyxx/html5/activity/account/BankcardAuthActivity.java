@@ -52,7 +52,7 @@ public class BankcardAuthActivity extends BaseActivity {
 
         API.Account.getUserNameAuth(User.getUser().getToken())
                 .setTag(TAG)
-                .setCallback(new Resp.Callback<NameAuth>() {
+                .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
                     @Override
                     protected void onRespSuccess(NameAuth nameAuth) {
                         if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
@@ -69,7 +69,7 @@ public class BankcardAuthActivity extends BaseActivity {
     private void requestBankcardAuth() {
         API.Account.getBankcardInfo(User.getUser().getToken())
                 .setTag(TAG)
-                .setCallback(new Resp.Callback<BankcardAuth>() {
+                .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
                     @Override
                     protected void onRespSuccess(BankcardAuth bankcardAuth) {
                         if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {

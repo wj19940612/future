@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.ProfileActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
@@ -128,23 +129,31 @@ public class AccountFragment extends BaseFragment {
                 }).post();
     }
 
-    @OnClick(R.id.signUp)
-    public void signUp() {
-        Launcher.with(getActivity(), SignUpActivity.class).execute();
-    }
-
-    @OnClick(R.id.signInButton)
-    public void signIn() {
-        Launcher.with(getActivity(), SignInActivity.class).execute();
-    }
-
-    @OnClick(R.id.recharge)
-    public void recharge() {
-
-    }
-
-    @OnClick(R.id.withdraw)
-    public void withdraw() {
-        Launcher.with(getActivity(), WithdrawActivity.class).execute();
+    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.scoreDetail, R.id.personalInfo, R.id.paidToPromote})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.signInButton:
+                Launcher.with(getActivity(), SignInActivity.class).execute();
+                break;
+            case R.id.signUp:
+                Launcher.with(getActivity(), SignUpActivity.class).execute();
+                break;
+            case R.id.recharge:
+                break;
+            case R.id.withdraw:
+                Launcher.with(getActivity(), WithdrawActivity.class).execute();
+                break;
+            case R.id.messageCenter:
+                break;
+            case R.id.fundDetail:
+                break;
+            case R.id.scoreDetail:
+                break;
+            case R.id.personalInfo:
+                Launcher.with(getActivity(), ProfileActivity.class).execute();
+                break;
+            case R.id.paidToPromote:
+                break;
+        }
     }
 }

@@ -71,6 +71,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <!-- service -->
+        <service android:name=".service.DownloadService"/>
+
         <!-- dialog activity -->
         <activity
             android:name=".activity.dialog.SaveImageActivity"
@@ -95,16 +98,18 @@
             android:name=".activity.account.ModifyPwdActivity"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".service.DownloadService"/>
-
-        <activity android:name=".activity.account.WithdrawActivity">
-        </activity>
-        <activity android:name=".activity.account.ProfileActivity">
-        </activity>
-        <activity android:name=".activity.account.NameAuthActivity">
-        </activity>
-        <activity android:name=".activity.account.BankcardAuthActivity">
-        </activity>
+        <activity
+            android:name=".activity.account.WithdrawActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.ProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.NameAuthActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.BankcardAuthActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

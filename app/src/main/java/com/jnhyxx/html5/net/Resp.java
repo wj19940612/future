@@ -53,14 +53,16 @@ public class Resp<T> {
                 '}';
     }
 
-    public abstract static class Callback<D> extends com.jnhyxx.html5.net.Callback<Resp<D>> {
+    public abstract static class Callback<T, D> extends com.jnhyxx.html5.net.Callback<T> {
 
         @Override
-        public void onSuccess(Resp<D> resp) {
-            if (resp.isSuccess()) {
-                onRespSuccess(resp.getData());
-            } else {
-                ToastUtil.show(resp.getMsg());
+        public void onSuccess(T t) {
+            if (t instanceof Resp) {
+                if (((Resp) t).isSuccess()) {
+                    onRespSuccess((D) ((Resp) t).getData());
+                } else {
+                    ToastUtil.show(((Resp) t).getMsg());
+                }
             }
         }
 

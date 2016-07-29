@@ -42,7 +42,7 @@ public class NameAuthActivity extends BaseActivity {
 
         API.Account.getUserNameAuth(User.getUser().getToken())
                 .setTag(TAG)
-                .setCallback(new Resp.Callback<NameAuth>() {
+                .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
                     @Override
                     protected void onRespSuccess(NameAuth nameAuth) {
                         if (nameAuth.getStatus() == NameAuth.STATUS_BE_BOUND) {

@@ -113,4 +113,8 @@ public class IconTextRow extends LinearLayout {
     public void setSubText(int resid) {
         mSubTextView.setText(resid);
     }
+
+    public String getSubText() {
+        return mSubTextView.getText().toString();
+    }
 }

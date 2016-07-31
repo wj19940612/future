@@ -97,7 +97,6 @@
         <activity
             android:name=".activity.account.ModifyPwdActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.account.WithdrawActivity"
             android:screenOrientation="portrait"/>
@@ -110,6 +109,8 @@
         <activity
             android:name=".activity.account.BankcardAuthActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.account.RechargeActivity">
+        </activity>
     </application>
 
 </manifest>

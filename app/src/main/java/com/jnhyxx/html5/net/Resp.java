@@ -66,6 +66,6 @@ public class Resp<T> {
             }
         }
 
-        protected abstract void onRespSuccess(D d);
+        public abstract void onRespSuccess(D d);
     }
 }

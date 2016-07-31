@@ -58,6 +58,25 @@ public class SmartDialog {
         return dialog;
     }
 
+    public static SmartDialog with(Activity activity, int resid) {
+        SmartDialog dialog = new SmartDialog(activity);
+        addMap(activity, dialog);
+        dialog.setMessage(resid);
+        return dialog;
+    }
+
+    public static SmartDialog with(Activity activity, String msg) {
+        SmartDialog dialog = new SmartDialog(activity);
+        addMap(activity, dialog);
+        dialog.setMessage(msg);
+        return dialog;
+    }
+
+    /**
+     * @deprecated use {@link #with(Activity activity, String msg)} instead
+     * @param activity
+     * @return
+     */
     public static SmartDialog with(Activity activity) {
         SmartDialog dialog = new SmartDialog(activity);
         addMap(activity, dialog);
@@ -142,6 +161,11 @@ public class SmartDialog {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #with(Activity activity, String msg)} instead
+     * @param messageId
+     * @return
+     */
     public SmartDialog setMessage(int messageId) {
         mMessageText = mActivity.getText(messageId).toString();
         return this;

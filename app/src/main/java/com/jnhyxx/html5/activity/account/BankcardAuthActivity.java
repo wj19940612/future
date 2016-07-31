@@ -3,9 +3,14 @@ package com.jnhyxx.html5.activity.account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -13,7 +18,9 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -24,20 +31,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BankcardAuthActivity extends BaseActivity {
+public class BankcardAuthActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
 
-    public static final int REQUEST_CODE = 0;
-    public static final String NAME_AUTH = "nameAuth";
+    public static final String NAME_AUTH_RESULT = "nameAuthResult";
+
     @BindView(R.id.cardholderName)
     EditText mCardholderName;
     @BindView(R.id.bankcardNum)
     EditText mBankcardNum;
-    @BindView(R.id.payingBank)
-    EditText mPayingBank;
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
+    @BindView(R.id.payingBank)
+    TextView mPayingBank;
+    @BindView(R.id.bankcardInputArea)
+    LinearLayout mBankcardInputArea;
+    @BindView(R.id.bank)
+    TextView mBank;
+    @BindView(R.id.hiddenBankcardNum)
+    TextView mHiddenBankcardNum;
+    @BindView(R.id.unbindBankcard)
+    Button mUnbindBankcard;
+    @BindView(R.id.bankcardImageArea)
+    LinearLayout mBankcardImageArea;
+    @BindView(R.id.fragmentContainer)
+    FrameLayout mFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,45 +69,41 @@ public class BankcardAuthActivity extends BaseActivity {
         mPayingBank.addTextChangedListener(mValidationWatcher);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
 
+        updateBankcardView(getIntent());
+
         API.Account.getUserNameAuth(User.getUser().getToken())
                 .setTag(TAG)
                 .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
                     @Override
-                    protected void onRespSuccess(NameAuth nameAuth) {
+                    public void onRespSuccess(NameAuth nameAuth) {
                         if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
-                            showAuthNameDialog();
+                            showAuthNameDialog(nameAuth);
                         } else {
                             mCardholderName.setText(nameAuth.getUserName());
-                            requestBankcardAuth();
-                        }
-                    }
-                }).post();
-
-    }
-
-    private void requestBankcardAuth() {
-        API.Account.getBankcardInfo(User.getUser().getToken())
-                .setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
-                    @Override
-                    protected void onRespSuccess(BankcardAuth bankcardAuth) {
-                        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {
-                            mCardholderName.setEnabled(false);
-                            mBankcardNum.setEnabled(false);
-                            mPayingBank.setEnabled(false);
-                            mPhoneNum.setEnabled(false);
                         }
                     }
                 }).post();
     }
 
-    private void showAuthNameDialog() {
-        SmartDialog.with(getActivity())
-                .setMessage(getString(R.string.prompt_unauthorized_name))
+    private void updateBankcardView(Intent intent) {
+        BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {
+            mBankcardInputArea.setVisibility(View.GONE);
+            mBankcardImageArea.setVisibility(View.VISIBLE);
+        } else if (bankcardAuth.getStatus() == BankcardAuth.STATUS_FILLED) {
+            mBankcardNum.setText(bankcardAuth.getBankNum());
+            mPayingBank.setText(bankcardAuth.getBankName());
+            mPhoneNum.setText(bankcardAuth.getPhone());
+        }
+    }
+
+    private void showAuthNameDialog(final NameAuth nameAuth) {
+        SmartDialog.with(getActivity(), R.string.prompt_unauthorized_name)
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
                         Launcher.with(getActivity(), NameAuthActivity.class)
+                                .putExtra(Launcher.EX_PAYLOAD, nameAuth)
                                 .executeForResult(REQUEST_CODE);
                     }
                 })
@@ -106,8 +121,8 @@ public class BankcardAuthActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            NameAuth nameAuth = (NameAuth) data.getSerializableExtra(NAME_AUTH);
-            mCardholderName.setText(nameAuth.getUserName());
+            NameAuth.Result result = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
+            mCardholderName.setText(result.getRealName());
             SmartDialog.dismiss(null, this);
         }
     }
@@ -123,10 +138,10 @@ public class BankcardAuthActivity extends BaseActivity {
     };
 
     private boolean checkSubmitButtonEnable() {
-        String cardholderName = ViewUtil.getEditTextTrim(mCardholderName);
-        String bankcardNum = ViewUtil.getEditTextTrim(mBankcardNum);
-        String payingBank = ViewUtil.getEditTextTrim(mPayingBank);
-        String phoneNum = ViewUtil.getEditTextTrim(mPhoneNum);
+        String cardholderName = ViewUtil.getTextTrim(mCardholderName);
+        String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
+        String payingBank = ViewUtil.getTextTrim(mPayingBank);
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
         if (TextUtils.isEmpty(cardholderName) || TextUtils.isEmpty(bankcardNum)
                 || TextUtils.isEmpty(payingBank) || TextUtils.isEmpty(phoneNum)) {
             return false;
@@ -134,7 +149,74 @@ public class BankcardAuthActivity extends BaseActivity {
         return true;
     }
 
-    @OnClick(R.id.submitToAuthButton)
-    public void onClick() {
+    @OnClick({R.id.payingBank, R.id.submitToAuthButton, R.id.unbindBankcard})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.payingBank:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
+                break;
+            case R.id.submitToAuthButton:
+                String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
+                String payingBank = ViewUtil.getTextTrim(mPayingBank);
+                String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+                API.Account.updateBankcard(User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+                        .setIndeterminate(this).setTag(TAG)
+                        .setCallback(new Callback<Resp<BankcardAuth>>() {
+                            @Override
+                            public void onSuccess(final Resp<BankcardAuth> resp) {
+                                if (resp.isSuccess()) {
+
+                                    SmartDialog.with(getActivity(), resp.getMsg())
+                                            .setCancelable(false)
+                                            .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                                                @Override
+                                                public void onClick(Dialog dialog) {
+                                                    dialog.dismiss();
+                                                    BankcardAuth auth = resp.getData();
+                                                    auth.setStatus(BankcardAuth.STATUS_FILLED);
+                                                    setResultForCalling(auth);
+                                                    finish();
+                                                }
+                                            }).show();
+
+                                } else {
+                                    SmartDialog.with(getActivity(), resp.getMsg()).show();
+                                }
+                            }
+                        }).post();
+                break;
+            case R.id.unbindBankcard:
+                SmartDialog.with(getActivity(), R.string.prompt_please_contact_services_to_unbind).show();
+                break;
+        }
+    }
+
+    /**
+     * 由提现页面唤起,在银行卡认证成功后返回结果通知提现页面
+     *
+     * @param data
+     */
+    private void setResultForCalling(BankcardAuth data) {
+        if (getCallingActivity() == null) return;
+        String fromClass = getCallingActivity().getClassName();
+
+        if (fromClass.equals(WithdrawActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(WithdrawActivity.BANKCARD_AUTH_RESULT, data);
+            setResult(RESULT_OK, intent);
+        }
+
+        if (fromClass.equals(ProfileActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(ProfileActivity.BANKCARD_AUTH_RESULT, data);
+            setResult(RESULT_OK, intent);
+        }
+    }
+
+    @Override
+    public void onBankItemClick(BankListFragment.Bank bank) {
+        mPayingBank.setText(bank.name);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 }
+

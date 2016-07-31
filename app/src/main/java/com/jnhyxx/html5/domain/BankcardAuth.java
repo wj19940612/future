@@ -1,6 +1,8 @@
 package com.jnhyxx.html5.domain;
 
-public class BankcardAuth {
+import java.io.Serializable;
+
+public class BankcardAuth implements Serializable {
 
     public static final int STATUS_NOT_FILLED = 0;
     public static final int STATUS_BE_BOUND = 1;
@@ -25,6 +27,18 @@ public class BankcardAuth {
     private String bankName;
     private int id;
     private int status;
+
+    public BankcardAuth(String bankNum, String provName, String cityName, String phone,
+                        String branName, String bankName, int id, int status) {
+        this.bankNum = bankNum;
+        this.provName = provName;
+        this.cityName = cityName;
+        this.phone = phone;
+        this.branName = branName;
+        this.bankName = bankName;
+        this.id = id;
+        this.status = status;
+    }
 
     public String getBankNum() {
         return bankNum;

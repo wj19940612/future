@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import java.io.Serializable;
+
 public class Launcher {
+
+    public static final String EX_PAYLOAD = "payload";
 
     private static Launcher sInstance;
 
@@ -35,6 +39,11 @@ public class Launcher {
 
     public Launcher putExtra(String key, String value) {
         mIntent.putExtra(key, value);
+        return this;
+    }
+
+    public Launcher putExtra(String key, Serializable data) {
+        mIntent.putExtra(key, data);
         return this;
     }
 

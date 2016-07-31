@@ -1,6 +1,8 @@
 package com.jnhyxx.html5.domain;
 
-public class ProfileSummary {
+import java.io.Serializable;
+
+public class ProfileSummary implements Serializable{
 
     /**
      * bankNum : null
@@ -12,23 +14,29 @@ public class ProfileSummary {
      * userName :
      * tele : 178****7906
      * headPic :
+     * provName : null
+     * cityName : null
+     * branName : null
      */
 
-    private Object bankNum;
+    private String bankNum;
     private int userStatus;
     private int bankStatus;
     private String idCardNum;
     private int couponCount;
-    private Object bankName;
+    private String bankName;
     private String userName;
     private String tele;
     private String headPic;
+    private String provName;
+    private String cityName;
+    private String branName;
 
-    public Object getBankNum() {
+    public String getBankNum() {
         return bankNum;
     }
 
-    public void setBankNum(Object bankNum) {
+    public void setBankNum(String bankNum) {
         this.bankNum = bankNum;
     }
 
@@ -64,11 +72,11 @@ public class ProfileSummary {
         this.couponCount = couponCount;
     }
 
-    public Object getBankName() {
+    public String getBankName() {
         return bankName;
     }
 
-    public void setBankName(Object bankName) {
+    public void setBankName(String bankName) {
         this.bankName = bankName;
     }
 
@@ -94,5 +102,38 @@ public class ProfileSummary {
 
     public void setHeadPic(String headPic) {
         this.headPic = headPic;
+    }
+
+    public String getProvName() {
+        return provName;
+    }
+
+    public void setProvName(String provName) {
+        this.provName = provName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getBranName() {
+        return branName;
+    }
+
+    public void setBranName(String branName) {
+        this.branName = branName;
+    }
+
+    public NameAuth createNameAuth() {
+        return new NameAuth(getUserStatus(), getUserName(), getIdCardNum());
+    }
+
+    public BankcardAuth createBankcardAuth() {
+        return new BankcardAuth(getBankNum(), getProvName(), getCityName(), getTele(),
+                getBranName(), getBankName(), -1, getBankStatus());
     }
 }

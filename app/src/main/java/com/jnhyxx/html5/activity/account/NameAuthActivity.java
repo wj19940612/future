@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
@@ -40,21 +40,26 @@ public class NameAuthActivity extends BaseActivity {
         setContentView(R.layout.activity_name_auth);
         ButterKnife.bind(this);
 
-        API.Account.getUserNameAuth(User.getUser().getToken())
-                .setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
-                    @Override
-                    protected void onRespSuccess(NameAuth nameAuth) {
-                        if (nameAuth.getStatus() == NameAuth.STATUS_BE_BOUND) {
-                            mName.setEnabled(false);
-                            mIdentityNum.setEnabled(false);
-                            mSubmitToAuthButton.setVisibility(View.GONE);
-                        }
-                    }
-                }).post();
-
         mName.addTextChangedListener(mValidationWatcher);
         mIdentityNum.addTextChangedListener(mValidationWatcher);
+
+        updateNameAuthView(getIntent());
+    }
+
+    private void updateNameAuthView(Intent intent) {
+        NameAuth nameAuth = (NameAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+        mName.setText(nameAuth.getUserName());
+        mIdentityNum.setText(nameAuth.getIdCardNum());
+
+        if (nameAuth.getStatus() == NameAuth.STATUS_BE_BOUND) {
+            mName.setEnabled(false);
+            mIdentityNum.setEnabled(false);
+            mSubmitToAuthButton.setVisibility(View.GONE);
+        } else {
+            mName.setEnabled(true);
+            mIdentityNum.setEnabled(true);
+            mSubmitToAuthButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -68,8 +73,8 @@ public class NameAuthActivity extends BaseActivity {
     };
 
     private boolean checkSubmitButtonEnable() {
-        String realName = ViewUtil.getEditTextTrim(mName);
-        String identityNum = ViewUtil.getEditTextTrim(mIdentityNum);
+        String realName = ViewUtil.getTextTrim(mName);
+        String identityNum = ViewUtil.getTextTrim(mIdentityNum);
         if (TextUtils.isEmpty(realName) || TextUtils.isEmpty(identityNum)) {
             return false;
         }
@@ -84,36 +89,46 @@ public class NameAuthActivity extends BaseActivity {
         API.Account.authUserName(token, realName, identityNum)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback<Resp<NameAuth>>() {
+                .setCallback(new Callback<Resp<NameAuth.Result>>() {
                     @Override
-                    public void onSuccess(final Resp<NameAuth> resp) {
+                    public void onSuccess(final Resp<NameAuth.Result> resp) {
                         if (resp.isSuccess()) {
-                            SmartDialog.with(getActivity())
+                            SmartDialog.with(getActivity(), resp.getMsg())
                                     .setCancelable(false)
-                                    .setMessage(resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {
+                                            dialog.dismiss();
                                             sendResultForCalling(resp.getData());
                                             finish();
                                         }
                                     }).show();
                         } else {
-                            SmartDialog.with(getActivity())
-                                    .setMessage(resp.getMsg())
-                                    .show();
+                            SmartDialog.with(getActivity(), resp.getMsg()).show();
                         }
                     }
                 }).post();
     }
 
-    private void sendResultForCalling(NameAuth nameAuth) {
+    /**
+     * 由银行卡认证页面唤起,在实名认证成功后返回结果
+     *
+     * 由个人信息页唤起,实名认证后返回结果
+     *
+     * @param result
+     */
+    private void sendResultForCalling(NameAuth.Result result) {
         if (getCallingActivity() == null) return;
         String fromClass = getCallingActivity().getClassName();
-        Log.d(TAG, "sendResultForCalling: " + fromClass);
-        if (fromClass.equals(BankcardAuthActivity.class.getSimpleName())) {
-            Intent intent = new Intent().putExtra(BankcardAuthActivity.NAME_AUTH, nameAuth);
-            setResult(BankcardAuthActivity.REQUEST_CODE, intent);
+
+        if (fromClass.equals(BankcardAuthActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(BankcardAuthActivity.NAME_AUTH_RESULT, result);
+            setResult(RESULT_OK, intent);
+        }
+
+        if (fromClass.equals(ProfileActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(ProfileActivity.NAME_AUTH_RESULT, result);
+            setResult(RESULT_OK, intent);
         }
     }
 }

@@ -19,7 +19,10 @@ import java.lang.ref.WeakReference;
 
 public class BaseActivity extends AppCompatActivity implements ApiIndeterminate {
 
-    protected static String TAG;
+    public static final int REQUEST_CODE = 8;
+
+
+    protected String TAG;
 
     private TimerHandler mTimerHandler;
     private Progress mProgress;
@@ -28,9 +31,7 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
-
         TAG = this.getClass().getSimpleName();
-
         mProgress = new Progress(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {

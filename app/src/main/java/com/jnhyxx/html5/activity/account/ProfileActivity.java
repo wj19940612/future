@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,9 +9,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.ProfileSummary;
-import com.jnhyxx.html5.domain.local.User;
-import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.johnz.kutils.Launcher;
 
@@ -20,6 +18,8 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivity {
 
+    public static final String NAME_AUTH_RESULT = "nameAuthResult";
+    public static final String BANKCARD_AUTH_RESULT = "bankcardAuthResult";
 
     @BindView(R.id.nameAuth)
     IconTextRow mNameAuth;
@@ -28,20 +28,21 @@ public class ProfileActivity extends BaseActivity {
     @BindView(R.id.phoneAuth)
     IconTextRow mPhoneAuth;
 
+    private ProfileSummary mProfileSummary;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
-        API.Account.getProfileSummary(User.getUser().getToken())
-                .setIndeterminate(this).setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<ProfileSummary>, ProfileSummary>() {
-                    @Override
-                    protected void onRespSuccess(ProfileSummary profileSummary) {
-                        updateProfileView(profileSummary);
-                    }
-                }).post();
+        updateProfileView(getIntent());
+    }
+
+    private void updateProfileView(Intent intent) {
+        mProfileSummary =
+                (ProfileSummary) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+        updateProfileView(mProfileSummary);
     }
 
     private void updateProfileView(ProfileSummary profileSummary) {
@@ -68,11 +69,31 @@ public class ProfileActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nameAuth:
-                Launcher.with(this, NameAuthActivity.class).execute();
+                Launcher.with(getActivity(), NameAuthActivity.class)
+                        .putExtra(Launcher.EX_PAYLOAD, mProfileSummary.createNameAuth())
+                        .executeForResult(REQUEST_CODE);
                 break;
             case R.id.bankcard:
-                Launcher.with(this, BankcardAuthActivity.class).execute();
+                Launcher.with(getActivity(), BankcardAuthActivity.class)
+                        .putExtra(Launcher.EX_PAYLOAD, mProfileSummary.createBankcardAuth())
+                        .executeForResult(REQUEST_CODE);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            NameAuth.Result result = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
+            if (result != null) {
+                mNameAuth.setSubText(R.string.filled);
+            }
+
+            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(BANKCARD_AUTH_RESULT);
+            if (bankcardAuth != null) {
+                mBankcard.setSubText(R.string.filled);
+            }
         }
     }
 }

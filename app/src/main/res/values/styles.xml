@@ -11,6 +11,7 @@
     <style name="DialogTheme.NoTitle" parent="Theme.AppCompat.Dialog" >
         <item name="android:windowNoTitle">true</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="SignInButton">
@@ -26,6 +27,8 @@
         <item name="android:textSize">13sp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingTop">12dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="SignEditText.PhoneNum">

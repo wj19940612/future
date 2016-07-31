@@ -13,12 +13,12 @@ import com.jnhyxx.html5.activity.account.ProfileActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.domain.BankcardAuth;
+import com.jnhyxx.html5.domain.ProfileSummary;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -113,18 +113,12 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void requestFundInfo() {
-        API.Finance.getFundInfo(User.getUser().getLoginInfo().getTokenInfo().getToken())
-                .setTag(TAG)
-                .setCallback(new Callback<Resp<FundInfo>>() {
+        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+                .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
                     @Override
-                    public void onSuccess(Resp<FundInfo> fundInfoResp) {
-                        if (fundInfoResp.isSuccess()) {
-                            FundInfo fundInfo = fundInfoResp.getData();
-                            mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
-                            mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
-                        } else {
-                            ToastUtil.show(fundInfoResp.getMsg());
-                        }
+                    public void onRespSuccess(FundInfo fundInfo) {
+                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
+                        mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
                     }
                 }).post();
     }
@@ -139,9 +133,19 @@ public class AccountFragment extends BaseFragment {
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             case R.id.recharge:
+
                 break;
             case R.id.withdraw:
-                Launcher.with(getActivity(), WithdrawActivity.class).execute();
+                API.Account.getBankcardInfo(User.getUser().getToken())
+                        .setTag(TAG)
+                        .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
+                            @Override
+                            public void onRespSuccess(BankcardAuth bankcardAuth) {
+                                Launcher.with(getActivity(), WithdrawActivity.class)
+                                        .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
+                                        .execute();
+                            }
+                        }).post();
                 break;
             case R.id.messageCenter:
                 break;
@@ -150,7 +154,15 @@ public class AccountFragment extends BaseFragment {
             case R.id.scoreDetail:
                 break;
             case R.id.personalInfo:
-                Launcher.with(getActivity(), ProfileActivity.class).execute();
+                API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
+                        .setCallback(new Resp.Callback<Resp<ProfileSummary>, ProfileSummary>() {
+                            @Override
+                            public void onRespSuccess(ProfileSummary profileSummary) {
+                                Launcher.with(getActivity(), ProfileActivity.class)
+                                        .putExtra(Launcher.EX_PAYLOAD, profileSummary)
+                                        .execute();
+                            }
+                        }).post();
                 break;
             case R.id.paidToPromote:
                 break;

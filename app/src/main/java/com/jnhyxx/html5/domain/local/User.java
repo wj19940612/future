@@ -62,4 +62,6 @@ public class User {
     public String getToken() {
         return getLoginInfo().getTokenInfo().getToken();
     }
+
+
 }

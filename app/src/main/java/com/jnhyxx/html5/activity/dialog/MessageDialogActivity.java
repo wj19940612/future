@@ -2,8 +2,6 @@ package com.jnhyxx.html5.activity.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -32,7 +30,6 @@ public class MessageDialogActivity extends Activity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_dialog);
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         scaleDialogWindowWidth(0.8);
 
         initView();

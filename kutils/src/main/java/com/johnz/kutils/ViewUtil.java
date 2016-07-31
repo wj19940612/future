@@ -1,12 +1,12 @@
 package com.johnz.kutils;
 
-import android.widget.EditText;
+import android.widget.TextView;
 
 public class ViewUtil {
 
-    public static String getEditTextTrim(EditText editText) {
-        if (editText != null) {
-            return editText.getText().toString().trim();
+    public static String getTextTrim(TextView textView) {
+        if (textView != null) {
+            return textView.getText().toString().trim();
         }
         return "";
     }

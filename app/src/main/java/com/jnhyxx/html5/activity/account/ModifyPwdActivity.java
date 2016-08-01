@@ -90,8 +90,7 @@ public class ModifyPwdActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Resp resp) {
                         if (resp.isSuccess()) {
-                            SmartDialog.with(getActivity())
-                                    .setMessage(resp.getMsg())
+                            SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {

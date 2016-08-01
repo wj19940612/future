@@ -94,7 +94,7 @@ public class NameAuthActivity extends BaseActivity {
                     public void onSuccess(final Resp<NameAuth.Result> resp) {
                         if (resp.isSuccess()) {
                             SmartDialog.with(getActivity(), resp.getMsg())
-                                    .setCancelable(false)
+                                    .setCancelableOnTouchOutside(false)
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {
@@ -127,7 +127,7 @@ public class NameAuthActivity extends BaseActivity {
         }
 
         if (fromClass.equals(ProfileActivity.class.getName())) {
-            Intent intent = new Intent().putExtra(ProfileActivity.NAME_AUTH_RESULT, result);
+            Intent intent = new Intent().putExtra(ProfileActivity.RESULT_NAME_AUTH, result);
             setResult(RESULT_OK, intent);
         }
     }

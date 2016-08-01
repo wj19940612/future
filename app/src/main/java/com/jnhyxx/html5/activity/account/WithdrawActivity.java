@@ -29,11 +29,11 @@ import butterknife.OnClick;
 
 public class WithdrawActivity extends BaseActivity {
 
-    public static final String BANKCARD_AUTH_RESULT = "bankcardAuthResult";
+    public static final String RESULT_BANKCARD_AUTH = "bankcardAuthResult";
 
     @BindView(R.id.balance)
     TextView mBalance;
-    @BindView(R.id.withdrawAmount)
+    @BindView(R.id.rechargeAmount)
     EditText mWithdrawAmount;
     @BindView(R.id.withdrawBankcard)
     TextView mWithdrawBankcard;
@@ -101,20 +101,23 @@ public class WithdrawActivity extends BaseActivity {
 
         double amount = Double.valueOf(withdrawAmount);
         API.Finance.withdraw(User.getUser().getLoginInfo().getTokenInfo().getToken(), amount)
-                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onSuccess(Resp resp) {
-                        SmartDialog.with(getActivity(), resp.getMsg())
-                                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                    @Override
-                                    public void onClick(Dialog dialog) {
-                                        dialog.dismiss();
-                                        finish();
-                                    }
-                                }).show();
+                        if (resp.isSuccess()) {
+                            SmartDialog.with(getActivity(), resp.getMsg())
+                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                                        @Override
+                                        public void onClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                            finish();
+                                        }
+                                    }).show();
+                        } else {
+                            SmartDialog.with(getActivity(), resp.getMsg()).show();
+                        }
                     }
-                }).post();
+                }).setTag(TAG).setIndeterminate(this).post();
     }
 
     @OnClick(R.id.addBankcardButton)
@@ -128,7 +131,7 @@ public class WithdrawActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(BANKCARD_AUTH_RESULT);
+            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(RESULT_BANKCARD_AUTH);
             updateBankInfoView(bankcardAuth);
         }
     }

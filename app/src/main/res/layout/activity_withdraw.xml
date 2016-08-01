@@ -95,7 +95,7 @@
                     android:text="@string/withdraw_amount"/>
 
                 <EditText
-                    android:id="@+id/withdrawAmount"
+                    android:id="@+id/rechargeAmount"
                     style="@style/SignEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

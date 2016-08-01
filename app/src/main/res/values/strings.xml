@@ -123,5 +123,14 @@
     <string name="unbind">解绑</string>
     <string name="recharge_amount">充值金额</string>
     <string name="hint_recharge_amount">充值金额 ≥ 50</string>
+    <string name="please_choose_payment">请选择支付方式</string>
+    <string name="bankcard_payment">银行卡支付</string>
+    <string name="alipay_payment">支付宝支付</string>
+    <string name="wechat_payment">微信支付</string>
+    <string name="account_fund_is_covered_by_PA">账户资金安全由平安财险承保</string>
+    <string name="recharge_amount_cannot_be_empty">充值金额不能为空</string>
+    <string name="recharge_amount_should_larger_than_50">充值金额应大于50</string>
+    <string name="payments_cannot_be_empty">支付方式不能为空</string>
+    <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
 
 </resources>

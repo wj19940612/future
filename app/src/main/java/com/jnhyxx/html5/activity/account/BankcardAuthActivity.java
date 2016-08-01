@@ -58,6 +58,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     @BindView(R.id.fragmentContainer)
     FrameLayout mFragmentContainer;
 
+    NameAuth.Result mNameAuthResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +115,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         finish();
                     }
                 })
-                .setCancelable(false)
+                .setCancelableOnTouchOutside(false)
                 .show();
     }
 
@@ -121,9 +123,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            NameAuth.Result result = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
-            mCardholderName.setText(result.getRealName());
-            SmartDialog.dismiss(null, this);
+            mNameAuthResult = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
+            mCardholderName.setText(mNameAuthResult.getRealName());
+            SmartDialog.dismiss(this);
         }
     }
 
@@ -168,7 +170,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                                 if (resp.isSuccess()) {
 
                                     SmartDialog.with(getActivity(), resp.getMsg())
-                                            .setCancelable(false)
+                                            .setCancelableOnTouchOutside(false)
                                             .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                                 @Override
                                                 public void onClick(Dialog dialog) {
@@ -193,7 +195,11 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     }
 
     /**
-     * 由提现页面唤起,在银行卡认证成功后返回结果通知提现页面
+     * 由提现页面唤起,回传 BankcardAuth
+     *
+     * 由个人信息页面唤起,回传 BankcardAuth NameAuth
+     *
+     * 由充值页面唤起,回传 BankcardAuth
      *
      * @param data
      */
@@ -202,12 +208,19 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         String fromClass = getCallingActivity().getClassName();
 
         if (fromClass.equals(WithdrawActivity.class.getName())) {
-            Intent intent = new Intent().putExtra(WithdrawActivity.BANKCARD_AUTH_RESULT, data);
+            Intent intent = new Intent().putExtra(WithdrawActivity.RESULT_BANKCARD_AUTH, data);
             setResult(RESULT_OK, intent);
         }
 
         if (fromClass.equals(ProfileActivity.class.getName())) {
-            Intent intent = new Intent().putExtra(ProfileActivity.BANKCARD_AUTH_RESULT, data);
+            Intent intent = new Intent()
+                    .putExtra(ProfileActivity.RESULT_BANKCARD_AUTH, data)
+                    .putExtra(ProfileActivity.RESULT_NAME_AUTH, mNameAuthResult);
+            setResult(RESULT_OK, intent);
+        }
+
+        if (fromClass.equals(RechargeActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(RechargeActivity.RESULT_BANKCARD_AUTH, data);
             setResult(RESULT_OK, intent);
         }
     }

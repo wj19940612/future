@@ -19,12 +19,6 @@ public class Launcher {
         mIntent = new Intent();
     }
 
-    public static Launcher with(Context context) {
-        sInstance = new Launcher();
-        sInstance.mContext = context;
-        return sInstance;
-    }
-
     public static Launcher with(Context context, Class<?> clazz) {
         sInstance = new Launcher();
         sInstance.mContext = context;

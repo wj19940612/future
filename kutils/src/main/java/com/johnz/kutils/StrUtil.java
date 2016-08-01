@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 
-public class TextUtil {
+public class StrUtil {
 
     /**
      * 按比例缩放 s2 的大小，同时拼接 s1 和 s2

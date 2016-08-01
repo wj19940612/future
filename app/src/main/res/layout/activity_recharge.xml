@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/recharge"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,13 +26,47 @@
             android:text="@string/recharge_amount"/>
 
         <EditText
-            android:id="@+id/withdrawAmount"
+            android:id="@+id/rechargeAmount"
             style="@style/SignEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_recharge_amount"
             android:inputType="numberDecimal"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/please_choose_payment"/>
+
+        <RadioGroup
+            android:id="@+id/paymentGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/nextStepButton"
+            style="@style/PrimaryRedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:text="@string/next_step"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/account_fund_is_covered_by_PA"
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </LinearLayout>

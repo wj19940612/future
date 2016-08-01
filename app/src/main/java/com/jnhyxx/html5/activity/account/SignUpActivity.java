@@ -145,8 +145,7 @@ public class SignUpActivity extends BaseActivity {
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);
 
-                            SmartDialog.with(getActivity())
-                                    .setMessage(resp.getMsg())
+                            SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
                                         public void onClick(Dialog dialog) {

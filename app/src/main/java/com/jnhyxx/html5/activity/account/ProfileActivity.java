@@ -18,8 +18,8 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivity {
 
-    public static final String NAME_AUTH_RESULT = "nameAuthResult";
-    public static final String BANKCARD_AUTH_RESULT = "bankcardAuthResult";
+    public static final String RESULT_NAME_AUTH = "nameAuthResult";
+    public static final String RESULT_BANKCARD_AUTH = "bankcardAuthResult";
 
     @BindView(R.id.nameAuth)
     IconTextRow mNameAuth;
@@ -85,12 +85,12 @@ public class ProfileActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            NameAuth.Result result = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
+            NameAuth.Result result = (NameAuth.Result) data.getSerializableExtra(RESULT_NAME_AUTH);
             if (result != null) {
                 mNameAuth.setSubText(R.string.filled);
             }
 
-            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(BANKCARD_AUTH_RESULT);
+            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(RESULT_BANKCARD_AUTH);
             if (bankcardAuth != null) {
                 mBankcard.setSubText(R.string.filled);
             }

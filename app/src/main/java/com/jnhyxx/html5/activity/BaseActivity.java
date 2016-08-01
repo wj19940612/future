@@ -57,7 +57,7 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
         super.onDestroy();
         API.cancel(TAG);
 
-        SmartDialog.dismiss(TAG, this);
+        SmartDialog.dismiss(this);
         mProgress.dismissAll();
 
         stopScheduleJob();

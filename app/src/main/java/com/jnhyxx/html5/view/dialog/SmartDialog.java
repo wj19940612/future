@@ -36,7 +36,7 @@ public class SmartDialog {
 
     private String mMessageText;
 
-    private boolean mCancelable;
+    private boolean mCancelableOnTouchOutside;
 
     private Dialog mDialog;
 
@@ -93,29 +93,21 @@ public class SmartDialog {
         mListMap.put(key, dialogList);
     }
 
-    public static void dismiss(String tag, Activity activity) {
-        List<SmartDialog> dialogList = mListMap.get(tag);
-        if (dialogList != null) {
-            for (SmartDialog dialog : dialogList) {
-                dialog.dismiss();
-            }
-            mListMap.remove(tag);
-        }
-
+    public static void dismiss(Activity activity) {
         String key = activity.getClass().getSimpleName();
-        dialogList = mListMap.get(key);
+        List<SmartDialog> dialogList = mListMap.get(key);
         if (dialogList != null) {
             for (SmartDialog dialog : dialogList) {
                 dialog.dismiss();
             }
-            mListMap.remove(tag);
+            mListMap.remove(key);
         }
     }
 
     private SmartDialog(Activity activity) {
         mActivity = activity;
         mPositiveId = R.string.ok;
-        mCancelable = true;
+        mCancelableOnTouchOutside = true;
     }
 
     private void scaleDialogWidth(double scale) {
@@ -151,8 +143,8 @@ public class SmartDialog {
         return this;
     }
 
-    public SmartDialog setCancelable(boolean cancelable) {
-        mCancelable = cancelable;
+    public SmartDialog setCancelableOnTouchOutside(boolean cancelable) {
+        mCancelableOnTouchOutside = cancelable;
         return this;
     }
 
@@ -161,17 +153,12 @@ public class SmartDialog {
         return this;
     }
 
-    /**
-     * @deprecated use {@link #with(Activity activity, String msg)} instead
-     * @param messageId
-     * @return
-     */
-    public SmartDialog setMessage(int messageId) {
+    private SmartDialog setMessage(int messageId) {
         mMessageText = mActivity.getText(messageId).toString();
         return this;
     }
 
-    public SmartDialog setMessage(String message) {
+    private SmartDialog setMessage(String message) {
         mMessageText = message;
         return this;
     }
@@ -195,13 +182,18 @@ public class SmartDialog {
         mDialog = new Dialog(mActivity, R.style.DialogTheme_NoTitle);
         View view = LayoutInflater.from(mActivity).inflate(R.layout.activity_popup_dialog, null);
         mDialog.setContentView(view);
-        mDialog.setCancelable(mCancelable);
-        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCanceledOnTouchOutside(mCancelableOnTouchOutside);
         mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 if (mOnCancelListener != null) {
                     mOnCancelListener.onCancel(mDialog);
+
+                } else if (!mCancelableOnTouchOutside) {
+                    // finish current page when not allow user to cancel on touch outside
+                    if (mActivity != null) {
+                        mActivity.finish();
+                    }
                 }
             }
         });

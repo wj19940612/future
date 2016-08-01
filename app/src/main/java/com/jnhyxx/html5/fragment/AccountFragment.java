@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.ProfileActivity;
+import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
@@ -133,11 +134,18 @@ public class AccountFragment extends BaseFragment {
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             case R.id.recharge:
-
+                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
+                        .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
+                            @Override
+                            public void onRespSuccess(BankcardAuth bankcardAuth) {
+                                Launcher.with(getActivity(), RechargeActivity.class)
+                                        .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
+                                        .execute();
+                            }
+                        }).post();
                 break;
             case R.id.withdraw:
-                API.Account.getBankcardInfo(User.getUser().getToken())
-                        .setTag(TAG)
+                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.ProfileActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
@@ -158,8 +159,10 @@ public class AccountFragment extends BaseFragment {
             case R.id.messageCenter:
                 break;
             case R.id.fundDetail:
+                openFundDetailPage(true);
                 break;
             case R.id.scoreDetail:
+                openFundDetailPage(false);
                 break;
             case R.id.personalInfo:
                 API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
@@ -174,6 +177,23 @@ public class AccountFragment extends BaseFragment {
                 break;
             case R.id.paidToPromote:
                 break;
+        }
+    }
+
+    private void openFundDetailPage(final boolean isCash) {
+        if (User.getUser().isLogin()) {
+            API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+                    .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
+                        @Override
+                        public void onRespSuccess(FundInfo fundInfo) {
+                            Launcher.with(getActivity(), FundDetailActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, fundInfo)
+                                    .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
+                                    .execute();
+                        }
+                    }).post();
+        } else {
+            Launcher.with(getActivity(), SignInActivity.class).execute();
         }
     }
 }

@@ -52,8 +52,11 @@
         \n3、周一至周五09:00-17:00的提款申请当天处理，17:00以后的提款申请延至第二天处理。周五17:00后提款，延至下个工作日处理。提现到账时间最快2小时，最晚1个工作日，如遇节假日顺延。
         \n4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</string>
     <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
-    <string name="prompt_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
-    <string name="prompt_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
+
+    <!-- Dialog -->
+    <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
+    <string name="dialog_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
+    <string name="dialog_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
 
     <!-- Account -->
     <string name="nickname_unknown">您好,请先登录</string>
@@ -131,6 +134,9 @@
     <string name="recharge_amount_cannot_be_empty">充值金额不能为空</string>
     <string name="recharge_amount_should_larger_than_50">充值金额应大于50</string>
     <string name="payments_cannot_be_empty">支付方式不能为空</string>
-    <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
+    <string name="frozen_deposit">冻结保证金</string>
+    <string name="profit_loss_detail">收支明细</string>
+    <string name="there_is_no_trade_detail">暂无交易明细</string>
+    <string name="click_to_load_more">点击加载更多</string>
 
 </resources>

@@ -60,7 +60,10 @@ public class User {
     }
 
     public String getToken() {
-        return getLoginInfo().getTokenInfo().getToken();
+        if (getLoginInfo() != null) {
+            return getLoginInfo().getTokenInfo().getToken();
+        }
+        return "";
     }
 
 

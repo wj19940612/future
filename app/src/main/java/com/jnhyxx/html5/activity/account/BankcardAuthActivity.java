@@ -100,7 +100,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     }
 
     private void showAuthNameDialog(final NameAuth nameAuth) {
-        SmartDialog.with(getActivity(), R.string.prompt_unauthorized_name)
+        SmartDialog.with(getActivity(), R.string.dialog_unauthorized_name)
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
@@ -189,7 +189,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         }).post();
                 break;
             case R.id.unbindBankcard:
-                SmartDialog.with(getActivity(), R.string.prompt_please_contact_services_to_unbind).show();
+                SmartDialog.with(getActivity(), R.string.dialog_please_contact_services_to_unbind).show();
                 break;
         }
     }

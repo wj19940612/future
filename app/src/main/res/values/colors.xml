@@ -6,4 +6,6 @@
 
     <color name="splitLine">#EDEDED</color>
     <color name="colorDisable">#DDDDDD</color>
+    <color name="greenPrimary">#008000</color>
+    <color name="redPrimary">#FF0000</color>
 </resources>

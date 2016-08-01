@@ -15,6 +15,8 @@ public class API extends APIBase {
     public static final String PASSWORD = "password";
     public static final String SIGN = "sign";
     public static final String TOKEN = "token";
+    public static final String PAGE_NO = "pageNo";
+    public static final String PAGE_SIZE = "pageSize";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -243,6 +245,37 @@ public class API extends APIBase {
                     new ApiParams()
                             .put(TOKEN, token)
                             .put("inoutAmt", amount));
+        }
+
+        /**
+         * /financy/financy/apiFinancyFlowList 资金(现金)流水列表
+         *
+         * @param token
+         * @param pageNo
+         * @param pageSize
+         * @return
+         */
+        public static API getCashFlowList(String token, int pageNo, int pageSize) {
+            return new API("/financy/financy/apiFinancyFlowList",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * /financy/financy/apiScoreFinancyFlowList 积分流水列表
+         * @param token
+         * @param pageNo
+         * @param pageSize
+         * @return
+         */
+        public static API getScoreFlowList(String token, int pageNo, int pageSize) {
+            return new API("/financy/financy/apiScoreFinancyFlowList",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize));
         }
     }
 }

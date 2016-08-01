@@ -1,6 +1,8 @@
 package com.jnhyxx.html5.domain.finance;
 
-public class FundInfo {
+import java.io.Serializable;
+
+public class FundInfo implements Serializable {
 
     /**
      * usedAmt : 9.99784E7

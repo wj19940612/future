@@ -36,6 +36,11 @@ public class Launcher {
         return this;
     }
 
+    public Launcher putExtra(String key, boolean value) {
+        mIntent.putExtra(key, value);
+        return this;
+    }
+
     public Launcher putExtra(String key, Serializable data) {
         mIntent.putExtra(key, data);
         return this;

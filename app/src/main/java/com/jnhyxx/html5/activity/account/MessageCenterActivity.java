@@ -46,8 +46,10 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return mContext.getString(R.string.system_message);
-                case 1: return mContext.getString(R.string.trade_remind);
+                case 0:
+                    return mContext.getString(R.string.system_message);
+                case 1:
+                    return mContext.getString(R.string.trade_remind);
             }
             return super.getPageTitle(position);
         }
@@ -55,8 +57,10 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return MsgListFragment.newInstance(MsgListFragment.TYPE_SYSTEM);
-                case 1: return MsgListFragment.newInstance(MsgListFragment.TYPE_TRADE);
+                case 0:
+                    return MsgListFragment.newInstance(MsgListFragment.TYPE_SYSTEM);
+                case 1:
+                    return MsgListFragment.newInstance(MsgListFragment.TYPE_TRADE);
             }
             return null;
         }

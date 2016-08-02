@@ -15,7 +15,7 @@ import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.AccountFragment;
 import com.jnhyxx.html5.fragment.HallFragment;
-import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.NewsFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.utils.Network;
@@ -208,7 +208,7 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return new HallFragment();
                 case 1:
-                    return new InfoFragment();
+                    return new NewsFragment();
                 case 2:
                     return new AccountFragment();
             }

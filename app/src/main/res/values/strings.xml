@@ -141,5 +141,8 @@
     <string name="there_is_no_message_for_now">暂无任何消息</string>
     <string name="system_message">系统消息</string>
     <string name="trade_remind">交易提醒</string>
+    <string name="information_live">资讯直播</string>
+    <string name="market_analysing">行情分析</string>
+    <string name="industry_news">行业资讯</string>
 
 </resources>

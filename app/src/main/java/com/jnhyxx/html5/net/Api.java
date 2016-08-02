@@ -265,6 +265,7 @@ public class API extends APIBase {
 
         /**
          * /financy/financy/apiScoreFinancyFlowList 积分流水列表
+         *
          * @param token
          * @param pageNo
          * @param pageSize
@@ -272,6 +273,35 @@ public class API extends APIBase {
          */
         public static API getScoreFlowList(String token, int pageNo, int pageSize) {
             return new API("/financy/financy/apiScoreFinancyFlowList",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize));
+        }
+    }
+
+    public static class Message {
+        /**
+         * /sms/message/systemMessages 系统消息列表
+         *
+         * @param token
+         * @return
+         */
+        public static API getSystemMessageList(String token, int pageNo, int pageSize) {
+            return new API("/sms/message/systemMessages",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * /sms/message/traderMassages 交易提醒列表
+         * @param token
+         * @return
+         */
+        public static API getTradeMessageList(String token, int pageNo, int pageSize) {
+            return new API("/sms/message/traderMassages",
                     new ApiParams()
                             .put(TOKEN, token)
                             .put(PAGE_NO, pageNo)

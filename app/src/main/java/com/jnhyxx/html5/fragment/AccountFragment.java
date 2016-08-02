@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.FundDetailActivity;
+import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.ProfileActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
@@ -157,6 +158,7 @@ public class AccountFragment extends BaseFragment {
                         }).post();
                 break;
             case R.id.messageCenter:
+                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.fundDetail:
                 openFundDetailPage(true);

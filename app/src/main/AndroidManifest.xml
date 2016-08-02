@@ -115,6 +115,8 @@
         <activity
             android:name=".activity.account.FundDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.account.MessageCenterActivity">
+        </activity>
     </application>
 
 </manifest>

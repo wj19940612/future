@@ -34,7 +34,7 @@ public class GsonRequest<T> extends Request<T> {
     public GsonRequest(String url, ApiParams params, Type type, ApiCallback<T> callback) {
         super(Method.POST, url, callback);
         this.headers = null;
-        this.params = params.get();
+        this.params = params != null ? params.get() : null;
         this.type = type;
         this.listener = callback;
     }

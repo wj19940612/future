@@ -8,23 +8,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class NewsFragment extends BaseFragment {
+public class InfoFragment extends BaseFragment {
 
-    @BindView(R.id.slidingTabLayout)
-    SlidingPaneLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
+    @BindView(R.id.slidingTabLayout)
+    SlidingTabLayout mSlidingTabLayout;
 
     private Unbinder mBinder;
 
@@ -39,14 +39,16 @@ public class NewsFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
-    static class NewsPagersAdapter extends FragmentPagerAdapter {
+    static class InfoPagersAdapter extends FragmentPagerAdapter {
 
         private Context mContext;
 
-        public NewsPagersAdapter(FragmentManager fm, Context context) {
+        public InfoPagersAdapter(FragmentManager fm, Context context) {
             super(fm);
             mContext = context;
         }
@@ -55,7 +57,7 @@ public class NewsFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return mContext.getString(R.string.information_live);
+                    return mContext.getString(R.string.news_living);
                 case 1:
                     return mContext.getString(R.string.market_analysing);
                 case 2:
@@ -70,9 +72,9 @@ public class NewsFragment extends BaseFragment {
                 case 0:
                     return new Fragment();
                 case 1:
-                    return new Fragment();
+                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
                 case 2:
-                    return new Fragment();
+                    return new InfoListFragment().newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
             }
             return null;
         }

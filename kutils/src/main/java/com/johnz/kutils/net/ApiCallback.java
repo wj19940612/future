@@ -20,7 +20,7 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
     private String mUrl;
     private onFinishedListener mOnFinishedListener;
     private String mTag;
-    private ApiIndeterminate mApiProgress;
+    private ApiIndeterminate mIndeterminate;
 
     public void setUrl(String url) {
         mUrl = url;
@@ -34,13 +34,13 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
         mTag = tag;
     }
 
-    public void setApiProgress(ApiIndeterminate apiProgress) {
-        mApiProgress = apiProgress;
+    public void setIndeterminate(ApiIndeterminate Indeterminate) {
+        mIndeterminate = Indeterminate;
     }
 
     public void onStart() {
-        if (mApiProgress != null) {
-            mApiProgress.onShow(mTag);
+        if (mIndeterminate != null) {
+            mIndeterminate.onShow(mTag);
         }
     }
 
@@ -49,8 +49,8 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
             mOnFinishedListener.onFinished(mUrl);
         }
 
-        if (mApiProgress != null) {
-            mApiProgress.onDismiss(mTag);
+        if (mIndeterminate != null) {
+            mIndeterminate.onDismiss(mTag);
         }
     }
 

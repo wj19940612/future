@@ -3,8 +3,8 @@
     <declare-styleable name="PageIndicator">
         <attr name="indicators" format="integer"/>
         <attr name="indicatorsInterval" format="dimension"/>
-        <attr name="point" format="color|reference"/>
-        <attr name="selectedPoint" format="color|reference"/>
+        <attr name="point" format="color"/>
+        <attr name="selectedPoint" format="color"/>
         <attr name="pointRadius" format="dimension"/>
     </declare-styleable>
 

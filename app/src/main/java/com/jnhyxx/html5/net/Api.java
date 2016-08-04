@@ -220,6 +220,24 @@ public class API extends APIBase {
                             .put("bankName", bankName)
                             .put("phone", phoneNum));
         }
+
+        /**
+         * /user/newsArticle/newsList 获取资讯: sectionId: 行情分析-58, 行业资讯-57
+         *
+         * @param token
+         * @param sectionId
+         * @param pageNo
+         * @param pageSize
+         * @return
+         */
+        public static API getInfo(String token, int sectionId, int pageNo, int pageSize) {
+            return new API("/user/newsArticle/newsList",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put("sectionId", sectionId)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize));
+        }
     }
 
     public static class Finance {
@@ -297,6 +315,7 @@ public class API extends APIBase {
 
         /**
          * /sms/message/traderMassages 交易提醒列表
+         *
          * @param token
          * @return
          */
@@ -306,6 +325,41 @@ public class API extends APIBase {
                             .put(TOKEN, token)
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
+        }
+    }
+
+    public static class Market {
+
+        /**
+         * /market/futureCommodity/select 获取首页产品列表
+         *
+         * @return
+         */
+        public static API getProductList() {
+            return new API("/market/futureCommodity/select", null);
+        }
+
+        /**
+         * /futuresquota/getAllCacheData 获取产品行情的简要
+         *
+         * @return
+         */
+        public static API getProductMarketBreifList() {
+            return new API("/futuresquota/getAllCacheData", null);
+        }
+    }
+
+    public static class Order {
+
+        /**
+         * /order/posiOrderCount 获取用户每个产品订单持仓情况的简要
+         *
+         * @param token
+         * @return
+         */
+        public static API getOrderPositionList(String token) {
+            return new API("/order/posiOrderCount",
+                    new ApiParams().put(TOKEN, token));
         }
     }
 }

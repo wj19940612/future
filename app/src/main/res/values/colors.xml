@@ -4,7 +4,11 @@
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="splitLine">#EDEDED</color>
+    <color name="splitLine">#E5E5E5</color>
+    <color name="splitLine2">#CDCDCD</color>
+    <color name="splitLineDark">#3B4856</color>
+    <color name="splitLineDark2">#233142</color>
+
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#008000</color>
     <color name="redPrimary">#FF0000</color>

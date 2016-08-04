@@ -4,14 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".fragment.NewsFragment">
+              tools:context=".fragment.InfoFragment">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleText="@string/information"/>
 
-    <android.support.v4.widget.SlidingPaneLayout
+    <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

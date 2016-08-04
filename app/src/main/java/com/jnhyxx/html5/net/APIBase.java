@@ -57,7 +57,7 @@ public class APIBase extends RequestManager {
                     mCallback.setUrl(url);
                     mCallback.setOnFinishedListener(new RequestFinishedListener());
                     mCallback.setTag(mTag);
-                    mCallback.setApiProgress(mIndeterminate);
+                    mCallback.setIndeterminate(mIndeterminate);
                     mCallback.onStart();
                     type = mCallback.getGenericType();
 

@@ -21,7 +21,6 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
 
     public static final int REQUEST_CODE = 8;
 
-
     protected String TAG;
 
     private TimerHandler mTimerHandler;
@@ -59,7 +58,6 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
 
         SmartDialog.dismiss(this);
         mProgress.dismissAll();
-
         stopScheduleJob();
     }
 
@@ -95,9 +93,9 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
             BaseActivity activity = mReference.get();
             if (activity != null) {
                 activity.onTimeUp();
+                int delayMillis = msg.what;
+                this.sendEmptyMessageDelayed(delayMillis, delayMillis);
             }
-            int delayMillis = msg.what;
-            this.sendEmptyMessageDelayed(delayMillis, delayMillis);
         }
     }
 

@@ -10,12 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.User;
-import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.net.ApiIndeterminate;
@@ -27,41 +26,30 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MsgListFragment extends ListFragment implements ApiIndeterminate {
+public class InfoListFragment extends ListFragment implements ApiIndeterminate {
 
-    private static final String TAG = "MsgListFragment";
+    private static final String TAG = "InfoListFragment";
 
     private static final String TYPE = "fragmentType";
-    public static final int TYPE_SYSTEM = 0;
-    public static final int TYPE_TRADE = 1;
+    public static final int TYPE_MARKET_ANALYSING = 0;
+    public static final int TYPE_INDUSTRY_NEWS = 1;
 
-    private OnMsgItemClickListener mListener;
+    private OnNewItemClickListener mListener;
     private int mType;
 
     private int mPageNo;
     private int mPageSize;
 
-    private MessageListAdapter mMessageListAdapter;
+    private NewsListAdapter mNewsListAdapter;
     private Set<Integer> mSet;
     private TextView mFooter;
 
-    public static MsgListFragment newInstance(int type) {
-        MsgListFragment fragment = new MsgListFragment();
+    public static InfoListFragment newInstance(int type) {
+        InfoListFragment fragment = new InfoListFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnMsgItemClickListener) {
-            mListener = (OnMsgItemClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnMsgItemClickListener");
-        }
     }
 
     @Override
@@ -78,34 +66,36 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
         mPageNo = 1;
         mPageSize = 10;
         mSet = new HashSet<>();
-        setEmptyText(getString(R.string.there_is_no_message_for_now));
+        setEmptyText(getString(R.string.there_is_no_info_for_now));
+        getListView().setDivider(null);
 
-        requestMessageList();
+        requestInfoList();
     }
 
-    private void requestMessageList() {
-        if (mType == TYPE_SYSTEM) {
-            API.Message.getSystemMessageList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+    private void requestInfoList() {
+        if (mType == TYPE_MARKET_ANALYSING) {
+            int SECTION_ID_MARKET_ANALYSING = 58;
+            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
+                    .setCallback(new Resp.Callback<Resp<List<Information>>, List<Information>>() {
                         @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                            updateMessageList(sysTradeMessages);
+                        public void onRespSuccess(List<Information> informationList) {
+                            updateInfoList(informationList);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();
         } else {
-            API.Message.getTradeMessageList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+            int SECTION_ID_INDUSTRY = 57;
+            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
+                    .setCallback(new Resp.Callback<Resp<List<Information>>, List<Information>>() {
                         @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                            updateMessageList(sysTradeMessages);
+                        public void onRespSuccess(List<Information> informationList) {
+                            updateInfoList(informationList);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();
         }
     }
 
-    private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || isDetached()) return;
-
+    private void updateInfoList(List<Information> informationList) {
+        if (informationList == null || isDetached()) return;
         if (mFooter == null) {
             mFooter = new TextView(getContext());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
@@ -117,37 +107,29 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                 @Override
                 public void onClick(View view) {
                     mPageNo++;
-                    requestMessageList();
+                    requestInfoList();
                 }
             });
             getListView().addFooterView(mFooter);
         }
 
-        if (sysTradeMessages.size() < mPageSize) {
+        if (informationList.size() < mPageSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
             getListView().removeFooterView(mFooter);
         }
 
-        if (mMessageListAdapter == null) {
-            mMessageListAdapter = new MessageListAdapter(getContext());
-            setListAdapter(mMessageListAdapter);
+        if (mNewsListAdapter == null) {
+            mNewsListAdapter = new NewsListAdapter(getContext());
+            setListAdapter(mNewsListAdapter);
         }
 
-        for (SysTradeMessage item : sysTradeMessages) {
+        for (Information item : informationList) {
             if (mSet.add(item.getId())) {
-                mMessageListAdapter.add(item);
+                mNewsListAdapter.add(item);
             }
         }
-        mMessageListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        SysTradeMessage message = (SysTradeMessage) l.getItemAtPosition(position);
-        if (mListener != null) {
-            mListener.onMsgItemClick(message);
-        }
+        mNewsListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -160,9 +142,13 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
         setListShown(true);
     }
 
-    static class MessageListAdapter extends ArrayAdapter<SysTradeMessage> {
+    private interface OnNewItemClickListener {
+        void onNewItemClick(Information information);
+    }
 
-        public MessageListAdapter(Context context) {
+    static class NewsListAdapter extends ArrayAdapter<Information> {
+
+        public NewsListAdapter(Context context) {
             super(context, 0);
         }
 
@@ -170,44 +156,46 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_message, null);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_info, null);
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.bindingData(getItem(position));
+            holder.bindingData(getItem(position), getContext());
             return convertView;
         }
 
         static class ViewHolder {
             @BindView(R.id.title)
             TextView mTitle;
-            @BindView(R.id.updateDate)
-            TextView mUpdateDate;
-            @BindView(R.id.content)
-            TextView mContent;
+            @BindView(R.id.summary)
+            TextView mSummary;
+            @BindView(R.id.createDate)
+            TextView mCreateDate;
+            @BindView(R.id.cmtAndReadCount)
+            TextView mCmtAndReadCount;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(SysTradeMessage item) {
-                mTitle.setText(item.getTitle());
-                mUpdateDate.setText(item.getUpdateDate());
-                mContent.setText(item.getContent());
+            public void bindingData(Information item, Context context) {
+                if (item.getSection() == Information.SECTION_MARKET_ANALYSING) {
+                    mTitle.setVisibility(View.GONE);
+                    mSummary.setText(item.getSummary());
+                    mCreateDate.setText(item.getCreateDate());
+                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
+                            item.getCmtCount(), item.getReadCount()));
+                } else {
+                    mTitle.setVisibility(View.VISIBLE);
+                    mTitle.setText(item.getTitle());
+                    mSummary.setText(item.getSummary());
+                    mCreateDate.setText(item.getCreateDate());
+                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
+                            item.getCmtCount(), item.getReadCount()));
+                }
             }
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-        API.cancel(TAG);
-    }
-
-    public interface OnMsgItemClickListener {
-        void onMsgItemClick(SysTradeMessage sysTradeMessage);
     }
 }

@@ -2,6 +2,15 @@ package com.jnhyxx.html5.domain.market;
 
 public class Product {
 
+    public static final String CURRENCY_RMB = "CNY";
+
+    public static final int MARKET_STATUS_CLOSE = 0;
+    public static final int MARKET_STATUS_OPEN = 1;
+
+    public static final int TAG_NEW = 2;
+    public static final int TAG_HOT = 1;
+    public static final int TAG_NONE = 0;
+
     /**
      * id : 1002
      * imgs : http://jzstock.oss-cn-hangzhou.aliyuncs.com/2016-04-29_marketCL.png

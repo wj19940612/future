@@ -3,10 +3,11 @@ package com.jnhyxx.html5.domain.local;
 import com.jnhyxx.html5.domain.market.MarketBrief;
 import com.jnhyxx.html5.domain.market.PositionBrief;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 
 import java.util.List;
 
-public class ProductPkg {
+public class ProductPkg implements GroupAdapter.Groupable  {
 
     private Product mProduct;
     private MarketBrief mMarketBrief;
@@ -29,8 +30,8 @@ public class ProductPkg {
     }
 
     public static void updateProductPkgList(List<ProductPkg> productPkgList, List<Product> productList,
-                                            List<PositionBrief> positionBriefList,
-                                            List<MarketBrief> marketBriefList) {
+                                                        List<PositionBrief> positionBriefList,
+                                                        List<MarketBrief> marketBriefList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
@@ -66,7 +67,8 @@ public class ProductPkg {
 
     }
 
-    public static boolean updateProductPkgList(List<ProductPkg> productPkgList, List<PositionBrief> positionBriefList) {
+    public static boolean updatePositionInProductPkg(List<ProductPkg> productPkgList,
+                                                     List<PositionBrief> positionBriefList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
@@ -97,6 +99,38 @@ public class ProductPkg {
         return updateProductList;
     }
 
+    public static boolean updateMarketInProductPkgList(List<ProductPkg> productPkgList,
+                                                       List<MarketBrief> marketBriefList) {
+        if (productPkgList == null) {
+            throw new NullPointerException("productPkgList is null");
+        }
+
+        int count = 0;
+        for (int i = 0; i < productPkgList.size(); i++) {
+            ProductPkg pkg = productPkgList.get(i);
+            Product product = pkg.getProduct();
+            for (int j = 0; marketBriefList != null && j < marketBriefList.size(); j++) {
+                MarketBrief marketBrief = marketBriefList.get(j);
+                if (product.getInstrumentCode().equalsIgnoreCase(marketBrief.getCode())) {
+                    pkg.setMarketBrief(marketBrief);
+                    count++; // when each product has its position brief, count++.
+                    break;
+                }
+            }
+        }
+
+        boolean haveSameSize = true;
+        boolean haveSameProducts = true;
+        if (marketBriefList != null) {
+            haveSameSize = (productPkgList.size() == marketBriefList.size());
+            haveSameProducts = (count == productPkgList.size());
+        }
+
+        boolean updateProductList = !(haveSameProducts && haveSameSize);
+
+        return updateProductList;
+    }
+
     public static void clearPositionBriefs(List<ProductPkg> productPkgList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
@@ -106,5 +140,13 @@ public class ProductPkg {
             ProductPkg pkg = productPkgList.get(i);
             pkg.setPositionBrief(null);
         }
+    }
+
+    @Override
+    public String getGroupName() {
+        if (getProduct().getCurrency().equalsIgnoreCase(Product.CURRENCY_RMB)) {
+            return "国内期货";
+        }
+        return "国外期货";
     }
 }

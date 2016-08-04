@@ -148,5 +148,9 @@
     <string name="industry_news">行业资讯</string>
     <string name="there_is_no_info_for_now">暂无任何资讯</string>
     <string name="comment_read_count">评论（%1$d）阅读（%2$d）</string>
-    
+
+    <!-- Home page -->
+    <string name="market_close">休市</string>
+    <string name="holding_position">持仓中</string>
+
 </resources>

@@ -6,6 +6,7 @@
         <attr name="point" format="color"/>
         <attr name="selectedPoint" format="color"/>
         <attr name="pointRadius" format="dimension"/>
+        <attr name="infinite" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="BottomTabs">
@@ -18,9 +19,9 @@
         <attr name="leftIcon" format="reference"/>
         <attr name="rightIcon" format="reference"/>
         <attr name="rightIconVisibility">
-            <enum name="visible" value="0" />
-            <enum name="invisible" value="4" />
-            <enum name="gone" value="8" />
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
         </attr>
         <attr name="subText" format="reference|string"/>
         <attr name="subTextSize" format="reference|string"/>

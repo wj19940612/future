@@ -3,8 +3,9 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.fragment.HallFragment">
+              tools:context=".fragment.HomeFragment">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
@@ -16,6 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@drawable/divider_hall_list"
+        android:dividerHeight="1px"
         android:headerDividersEnabled="false"
+        android:listSelector="@null"
+        android:overScrollMode="never"
         android:scrollbars="none"/>
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/there_is_no_data_for_now"/>
 </LinearLayout>

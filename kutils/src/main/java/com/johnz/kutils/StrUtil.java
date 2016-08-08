@@ -93,4 +93,26 @@ public class StrUtil {
         return res;
     }
 
+    /**
+     * 设置 s2 颜色，同时按顺拼接 s1, s2 和 s3
+     * @param s1
+     * @param s2
+     * @param s2Color
+     * @param s3
+     * @return
+     */
+    public static SpannableString mergeTextWithColor(String s1, String s2, int s2Color, String s3) {
+        SpannableString res = new SpannableString("");
+        if (!TextUtils.isEmpty(s1)) {
+            int start = s1.length();
+            s1 = s1 + s2;
+            int end = s1.length();
+            res = new SpannableString(s1 + s3);
+            if (s2Color != Color.TRANSPARENT) {
+                res.setSpan(new ForegroundColorSpan(s2Color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return res;
+    }
+
 }

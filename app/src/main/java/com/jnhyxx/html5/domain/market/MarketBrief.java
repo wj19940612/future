@@ -27,6 +27,13 @@ public class MarketBrief {
         return percentage;
     }
 
+    public String getUnsignPercentage() {
+        if (percentage.startsWith("-") || percentage.startsWith("+")) {
+            return percentage.substring(1, percentage.length());
+        }
+        return percentage;
+    }
+
     public void setPercentage(String percentage) {
         this.percentage = percentage;
     }

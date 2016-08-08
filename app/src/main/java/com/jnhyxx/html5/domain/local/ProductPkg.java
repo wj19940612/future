@@ -29,9 +29,17 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         return mProduct;
     }
 
+    public MarketBrief getMarketBrief() {
+        return mMarketBrief;
+    }
+
+    public PositionBrief getPositionBrief() {
+        return mPositionBrief;
+    }
+
     public static void updateProductPkgList(List<ProductPkg> productPkgList, List<Product> productList,
-                                                        List<PositionBrief> positionBriefList,
-                                                        List<MarketBrief> marketBriefList) {
+                                            List<PositionBrief> positionBriefList,
+                                            List<MarketBrief> marketBriefList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }

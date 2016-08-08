@@ -3,11 +3,8 @@
 
     <item
         android:left="16dp"
-        android:right="16dp">
-        <shape>
-            <size android:height="0.5dp" />
-            <solid android:color="@color/splitLine" />
-        </shape>
+        android:right="16dp"
+        android:drawable="@color/splitLine">
     </item>
 
 </layer-list>

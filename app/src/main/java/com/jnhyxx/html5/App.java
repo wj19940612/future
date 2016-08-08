@@ -46,7 +46,9 @@ public class App extends Application {
         MobclickAgent.setCatchUncaughtExceptions(!BuildConfig.DEBUG);
 
         initPushHandlers();
-        //handleUncaughtException();
+        if (!BuildConfig.DEBUG) {
+            handleUncaughtException();
+        }
     }
 
     private void handleUncaughtException() {

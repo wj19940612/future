@@ -102,6 +102,8 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
     protected void startScheduleJob(int millisecond) {
         if (mTimerHandler == null) {
             mTimerHandler = new TimerHandler(this);
+        } else {
+            mTimerHandler.removeCallbacksAndMessages(null);
         }
         mTimerHandler.sendEmptyMessageDelayed(millisecond, 0);
     }

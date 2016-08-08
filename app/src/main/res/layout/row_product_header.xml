@@ -3,7 +3,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/bg_product_header"
+              android:background="@drawable/bg_white_with_gray_bottom_border"
               android:orientation="horizontal"
               android:paddingBottom="10dp"
               android:paddingTop="10dp">
@@ -20,5 +20,4 @@
         android:layout_marginLeft="20dp"
         android:textSize="16sp"
         tools:text="国际期货"/>
-
 </LinearLayout>

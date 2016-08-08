@@ -17,6 +17,7 @@ public class API extends APIBase {
     public static final String TOKEN = "token";
     public static final String PAGE_NO = "pageNo";
     public static final String PAGE_SIZE = "pageSize";
+    public static final String TYPE = "type";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -237,6 +238,17 @@ public class API extends APIBase {
                             .put("sectionId", sectionId)
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * /user/newsNotice/newsImgList 获取首页广告
+         *
+         * @return
+         */
+        public static API getHomeAdvertisements() {
+            return new API("/user/newsNotice/newsImgList",
+                    new ApiParams()
+                            .put(TYPE, 2));
         }
     }
 

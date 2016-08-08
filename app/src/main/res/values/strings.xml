@@ -42,9 +42,9 @@
     <string name="api_error_server">服务器异常</string>
 
     <!-- Main -->
-    <string name="hall">大厅</string>
+    <string name="home">首页</string>
     <string name="information">资讯</string>
-    <string name="account">账户</string>
+    <string name="mine">我的</string>
 
     <!-- Local Prompt -->
     <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；
@@ -152,5 +152,13 @@
     <!-- Home page -->
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
+    <string name="forenoon">上午</string>
+    <string name="afternoon">下午</string>
+    <string name="night">晚上</string>
+    <string name="dawn">凌晨</string>
+    <string name="simulation">模拟操盘</string>
+    <string name="newer_guide">新手引导</string>
+    <string name="contact_service">联系客服</string>
+    <string name="there_is_no_data_for_now">暂无数据</string>
 
 </resources>

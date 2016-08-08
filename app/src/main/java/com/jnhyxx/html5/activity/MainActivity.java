@@ -14,7 +14,7 @@ import android.webkit.WebView;
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.AccountFragment;
-import com.jnhyxx.html5.fragment.HallFragment;
+import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.APIBase;
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new HallFragment();
+                    return new HomeFragment();
                 case 1:
                     return new InfoFragment();
                 case 2:

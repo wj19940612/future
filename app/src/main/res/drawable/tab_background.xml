@@ -3,7 +3,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/splitLine" />
+            <solid android:color="@color/splitLine2" />
         </shape>
     </item>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#FA4300" android:state_selected="true"/>
-    <item android:color="#999999"/>
+    <item android:color="#358CF3" android:state_selected="true"/>
+    <item android:color="#E6E6E6"/>
 </selector>

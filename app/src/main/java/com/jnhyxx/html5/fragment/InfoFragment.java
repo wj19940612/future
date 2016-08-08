@@ -31,7 +31,7 @@ public class InfoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
+        View view = inflater.inflate(R.layout.fragment_info, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -40,6 +40,7 @@ public class InfoFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
         mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
         mSlidingTabLayout.setViewPager(mViewPager);
     }

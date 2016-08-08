@@ -115,8 +115,12 @@
         <activity
             android:name=".activity.account.FundDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.account.MessageCenterActivity">
-        </activity>
-    </application>
+        <activity
+            android:name=".activity.account.MessageCenterActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.order.OrderActivity"
+            android:screenOrientation="portrait"/>
+</application>
 
-</manifest>
+    </manifest>

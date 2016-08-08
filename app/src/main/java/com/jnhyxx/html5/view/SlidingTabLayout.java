@@ -129,6 +129,15 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     /**
+     * Sets the padding to be used for controlling the selected tab width.
+     * Add by JohnZ
+     * @param padding
+     */
+    public void setSelectedIndicatorPadding(int padding) {
+        mTabStrip.setSelectedIndicatorPadding(padding);
+    }
+
+    /**
      * Sets the colors to be used for tab dividers. These colors are treated as a circular array.
      * Providing one color will mean that all tabs are indicated with the same color.
      */

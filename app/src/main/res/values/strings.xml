@@ -141,7 +141,7 @@
     <string name="there_is_no_message_for_now">暂无任何消息</string>
     <string name="system_message">系统消息</string>
     <string name="trade_remind">交易提醒</string>
-    
+
     <!-- Information -->
     <string name="news_living">资讯直播</string>
     <string name="market_analysing">行情分析</string>
@@ -160,5 +160,11 @@
     <string name="newer_guide">新手引导</string>
     <string name="contact_service">联系客服</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
+
+    <!-- Order page -->
+    <string name="order">订单</string>
+    <string name="holding">持仓</string>
+    <string name="settlement">结算</string>
+    <string name="there_is_no_holding_position_records">暂无持仓记录</string>
 
 </resources>

@@ -42,7 +42,7 @@
     </style>
 
     <style name="PrimaryRedButton">
-        <item name="android:background">@drawable/btn_primary_red</item>
+        <item name="android:background">@drawable/btn_primary</item>
         <item name="android:clickable">true</item>
         <item name="android:enabled">false</item>
         <item name="android:gravity">center</item>

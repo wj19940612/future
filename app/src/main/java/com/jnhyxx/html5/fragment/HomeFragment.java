@@ -95,6 +95,7 @@ public class HomeFragment extends BaseFragment {
         super.onTimeUp(count);
         requestProductMarketBriefList();
         mHomeListHeader.nextOrderReport();
+        mHomeListHeader.nextAdvertisement();
     }
 
     @Override

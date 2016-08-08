@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -182,9 +183,12 @@ public class PageIndicator extends View {
             index = (index + mCount) % mCount;
         }
 
+        Log.d("TEST", "move: " + index + ", " + mCurrentIndex);
+
         if (index < 0 || index >= mCount) return;
 
         if (mCurrentIndex != index) {
+            mCurrentIndex = index;
             invalidate();
         }
     }
@@ -195,9 +199,5 @@ public class PageIndicator extends View {
 
     public void back() {
         move(mCurrentIndex - 1);
-    }
-
-    public void setInfinite(boolean infinite) {
-        mInfinite = infinite;
     }
 }

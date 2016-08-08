@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,7 @@ public class HomeListHeader extends FrameLayout {
 
         @Override
         public void onPageSelected(int position) {
+            Log.d("TEST", "onPageSelected: " + position);
             if (mPageIndicator != null) {
                 mPageIndicator.move(position);
             }
@@ -129,12 +131,17 @@ public class HomeListHeader extends FrameLayout {
         }
     }
 
+
+    public void nextAdvertisement() {
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+    }
+
     public void setHomeAdvertisement(HomeAdvertisement homeAdvertisement) {
+        mPageIndicator.setCount(homeAdvertisement.getNews_notice_img_list().size());
         if (mAdapter == null) {
             mAdapter = new AdvertisementAdapter(getContext(), homeAdvertisement.getNews_notice_img_list());
             mViewPager.setAdapter(mAdapter);
             mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-            mViewPager.setCurrentItem(mAdapter.getCount() / 2);
         } else {
             mAdapter.setNewAdvertisements(homeAdvertisement.getNews_notice_img_list());
         }
@@ -161,14 +168,16 @@ public class HomeListHeader extends FrameLayout {
         private List<ImageView> createImageViewList(int size) {
             List<ImageView> imageViewList = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                imageViewList.add(new ImageView(mContext));
+                ImageView imageView  = new ImageView(mContext);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageViewList.add(imageView);
             }
             return imageViewList;
         }
 
         @Override
         public int getCount() {
-            return Integer.MAX_VALUE;
+            return mList.size();
         }
 
         @Override
@@ -178,21 +187,18 @@ public class HomeListHeader extends FrameLayout {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            int pos = position % mList.size();
-            ImageView imageView = mImageViewList.get(pos);
+            int pos = position;
+            ImageView imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             HomeAdvertisement.NewsNoticeImgListBean bean = mList.get(pos);
+            container.addView(imageView, 0);
             Picasso.with(mContext).load(BuildConfig.API_HOST + bean.getMiddleBanner()).into(imageView);
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            int pos = position % mList.size();
-            ImageView imageView = mImageViewList.get(pos);
-            if (imageView != null) {
-                container.removeView(imageView);
-            }
+            container.removeView((View) object);
         }
     }
 }

@@ -27,14 +27,16 @@ import android.widget.LinearLayout;
 
 class SlidingTabStrip extends LinearLayout {
 
-    private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 2;
+    private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 1;
     private static final byte DEFAULT_BOTTOM_BORDER_COLOR_ALPHA = 0x26;
-    private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 8;
+    private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 2;
     private static final int DEFAULT_SELECTED_INDICATOR_COLOR = 0xFF33B5E5;
 
     private static final int DEFAULT_DIVIDER_THICKNESS_DIPS = 1;
     private static final byte DEFAULT_DIVIDER_COLOR_ALPHA = 0x20;
     private static final float DEFAULT_DIVIDER_HEIGHT = 0.5f;
+
+    private static final int DEFAULT_SELECTED_INDICATOR_PADDING_DIPS = 10; // Add by JohnZ
 
     private final int mBottomBorderThickness;
     private final Paint mBottomBorderPaint;
@@ -49,6 +51,8 @@ class SlidingTabStrip extends LinearLayout {
 
     private int mSelectedPosition;
     private float mSelectionOffset;
+
+    private int mSelectedPadding;
 
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
     private final SimpleTabColorizer mDefaultTabColorizer;
@@ -85,6 +89,8 @@ class SlidingTabStrip extends LinearLayout {
         mDividerHeight = DEFAULT_DIVIDER_HEIGHT;
         mDividerPaint = new Paint();
         mDividerPaint.setStrokeWidth((int) (DEFAULT_DIVIDER_THICKNESS_DIPS * density));
+
+        mSelectedPadding = (int) (DEFAULT_SELECTED_INDICATOR_PADDING_DIPS * density);
     }
 
     void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
@@ -109,6 +115,11 @@ class SlidingTabStrip extends LinearLayout {
     void onViewPagerPageChanged(int position, float positionOffset) {
         mSelectedPosition = position;
         mSelectionOffset = positionOffset;
+        invalidate();
+    }
+
+    void setSelectedIndicatorPadding(int padding) {
+        mSelectedPadding = padding;
         invalidate();
     }
 
@@ -144,7 +155,7 @@ class SlidingTabStrip extends LinearLayout {
 
             mSelectedIndicatorPaint.setColor(color);
 
-            canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
+            canvas.drawRect(left + mSelectedPadding, height - mSelectedIndicatorThickness, right - mSelectedPadding,
                     height, mSelectedIndicatorPaint);
         }
 

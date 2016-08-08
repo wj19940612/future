@@ -125,7 +125,7 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     @Override
-    protected void onTimeUp() { // TODO: 7/22/16 考虑Home了之后页面被回收的情况
+    public void onTimeUp(int count) { // TODO: 7/22/16 考虑Home了之后页面被回收的情况
         mCounter--;
         if (mCounter <= 0) {
             mFreezeObtainAuthCode = false;

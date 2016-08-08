@@ -18,7 +18,8 @@ import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.MarketBrief;
-import com.jnhyxx.html5.domain.market.PositionBrief;
+import com.jnhyxx.html5.domain.order.OrderReport;
+import com.jnhyxx.html5.domain.order.PositionBrief;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -54,7 +55,7 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_hall, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -71,8 +72,29 @@ public class HomeFragment extends BaseFragment {
         mList.setEmptyView(mEmpty);
 
         requestHomeAdvertisement();
+        requestOrderReport();
         requestProductList();
         requestProductMarketBriefList();
+
+        startScheduleJob(5 * 1000);
+    }
+
+    private void requestOrderReport() {
+        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
+            @Override
+            public void onSuccess(Resp<OrderReport> orderReportResp) {
+                if (orderReportResp.isSuccess()) {
+                    mHomeListHeader.setOrderReport(orderReportResp.getData());
+                }
+            }
+        }).setTag(TAG).post();
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        super.onTimeUp(count);
+        requestProductMarketBriefList();
+        mHomeListHeader.nextOrderReport();
     }
 
     @Override
@@ -104,7 +126,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestProductMarketBriefList() {
-        API.Market.getProductMarketBreifList()
+        API.Market.getProductMarketBriefList()
                 .setCallback(new Callback<Resp<List<MarketBrief>>>() {
                     @Override
                     public void onSuccess(Resp<List<MarketBrief>> listResp) {
@@ -114,6 +136,8 @@ public class HomeFragment extends BaseFragment {
                                     ProductPkg.updateMarketInProductPkgList(mProductPkgList, mMarketBriefList);
                             if (updateProductList) {
                                 requestProductList();
+                            } else {
+                                updateProductListView();
                             }
                         }
                     }
@@ -131,6 +155,8 @@ public class HomeFragment extends BaseFragment {
                                     ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
                             if (updateProductList) {
                                 requestProductList();
+                            } else {
+                                updateProductListView();
                             }
                         }
                     }).setTag(TAG).post();

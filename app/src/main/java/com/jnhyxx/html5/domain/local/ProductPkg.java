@@ -1,7 +1,7 @@
 package com.jnhyxx.html5.domain.local;
 
 import com.jnhyxx.html5.domain.market.MarketBrief;
-import com.jnhyxx.html5.domain.market.PositionBrief;
+import com.jnhyxx.html5.domain.order.PositionBrief;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 

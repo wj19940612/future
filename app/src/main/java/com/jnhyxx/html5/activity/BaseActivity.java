@@ -2,22 +2,20 @@ package com.jnhyxx.html5.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.TimerHandler;
 import com.jnhyxx.html5.view.dialog.Progress;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.net.ApiIndeterminate;
 import com.umeng.message.PushAgent;
 
-import java.lang.ref.WeakReference;
-
-public class BaseActivity extends AppCompatActivity implements ApiIndeterminate {
+public class BaseActivity extends AppCompatActivity implements
+        ApiIndeterminate, TimerHandler.TimerCallback {
 
     public static final int REQUEST_CODE = 8;
 
@@ -79,31 +77,11 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
         }
     }
 
-    private static class TimerHandler extends Handler {
-
-        WeakReference<BaseActivity> mReference;
-
-        public TimerHandler(BaseActivity activity) {
-            mReference = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            BaseActivity activity = mReference.get();
-            if (activity != null) {
-                activity.onTimeUp();
-                int delayMillis = msg.what;
-                this.sendEmptyMessageDelayed(delayMillis, delayMillis);
-            }
-        }
-    }
-
     protected void startScheduleJob(int millisecond) {
+        stopScheduleJob();
+
         if (mTimerHandler == null) {
             mTimerHandler = new TimerHandler(this);
-        } else {
-            mTimerHandler.removeCallbacksAndMessages(null);
         }
         mTimerHandler.sendEmptyMessageDelayed(millisecond, 0);
     }
@@ -114,5 +92,8 @@ public class BaseActivity extends AppCompatActivity implements ApiIndeterminate 
         }
     }
 
-    protected void onTimeUp() {}
+    @Override
+    public void onTimeUp(int count) {
+
+    }
 }

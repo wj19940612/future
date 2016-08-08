@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.domain.market;
+package com.jnhyxx.html5.domain.order;
 
 /**
  * 持仓简要数据内容

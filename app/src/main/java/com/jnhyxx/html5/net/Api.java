@@ -356,7 +356,7 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static API getProductMarketBreifList() {
+        public static API getProductMarketBriefList() {
             return new API("/futuresquota/getAllCacheData", null);
         }
     }
@@ -372,6 +372,14 @@ public class API extends APIBase {
         public static API getOrderPositionList(String token) {
             return new API("/order/posiOrderCount",
                     new ApiParams().put(TOKEN, token));
+        }
+
+        /**
+         * /order/order/indexReport 获取持仓播报数据
+         * @return
+         */
+        public static API getReportData() {
+            return new API("/order/order/indexReport", null);
         }
     }
 }

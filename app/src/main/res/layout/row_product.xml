@@ -71,7 +71,7 @@
             android:id="@+id/advertisement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="4dp"
             android:textColor="#A8A8A8"
             android:textSize="12sp"
             tools:text="最热品种，980元做一手"/>

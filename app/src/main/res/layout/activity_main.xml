@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/tab_background"
+        android:paddingBottom="3dp"
         android:paddingTop="5dp"
         app:interval="2dp"
         app:textColor="@color/tab_text"

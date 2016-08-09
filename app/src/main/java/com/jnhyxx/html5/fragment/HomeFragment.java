@@ -18,9 +18,9 @@ import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.MarketBrief;
+import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.domain.order.PositionBrief;
-import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -64,12 +64,11 @@ public class HomeFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
-
-        if (mHomeListHeader == null) {
-            mHomeListHeader = new HomeListHeader(getContext());
-            mList.addHeaderView(mHomeListHeader);
-        }
+        mHomeListHeader = new HomeListHeader(getContext());
+        mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
+        mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
+        mList.setAdapter(mProductPkgAdapter);
 
         requestHomeAdvertisement();
         requestOrderReport();
@@ -93,9 +92,11 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        requestProductMarketBriefList();
-        mHomeListHeader.nextOrderReport();
-        mHomeListHeader.nextAdvertisement();
+        if (getUserVisibleHint()) {
+            requestProductMarketBriefList();
+            mHomeListHeader.nextOrderReport();
+            mHomeListHeader.nextAdvertisement();
+        }
     }
 
     @Override
@@ -168,11 +169,7 @@ public class HomeFragment extends BaseFragment {
 
     private void updateProductListView() {
         if (mProductPkgList == null || mProductPkgList.size() == 0) return;
-
-        if (mProductPkgAdapter == null) {
-            mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
-            mList.setAdapter(mProductPkgAdapter);
-        } else {
+        if (mProductPkgAdapter != null) {
             mProductPkgAdapter.setGroupableList(mProductPkgList);
         }
     }

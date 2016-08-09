@@ -21,7 +21,6 @@ import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,7 +35,7 @@ public class HomeListHeader extends FrameLayout {
     private OnViewClickListener mListener;
 
     @BindView(R.id.viewPager)
-    ViewPager mViewPager;
+    InfiniteViewPager mViewPager;
     @BindView(R.id.pageIndicator)
     PageIndicator mPageIndicator;
     @BindView(R.id.currentOnlineNumber)
@@ -86,7 +85,6 @@ public class HomeListHeader extends FrameLayout {
 
         @Override
         public void onPageSelected(int position) {
-            Log.d("TEST", "onPageSelected: " + position);
             if (mPageIndicator != null) {
                 mPageIndicator.move(position);
             }
@@ -94,7 +92,6 @@ public class HomeListHeader extends FrameLayout {
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
         }
     };
 
@@ -133,6 +130,7 @@ public class HomeListHeader extends FrameLayout {
 
 
     public void nextAdvertisement() {
+        Log.d("John", "nextAdvertisement: " + mViewPager.getCurrentItem() );
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
     }
 
@@ -140,8 +138,8 @@ public class HomeListHeader extends FrameLayout {
         mPageIndicator.setCount(homeAdvertisement.getNews_notice_img_list().size());
         if (mAdapter == null) {
             mAdapter = new AdvertisementAdapter(getContext(), homeAdvertisement.getNews_notice_img_list());
-            mViewPager.setAdapter(mAdapter);
             mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+            mViewPager.setAdapter(mAdapter);
         } else {
             mAdapter.setNewAdvertisements(homeAdvertisement.getNews_notice_img_list());
         }
@@ -150,29 +148,16 @@ public class HomeListHeader extends FrameLayout {
     private static class AdvertisementAdapter extends PagerAdapter {
 
         private List<HomeAdvertisement.NewsNoticeImgListBean> mList;
-        private List<ImageView> mImageViewList;
         private Context mContext;
 
         public AdvertisementAdapter(Context context, List<HomeAdvertisement.NewsNoticeImgListBean> imgListBeen) {
             mContext = context;
             mList = imgListBeen;
-            mImageViewList = createImageViewList(mList.size());
         }
 
         public void setNewAdvertisements(List<HomeAdvertisement.NewsNoticeImgListBean> imgListBeen) {
             mList = imgListBeen;
-            mImageViewList = createImageViewList(mList.size());
             notifyDataSetChanged();
-        }
-
-        private List<ImageView> createImageViewList(int size) {
-            List<ImageView> imageViewList = new ArrayList<>();
-            for (int i = 0; i < size; i++) {
-                ImageView imageView  = new ImageView(mContext);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageViewList.add(imageView);
-            }
-            return imageViewList;
         }
 
         @Override

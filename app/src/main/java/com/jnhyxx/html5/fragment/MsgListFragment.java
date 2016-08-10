@@ -88,7 +88,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
             API.Message.getSystemMessageList(User.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
+                        public void onRespReceive(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();
@@ -96,7 +96,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
             API.Message.getTradeMessageList(User.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
+                        public void onRespReceive(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();

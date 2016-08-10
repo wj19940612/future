@@ -52,12 +52,6 @@ public class SmartDialog {
 
     private static Map<String, List<SmartDialog>> mListMap = new HashMap<>();
 
-    public static SmartDialog with(String tag, Activity activity) {
-        SmartDialog dialog = new SmartDialog(activity);
-        addMap(activity, dialog);
-        return dialog;
-    }
-
     public static SmartDialog with(Activity activity, int resid) {
         SmartDialog dialog = new SmartDialog(activity);
         addMap(activity, dialog);

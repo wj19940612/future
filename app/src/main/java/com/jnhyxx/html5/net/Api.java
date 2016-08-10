@@ -18,6 +18,9 @@ public class API extends APIBase {
     public static final String PAGE_NO = "pageNo";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TYPE = "type";
+    public static final String FUND_TYPE = "fundType";
+    public static final String FUTURES_TYPE = "futuresType";
+    public static final String VERSION = "version";
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
@@ -371,15 +374,37 @@ public class API extends APIBase {
          */
         public static API getOrderPositionList(String token) {
             return new API("/order/posiOrderCount",
-                    new ApiParams().put(TOKEN, token));
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(VERSION, "0.0.1"));
         }
 
         /**
          * /order/order/indexReport 获取持仓播报数据
+         *
          * @return
          */
         public static API getReportData() {
             return new API("/order/order/indexReport", null);
+        }
+
+        /**
+         * /order/futures/balancedList 获取结算订单列表
+         *
+         * @param token
+         * @param pageNo
+         * @param pageSize
+         * @param id
+         * @param fundType @return
+         */
+        public static API getSettlementOrderList(String token, int pageNo, int pageSize, int id, int fundType) {
+            return new API("/order/futures/balancedList",
+                    new ApiParams()
+                            .put(TOKEN, token)
+                            .put(PAGE_NO, pageNo)
+                            .put(PAGE_SIZE, pageSize)
+                            .put(FUTURES_TYPE, id)
+                            .put(FUND_TYPE, fundType));
         }
     }
 }

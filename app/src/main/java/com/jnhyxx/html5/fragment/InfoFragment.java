@@ -75,7 +75,7 @@ public class InfoFragment extends BaseFragment {
                 case 1:
                     return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
                 case 2:
-                    return new InfoListFragment().newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
+                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
             }
             return null;
         }

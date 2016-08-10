@@ -78,7 +78,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<Information>>, List<Information>>() {
                         @Override
-                        public void onRespSuccess(List<Information> informationList) {
+                        public void onRespReceive(List<Information> informationList) {
                             updateInfoList(informationList);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();
@@ -87,7 +87,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<Information>>, List<Information>>() {
                         @Override
-                        public void onRespSuccess(List<Information> informationList) {
+                        public void onRespReceive(List<Information> informationList) {
                             updateInfoList(informationList);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();

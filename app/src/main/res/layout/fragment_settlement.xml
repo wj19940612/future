@@ -4,7 +4,6 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -21,5 +20,5 @@
         android:paddingTop="50dp"
         android:textColor="#CACACA"
         android:textSize="20sp"
-        tools:text="暂无持仓记录"/>
+        android:text="@string/there_is_no_holding_position_records"/>
 </LinearLayout>

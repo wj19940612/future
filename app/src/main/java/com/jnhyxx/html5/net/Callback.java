@@ -13,6 +13,11 @@ import com.johnz.kutils.net.NullResponseError;
 public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
+    public void onSuccess(T t) {
+        onReceive(t);
+    }
+
+    @Override
     public void onFailure(VolleyError volleyError) {
         int toastResId = R.string.api_error_network;
         if (volleyError instanceof NullResponseError) {
@@ -28,4 +33,6 @@ public abstract class Callback<T> extends ApiCallback<T> {
         }
         ToastUtil.show(toastResId);
     }
+
+    public abstract void onReceive(T t);
 }

@@ -87,7 +87,7 @@ public class SignInActivity extends BaseActivity {
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
-                    public void onSuccess(Resp<JsonObject> resp) {
+                    public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);

@@ -121,6 +121,8 @@
         <activity
             android:name=".activity.order.OrderActivity"
             android:screenOrientation="portrait"/>
-</application>
+        <activity android:name=".activity.ProductActivity">
+        </activity>
+    </application>
 
-    </manifest>
+</manifest>

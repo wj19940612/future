@@ -61,7 +61,7 @@ public class WithdrawActivity extends BaseActivity {
         API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
                 .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
                     @Override
-                    public void onRespSuccess(FundInfo fundInfo) {
+                    public void onRespReceive(FundInfo fundInfo) {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                     }
                 }).post();
@@ -103,7 +103,7 @@ public class WithdrawActivity extends BaseActivity {
         API.Finance.withdraw(User.getUser().getLoginInfo().getTokenInfo().getToken(), amount)
                 .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(Resp resp) {
+                    public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

@@ -65,7 +65,7 @@ public class APIBase extends RequestManager {
                     mCallback = new ApiCallback<Object>() {
                         @Override
                         public void onSuccess(Object o) {
-                            Log.d(TAG, "onSuccess: result(default): " + o);
+                            Log.d(TAG, "onReceive: result(default): " + o);
                         }
                         @Override
                         public void onFailure(VolleyError volleyError) {

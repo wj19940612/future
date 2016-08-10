@@ -89,7 +89,7 @@ public class FindPwdActivity extends BaseActivity {
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(Resp resp) {
+                    public void onReceive(Resp resp) {
                         ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
@@ -110,7 +110,7 @@ public class FindPwdActivity extends BaseActivity {
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(Resp resp) {
+                    public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
                                     .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)

@@ -91,7 +91,7 @@ public class NameAuthActivity extends BaseActivity {
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<NameAuth.Result>>() {
                     @Override
-                    public void onSuccess(final Resp<NameAuth.Result> resp) {
+                    public void onReceive(final Resp<NameAuth.Result> resp) {
                         if (resp.isSuccess()) {
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setCancelableOnTouchOutside(false)

@@ -48,10 +48,6 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void gotoMain(){
-//        if (BuildConfig.DEBUG) {
-//            Launcher.with(this, OrderActivity.class).execute();
-//            return; // TODO: 8/8/16 just for debug, remove later
-//        }
         startActivity(new Intent(this, MainActivity.class));
         supportFinishAfterTransition();
     }

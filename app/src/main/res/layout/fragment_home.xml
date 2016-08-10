@@ -16,10 +16,10 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@drawable/divider_hall_list"
+        android:divider="@drawable/divider_home_list"
         android:dividerHeight="1px"
         android:headerDividersEnabled="false"
-        android:listSelector="@null"
+        android:listSelector="@drawable/list_selector_home"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 

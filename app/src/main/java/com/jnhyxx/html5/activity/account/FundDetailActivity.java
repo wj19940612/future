@@ -74,7 +74,7 @@ public class FundDetailActivity extends BaseActivity {
             API.Finance.getCashFlowList(User.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
-                        public void onRespSuccess(List<FundFlowItem> fundFlowItems) {
+                        public void onRespReceive(List<FundFlowItem> fundFlowItems) {
                             updateFlowList(fundFlowItems);
                         }
                     }).setIndeterminate(this).setTag(TAG).post();
@@ -82,7 +82,7 @@ public class FundDetailActivity extends BaseActivity {
             API.Finance.getScoreFlowList(User.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Resp.Callback<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
-                        public void onRespSuccess(List<FundFlowItem> fundFlowItems) {
+                        public void onRespReceive(List<FundFlowItem> fundFlowItems) {
                             updateFlowList(fundFlowItems);
                         }
                     }).setIndeterminate(this).setTag(TAG).post();

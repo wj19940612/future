@@ -7,11 +7,11 @@ public class Resp<T> {
 
     private int code;
     private String msg;
-    private Integer msgType;
+    private int msgType;
     private String errparam;
     private T data;
 
-    public Integer getCode() {
+    public int getCode() {
         return code;
     }
 
@@ -56,16 +56,16 @@ public class Resp<T> {
     public abstract static class Callback<T, D> extends com.jnhyxx.html5.net.Callback<T> {
 
         @Override
-        public void onSuccess(T t) {
+        public void onReceive(T t) {
             if (t instanceof Resp) {
                 if (((Resp) t).isSuccess()) {
-                    onRespSuccess((D) ((Resp) t).getData());
+                    onRespReceive((D) ((Resp) t).getData());
                 } else {
                     ToastUtil.show(((Resp) t).getMsg());
                 }
             }
         }
 
-        public abstract void onRespSuccess(D d);
+        public abstract void onRespReceive(D d);
     }
 }

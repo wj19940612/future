@@ -88,7 +88,7 @@ public class ModifyPwdActivity extends BaseActivity {
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(Resp resp) {
+                    public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

@@ -1,6 +1,13 @@
 package com.jnhyxx.html5.domain.market;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
+
+    public static final String EX_PRODUCT = "product";
+    public static final String EX_FUND_TYPE = "fund";
+    public static final int FUND_TYPE_CASH = 0;
+    public static final int FUND_TYPE_SCORE = 1;
 
     public static final String CURRENCY_RMB = "CNY";
 
@@ -323,5 +330,19 @@ public class Product {
 
     public void setRate(double rate) {
         this.rate = rate;
+    }
+
+    public int getLossProfitPrecision() {
+        return calLossProfitPrecision(multiple / Math.pow(10, decimalPlaces));
+    }
+
+    private int calLossProfitPrecision(double v) {
+        String s = String.valueOf(v);
+        int indexOfPoint = s.indexOf(".");
+        if (indexOfPoint > -1) {
+            s = s.replaceAll("0+?$", ""); // remove all tail 0
+            return s.substring(indexOfPoint + 1).length();
+        }
+        return 0;
     }
 }

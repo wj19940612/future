@@ -125,7 +125,7 @@ public class RechargeActivity extends BaseActivity {
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespSuccess(BankcardAuth bankcardAuth) {
+                            public void onRespReceive(BankcardAuth bankcardAuth) {
                                 if (bankcardAuth.getStatus() != BankcardAuth.STATUS_NOT_FILLED
                                     && !TextUtils.isEmpty(bankcardAuth.getPhone())) {
                                     SmartDialog.dismiss(getActivity());

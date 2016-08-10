@@ -3,6 +3,7 @@ package com.johnz.kutils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import java.io.Serializable;
 
@@ -46,6 +47,11 @@ public class Launcher {
         return this;
     }
 
+    public Launcher putExtra(String key, Bundle bundle) {
+        mIntent.putExtra(key, bundle);
+        return this;
+    }
+
     public Launcher setFlags(int flag) {
         mIntent.setFlags(flag);
         return this;
@@ -61,4 +67,6 @@ public class Launcher {
             activity.startActivityForResult(mIntent, requestCode);
         }
     }
+
+
 }

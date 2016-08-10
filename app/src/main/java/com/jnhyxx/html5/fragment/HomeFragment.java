@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.ProductActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.User;
@@ -27,6 +29,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
+import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +57,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
@@ -69,6 +71,18 @@ public class HomeFragment extends BaseFragment {
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
+                if (pkg != null) {
+                    Launcher.with(getActivity(), ProductActivity.class)
+                            .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                            .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                            .execute();
+                }
+            }
+        });
 
         requestHomeAdvertisement();
         requestOrderReport();
@@ -81,7 +95,7 @@ public class HomeFragment extends BaseFragment {
     private void requestOrderReport() {
         API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
             @Override
-            public void onSuccess(Resp<OrderReport> orderReportResp) {
+            public void onReceive(Resp<OrderReport> orderReportResp) {
                 if (orderReportResp.isSuccess()) {
                     mHomeListHeader.setOrderReport(orderReportResp.getData());
                 }
@@ -109,7 +123,7 @@ public class HomeFragment extends BaseFragment {
         API.Account.getHomeAdvertisements()
                 .setCallback(new Resp.Callback<Resp<HomeAdvertisement>, HomeAdvertisement>() {
                     @Override
-                    public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
+                    public void onRespReceive(HomeAdvertisement homeAdvertisement) {
                         mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
                     }
                 }).setTag(TAG).post();
@@ -119,7 +133,7 @@ public class HomeFragment extends BaseFragment {
         API.Market.getProductList().setTag(TAG).setIndeterminate(this)
                 .setCallback(new Resp.Callback<Resp<List<Product>>, List<Product>>() {
                     @Override
-                    public void onRespSuccess(List<Product> products) {
+                    public void onRespReceive(List<Product> products) {
                         ProductPkg.updateProductPkgList(mProductPkgList, products,
                                 mPositionBriefList, mMarketBriefList);
                         updateProductListView();
@@ -131,13 +145,13 @@ public class HomeFragment extends BaseFragment {
         API.Market.getProductMarketBriefList()
                 .setCallback(new Callback<Resp<List<MarketBrief>>>() {
                     @Override
-                    public void onSuccess(Resp<List<MarketBrief>> listResp) {
+                    public void onReceive(Resp<List<MarketBrief>> listResp) {
                         if (listResp.isSuccess()) {
                             mMarketBriefList = listResp.getData();
                             boolean updateProductList =
                                     ProductPkg.updateMarketInProductPkgList(mProductPkgList, mMarketBriefList);
                             if (updateProductList) {
-                                requestProductList();
+                                // requestProductList(); // TODO: 8/10/16 add later
                             } else {
                                 updateProductListView();
                             }
@@ -151,7 +165,7 @@ public class HomeFragment extends BaseFragment {
             API.Order.getOrderPositionList(User.getUser().getToken())
                     .setCallback(new Resp.Callback<Resp<List<PositionBrief>>, List<PositionBrief>>() {
                         @Override
-                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
+                        public void onRespReceive(List<PositionBrief> positionBriefs) {
                             mPositionBriefList = positionBriefs;
                             boolean updateProductList =
                                     ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
@@ -245,11 +259,7 @@ public class HomeFragment extends BaseFragment {
                 mProductName.setText(pkg.getProduct().getCommodityName());
                 mAdvertisement.setText(pkg.getProduct().getAdvertisement());
                 Product product = pkg.getProduct();
-                if (product.getTag() == Product.TAG_HOT) {
-                    mHotIcon.setVisibility(View.VISIBLE);
-                } else {
-                    mHotIcon.setVisibility(View.GONE);
-                }
+                mHotIcon.setVisibility((product.getTag() == Product.TAG_HOT) ? View.VISIBLE : View.GONE);
                 if (product.getMarketStatus() == Product.MARKET_STATUS_CLOSE) {
                     mProductName.setTextColor(context.getResources().getColor(R.color.blackHalfTransparent));
                     mAdvertisement.setTextColor(Color.parseColor("#7FA8A8A8"));

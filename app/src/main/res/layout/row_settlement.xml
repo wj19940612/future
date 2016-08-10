@@ -11,16 +11,23 @@
               android:paddingTop="4dp"
               android:weightSum="5.5">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:lineSpacingExtra="3dp"
         android:paddingBottom="12dp"
-        android:paddingTop="12dp"
-        android:textColor="#666666"
-        tools:text="07/28\n10:24"/>
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/sellDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:lineSpacingExtra="3dp"
+            android:textColor="#666666"
+            tools:text="07/28\n10:24"/>
+    </LinearLayout>
 
     <View
         android:layout_width="1px"
@@ -64,8 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/redPrimary"
             tools:text="+20美元"/>
     </RelativeLayout>
-
 </LinearLayout>

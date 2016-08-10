@@ -118,7 +118,7 @@ public class SignUpActivity extends BaseActivity {
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
-                    public void onSuccess(Resp resp) {
+                    public void onReceive(Resp resp) {
                         ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
@@ -140,7 +140,7 @@ public class SignUpActivity extends BaseActivity {
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
-                    public void onSuccess(Resp<JsonObject> resp) {
+                    public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);

@@ -77,7 +77,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 .setTag(TAG)
                 .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
                     @Override
-                    public void onRespSuccess(NameAuth nameAuth) {
+                    public void onRespReceive(NameAuth nameAuth) {
                         if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
                             showAuthNameDialog(nameAuth);
                         } else {
@@ -166,7 +166,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp<BankcardAuth>>() {
                             @Override
-                            public void onSuccess(final Resp<BankcardAuth> resp) {
+                            public void onReceive(final Resp<BankcardAuth> resp) {
                                 if (resp.isSuccess()) {
 
                                     SmartDialog.with(getActivity(), resp.getMsg())

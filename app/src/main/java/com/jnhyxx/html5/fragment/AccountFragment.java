@@ -119,7 +119,7 @@ public class AccountFragment extends BaseFragment {
         API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
                 .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
                     @Override
-                    public void onRespSuccess(FundInfo fundInfo) {
+                    public void onRespReceive(FundInfo fundInfo) {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                         mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
                     }
@@ -139,7 +139,7 @@ public class AccountFragment extends BaseFragment {
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespSuccess(BankcardAuth bankcardAuth) {
+                            public void onRespReceive(BankcardAuth bankcardAuth) {
                                 Launcher.with(getActivity(), RechargeActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
@@ -150,7 +150,7 @@ public class AccountFragment extends BaseFragment {
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespSuccess(BankcardAuth bankcardAuth) {
+                            public void onRespReceive(BankcardAuth bankcardAuth) {
                                 Launcher.with(getActivity(), WithdrawActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
@@ -170,7 +170,7 @@ public class AccountFragment extends BaseFragment {
                 API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Resp.Callback<Resp<ProfileSummary>, ProfileSummary>() {
                             @Override
-                            public void onRespSuccess(ProfileSummary profileSummary) {
+                            public void onRespReceive(ProfileSummary profileSummary) {
                                 Launcher.with(getActivity(), ProfileActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, profileSummary)
                                         .execute();
@@ -187,7 +187,7 @@ public class AccountFragment extends BaseFragment {
             API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
                     .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
                         @Override
-                        public void onRespSuccess(FundInfo fundInfo) {
+                        public void onRespReceive(FundInfo fundInfo) {
                             Launcher.with(getActivity(), FundDetailActivity.class)
                                     .putExtra(Launcher.EX_PAYLOAD, fundInfo)
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)

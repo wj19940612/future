@@ -12,7 +12,6 @@
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#25D282</color>
     <color name="redPrimary">#FB4B55</color>
-    <color name="grayPrimary">#666666</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
 </resources>

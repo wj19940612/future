@@ -166,11 +166,30 @@
     <string name="holding">持仓</string>
     <string name="settlement">结算</string>
     <string name="there_is_no_holding_position_records">暂无持仓记录</string>
+    <string name="there_is_no_settlements_records">暂无结算记录</string>
     <string name="bullish">看涨</string>
     <string name="bearish">看跌</string>
     <string name="time_up_sale">到时中止</string>
     <string name="stop_profit_sale">止盈卖出</string>
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>
+
+    <!-- Order detail -->
+    <string name="order_detail">订单详情</string>
+    <string name="settlement_loss_profit_unit">结算盈亏 (%1$s)</string>
+    <string name="order_info">订单信息</string>
+    <string name="buy_price">买入价</string>
+    <string name="contract_info">合约信息</string>
+    <string name="trade_variety">交易品种</string>
+    <string name="trade_quantity">交易数量</string>
+    <string name="trade_fee">交易综合费</string>
+    <string name="margin">保证金</string>
+    <string name="contract_deadline">合约到期时间</string>
+    <string name="buy_type">买入类型</string>
+    <string name="buy_time">买入时间</string>
+    <string name="sell_price">卖出价</string>
+    <string name="sell_type">卖出类型</string>
+    <string name="sell_time">卖出时间</string>
+    <string name="order_id">订单号</string>
 
 </resources>

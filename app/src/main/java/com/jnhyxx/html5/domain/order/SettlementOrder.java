@@ -2,7 +2,9 @@ package com.jnhyxx.html5.domain.order;
 
 import com.jnhyxx.html5.domain.market.Product;
 
-public class SettlementOrder {
+import java.io.Serializable;
+
+public class SettlementOrder implements Serializable {
 
     public static final int TRADE_TYPE_LONG = 0;
     public static final int TRADE_TYPE_SHORT = 1;

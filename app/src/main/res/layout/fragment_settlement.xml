@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         android:drawableTop="@drawable/image_no_record"
         android:gravity="center"
         android:paddingTop="50dp"
+        android:text="@string/there_is_no_settlements_records"
         android:textColor="#CACACA"
-        android:textSize="20sp"
-        android:text="@string/there_is_no_holding_position_records"/>
+        android:textSize="20sp"/>
 </LinearLayout>

@@ -123,6 +123,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ProductActivity">
         </activity>
+        <activity android:name=".activity.order.OrderDetailActivity">
+        </activity>
     </application>
 
 </manifest>

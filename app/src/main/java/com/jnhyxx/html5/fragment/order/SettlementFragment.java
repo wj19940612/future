@@ -1,16 +1,19 @@
 package com.jnhyxx.html5.fragment.order;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.order.OrderDetailActivity;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.SettlementOrder;
@@ -19,6 +22,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
+import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
 import java.util.List;
@@ -73,6 +77,18 @@ public class SettlementFragment extends BaseFragment {
         mPageNo = 1;
         mPageSize = 10;
         mList.setEmptyView(mEmpty);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                SettlementOrder settlementOrder = (SettlementOrder) adapterView.getItemAtPosition(position);
+                if (settlementOrder != null) {
+                    Launcher.with(getActivity(), OrderDetailActivity.class)
+                            .putExtra(Launcher.EX_PAYLOAD, settlementOrder)
+                            .putExtra(Product.EX_PRODUCT, mProduct)
+                            .execute();
+                }
+            }
+        });
 
         API.Order.getSettlementOrderList(User.getUser().getToken(),
                 mPageNo, mPageSize, mProduct.getId(), mFundType)
@@ -173,7 +189,7 @@ public class SettlementFragment extends BaseFragment {
                 if (item.isForeign()) {
                     double lossProfit = item.getLossProfit();
                     double rate = item.getRate();
-                    int grayColor = context.getResources().getColor(R.color.grayPrimary);
+                    int grayColor = Color.parseColor("#666666"); // gray
                     int color;
                     String lossProfitForeign;
                     if (lossProfit < 0) {

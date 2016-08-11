@@ -109,7 +109,7 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         // above is header, next is contract and order info // TODO: 8/11/16 add latter with new API and Model
-        
+
     }
 
     private void initData(Intent intent) {

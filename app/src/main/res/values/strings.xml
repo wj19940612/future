@@ -174,7 +174,7 @@
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>
 
-    <!-- Order detail -->
+    <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
     <string name="settlement_loss_profit_unit">结算盈亏 (%1$s)</string>
     <string name="order_info">订单信息</string>
@@ -191,5 +191,8 @@
     <string name="sell_type">卖出类型</string>
     <string name="sell_time">卖出时间</string>
     <string name="order_id">订单号</string>
+
+    <!-- Product page -->
+    <string name="play_rule">玩法规则</string>
 
 </resources>

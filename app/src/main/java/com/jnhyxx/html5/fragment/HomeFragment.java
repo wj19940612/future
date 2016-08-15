@@ -48,6 +48,7 @@ public class HomeFragment extends BaseFragment {
     private Unbinder mBinder;
 
     private List<ProductPkg> mProductPkgList;
+    private List<Product> mProductList;
     private List<PositionBrief> mPositionBriefList;
     private List<MarketBrief> mMarketBriefList;
 
@@ -79,6 +80,7 @@ public class HomeFragment extends BaseFragment {
                     Launcher.with(getActivity(), ProductActivity.class)
                             .putExtra(Product.EX_PRODUCT, pkg.getProduct())
                             .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                            .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                             .execute();
                 }
             }
@@ -134,6 +136,7 @@ public class HomeFragment extends BaseFragment {
                 .setCallback(new Resp.Callback<Resp<List<Product>>, List<Product>>() {
                     @Override
                     public void onRespReceive(List<Product> products) {
+                        mProductList = products;
                         ProductPkg.updateProductPkgList(mProductPkgList, products,
                                 mPositionBriefList, mMarketBriefList);
                         updateProductListView();

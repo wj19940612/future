@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class TitleBar extends RelativeLayout {
     private TextView mTitleView;
     private TextView mLeftView;
     private TextView mRightView;
+    private View mCustomView;
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,9 +46,9 @@ public class TitleBar extends RelativeLayout {
     private void processAttrs(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar);
 
-        int defaultTitleSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18,
+        int defaultTitleSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18,
                 getResources().getDisplayMetrics());
-        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12,
                 getResources().getDisplayMetrics());
 
         mTitle = typedArray.getText(R.styleable.TitleBar_titleText);
@@ -59,6 +61,10 @@ public class TitleBar extends RelativeLayout {
         mRightVisible = typedArray.getBoolean(R.styleable.TitleBar_rightVisible, false);
         mBackFeature = typedArray.getBoolean(R.styleable.TitleBar_backFeature, false);
         mBackIcon = typedArray.getDrawable(R.styleable.TitleBar_backIcon);
+        int customViewResId = typedArray.getResourceId(R.styleable.TitleBar_customView, -1);
+        if (customViewResId != -1) {
+            mCustomView = LayoutInflater.from(getContext()).inflate(customViewResId, null);
+        }
 
         typedArray.recycle();
     }
@@ -68,21 +74,25 @@ public class TitleBar extends RelativeLayout {
         int fixedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
                 getResources().getDisplayMetrics());
 
+        // center view
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, fixedHeight);
+        if (mCustomView != null) {
+            addView(mCustomView, params);
+        } else {
+            mTitleView = new TextView(getContext());
+            mTitleView.setGravity(Gravity.CENTER);
+            addView(mTitleView, params);
+        }
+
         // left view
         int paddingHorizontal = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                 getResources().getDisplayMetrics());
-        LayoutParams params =  new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
+        params =  new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         mLeftView = new TextView(getContext());
         mLeftView.setGravity(Gravity.CENTER);
         mLeftView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
         addView(mLeftView, params);
-
-        // center view
-        mTitleView = new TextView(getContext());
-        mTitleView.setGravity(Gravity.CENTER);
-        params = new LayoutParams(LayoutParams.MATCH_PARENT, fixedHeight);
-        addView(mTitleView, params);
 
         // right view
         mRightView = new TextView(getContext());
@@ -131,12 +141,16 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void setTitle(CharSequence title) {
+        if (mTitleView == null) return;
+
         mTitle = title;
         if (TextUtils.isEmpty(mTitle)) return;
         mTitleView.setText(mTitle);
     }
 
     public void setTitleSize(int titleSize) {
+        if (mTitleView == null) return;
+
         mTitleSize = titleSize;
         mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
     }
@@ -153,7 +167,7 @@ public class TitleBar extends RelativeLayout {
 
     public void setRightImage(Drawable rightImage) {
         mRightImage = rightImage;
-        mRightView.setCompoundDrawables(mRightImage, null, null, null);
+        mRightView.setCompoundDrawablesWithIntrinsicBounds(mRightImage, null, null, null);
     }
 
     public void setRightVisible(boolean rightVisible) {
@@ -165,6 +179,8 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void setTitleColor(ColorStateList titleColor) {
+        if (mTitleView == null) return;
+
         mTitleColor = titleColor;
         if (mTitleColor != null) {
             mTitleView.setTextColor(mTitleColor);

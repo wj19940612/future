@@ -35,6 +35,7 @@
         <attr name="titleText" format="reference|string"/>
         <attr name="titleTextSize" format="dimension"/>
         <attr name="titleTextColor" format="color"/>
+        <attr name="customView" format="reference"/>
         <attr name="rightText" format="reference|string"/>
         <attr name="rightTextSize" format="dimension"/>
         <attr name="rightTextColor" format="color"/>

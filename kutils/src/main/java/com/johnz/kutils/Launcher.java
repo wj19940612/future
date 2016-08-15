@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Launcher {
 
@@ -25,6 +27,11 @@ public class Launcher {
         sInstance.mContext = context;
         sInstance.mIntent.setClass(context, clazz);
         return sInstance;
+    }
+
+    public Launcher putExtra(String key, ArrayList<? extends Parcelable> value) {
+        mIntent.putParcelableArrayListExtra(key, value);
+        return this;
     }
 
     public Launcher putExtra(String key, int value) {

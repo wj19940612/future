@@ -1,11 +1,16 @@
 package com.jnhyxx.html5.domain.market;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Product implements Serializable, Parcelable {
 
     public static final String EX_PRODUCT = "product";
     public static final String EX_FUND_TYPE = "fund";
+    public static final String EX_PRODUCT_LIST = "productList";
+
     public static final int FUND_TYPE_CASH = 0;
     public static final int FUND_TYPE_SCORE = 1;
 
@@ -79,7 +84,7 @@ public class Product implements Serializable {
     private String timeAndNum;
     private String nightTimeAndNum;
     private String timeline;
-    private Object loddyType;
+    private int loddyType;
     private String accountCode;
     private double minPrice;
     private double rate;
@@ -300,11 +305,11 @@ public class Product implements Serializable {
         this.timeline = timeline;
     }
 
-    public Object getLoddyType() {
+    public int getLoddyType() {
         return loddyType;
     }
 
-    public void setLoddyType(Object loddyType) {
+    public void setLoddyType(int loddyType) {
         this.loddyType = loddyType;
     }
 
@@ -345,4 +350,93 @@ public class Product implements Serializable {
         }
         return 0;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.imgs);
+        dest.writeString(this.marketCode);
+        dest.writeString(this.commodityName);
+        dest.writeString(this.instrumentID);
+        dest.writeString(this.instrumentCode);
+        dest.writeString(this.currency);
+        dest.writeString(this.currencyName);
+        dest.writeString(this.currencySign);
+        dest.writeString(this.currencyUnit);
+        dest.writeDouble(this.multiple);
+        dest.writeInt(this.decimalPlaces);
+        dest.writeString(this.commodityDesc);
+        dest.writeString(this.advertisement);
+        dest.writeInt(this.vendibility);
+        dest.writeInt(this.tag);
+        dest.writeInt(this.timeTag);
+        dest.writeInt(this.marketId);
+        dest.writeString(this.marketName);
+        dest.writeInt(this.marketStatus);
+        dest.writeInt(this.baseline);
+        dest.writeDouble(this.interval);
+        dest.writeInt(this.isDoule);
+        dest.writeDouble(this.scale);
+        dest.writeString(this.timeAndNum);
+        dest.writeString(this.nightTimeAndNum);
+        dest.writeString(this.timeline);
+        dest.writeInt(this.loddyType);
+        dest.writeString(this.accountCode);
+        dest.writeDouble(this.minPrice);
+        dest.writeDouble(this.rate);
+    }
+
+    public Product() {
+    }
+
+    protected Product(Parcel in) {
+        this.id = in.readInt();
+        this.imgs = in.readString();
+        this.marketCode = in.readString();
+        this.commodityName = in.readString();
+        this.instrumentID = in.readString();
+        this.instrumentCode = in.readString();
+        this.currency = in.readString();
+        this.currencyName = in.readString();
+        this.currencySign = in.readString();
+        this.currencyUnit = in.readString();
+        this.multiple = in.readDouble();
+        this.decimalPlaces = in.readInt();
+        this.commodityDesc = in.readString();
+        this.advertisement = in.readString();
+        this.vendibility = in.readInt();
+        this.tag = in.readInt();
+        this.timeTag = in.readInt();
+        this.marketId = in.readInt();
+        this.marketName = in.readString();
+        this.marketStatus = in.readInt();
+        this.baseline = in.readInt();
+        this.interval = in.readDouble();
+        this.isDoule = in.readInt();
+        this.scale = in.readDouble();
+        this.timeAndNum = in.readString();
+        this.nightTimeAndNum = in.readString();
+        this.timeline = in.readString();
+        this.loddyType = in.readInt();
+        this.accountCode = in.readString();
+        this.minPrice = in.readDouble();
+        this.rate = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

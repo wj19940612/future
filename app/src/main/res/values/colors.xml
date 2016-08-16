@@ -8,11 +8,13 @@
     <color name="splitLine2">#CDCDCD</color>
     <color name="splitLineDark">#3B4856</color>
     <color name="splitLineDark2">#233142</color>
+    <color name="splitBlock">#0C233C</color>
 
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#25D282</color>
     <color name="redPrimary">#FB4B55</color>
     
+    <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
     <color name="colorSlidingMenu">#1E61B0</color>
 

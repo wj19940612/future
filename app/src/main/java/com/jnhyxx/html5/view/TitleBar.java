@@ -197,4 +197,8 @@ public class TitleBar extends RelativeLayout {
             mRightView.setTextColor(ColorStateList.valueOf(Color.WHITE));
         }
     }
+
+    public View getCustomView() {
+        return mCustomView;
+    }
 }

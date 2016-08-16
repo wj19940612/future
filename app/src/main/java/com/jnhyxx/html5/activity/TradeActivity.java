@@ -14,7 +14,10 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.TitleBar;
+import com.jnhyxx.html5.view.TradePageHeader;
+import com.jnhyxx.html5.view.market.ChartContainer;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -22,10 +25,34 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProductActivity extends BaseActivity {
+public class TradeActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.tradePageHeader)
+    TradePageHeader mTradePageHeader;
+    @BindView(R.id.openPrice)
+    TextView mOpenPrice;
+    @BindView(R.id.preClosePrice)
+    TextView mPreClosePrice;
+    @BindView(R.id.highestPrice)
+    TextView mHighestPrice;
+    @BindView(R.id.lowestPrice)
+    TextView mLowestPrice;
+    @BindView(R.id.chartContainer)
+    ChartContainer mChartContainer;
+    @BindView(R.id.lastPrice)
+    TextView mLastPrice;
+    @BindView(R.id.priceChange)
+    TextView mPriceChange;
+    @BindView(R.id.buySellVolumeLayout)
+    BuySellVolumeLayout mBuySellVolumeLayout;
+    @BindView(R.id.marketTime)
+    TextView mMarketTime;
+    @BindView(R.id.buyLongBtn)
+    TextView mBuyLongBtn;
+    @BindView(R.id.sellShortBtn)
+    TextView mSellShortBtn;
 
     private SlidingMenu mMenu;
 
@@ -36,7 +63,7 @@ public class ProductActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
 
         initData(getIntent());

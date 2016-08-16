@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
@@ -106,7 +107,7 @@ public class HomeListHeader extends FrameLayout {
     public void setOrderReport(OrderReport orderReport) {
         mOrderReport = orderReport;
         SpannableString currentOnlineNumber = StrUtil.mergeTextWithColor("当前在线",
-                mOrderReport.getCount() + "", getContext().getResources().getColor(R.color.redPrimary),
+                mOrderReport.getCount() + "", ContextCompat.getColor(getContext(), R.color.redPrimary),
                 "人");
         mCurrentOnlineNumber.setText(currentOnlineNumber);
         mCount = 0;
@@ -121,7 +122,7 @@ public class HomeListHeader extends FrameLayout {
             OrderReport.ResultListBean resultListBean = listBeen.get(mCount++ % listBeen.size());
             SpannableString orderReport = StrUtil.mergeTextWithColor(
                     resultListBean.getNick() + " " + resultListBean.getTime() + " ",
-                    resultListBean.getTradeType(), getContext().getResources().getColor(R.color.redPrimary),
+                    resultListBean.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
                     " " + resultListBean.getFuturesType());
             orderReportView.setText(orderReport);
             mViewSwitcher.showNext();

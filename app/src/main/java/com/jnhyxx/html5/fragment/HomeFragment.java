@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.ProductActivity;
+import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.User;
@@ -77,7 +78,7 @@ public class HomeFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
-                    Launcher.with(getActivity(), ProductActivity.class)
+                    Launcher.with(getActivity(), TradeActivity.class)
                             .putExtra(Product.EX_PRODUCT, pkg.getProduct())
                             .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                             .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
@@ -264,7 +265,7 @@ public class HomeFragment extends BaseFragment {
                 Product product = pkg.getProduct();
                 mHotIcon.setVisibility((product.getTag() == Product.TAG_HOT) ? View.VISIBLE : View.GONE);
                 if (product.getMarketStatus() == Product.MARKET_STATUS_CLOSE) {
-                    mProductName.setTextColor(context.getResources().getColor(R.color.blackHalfTransparent));
+                    mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
                     mAdvertisement.setTextColor(Color.parseColor("#7FA8A8A8"));
                     mHoldingPosition.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
@@ -272,7 +273,7 @@ public class HomeFragment extends BaseFragment {
                     mPriceChangeArea.setVisibility(View.GONE);
                     mMarketOpenTime.setText(createMarketOpenTime(product, context));
                 } else {
-                    mProductName.setTextColor(context.getResources().getColor(android.R.color.black));
+                    mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
                     mMarketCloseText.setVisibility(View.GONE);
                     mMarketCloseArea.setVisibility(View.GONE);
@@ -284,11 +285,11 @@ public class HomeFragment extends BaseFragment {
                         mPriceChangePercent.setText(marketBrief.getUnsignPercentage());
                         String priceChangePercent = marketBrief.getPercentage();
                         if (priceChangePercent.startsWith("-")) {
-                            mLastPrice.setTextColor(context.getResources().getColor(R.color.greenPrimary));
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                             mPriceChangePercent.setBackgroundResource(R.drawable.bg_green_primary);
                             mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_down_arrow, 0, 0, 0);
                         } else {
-                            mLastPrice.setTextColor(context.getResources().getColor(R.color.redPrimary));
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                             mPriceChangePercent.setBackgroundResource(R.drawable.bg_red_primary);
                             mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_up_arrow, 0, 0, 0);
                         }

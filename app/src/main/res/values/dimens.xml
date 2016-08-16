@@ -5,6 +5,11 @@
 
     <dimen name="radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
     <dimen name="sliding_shadow_width">15dp</dimen>
+    <dimen name="trade_header_height">88dp</dimen>
+    <dimen name="trade_header_btn_width">85dp</dimen>
 </resources>
+

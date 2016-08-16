@@ -16,6 +16,7 @@ import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.TitleBar;
@@ -59,9 +60,9 @@ public class WithdrawActivity extends BaseActivity {
         updateBankInfoView(getIntent());
 
         API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
+                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                     @Override
-                    public void onRespReceive(FundInfo fundInfo) {
+                    public void onRespSuccess(FundInfo fundInfo) {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                     }
                 }).post();

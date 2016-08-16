@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -75,9 +76,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
         API.Account.getUserNameAuth(User.getUser().getToken())
                 .setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<NameAuth>, NameAuth>() {
+                .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
                     @Override
-                    public void onRespReceive(NameAuth nameAuth) {
+                    public void onRespSuccess(NameAuth nameAuth) {
                         if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
                             showAuthNameDialog(nameAuth);
                         } else {

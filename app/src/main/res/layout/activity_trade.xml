@@ -86,6 +86,7 @@
     <com.jnhyxx.html5.view.market.ChartContainer
         android:id="@+id/chartContainer"
         android:layout_width="match_parent"
+        android:background="@color/bluePrimary"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 

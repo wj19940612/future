@@ -17,6 +17,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.net.ApiIndeterminate;
 
@@ -86,17 +87,17 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
     private void requestMessageList() {
         if (mType == TYPE_SYSTEM) {
             API.Message.getSystemMessageList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+                    .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
-                        public void onRespReceive(List<SysTradeMessage> sysTradeMessages) {
+                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();
         } else {
             API.Message.getTradeMessageList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+                    .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
-                        public void onRespReceive(List<SysTradeMessage> sysTradeMessages) {
+                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
                     }).setTag(TAG).setIndeterminate(this).post();

@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.ProfileSummary;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -117,9 +118,9 @@ public class AccountFragment extends BaseFragment {
 
     private void requestFundInfo() {
         API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-                .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
+                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                     @Override
-                    public void onRespReceive(FundInfo fundInfo) {
+                    public void onRespSuccess(FundInfo fundInfo) {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                         mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
                     }
@@ -137,9 +138,9 @@ public class AccountFragment extends BaseFragment {
                 break;
             case R.id.recharge:
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
+                        .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespReceive(BankcardAuth bankcardAuth) {
+                            public void onRespSuccess(BankcardAuth bankcardAuth) {
                                 Launcher.with(getActivity(), RechargeActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
@@ -148,9 +149,9 @@ public class AccountFragment extends BaseFragment {
                 break;
             case R.id.withdraw:
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
+                        .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespReceive(BankcardAuth bankcardAuth) {
+                            public void onRespSuccess(BankcardAuth bankcardAuth) {
                                 Launcher.with(getActivity(), WithdrawActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
@@ -168,9 +169,9 @@ public class AccountFragment extends BaseFragment {
                 break;
             case R.id.personalInfo:
                 API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Resp.Callback<Resp<ProfileSummary>, ProfileSummary>() {
+                        .setCallback(new Callback2<Resp<ProfileSummary>, ProfileSummary>() {
                             @Override
-                            public void onRespReceive(ProfileSummary profileSummary) {
+                            public void onRespSuccess(ProfileSummary profileSummary) {
                                 Launcher.with(getActivity(), ProfileActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, profileSummary)
                                         .execute();
@@ -185,9 +186,9 @@ public class AccountFragment extends BaseFragment {
     private void openFundDetailPage(final boolean isCash) {
         if (User.getUser().isLogin()) {
             API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-                    .setCallback(new Resp.Callback<Resp<FundInfo>, FundInfo>() {
+                    .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                         @Override
-                        public void onRespReceive(FundInfo fundInfo) {
+                        public void onRespSuccess(FundInfo fundInfo) {
                             Launcher.with(getActivity(), FundDetailActivity.class)
                                     .putExtra(Launcher.EX_PAYLOAD, fundInfo)
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)

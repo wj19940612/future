@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.SettlementOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
@@ -92,9 +94,9 @@ public class SettlementFragment extends BaseFragment {
 
         API.Order.getSettlementOrderList(User.getUser().getToken(),
                 mPageNo, mPageSize, mProduct.getId(), mFundType)
-                .setCallback(new Resp.Callback<Resp<List<SettlementOrder>>, List<SettlementOrder>>() {
+                .setCallback(new Callback2<Resp<List<SettlementOrder>>, List<SettlementOrder>>() {
                     @Override
-                    public void onRespReceive(List<SettlementOrder> settlementOrders) {
+                    public void onRespSuccess(List<SettlementOrder> settlementOrders) {
                         updateSettlementOrderListView(settlementOrders);
                     }
                 }).setTag(TAG).post();
@@ -193,12 +195,12 @@ public class SettlementFragment extends BaseFragment {
                     int color;
                     String lossProfitForeign;
                     if (lossProfit < 0) {
-                        color = context.getResources().getColor(R.color.greenPrimary);
+                        color = ContextCompat.getColor(context, R.color.greenPrimary);
                         lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
                                 + product.getCurrencyUnit();
 
                     } else {
-                        color = context.getResources().getColor(R.color.redPrimary);
+                        color = ContextCompat.getColor(context, R.color.redPrimary);
                         lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
                                 + product.getCurrencyUnit();
                     }
@@ -211,12 +213,12 @@ public class SettlementFragment extends BaseFragment {
                     int color;
                     String lossProfitInner;
                     if (lossProfit < 0) {
-                        color = context.getResources().getColor(R.color.greenPrimary);
+                        color = ContextCompat.getColor(context, R.color.greenPrimary);
                         lossProfitInner = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
                                 + product.getCurrencyUnit();
 
                     } else {
-                        color = context.getResources().getColor(R.color.redPrimary);
+                        color = ContextCompat.getColor(context, R.color.redPrimary);
                         lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
                                 + product.getCurrencyUnit();
                     }

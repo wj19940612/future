@@ -26,6 +26,7 @@ import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.domain.order.PositionBrief;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
@@ -124,9 +125,9 @@ public class HomeFragment extends BaseFragment {
 
     private void requestHomeAdvertisement() {
         API.Account.getHomeAdvertisements()
-                .setCallback(new Resp.Callback<Resp<HomeAdvertisement>, HomeAdvertisement>() {
+                .setCallback(new Callback2<Resp<HomeAdvertisement>, HomeAdvertisement>() {
                     @Override
-                    public void onRespReceive(HomeAdvertisement homeAdvertisement) {
+                    public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
                         mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
                     }
                 }).setTag(TAG).post();
@@ -134,9 +135,9 @@ public class HomeFragment extends BaseFragment {
 
     private void requestProductList() {
         API.Market.getProductList().setTag(TAG).setIndeterminate(this)
-                .setCallback(new Resp.Callback<Resp<List<Product>>, List<Product>>() {
+                .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
-                    public void onRespReceive(List<Product> products) {
+                    public void onRespSuccess(List<Product> products) {
                         mProductList = products;
                         ProductPkg.updateProductPkgList(mProductPkgList, products,
                                 mPositionBriefList, mMarketBriefList);
@@ -167,9 +168,9 @@ public class HomeFragment extends BaseFragment {
     private void requestPositionBriefList() {
         if (User.getUser().isLogin()) {
             API.Order.getOrderPositionList(User.getUser().getToken())
-                    .setCallback(new Resp.Callback<Resp<List<PositionBrief>>, List<PositionBrief>>() {
+                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
                         @Override
-                        public void onRespReceive(List<PositionBrief> positionBriefs) {
+                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
                             mPositionBriefList = positionBriefs;
                             boolean updateProductList =
                                     ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);

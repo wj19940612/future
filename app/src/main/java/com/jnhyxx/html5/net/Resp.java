@@ -1,8 +1,6 @@
 package com.jnhyxx.html5.net;
 
 
-import com.jnhyxx.html5.utils.ToastUtil;
-
 public class Resp<T> {
 
     private int code;
@@ -51,21 +49,5 @@ public class Resp<T> {
                 ", errparam='" + errparam + '\'' +
                 ", data=" + data +
                 '}';
-    }
-
-    public abstract static class Callback<T, D> extends com.jnhyxx.html5.net.Callback<T> {
-
-        @Override
-        public void onReceive(T t) {
-            if (t instanceof Resp) {
-                if (((Resp) t).isSuccess()) {
-                    onRespReceive((D) ((Resp) t).getData());
-                } else {
-                    ToastUtil.show(((Resp) t).getMsg());
-                }
-            }
-        }
-
-        public abstract void onRespReceive(D d);
     }
 }

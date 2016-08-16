@@ -95,8 +95,6 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private View createTab(int resId) {
         int paddingPx = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());
-        mContainer = new FrameLayout(getContext());
-
         TextView tab = new TextView(getContext());
         tab.setText(resId);
         tab.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.chart_tab_text));

@@ -15,6 +15,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -123,9 +124,9 @@ public class RechargeActivity extends BaseActivity {
             if (bankcardAuth.getStatus() != BankcardAuth.STATUS_NOT_FILLED) {
 
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Resp.Callback<Resp<BankcardAuth>, BankcardAuth>() {
+                        .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
-                            public void onRespReceive(BankcardAuth bankcardAuth) {
+                            public void onRespSuccess(BankcardAuth bankcardAuth) {
                                 if (bankcardAuth.getStatus() != BankcardAuth.STATUS_NOT_FILLED
                                     && !TextUtils.isEmpty(bankcardAuth.getPhone())) {
                                     SmartDialog.dismiss(getActivity());

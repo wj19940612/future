@@ -20,6 +20,7 @@ import com.jnhyxx.html5.domain.finance.FundFlowItem;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -72,17 +73,17 @@ public class FundDetailActivity extends BaseActivity {
     private void requestFlowList() {
         if (mIsCash) {
             API.Finance.getCashFlowList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
+                    .setCallback(new Callback2<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
-                        public void onRespReceive(List<FundFlowItem> fundFlowItems) {
+                        public void onRespSuccess(List<FundFlowItem> fundFlowItems) {
                             updateFlowList(fundFlowItems);
                         }
                     }).setIndeterminate(this).setTag(TAG).post();
         } else {
             API.Finance.getScoreFlowList(User.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Resp.Callback<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
+                    .setCallback(new Callback2<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
-                        public void onRespReceive(List<FundFlowItem> fundFlowItems) {
+                        public void onRespSuccess(List<FundFlowItem> fundFlowItems) {
                             updateFlowList(fundFlowItems);
                         }
                     }).setIndeterminate(this).setTag(TAG).post();

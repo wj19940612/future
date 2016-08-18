@@ -9,8 +9,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.TrendViewData;
+import com.johnz.kutils.DateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,8 +23,6 @@ public class TrendView extends ChartView {
     private List<TrendViewData> mModelList;
     private TrendViewData mFloatingModel;
     private Map<Integer, TrendViewData> mVisibleModelList;
-
-    private Product mProduct;
 
     public TrendView(Context context) {
         super(context);
@@ -93,7 +91,6 @@ public class TrendView extends ChartView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        determineTotalPoints();
         super.onDraw(canvas);
     }
 
@@ -172,9 +169,9 @@ public class TrendView extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
-        if (mProduct != null && mModelList != null && mModelList.size() > 0) {
-            setTimeLineTextPaint(sPaint);
-            float startY = top + mFontHeight / 2 + mOffset4CenterText;
+//        if (mProduct != null && mModelList != null && mModelList.size() > 0) {
+//            setTimeLineTextPaint(sPaint);
+//            float startY = top + mFontHeight / 2 + mOffset4CenterText;
 
 //            String[] times = mProduct.getTimeLine(mIsAtNight);
 //            if (times != null && times.length > 0) {
@@ -190,7 +187,7 @@ public class TrendView extends ChartView {
 //                    }
 //                }
 //            }
-        }
+//        }
     }
 
     @Override
@@ -199,35 +196,27 @@ public class TrendView extends ChartView {
         return getIndexOfXAxis(touchX);
     }
 
-    private void calculateMinimumRange() {
-//        if (mMinRange == 0 && mProduct != null) {
-//            double multiplicand = mProduct.getMinimumRangeFactor();
-//            mMinRange = new BigDecimal(mPreClosePrice)
-//                    .multiply(new BigDecimal(multiplicand))
-//                    .floatValue();
-//        }
-    }
-
-    private void determineTotalPoints() {
-//        if (mProduct != null) {
-//            setTotalPoints(mIsAtNight?
-//                    mProduct.getNightPointsNumber():
-//                    mProduct.getDayPointsNumber());
-//        }
-    }
-
     private float getChartX(TrendViewData model) {
-//        if (mProduct != null) {
-//            int indexOfTotalPoints
-//                    = mProduct.getIndexFromDate(model.getHhmmDate(), mIsAtNight);
-//
-//            if (mVisibleModelList != null) {
-//                mVisibleModelList.put(indexOfTotalPoints, model);
-//            }
-//
-//            return getChartX(indexOfTotalPoints);
-//        }
-        return 0;
+        int indexOfXAxis = getIndexFromDate(model.getHHmm());
+        return getChartX(indexOfXAxis);
+    }
+
+    private int getIndexFromDate(String hhmm) {
+        String[] timeLines = mSettings.getOpenMarketTimes();
+        int size = timeLines.length;
+        size = (size % 2 == 0 ? size : size - 1);
+
+        int index = 0;
+        for (int i = 0; i < size; i += 2) {
+            if (DateUtil.isBetweenTimes(timeLines[i], timeLines[i + 1], hhmm)) {
+                index = DateUtil.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
+                for (int j = 0; j < i; j += 2) {
+                    // the total points of this period
+                    index += DateUtil.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm") + 1;
+                }
+            }
+        }
+        return index;
     }
 
     @Override

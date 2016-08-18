@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -464,6 +465,11 @@ public abstract class ChartView extends View {
         return getPaddingLeft() + index * width * 1.0f / mSettings.getXAxis();
     }
 
+    /**
+     * this is the inverse operation of getCharX(index)
+     * @param x
+     * @return
+     */
     protected int getIndexOfXAxis(float x) {
         int width = getWidth() - getPaddingLeft() - getPaddingRight();
         x = x - getPaddingLeft();
@@ -546,6 +552,8 @@ public abstract class ChartView extends View {
         private int mXAxis;
         private float mPreClosePrice;
         private float mLimitUpPercent;
+        private String mOpenMarketTimes;
+        private String mDisplayMarketTimes;
 
         public ChartSettings() {
             mBaseLines = new float[0];
@@ -559,6 +567,24 @@ public abstract class ChartView extends View {
 
         public ChartSettings setLimitUpPercent(float limitUpPercent) {
             mLimitUpPercent = limitUpPercent;
+            return this;
+        }
+
+        public ChartSettings setOpenMarketTimes(String openMarketTimes) {
+            mOpenMarketTimes = openMarketTimes;
+            return this;
+        }
+
+        public String[] getOpenMarketTimes() {
+            String[] result = new String[0];
+            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
+                return mOpenMarketTimes.split(";");
+            }
+            return result;
+        }
+
+        public ChartSettings setDisplayMarketTimes(String displayMarketTimes) {
+            mDisplayMarketTimes = displayMarketTimes;
             return this;
         }
 

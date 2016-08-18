@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.domain.market;
 
 public class TrendViewData {
+
     /**
      * cu1610,37230.0,20160815101000
      */
@@ -13,6 +14,13 @@ public class TrendViewData {
         this.instrumentId = instrumentId;
         this.lastPrice = lastPrice;
         this.date = date;
+    }
+
+    public String getHHmm() {
+        if (date.length() >= 12) {
+            return date.substring(8, 10) + ":" + date.substring(10, 12);
+        }
+        return "";
     }
 
     public String getInstrumentId() {

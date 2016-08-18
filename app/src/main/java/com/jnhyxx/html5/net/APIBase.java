@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.net;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -22,13 +23,19 @@ public class APIBase extends RequestManager {
 
     private String mTag;
     private String mUri;
+    private String mHost;
     private ApiCallback<?> mCallback;
     private ApiParams mApiParams;
     private ApiIndeterminate mIndeterminate;
 
     protected APIBase(String uri, ApiParams apiParams) {
+        this(uri, apiParams, 0);
+    }
+
+    protected APIBase(String uri, ApiParams apiParams, int version) {
         mUri = uri;
         mApiParams = apiParams;
+        mHost = getHost(version);
     }
 
     public APIBase setTag(String tag) {
@@ -46,13 +53,22 @@ public class APIBase extends RequestManager {
         return this;
     }
 
+    private String getHost(int version) {
+        switch (version) {
+            case 2:
+                return "http://newtest.jnhyxx.com";
+            default:
+                return HOST;
+        }
+    }
+
     public void post() {
         synchronized (sCurrentUrls) {
-            String url = new StringBuilder(HOST).append(mUri).toString();
+            if (TextUtils.isEmpty(mHost)) mHost = HOST;
+            String url = new StringBuilder(mHost).append(mUri).toString();
 
             if (sCurrentUrls.add(url) || true) {
-                Type type = null;
-
+                Type type;
                 if (mCallback != null) {
                     mCallback.setUrl(url);
                     mCallback.setOnFinishedListener(new RequestFinishedListener());
@@ -67,10 +83,11 @@ public class APIBase extends RequestManager {
                         public void onSuccess(Object o) {
                             Log.d(TAG, "onReceive: result(default): " + o);
                         }
+
                         @Override
                         public void onFailure(VolleyError volleyError) {
                             Log.d(TAG, "onFailure: error(default): " +
-                                    volleyError == null? null: volleyError.toString());
+                                    volleyError == null ? null : volleyError.toString());
                         }
                     };
                     mCallback.setUrl(url);

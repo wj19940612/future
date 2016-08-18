@@ -26,6 +26,10 @@ public class API extends APIBase {
         super(uri, apiParams);
     }
 
+    public API(String uri, ApiParams apiParams, int version) {
+        super(uri, apiParams, version);
+    }
+
     public static class Account {
         /**
          * 更新友盟设备号 /user/user/updateUmCode
@@ -351,7 +355,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getProductList() {
-            return new API("/market/futureCommodity/select", null);
+            return new API("/market/futureCommodity/select", null, 2);
         }
 
         /**

@@ -47,6 +47,17 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         onTabClick(POS_TREND);
     }
 
+    public void addTrendView(ChartView chartView) {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mContainer.addView(chartView, POS_TREND, params);
+    }
+
+    public ChartView getTrendView() {
+        return (ChartView) mContainer.getChildAt(POS_TREND);
+    }
+
 //    private void initPopupWindow() {
 //        //View popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window_kline, null);
 //        LinearLayout popupViewGroup = (LinearLayout) popupView;

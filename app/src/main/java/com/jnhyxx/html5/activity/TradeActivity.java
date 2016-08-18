@@ -18,6 +18,8 @@ import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
 import com.jnhyxx.html5.view.market.ChartContainer;
+import com.jnhyxx.html5.view.market.ChartView;
+import com.jnhyxx.html5.view.market.TrendView;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -76,6 +78,15 @@ public class TradeActivity extends BaseActivity {
         });
 
         initSlidingMenu();
+        initChartView();
+    }
+
+    private void initChartView() {
+        ChartView.ChartSettings settings = new ChartView.ChartSettings();
+        settings.setBaseLines(8).setNumberScale(2);
+        TrendView trendView = new TrendView(this);
+        trendView.setSettings(settings);
+        mChartContainer.addTrendView(trendView);
     }
 
     private void initSlidingMenu() {

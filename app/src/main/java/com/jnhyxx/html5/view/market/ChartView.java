@@ -25,9 +25,11 @@ public abstract class ChartView extends View {
 
         BASE("#3B4856"),
         TEXT("#A8A8A8"),
+        WHITE("#FFFFFF"),
+        FILL("#331D3856"),
         GREEN("#08BA42"),
         RED("#F3293B"),
-        BLUE("#009CE3"),
+        BLUE("#358CF3"),
         ORANGE("#F27A00"),
         PURPLE("#AE4085"),
         YELLOW("#EAC281");
@@ -71,9 +73,13 @@ public abstract class ChartView extends View {
     private Handler mHandler;
 
     protected ChartSettings mSettings;
+
     protected float mFontSize;
-    protected float mFontBigSize;
+    protected float mBigFontSize;
     protected int mFontHeight;
+    protected int mBigFontHeight;
+    protected int mPriceAreaWidth;
+
     protected float mOffset4CenterText; // center y of text + this will draw the text in center you want
     protected int mTextMargin; // The margin between text and baseline
     protected int mRectPadding;
@@ -112,11 +118,13 @@ public abstract class ChartView extends View {
 
         mSettings = new ChartSettings();
         mFontSize = sp2Px(FONT_SIZE_DP);
-        mFontBigSize = sp2Px(FONT_BIG_SIZE_DP);
+        mBigFontSize = sp2Px(FONT_BIG_SIZE_DP);
         sPaint.setTextSize(mFontSize);
         mFontMetrics = sPaint.getFontMetrics();
         sPaint.getFontMetrics(mFontMetrics);
         mFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
+        sPaint.setTextSize(mBigFontSize);
+        mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
         mOffset4CenterText = calOffsetY4TextCenter();
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
         mRectPadding = (int) dp2Px(RECT_PADDING_DP);
@@ -183,7 +191,7 @@ public abstract class ChartView extends View {
                     width, getBottomPartHeight(), canvas);
         }
 
-        drawRealTimeData(mSettings.isIndexesEnable(), width, canvas);
+        drawRealTimeData(mSettings.isIndexesEnable(), left, top, width, topPartHeight, canvas);
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
@@ -326,11 +334,11 @@ public abstract class ChartView extends View {
         if (baselines == null || baselines.length < 2) return;
 
         int verticalInterval = height / (baselines.length - 1);
-        int priceAreaWidth = (int) calculatePriceAreaWidth();
+        mPriceAreaWidth = (int) calculatePriceWidth();
         for (int i = 0; i < baselines.length; i++) {
             int baselineWidth = width;
             if (i > 0 && i < baselines.length - 1) {
-                baselineWidth -= priceAreaWidth;
+                baselineWidth -= mPriceAreaWidth;
             }
             Path path = getPath();
             path.moveTo(left, top);
@@ -342,7 +350,7 @@ public abstract class ChartView extends View {
                 setDefaultTextPaint(sPaint);
                 String baseLineValue = formatNumber(baselines[i]);
                 float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - priceAreaWidth + (priceAreaWidth - textWidth) / 2;
+                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
                 float y = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
                 canvas.drawText(baseLineValue, x, y, sPaint);
             }
@@ -350,7 +358,7 @@ public abstract class ChartView extends View {
                 setDefaultTextPaint(sPaint);
                 String baseLineValue = formatNumber(baselines[i]);
                 float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - priceAreaWidth + (priceAreaWidth - textWidth) / 2;
+                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
                 float y = top - mTextMargin - mFontHeight / 2 + mOffset4CenterText;
                 canvas.drawText(baseLineValue, x, y, sPaint);
             }
@@ -374,7 +382,9 @@ public abstract class ChartView extends View {
                                         Canvas canvas) {
     }
 
-    protected abstract void drawRealTimeData(boolean indexesEnable, int width, Canvas canvas);
+    protected abstract void drawRealTimeData(boolean indexesEnable,
+                                             int left, int top, int width, int height,
+                                             Canvas canvas);
 
     /**
      * draw time line
@@ -492,12 +502,12 @@ public abstract class ChartView extends View {
      * this method is used to calculate a rectF for the text that will be drew
      * we add some left-right padding for the text, just for nice
      *
-     * @param textX
-     * @param textY
+     * @param textX left of text
+     * @param textY y of text baseline
      * @param textWidth
      * @return
      */
-    protected RectF getTextBgRectF(float textX, float textY, float textWidth) {
+    protected RectF getBigFontBgRectF(float textX, float textY, float textWidth) {
         mRectF.left = textX - mRectPadding;
         mRectF.top = textY + mFontMetrics.top;
         mRectF.right = textX + textWidth + mRectPadding;
@@ -505,11 +515,11 @@ public abstract class ChartView extends View {
         return mRectF;
     }
 
-    public float calculatePriceAreaWidth() {
+    private float calculatePriceWidth() {
         String preClosePrice = formatNumber(mSettings.getPreClosePrice());
-        sPaint.setTextSize(mFontBigSize);
+        sPaint.setTextSize(mBigFontSize);
         float priceWidth = sPaint.measureText(preClosePrice);
-        return getTextBgRectF(0, 0, priceWidth).width();
+        return getBigFontBgRectF(0, 0, priceWidth).width();
     }
 
     protected float dp2Px(float value) {

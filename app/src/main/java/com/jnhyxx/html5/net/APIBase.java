@@ -3,6 +3,7 @@ package com.jnhyxx.html5.net;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.jnhyxx.html5.BuildConfig;
 import com.johnz.kutils.net.ApiCallback;
@@ -21,6 +22,7 @@ public class APIBase extends RequestManager {
 
     private static Set<String> sCurrentUrls = new HashSet<>();
 
+    private int mMethod;
     private String mTag;
     private String mUri;
     private String mHost;
@@ -36,6 +38,7 @@ public class APIBase extends RequestManager {
         mUri = uri;
         mApiParams = apiParams;
         mHost = getHost(version);
+        mMethod = Request.Method.POST;
     }
 
     public APIBase setTag(String tag) {
@@ -62,12 +65,17 @@ public class APIBase extends RequestManager {
         }
     }
 
+    public void get() {
+        mMethod = Request.Method.GET;
+        post();
+    }
+
     public void post() {
         synchronized (sCurrentUrls) {
             if (TextUtils.isEmpty(mHost)) mHost = HOST;
             String url = new StringBuilder(mHost).append(mUri).toString();
 
-            if (sCurrentUrls.add(url) || true) {
+            if (sCurrentUrls.add(url)) {
                 Type type;
                 if (mCallback != null) {
                     mCallback.setUrl(url);
@@ -95,7 +103,7 @@ public class APIBase extends RequestManager {
                     type = mCallback.getGenericType();
                 }
 
-                GsonRequest request = new GsonRequest(url, mApiParams, type, mCallback);
+                GsonRequest request = new GsonRequest(mMethod, url, mApiParams, type, mCallback);
                 request.setTag(mTag);
 
                 enqueue(request);

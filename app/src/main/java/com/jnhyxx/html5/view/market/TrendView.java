@@ -3,6 +3,7 @@ package com.jnhyxx.html5.view.market;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class TrendView extends ChartView {
 
     private List<TrendViewData> mModelList;
-    private TrendViewData mFloatingModel;
+    private TrendViewData mUnstableData;
     private Map<Integer, TrendViewData> mVisibleModelList;
 
     public TrendView(Context context) {
@@ -38,8 +39,20 @@ public class TrendView extends ChartView {
         mVisibleModelList = new HashMap<>();
     }
 
-    protected void setUpPointPaint(Paint paint) {
-        paint.setColor(Color.parseColor("#F44306"));
+    private void setDashLinePaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.BLUE.get()));
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setPathEffect(new DashPathEffect(new float[]{3, 8}, 1));
+    }
+
+    private void setUnstablePricePaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.WHITE.get()));
+        paint.setTextSize(mFontSize);
+        paint.setPathEffect(null);
+    }
+
+    private void setUnstablePriceBgPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.FILL);
         paint.setPathEffect(null);
     }
@@ -52,10 +65,16 @@ public class TrendView extends ChartView {
     }
 
     private void setRealTimeLinePaint(Paint paint) {
-        paint.setColor(Color.parseColor(ChartColor.YELLOW.get()));
-        paint.setStrokeWidth(dp2Px(1));
+        paint.setColor(Color.parseColor(ChartColor.BLUE.get()));
+        paint.setStrokeWidth(1);
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(null);
+    }
+
+    private void setRealTimeFillPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartColor.FILL.get()));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAlpha(51);
     }
 
     protected void setYellowBgPaint(Paint paint) {
@@ -80,26 +99,22 @@ public class TrendView extends ChartView {
 //    public void addFloatingPrice(Double lastPrice) {
 //        if (mModelList != null && mModelList.size() > 0) {
 //            TrendViewData lastModel = mModelList.get(mModelList.size() - 1);
-//            mFloatingModel = new TrendViewData(lastModel, lastPrice);
-//            if (mProduct != null && mProduct.isValidDate(mFloatingModel.getDate())) {
+//            mUnstableData = new TrendViewData(lastModel, lastPrice);
+//            if (mProduct != null && mProduct.isValidDate(mUnstableData.getDate())) {
 //                redraw();
 //            } else {
-//                mFloatingModel = null;
+//                mUnstableData = null;
 //            }
 //        }
 //    }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
 
     @Override
     protected void calculateBaseLines(float[] baselines) {
         if (mModelList != null && mModelList.size() > 0) {
             float max = Float.MIN_VALUE;
             float min = Float.MAX_VALUE;
-            for (TrendViewData data: mModelList) {
+            for (TrendViewData data : mModelList) {
                 if (max < data.getLastPrice()) {
                     max = data.getLastPrice();
                 }
@@ -108,12 +123,12 @@ public class TrendView extends ChartView {
                 }
             }
 
-            if (mFloatingModel != null) {
-                if (max < mFloatingModel.getLastPrice()) {
-                    max = mFloatingModel.getLastPrice();
+            if (mUnstableData != null) {
+                if (max < mUnstableData.getLastPrice()) {
+                    max = mUnstableData.getLastPrice();
                 }
-                if (min > mFloatingModel.getLastPrice()) {
-                    min = mFloatingModel.getLastPrice();
+                if (min > mUnstableData.getLastPrice()) {
+                    min = mUnstableData.getLastPrice();
                 }
             }
 
@@ -137,9 +152,11 @@ public class TrendView extends ChartView {
     }
 
     @Override
-    protected void drawRealTimeData(boolean indexesEnable, int width, Canvas canvas) {
-        if (mModelList != null && mModelList.size() > 0) {
-            int size = mModelList.size();
+    protected void drawRealTimeData(boolean indexesEnable,
+                                    int left, int top, int width, int height, Canvas canvas) {
+        int size = mModelList.size();
+        float firstChartX = 0;
+        if (mModelList != null && size > 0) {
             Path path = getPath();
             float chartX = 0;
             float chartY = 0;
@@ -147,23 +164,51 @@ public class TrendView extends ChartView {
                 chartX = getChartX(mModelList.get(i));
                 chartY = getChartY(mModelList.get(i).getLastPrice());
                 if (path.isEmpty()) {
+                    firstChartX = chartX;
                     path.moveTo(chartX, chartY);
                 } else {
                     path.lineTo(chartX, chartY);
                 }
             }
 
-            if (mFloatingModel != null) {
-                chartX = getChartX(mFloatingModel);
-                chartY = getChartY(mFloatingModel.getLastPrice());
+            if (mUnstableData != null) {
+                chartX = getChartX(mUnstableData);
+                chartY = getChartY(mUnstableData.getLastPrice());
                 path.lineTo(chartX, chartY);
             }
 
             setRealTimeLinePaint(sPaint);
             canvas.drawPath(path, sPaint);
 
-            setUpPointPaint(sPaint);
-            canvas.drawCircle(chartX, chartY, 4, sPaint);
+            // fill area
+            setRealTimeFillPaint(sPaint);
+            path.lineTo(chartX, top + height);
+            path.lineTo(firstChartX, top + height);
+            path.close();
+            canvas.drawPath(path, sPaint);
+
+            if (mUnstableData != null) {
+                // dash line
+                path = getPath();
+                path.moveTo(chartX, chartY);
+                path.lineTo(left + width - mPriceAreaWidth, chartY);
+                setDashLinePaint(sPaint);
+                canvas.drawPath(path, sPaint);
+
+                // unstable price
+                setUnstablePricePaint(sPaint);
+                String unstablePrice = formatNumber(mUnstableData.getLastPrice());
+                RectF blueRect = getBigFontBgRectF(chartX, chartY + mOffset4CenterText,
+                        sPaint.measureText(unstablePrice));
+                float rectHeight = blueRect.height();
+                blueRect.top -= rectHeight / 2;
+                blueRect.bottom -= rectHeight / 2;
+                setUnstablePriceBgPaint(sPaint);
+                canvas.drawRoundRect(blueRect, 5, 5, sPaint);
+                float priceY = chartY - rectHeight / 2 + mOffset4CenterText;
+                setUnstablePricePaint(sPaint);
+                canvas.drawText(unstablePrice, chartX + mRectPadding, priceY, sPaint);
+            }
         }
     }
 
@@ -246,7 +291,7 @@ public class TrendView extends ChartView {
             dateX = dateX > width - textWidth ? width - textWidth - mRectPadding : dateX;
 
             // draw rectangle yellow background for date
-            RectF rectF = getTextBgRectF(dateX, dateY, textWidth);
+            RectF rectF = getBigFontBgRectF(dateX, dateY, textWidth);
             setYellowBgPaint(sPaint);
             canvas.drawRoundRect(rectF, 5, 5, sPaint);
             setBlackTextPaint(sPaint);
@@ -272,7 +317,7 @@ public class TrendView extends ChartView {
                 priceX = left + mRectPadding;
             }
 
-            rectF = getTextBgRectF(priceX, priceY, textWidth);
+            rectF = getBigFontBgRectF(priceX, priceY, textWidth);
             setYellowBgPaint(sPaint);
             canvas.drawRoundRect(rectF, 5, 5, sPaint);
             setBlackTextPaint(sPaint);

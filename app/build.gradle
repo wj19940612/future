@@ -4,7 +4,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.jnhyxx.html5"
         minSdkVersion 14
@@ -81,14 +81,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     app1Compile files('libs/via_sdk_v1.jar')
     provided files('libs/via_sdk_v1.jar')
-
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -97,8 +95,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
-
     compile project(':SlidingMenu')
     compile project(':PushSDK')
     compile project(':kutils')
+    compile files('libs/via_sdk_v1.jar')
 }

@@ -37,7 +37,6 @@ public class APIBase extends RequestManager {
     protected APIBase(String uri, ApiParams apiParams, int version) {
         mUri = uri;
         mApiParams = apiParams;
-        mHost = getHost(version);
         mMethod = Request.Method.POST;
     }
 
@@ -56,14 +55,6 @@ public class APIBase extends RequestManager {
         return this;
     }
 
-    private String getHost(int version) {
-        switch (version) {
-            case 2:
-                return "http://newtest.jnhyxx.com";
-            default:
-                return HOST;
-        }
-    }
 
     public void get() {
         mMethod = Request.Method.GET;

@@ -355,7 +355,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getProductList() {
-            return new API("/order/variety/getVariety.do", null, 2);
+            return new API("/order/variety/getVariety.do", null);
         }
 
         /**

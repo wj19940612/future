@@ -143,7 +143,7 @@ public class HomeFragment extends BaseFragment {
                                 mPositionBriefList, mMarketBriefList);
                         updateProductListView();
                     }
-                }).post();
+                }).get();
     }
 
     private void requestProductMarketBriefList() {

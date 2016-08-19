@@ -18,7 +18,8 @@ public class BuySellVolumeLayout extends LinearLayout {
     private static final float MARGIN_TOP_LINE_DP = 4;
     private static final float MARGIN_TOP_RECT_DP = 10;
     private static final float RECT_HEIGHT_DP = 6;
-    private static final float RECT_MAX_WIDTH_DP = 150;
+    private static final float RECT_MAX_WIDTH_DP = 100;
+    private static final int MAX_VOLUME = 30;
 
     private TextView mBuyVolumeNum;
     private TextView mSellVolumeNum;
@@ -119,17 +120,21 @@ public class BuySellVolumeLayout extends LinearLayout {
     public void setVolumes(int buyVolume, int sellVolume) {
         mBuyVolumeNum.setText(String.valueOf(buyVolume));
         mSellVolumeNum.setText(String.valueOf(sellVolume));
-        float buyVolumeRectWidthPx = buyVolume;
-        float sellVolumeRectWidthPx = sellVolume;
-        if (buyVolume > RECT_MAX_WIDTH_DP || sellVolume > RECT_MAX_WIDTH_DP) {
-            buyVolumeRectWidthPx = RECT_MAX_WIDTH_DP * buyVolume / (buyVolume + sellVolume);
-            sellVolumeRectWidthPx = RECT_MAX_WIDTH_DP * sellVolume / (buyVolume + sellVolume);
+        float buyVolumeRectWidthDp = buyVolume * RECT_MAX_WIDTH_DP / MAX_VOLUME;
+        float sellVolumeRectWidthDp = sellVolume * RECT_MAX_WIDTH_DP / MAX_VOLUME;
+        if (buyVolumeRectWidthDp > RECT_MAX_WIDTH_DP) {
+            buyVolumeRectWidthDp = RECT_MAX_WIDTH_DP;
+            sellVolumeRectWidthDp = RECT_MAX_WIDTH_DP * sellVolume / buyVolume;
+        }
+        if (sellVolumeRectWidthDp > RECT_MAX_WIDTH_DP) {
+            sellVolumeRectWidthDp = RECT_MAX_WIDTH_DP;
+            buyVolumeRectWidthDp = RECT_MAX_WIDTH_DP * buyVolume / sellVolume;
         }
         LayoutParams params = (LayoutParams) mBuyVolumeView.getLayoutParams();
-        params.width = dp2px(buyVolumeRectWidthPx);
+        params.width = dp2px(buyVolumeRectWidthDp);
         mBuyVolumeView.setLayoutParams(params);
         params = (LayoutParams) mSellVolumeView.getLayoutParams();
-        params.width = dp2px(sellVolumeRectWidthPx);
+        params.width = dp2px(sellVolumeRectWidthDp);
         mSellVolumeView.setLayoutParams(params);
     }
 

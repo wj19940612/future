@@ -11,5 +11,6 @@
     <dimen name="sliding_shadow_width">15dp</dimen>
     <dimen name="trade_header_height">88dp</dimen>
     <dimen name="trade_header_btn_width">85dp</dimen>
+    <dimen name="market_status_area_height">77dp</dimen>
 </resources>
 

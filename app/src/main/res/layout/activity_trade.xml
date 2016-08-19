@@ -86,26 +86,61 @@
     <com.jnhyxx.html5.view.market.ChartContainer
         android:id="@+id/chartContainer"
         android:layout_width="match_parent"
-        android:background="@color/bluePrimary"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/splitBlock"/>
+        android:layout_weight="1"
+        android:background="@color/bluePrimary"/>
 
     <LinearLayout
+        android:id="@+id/marketCloseArea"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/market_status_area_height"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_market_time_status"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textColor="#666666"
+            tools:text="@string/market_close"/>
+
+        <TextView
+            android:id="@+id/nextTradeTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bluePrimary"
+            android:gravity="center"
+            android:text="@string/next_trade_time_is"
+            android:textColor="#666666"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/marketOpenArea"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/market_status_area_height"
         android:background="@color/bluePrimary"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/marketTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_market_time_status"
+            android:gravity="center"
+            android:padding="3dp"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            tools:text="@string/prompt_holding_position_time_to"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:id="@+id/lastPrice"
@@ -123,9 +158,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/lastPrice"
-                tools:text="+0.15\n+0.33%"
                 android:textColor="@color/redPrimary"
-                android:textSize="11sp"/>
+                android:textSize="11sp"
+                tools:text="+0.15\n+0.33%"/>
 
             <com.jnhyxx.html5.view.BuySellVolumeLayout
                 android:id="@+id/buySellVolumeLayout"
@@ -135,17 +170,6 @@
                 android:layout_toRightOf="@id/priceChange"
                 android:orientation="vertical"/>
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/marketTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:paddingBottom="6dp"
-            android:textColor="#666666"
-            android:textSize="12sp"
-            tools:text="@string/prompt_holding_position_time_to"/>
     </LinearLayout>
 
     <LinearLayout

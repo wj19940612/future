@@ -21,16 +21,8 @@ public class GsonRequest<T> extends Request<T> {
     private final Type type;
     private final Listener<T> listener;
 
-    public GsonRequest(String url, Type type, ApiCallback<T> callback) {
-        super(Method.POST, url, callback);
-        this.headers = null;
-        this.params = null;
-        this.type = type;
-        this.listener = callback;
-    }
-
-    public GsonRequest(String url, ApiParams params, Type type, ApiCallback<T> callback) {
-        super(Method.POST, url, callback);
+    public GsonRequest(int method, String url, ApiParams params, Type type, ApiCallback<T> callback) {
+        super(method, url, callback);
         this.headers = null;
         this.params = params != null ? params.get() : null;
         this.type = type;

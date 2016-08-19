@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -310,12 +311,15 @@ public class HomeFragment extends BaseFragment {
 
             private String createMarketOpenTime(Product product, Context context) {
                 String timeLine = product.getTimeline();
-                String[] timeSplit = timeLine.split(";");
-                String startTime = timeSplit[0];
-                String endTime = timeSplit[timeSplit.length - 1];
-                startTime = addChinesePrefix(startTime, context);
-                endTime = addChinesePrefix(endTime, context);
-                return startTime + "~" + endTime;
+                if (!TextUtils.isEmpty(timeLine)) {
+                    String[] timeSplit = timeLine.split(";");
+                    String startTime = timeSplit[0];
+                    String endTime = timeSplit[timeSplit.length - 1];
+                    startTime = addChinesePrefix(startTime, context);
+                    endTime = addChinesePrefix(endTime, context);
+                    return startTime + "~" + endTime;
+                }
+                return "";
             }
 
             private String addChinesePrefix(String time, Context context) {

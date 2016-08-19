@@ -8,22 +8,113 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
-import com.jnhyxx.html5.domain.market.TrendViewData;
 import com.johnz.kutils.DateUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 public class TrendView extends ChartView {
 
-    private List<TrendViewData> mModelList;
-    private TrendViewData mUnstableData;
-    private Map<Integer, TrendViewData> mVisibleModelList;
+    public static class Data {
+
+        /**
+         * cu1610,37230.0,20160815101000
+         */
+
+        private String contractId;
+        private float lastPrice;
+        private String date;
+
+        public Data(String contractId, float lastPrice, String date) {
+            this.contractId = contractId;
+            this.lastPrice = lastPrice;
+            this.date = date;
+        }
+
+        public String getHHmm() {
+            if (date.length() >= 12) {
+                return date.substring(8, 10) + ":" + date.substring(10, 12);
+            }
+            return "";
+        }
+
+        public String getContractId() {
+            return contractId;
+        }
+
+        public void setContractId(String contractId) {
+            this.contractId = contractId;
+        }
+
+        public float getLastPrice() {
+            return lastPrice;
+        }
+
+        public void setLastPrice(float lastPrice) {
+            this.lastPrice = lastPrice;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public static List<Data> createDataList(String data, String[] openMarketTime) {
+            List<Data> result = new ArrayList<>();
+            HashSet hashSet = new HashSet();
+            int length = data.length();
+            int start = 0;
+            while (start < length) {
+                int end = data.indexOf("|", start);
+                if (end > start) {
+                    String singleData = data.substring(start, end);
+                    String[] splitData = singleData.split(",");
+                    String date = splitData[2];
+                    start = end + 1;
+
+                    // filter invalid data and repeated data based on data.date
+                    if (isValidDate(date, openMarketTime) && !isRepeatedDate(date, hashSet)) {
+                        Data validData = new Data(splitData[0], Float.valueOf(splitData[1]), date);
+                        result.add(validData);
+                    }
+                }
+            }
+            Log.d("TEST", "hashSet.size: " + hashSet.size());
+            return result;
+        }
+
+        private static boolean isRepeatedDate(String date, HashSet hashSet) {
+            String dateWithHourMinute = date.substring(8, 12); // yyyyMMddhhmmss -> hhmm
+            return !hashSet.add(dateWithHourMinute);
+        }
+
+        private static boolean isValidDate(String date, String[] openMarketTime) {
+            if (date.length() != 14) {
+                return false;
+            }
+
+            String hhmm = date.substring(8, 10) + ":" + date.substring(10, 12); // yyyyMMddhhmmss -> hh:mm
+            return DateUtil.isBetweenTimes(openMarketTime, hhmm);
+        }
+
+    }
+
+    private List<Data> mModelList;
+    private Data mUnstableData;
+    private Map<Integer, Data> mVisibleModelList;
+
+    private float mPriceAreaWidth;
 
     public TrendView(Context context) {
         super(context);
@@ -86,13 +177,8 @@ public class TrendView extends ChartView {
         paint.setColor(Color.BLACK);
     }
 
-    private void setTimeLineTextPaint(Paint paint) {
-        paint.setColor(Color.parseColor(ChartColor.YELLOW.get()));
-    }
-
-    public void setChartModels(List<TrendViewData> modelList) {
+    public void setChartModels(List<TrendView.Data> modelList) {
         mModelList = modelList;
-
         redraw();
     }
 
@@ -114,7 +200,7 @@ public class TrendView extends ChartView {
         if (mModelList != null && mModelList.size() > 0) {
             float max = Float.MIN_VALUE;
             float min = Float.MAX_VALUE;
-            for (TrendViewData data : mModelList) {
+            for (Data data : mModelList) {
                 if (max < data.getLastPrice()) {
                     max = data.getLastPrice();
                 }
@@ -152,8 +238,64 @@ public class TrendView extends ChartView {
     }
 
     @Override
+    protected void drawBaseLines(float[] baselines, int left, float top, int width, int height, Canvas canvas) {
+        if (baselines == null || baselines.length < 2) return;
+
+        float verticalInterval = height * 1.0f / (baselines.length - 1);
+        mPriceAreaWidth = calculatePriceWidth(baselines[0]);
+        float topY = top;
+        for (int i = 0; i < baselines.length; i++) {
+            float baselineWidth = width;
+            if (i > 0 && i < baselines.length - 1) {
+                baselineWidth -= mPriceAreaWidth;
+            }
+            Path path = getPath();
+            path.moveTo(left, topY);
+            path.lineTo(left + baselineWidth, topY);
+            setBaseLinePaint(sPaint);
+            canvas.drawPath(path, sPaint);
+
+            if (i % 2 == 0 && i != baselines.length - 1) {
+                setDefaultTextPaint(sPaint);
+                String baseLineValue = formatNumber(baselines[i]);
+                float textWidth = sPaint.measureText(baseLineValue);
+                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
+                float y = topY + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
+                canvas.drawText(baseLineValue, x, y, sPaint);
+
+            } else if (i == baselines.length - 1) { // last baseline
+                setDefaultTextPaint(sPaint);
+                String baseLineValue = formatNumber(baselines[i]);
+                float textWidth = sPaint.measureText(baseLineValue);
+                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
+                float y = topY - mTextMargin - mFontHeight / 2 + mOffset4CenterText;
+                canvas.drawText(baseLineValue, x, y, sPaint);
+            }
+
+            topY += verticalInterval;
+        }
+
+        // vertical line
+        Path path = getPath();
+        float chartX = left + width - mPriceAreaWidth;
+        path.moveTo(chartX, top);
+        path.lineTo(chartX, topY - verticalInterval);
+        setBaseLinePaint(sPaint);
+        canvas.drawPath(path, sPaint);
+    }
+
+    private float calculatePriceWidth(float baseline) {
+        String preClosePrice = formatNumber(baseline);
+        sPaint.setTextSize(mBigFontSize);
+        float priceWidth = sPaint.measureText(preClosePrice);
+        return getBigFontBgRectF(0, 0, priceWidth).width();
+    }
+
+    @Override
     protected void drawRealTimeData(boolean indexesEnable,
-                                    int left, int top, int width, int height, Canvas canvas) {
+                                    int left, int top, int width, int height,
+                                    int left2, int top2, int width2, int height2,
+                                    Canvas canvas) {
         int size = mModelList.size();
         float firstChartX = 0;
         if (mModelList != null && size > 0) {
@@ -214,25 +356,23 @@ public class TrendView extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
-//        if (mProduct != null && mModelList != null && mModelList.size() > 0) {
-//            setTimeLineTextPaint(sPaint);
-//            float startY = top + mFontHeight / 2 + mOffset4CenterText;
-
-//            String[] times = mProduct.getTimeLine(mIsAtNight);
-//            if (times != null && times.length > 0) {
-//                float textWidth = sPaint.measureText(times[0]);
-//                for (int i = 0; i < times.length; i++) {
-//                    if (i == 0) {
-//                        canvas.drawText(times[i], getChartX(0), startY, sPaint);
-//                    } else if (i == times.length - 1) {
-//                        canvas.drawText(times[i], getChartX(0) + width - textWidth, startY, sPaint);
-//                    } else {
-//                        int indexOfTime = mProduct.getIndexFromDate(times[i], mIsAtNight);
-//                        canvas.drawText(times[i], getChartX(indexOfTime) - textWidth/2, startY, sPaint);
-//                    }
-//                }
-//            }
-//        }
+        if (mModelList != null && mModelList.size() > 0) {
+            String[] displayMarketTimes = mSettings.getDisplayMarketTimes();
+            if (displayMarketTimes.length != 0) {
+                setDefaultTextPaint(sPaint);
+                float textY = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
+                for (int i = 0; i < displayMarketTimes.length; i++) {
+                    if (i == 0) {
+                        float textX = left + mTextMargin;
+                        canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
+                    } else {
+                        float textWidth = sPaint.measureText(displayMarketTimes[i]);
+                        float textX = getChartX(getIndexFromDate(displayMarketTimes[i])) - textWidth / 2;
+                        canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -241,9 +381,16 @@ public class TrendView extends ChartView {
         return getIndexOfXAxis(touchX);
     }
 
-    private float getChartX(TrendViewData model) {
+    private float getChartX(Data model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
         return getChartX(indexOfXAxis);
+    }
+
+    @Override
+    protected float getChartX(int index) {
+        float width = getWidth() - getPaddingLeft() - getPaddingRight() - mPriceAreaWidth;
+        float chartX = getPaddingLeft() + index * width * 1.0f / mSettings.getXAxis();
+        return chartX;
     }
 
     private int getIndexFromDate(String hhmm) {
@@ -257,7 +404,7 @@ public class TrendView extends ChartView {
                 index = DateUtil.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
                 for (int j = 0; j < i; j += 2) {
                     // the total points of this period
-                    index += DateUtil.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm") + 1;
+                    index += DateUtil.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm");
                 }
             }
         }
@@ -275,7 +422,7 @@ public class TrendView extends ChartView {
     @Override
     protected void drawTopTouchLines(int touchIndex, int left, int top, int width, int height, Canvas canvas) {
         if (hasThisTouchIndex(touchIndex)) {
-            TrendViewData model = mVisibleModelList.get(touchIndex);
+            Data model = mVisibleModelList.get(touchIndex);
             float touchX = getChartX(touchIndex);
             float touchY = getChartY(model.getLastPrice());
 

@@ -351,11 +351,12 @@ public class API extends APIBase {
 
         /**
          * /market/futureCommodity/select 获取首页产品列表
+         * /order/variety/getVariety.do
          *
          * @return
          */
         public static API getProductList() {
-            return new API("/order/variety/getVariety.do", null);
+            return new API("/market/futureCommodity/select", null);
         }
 
         /**

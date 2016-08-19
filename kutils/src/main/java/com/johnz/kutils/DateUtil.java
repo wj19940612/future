@@ -76,4 +76,27 @@ public class DateUtil {
             return time.compareTo(time1) >= 0 || time.compareTo(time2) <= 0;
         }
     }
+
+    /**
+     * check if time is between times[i] and times[i + 1]
+     *
+     * @param times
+     * @param time
+     * @return
+     */
+    public static boolean isBetweenTimes(String[] times, String time) {
+        int size = times.length;
+
+        if (size % 2 != 0) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i += 2) {
+            if (isBetweenTimes(times[i], times[i + 1], time)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

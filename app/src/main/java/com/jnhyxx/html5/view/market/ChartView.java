@@ -15,6 +15,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.johnz.kutils.DateUtil;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -27,11 +29,7 @@ public abstract class ChartView extends View {
         TEXT("#A8A8A8"),
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
-        GREEN("#08BA42"),
-        RED("#F3293B"),
         BLUE("#358CF3"),
-        ORANGE("#F27A00"),
-        PURPLE("#AE4085"),
         YELLOW("#EAC281");
 
         private String value;
@@ -75,12 +73,12 @@ public abstract class ChartView extends View {
     protected ChartSettings mSettings;
 
     protected float mFontSize;
-    protected float mBigFontSize;
     protected int mFontHeight;
-    protected int mBigFontHeight;
-    protected int mPriceAreaWidth;
-
     protected float mOffset4CenterText; // center y of text + this will draw the text in center you want
+    protected float mBigFontSize;
+    protected int mBigFontHeight;
+    protected float mOffset4CenterBigText;
+
     protected int mTextMargin; // The margin between text and baseline
     protected int mRectPadding;
     protected int mMiddleExtraSpace; // The middle space between two parts
@@ -117,21 +115,30 @@ public abstract class ChartView extends View {
         mHandler = new ChartHandler();
 
         mSettings = new ChartSettings();
+
+        // text font
         mFontSize = sp2Px(FONT_SIZE_DP);
-        mBigFontSize = sp2Px(FONT_BIG_SIZE_DP);
         sPaint.setTextSize(mFontSize);
         mFontMetrics = sPaint.getFontMetrics();
         sPaint.getFontMetrics(mFontMetrics);
         mFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
-        sPaint.setTextSize(mBigFontSize);
-        mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
         mOffset4CenterText = calOffsetY4TextCenter();
+
+        // big text font
+        mBigFontSize = sp2Px(FONT_BIG_SIZE_DP);
+        sPaint.setTextSize(mBigFontSize);
+        sPaint.getFontMetrics(mFontMetrics);
+        mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
+        mOffset4CenterBigText = calOffsetY4TextCenter();
+
+        // constant
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
         mRectPadding = (int) dp2Px(RECT_PADDING_DP);
         mMiddleExtraSpace = (int) dp2Px(MIDDLE_EXTRA_SPACE_DP);
         mTimeLineHeight = (int) dp2Px(HEIGHT_TIME_LINE_DP);
         mCenterPartHeight = mMiddleExtraSpace + mTimeLineHeight;
 
+        // gesture
         mTouchIndex = -1;
         mAction = Action.NONE;
     }
@@ -150,6 +157,7 @@ public abstract class ChartView extends View {
 
     public void setSettings(ChartSettings settings) {
         mSettings = settings;
+        redraw();
     }
 
     protected void setBaseLinePaint(Paint paint) {
@@ -191,7 +199,10 @@ public abstract class ChartView extends View {
                     width, getBottomPartHeight(), canvas);
         }
 
-        drawRealTimeData(mSettings.isIndexesEnable(), left, top, width, topPartHeight, canvas);
+        drawRealTimeData(mSettings.isIndexesEnable(),
+                left, top, width, topPartHeight,
+                left, top + getTopPartHeight() + mCenterPartHeight, width, getBottomPartHeight(),
+                canvas);
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
@@ -329,43 +340,8 @@ public abstract class ChartView extends View {
      * @param height    the total height of several top baselines without text and textMargin
      * @param canvas
      */
-    protected void drawBaseLines(float[] baselines, int left, float top, int width, int height,
-                                 Canvas canvas) {
-        if (baselines == null || baselines.length < 2) return;
-
-        int verticalInterval = height / (baselines.length - 1);
-        mPriceAreaWidth = (int) calculatePriceWidth();
-        for (int i = 0; i < baselines.length; i++) {
-            int baselineWidth = width;
-            if (i > 0 && i < baselines.length - 1) {
-                baselineWidth -= mPriceAreaWidth;
-            }
-            Path path = getPath();
-            path.moveTo(left, top);
-            path.lineTo(left + baselineWidth, top);
-            setBaseLinePaint(sPaint);
-            canvas.drawPath(path, sPaint);
-
-            if (i % 2 == 0) {
-                setDefaultTextPaint(sPaint);
-                String baseLineValue = formatNumber(baselines[i]);
-                float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
-                float y = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
-                canvas.drawText(baseLineValue, x, y, sPaint);
-            }
-            if (i == baselines.length - 1) { // last baseline
-                setDefaultTextPaint(sPaint);
-                String baseLineValue = formatNumber(baselines[i]);
-                float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
-                float y = top - mTextMargin - mFontHeight / 2 + mOffset4CenterText;
-                canvas.drawText(baseLineValue, x, y, sPaint);
-            }
-
-            top += verticalInterval;
-        }
-    }
+    protected abstract void drawBaseLines(float[] baselines, int left, float top, int width, int height,
+                                          Canvas canvas);
 
     /**
      * draw bottom indexes baselines
@@ -384,6 +360,7 @@ public abstract class ChartView extends View {
 
     protected abstract void drawRealTimeData(boolean indexesEnable,
                                              int left, int top, int width, int height,
+                                             int left2, int top2, int width2, int height2,
                                              Canvas canvas);
 
     /**
@@ -477,6 +454,7 @@ public abstract class ChartView extends View {
 
     /**
      * this is the inverse operation of getCharX(index)
+     *
      * @param x
      * @return
      */
@@ -502,8 +480,8 @@ public abstract class ChartView extends View {
      * this method is used to calculate a rectF for the text that will be drew
      * we add some left-right padding for the text, just for nice
      *
-     * @param textX left of text
-     * @param textY y of text baseline
+     * @param textX     left of text
+     * @param textY     y of text baseline
      * @param textWidth
      * @return
      */
@@ -513,13 +491,6 @@ public abstract class ChartView extends View {
         mRectF.right = textX + textWidth + mRectPadding;
         mRectF.bottom = textY + mFontMetrics.bottom;
         return mRectF;
-    }
-
-    private float calculatePriceWidth() {
-        String preClosePrice = formatNumber(mSettings.getPreClosePrice());
-        sPaint.setTextSize(mBigFontSize);
-        float priceWidth = sPaint.measureText(preClosePrice);
-        return getBigFontBgRectF(0, 0, priceWidth).width();
     }
 
     protected float dp2Px(float value) {
@@ -564,6 +535,8 @@ public abstract class ChartView extends View {
         private float mLimitUpPercent;
         private String mOpenMarketTimes;
         private String mDisplayMarketTimes;
+        private boolean mCalculateXAxisFromOpenMarketTime;
+        private boolean mXAxisRefresh;
 
         public ChartSettings() {
             mBaseLines = new float[0];
@@ -598,8 +571,12 @@ public abstract class ChartView extends View {
             return this;
         }
 
-        public float getLimitUpPercent() {
-            return mLimitUpPercent;
+        public String[] getDisplayMarketTimes() {
+            String[] result = new String[0];
+            if (!TextUtils.isEmpty(mDisplayMarketTimes)) {
+                return mDisplayMarketTimes.split(";");
+            }
+            return result;
         }
 
         public float getLimitUp() {
@@ -623,7 +600,7 @@ public abstract class ChartView extends View {
             if (baseLines < 2) {
                 baseLines = 2;
             }
-            if (baseLines % 2 != 0) {
+            if (baseLines % 2 == 0) {
                 baseLines++;
             }
             mBaseLines = new float[baseLines];
@@ -661,11 +638,31 @@ public abstract class ChartView extends View {
         }
 
         public int getXAxis() {
+            if (mCalculateXAxisFromOpenMarketTime) {
+                if (mXAxisRefresh) {
+                    String[] openMarketTime = getOpenMarketTimes();
+                    int size = openMarketTime.length % 2 == 0 ?
+                            openMarketTime.length : openMarketTime.length - 1;
+                    int xAxis = 0;
+                    for (int i = 0; i < size; i += 2) {
+                        xAxis += DateUtil.getDiffMinutes(openMarketTime[i], openMarketTime[i + 1], "hh:mm");
+                    }
+                    mXAxis = xAxis - 1;
+                    mXAxisRefresh = false;
+                }
+                return mXAxis;
+            }
             return mXAxis;
         }
 
         public ChartSettings setXAxis(int XAxis) {
             mXAxis = XAxis;
+            return this;
+        }
+
+        public ChartSettings setCalculateXAxisFromOpenMarketTime(boolean value) {
+            mCalculateXAxisFromOpenMarketTime = value;
+            mXAxisRefresh = true;
             return this;
         }
     }

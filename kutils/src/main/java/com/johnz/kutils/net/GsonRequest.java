@@ -53,8 +53,7 @@ public class GsonRequest<T> extends Request<T> {
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 
-            //Log.d(getTag().toString(), "parseNetworkResponse: " + json);
-
+            //Log.d("TEST", "parseNetworkResponse: " + json);
             T result = new Gson().fromJson(json, type);
 
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));

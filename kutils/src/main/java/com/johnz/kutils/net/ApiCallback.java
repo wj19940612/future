@@ -34,6 +34,14 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
         mTag = tag;
     }
 
+    public String getTag() {
+        return mTag;
+    }
+
+    public String getUrl() {
+        return mUrl;
+    }
+
     public void setIndeterminate(ApiIndeterminate Indeterminate) {
         mIndeterminate = Indeterminate;
     }

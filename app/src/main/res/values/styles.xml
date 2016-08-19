@@ -60,7 +60,7 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">20dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:textColor">#262626</item>
     </style>
 

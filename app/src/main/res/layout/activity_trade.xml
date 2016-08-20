@@ -83,7 +83,7 @@
         android:layout_height="1px"
         android:background="@color/splitLineDark"/>
 
-    <com.jnhyxx.html5.view.market.ChartContainer
+    <com.jnhyxx.html5.view.ChartContainer
         android:id="@+id/chartContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"

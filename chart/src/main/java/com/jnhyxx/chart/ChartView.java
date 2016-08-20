@@ -50,7 +50,7 @@ public abstract class ChartView extends View {
     private static final int FONT_SIZE_DP = 8;
     private static final int FONT_BIG_SIZE_DP = 9;
     private static final int TEXT_MARGIN_WITH_LINE_DP = 5;
-    private static final int RECT_PADDING_DP = 4;
+    private static final int RECT_PADDING_DP = 3;
     private static final int MIDDLE_EXTRA_SPACE_DP = 10;
     private static final int HEIGHT_TIME_LINE_DP = 24;
     private static final float RATIO_OF_TOP = 0.73f;
@@ -76,9 +76,11 @@ public abstract class ChartView extends View {
     protected int mBigFontHeight;
     protected float mOffset4CenterBigText;
 
-    protected int mTextMargin; // The margin between text and baseline
-    protected int mRectPadding;
     protected int mMiddleExtraSpace; // The middle space between two parts
+    protected int mTextMargin; // The margin between text and baseline
+
+    protected int mXRectPadding;
+    private int mYXRectPadding;
     private int mTimeLineHeight;
     private int mCenterPartHeight;
 
@@ -130,7 +132,8 @@ public abstract class ChartView extends View {
 
         // constant
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
-        mRectPadding = (int) dp2Px(RECT_PADDING_DP);
+        mXRectPadding = (int) dp2Px(RECT_PADDING_DP);
+        mYXRectPadding = mXRectPadding / 2;
         mMiddleExtraSpace = (int) dp2Px(MIDDLE_EXTRA_SPACE_DP);
         mTimeLineHeight = (int) dp2Px(HEIGHT_TIME_LINE_DP);
         mCenterPartHeight = mMiddleExtraSpace + mTimeLineHeight;
@@ -487,10 +490,10 @@ public abstract class ChartView extends View {
      * @return
      */
     protected RectF getBigFontBgRectF(float textX, float textY, float textWidth) {
-        mRectF.left = textX - mRectPadding;
-        mRectF.top = textY + mFontMetrics.top;
-        mRectF.right = textX + textWidth + mRectPadding;
-        mRectF.bottom = textY + mFontMetrics.bottom;
+        mRectF.left = textX - mXRectPadding;
+        mRectF.top = textY + mFontMetrics.top - mYXRectPadding;
+        mRectF.right = textX + textWidth + mXRectPadding;
+        mRectF.bottom = textY + mFontMetrics.bottom + mYXRectPadding;
         return mRectF;
     }
 

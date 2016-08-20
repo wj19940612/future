@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DateUtil {
 
-    public static String DEFAULT_FORMAT = "yyyy-MM-dd hh:mm:ss";
+    public static String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static String format(String time, String fromFormat, String toFormat) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(fromFormat);

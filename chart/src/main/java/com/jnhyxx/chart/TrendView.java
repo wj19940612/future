@@ -53,22 +53,6 @@ public class TrendView extends ChartView {
             }
         }
 
-        /**
-         * check if trendView data.date is valid
-         *
-         * @param date
-         * @param openMarketTime
-         * @return
-         */
-        public static boolean isValidDate(String date, String[] openMarketTime) {
-            if (date.length() != 14) {
-                return false;
-            }
-
-            String hhmm = date.substring(8, 10) + ":" + date.substring(10, 12); // yyyyMMddhhmmss -> hh:mm
-            return Util.isBetweenTimes(openMarketTime, hhmm);
-        }
-
         public static List<TrendViewData> createDataList(String data, String[] openMarketTime) {
             List<TrendViewData> result = new ArrayList<>();
             HashSet hashSet = new HashSet();
@@ -93,12 +77,29 @@ public class TrendView extends ChartView {
         }
 
         private static boolean isRepeatedDate(String date, HashSet hashSet) {
-            String dateWithHourMinute = date.substring(8, 12); // yyyyMMddhhmmss -> hhmm
+            String dateWithHourMinute = date.substring(8, 12); // yyyyMMddHHmmss -> hhmm
             return !hashSet.add(dateWithHourMinute);
         }
 
         /**
+         * check if trendView data.date is valid
+         *
+         * @param date
+         * @param openMarketTime
+         * @return
+         */
+        public static boolean isValidDate(String date, String[] openMarketTime) {
+            if (date.length() != 14) {
+                return false;
+            }
+
+            String hhmm = date.substring(8, 10) + ":" + date.substring(10, 12); // yyyyMMddHHmmss -> hh:mm
+            return Util.isBetweenTimes(openMarketTime, hhmm);
+        }
+
+        /**
          * check if time is between times[i] and times[i + 1] (open interval)
+         * <br/> ps. 数据时间的合法性判断使用开区间
          *
          * @param times
          * @param time
@@ -121,6 +122,7 @@ public class TrendView extends ChartView {
 
         /**
          * check if time is between time1 and time2 (open interval), time1 <= time < time2
+         * <br/> ps. 数据时间的合法性判断使用开区间
          *
          * @param time1
          * @param time2
@@ -132,6 +134,23 @@ public class TrendView extends ChartView {
                 return time.compareTo(time1) >= 0 && time.compareTo(time2) < 0;
             } else {
                 return time.compareTo(time1) >= 0 || time.compareTo(time2) < 0;
+            }
+        }
+
+        /**
+         * check if time is between time1 and time2 (close interval), time1 <= time <= time2
+         * <br/> ps. 数据时间的坐标的计算使用闭区间
+         *
+         * @param time1
+         * @param time2
+         * @param time
+         * @return
+         */
+        private static boolean isBetweenTimesClose(String time1, String time2, String time) {
+            if (time1.compareTo(time2) <= 0) {
+                return time.compareTo(time1) >= 0 && time.compareTo(time2) <= 0;
+            } else {
+                return time.compareTo(time1) >= 0 || time.compareTo(time2) <= 0;
             }
         }
     }
@@ -231,12 +250,12 @@ public class TrendView extends ChartView {
     private void setDashLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(new DashPathEffect(new float[]{3, 8}, 1));
+        paint.setPathEffect(new DashPathEffect(new float[]{8, 3}, 1));
     }
 
     private void setUnstablePricePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.WHITE.get()));
-        paint.setTextSize(mFontSize);
+        paint.setTextSize(mBigFontSize);
         paint.setPathEffect(null);
     }
 
@@ -334,8 +353,10 @@ public class TrendView extends ChartView {
                     .divide(new BigDecimal(baselines.length - 1), RoundingMode.HALF_EVEN)
                     .floatValue();
 
-            baselines[0] = max;
-            baselines[baselines.length - 1] = min;
+            float pricePadding = mDataList.get(0).getLastPrice() * 0.0025f;
+            /** expand max ~ min to not make trend line touch top and bottom **/
+            baselines[0] = max + pricePadding;
+            baselines[baselines.length - 1] = min - pricePadding;
             for (int i = baselines.length - 2; i > 0; i--) {
                 baselines[i] = baselines[i + 1] + priceRange;
             }
@@ -445,16 +466,21 @@ public class TrendView extends ChartView {
                 // unstable price
                 setUnstablePricePaint(sPaint);
                 String unstablePrice = formatNumber(mUnstableData.getLastPrice());
-                RectF blueRect = getBigFontBgRectF(chartX, chartY + mOffset4CenterText,
+                float priceWidth = sPaint.measureText(unstablePrice);
+                float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
+                float priceX = left + width - priceMargin - priceWidth;
+                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText,
                         sPaint.measureText(unstablePrice));
+                //// the center of rect is connected to dashLine
+                //// add offset and let the bottom of rect connect to dashLine
                 float rectHeight = blueRect.height();
                 blueRect.top -= rectHeight / 2;
                 blueRect.bottom -= rectHeight / 2;
                 setUnstablePriceBgPaint(sPaint);
-                canvas.drawRoundRect(blueRect, 5, 5, sPaint);
+                canvas.drawRoundRect(blueRect, 2, 2, sPaint);
                 float priceY = chartY - rectHeight / 2 + mOffset4CenterText;
                 setUnstablePricePaint(sPaint);
-                canvas.drawText(unstablePrice, chartX + mRectPadding, priceY, sPaint);
+                canvas.drawText(unstablePrice, priceX, priceY, sPaint);
             }
         }
     }
@@ -505,7 +531,7 @@ public class TrendView extends ChartView {
 
         int index = 0;
         for (int i = 0; i < size; i += 2) {
-            if (Util.isBetweenTimes(timeLines[i], timeLines[i + 1], hhmm)) {
+            if (Util.isBetweenTimesClose(timeLines[i], timeLines[i + 1], hhmm)) {
                 index = Util.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
                 for (int j = 0; j < i; j += 2) {
                     // the total points of this period
@@ -539,8 +565,8 @@ public class TrendView extends ChartView {
             float dateX = touchX - textWidth / 2;
 
             // when date string touches the borders, add offset
-            dateX = dateX < 0 ? 0 + mRectPadding : dateX;
-            dateX = dateX > width - textWidth ? width - textWidth - mRectPadding : dateX;
+            dateX = dateX < 0 ? 0 + mXRectPadding : dateX;
+            dateX = dateX > width - textWidth ? width - textWidth - mXRectPadding : dateX;
 
             // draw rectangle yellow background for date
             RectF rectF = getBigFontBgRectF(dateX, dateY, textWidth);
@@ -561,12 +587,12 @@ public class TrendView extends ChartView {
             // draw model.lastPrice connected to horizontal line
             String price = formatNumber(model.getLastPrice());
             textWidth = sPaint.measureText(price);
-            float priceX = left + width - textWidth - mRectPadding;
+            float priceX = left + width - textWidth - mXRectPadding;
             float priceY = touchY + mOffset4CenterText;
 
             // when touchX is larger than half of width, move price to left
             if (touchX > width / 2) {
-                priceX = left + mRectPadding;
+                priceX = left + mXRectPadding;
             }
 
             rectF = getBigFontBgRectF(priceX, priceY, textWidth);

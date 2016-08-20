@@ -2,7 +2,7 @@ package com.jnhyxx.chart.domain;
 
 public class TrendViewData {
 
-    public static final String DATE_FORMAT = "yyyyMMddhhmmss";
+    public static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
     /**
      * cu1610,37230.0,20160815101000

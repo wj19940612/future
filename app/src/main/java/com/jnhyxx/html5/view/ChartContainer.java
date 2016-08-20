@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.view.market;
+package com.jnhyxx.html5.view;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

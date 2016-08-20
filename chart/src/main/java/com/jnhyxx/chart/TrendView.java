@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.view.market;
+package com.jnhyxx.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,14 +7,17 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.johnz.kutils.DateUtil;
+import com.jnhyxx.chart.domain.TrendViewData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,55 +26,51 @@ import java.util.Map;
 
 public class TrendView extends ChartView {
 
-    public static class Data {
+    public static class Util {
+        /**
+         * get diff minutes bewteen endDate and startDate. endDate - startDate
+         *
+         * @param startDate
+         * @param endDate
+         * @return
+         */
+        public static int getDiffMinutes(String startDate, String endDate, String format) {
+            long diff = 0;
+            try {
+                SimpleDateFormat parser = new SimpleDateFormat(format);
+                long start = parser.parse(startDate).getTime();
+                long end = parser.parse(endDate).getTime();
+
+                if (startDate.compareTo(endDate) <= 0) { // eg. 09:00 <= 09:10
+                    diff = end - start;
+                } else { // eg. 21:00 ~ 01:00, we should change 01:00 to 25:00
+                    diff = end + 24 * 60 * 60 * 1000 - start;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } finally {
+                return (int) (diff / (60 * 1000));
+            }
+        }
 
         /**
-         * cu1610,37230.0,20160815101000
+         * check if trendView data.date is valid
+         *
+         * @param date
+         * @param openMarketTime
+         * @return
          */
-
-        private String contractId;
-        private float lastPrice;
-        private String date;
-
-        public Data(String contractId, float lastPrice, String date) {
-            this.contractId = contractId;
-            this.lastPrice = lastPrice;
-            this.date = date;
-        }
-
-        public String getHHmm() {
-            if (date.length() >= 12) {
-                return date.substring(8, 10) + ":" + date.substring(10, 12);
+        public static boolean isValidDate(String date, String[] openMarketTime) {
+            if (date.length() != 14) {
+                return false;
             }
-            return "";
+
+            String hhmm = date.substring(8, 10) + ":" + date.substring(10, 12); // yyyyMMddhhmmss -> hh:mm
+            return Util.isBetweenTimes(openMarketTime, hhmm);
         }
 
-        public String getContractId() {
-            return contractId;
-        }
-
-        public void setContractId(String contractId) {
-            this.contractId = contractId;
-        }
-
-        public float getLastPrice() {
-            return lastPrice;
-        }
-
-        public void setLastPrice(float lastPrice) {
-            this.lastPrice = lastPrice;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public static List<Data> createDataList(String data, String[] openMarketTime) {
-            List<Data> result = new ArrayList<>();
+        public static List<TrendViewData> createDataList(String data, String[] openMarketTime) {
+            List<TrendViewData> result = new ArrayList<>();
             HashSet hashSet = new HashSet();
             int length = data.length();
             int start = 0;
@@ -82,10 +81,9 @@ public class TrendView extends ChartView {
                     String[] splitData = singleData.split(",");
                     String date = splitData[2];
                     start = end + 1;
-
                     // filter invalid data and repeated data based on data.date
-                    if (isValidDate(date, openMarketTime) && !isRepeatedDate(date, hashSet)) {
-                        Data validData = new Data(splitData[0], Float.valueOf(splitData[1]), date);
+                    if (!isRepeatedDate(date, hashSet) && isValidDate(date, openMarketTime)) {
+                        TrendViewData validData = new TrendViewData(splitData[0], Float.valueOf(splitData[1]), date);
                         result.add(validData);
                     }
                 }
@@ -99,22 +97,122 @@ public class TrendView extends ChartView {
             return !hashSet.add(dateWithHourMinute);
         }
 
-        private static boolean isValidDate(String date, String[] openMarketTime) {
-            if (date.length() != 14) {
-                return false;
+        /**
+         * check if time is between times[i] and times[i + 1] (open interval)
+         *
+         * @param times
+         * @param time
+         * @return
+         */
+        private static boolean isBetweenTimes(String[] times, String time) {
+            int size = times.length;
+
+            if (size % 2 != 0) {
+                size = size - 1; // make size even
             }
 
-            String hhmm = date.substring(8, 10) + ":" + date.substring(10, 12); // yyyyMMddhhmmss -> hh:mm
-            return DateUtil.isBetweenTimes(openMarketTime, hhmm);
+            for (int i = 0; i < size; i += 2) {
+                if (isBetweenTimes(times[i], times[i + 1], time)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
+        /**
+         * check if time is between time1 and time2 (open interval), time1 <= time < time2
+         *
+         * @param time1
+         * @param time2
+         * @param time
+         * @return
+         */
+        private static boolean isBetweenTimes(String time1, String time2, String time) {
+            if (time1.compareTo(time2) <= 0) {
+                return time.compareTo(time1) >= 0 && time.compareTo(time2) < 0;
+            } else {
+                return time.compareTo(time1) >= 0 || time.compareTo(time2) < 0;
+            }
+        }
     }
 
-    private List<Data> mModelList;
-    private Data mUnstableData;
-    private Map<Integer, Data> mVisibleModelList;
+    public static class Settings extends ChartSettings {
+
+        private float mLimitUpPercent;
+        private String mOpenMarketTimes;
+        private String mDisplayMarketTimes;
+        private boolean mCalculateXAxisFromOpenMarketTime;
+        private boolean mXAxisRefresh;
+
+        public Settings() {
+            super();
+            mLimitUpPercent = 0;
+        }
+
+        public void setLimitUpPercent(float limitUpPercent) {
+            mLimitUpPercent = limitUpPercent;
+        }
+
+        public void setOpenMarketTimes(String openMarketTimes) {
+            mOpenMarketTimes = openMarketTimes;
+        }
+
+        public String[] getOpenMarketTimes() {
+            String[] result = new String[0];
+            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
+                return mOpenMarketTimes.split(";");
+            }
+            return result;
+        }
+
+        public void setDisplayMarketTimes(String displayMarketTimes) {
+            mDisplayMarketTimes = displayMarketTimes;
+        }
+
+        public String[] getDisplayMarketTimes() {
+            String[] result = new String[0];
+            if (!TextUtils.isEmpty(mDisplayMarketTimes)) {
+                return mDisplayMarketTimes.split(";");
+            }
+            return result;
+        }
+
+        public float getLimitUp() {
+            return getPreClosePrice() * mLimitUpPercent;
+        }
+
+        public void setCalculateXAxisFromOpenMarketTime(boolean value) {
+            mCalculateXAxisFromOpenMarketTime = value;
+            mXAxisRefresh = true;
+        }
+
+        @Override
+        public int getXAxis() {
+            if (mCalculateXAxisFromOpenMarketTime) {
+                if (mXAxisRefresh) {
+                    String[] openMarketTime = getOpenMarketTimes();
+                    int size = openMarketTime.length % 2 == 0 ?
+                            openMarketTime.length : openMarketTime.length - 1;
+                    int xAxis = 0;
+                    for (int i = 0; i < size; i += 2) {
+                        xAxis += Util.getDiffMinutes(openMarketTime[i], openMarketTime[i + 1], "hh:mm");
+                    }
+                    setXAxis(xAxis - 1);
+                    mXAxisRefresh = false;
+
+                }
+                return super.getXAxis();
+            }
+            return super.getXAxis();
+        }
+    }
+
+    private List<TrendViewData> mDataList;
+    private TrendViewData mUnstableData;
+    private Map<Integer, TrendViewData> mVisibleModelList;
 
     private float mPriceAreaWidth;
+    private Settings mSettings;
 
     public TrendView(Context context) {
         super(context);
@@ -177,35 +275,42 @@ public class TrendView extends ChartView {
         paint.setColor(Color.BLACK);
     }
 
-    public void setChartModels(List<TrendView.Data> modelList) {
-        mModelList = modelList;
+    public void setDataList(List<TrendViewData> dataList) {
+        mDataList = dataList;
         redraw();
     }
 
-//    public void addFloatingPrice(Double lastPrice) {
-//        if (mModelList != null && mModelList.size() > 0) {
-//            TrendViewData lastModel = mModelList.get(mModelList.size() - 1);
-//            mUnstableData = new TrendViewData(lastModel, lastPrice);
-//            if (mProduct != null && mProduct.isValidDate(mUnstableData.getDate())) {
-//                redraw();
-//            } else {
-//                mUnstableData = null;
-//            }
-//        }
-//    }
+    public List<TrendViewData> getDataList() {
+        return mDataList;
+    }
 
+    public void setUnstableData(TrendViewData unstableData) {
+        mUnstableData = unstableData;
+        redraw();
+    }
+
+    @Override
+    public void setSettings(ChartSettings settings) {
+        mSettings = (Settings) settings;
+        super.setSettings(settings);
+    }
+
+    @Override
+    public Settings getSettings() {
+        return mSettings;
+    }
 
     @Override
     protected void calculateBaseLines(float[] baselines) {
-        if (mModelList != null && mModelList.size() > 0) {
+        if (mDataList != null && mDataList.size() > 0) {
             float max = Float.MIN_VALUE;
             float min = Float.MAX_VALUE;
-            for (Data data : mModelList) {
-                if (max < data.getLastPrice()) {
-                    max = data.getLastPrice();
+            for (TrendViewData trendViewData : mDataList) {
+                if (max < trendViewData.getLastPrice()) {
+                    max = trendViewData.getLastPrice();
                 }
-                if (min > data.getLastPrice()) {
-                    min = data.getLastPrice();
+                if (min > trendViewData.getLastPrice()) {
+                    min = trendViewData.getLastPrice();
                 }
             }
 
@@ -296,15 +401,15 @@ public class TrendView extends ChartView {
                                     int left, int top, int width, int height,
                                     int left2, int top2, int width2, int height2,
                                     Canvas canvas) {
-        int size = mModelList.size();
+        int size = mDataList.size();
         float firstChartX = 0;
-        if (mModelList != null && size > 0) {
+        if (mDataList != null && size > 0) {
             Path path = getPath();
             float chartX = 0;
             float chartY = 0;
             for (int i = 0; i < size; i++) {
-                chartX = getChartX(mModelList.get(i));
-                chartY = getChartY(mModelList.get(i).getLastPrice());
+                chartX = getChartX(mDataList.get(i));
+                chartY = getChartY(mDataList.get(i).getLastPrice());
                 if (path.isEmpty()) {
                     firstChartX = chartX;
                     path.moveTo(chartX, chartY);
@@ -356,7 +461,7 @@ public class TrendView extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
-        if (mModelList != null && mModelList.size() > 0) {
+        if (mDataList != null && mDataList.size() > 0) {
             String[] displayMarketTimes = mSettings.getDisplayMarketTimes();
             if (displayMarketTimes.length != 0) {
                 setDefaultTextPaint(sPaint);
@@ -381,7 +486,7 @@ public class TrendView extends ChartView {
         return getIndexOfXAxis(touchX);
     }
 
-    private float getChartX(Data model) {
+    private float getChartX(TrendViewData model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
         return getChartX(indexOfXAxis);
     }
@@ -400,11 +505,11 @@ public class TrendView extends ChartView {
 
         int index = 0;
         for (int i = 0; i < size; i += 2) {
-            if (DateUtil.isBetweenTimes(timeLines[i], timeLines[i + 1], hhmm)) {
-                index = DateUtil.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
+            if (Util.isBetweenTimes(timeLines[i], timeLines[i + 1], hhmm)) {
+                index = Util.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
                 for (int j = 0; j < i; j += 2) {
                     // the total points of this period
-                    index += DateUtil.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm");
+                    index += Util.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm");
                 }
             }
         }
@@ -422,7 +527,7 @@ public class TrendView extends ChartView {
     @Override
     protected void drawTopTouchLines(int touchIndex, int left, int top, int width, int height, Canvas canvas) {
         if (hasThisTouchIndex(touchIndex)) {
-            Data model = mVisibleModelList.get(touchIndex);
+            TrendViewData model = mVisibleModelList.get(touchIndex);
             float touchX = getChartX(touchIndex);
             float touchY = getChartY(model.getLastPrice());
 

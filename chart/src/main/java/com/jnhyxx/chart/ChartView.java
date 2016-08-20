@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.view.market;
+package com.jnhyxx.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,14 +8,11 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.johnz.kutils.DateUtil;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -153,6 +150,10 @@ public abstract class ChartView extends View {
             mTouchIndex = calculateTouchIndex(e);
             redraw();
         }
+    }
+
+    public ChartSettings getSettings() {
+        return mSettings;
     }
 
     public void setSettings(ChartSettings settings) {
@@ -321,14 +322,14 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected void drawTitleAboveBaselines(int left, int top, int top2, int touchIndex, Canvas canvas) {
+
     }
 
     protected abstract void calculateBaseLines(float[] baselines);
 
     protected void calculateIndexesBaseLines(float[] indexesBaseLines) {
-    }
 
-    ;
+    }
 
     /**
      * draw top baselines
@@ -522,148 +523,5 @@ public abstract class ChartView extends View {
 
     protected void redraw() {
         invalidate(0, 0, getWidth(), getHeight());
-    }
-
-    public static class ChartSettings {
-
-        private float[] mBaseLines;
-        private float[] mIndexesBaseLines;
-        private boolean mIndexesEnable;
-        private int mNumberScale;
-        private int mXAxis;
-        private float mPreClosePrice;
-        private float mLimitUpPercent;
-        private String mOpenMarketTimes;
-        private String mDisplayMarketTimes;
-        private boolean mCalculateXAxisFromOpenMarketTime;
-        private boolean mXAxisRefresh;
-
-        public ChartSettings() {
-            mBaseLines = new float[0];
-            mIndexesBaseLines = new float[0];
-            mIndexesEnable = false;
-            mNumberScale = 2;
-            mXAxis = 0;
-            mPreClosePrice = 0;
-            mLimitUpPercent = 0;
-        }
-
-        public ChartSettings setLimitUpPercent(float limitUpPercent) {
-            mLimitUpPercent = limitUpPercent;
-            return this;
-        }
-
-        public ChartSettings setOpenMarketTimes(String openMarketTimes) {
-            mOpenMarketTimes = openMarketTimes;
-            return this;
-        }
-
-        public String[] getOpenMarketTimes() {
-            String[] result = new String[0];
-            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
-                return mOpenMarketTimes.split(";");
-            }
-            return result;
-        }
-
-        public ChartSettings setDisplayMarketTimes(String displayMarketTimes) {
-            mDisplayMarketTimes = displayMarketTimes;
-            return this;
-        }
-
-        public String[] getDisplayMarketTimes() {
-            String[] result = new String[0];
-            if (!TextUtils.isEmpty(mDisplayMarketTimes)) {
-                return mDisplayMarketTimes.split(";");
-            }
-            return result;
-        }
-
-        public float getLimitUp() {
-            return mPreClosePrice * mLimitUpPercent;
-        }
-
-        public float getPreClosePrice() {
-            return mPreClosePrice;
-        }
-
-        public ChartSettings setPreClosePrice(float preClosePrice) {
-            mPreClosePrice = preClosePrice;
-            return this;
-        }
-
-        public float[] getBaseLines() {
-            return mBaseLines;
-        }
-
-        public ChartSettings setBaseLines(int baseLines) {
-            if (baseLines < 2) {
-                baseLines = 2;
-            }
-            if (baseLines % 2 == 0) {
-                baseLines++;
-            }
-            mBaseLines = new float[baseLines];
-            return this;
-        }
-
-        public float[] getIndexesBaseLines() {
-            return mIndexesBaseLines;
-        }
-
-        public ChartSettings setIndexesBaseLines(int indexesBaseLines) {
-            if (indexesBaseLines < 2) {
-                indexesBaseLines = 2;
-            }
-            mIndexesBaseLines = new float[indexesBaseLines];
-            return this;
-        }
-
-        public boolean isIndexesEnable() {
-            return mIndexesEnable;
-        }
-
-        public ChartSettings setIndexesEnable(boolean indexesEnable) {
-            mIndexesEnable = indexesEnable;
-            return this;
-        }
-
-        public int getNumberScale() {
-            return mNumberScale;
-        }
-
-        public ChartSettings setNumberScale(int numberScale) {
-            mNumberScale = numberScale;
-            return this;
-        }
-
-        public int getXAxis() {
-            if (mCalculateXAxisFromOpenMarketTime) {
-                if (mXAxisRefresh) {
-                    String[] openMarketTime = getOpenMarketTimes();
-                    int size = openMarketTime.length % 2 == 0 ?
-                            openMarketTime.length : openMarketTime.length - 1;
-                    int xAxis = 0;
-                    for (int i = 0; i < size; i += 2) {
-                        xAxis += DateUtil.getDiffMinutes(openMarketTime[i], openMarketTime[i + 1], "hh:mm");
-                    }
-                    mXAxis = xAxis - 1;
-                    mXAxisRefresh = false;
-                }
-                return mXAxis;
-            }
-            return mXAxis;
-        }
-
-        public ChartSettings setXAxis(int XAxis) {
-            mXAxis = XAxis;
-            return this;
-        }
-
-        public ChartSettings setCalculateXAxisFromOpenMarketTime(boolean value) {
-            mCalculateXAxisFromOpenMarketTime = value;
-            mXAxisRefresh = true;
-            return this;
-        }
     }
 }

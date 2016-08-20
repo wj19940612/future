@@ -22,6 +22,10 @@ public class DateUtil {
     }
 
     public static boolean isInThisYear(String time, String fromFormat) {
+        if (time.length() != fromFormat.length()) {
+            return false;
+        }
+
         SimpleDateFormat dateFormat = new SimpleDateFormat(fromFormat);
         try {
             Date date = dateFormat.parse(time);
@@ -35,68 +39,18 @@ public class DateUtil {
         return false;
     }
 
-    /**
-     * get diff minutes bewteen endDate and startDate. endDate - startDate
-     *
-     * @param startDate
-     * @param endDate
-     * @return
-     */
-    public static int getDiffMinutes(String startDate, String endDate, String format) {
-        long diff = 0;
+    public static String addOneMinute(String date, String format) {
+        if (date.length() != format.length()) {
+            return date;
+        }
+        SimpleDateFormat parser = new SimpleDateFormat(format);
         try {
-            SimpleDateFormat parser = new SimpleDateFormat(format);
-            long start = parser.parse(startDate).getTime();
-            long end = parser.parse(endDate).getTime();
-
-            if (startDate.compareTo(endDate) <= 0) { // eg. 09:00 <= 09:10
-                diff = end - start;
-            } else { // eg. 21:00 ~ 01:00, we should change 01:00 to 25:00
-                diff = end + 24 * 60 * 60 * 1000 - start;
-            }
+            long originDate = parser.parse(date).getTime();
+            long finalDate = originDate + 60 * 1000; // 1 min
+            return parser.format(new Date(finalDate));
         } catch (ParseException e) {
             e.printStackTrace();
-        } finally {
-            return (int) (diff / (60 * 1000));
         }
-    }
-
-    /**
-     * check if time is between time1 and time2
-     *
-     * @param time1
-     * @param time2
-     * @param time
-     * @return
-     */
-    public static boolean isBetweenTimes(String time1, String time2, String time) {
-        if (time1.compareTo(time2) <= 0) {
-            return time.compareTo(time1) >= 0 && time.compareTo(time2) <= 0;
-        } else {
-            return time.compareTo(time1) >= 0 || time.compareTo(time2) <= 0;
-        }
-    }
-
-    /**
-     * check if time is between times[i] and times[i + 1]
-     *
-     * @param times
-     * @param time
-     * @return
-     */
-    public static boolean isBetweenTimes(String[] times, String time) {
-        int size = times.length;
-
-        if (size % 2 != 0) {
-            return false;
-        }
-
-        for (int i = 0; i < size; i += 2) {
-            if (isBetweenTimes(times[i], times[i + 1], time)) {
-                return true;
-            }
-        }
-
-        return false;
+        return date;
     }
 }

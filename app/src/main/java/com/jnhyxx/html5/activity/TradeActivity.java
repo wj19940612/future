@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jnhyxx.chart.TrendView;
+import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.domain.market.Product;
@@ -18,8 +20,7 @@ import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
 import com.jnhyxx.html5.view.market.ChartContainer;
-import com.jnhyxx.html5.view.market.ChartView;
-import com.jnhyxx.html5.view.market.TrendView;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -81,19 +82,45 @@ public class TradeActivity extends BaseActivity {
 
         initSlidingMenu();
         initChartView();
+
+        startScheduleJob(500);
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        TrendView trendView = mChartContainer.getTrendView();
+        List<TrendViewData> dataList = trendView.getDataList();
+        TrendView.Settings settings = trendView.getSettings();
+
+        if (dataList == null || dataList.size() == 0) {
+            return;
+        }
+
+        TrendViewData lastData = dataList.get(dataList.size() - 1);
+        String date = DateUtil.addOneMinute(lastData.getDate(), TrendViewData.DATE_FORMAT);
+        if (TrendView.Util.isValidDate(date, settings.getOpenMarketTimes())) {
+            float lastPrice = getLastPrice();
+            TrendViewData unstableData = new TrendViewData(lastData.getContractId(), lastPrice, date);
+            //trendView.setUnstableData(unstableData);
+        }
+    }
+
+    private float getLastPrice() {
+
+        return 0;
     }
 
     private void initChartView() {
-        ChartView.ChartSettings settings = new ChartView.ChartSettings();
-        settings.setBaseLines(9)
-                .setNumberScale(2)
-                .setCalculateXAxisFromOpenMarketTime(true)
-                .setOpenMarketTimes("09:00;10:15;10:30;11:30;13:30;15:00;21:00;01:00")
-                .setDisplayMarketTimes("09:00;13:30;21:00;01:00");
+        TrendView.Settings settings = new TrendView.Settings();
+        settings.setBaseLines(9);
+        settings.setNumberScale(2);
+        settings.setCalculateXAxisFromOpenMarketTime(true);
+        settings.setOpenMarketTimes("09:00;10:15;10:30;11:30;13:30;15:00;21:00;01:00");
+        settings.setDisplayMarketTimes("09:00;13:30;21:00;01:00");
         TrendView trendView = new TrendView(this);
         trendView.setSettings(settings);
         mChartContainer.addTrendView(trendView);
-        trendView.setChartModels(TrendView.Data.createDataList(TESTDATA, settings.getOpenMarketTimes()));
+        trendView.setDataList(TrendView.Util.createDataList(TESTDATA, settings.getOpenMarketTimes()));
     }
 
     private void initSlidingMenu() {
@@ -121,6 +148,7 @@ public class TradeActivity extends BaseActivity {
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
+
 
     static class MenuAdapter extends ArrayAdapter<Product> {
 

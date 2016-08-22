@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +42,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * 首页的fragment
+ */
 public class HomeFragment extends BaseFragment {
-
+    private static final String TAG = "HomeFragment";
     @BindView(android.R.id.list)
     ListView mList;
     @BindView(android.R.id.empty)
@@ -272,7 +277,13 @@ public class HomeFragment extends BaseFragment {
                     mMarketCloseText.setVisibility(View.VISIBLE);
                     mMarketCloseArea.setVisibility(View.VISIBLE);
                     mPriceChangeArea.setVisibility(View.GONE);
-                    mMarketOpenTime.setText(createMarketOpenTime(product, context));
+                    // TODO: 2016/8/19 刚进入界面程序崩溃，空指针； 
+                    String marketOpenTime = createMarketOpenTime(product, context);
+                    if(!TextUtils.isDigitsOnly(marketOpenTime)){
+                        mMarketOpenTime.setText(marketOpenTime);
+                    }else{
+                        mMarketOpenTime.setText("开市时间");
+                    }
                 } else {
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
@@ -310,12 +321,16 @@ public class HomeFragment extends BaseFragment {
 
             private String createMarketOpenTime(Product product, Context context) {
                 String timeLine = product.getTimeline();
-                String[] timeSplit = timeLine.split(";");
-                String startTime = timeSplit[0];
-                String endTime = timeSplit[timeSplit.length - 1];
-                startTime = addChinesePrefix(startTime, context);
-                endTime = addChinesePrefix(endTime, context);
-                return startTime + "~" + endTime;
+                Log.d(TAG," createMarketOpenTime"+ timeLine);
+                if(!TextUtils.isEmpty(timeLine)){
+                    String[] timeSplit = timeLine.split(";");
+                    String startTime = timeSplit[0];
+                    String endTime = timeSplit[timeSplit.length - 1];
+                    startTime = addChinesePrefix(startTime, context);
+                    endTime = addChinesePrefix(endTime, context);
+                    return startTime + "~" + endTime;
+                }
+                return "";
             }
 
             private String addChinesePrefix(String time, Context context) {

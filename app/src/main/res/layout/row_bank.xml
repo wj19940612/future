@@ -10,7 +10,7 @@
         android:id="@+id/bank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_feedback"
+        android:drawableLeft="@drawable/account_ic_feedback"
         android:drawablePadding="16dp"
         android:gravity="center_vertical"
         tools:text="广发银行"/>

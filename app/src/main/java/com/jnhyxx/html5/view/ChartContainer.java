@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.view.market;
+package com.jnhyxx.html5.view;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.R;
 
 public class ChartContainer extends LinearLayout implements View.OnClickListener {
@@ -47,15 +48,15 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         onTabClick(POS_TREND);
     }
 
-    public void addTrendView(ChartView chartView) {
+    public void addTrendView(TrendView trendView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(chartView, POS_TREND, params);
+        mContainer.addView(trendView, POS_TREND, params);
     }
 
-    public ChartView getTrendView() {
-        return (ChartView) mContainer.getChildAt(POS_TREND);
+    public TrendView getTrendView() {
+        return (TrendView) mContainer.getChildAt(POS_TREND);
     }
 
 //    private void initPopupWindow() {

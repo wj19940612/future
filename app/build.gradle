@@ -97,5 +97,5 @@ dependencies {
     compile project(':SlidingMenu')
     compile project(':PushSDK')
     compile project(':kutils')
-    compile files('libs/via_sdk_v1.jar')
+    compile project(':chart')
 }

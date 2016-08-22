@@ -1,1 +1,1 @@
-include ':app', ':umenglibrary', ':kutils', ':PushSDK', ':SlidingMenu'
+include ':app', ':umenglibrary', ':kutils', ':PushSDK', ':SlidingMenu', ':chart'

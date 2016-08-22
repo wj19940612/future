@@ -3,11 +3,18 @@
 
     <item>
         <shape>
+            <solid android:color="@color/splitLine2"/>
+        </shape>
+    </item>
+
+    <item android:bottom="1px">
+        <shape>
             <solid android:color="#F4F4F2"/>
         </shape>
     </item>
 
-    <item android:bottom="12dp">
+
+    <item android:top="12dp" android:bottom="1px">
         <shape>
             <solid android:color="@android:color/white"/>
         </shape>

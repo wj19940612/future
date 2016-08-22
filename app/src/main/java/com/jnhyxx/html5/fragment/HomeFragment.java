@@ -279,9 +279,9 @@ public class HomeFragment extends BaseFragment {
                     mPriceChangeArea.setVisibility(View.GONE);
                     // TODO: 2016/8/19 刚进入界面程序崩溃，空指针； 
                     String marketOpenTime = createMarketOpenTime(product, context);
-                    if(!TextUtils.isDigitsOnly(marketOpenTime)){
+                    if (!TextUtils.isDigitsOnly(marketOpenTime)) {
                         mMarketOpenTime.setText(marketOpenTime);
-                    }else{
+                    } else {
                         mMarketOpenTime.setText("开市时间");
                     }
                 } else {
@@ -321,8 +321,8 @@ public class HomeFragment extends BaseFragment {
 
             private String createMarketOpenTime(Product product, Context context) {
                 String timeLine = product.getTimeline();
-                Log.d(TAG," createMarketOpenTime"+ timeLine);
-                if(!TextUtils.isEmpty(timeLine)){
+                Log.d(TAG, " createMarketOpenTime" + timeLine);
+                if (!TextUtils.isEmpty(timeLine)) {
                     String[] timeSplit = timeLine.split(";");
                     String startTime = timeSplit[0];
                     String endTime = timeSplit[timeSplit.length - 1];

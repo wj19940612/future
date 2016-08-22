@@ -40,6 +40,7 @@ public class APIBase extends RequestManager {
         mUri = uri;
         mApiParams = apiParams;
         mMethod = Request.Method.POST;
+        mTag = "";
     }
 
     public APIBase setTag(String tag) {

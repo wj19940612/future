@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.view.market;
+package com.jnhyxx.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,11 +26,7 @@ public abstract class ChartView extends View {
         TEXT("#A8A8A8"),
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
-        GREEN("#08BA42"),
-        RED("#F3293B"),
         BLUE("#358CF3"),
-        ORANGE("#F27A00"),
-        PURPLE("#AE4085"),
         YELLOW("#EAC281");
 
         private String value;
@@ -55,7 +50,7 @@ public abstract class ChartView extends View {
     private static final int FONT_SIZE_DP = 8;
     private static final int FONT_BIG_SIZE_DP = 9;
     private static final int TEXT_MARGIN_WITH_LINE_DP = 5;
-    private static final int RECT_PADDING_DP = 4;
+    private static final int RECT_PADDING_DP = 3;
     private static final int MIDDLE_EXTRA_SPACE_DP = 10;
     private static final int HEIGHT_TIME_LINE_DP = 24;
     private static final float RATIO_OF_TOP = 0.73f;
@@ -75,15 +70,17 @@ public abstract class ChartView extends View {
     protected ChartSettings mSettings;
 
     protected float mFontSize;
-    protected float mBigFontSize;
     protected int mFontHeight;
-    protected int mBigFontHeight;
-    protected int mPriceAreaWidth;
-
     protected float mOffset4CenterText; // center y of text + this will draw the text in center you want
-    protected int mTextMargin; // The margin between text and baseline
-    protected int mRectPadding;
+    protected float mBigFontSize;
+    protected int mBigFontHeight;
+    protected float mOffset4CenterBigText;
+
     protected int mMiddleExtraSpace; // The middle space between two parts
+    protected int mTextMargin; // The margin between text and baseline
+
+    protected int mXRectPadding;
+    private int mYXRectPadding;
     private int mTimeLineHeight;
     private int mCenterPartHeight;
 
@@ -117,21 +114,31 @@ public abstract class ChartView extends View {
         mHandler = new ChartHandler();
 
         mSettings = new ChartSettings();
+
+        // text font
         mFontSize = sp2Px(FONT_SIZE_DP);
-        mBigFontSize = sp2Px(FONT_BIG_SIZE_DP);
         sPaint.setTextSize(mFontSize);
         mFontMetrics = sPaint.getFontMetrics();
         sPaint.getFontMetrics(mFontMetrics);
         mFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
-        sPaint.setTextSize(mBigFontSize);
-        mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
         mOffset4CenterText = calOffsetY4TextCenter();
+
+        // big text font
+        mBigFontSize = sp2Px(FONT_BIG_SIZE_DP);
+        sPaint.setTextSize(mBigFontSize);
+        sPaint.getFontMetrics(mFontMetrics);
+        mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
+        mOffset4CenterBigText = calOffsetY4TextCenter();
+
+        // constant
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
-        mRectPadding = (int) dp2Px(RECT_PADDING_DP);
+        mXRectPadding = (int) dp2Px(RECT_PADDING_DP);
+        mYXRectPadding = mXRectPadding / 2;
         mMiddleExtraSpace = (int) dp2Px(MIDDLE_EXTRA_SPACE_DP);
         mTimeLineHeight = (int) dp2Px(HEIGHT_TIME_LINE_DP);
         mCenterPartHeight = mMiddleExtraSpace + mTimeLineHeight;
 
+        // gesture
         mTouchIndex = -1;
         mAction = Action.NONE;
     }
@@ -148,8 +155,13 @@ public abstract class ChartView extends View {
         }
     }
 
+    public ChartSettings getSettings() {
+        return mSettings;
+    }
+
     public void setSettings(ChartSettings settings) {
         mSettings = settings;
+        redraw();
     }
 
     protected void setBaseLinePaint(Paint paint) {
@@ -191,7 +203,10 @@ public abstract class ChartView extends View {
                     width, getBottomPartHeight(), canvas);
         }
 
-        drawRealTimeData(mSettings.isIndexesEnable(), left, top, width, topPartHeight, canvas);
+        drawRealTimeData(mSettings.isIndexesEnable(),
+                left, top, width, topPartHeight,
+                left, top + getTopPartHeight() + mCenterPartHeight, width, getBottomPartHeight(),
+                canvas);
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
@@ -310,14 +325,14 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected void drawTitleAboveBaselines(int left, int top, int top2, int touchIndex, Canvas canvas) {
+
     }
 
     protected abstract void calculateBaseLines(float[] baselines);
 
     protected void calculateIndexesBaseLines(float[] indexesBaseLines) {
-    }
 
-    ;
+    }
 
     /**
      * draw top baselines
@@ -329,43 +344,8 @@ public abstract class ChartView extends View {
      * @param height    the total height of several top baselines without text and textMargin
      * @param canvas
      */
-    protected void drawBaseLines(float[] baselines, int left, float top, int width, int height,
-                                 Canvas canvas) {
-        if (baselines == null || baselines.length < 2) return;
-
-        int verticalInterval = height / (baselines.length - 1);
-        mPriceAreaWidth = (int) calculatePriceWidth();
-        for (int i = 0; i < baselines.length; i++) {
-            int baselineWidth = width;
-            if (i > 0 && i < baselines.length - 1) {
-                baselineWidth -= mPriceAreaWidth;
-            }
-            Path path = getPath();
-            path.moveTo(left, top);
-            path.lineTo(left + baselineWidth, top);
-            setBaseLinePaint(sPaint);
-            canvas.drawPath(path, sPaint);
-
-            if (i % 2 == 0) {
-                setDefaultTextPaint(sPaint);
-                String baseLineValue = formatNumber(baselines[i]);
-                float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
-                float y = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
-                canvas.drawText(baseLineValue, x, y, sPaint);
-            }
-            if (i == baselines.length - 1) { // last baseline
-                setDefaultTextPaint(sPaint);
-                String baseLineValue = formatNumber(baselines[i]);
-                float textWidth = sPaint.measureText(baseLineValue);
-                float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
-                float y = top - mTextMargin - mFontHeight / 2 + mOffset4CenterText;
-                canvas.drawText(baseLineValue, x, y, sPaint);
-            }
-
-            top += verticalInterval;
-        }
-    }
+    protected abstract void drawBaseLines(float[] baselines, int left, float top, int width, int height,
+                                          Canvas canvas);
 
     /**
      * draw bottom indexes baselines
@@ -384,6 +364,7 @@ public abstract class ChartView extends View {
 
     protected abstract void drawRealTimeData(boolean indexesEnable,
                                              int left, int top, int width, int height,
+                                             int left2, int top2, int width2, int height2,
                                              Canvas canvas);
 
     /**
@@ -477,6 +458,7 @@ public abstract class ChartView extends View {
 
     /**
      * this is the inverse operation of getCharX(index)
+     *
      * @param x
      * @return
      */
@@ -502,24 +484,17 @@ public abstract class ChartView extends View {
      * this method is used to calculate a rectF for the text that will be drew
      * we add some left-right padding for the text, just for nice
      *
-     * @param textX left of text
-     * @param textY y of text baseline
+     * @param textX     left of text
+     * @param textY     y of text baseline
      * @param textWidth
      * @return
      */
     protected RectF getBigFontBgRectF(float textX, float textY, float textWidth) {
-        mRectF.left = textX - mRectPadding;
-        mRectF.top = textY + mFontMetrics.top;
-        mRectF.right = textX + textWidth + mRectPadding;
-        mRectF.bottom = textY + mFontMetrics.bottom;
+        mRectF.left = textX - mXRectPadding;
+        mRectF.top = textY + mFontMetrics.top - mYXRectPadding;
+        mRectF.right = textX + textWidth + mXRectPadding;
+        mRectF.bottom = textY + mFontMetrics.bottom + mYXRectPadding;
         return mRectF;
-    }
-
-    private float calculatePriceWidth() {
-        String preClosePrice = formatNumber(mSettings.getPreClosePrice());
-        sPaint.setTextSize(mBigFontSize);
-        float priceWidth = sPaint.measureText(preClosePrice);
-        return getBigFontBgRectF(0, 0, priceWidth).width();
     }
 
     protected float dp2Px(float value) {
@@ -551,122 +526,5 @@ public abstract class ChartView extends View {
 
     protected void redraw() {
         invalidate(0, 0, getWidth(), getHeight());
-    }
-
-    public static class ChartSettings {
-
-        private float[] mBaseLines;
-        private float[] mIndexesBaseLines;
-        private boolean mIndexesEnable;
-        private int mNumberScale;
-        private int mXAxis;
-        private float mPreClosePrice;
-        private float mLimitUpPercent;
-        private String mOpenMarketTimes;
-        private String mDisplayMarketTimes;
-
-        public ChartSettings() {
-            mBaseLines = new float[0];
-            mIndexesBaseLines = new float[0];
-            mIndexesEnable = false;
-            mNumberScale = 2;
-            mXAxis = 0;
-            mPreClosePrice = 0;
-            mLimitUpPercent = 0;
-        }
-
-        public ChartSettings setLimitUpPercent(float limitUpPercent) {
-            mLimitUpPercent = limitUpPercent;
-            return this;
-        }
-
-        public ChartSettings setOpenMarketTimes(String openMarketTimes) {
-            mOpenMarketTimes = openMarketTimes;
-            return this;
-        }
-
-        public String[] getOpenMarketTimes() {
-            String[] result = new String[0];
-            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
-                return mOpenMarketTimes.split(";");
-            }
-            return result;
-        }
-
-        public ChartSettings setDisplayMarketTimes(String displayMarketTimes) {
-            mDisplayMarketTimes = displayMarketTimes;
-            return this;
-        }
-
-        public float getLimitUpPercent() {
-            return mLimitUpPercent;
-        }
-
-        public float getLimitUp() {
-            return mPreClosePrice * mLimitUpPercent;
-        }
-
-        public float getPreClosePrice() {
-            return mPreClosePrice;
-        }
-
-        public ChartSettings setPreClosePrice(float preClosePrice) {
-            mPreClosePrice = preClosePrice;
-            return this;
-        }
-
-        public float[] getBaseLines() {
-            return mBaseLines;
-        }
-
-        public ChartSettings setBaseLines(int baseLines) {
-            if (baseLines < 2) {
-                baseLines = 2;
-            }
-            if (baseLines % 2 != 0) {
-                baseLines++;
-            }
-            mBaseLines = new float[baseLines];
-            return this;
-        }
-
-        public float[] getIndexesBaseLines() {
-            return mIndexesBaseLines;
-        }
-
-        public ChartSettings setIndexesBaseLines(int indexesBaseLines) {
-            if (indexesBaseLines < 2) {
-                indexesBaseLines = 2;
-            }
-            mIndexesBaseLines = new float[indexesBaseLines];
-            return this;
-        }
-
-        public boolean isIndexesEnable() {
-            return mIndexesEnable;
-        }
-
-        public ChartSettings setIndexesEnable(boolean indexesEnable) {
-            mIndexesEnable = indexesEnable;
-            return this;
-        }
-
-        public int getNumberScale() {
-            return mNumberScale;
-        }
-
-        public ChartSettings setNumberScale(int numberScale) {
-            mNumberScale = numberScale;
-            return this;
-        }
-
-        public int getXAxis() {
-            return mXAxis;
-        }
-
-        public ChartSettings setXAxis(int XAxis) {
-            mXAxis = XAxis;
-            return this;
-        }
     }
 }

@@ -171,5 +171,7 @@
     <dimen name="sp_50">50sp</dimen>
 
 
+
+    <dimen name="market_status_area_height">77dp</dimen>
 </resources>
 

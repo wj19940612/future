@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.net;
 
+import android.util.Log;
+
 import com.android.volley.NetworkError;
 import com.android.volley.ParseError;
 import com.android.volley.ServerError;
@@ -14,6 +16,7 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onSuccess(T t) {
+        Log.d(getTag(), "onSuccess: " + t.toString());
         onReceive(t);
     }
 

@@ -1,17 +1,19 @@
-package com.jnhyxx.html5.domain.market;
+package com.jnhyxx.chart.domain;
 
 public class TrendViewData {
+
+    public static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
     /**
      * cu1610,37230.0,20160815101000
      */
 
-    private String instrumentId;
+    private String contractId;
     private float lastPrice;
     private String date;
 
-    public TrendViewData(String instrumentId, float lastPrice, String date) {
-        this.instrumentId = instrumentId;
+    public TrendViewData(String contractId, float lastPrice, String date) {
+        this.contractId = contractId;
         this.lastPrice = lastPrice;
         this.date = date;
     }
@@ -23,12 +25,12 @@ public class TrendViewData {
         return "";
     }
 
-    public String getInstrumentId() {
-        return instrumentId;
+    public String getContractId() {
+        return contractId;
     }
 
-    public void setInstrumentId(String instrumentId) {
-        this.instrumentId = instrumentId;
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 
     public float getLastPrice() {

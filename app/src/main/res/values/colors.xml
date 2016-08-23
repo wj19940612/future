@@ -24,4 +24,5 @@
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>
     <color name="account_top_blue_text">#358CF3</color>
+    <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 </resources>

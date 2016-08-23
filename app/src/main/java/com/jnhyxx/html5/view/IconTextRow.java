@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,7 +65,7 @@ public class IconTextRow extends LinearLayout {
 
         LayoutParams params;
         if (mLeftIcon != null) {
-            params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, padding, 0);
             ImageView leftIcon = new ImageView(getContext());
             leftIcon.setImageDrawable(mLeftIcon);

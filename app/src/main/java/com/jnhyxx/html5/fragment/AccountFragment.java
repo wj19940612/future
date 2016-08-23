@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -50,20 +51,27 @@ public class AccountFragment extends BaseFragment {
     //注册
     @BindView(R.id.signUp)
     TextView mSignUp;
+    //消息中心的未读消息数
+    @BindView(R.id.account_tv_message_number)
+    TextView mMessageNumber;
     //消息中心
     @BindView(R.id.messageCenter)
-    IconTextRow mMessageCenter;
+//    IconTextRow mMessageCenter;
+            RelativeLayout mMessageCenter;
     //交易明细
     @BindView(R.id.fundDetail)
-    IconTextRow mFundDetail;
+//    IconTextRow mFundDetail;
+            RelativeLayout mFundDetail;
 
     //积分明细
 //    @BindView(R.id.scoreDetail)
 //    IconTextRow mScoreDetail;
     @BindView(R.id.personalInfo)
-    IconTextRow mPersonalInfo;
+//    IconTextRow mPersonalInfo;
+            RelativeLayout mPersonalInfo;
     @BindView(R.id.paidToPromote)
-    IconTextRow mPaidToPromote;
+//    IconTextRow mPaidToPromote;
+            RelativeLayout mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
     //登陆和注册按钮的父容器
@@ -155,6 +163,7 @@ public class AccountFragment extends BaseFragment {
             case R.id.signInButton:
                 Launcher.with(getActivity(), SignInActivity.class).execute();
                 break;
+            //zhuce
             case R.id.signUp:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;

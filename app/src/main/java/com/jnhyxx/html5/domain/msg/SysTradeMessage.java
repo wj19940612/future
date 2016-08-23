@@ -1,7 +1,10 @@
 package com.jnhyxx.html5.domain.msg;
 
-public class SysTradeMessage {
+import java.io.Serializable;
 
+public class SysTradeMessage implements Serializable{
+
+    private static final long serialVersionUID = 6318735334000377658L;
     /**
      * id : 96
      * title :  关于香港交易所延迟开市的通知
@@ -10,7 +13,6 @@ public class SysTradeMessage {
      * createDate : 2016-08-02 10:08:32
      * updateDate : 2016-08-02 10:11:49
      */
-
     private int id;
     private String title;
     private String content;

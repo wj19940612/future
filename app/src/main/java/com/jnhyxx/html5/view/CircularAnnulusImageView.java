@@ -27,12 +27,15 @@ import com.jnhyxx.html5.R;
 public class CircularAnnulusImageView extends ImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
+    //图片的设置
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
+    //colorDrawable的属性
     private static final int COLORDRAWABLE_DIMENSION = 1;
-
+    //外圆环的默认宽度
     private static final int DEFAULT_BORDER_WIDTH = 0;
+    //外圆环的默认颜色z
     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;
-
+    //内圆的正方形
     private final RectF mDrawableRect = new RectF();
     private final RectF mBorderRect = new RectF();
 
@@ -40,6 +43,7 @@ public class CircularAnnulusImageView extends ImageView {
     private final Paint mBitmapPaint = new Paint();
     private final Paint mBorderPaint = new Paint();
 
+    //外圆环的颜色，可通过xml设置
     private int mBorderColor = DEFAULT_BORDER_COLOR;
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
 
@@ -66,12 +70,12 @@ public class CircularAnnulusImageView extends ImageView {
         super(context, attrs, defStyle);
         super.setScaleType(SCALE_TYPE);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircularAnnulusImageView, defStyle, 0);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularAnnulusImageView, defStyle, 0);
 
-        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircularAnnulusImageView_border_width, DEFAULT_BORDER_WIDTH);
-        mBorderColor = a.getColor(R.styleable.CircularAnnulusImageView_border_color, DEFAULT_BORDER_COLOR);
+        mBorderWidth = typedArray.getDimensionPixelSize(R.styleable.CircularAnnulusImageView_border_width, DEFAULT_BORDER_WIDTH);
+        mBorderColor = typedArray.getColor(R.styleable.CircularAnnulusImageView_border_color, DEFAULT_BORDER_COLOR);
 
-        a.recycle();
+        typedArray.recycle();
 
         mReady = true;
 

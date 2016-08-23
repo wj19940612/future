@@ -87,6 +87,10 @@ dependencies {
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile project(':SlidingMenu')
+    compile project(':PushSDK')
+    compile project(':kutils')
+    compile project(':chart')
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
@@ -94,8 +98,4 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     compile 'com.android.support:support-v4:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
-    compile project(':SlidingMenu')
-    compile project(':PushSDK')
-    compile project(':kutils')
-    compile project(':chart')
 }

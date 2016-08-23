@@ -44,4 +44,9 @@
         <attr name="backFeature" format="boolean"/>
         <attr name="backIcon" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="OrderConfigurationSelector">
+        <attr name="maximum" format="integer"/>
+        <attr name="android:textSize"/>
+    </declare-styleable>
 </resources>

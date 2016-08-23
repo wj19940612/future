@@ -209,4 +209,10 @@
     <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
     <string name="next_trade_time_is">下次交易时间 %1$s</string>
 
+    <!-- Trade page: place an order -->
+    <string name="touch_stop_loss">触发止损</string>
+    <string name="touch_stop_profit">触发止盈</string>
+    <string name="total_to_be_paid">合计支付</string>
+    <string name="last_bid_ask_price">最新买入价</string>
+
 </resources>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.TradeActivity">
 
     <com.jnhyxx.html5.view.TitleBar
@@ -17,190 +16,206 @@
         app:rightImage="@drawable/ic_product_menu"
         app:rightVisible="true"/>
 
-    <com.jnhyxx.html5.view.TradePageHeader
-        android:id="@+id/tradePageHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/splitBlock"/>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bluePrimary"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:layout_height="match_parent"
+        android:layout_below="@id/titleBar"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/openPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textColor="#A8A8A8"
-            android:textSize="11sp"
-            tools:text="今开 45.6511"/>
+        <com.jnhyxx.html5.view.TradePageHeader
+            android:id="@+id/tradePageHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/preClosePrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textColor="#A8A8A8"
-            android:textSize="11sp"
-            tools:text="昨收 45.6511"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/splitBlock"/>
 
-        <TextView
-            android:id="@+id/highestPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textColor="#A8A8A8"
-            android:textSize="11sp"
-            tools:text="最高 45.6511"/>
-
-        <TextView
-            android:id="@+id/lowestPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:maxLines="1"
-            android:textColor="#A8A8A8"
-            android:textSize="11sp"
-            tools:text="最低 45.6511"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
-
-    <com.jnhyxx.html5.view.ChartContainer
-        android:id="@+id/chartContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/bluePrimary"/>
-
-    <LinearLayout
-        android:id="@+id/marketCloseArea"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/market_status_area_height"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_market_time_status"
-            android:gravity="center"
-            android:padding="4dp"
-            android:textColor="#666666"
-            tools:text="@string/market_close"/>
-
-        <TextView
-            android:id="@+id/nextTradeTime"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:background="@color/bluePrimary"
-            android:gravity="center"
-            android:text="@string/next_trade_time_is"
-            android:textColor="#666666"
-            android:textSize="15sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/marketOpenArea"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/market_status_area_height"
-        android:background="@color/bluePrimary"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/marketTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_market_time_status"
-            android:gravity="center"
-            android:padding="3dp"
-            android:textColor="#666666"
-            android:textSize="12sp"
-            tools:text="@string/prompt_holding_position_time_to"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:paddingRight="16dp"
+            android:paddingTop="10dp">
 
             <TextView
-                android:id="@+id/lastPrice"
-                android:layout_width="wrap_content"
+                android:id="@+id/openPrice"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textColor="@color/redPrimary"
-                android:textSize="30sp"
-                tools:text="45.89"/>
-
-            <TextView
-                android:id="@+id/priceChange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@id/lastPrice"
-                android:textColor="@color/redPrimary"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="#A8A8A8"
                 android:textSize="11sp"
-                tools:text="+0.15\n+0.33%"/>
+                tools:text="今开 45.6511"/>
 
-            <com.jnhyxx.html5.view.BuySellVolumeLayout
-                android:id="@+id/buySellVolumeLayout"
+            <TextView
+                android:id="@+id/preClosePrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="#A8A8A8"
+                android:textSize="11sp"
+                tools:text="昨收 45.6511"/>
+
+            <TextView
+                android:id="@+id/highestPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="#A8A8A8"
+                android:textSize="11sp"
+                tools:text="最高 45.6511"/>
+
+            <TextView
+                android:id="@+id/lowestPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:maxLines="1"
+                android:textColor="#A8A8A8"
+                android:textSize="11sp"
+                tools:text="最低 45.6511"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/splitLineDark"/>
+
+        <com.jnhyxx.html5.view.ChartContainer
+            android:id="@+id/chartContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/bluePrimary"/>
+
+        <LinearLayout
+            android:id="@+id/marketCloseArea"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/market_status_area_height"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/priceChange"
-                android:orientation="vertical"/>
-        </RelativeLayout>
+                android:background="@drawable/bg_market_time_status"
+                android:gravity="center"
+                android:padding="4dp"
+                android:textColor="#666666"
+                tools:text="@string/market_close"/>
+
+            <TextView
+                android:id="@+id/nextTradeTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bluePrimary"
+                android:gravity="center"
+                android:text="@string/next_trade_time_is"
+                android:textColor="#666666"
+                android:textSize="15sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/marketOpenArea"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/market_status_area_height"
+            android:background="@color/bluePrimary"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/marketTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_market_time_status"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                tools:text="@string/prompt_holding_position_time_to"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:id="@+id/lastPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/redPrimary"
+                    android:textSize="30sp"
+                    tools:text="45.89"/>
+
+                <TextView
+                    android:id="@+id/priceChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/lastPrice"
+                    android:textColor="@color/redPrimary"
+                    android:textSize="11sp"
+                    tools:text="+0.15\n+0.33%"/>
+
+                <com.jnhyxx.html5.view.BuySellVolumeLayout
+                    android:id="@+id/buySellVolumeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/priceChange"
+                    android:orientation="vertical"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/buyLongBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_red_primary"
+                android:gravity="center"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:text="@string/buy_long"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/sellShortBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_green_primary"
+                android:gravity="center"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:text="@string/sell_short"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/placeOrderContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/buyLongBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_red_primary"
-            android:gravity="center"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
-            android:text="@string/buy_long"
-            android:textColor="@android:color/white"
-            android:textSize="17sp"/>
-
-        <TextView
-            android:id="@+id/sellShortBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_green_primary"
-            android:gravity="center"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
-            android:text="@string/sell_short"
-            android:textColor="@android:color/white"
-            android:textSize="17sp"/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/titleBar"
+        android:paddingTop="@dimen/trade_header_height"
+        android:visibility="gone">
+    </FrameLayout>
+</RelativeLayout>

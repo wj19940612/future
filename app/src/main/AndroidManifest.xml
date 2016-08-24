@@ -60,7 +60,7 @@
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- wechat callback -->
         <activity
@@ -120,11 +120,12 @@
         <activity
             android:name=".activity.order.OrderActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.TradeActivity"></activity>
-        <activity android:name=".activity.order.OrderDetailActivity"></activity>
+        <activity android:name=".activity.TradeActivity" />
+        <activity android:name=".activity.order.OrderDetailActivity" />
         <activity
             android:name=".activity.account.MessageCenterListItemInfoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.account.AboutUsActivity"></activity>
     </application>
 
 </manifest>

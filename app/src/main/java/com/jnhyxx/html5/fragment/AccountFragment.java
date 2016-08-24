@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.ProfileActivity;
@@ -201,17 +202,19 @@ public class AccountFragment extends BaseFragment {
 //            case R.id.scoreDetail:
 //                openFundDetailPage(false);
 //                break;
+            //关于我们
             case R.id.personalInfo:
-                API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Callback2<Resp<ProfileSummary>, ProfileSummary>() {
-                            @Override
-                            public void onRespSuccess(ProfileSummary profileSummary) {
-                                Launcher.with(getActivity(), ProfileActivity.class)
-                                        .putExtra(Launcher.EX_PAYLOAD, profileSummary)
-                                        .execute();
-                            }
-                        }).post();
-                break;
+//                API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
+//                        .setCallback(new Callback2<Resp<ProfileSummary>, ProfileSummary>() {
+//                            @Override
+//                            public void onRespSuccess(ProfileSummary profileSummary) {
+//                                Launcher.with(getActivity(), ProfileActivity.class)
+//                                        .putExtra(Launcher.EX_PAYLOAD, profileSummary)
+//                                        .execute();
+//                            }
+//                        }).post();
+//                break;
+                Launcher.with(getActivity(), AboutUsActivity.class).execute();
             case R.id.paidToPromote:
                 break;
         }

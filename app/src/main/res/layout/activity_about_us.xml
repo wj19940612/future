@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about_us"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDF0F5"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.AboutUsActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/account_aboutus" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/activity_about_us_tv_versionName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="@string/app_name" />
+
+    <!--<ExpandableListView-->
+    <!--android:id="@+id/activity_about_us_expand_listView"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <ScrollView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_company_info"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_company_info" />
+
+                <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/activity_about_us_tv_company_info"
+                style="@style/AboutAsEntryBottomTextViewStyle"
+                android:text="@string/account_about_us_company_info_child" />
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_manager_team"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_manager_team" />
+
+                <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/activity_about_us_tv_manager_team"
+                style="@style/AboutAsEntryBottomTextViewStyle"
+                android:text="@string/account_about_us_manager_team_child" />
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_company_culture"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_company_culture" />
+
+                <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/activity_about_us_tv_company_culture"
+                style="@style/AboutAsEntryBottomTextViewStyle"
+                android:text="@string/account_about_us_company_culture_child" />
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_collaborate_case"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_collaborate_case" />
+
+                <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/activity_about_us_tv_collaborate_case"
+                style="@style/AboutAsEntryBottomTextViewStyle"
+                android:text="@string/account_about_us_collaborate_case_child" />
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_company_telphone"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_company_telphone" />
+
+                <TextView
+                    android:id="@+id/account_about_us_activity_expandlist_tv_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/account_about_us_company_telphone_number"
+                    android:textColor="@android:color/holo_red_dark" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/activity_about_us_rl_service_qq"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:text="@string/account_about_us_service_qq" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/account_about_us_service_qq_number"
+                    android:textColor="@android:color/holo_red_dark" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

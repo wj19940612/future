@@ -70,11 +70,11 @@ public class APIBase extends RequestManager {
         synchronized (sCurrentUrls) {
             if (TextUtils.isEmpty(mHost)) {
                 mHost = HOST;
+                // TODO: 2016/8/23 切换到测试平台;
+                //测试平台
+//            mHost = TEST_HOST;
             }
 
-            // TODO: 2016/8/23 切换到测试平台;
-            //测试平台
-//            mHost = TEST_HOST;
             String url = new StringBuilder(mHost).append(mUri).toString();
 
             if (sCurrentUrls.add(url)) {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!--我的界面的消息中心界面的交易提醒的item样式-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/account_trade_warn_image_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/account_trade_warn_list_icon_bad" />
+
+        <TextView
+            android:id="@+id/account_trade_warn_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/account_trade_warn_image_status"
+            android:text="交易提醒通知"
+            android:textColor="#262626" />
+
+        <TextView
+            android:id="@+id/account_trade_warn_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/account_trade_warn_tv_title"
+            android:layout_alignParentRight="true"
+            android:text="2016-12-12 12:12:12"
+            android:textColor="#ABABAB"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:paddingBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="10dp"
+        android:text="几十分开始放假看会电视看见了丰厚的设计开发和道具收费了深刻的复合接口上的号放假了快速点击返回"
+        android:textColor="#666666"
+        android:textSize="12dp" />
+</LinearLayout>

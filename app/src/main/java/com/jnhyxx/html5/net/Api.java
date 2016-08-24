@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.net;
 
+import android.util.Log;
+
 import com.jnhyxx.html5.App;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -24,6 +26,7 @@ public class API extends APIBase {
 
     private API(String uri, ApiParams apiParams) {
         super(uri, apiParams);
+        Log.d(API.class.getSimpleName(),"所上传的网址");
     }
 
     public API(String uri, ApiParams apiParams, int version) {

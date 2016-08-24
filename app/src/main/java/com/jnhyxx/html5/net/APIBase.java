@@ -21,6 +21,8 @@ import static android.content.ContentValues.TAG;
 public class APIBase extends RequestManager {
 
     public final static String HOST = BuildConfig.API_HOST;
+    //测试平台的网址
+    public final static String TEST_HOST = "http://newtest.jnhyxx.com";
 
     private static Set<String> sCurrentUrls = new HashSet<>();
 
@@ -66,7 +68,13 @@ public class APIBase extends RequestManager {
 
     public void post() {
         synchronized (sCurrentUrls) {
-            if (TextUtils.isEmpty(mHost)) mHost = HOST;
+            if (TextUtils.isEmpty(mHost)) {
+                mHost = HOST;
+            }
+
+            // TODO: 2016/8/23 切换到测试平台;
+            //测试平台
+//            mHost = TEST_HOST;
             String url = new StringBuilder(mHost).append(mUri).toString();
 
             if (sCurrentUrls.add(url)) {

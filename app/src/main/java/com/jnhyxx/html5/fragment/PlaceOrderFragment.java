@@ -7,15 +7,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -23,8 +25,30 @@ public class PlaceOrderFragment extends BaseFragment {
 
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
+    @BindView(R.id.lastPrice)
+    TextView mLastPrice;
+    @BindView(R.id.priceChange)
+    TextView mPriceChange;
+    @BindView(R.id.buySellVolumeLayout)
+    BuySellVolumeLayout mBuySellVolumeLayout;
+    @BindView(R.id.touchStopLossSelector)
+    OrderConfigurationSelector mTouchStopLossSelector;
+    @BindView(R.id.touchStopProfitSelector)
+    OrderConfigurationSelector mTouchStopProfitSelector;
+    @BindView(R.id.margin)
+    TextView mMargin;
+    @BindView(R.id.tradeFee)
+    TextView mTradeFee;
+    @BindView(R.id.rateAndMarketTime)
+    TextView mRateAndMarketTime;
+    @BindView(R.id.TotalTobePaid)
+    TextView mTotalTobePaid;
+    @BindView(R.id.lastBidAskPrice)
+    TextView mLastBidAskPrice;
+    @BindView(R.id.confirmButton)
+    TextView mConfirmButton;
 
-    private OnBuyBtnClickListener mListener;
+    private Callback mCallback;
 
     private static final String TYPE = "fragmentType";
     public static final int TYPE_BUY_LONG = 0;
@@ -46,8 +70,8 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnBuyBtnClickListener) {
-            mListener = (OnBuyBtnClickListener) context;
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnBuyBtnClickListener");
@@ -73,41 +97,7 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final List<Test> testList = new ArrayList<>();
-        testList.add(new Test("1手"));
-        testList.add(new Test("2手"));
-        testList.add(new Test("5手"));
-        testList.add(new Test("10手"));
-        testList.add(new Test("15手"));
-        testList.add(new Test("15手"));
-        testList.add(new Test("15手"));
-        mTradeQuantitySelector.setOrderConfigurationList(testList);
-        mTradeQuantitySelector.setOnItemClickListener(new OrderConfigurationSelector.OnItemClickListener() {
-            @Override
-            public void onItemClick(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
-                Log.d("TEST", "onItemClick: " + position);
-            }
-        });
-    }
 
-    private class Test implements OrderConfigurationSelector.OrderConfiguration {
-
-        private String value;
-
-        public Test(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String getValue() {
-            return value;
-        }
-    }
-
-    public void onButtonPressed() {
-        if (mListener != null) {
-            mListener.onBuyBtnClick();
-        }
     }
 
     @Override
@@ -119,10 +109,51 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
     }
 
-    public interface OnBuyBtnClickListener {
-        void onBuyBtnClick();
+    @OnClick(R.id.confirmButton)
+    public void onClick() {
+        if (mCallback != null) {
+            mCallback.onConfirmBtnClick();
+        }
+    }
+
+    public interface Callback {
+        void onConfirmBtnClick();
+        void onHideAnimEnd();
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, final boolean enter, int nextAnim) {
+        Animation animation;
+        Log.d("TEST", "onCreateAnimation: " + enter);
+
+        if (enter) {
+            animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_bottom);
+        } else {
+            animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_bottom);
+        }
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d("TEST", "onAnimationStart: ");
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Log.d("TEST", "onAnimationEnd: ");
+                if (!enter && mCallback != null) {
+                    mCallback.onHideAnimEnd();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        return animation;
     }
 }

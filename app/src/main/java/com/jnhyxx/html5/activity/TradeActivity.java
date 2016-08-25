@@ -226,11 +226,6 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         hidePlaceOrderFragment();
     }
 
-    @Override
-    public void onHideAnimEnd() {
-        mPlaceOrderContainer.setVisibility(View.GONE);
-    }
-
     static class MenuAdapter extends ArrayAdapter<Product> {
 
         public MenuAdapter(Context context) {

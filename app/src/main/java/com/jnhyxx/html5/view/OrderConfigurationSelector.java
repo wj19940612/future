@@ -286,6 +286,7 @@ public class OrderConfigurationSelector extends LinearLayout {
     private OnClickListener mListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (mOrderConfigurationList == null || mOrderConfigurationList.size() == 0) return;
             int position = (int) view.getTag(KEY_POSITION);
             if (position == mMaximum - 1 && mNumberOfItems > mMaximum) {
                 showPopupWindow(view);

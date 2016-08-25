@@ -3,18 +3,25 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/bluePrimary"
+              android:background="@android:color/transparent"
               android:clickable="true"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.fragment.PlaceOrderFragment">
 
+    <View
+        android:id="@+id/backClickArea"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/trade_header_height"
+        android:background="@android:color/transparent"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="18dp"
+        android:background="@color/bluePrimary"
+        android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="18dp">
+        android:paddingTop="16dp">
 
         <TextView
             android:id="@+id/lastPrice"
@@ -48,6 +55,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bluePrimary"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -67,8 +75,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:paddingBottom="18dp"
-                android:paddingTop="18dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
                 android:text="@string/trade_quantity"
                 android:textColor="#A8A8A8"/>
 
@@ -90,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="14dp"
-            android:paddingTop="18dp"
+            android:paddingTop="16dp"
             android:text="@string/touch_stop_loss"
             android:textColor="#A8A8A8"/>
 
@@ -104,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="14dp"
-            android:paddingTop="18dp"
+            android:paddingTop="16dp"
             android:text="@string/touch_stop_profit"
             android:textColor="#A8A8A8"/>
 
@@ -130,8 +138,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="18dp"
-            android:paddingTop="18dp">
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -154,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="18dp">
+            android:paddingBottom="16dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -190,10 +198,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/bluePrimary"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="18dp">
+        android:paddingTop="16dp">
 
         <TextView
             android:layout_width="0dp"

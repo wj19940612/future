@@ -3,7 +3,6 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 
@@ -59,6 +59,8 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private Unbinder mBinder;
 
+    private BlurEngine mBlurEngine;
+
     public static PlaceOrderFragment newInstance(int type) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
@@ -89,6 +91,8 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mBlurEngine = new BlurEngine(container, R.color.blackHalfTransparent);
+
         View view = inflater.inflate(R.layout.fragment_place_order, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
@@ -97,12 +101,12 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mBlurEngine.onDestroyView();
         mBinder.unbind();
     }
 
@@ -121,38 +125,17 @@ public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
         void onConfirmBtnClick();
-        void onHideAnimEnd();
     }
 
     @Override
     public Animation onCreateAnimation(int transit, final boolean enter, int nextAnim) {
         Animation animation;
-        Log.d("TEST", "onCreateAnimation: " + enter);
 
         if (enter) {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_bottom);
         } else {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_bottom);
         }
-
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Log.d("TEST", "onAnimationStart: ");
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Log.d("TEST", "onAnimationEnd: ");
-                if (!enter && mCallback != null) {
-                    mCallback.onHideAnimEnd();
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
 
         return animation;
     }

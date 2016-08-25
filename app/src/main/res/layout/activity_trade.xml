@@ -215,15 +215,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/titleBar"
-        android:background="@color/blackHalfTransparent"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/trade_header_height"
-        android:visibility="gone">
-        <!--<fragment-->
-            <!--android:id="@+id/placeOrderFragment"-->
-            <!--android:name="com.jnhyxx.html5.fragment.PlaceOrderFragment"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--tools:layout="@layout/fragment_place_order"/>-->
-    </FrameLayout>
+        android:orientation="vertical"/>
 </RelativeLayout>

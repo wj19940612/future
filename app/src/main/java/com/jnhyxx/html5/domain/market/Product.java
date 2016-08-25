@@ -19,234 +19,95 @@ public class Product implements Serializable, Parcelable {
     public static final int MARKET_STATUS_CLOSE = 0;
     public static final int MARKET_STATUS_OPEN = 1;
 
-    public static final int TAG_NEW = 2;
-    public static final int TAG_HOT = 1;
+    public static final int TAG_NEW = 1;
+    public static final int TAG_HOT = 2;
     public static final int TAG_NONE = 0;
 
+    public static final int IS_DOMESTIC = 1;
+
     /**
-     * id : 1002
-     * imgs : http://jzstock.oss-cn-hangzhou.aliyuncs.com/2016-04-29_marketCL.png
-     * marketCode : CME
-     * commodityName : 美原油
-     * instrumentID : CL1609
-     * instrumentCode : CL
+     * displayMarketTimes : 06:00;07:00;04:58
+     * decimalScale : 0.2
+     * sign : $
+     * fcpInterVal : 20
+     * varietyType : CL
+     * baseline : 2
+     * isDomestic : 0
+     * tags : 0
+     * exchangeId : 9
+     * openMarketTime : 06:00;05:00
+     * varietyId : 10
+     * exchangeStatus : 1
+     * contractsCode : CL1609
+     * advertisement : 来吧
      * currency : USD
-     * currencyName : 美元
-     * currencySign : $
+     * marketPoint : 2
+     * varietyName : 美原油
+     * eachPointMoney : 1000
      * currencyUnit : 美元
-     * multiple : 1000.0
-     * decimalPlaces : 2
-     * commodityDesc :
-     * advertisement : 800元一手，炒原油
-     * vendibility : 1
-     * tag : 1
-     * timeTag : 0
-     * marketId : 14
-     * marketName : 芝加哥商品交易所1
-     * marketStatus : 1
-     * baseline : 6
-     * interval : 0.5
-     * isDoule : 1
-     * scale : 3.0
-     * timeAndNum : 06:00/1381;05:00
-     * nightTimeAndNum :
-     * timeline : 06:00;05:00;
-     * loddyType : null
-     * accountCode : cainiu;score
-     * minPrice : 0.01
-     * rate : 6.6
+     * ratio : 6.65
      */
 
-    private int id;
-    private String imgs;
-    private String marketCode;
-    private String commodityName;
-    private String instrumentID;
-    private String instrumentCode;
-    private String currency;
-    private String currencyName;
-    private String currencySign;
-    private String currencyUnit;
-    private double multiple;
-    private int decimalPlaces;
-    private String commodityDesc;
-    private String advertisement;
-    private int vendibility;
-    private int tag;
-    private int timeTag;
-    private int marketId;
-    private String marketName;
-    private int marketStatus;
+    private String displayMarketTimes;
+    private double decimalScale;
+    private String sign;
+    private double fcpInterVal;
+    private String varietyType;
     private int baseline;
-    private double interval;
-    private int isDoule;
-    private double scale;
-    private String timeAndNum;
-    private String nightTimeAndNum;
-    private String timeline;
-    private int loddyType;
-    private String accountCode;
-    private double minPrice;
-    private double rate;
+    private int isDomestic;
+    private int tags;
+    private int exchangeId;
+    private String openMarketTime;
+    private int varietyId;
+    private int exchangeStatus;
+    private String contractsCode;
+    private String currency;
+    private int marketPoint;
+    private String varietyName;
+    private int eachPointMoney;
+    private String currencyUnit;
+    private double ratio;
 
-    public int getId() {
-        return id;
+    private String advertisement;
+
+    public String getDisplayMarketTimes() {
+        return displayMarketTimes;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDisplayMarketTimes(String displayMarketTimes) {
+        this.displayMarketTimes = displayMarketTimes;
     }
 
-    public String getImgs() {
-        return imgs;
+    public double getLimitUpPercent() {
+        return decimalScale;
     }
 
-    public void setImgs(String imgs) {
-        this.imgs = imgs;
+    public void setLimitUpPercent(double limitUpPercent) {
+        this.decimalScale = limitUpPercent;
     }
 
-    public String getMarketCode() {
-        return marketCode;
+    public String getSign() {
+        return sign;
     }
 
-    public void setMarketCode(String marketCode) {
-        this.marketCode = marketCode;
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 
-    public String getCommodityName() {
-        return commodityName;
+    public double getFlashChartPriceInterval() {
+        return fcpInterVal;
     }
 
-    public void setCommodityName(String commodityName) {
-        this.commodityName = commodityName;
+    public void setFlashChartPriceInterval(double fcpInterVal) {
+        this.fcpInterVal = fcpInterVal;
     }
 
-    public String getInstrumentID() {
-        return instrumentID;
+    public String getVarietyType() {
+        return varietyType;
     }
 
-    public void setInstrumentID(String instrumentID) {
-        this.instrumentID = instrumentID;
-    }
-
-    public String getInstrumentCode() {
-        return instrumentCode;
-    }
-
-    public void setInstrumentCode(String instrumentCode) {
-        this.instrumentCode = instrumentCode;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
-    public String getCurrencySign() {
-        return currencySign;
-    }
-
-    public void setCurrencySign(String currencySign) {
-        this.currencySign = currencySign;
-    }
-
-    public String getCurrencyUnit() {
-        return currencyUnit;
-    }
-
-    public void setCurrencyUnit(String currencyUnit) {
-        this.currencyUnit = currencyUnit;
-    }
-
-    public double getMultiple() {
-        return multiple;
-    }
-
-    public void setMultiple(double multiple) {
-        this.multiple = multiple;
-    }
-
-    public int getDecimalPlaces() {
-        return decimalPlaces;
-    }
-
-    public void setDecimalPlaces(int decimalPlaces) {
-        this.decimalPlaces = decimalPlaces;
-    }
-
-    public String getCommodityDesc() {
-        return commodityDesc;
-    }
-
-    public void setCommodityDesc(String commodityDesc) {
-        this.commodityDesc = commodityDesc;
-    }
-
-    public String getAdvertisement() {
-        return advertisement;
-    }
-
-    public void setAdvertisement(String advertisement) {
-        this.advertisement = advertisement;
-    }
-
-    public int getVendibility() {
-        return vendibility;
-    }
-
-    public void setVendibility(int vendibility) {
-        this.vendibility = vendibility;
-    }
-
-    public int getTag() {
-        return tag;
-    }
-
-    public void setTag(int tag) {
-        this.tag = tag;
-    }
-
-    public int getTimeTag() {
-        return timeTag;
-    }
-
-    public void setTimeTag(int timeTag) {
-        this.timeTag = timeTag;
-    }
-
-    public int getMarketId() {
-        return marketId;
-    }
-
-    public void setMarketId(int marketId) {
-        this.marketId = marketId;
-    }
-
-    public String getMarketName() {
-        return marketName;
-    }
-
-    public void setMarketName(String marketName) {
-        this.marketName = marketName;
-    }
-
-    public int getMarketStatus() {
-        return marketStatus;
-    }
-
-    public void setMarketStatus(int marketStatus) {
-        this.marketStatus = marketStatus;
+    public void setVarietyType(String varietyType) {
+        this.varietyType = varietyType;
     }
 
     public int getBaseline() {
@@ -257,96 +118,121 @@ public class Product implements Serializable, Parcelable {
         this.baseline = baseline;
     }
 
-    public double getInterval() {
-        return interval;
+    public int getIsDomestic() {
+        return isDomestic;
     }
 
-    public void setInterval(double interval) {
-        this.interval = interval;
+    public void setIsDomestic(int isDomestic) {
+        this.isDomestic = isDomestic;
     }
 
-    public int getIsDoule() {
-        return isDoule;
+    public int getTags() {
+        return tags;
     }
 
-    public void setIsDoule(int isDoule) {
-        this.isDoule = isDoule;
+    public void setTags(int tags) {
+        this.tags = tags;
     }
 
-    public double getScale() {
-        return scale;
+    public int getExchangeId() {
+        return exchangeId;
     }
 
-    public void setScale(double scale) {
-        this.scale = scale;
+    public void setExchangeId(int exchangeId) {
+        this.exchangeId = exchangeId;
     }
 
-    public String getTimeAndNum() {
-        return timeAndNum;
+    public String getOpenMarketTime() {
+        return openMarketTime;
     }
 
-    public void setTimeAndNum(String timeAndNum) {
-        this.timeAndNum = timeAndNum;
+    public void setOpenMarketTime(String openMarketTime) {
+        this.openMarketTime = openMarketTime;
     }
 
-    public String getNightTimeAndNum() {
-        return nightTimeAndNum;
+    public int getVarietyId() {
+        return varietyId;
     }
 
-    public void setNightTimeAndNum(String nightTimeAndNum) {
-        this.nightTimeAndNum = nightTimeAndNum;
+    public void setVarietyId(int varietyId) {
+        this.varietyId = varietyId;
     }
 
-    public String getTimeline() {
-        return timeline;
+    public int getExchangeStatus() {
+        return exchangeStatus;
     }
 
-    public void setTimeline(String timeline) {
-        this.timeline = timeline;
+    public void setExchangeStatus(int exchangeStatus) {
+        this.exchangeStatus = exchangeStatus;
     }
 
-    public int getLoddyType() {
-        return loddyType;
+    public String getContractsCode() {
+        return contractsCode;
     }
 
-    public void setLoddyType(int loddyType) {
-        this.loddyType = loddyType;
+    public void setContractsCode(String contractsCode) {
+        this.contractsCode = contractsCode;
     }
 
-    public String getAccountCode() {
-        return accountCode;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setAccountCode(String accountCode) {
-        this.accountCode = accountCode;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public double getMinPrice() {
-        return minPrice;
+    public int getDecimalScale() {
+        return marketPoint;
     }
 
-    public void setMinPrice(double minPrice) {
-        this.minPrice = minPrice;
+    public void setDecimalScale(int decimalScale) {
+        this.marketPoint = decimalScale;
     }
 
-    public double getRate() {
-        return rate;
+    public String getVarietyName() {
+        return varietyName;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setVarietyName(String varietyName) {
+        this.varietyName = varietyName;
     }
 
-    public int getLossProfitPrecision() {
-        return calLossProfitPrecision(multiple / Math.pow(10, decimalPlaces));
+    public int getEachPointMoney() {
+        return eachPointMoney;
     }
 
-    private int calLossProfitPrecision(double v) {
+    public void setEachPointMoney(int eachPointMoney) {
+        this.eachPointMoney = eachPointMoney;
+    }
+
+    public String getCurrencyUnit() {
+        return currencyUnit;
+    }
+
+    public void setCurrencyUnit(String currencyUnit) {
+        this.currencyUnit = currencyUnit;
+    }
+
+    public double getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
+    }
+
+    public int getLossProfitScale() {
+        return calLossProfitScale(eachPointMoney / Math.pow(10, getDecimalScale()));
+    }
+
+    private int calLossProfitScale(double v) {
         String s = String.valueOf(v);
         int indexOfPoint = s.indexOf(".");
         if (indexOfPoint > -1) {
             s = s.replaceAll("0+?$", ""); // remove all tail 0
             return s.substring(indexOfPoint + 1).length();
+
         }
         return 0;
     }
@@ -358,77 +244,53 @@ public class Product implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.imgs);
-        dest.writeString(this.marketCode);
-        dest.writeString(this.commodityName);
-        dest.writeString(this.instrumentID);
-        dest.writeString(this.instrumentCode);
-        dest.writeString(this.currency);
-        dest.writeString(this.currencyName);
-        dest.writeString(this.currencySign);
-        dest.writeString(this.currencyUnit);
-        dest.writeDouble(this.multiple);
-        dest.writeInt(this.decimalPlaces);
-        dest.writeString(this.commodityDesc);
-        dest.writeString(this.advertisement);
-        dest.writeInt(this.vendibility);
-        dest.writeInt(this.tag);
-        dest.writeInt(this.timeTag);
-        dest.writeInt(this.marketId);
-        dest.writeString(this.marketName);
-        dest.writeInt(this.marketStatus);
+        dest.writeString(this.displayMarketTimes);
+        dest.writeDouble(this.decimalScale);
+        dest.writeString(this.sign);
+        dest.writeDouble(this.fcpInterVal);
+        dest.writeString(this.varietyType);
         dest.writeInt(this.baseline);
-        dest.writeDouble(this.interval);
-        dest.writeInt(this.isDoule);
-        dest.writeDouble(this.scale);
-        dest.writeString(this.timeAndNum);
-        dest.writeString(this.nightTimeAndNum);
-        dest.writeString(this.timeline);
-        dest.writeInt(this.loddyType);
-        dest.writeString(this.accountCode);
-        dest.writeDouble(this.minPrice);
-        dest.writeDouble(this.rate);
+        dest.writeInt(this.isDomestic);
+        dest.writeInt(this.tags);
+        dest.writeInt(this.exchangeId);
+        dest.writeString(this.openMarketTime);
+        dest.writeInt(this.varietyId);
+        dest.writeInt(this.exchangeStatus);
+        dest.writeString(this.contractsCode);
+        dest.writeString(this.currency);
+        dest.writeInt(this.marketPoint);
+        dest.writeString(this.varietyName);
+        dest.writeInt(this.eachPointMoney);
+        dest.writeString(this.currencyUnit);
+        dest.writeDouble(this.ratio);
     }
 
     public Product() {
     }
 
     protected Product(Parcel in) {
-        this.id = in.readInt();
-        this.imgs = in.readString();
-        this.marketCode = in.readString();
-        this.commodityName = in.readString();
-        this.instrumentID = in.readString();
-        this.instrumentCode = in.readString();
-        this.currency = in.readString();
-        this.currencyName = in.readString();
-        this.currencySign = in.readString();
-        this.currencyUnit = in.readString();
-        this.multiple = in.readDouble();
-        this.decimalPlaces = in.readInt();
-        this.commodityDesc = in.readString();
-        this.advertisement = in.readString();
-        this.vendibility = in.readInt();
-        this.tag = in.readInt();
-        this.timeTag = in.readInt();
-        this.marketId = in.readInt();
-        this.marketName = in.readString();
-        this.marketStatus = in.readInt();
+        this.displayMarketTimes = in.readString();
+        this.decimalScale = in.readDouble();
+        this.sign = in.readString();
+        this.fcpInterVal = in.readDouble();
+        this.varietyType = in.readString();
         this.baseline = in.readInt();
-        this.interval = in.readDouble();
-        this.isDoule = in.readInt();
-        this.scale = in.readDouble();
-        this.timeAndNum = in.readString();
-        this.nightTimeAndNum = in.readString();
-        this.timeline = in.readString();
-        this.loddyType = in.readInt();
-        this.accountCode = in.readString();
-        this.minPrice = in.readDouble();
-        this.rate = in.readDouble();
+        this.isDomestic = in.readInt();
+        this.tags = in.readInt();
+        this.exchangeId = in.readInt();
+        this.openMarketTime = in.readString();
+        this.varietyId = in.readInt();
+        this.exchangeStatus = in.readInt();
+        this.contractsCode = in.readString();
+        this.currency = in.readString();
+        this.marketPoint = in.readInt();
+        this.varietyName = in.readString();
+        this.eachPointMoney = in.readInt();
+        this.currencyUnit = in.readString();
+        this.ratio = in.readDouble();
     }
 
-    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
         @Override
         public Product createFromParcel(Parcel source) {
             return new Product(source);
@@ -439,4 +301,12 @@ public class Product implements Serializable, Parcelable {
             return new Product[size];
         }
     };
+
+    public String getAdvertisement() {
+        return advertisement;
+    }
+
+    public void setAdvertisement(String advertisement) {
+        this.advertisement = advertisement;
+    }
 }

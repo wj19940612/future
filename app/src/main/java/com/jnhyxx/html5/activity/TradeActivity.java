@@ -257,8 +257,8 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
             }
 
             public void bindingData(Product item) {
-                mProductName.setText(item.getCommodityName());
-                mProductCode.setText(item.getInstrumentID());
+                mProductName.setText(item.getVarietyName());
+                mProductCode.setText(item.getVarietyType());
             }
         }
     }

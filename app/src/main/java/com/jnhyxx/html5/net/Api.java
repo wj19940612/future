@@ -99,7 +99,7 @@ public class API extends APIBase {
         }
 
         /**
-         * 注册 "/user/register
+         * 注册 /user/register.do
          *
          * @param phoneNum
          * @param password
@@ -107,9 +107,9 @@ public class API extends APIBase {
          */
         public static API signUp(String phoneNum, String password, String authCode) {
             ApiParams params = new ApiParams()
-                    .put("tele", phoneNum)
-                    .put(PASSWORD, password)
-                    .put(AUTH_CODE, authCode);
+                    .put("userPhone", phoneNum)
+                    .put("userPass", password)
+                    .put("regCode", authCode);
             // TODO: 7/22/16 统计数据
                     /*.put("deviceModel", "deviceModel")
                     .put("deviceImei", "deviceImei")
@@ -117,7 +117,7 @@ public class API extends APIBase {
                     .put("clientVersion", "clientVersion")
                     .put("regSource", "regSource")
                     .put("operator", "operator");*/
-            return new API("/user/register", params);
+            return new API("/user/register.do", params);
         }
 
         /**
@@ -356,7 +356,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getProductList() {
-            return new API("/market/futureCommodity/select", null);
+            return new API("/order/variety/getVariety.do", null);
         }
 
         /**

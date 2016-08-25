@@ -83,10 +83,10 @@ public class OrderDetailActivity extends BaseActivity {
             String lossProfitForeign;
             if (lossProfit < 0) {
                 color = getResources().getColor(R.color.greenPrimary);
-                lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitPrecision());
+                lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
             } else {
                 color = getResources().getColor(R.color.redPrimary);
-                lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitPrecision());
+                lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
             }
             String lossProfitInner = "   (" + FinanceUtil.formatWithScale(lossProfit * rate) + FinanceUtil.UNIT_YUAN + ")";
             mLossProfit.setTextColor(color);
@@ -98,11 +98,11 @@ public class OrderDetailActivity extends BaseActivity {
             String lossProfitInner;
             if (lossProfit < 0) {
                 color = getResources().getColor(R.color.greenPrimary);
-                lossProfitInner = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitPrecision());
+                lossProfitInner = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
 
             } else {
                 color = getResources().getColor(R.color.redPrimary);
-                lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitPrecision());
+                lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
             }
             mLossProfit.setTextColor(color);
             mLossProfit.setText(lossProfitInner);

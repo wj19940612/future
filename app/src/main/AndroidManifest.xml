@@ -125,7 +125,8 @@
         <activity
             android:name=".activity.account.MessageCenterListItemInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.account.AboutUsActivity"></activity>
+        <activity android:name=".activity.account.AboutUsActivity" />
+        <activity android:name=".activity.account.ExpandMakeMoneyActivity"></activity>
     </application>
 
 </manifest>

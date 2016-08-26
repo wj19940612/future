@@ -247,4 +247,19 @@
 \n最终，盈投的月利润比以前翻了7-10倍！靠的就是系统的强大风控系统保障下提高了盈利模式。同时靠营销系统每个月客户数量都大了增长。
 \n盈投坦言，现在增长到500多个活跃用户，月利润500多万元。</string>
 
+    <!--我的界面/推广挣钱-->
+    <string name="account_expand_make_money_right_title">我的用户</string>
+    <string name="account_expand_make_money_title">推广挣钱</string>
+    <string name="account_expand_make_money_brokerage">可提佣金</string>
+    <string name="account_expand_make_money_brokerage_number">0.00</string>
+    <string name="account_expand_make_money_brokerage_pickup">提取</string>
+    <string name="account_expand_make_money_proxy_grade">代理等级</string>
+    <string name="account_expand_make_money_brokerage_scle">佣金比例</string>
+    <string name="account_expand_make_money_mine_account">我的用户</string>
+    <string name="account_expand_make_money_exchange_account">交易用户</string>
+    <string name="account_expand_make_money_two_dimensional_code">长按二维码保存图片，发送给好友</string>
+    <string name="account_expand_make_money_share_lianjie">分享您的专属链接</string>
+    <string name="account_expand_make_money_share_web">http://www.jnhyxx.com/?abc=9a4453</string>
+    <string name="account_expand_make_money_invite_code">您的邀请码</string>
+    <string name="common_copy_text">复制</string>
 </resources>

@@ -23,26 +23,26 @@ public class AboutUsActivity extends BaseActivity {
     private static final String TAG = "AboutUsActivity";
     @BindView(R.id.activity_about_us_tv_versionName)
     TextView tv_versionName;
-    //公司简介
-    @BindView(R.id.activity_about_us_rl_company_info)
-    RelativeLayout rl_companyInfo;
-    @BindView(R.id.activity_about_us_tv_company_info)
-    TextView tv_companyInfo;
-    //管理团队
-    @BindView(R.id.activity_about_us_rl_manager_team)
-    RelativeLayout rl_manager_team;
-    @BindView(R.id.activity_about_us_tv_manager_team)
-    TextView tv_manager_team;
-    //企业文化
-    @BindView(R.id.activity_about_us_rl_company_culture)
-    RelativeLayout rl_company_cultrue;
-    @BindView(R.id.activity_about_us_tv_company_culture)
-    TextView tv_company_cultrue;
-    //合作案例
-    @BindView(R.id.activity_about_us_rl_collaborate_case)
-    RelativeLayout rl_collaborate_case;
-    @BindView(R.id.activity_about_us_tv_collaborate_case)
-    TextView tv_collaborate_case;
+//    //公司简介
+//    @BindView(R.id.activity_about_us_rl_company_info)
+//    RelativeLayout rl_companyInfo;
+//    @BindView(R.id.activity_about_us_tv_company_info)
+//    TextView tv_companyInfo;
+//    //管理团队
+//    @BindView(R.id.activity_about_us_rl_manager_team)
+//    RelativeLayout rl_manager_team;
+//    @BindView(R.id.activity_about_us_tv_manager_team)
+//    TextView tv_manager_team;
+//    //企业文化
+//    @BindView(R.id.activity_about_us_rl_company_culture)
+//    RelativeLayout rl_company_cultrue;
+//    @BindView(R.id.activity_about_us_tv_company_culture)
+//    TextView tv_company_cultrue;
+//    //合作案例
+//    @BindView(R.id.activity_about_us_rl_collaborate_case)
+//    RelativeLayout rl_collaborate_case;
+//    @BindView(R.id.activity_about_us_tv_collaborate_case)
+//    TextView tv_collaborate_case;
     //公司热线
     @BindView(R.id.activity_about_us_rl_company_telphone)
     RelativeLayout rl_company_telphone;
@@ -101,53 +101,53 @@ public class AboutUsActivity extends BaseActivity {
         boolean tvManagerTeamStatus;
         switch (viewId) {
             //公司信息
-            case R.id.activity_about_us_rl_company_info:
-                tv_companyInfoStatus = tv_companyInfo.isShown();
-                if (tv_companyInfoStatus) {
-                    tv_companyInfo.setVisibility(View.GONE);
-                } else {
-                    tv_companyInfo.setVisibility(View.VISIBLE);
-                }
-                tv_manager_team.setVisibility(View.GONE);
-                tv_company_cultrue.setVisibility(View.GONE);
-                tv_collaborate_case.setVisibility(View.GONE);
-                break;
-            //管理团队
-            case R.id.activity_about_us_rl_manager_team:
-                tvManagerTeamStatus = tv_manager_team.isShown();
-                if (tvManagerTeamStatus) {
-                    tv_manager_team.setVisibility(View.GONE);
-                } else {
-                    tv_manager_team.setVisibility(View.VISIBLE);
-                }
-                tv_companyInfo.setVisibility(View.GONE);
-                tv_company_cultrue.setVisibility(View.GONE);
-                tv_collaborate_case.setVisibility(View.GONE);
-                break;
-            //企业文化
-            case R.id.activity_about_us_rl_company_culture:
-                boolean tvCompanyCultrueStatus = tv_company_cultrue.isShown();
-                if (tvCompanyCultrueStatus) {
-                    tv_company_cultrue.setVisibility(View.GONE);
-                } else {
-                    tv_company_cultrue.setVisibility(View.VISIBLE);
-                }
-                tv_companyInfo.setVisibility(View.GONE);
-                tv_manager_team.setVisibility(View.GONE);
-                tv_collaborate_case.setVisibility(View.GONE);
-                break;
-            //合作案例
-            case R.id.activity_about_us_rl_collaborate_case:
-                boolean tvCollaborateCaseStatus = tv_collaborate_case.isShown();
-                if (tvCollaborateCaseStatus) {
-                    tv_collaborate_case.setVisibility(View.GONE);
-                } else {
-                    tv_collaborate_case.setVisibility(View.VISIBLE);
-                }
-                tv_companyInfo.setVisibility(View.GONE);
-                tv_manager_team.setVisibility(View.GONE);
-                tv_company_cultrue.setVisibility(View.GONE);
-                break;
+//            case R.id.activity_about_us_rl_company_info:
+//                tv_companyInfoStatus = tv_companyInfo.isShown();
+//                if (tv_companyInfoStatus) {
+//                    tv_companyInfo.setVisibility(View.GONE);
+//                } else {
+//                    tv_companyInfo.setVisibility(View.VISIBLE);
+//                }
+//                tv_manager_team.setVisibility(View.GONE);
+//                tv_company_cultrue.setVisibility(View.GONE);
+//                tv_collaborate_case.setVisibility(View.GONE);
+//                break;
+//            //管理团队
+//            case R.id.activity_about_us_rl_manager_team:
+//                tvManagerTeamStatus = tv_manager_team.isShown();
+//                if (tvManagerTeamStatus) {
+//                    tv_manager_team.setVisibility(View.GONE);
+//                } else {
+//                    tv_manager_team.setVisibility(View.VISIBLE);
+//                }
+//                tv_companyInfo.setVisibility(View.GONE);
+//                tv_company_cultrue.setVisibility(View.GONE);
+//                tv_collaborate_case.setVisibility(View.GONE);
+//                break;
+//            //企业文化
+//            case R.id.activity_about_us_rl_company_culture:
+//                boolean tvCompanyCultrueStatus = tv_company_cultrue.isShown();
+//                if (tvCompanyCultrueStatus) {
+//                    tv_company_cultrue.setVisibility(View.GONE);
+//                } else {
+//                    tv_company_cultrue.setVisibility(View.VISIBLE);
+//                }
+//                tv_companyInfo.setVisibility(View.GONE);
+//                tv_manager_team.setVisibility(View.GONE);
+//                tv_collaborate_case.setVisibility(View.GONE);
+//                break;
+//            //合作案例
+//            case R.id.activity_about_us_rl_collaborate_case:
+//                boolean tvCollaborateCaseStatus = tv_collaborate_case.isShown();
+//                if (tvCollaborateCaseStatus) {
+//                    tv_collaborate_case.setVisibility(View.GONE);
+//                } else {
+//                    tv_collaborate_case.setVisibility(View.VISIBLE);
+//                }
+//                tv_companyInfo.setVisibility(View.GONE);
+//                tv_manager_team.setVisibility(View.GONE);
+//                tv_company_cultrue.setVisibility(View.GONE);
+//                break;
             //公司热线
             case R.id.activity_about_us_rl_company_telphone:
                 break;

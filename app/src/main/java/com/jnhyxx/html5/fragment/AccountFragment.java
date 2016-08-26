@@ -124,7 +124,7 @@ public class AccountFragment extends BaseFragment {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                         mScore.setText(FinanceUtil.formatWithScale(fundInfo.getScore()));
                     }
-                }).post();
+                }).fire();
     }
 
     @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.scoreDetail, R.id.personalInfo, R.id.paidToPromote})
@@ -145,7 +145,7 @@ public class AccountFragment extends BaseFragment {
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
                             }
-                        }).post();
+                        }).fire();
                 break;
             case R.id.withdraw:
                 API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
@@ -156,7 +156,7 @@ public class AccountFragment extends BaseFragment {
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
                             }
-                        }).post();
+                        }).fire();
                 break;
             case R.id.messageCenter:
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
@@ -176,7 +176,7 @@ public class AccountFragment extends BaseFragment {
                                         .putExtra(Launcher.EX_PAYLOAD, profileSummary)
                                         .execute();
                             }
-                        }).post();
+                        }).fire();
                 break;
             case R.id.paidToPromote:
                 break;
@@ -194,7 +194,7 @@ public class AccountFragment extends BaseFragment {
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
                                     .execute();
                         }
-                    }).post();
+                    }).fire();
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }

@@ -92,7 +92,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                         public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
-                    }).setTag(TAG).setIndeterminate(this).post();
+                    }).setTag(TAG).setIndeterminate(this).fire();
         } else {
             API.Message.getTradeMessageList(User.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
@@ -100,7 +100,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                         public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
                             updateMessageList(sysTradeMessages);
                         }
-                    }).setTag(TAG).setIndeterminate(this).post();
+                    }).setTag(TAG).setIndeterminate(this).fire();
         }
     }
 

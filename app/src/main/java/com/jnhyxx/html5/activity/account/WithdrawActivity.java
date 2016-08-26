@@ -65,7 +65,7 @@ public class WithdrawActivity extends BaseActivity {
                     public void onRespSuccess(FundInfo fundInfo) {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                     }
-                }).post();
+                }).fire();
 
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +118,7 @@ public class WithdrawActivity extends BaseActivity {
                             SmartDialog.with(getActivity(), resp.getMsg()).show();
                         }
                     }
-                }).setTag(TAG).setIndeterminate(this).post();
+                }).setTag(TAG).setIndeterminate(this).fire();
     }
 
     @OnClick(R.id.addBankcardButton)

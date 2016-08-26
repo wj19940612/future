@@ -31,13 +31,21 @@ public class APIBase extends RequestManager {
     private ApiIndeterminate mIndeterminate;
 
     protected APIBase(String uri, ApiParams apiParams) {
-        this(uri, apiParams, 0);
+        this(Request.Method.POST, uri, apiParams, 0);
     }
 
     protected APIBase(String uri, ApiParams apiParams, int version) {
+        this(Request.Method.POST, uri, apiParams, version);
+    }
+
+    protected APIBase(int method, String uri, ApiParams apiParams) {
+        this(method, uri, apiParams, 0);
+    }
+
+    protected APIBase(int method, String uri, ApiParams apiParams, int version) {
         mUri = uri;
         mApiParams = apiParams;
-        mMethod = Request.Method.POST;
+        mMethod = method;
         mTag = "";
     }
 
@@ -56,15 +64,12 @@ public class APIBase extends RequestManager {
         return this;
     }
 
-
-    public void get() {
-        mMethod = Request.Method.GET;
-        post();
-    }
-
-    public void post() {
+    public void fire() {
         synchronized (sCurrentUrls) {
-            if (TextUtils.isEmpty(mHost)) mHost = HOST;
+            if (TextUtils.isEmpty(mHost)) {
+                mHost = HOST;
+            }
+
             String url = new StringBuilder(mHost).append(mUri).toString();
 
             if (sCurrentUrls.add(url)) {

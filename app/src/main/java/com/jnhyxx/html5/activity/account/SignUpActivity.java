@@ -128,7 +128,7 @@ public class SignUpActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     @OnClick(R.id.signUpButton)
@@ -136,7 +136,7 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
-        API.Account.signUp(phoneNum, password, authCode)
+        API.Account.signUp(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
@@ -157,7 +157,7 @@ public class SignUpActivity extends BaseActivity {
                             ToastUtil.show(resp.getMsg());
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     @Override

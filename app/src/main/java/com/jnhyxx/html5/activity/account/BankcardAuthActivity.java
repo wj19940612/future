@@ -85,7 +85,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                             mCardholderName.setText(nameAuth.getUserName());
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     private void updateBankcardView(Intent intent) {
@@ -187,7 +187,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                                     SmartDialog.with(getActivity(), resp.getMsg()).show();
                                 }
                             }
-                        }).post();
+                        }).fire();
                 break;
             case R.id.unbindBankcard:
                 SmartDialog.with(getActivity(), R.string.dialog_please_contact_services_to_unbind).show();

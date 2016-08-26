@@ -107,7 +107,7 @@ public class NameAuthActivity extends BaseActivity {
                             SmartDialog.with(getActivity(), resp.getMsg()).show();
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     /**

@@ -82,7 +82,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
                         public void onRespSuccess(List<Information> informationList) {
                             updateInfoList(informationList);
                         }
-                    }).setTag(TAG).setIndeterminate(this).post();
+                    }).setTag(TAG).setIndeterminate(this).fire();
         } else {
             int SECTION_ID_INDUSTRY = 57;
             API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
@@ -91,7 +91,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
                         public void onRespSuccess(List<Information> informationList) {
                             updateInfoList(informationList);
                         }
-                    }).setTag(TAG).setIndeterminate(this).post();
+                    }).setTag(TAG).setIndeterminate(this).fire();
         }
     }
 

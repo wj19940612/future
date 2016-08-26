@@ -53,7 +53,8 @@ public class GsonRequest<T> extends Request<T> {
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 
-            //Log.d("TEST", "parseNetworkResponse: " + json);
+            CookieManger.getInstance().parse(response.headers);
+
             T result = new Gson().fromJson(json, type);
 
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));

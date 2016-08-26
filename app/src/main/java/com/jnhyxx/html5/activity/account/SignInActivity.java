@@ -7,14 +7,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.LoginInfo;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -85,18 +82,25 @@ public class SignInActivity extends BaseActivity {
         API.Account.signIn(phoneNum, password)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback<Resp<JsonObject>>() {
+                .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
-                    public void onReceive(Resp<JsonObject> resp) {
-                        if (resp.isSuccess()) {
-                            LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                            User.getUser().setLoginInfo(info);
-                            finish();
-                        } else {
-                            ToastUtil.show(resp.getMsg());
-                        }
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        /*LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
+                        User.getUser().setLoginInfo(info);
+                        finish();*/
+                        test();
                     }
-                }).post();
+                }).fire();
+    }
+
+    private void test() {
+        API.Account.getUserInfo()
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        ToastUtil.show(resp.getMsg());
+                    }
+                }).setTag(TAG).setIndeterminate(this).fire();
     }
 
     @OnClick(R.id.signUp)

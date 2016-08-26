@@ -33,7 +33,10 @@ public class ApiParams {
             mParams = new HashMap<>();
         }
 
-        mParams.put(key, value.toString());
+        if (value != null) {
+            mParams.put(key, value.toString());
+        }
+
         return this;
     }
 

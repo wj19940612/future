@@ -99,7 +99,7 @@ public class SettlementFragment extends BaseFragment {
                     public void onRespSuccess(List<SettlementOrder> settlementOrders) {
                         updateSettlementOrderListView(settlementOrders);
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void updateSettlementOrderListView(List<SettlementOrder> settlementOrders) {

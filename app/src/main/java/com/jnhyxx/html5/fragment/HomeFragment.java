@@ -105,7 +105,7 @@ public class HomeFragment extends BaseFragment {
                     mHomeListHeader.setOrderReport(orderReportResp.getData());
                 }
             }
-        }).setTag(TAG).post();
+        }).setTag(TAG).fire();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
                         mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void requestProductList() {
@@ -144,7 +144,7 @@ public class HomeFragment extends BaseFragment {
                                 mPositionBriefList, mMarketBriefList);
                         updateProductListView();
                     }
-                }).get();
+                }).fire();
     }
 
     private void requestProductMarketBriefList() {
@@ -163,7 +163,7 @@ public class HomeFragment extends BaseFragment {
                             }
                         }
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void requestPositionBriefList() {
@@ -181,7 +181,7 @@ public class HomeFragment extends BaseFragment {
                                 updateProductListView();
                             }
                         }
-                    }).setTag(TAG).post();
+                    }).setTag(TAG).fire();
         } else { // clear all product position
             ProductPkg.clearPositionBriefs(mProductPkgList);
         }

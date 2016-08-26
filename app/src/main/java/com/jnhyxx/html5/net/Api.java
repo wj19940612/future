@@ -1,6 +1,8 @@
 package com.jnhyxx.html5.net;
 
+import com.android.volley.Request;
 import com.jnhyxx.html5.App;
+import com.jnhyxx.html5.BuildConfig;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 import com.umeng.message.UmengRegistrar;
@@ -8,6 +10,8 @@ import com.umeng.message.UmengRegistrar;
 import java.security.NoSuchAlgorithmException;
 
 public class API extends APIBase {
+
+    private static final int GET = Request.Method.GET;
 
     public static final String TELE = "tele";
     public static final String CODE = "code";
@@ -28,6 +32,14 @@ public class API extends APIBase {
 
     public API(String uri, ApiParams apiParams, int version) {
         super(uri, apiParams, version);
+    }
+
+    public API(int method, String uri, ApiParams apiParams) {
+        super(method, uri, apiParams);
+    }
+
+    public API(int method, String uri, ApiParams apiParams, int version) {
+        super(method, uri, apiParams, version);
     }
 
     public static class Account {
@@ -103,46 +115,59 @@ public class API extends APIBase {
          *
          * @param phoneNum
          * @param password
-         * @param authCode
+         * @param regCode
          */
-        public static API signUp(String phoneNum, String password, String authCode) {
-            ApiParams params = new ApiParams()
-                    .put("userPhone", phoneNum)
-                    .put("userPass", password)
-                    .put("regCode", authCode);
-            // TODO: 7/22/16 统计数据
+        public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
+            return new API("/user/register.do",
+                    new ApiParams()
+                            .put("userPhone", phoneNum)
+                            .put("userPass", password)
+                            .put("regCode", regCode)
+                            .put("promoterCode", promoterCode));
+
+            // TODO: 7/22/16 统计数据 maybe delete
                     /*.put("deviceModel", "deviceModel")
                     .put("deviceImei", "deviceImei")
                     .put("deviceVersion", "deviceVersion")
                     .put("clientVersion", "clientVersion")
                     .put("regSource", "regSource")
                     .put("operator", "operator");*/
-            return new API("/user/register.do", params);
         }
 
         /**
-         * 登录 /user/login
+         * 登录 /user/user/login.do
          *
-         * @param loginName
+         * @param phoneNum
          * @param password
          */
-        public static API signIn(String loginName, String password) {
+        public static API signIn(String phoneNum, String password) {
             try {
-                password = SecurityUtil.md5Encrypt(password);
+                if (!BuildConfig.DEBUG)  // TODO: 8/26/16 正式时候添加, 后期删除
+                    password = SecurityUtil.md5Encrypt(password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
 
-            ApiParams params = new ApiParams()
-                    .put("loginName", loginName)
-                    .put(PASSWORD, password);
-            // TODO: 7/22/16 统计数据
+            return new API("/user/user/login.do",
+                    new ApiParams()
+                            .put("userPhone", phoneNum)
+                            .put("userPass", password));
+
+            // TODO: 7/22/16 统计数据 maybe delete
             /*      .put("deviceModel", deviceModel)
                     .put("deviceImei", deviceImei)
                     .put("deviceVersion", deviceVersion)
                     .put("clientVersion", clientVersion)
                     .put("operator", operator);*/
-            return new API("/user/login", params);
+        }
+
+        /**
+         * /user/user/findUserInfo.do
+         *
+         * @return
+         */
+        public static API getUserInfo() {
+            return new API("/user/user/findUserInfo.do", null);
         }
 
         /**
@@ -356,7 +381,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getProductList() {
-            return new API("/order/variety/getVariety.do", null);
+            return new API(GET, "/order/variety/getVariety.do", null);
         }
 
         /**

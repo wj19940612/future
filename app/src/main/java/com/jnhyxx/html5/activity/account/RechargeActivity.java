@@ -132,7 +132,7 @@ public class RechargeActivity extends BaseActivity {
                                     SmartDialog.dismiss(getActivity());
                                 }
                             }
-                        }).post();
+                        }).fire();
 
             }
         }

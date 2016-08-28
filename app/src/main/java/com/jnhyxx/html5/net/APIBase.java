@@ -7,8 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.jnhyxx.html5.BuildConfig;
 import com.johnz.kutils.net.ApiCallback;
+import com.johnz.kutils.net.ApiHeaders;
 import com.johnz.kutils.net.ApiIndeterminate;
 import com.johnz.kutils.net.ApiParams;
+import com.johnz.kutils.net.CookieManger;
 import com.johnz.kutils.net.GsonRequest;
 import com.johnz.kutils.net.RequestManager;
 
@@ -72,6 +74,12 @@ public class APIBase extends RequestManager {
 
             String url = new StringBuilder(mHost).append(mUri).toString();
 
+            ApiHeaders headers = new ApiHeaders();
+            String cookies = CookieManger.getInstance().getCookies();
+            if (!TextUtils.isEmpty(cookies)) {
+                headers.put("Cookie", cookies);
+            }
+
             if (sCurrentUrls.add(url)) {
                 Type type;
                 if (mCallback != null) {
@@ -100,7 +108,7 @@ public class APIBase extends RequestManager {
                     type = mCallback.getGenericType();
                 }
 
-                GsonRequest request = new GsonRequest(mMethod, url, mApiParams, type, mCallback);
+                GsonRequest request = new GsonRequest(mMethod, url, headers, mApiParams, type, mCallback);
                 request.setTag(mTag);
 
                 enqueue(request);

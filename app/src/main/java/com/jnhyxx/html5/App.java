@@ -40,7 +40,7 @@ public class App extends Application {
         }
 
         API.init(sContext.getCacheDir());
-        CookieManger.getInstance().init(sContext, new String[]{"token1", "token2"});
+        CookieManger.getInstance().init(sContext.getFilesDir());
 
         UmengLib.init(sContext);
 

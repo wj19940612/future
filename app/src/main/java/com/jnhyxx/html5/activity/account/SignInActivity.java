@@ -13,7 +13,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.Launcher;
 
@@ -88,20 +87,10 @@ public class SignInActivity extends BaseActivity {
                         /*LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                         User.getUser().setLoginInfo(info);
                         finish();*/
-                        test();
                     }
                 }).fire();
     }
 
-    private void test() {
-        API.Account.getUserInfo()
-                .setCallback(new Callback1<Resp<JsonObject>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<JsonObject> resp) {
-                        ToastUtil.show(resp.getMsg());
-                    }
-                }).setTag(TAG).setIndeterminate(this).fire();
-    }
 
     @OnClick(R.id.signUp)
     void openSignUpPage() {

@@ -57,7 +57,7 @@ public class CookieHurlStack implements HttpStack {
     }
 
     /**
-     * @param urlRewriter Rewriter to use for request URLs
+     * @param urlRewriter      Rewriter to use for request URLs
      * @param sslSocketFactory SSL factory to use for HTTPS connections
      */
     public CookieHurlStack(UrlRewriter urlRewriter, SSLSocketFactory sslSocketFactory) {
@@ -82,7 +82,15 @@ public class CookieHurlStack implements HttpStack {
         URL parsedUrl = new URL(url);
         HttpURLConnection connection = openConnection(parsedUrl, request);
         for (String headerName : map.keySet()) {
+            // handle cookie key: Cookie0 and Cookie1
+//            if (headerName.contains("Cookie")) {
+//                connection.addRequestProperty("Cookie", map.get(headerName));
+//            } else {
+//                connection.addRequestProperty(headerName, map.get(headerName));
+//            }
+//
             connection.addRequestProperty(headerName, map.get(headerName));
+
         }
         setConnectionParametersForRequest(connection, request);
         // Initialize HttpResponse with data from the HttpURLConnection.
@@ -104,9 +112,10 @@ public class CookieHurlStack implements HttpStack {
                 StringBuilder stringBuilder = new StringBuilder();
 
                 if (header.getValue().size() > 1) {
-                    for (String value: header.getValue()) {
+                    for (String value : header.getValue()) {
                         stringBuilder.append(value).append("\n");
                     }
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                 } else {
                     stringBuilder.append(header.getValue().get(0));
                 }
@@ -120,10 +129,11 @@ public class CookieHurlStack implements HttpStack {
 
     /**
      * Checks if a response message contains a body.
-     * @see <a href="https://tools.ietf.org/html/rfc7230#section-3.3">RFC 7230 section 3.3</a>
+     *
      * @param requestMethod request method
-     * @param responseCode response status code
+     * @param responseCode  response status code
      * @return whether the response has a body
+     * @see <a href="https://tools.ietf.org/html/rfc7230#section-3.3">RFC 7230 section 3.3</a>
      */
     private static boolean hasResponseBody(int requestMethod, int responseCode) {
         return requestMethod != Request.Method.HEAD
@@ -134,6 +144,7 @@ public class CookieHurlStack implements HttpStack {
 
     /**
      * Initializes an {@link HttpEntity} from the given {@link HttpURLConnection}.
+     *
      * @param connection
      * @return an HttpEntity populated with data from <code>connection</code>.
      */
@@ -168,6 +179,7 @@ public class CookieHurlStack implements HttpStack {
 
     /**
      * Opens an {@link HttpURLConnection} with parameters.
+     *
      * @param url
      * @return an open connection
      * @throws IOException
@@ -183,7 +195,7 @@ public class CookieHurlStack implements HttpStack {
 
         // use caller-provided custom SslSocketFactory, if any, for HTTPS
         if ("https".equals(url.getProtocol()) && mSslSocketFactory != null) {
-            ((HttpsURLConnection)connection).setSSLSocketFactory(mSslSocketFactory);
+            ((HttpsURLConnection) connection).setSSLSocketFactory(mSslSocketFactory);
         }
 
         return connection;

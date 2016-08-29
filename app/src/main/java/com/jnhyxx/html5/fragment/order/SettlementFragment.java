@@ -93,13 +93,13 @@ public class SettlementFragment extends BaseFragment {
         });
 
         API.Order.getSettlementOrderList(User.getUser().getToken(),
-                mPageNo, mPageSize, mProduct.getId(), mFundType)
+                mPageNo, mPageSize, mProduct.getVarietyId(), mFundType)
                 .setCallback(new Callback2<Resp<List<SettlementOrder>>, List<SettlementOrder>>() {
                     @Override
                     public void onRespSuccess(List<SettlementOrder> settlementOrders) {
                         updateSettlementOrderListView(settlementOrders);
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void updateSettlementOrderListView(List<SettlementOrder> settlementOrders) {
@@ -196,12 +196,12 @@ public class SettlementFragment extends BaseFragment {
                     String lossProfitForeign;
                     if (lossProfit < 0) {
                         color = ContextCompat.getColor(context, R.color.greenPrimary);
-                        lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
+                        lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
 
                     } else {
                         color = ContextCompat.getColor(context, R.color.redPrimary);
-                        lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
+                        lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
                     }
                     String lossProfitInner = "(" + FinanceUtil.formatWithScale(lossProfit * rate) + ")";
@@ -214,12 +214,12 @@ public class SettlementFragment extends BaseFragment {
                     String lossProfitInner;
                     if (lossProfit < 0) {
                         color = ContextCompat.getColor(context, R.color.greenPrimary);
-                        lossProfitInner = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
+                        lossProfitInner = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
 
                     } else {
                         color = ContextCompat.getColor(context, R.color.redPrimary);
-                        lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitPrecision())
+                        lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
                     }
                     mLossProfit.setTextColor(color);

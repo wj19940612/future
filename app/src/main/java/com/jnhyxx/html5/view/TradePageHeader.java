@@ -83,7 +83,9 @@ public class TradePageHeader extends FrameLayout {
         mHeaders[HEADER_AVAILABLE_BALANCE] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_available_balance, null);
         mHeaders[HEADER_HOLDING_POSITION] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_holding_position, null);
         for (int i = 0; i < mHeaders.length; i++) {
-            addView(mHeaders[i], i);
+            FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    (int) getResources().getDimension(R.dimen.trade_header_height));
+            addView(mHeaders[i], i, params);
         }
         showView(HEADER_UNLOGIN);
         ButterKnife.bind(this);

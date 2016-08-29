@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PageIndicator">
-        <attr name="indicators" format="integer" />
-        <attr name="indicatorsInterval" format="dimension" />
-        <attr name="point" format="color" />
-        <attr name="selectedPoint" format="color" />
-        <attr name="pointRadius" format="dimension" />
-        <attr name="infinite" format="boolean" />
+        <attr name="indicators" format="integer"/>
+        <attr name="indicatorsInterval" format="dimension"/>
+        <attr name="point" format="color"/>
+        <attr name="selectedPoint" format="color"/>
+        <attr name="pointRadius" format="dimension"/>
+        <attr name="infinite" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="BottomTabs">
-        <attr name="textSize" format="dimension" />
-        <attr name="textColor" format="color" />
-        <attr name="interval" format="dimension" />
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
+        <attr name="interval" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="IconTextRow">
-        <attr name="leftIcon" format="reference" />
-        <attr name="rightIcon" format="reference" />
+        <attr name="leftIcon" format="reference"/>
+        <attr name="rightIcon" format="reference"/>
         <attr name="rightIconVisibility">
-            <enum name="visible" value="0" />
-            <enum name="invisible" value="4" />
-            <enum name="gone" value="8" />
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
         </attr>
-        <attr name="subText" format="reference|string" />
-        <attr name="subTextSize" format="reference|string" />
-        <attr name="subTextColor" format="reference|string" />
-        <attr name="rowText" format="reference|string" />
-        <attr name="rowTextSize" format="dimension" />
-        <attr name="rowTextColor" format="color" />
+        <attr name="subText" format="reference|string"/>
+        <attr name="subTextSize" format="reference|string"/>
+        <attr name="subTextColor" format="reference|string"/>
+        <attr name="rowText" format="reference|string"/>
+        <attr name="rowTextSize" format="dimension"/>
+        <attr name="rowTextColor" format="color"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBar">
-        <attr name="titleText" format="reference|string" />
-        <attr name="titleTextSize" format="dimension" />
-        <attr name="titleTextColor" format="color" />
-        <attr name="customView" format="reference" />
-        <attr name="rightText" format="reference|string" />
-        <attr name="rightTextSize" format="dimension" />
-        <attr name="rightTextColor" format="color" />
-        <attr name="rightImage" format="reference" />
-        <attr name="rightVisible" format="boolean" />
-        <attr name="backFeature" format="boolean" />
-        <attr name="backIcon" format="reference" />
+        <attr name="titleText" format="reference|string"/>
+        <attr name="titleTextSize" format="dimension"/>
+        <attr name="titleTextColor" format="color"/>
+        <attr name="customView" format="reference"/>
+        <attr name="rightText" format="reference|string"/>
+        <attr name="rightTextSize" format="dimension"/>
+        <attr name="rightTextColor" format="color"/>
+        <attr name="rightImage" format="reference"/>
+        <attr name="rightVisible" format="boolean"/>
+        <attr name="backFeature" format="boolean"/>
+        <attr name="backIcon" format="reference"/>
+        <attr name="barBackground" format="reference"/>
     </declare-styleable>
     <!--带圆环的imageView-->
     <declare-styleable name="CircularAnnulusImageView">
+<<<<<<< HEAD
         <attr name="borderWidth" format="dimension" />
         <attr name="borderColor" format="color" />
     </declare-styleable>
@@ -54,5 +56,20 @@
         <attr name="elLeftTxt" format="reference|string" />
         <attr name="elDuration" format="integer" />
         <attr name="elBottomTxt" format="reference|string" />
+=======
+        <attr name="border_width" format="dimension"/>
+        <attr name="border_color" format="color"/>
+    </declare-styleable>
+    <!--仿照ExpandableListView，使上面控件点击后，底下控件可以展示-->
+    <declare-styleable name="ExpandableLayout">
+        <attr name="el_leftTxt" format="reference|string"/>
+        <attr name="el_duration" format="integer"/>
+        <attr name="el_bottomTxt" format="reference|string"/>
+    </declare-styleable>
+
+    <declare-styleable name="OrderConfigurationSelector">
+        <attr name="maximum" format="integer"/>
+        <attr name="android:textSize"/>
+>>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
     </declare-styleable>
 </resources>

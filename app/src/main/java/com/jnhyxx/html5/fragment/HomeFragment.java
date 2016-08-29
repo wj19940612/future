@@ -109,7 +109,7 @@ public class HomeFragment extends BaseFragment {
                     mHomeListHeader.setOrderReport(orderReportResp.getData());
                 }
             }
-        }).setTag(TAG).post();
+        }).setTag(TAG).fire();
     }
 
     @Override
@@ -135,7 +135,7 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
                         mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void requestProductList() {
@@ -148,7 +148,7 @@ public class HomeFragment extends BaseFragment {
                                 mPositionBriefList, mMarketBriefList);
                         updateProductListView();
                     }
-                }).get();
+                }).fire();
     }
 
     private void requestProductMarketBriefList() {
@@ -167,7 +167,7 @@ public class HomeFragment extends BaseFragment {
                             }
                         }
                     }
-                }).setTag(TAG).post();
+                }).setTag(TAG).fire();
     }
 
     private void requestPositionBriefList() {
@@ -185,7 +185,7 @@ public class HomeFragment extends BaseFragment {
                                 updateProductListView();
                             }
                         }
-                    }).setTag(TAG).post();
+                    }).setTag(TAG).fire();
         } else { // clear all product position
             ProductPkg.clearPositionBriefs(mProductPkgList);
         }
@@ -266,11 +266,11 @@ public class HomeFragment extends BaseFragment {
                 if (!(item instanceof ProductPkg)) return;
 
                 ProductPkg pkg = (ProductPkg) item;
-                mProductName.setText(pkg.getProduct().getCommodityName());
+                mProductName.setText(pkg.getProduct().getVarietyName());
                 mAdvertisement.setText(pkg.getProduct().getAdvertisement());
                 Product product = pkg.getProduct();
-                mHotIcon.setVisibility((product.getTag() == Product.TAG_HOT) ? View.VISIBLE : View.GONE);
-                if (product.getMarketStatus() == Product.MARKET_STATUS_CLOSE) {
+                mHotIcon.setVisibility((product.getTags() == Product.TAG_HOT) ? View.VISIBLE : View.GONE);
+                if (product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
                     mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
                     mAdvertisement.setTextColor(Color.parseColor("#7FA8A8A8"));
                     mHoldingPosition.setVisibility(View.GONE);
@@ -293,7 +293,7 @@ public class HomeFragment extends BaseFragment {
                     MarketBrief marketBrief = pkg.getMarketBrief(); // Market status
                     if (marketBrief != null) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(marketBrief.getLastPrice(),
-                                product.getDecimalPlaces()));
+                                product.getDecimalScale()));
                         mPriceChangePercent.setText(marketBrief.getUnsignPercentage());
                         String priceChangePercent = marketBrief.getPercentage();
                         if (priceChangePercent.startsWith("-")) {
@@ -320,8 +320,7 @@ public class HomeFragment extends BaseFragment {
             }
 
             private String createMarketOpenTime(Product product, Context context) {
-                String timeLine = product.getTimeline();
-                Log.d(TAG, " createMarketOpenTime" + timeLine);
+                String timeLine = product.getOpenMarketTime();
                 if (!TextUtils.isEmpty(timeLine)) {
                     String[] timeSplit = timeLine.split(";");
                     String startTime = timeSplit[0];

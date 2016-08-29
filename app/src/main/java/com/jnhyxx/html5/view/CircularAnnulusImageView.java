@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.view;
 
-import android.widget.ImageView;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;

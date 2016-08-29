@@ -21,9 +21,11 @@ public class GsonRequest<T> extends Request<T> {
     private final Type type;
     private final Listener<T> listener;
 
-    public GsonRequest(int method, String url, ApiParams params, Type type, ApiCallback<T> callback) {
+    public GsonRequest(int method, String url, ApiHeaders headers, ApiParams params, Type type,
+                       ApiCallback<T> callback) {
         super(method, url, callback);
-        this.headers = null;
+
+        this.headers = headers != null ? headers.get() : null;
         this.params = params != null ? params.get() : null;
         this.type = type;
         this.listener = callback;
@@ -53,7 +55,8 @@ public class GsonRequest<T> extends Request<T> {
         try {
             json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 
-            //Log.d("TEST", "parseNetworkResponse: " + json);
+            CookieManger.getInstance().parse(response.headers);
+
             T result = new Gson().fromJson(json, type);
 
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));

@@ -122,7 +122,7 @@ public class TrendView extends ChartView {
 
         /**
          * check if time is between time1 and time2 (open interval), time1 <= time < time2
-         * <br/> ps. 数据时间的合法性判断使用开区间
+         *
          *
          * @param time1
          * @param time2

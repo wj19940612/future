@@ -7,8 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.jnhyxx.html5.BuildConfig;
 import com.johnz.kutils.net.ApiCallback;
+import com.johnz.kutils.net.ApiHeaders;
 import com.johnz.kutils.net.ApiIndeterminate;
 import com.johnz.kutils.net.ApiParams;
+import com.johnz.kutils.net.CookieManger;
 import com.johnz.kutils.net.GsonRequest;
 import com.johnz.kutils.net.RequestManager;
 
@@ -21,8 +23,6 @@ import static android.content.ContentValues.TAG;
 public class APIBase extends RequestManager {
 
     public final static String HOST = BuildConfig.API_HOST;
-    //测试平台的网址
-    public final static String TEST_HOST = "http://newtest.jnhyxx.com";
 
     private static Set<String> sCurrentUrls = new HashSet<>();
 
@@ -35,13 +35,21 @@ public class APIBase extends RequestManager {
     private ApiIndeterminate mIndeterminate;
 
     protected APIBase(String uri, ApiParams apiParams) {
-        this(uri, apiParams, 0);
+        this(Request.Method.POST, uri, apiParams, 0);
     }
 
     protected APIBase(String uri, ApiParams apiParams, int version) {
+        this(Request.Method.POST, uri, apiParams, version);
+    }
+
+    protected APIBase(int method, String uri, ApiParams apiParams) {
+        this(method, uri, apiParams, 0);
+    }
+
+    protected APIBase(int method, String uri, ApiParams apiParams, int version) {
         mUri = uri;
         mApiParams = apiParams;
-        mMethod = Request.Method.POST;
+        mMethod = method;
         mTag = "";
     }
 
@@ -60,22 +68,19 @@ public class APIBase extends RequestManager {
         return this;
     }
 
-
-    public void get() {
-        mMethod = Request.Method.GET;
-        post();
-    }
-
-    public void post() {
+    public void fire() {
         synchronized (sCurrentUrls) {
             if (TextUtils.isEmpty(mHost)) {
                 mHost = HOST;
-                // TODO: 2016/8/23 切换到测试平台;
-                //测试平台
-//            mHost = TEST_HOST;
             }
 
             String url = new StringBuilder(mHost).append(mUri).toString();
+
+            ApiHeaders headers = new ApiHeaders();
+            String cookies = CookieManger.getInstance().getCookies();
+            if (!TextUtils.isEmpty(cookies)) {
+                headers.put("Cookie", cookies);
+            }
 
             if (sCurrentUrls.add(url)) {
                 Type type;
@@ -105,7 +110,7 @@ public class APIBase extends RequestManager {
                     type = mCallback.getGenericType();
                 }
 
-                GsonRequest request = new GsonRequest(mMethod, url, mApiParams, type, mCallback);
+                GsonRequest request = new GsonRequest(mMethod, url, headers, mApiParams, type, mCallback);
                 request.setTag(mTag);
 
                 enqueue(request);

@@ -7,7 +7,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 
 import java.io.File;
 
@@ -22,7 +21,7 @@ public class RequestManager {
 
         public static RequestQueue newRequestQueue(File cacheDirectory) {
             File cacheDir = new File(cacheDirectory, DEFAULT_CACHE_DIR);
-            Network network = new BasicNetwork(new HurlStack());
+            Network network = new BasicNetwork(new CookieHurlStack());
             RequestQueue queue = new RequestQueue(new DiskBasedCache(cacheDir), network);
             queue.start();
             return queue;

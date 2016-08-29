@@ -53,7 +53,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             if (positionBriefList != null ) {
                 for (int j = 0; j < positionBriefList.size(); j++) {
                     PositionBrief brief = positionBriefList.get(j);
-                    if (product.getInstrumentCode().equalsIgnoreCase(brief.getInstrumentCode())) {
+                    if (product.getVarietyType().equalsIgnoreCase(brief.getInstrumentCode())) {
                         pkg.setPositionBrief(brief);
                         break;
                     }
@@ -63,7 +63,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             if (marketBriefList != null) {
                 for (int k = 0; k < marketBriefList.size(); k++) {
                     MarketBrief marketBrief = marketBriefList.get(k);
-                    if (product.getInstrumentCode().equalsIgnoreCase(marketBrief.getCode())) {
+                    if (product.getVarietyType().equalsIgnoreCase(marketBrief.getCode())) {
                         pkg.setMarketBrief(marketBrief);
                         break;
                     }
@@ -87,7 +87,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             Product product = pkg.getProduct();
             for (int j = 0; positionBriefList != null && j < positionBriefList.size(); j++) {
                 PositionBrief positionBrief= positionBriefList.get(j);
-                if (product.getInstrumentCode().equalsIgnoreCase(positionBrief.getInstrumentCode())) {
+                if (product.getVarietyType().equalsIgnoreCase(positionBrief.getInstrumentCode())) {
                     pkg.setPositionBrief(positionBrief);
                     count++; // when each product has its position brief, count++.
                     break;
@@ -119,7 +119,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             Product product = pkg.getProduct();
             for (int j = 0; marketBriefList != null && j < marketBriefList.size(); j++) {
                 MarketBrief marketBrief = marketBriefList.get(j);
-                if (product.getInstrumentCode().equalsIgnoreCase(marketBrief.getCode())) {
+                if (product.getVarietyType().equalsIgnoreCase(marketBrief.getCode())) {
                     pkg.setMarketBrief(marketBrief);
                     count++; // when each product has its position brief, count++.
                     break;
@@ -152,7 +152,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
     @Override
     public String getGroupName() {
-        if (getProduct().getCurrency().equalsIgnoreCase(Product.CURRENCY_RMB)) {
+        if (getProduct().getIsDomestic() == Product.IS_DOMESTIC) {
             return "国内期货";
         }
         return "国外期货";

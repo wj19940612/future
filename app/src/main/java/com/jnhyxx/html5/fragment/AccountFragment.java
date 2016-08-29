@@ -1,15 +1,12 @@
 package com.jnhyxx.html5.fragment;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,19 +14,16 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
-import com.jnhyxx.html5.activity.account.ProfileActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
-import com.jnhyxx.html5.domain.ProfileSummary;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -67,7 +61,7 @@ public class AccountFragment extends BaseFragment {
     //积分明细
 //    @BindView(R.id.scoreDetail)
 //    IconTextRow mScoreDetail;
-    @BindView(R.id.personalInfo)
+    @BindView(R.id.aboutUs)
 //    IconTextRow mPersonalInfo;
             RelativeLayout mPersonalInfo;
     @BindView(R.id.paidToPromote)
@@ -85,10 +79,15 @@ public class AccountFragment extends BaseFragment {
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
+<<<<<<< HEAD
     @BindView(R.id.fragmentAccountTitleBar)
     TitleBar mTitleBar;
 //    @BindView(R.id.fragment_account_titleBar_iv_setting)
 //    ImageView mSettingImageView;
+=======
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+>>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
     private Unbinder mBinder;
 
     @Override
@@ -126,6 +125,7 @@ public class AccountFragment extends BaseFragment {
                     updateAccountInfoView();
                 }
             });
+<<<<<<< HEAD
        /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -133,6 +133,8 @@ public class AccountFragment extends BaseFragment {
                     updateAccountInfoView();
                 }
             });*/
+=======
+>>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
             requestFundInfo();
 
         } else {
@@ -154,17 +156,15 @@ public class AccountFragment extends BaseFragment {
                         mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
                         mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
                     }
-                }).post();
-
+                }).fire();
     }
 
-    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.personalInfo, R.id.paidToPromote})
+    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
                 Launcher.with(getActivity(), SignInActivity.class).execute();
                 break;
-            //zhuce
             case R.id.signUp:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
@@ -178,7 +178,7 @@ public class AccountFragment extends BaseFragment {
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
                             }
-                        }).post();
+                        }).fire();
                 break;
             //提现
             case R.id.withdraw:
@@ -190,7 +190,7 @@ public class AccountFragment extends BaseFragment {
                                         .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
                                         .execute();
                             }
-                        }).post();
+                        }).fire();
                 break;
             case R.id.messageCenter:
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
@@ -198,23 +198,9 @@ public class AccountFragment extends BaseFragment {
             case R.id.fundDetail:
                 openFundDetailPage(true);
                 break;
-            //积分明细
-//            case R.id.scoreDetail:
-//                openFundDetailPage(false);
-//                break;
-            //关于我们
-            case R.id.personalInfo:
-//                API.Account.getProfileSummary(User.getUser().getToken()).setTag(TAG)
-//                        .setCallback(new Callback2<Resp<ProfileSummary>, ProfileSummary>() {
-//                            @Override
-//                            public void onRespSuccess(ProfileSummary profileSummary) {
-//                                Launcher.with(getActivity(), ProfileActivity.class)
-//                                        .putExtra(Launcher.EX_PAYLOAD, profileSummary)
-//                                        .execute();
-//                            }
-//                        }).post();
-//                break;
+            case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
+                break;
             case R.id.paidToPromote:
                 break;
         }
@@ -231,7 +217,7 @@ public class AccountFragment extends BaseFragment {
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
                                     .execute();
                         }
-                    }).post();
+                    }).fire();
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }

@@ -102,6 +102,6 @@ public class ModifyPwdActivity extends BaseActivity {
                             ToastUtil.show(resp.getMsg());
                         }
                     }
-                }).post();
+                }).fire();
     }
 }

@@ -99,7 +99,7 @@ public class FindPwdActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     @OnClick(R.id.nextStepButton)
@@ -121,7 +121,7 @@ public class FindPwdActivity extends BaseActivity {
                             ToastUtil.show(resp.getMsg());
                         }
                     }
-                }).post();
+                }).fire();
     }
 
     @Override

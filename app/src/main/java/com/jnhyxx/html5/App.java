@@ -11,6 +11,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.umenglibrary.UmengLib;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
@@ -39,6 +40,7 @@ public class App extends Application {
         }
 
         API.init(sContext.getCacheDir());
+        CookieManger.getInstance().init(sContext.getFilesDir());
 
         UmengLib.init(sContext);
 

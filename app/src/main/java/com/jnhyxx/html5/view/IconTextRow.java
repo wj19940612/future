@@ -41,7 +41,7 @@ public class IconTextRow extends LinearLayout {
     private void processAttrs(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.IconTextRow);
 
-        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14,
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
                 getResources().getDisplayMetrics());
 
         mLeftIcon = typedArray.getDrawable(R.styleable.IconTextRow_leftIcon);

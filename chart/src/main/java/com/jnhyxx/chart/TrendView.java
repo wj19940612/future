@@ -312,6 +312,7 @@ public class TrendView extends ChartView {
     public void setSettings(ChartSettings settings) {
         mSettings = (Settings) settings;
         super.setSettings(settings);
+        redraw();
     }
 
     @Override
@@ -422,9 +423,9 @@ public class TrendView extends ChartView {
                                     int left, int top, int width, int height,
                                     int left2, int top2, int width2, int height2,
                                     Canvas canvas) {
-        int size = mDataList.size();
         float firstChartX = 0;
-        if (mDataList != null && size > 0) {
+        if (mDataList != null && mDataList.size() > 0) {
+            int size = mDataList.size();
             Path path = getPath();
             float chartX = 0;
             float chartY = 0;

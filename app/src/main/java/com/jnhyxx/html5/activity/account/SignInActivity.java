@@ -78,7 +78,7 @@ public class SignInActivity extends BaseActivity {
     void signIn() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
-        API.Account.signIn(phoneNum, password)
+        API.User.signIn(phoneNum, password)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback1<Resp<JsonObject>>() {

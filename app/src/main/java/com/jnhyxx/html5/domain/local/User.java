@@ -59,6 +59,10 @@ public class User {
         saveToPreference();
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public String getToken() {
         if (getLoginInfo() != null) {
             return getLoginInfo().getTokenInfo().getToken();
@@ -66,5 +70,8 @@ public class User {
         return "";
     }
 
+    public double getAvailableBalance() {
+        return 0; // TODO: 8/29/16 可用资金
+    }
 
 }

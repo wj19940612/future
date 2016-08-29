@@ -84,7 +84,7 @@ public class FindPwdActivity extends BaseActivity {
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-        API.Account.obtainAuthCodeWhenFindPwd(phoneNum)
+        API.User.obtainAuthCodeWhenFindPwd(phoneNum)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -106,7 +106,7 @@ public class FindPwdActivity extends BaseActivity {
     void doNextStepButtonClick() {
         final String phoneNum = mPhoneNum.getText().toString().trim();
         final String authCode = mMessageAuthCode.getText().toString().trim();
-        API.Account.authCodeWhenFindPassword(phoneNum, authCode)
+        API.User.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override

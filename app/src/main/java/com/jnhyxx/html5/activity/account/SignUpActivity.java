@@ -14,7 +14,6 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.LoginInfo;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -114,7 +113,7 @@ public class SignUpActivity extends BaseActivity {
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
-        API.Account.obtainAuthCode(phoneNum)
+        API.User.obtainAuthCode(phoneNum)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -136,14 +135,14 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
-        API.Account.signUp(phoneNum, password, authCode, null)
+        API.User.signUp(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                            User.getUser().setLoginInfo(info);
+                            com.jnhyxx.html5.domain.local.User.getUser().setLoginInfo(info);
 
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

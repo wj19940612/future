@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -83,10 +82,10 @@ public class NameAuthActivity extends BaseActivity {
 
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
-        String token = User.getUser().getToken();
+        String token = com.jnhyxx.html5.domain.local.User.getUser().getToken();
         String realName = mName.getText().toString().trim();
         String identityNum = mIdentityNum.getText().toString().trim();
-        API.Account.authUserName(token, realName, identityNum)
+        API.User.authUserName(token, realName, identityNum)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<NameAuth.Result>>() {

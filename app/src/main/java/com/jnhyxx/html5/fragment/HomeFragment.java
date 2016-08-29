@@ -20,11 +20,10 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.local.User;
-import com.jnhyxx.html5.domain.market.MarketBrief;
+import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.domain.order.HomePositions;
+import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
@@ -56,7 +55,7 @@ public class HomeFragment extends BaseFragment {
     private List<ProductPkg> mProductPkgList;
     private List<Product> mProductList;
     private List<HomePositions.CashOpSBean> mCashPositionList;
-    private List<MarketBrief> mMarketBriefList;
+    private List<MarketData> mMarketDataList;
 
     private ProductPkgAdapter mProductPkgAdapter;
     private HomeListHeader mHomeListHeader;
@@ -83,11 +82,8 @@ public class HomeFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
-                    Launcher.with(getActivity(), TradeActivity.class)
-                            .putExtra(Product.EX_PRODUCT, pkg.getProduct())
-                            .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                            .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                            .execute();
+                    // TODO: 8/29/16 要先请求socket连接地址和端口
+                    requestProductExchangeStatus(pkg.getProduct());
                 }
             }
         });
@@ -98,6 +94,16 @@ public class HomeFragment extends BaseFragment {
         requestProductMarketList();
 
         startScheduleJob(5 * 1000);
+    }
+
+    private void requestProductExchangeStatus(Product product) {
+        // TODO: 8/29/16 获取交易所状态或者下一次开市时间
+        
+        Launcher.with(getActivity(), TradeActivity.class)
+                .putExtra(Product.EX_PRODUCT, product)
+                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                .execute();
     }
 
     private void requestOrderReport() {
@@ -128,7 +134,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestHomeAdvertisement() {
-        API.Account.getHomeAdvertisements()
+        API.User.getHomeAdvertisements()
                 .setCallback(new Callback2<Resp<HomeAdvertisement>, HomeAdvertisement>() {
                     @Override
                     public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
@@ -144,33 +150,28 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
                         ProductPkg.updateProductPkgList(mProductPkgList, products,
-                                mCashPositionList, mMarketBriefList);
+                                mCashPositionList, mMarketDataList);
                         updateProductListView();
                     }
                 }).fire();
     }
 
     private void requestProductMarketList() {
-        API.Market.getProductMarketBriefList()
-                .setCallback(new Callback<Resp<List<MarketBrief>>>() {
+        API.Market.getProductMarketList().setTag(TAG)
+                .setCallback(new Callback<Resp<List<MarketData>>>() {
                     @Override
-                    public void onReceive(Resp<List<MarketBrief>> listResp) {
+                    public void onReceive(Resp<List<MarketData>> listResp) {
                         if (listResp.isSuccess()) {
-                            mMarketBriefList = listResp.getData();
-                            boolean updateProductList =
-                                    ProductPkg.updateMarketInProductPkgList(mProductPkgList, mMarketBriefList);
-                            if (updateProductList) {
-                                // requestProductList(); // TODO: 8/10/16 add later
-                            } else {
-                                updateProductListView();
-                            }
+                            mMarketDataList = listResp.getData();
+                            ProductPkg.updateMarketInProductPkgList(mProductPkgList, mMarketDataList);
+                            updateProductListView();
                         }
                     }
-                }).setTag(TAG).fire();
+                }).fire();
     }
 
     private void requestHomePositions() {
-        if (User.getUser().isLogin()) {
+        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override
@@ -284,12 +285,12 @@ public class HomeFragment extends BaseFragment {
                     mMarketCloseText.setVisibility(View.GONE);
                     mMarketCloseArea.setVisibility(View.GONE);
                     mPriceChangeArea.setVisibility(View.VISIBLE);
-                    MarketBrief marketBrief = pkg.getMarketBrief(); // Market status
-                    if (marketBrief != null) {
-                        mLastPrice.setText(FinanceUtil.formatWithScale(marketBrief.getLastPrice(),
+                    MarketData marketData = pkg.getMarketData(); // Market status
+                    if (marketData != null) {
+                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
                                 product.getDecimalScale()));
-                        mPriceChangePercent.setText(marketBrief.getUnsignPercentage());
-                        String priceChangePercent = marketBrief.getPercentage();
+                        mPriceChangePercent.setText(marketData.getUnsignedPercentage());
+                        String priceChangePercent = marketData.getPercentage();
                         if (priceChangePercent.startsWith("-")) {
                             mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                             mPriceChangePercent.setBackgroundResource(R.drawable.bg_green_primary);

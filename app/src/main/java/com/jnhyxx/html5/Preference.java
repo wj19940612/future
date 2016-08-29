@@ -10,6 +10,7 @@ public class Preference {
     public interface Key {
         String IS_FOREGROUND = "isForeground";
         String USER_JSON = "userJson";
+        String SERVER_TIME = "ServerTime";
     }
 
     private static Preference sInstance;
@@ -45,5 +46,21 @@ public class Preference {
 
     public String getUserJson() {
         return mPrefs.getString(Key.USER_JSON, null);
+    }
+
+    public void setTimestamp(String key, long timestamp) {
+        getEditor().putLong(key, timestamp).commit();
+    }
+
+    public long getTimestamp(String key) {
+        return mPrefs.getLong(key, 0);
+    }
+
+    public void setServerTime(long serverTime) {
+        getEditor().putLong(Key.SERVER_TIME, serverTime).commit();
+    }
+
+    public long getServerTime() {
+        return mPrefs.getLong(Key.SERVER_TIME, 0);
     }
 }

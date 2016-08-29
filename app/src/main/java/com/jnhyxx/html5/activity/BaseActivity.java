@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
+import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.TimerHandler;
 import com.jnhyxx.html5.view.dialog.Progress;
@@ -62,6 +63,7 @@ public class BaseActivity extends AppCompatActivity implements
                 API.cancel(TAG);
             }
         });
+        SysTime.getSysTime().sync();
     }
 
     @Override

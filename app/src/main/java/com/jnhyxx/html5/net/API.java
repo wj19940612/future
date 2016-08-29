@@ -42,7 +42,17 @@ public class API extends APIBase {
         super(method, uri, apiParams, version);
     }
 
-    public static class Account {
+    public static class User {
+
+        /**
+         * /user/user/getSystemTime.do 获取服务器系统时间,用于同步
+         *
+         * @return
+         */
+        public static API getSystemTime() {
+            return new API("/user/user/getSystemTime.do", null);
+        }
+
         /**
          * 更新友盟设备号 /user/user/updateUmCode
          *
@@ -385,12 +395,12 @@ public class API extends APIBase {
         }
 
         /**
-         * /futuresquota/getAllCacheData 获取产品行情的简要
+         * /quota/quota/getAllQuotaData.do 获取产品行情数据
          *
          * @return
          */
-        public static API getProductMarketBriefList() {
-            return new API("/futuresquota/getAllCacheData", null);
+        public static API getProductMarketList() {
+            return new API("/quota/quota/getAllQuotaData.do", null);
         }
     }
 

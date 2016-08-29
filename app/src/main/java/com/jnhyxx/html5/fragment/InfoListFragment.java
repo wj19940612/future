@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -76,7 +75,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
     private void requestInfoList() {
         if (mType == TYPE_MARKET_ANALYSING) {
             int SECTION_ID_MARKET_ANALYSING = 58;
-            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
+            API.User.getInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
                         @Override
                         public void onRespSuccess(List<Information> informationList) {
@@ -85,7 +84,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
                     }).setTag(TAG).setIndeterminate(this).fire();
         } else {
             int SECTION_ID_INDUSTRY = 57;
-            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
+            API.User.getInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
                         @Override
                         public void onRespSuccess(List<Information> informationList) {

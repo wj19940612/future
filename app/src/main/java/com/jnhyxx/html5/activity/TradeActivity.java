@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
+import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.fragment.PlaceOrderFragment;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
@@ -95,18 +97,56 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
 
         initData(getIntent());
 
+        initSlidingMenu();
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mMenu.showMenu();
             }
         });
+        mTradePageHeader.setOnViewClickListener(new TradePageHeader.OnViewClickListener() {
+            @Override
+            public void onSignInButtonClick() {
 
-        initSlidingMenu();
-        initChartView();
+            }
+
+            @Override
+            public void onOrderListButtonClick() {
+
+            }
+
+            @Override
+            public void onOneKeyClosePosButtonClick() {
+
+            }
+
+            @Override
+            public void onProfitAreaClick() {
+
+            }
+        });
+
+        updateChartViewBasedOnProduct();
 
         // TODO: 8/20/16 测试代码,后面删除
-        startScheduleJob(1000);
+        // startScheduleJob(1000);
+    }
+
+    private void initData(Intent intent) {
+        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (User.getUser().isLogin()) {
+            mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
+            mTradePageHeader.setAvailableBalance(User.getUser().getAvailableBalance());
+        } else {
+            mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
+        }
     }
 
     // TODO: 8/20/16 测试代码,后面删除
@@ -140,17 +180,21 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         return Float.valueOf(temp[1]);
     }
 
-    private void initChartView() {
+    private void updateChartViewBasedOnProduct() {
+        TrendView trendView = mChartContainer.getTrendView();
+        if (trendView == null) {
+            trendView = new TrendView(this);
+            mChartContainer.addTrendView(trendView);
+        }
         TrendView.Settings settings = new TrendView.Settings();
-        settings.setBaseLines(9);
-        settings.setNumberScale(2);
+        settings.setBaseLines(mProduct.getBaseline());
+        settings.setNumberScale(mProduct.getDecimalScale());
+        settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
+        settings.setDisplayMarketTimes(mProduct.getDisplayMarketTimes());
         settings.setCalculateXAxisFromOpenMarketTime(true);
-        settings.setOpenMarketTimes("09:00;10:15;10:30;11:30;13:30;15:00;21:00;01:00");
-        settings.setDisplayMarketTimes("09:00;13:30;21:00;01:00");
-        TrendView trendView = new TrendView(this);
         trendView.setSettings(settings);
-        mChartContainer.addTrendView(trendView);
-        trendView.setDataList(TrendView.Util.createDataList(TESTDATA, settings.getOpenMarketTimes()));
+
+        //trendView.setDataList(TrendView.Util.createDataList(TESTDATA, settings.getOpenMarketTimes()));
     }
 
     private void initSlidingMenu() {
@@ -164,6 +208,16 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         MenuAdapter menuAdapter = new MenuAdapter(this);
         menuAdapter.addAll(mProductList);
         listView.setAdapter(menuAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Product product = (Product) adapterView.getItemAtPosition(position);
+                if (product != null) {
+                    mProduct = product;
+                    updateChartViewBasedOnProduct();
+                }
+            }
+        });
     }
 
     private void openOrdersPage() {
@@ -171,12 +225,6 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
                 .execute();
-    }
-
-    private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
-        mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})

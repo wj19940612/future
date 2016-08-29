@@ -42,7 +42,7 @@ public class TradePageHeader extends FrameLayout {
                 mListener.onProfitAreaClick();
                 break;
             case R.id.oneKeyClosePositionBtn:
-                mListener.onOneKeyButtonClick();
+                mListener.onOneKeyClosePosButtonClick();
                 break;
             case R.id.orderListBtn:
                 mListener.onOrderListButtonClick();
@@ -59,7 +59,7 @@ public class TradePageHeader extends FrameLayout {
 
         void onOrderListButtonClick();
 
-        void onOneKeyButtonClick();
+        void onOneKeyClosePosButtonClick();
 
         void onProfitAreaClick();
     }

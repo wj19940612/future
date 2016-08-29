@@ -20,7 +20,6 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.finance.FundInfo;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -104,17 +103,17 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void updateAccountInfoView() {
-        if (User.getUser().isLogin()) {
-            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
+        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+            String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick());
             Log.d(TAG, " " + format);
-            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
+            mNickname.setText(getString(R.string.nickname_logged, com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick()));
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
             mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User.getUser().logout();
+                    com.jnhyxx.html5.domain.local.User.getUser().logout();
                     updateAccountInfoView();
                 }
             });
@@ -132,7 +131,7 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void requestFundInfo() {
-        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+        API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                 .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                     @Override
                     public void onRespSuccess(FundInfo fundInfo) {
@@ -153,7 +152,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //充值
             case R.id.recharge:
-                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -165,7 +164,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //提现
             case R.id.withdraw:
-                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -190,8 +189,8 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void openFundDetailPage(final boolean isCash) {
-        if (User.getUser().isLogin()) {
-            API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+            API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                     .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                         @Override
                         public void onRespSuccess(FundInfo fundInfo) {

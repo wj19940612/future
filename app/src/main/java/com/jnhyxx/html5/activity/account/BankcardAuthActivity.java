@@ -17,7 +17,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -31,8 +30,6 @@ import com.johnz.kutils.ViewUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
 
 public class BankcardAuthActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
 
@@ -76,7 +73,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
         updateBankcardView(getIntent());
 
-        API.Account.getUserNameAuth(User.getUser().getToken())
+        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
                     @Override
@@ -165,7 +162,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                API.Account.updateBankcard(User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+                API.User.updateBankcard(com.jnhyxx.html5.domain.local.User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp<BankcardAuth>>() {
                             @Override

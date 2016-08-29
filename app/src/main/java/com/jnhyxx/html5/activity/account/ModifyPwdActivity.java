@@ -84,7 +84,7 @@ public class ModifyPwdActivity extends BaseActivity {
 
     @OnClick(R.id.confirmButton)
     public void onClick() {
-        API.Account.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
+        API.User.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.MarketBrief;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderReport;
-import com.jnhyxx.html5.domain.order.PositionBrief;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
@@ -56,7 +55,7 @@ public class HomeFragment extends BaseFragment {
 
     private List<ProductPkg> mProductPkgList;
     private List<Product> mProductList;
-    private List<PositionBrief> mPositionBriefList;
+    private List<HomePositions.CashOpSBean> mCashPositionList;
     private List<MarketBrief> mMarketBriefList;
 
     private ProductPkgAdapter mProductPkgAdapter;
@@ -96,7 +95,7 @@ public class HomeFragment extends BaseFragment {
         requestHomeAdvertisement();
         requestOrderReport();
         requestProductList();
-        requestProductMarketBriefList();
+        requestProductMarketList();
 
         startScheduleJob(5 * 1000);
     }
@@ -116,7 +115,7 @@ public class HomeFragment extends BaseFragment {
     public void onTimeUp(int count) {
         super.onTimeUp(count);
         if (getUserVisibleHint()) {
-            requestProductMarketBriefList();
+            requestProductMarketList();
             mHomeListHeader.nextOrderReport();
             mHomeListHeader.nextAdvertisement();
         }
@@ -125,7 +124,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestPositionBriefList();
+        requestHomePositions();
     }
 
     private void requestHomeAdvertisement() {
@@ -145,13 +144,13 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
                         ProductPkg.updateProductPkgList(mProductPkgList, products,
-                                mPositionBriefList, mMarketBriefList);
+                                mCashPositionList, mMarketBriefList);
                         updateProductListView();
                     }
                 }).fire();
     }
 
-    private void requestProductMarketBriefList() {
+    private void requestProductMarketList() {
         API.Market.getProductMarketBriefList()
                 .setCallback(new Callback<Resp<List<MarketBrief>>>() {
                     @Override
@@ -170,24 +169,24 @@ public class HomeFragment extends BaseFragment {
                 }).setTag(TAG).fire();
     }
 
-    private void requestPositionBriefList() {
+    private void requestHomePositions() {
         if (User.getUser().isLogin()) {
-            API.Order.getOrderPositionList(User.getUser().getToken())
-                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
+            API.Order.getHomePositions().setTag(TAG)
+                    .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override
-                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
-                            mPositionBriefList = positionBriefs;
+                        public void onRespSuccess(HomePositions homePositions) {
+                            mCashPositionList = homePositions.getCashOpS();
                             boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
+                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                             if (updateProductList) {
                                 requestProductList();
                             } else {
                                 updateProductListView();
                             }
                         }
-                    }).setTag(TAG).fire();
+                    }).fire();
         } else { // clear all product position
-            ProductPkg.clearPositionBriefs(mProductPkgList);
+            ProductPkg.clearPositions(mProductPkgList);
         }
     }
 
@@ -277,13 +276,8 @@ public class HomeFragment extends BaseFragment {
                     mMarketCloseText.setVisibility(View.VISIBLE);
                     mMarketCloseArea.setVisibility(View.VISIBLE);
                     mPriceChangeArea.setVisibility(View.GONE);
-                    // TODO: 2016/8/19 刚进入界面程序崩溃，空指针； 
                     String marketOpenTime = createMarketOpenTime(product, context);
-                    if (!TextUtils.isDigitsOnly(marketOpenTime)) {
-                        mMarketOpenTime.setText(marketOpenTime);
-                    } else {
-                        mMarketOpenTime.setText("开市时间");
-                    }
+                    mMarketOpenTime.setText(marketOpenTime);
                 } else {
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
@@ -310,8 +304,8 @@ public class HomeFragment extends BaseFragment {
                         mPriceChangePercent.setText("——%");
                         mPriceChangePercent.setCompoundDrawables(null, null, null, null);
                     }
-                    PositionBrief positionBrief = pkg.getPositionBrief(); // Position status
-                    if (positionBrief != null && positionBrief.getCash() > 0) {
+                    HomePositions.Position position = pkg.getPosition(); // Position status
+                    if (position != null && position.getHandsNum() > 0) {
                         mHoldingPosition.setVisibility(View.VISIBLE);
                     } else {
                         mHoldingPosition.setVisibility(View.GONE);

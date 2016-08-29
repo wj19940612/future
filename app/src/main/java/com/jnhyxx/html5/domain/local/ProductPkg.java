@@ -1,7 +1,7 @@
 package com.jnhyxx.html5.domain.local;
 
 import com.jnhyxx.html5.domain.market.MarketBrief;
-import com.jnhyxx.html5.domain.order.PositionBrief;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 
@@ -11,14 +11,10 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
     private Product mProduct;
     private MarketBrief mMarketBrief;
-    private PositionBrief mPositionBrief;
+    private HomePositions.Position mPosition;
 
     public ProductPkg(Product product) {
         mProduct = product;
-    }
-
-    public void setPositionBrief(PositionBrief positionBrief) {
-        mPositionBrief = positionBrief;
     }
 
     public void setMarketBrief(MarketBrief marketBrief) {
@@ -33,12 +29,17 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         return mMarketBrief;
     }
 
-    public PositionBrief getPositionBrief() {
-        return mPositionBrief;
+    public HomePositions.Position getPosition() {
+        return mPosition;
     }
 
-    public static void updateProductPkgList(List<ProductPkg> productPkgList, List<Product> productList,
-                                            List<PositionBrief> positionBriefList,
+    public void setPosition(HomePositions.Position position) {
+        mPosition = position;
+    }
+
+    public static void updateProductPkgList(List<ProductPkg> productPkgList,
+                                            List<Product> productList,
+                                            List<? extends HomePositions.Position> positionList,
                                             List<MarketBrief> marketBriefList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
@@ -50,11 +51,11 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             Product product = productList.get(i);
             ProductPkg pkg = new ProductPkg(product);
 
-            if (positionBriefList != null ) {
-                for (int j = 0; j < positionBriefList.size(); j++) {
-                    PositionBrief brief = positionBriefList.get(j);
-                    if (product.getVarietyType().equalsIgnoreCase(brief.getInstrumentCode())) {
-                        pkg.setPositionBrief(brief);
+            if (positionList != null ) {
+                for (int j = 0; j < positionList.size(); j++) {
+                    HomePositions.Position position = positionList.get(j);
+                    if (product.getVarietyType().equalsIgnoreCase(position.getVarietyType())) {
+                        pkg.setPosition(position);
                         break;
                     }
                 }
@@ -76,7 +77,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
     }
 
     public static boolean updatePositionInProductPkg(List<ProductPkg> productPkgList,
-                                                     List<PositionBrief> positionBriefList) {
+                                                     List<? extends HomePositions.Position> positionList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
@@ -85,10 +86,10 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
             Product product = pkg.getProduct();
-            for (int j = 0; positionBriefList != null && j < positionBriefList.size(); j++) {
-                PositionBrief positionBrief= positionBriefList.get(j);
-                if (product.getVarietyType().equalsIgnoreCase(positionBrief.getInstrumentCode())) {
-                    pkg.setPositionBrief(positionBrief);
+            for (int j = 0; positionList != null && j < positionList.size(); j++) {
+                HomePositions.Position position = positionList.get(j);
+                if (product.getVarietyType().equalsIgnoreCase(position.getVarietyType())) {
+                    pkg.setPosition(position);
                     count++; // when each product has its position brief, count++.
                     break;
                 }
@@ -97,8 +98,8 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
         boolean haveSameSize = true;
         boolean haveSameProducts = true;
-        if (positionBriefList != null) {
-            haveSameSize = (productPkgList.size() == positionBriefList.size());
+        if (positionList != null) {
+            haveSameSize = (productPkgList.size() == positionList.size());
             haveSameProducts = (count == productPkgList.size());
         }
 
@@ -106,6 +107,8 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
         return updateProductList;
     }
+
+
 
     public static boolean updateMarketInProductPkgList(List<ProductPkg> productPkgList,
                                                        List<MarketBrief> marketBriefList) {
@@ -139,14 +142,14 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         return updateProductList;
     }
 
-    public static void clearPositionBriefs(List<ProductPkg> productPkgList) {
+    public static void clearPositions(List<ProductPkg> productPkgList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
 
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
-            pkg.setPositionBrief(null);
+            pkg.setPosition(null);
         }
     }
 

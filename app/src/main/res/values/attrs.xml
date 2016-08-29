@@ -43,6 +43,18 @@
         <attr name="rightVisible" format="boolean"/>
         <attr name="backFeature" format="boolean"/>
         <attr name="backIcon" format="reference"/>
+        <attr name="barBackground" format="reference"/>
+    </declare-styleable>
+    <!--带圆环的imageView-->
+    <declare-styleable name="CircularAnnulusImageView">
+        <attr name="border_width" format="dimension"/>
+        <attr name="border_color" format="color"/>
+    </declare-styleable>
+    <!--仿照ExpandableListView，使上面控件点击后，底下控件可以展示-->
+    <declare-styleable name="ExpandableLayout">
+        <attr name="el_leftTxt" format="reference|string"/>
+        <attr name="el_duration" format="integer"/>
+        <attr name="el_bottomTxt" format="reference|string"/>
     </declare-styleable>
 
     <declare-styleable name="OrderConfigurationSelector">

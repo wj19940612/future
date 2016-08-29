@@ -64,7 +64,7 @@
     <string name="account_balance">账户余额(元)</string>
     <string name="account_score">我的积分</string>
     <string name="sign_in">登录</string>
-    <string name="sign_up_free">免费注册</string>
+    <string name="sign_up_free">注册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
     <string name="score_detail">积分明细</string>
@@ -206,8 +206,46 @@
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>
     <string name="sell_volume">卖量</string>
+
+    <string name="prompt_market_close_next_trade_time_is">已休市, 下次交易时间 </string>
+
+    <!--我的界面-->
+    <string name="account_trade_info">交易明细</string>
+    <string name="account_aboutus">关于我们</string>
+    <string name="account_not_login">未登陆</string>
+    <string name="account_mine_integral">%1$s 分</string>
+    <string name="account_user_balance">余额(元)</string>
+
     <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
     <string name="next_trade_time_is">下次交易时间 %1$s</string>
+    <!--我的界面/消息中心/消息详情-->
+    <string name="account_message_center_info_title">消息详情</string>
+
+    <!--我的界面/关于我们-->
+    <string name="account_about_us_app_version">%1$s (%2$s)</string>
+    <string name="account_about_us_company_info">公司简介</string>
+    <string name="account_about_us_manager_team">管理团队</string>
+    <string name="account_about_us_company_culture">企业文化</string>
+    <string name="account_about_us_collaborate_case">合作案例</string>
+    <string name="account_about_us_company_telphone">联系电话</string>
+    <string name="account_about_us_company_telphone_number">400-617-2286</string>
+    <string name="account_about_us_service_qq">客服QQ</string>
+    <string name="account_about_us_service_qq_number">3088152027</string>
+    <string name="account_about_us_company_info_child">济南恒运信息技术有限公司成立于2014年3月，是一家集金融服务、软件开发、资产配置、国际外汇、原油、黄金、期货等金融产品于一体的高新技术金融服务公司。
+\n目前，已与华东、华中、华南、华北等地区近60家企业达成战略合作协议，更是在浙江、山东、上海、北京等地设立分公司，业务遍布全国各地，已成为中国最有影响力的“以服务为导向，以创新为灵魂、以方便快捷为宗旨”的高新技术企业之一。
+\n原油期货宝是济南恒运信息技术有限公司旗下的金融创新产品，旨在为大众用户提供更加便捷、低成本的期货交易。无需下载，注册免开户，超低门槛玩美原油、恒指、沪金等国内外期货。</string>
+    <string name="account_about_us_manager_team_child">恒运的团队核心成员均来自于支付宝、网易等顶级互联网公司，以及在券商、投研机构等领域具有丰富的金融行业量化投资经验，并且在各自行业拥有多年管理经验的高端专业人士。</string>
+    <string name="account_about_us_company_culture_child">愿景
+                                \n让用户的每一分钱都变得更有价值
+                                \n定位
+                                \n专业、安全、便捷、可信赖的投资服务平台
+                                \n价值观
+                                \n快速、简约、严谨、创新</string>
+    <string name="account_about_us_collaborate_case_child">杭州盈投公司是一家专业的配资公司，以前使用HOMS做股票配资，使用鑫管家做期货配资，由于homs及鑫管家都无法使用，使业务陷入了停滞，大量客户面临流失的风险。
+\n在这种情况下，盈投公司找到了我们公司，定制了一套专属于盈投公司自己的配资交易系统，不仅完全取代了之前鑫管家等软件，而且由于系统风控非常强，放大了配资比例，获得了更高额的利润！这种方式用户也很喜欢，投资门槛很低，每天的交易量很大。
+\n一个网址即可展开业务，所有推广都在微信公众号。
+\n最终，盈投的月利润比以前翻了7-10倍！靠的就是系统的强大风控系统保障下提高了盈利模式。同时靠营销系统每个月客户数量都大了增长。
+\n盈投坦言，现在增长到500多个活跃用户，月利润500多万元。</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>
@@ -215,4 +253,19 @@
     <string name="total_to_be_paid">合计支付</string>
     <string name="last_bid_ask_price">最新买入价</string>
 
+    <!--我的界面/推广挣钱-->
+    <string name="account_expand_make_money_right_title">我的用户</string>
+    <string name="account_expand_make_money_title">推广挣钱</string>
+    <string name="account_expand_make_money_brokerage">可提佣金</string>
+    <string name="account_expand_make_money_brokerage_number">0.00</string>
+    <string name="account_expand_make_money_brokerage_pickup">提取</string>
+    <string name="account_expand_make_money_proxy_grade">代理等级</string>
+    <string name="account_expand_make_money_brokerage_scle">佣金比例</string>
+    <string name="account_expand_make_money_mine_account">我的用户</string>
+    <string name="account_expand_make_money_exchange_account">交易用户</string>
+    <string name="account_expand_make_money_two_dimensional_code">长按二维码保存图片，发送给好友</string>
+    <string name="account_expand_make_money_share_lianjie">分享您的专属链接</string>
+    <string name="account_expand_make_money_share_web">http://www.jnhyxx.com/?abc=9a4453</string>
+    <string name="account_expand_make_money_invite_code">您的邀请码</string>
+    <string name="common_copy_text">复制</string>
 </resources>

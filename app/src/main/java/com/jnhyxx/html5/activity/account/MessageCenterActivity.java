@@ -12,6 +12,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
+import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +74,6 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
 
     @Override
     public void onMsgItemClick(SysTradeMessage sysTradeMessage) {
-
+        Launcher.with(MessageCenterActivity.this,MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD,sysTradeMessage).execute();
     }
 }

@@ -18,6 +18,8 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.content.ContentValues.TAG;
+
 public class APIBase extends RequestManager {
 
     public final static String HOST = BuildConfig.API_HOST;

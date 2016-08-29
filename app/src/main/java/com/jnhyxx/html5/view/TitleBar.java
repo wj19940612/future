@@ -29,6 +29,7 @@ public class TitleBar extends RelativeLayout {
     private boolean mRightVisible;
     private boolean mBackFeature;
     private Drawable mBackIcon;
+    private int mBackgroundRes;
 
     private TextView mTitleView;
     private TextView mLeftView;
@@ -65,12 +66,13 @@ public class TitleBar extends RelativeLayout {
         if (customViewResId != -1) {
             mCustomView = LayoutInflater.from(getContext()).inflate(customViewResId, null);
         }
+        mBackgroundRes = typedArray.getResourceId(R.styleable.TitleBar_barBackground, R.color.colorPrimary);
 
         typedArray.recycle();
     }
 
     private void init() {
-        setBackgroundResource(R.color.colorPrimary);
+        setBackgroundResource(mBackgroundRes);
         int fixedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
                 getResources().getDisplayMetrics());
 

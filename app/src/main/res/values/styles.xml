@@ -81,5 +81,41 @@
         <item name="android:paddingLeft">30dp</item>
         <item name="android:textColor">#262626</item>
     </style>
-
+    <!--关于我们界面的列表容器-->
+    <style name="AboutAsEntryRelativeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <!--关于我们界面的列表左边的文字-->
+    <style name="AboutAsEntryLeftTextViewStyle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--关于我们界面的列表左边的图片-->
+    <style name="AboutAsEntryRightImageViewStyle">
+        <item name="android:src">@android:drawable/arrow_down_float</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    <!--关于我们界面的列表点击后出现的详细信息-->
+    <style name="AboutAsEntryBottomTextViewStyle">
+        <item name="android:visibility">gone</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

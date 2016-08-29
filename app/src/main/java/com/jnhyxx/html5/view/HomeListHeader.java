@@ -19,6 +19,7 @@ import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.order.OrderReport;
+import com.jnhyxx.html5.net.APIBase;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
@@ -178,7 +179,10 @@ public class HomeListHeader extends FrameLayout {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             HomeAdvertisement.NewsNoticeImgListBean bean = mList.get(pos);
             container.addView(imageView, 0);
+            // TODO: 2016/8/23 正式平台的地址
             Picasso.with(mContext).load(BuildConfig.API_HOST + bean.getMiddleBanner()).into(imageView);
+            // TODO: 2016/8/23 测试平台
+//            Picasso.with(mContext).load(APIBase.TEST_HOST + bean.getMiddleBanner()).into(imageView);
             return imageView;
         }
 

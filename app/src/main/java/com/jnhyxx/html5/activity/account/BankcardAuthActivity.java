@@ -32,6 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
+
 public class BankcardAuthActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
 
     public static final String NAME_AUTH_RESULT = "nameAuthResult";

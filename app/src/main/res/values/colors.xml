@@ -19,4 +19,12 @@
     <color name="colorSlidingMenu">#1E61B0</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
+    
+    
+    <!--我的fragment-->
+    <color name="account_center_text">#262626</color>
+    <color name="account_top_blue_text">#358CF3</color>
+    <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
+
+    <color name="common_bg">#EDF0F5</color>
 </resources>

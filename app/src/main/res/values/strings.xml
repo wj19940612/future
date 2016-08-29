@@ -255,6 +255,7 @@
     <string name="account_expand_make_money_brokerage_pickup">提取</string>
     <string name="account_expand_make_money_proxy_grade">代理等级</string>
     <string name="account_expand_make_money_brokerage_scle">佣金比例</string>
+    <string name="account_expand_make_money_brokerage_scle_number">%1$d%</string>
     <string name="account_expand_make_money_mine_account">我的用户</string>
     <string name="account_expand_make_money_exchange_account">交易用户</string>
     <string name="account_expand_make_money_two_dimensional_code">长按二维码保存图片，发送给好友</string>

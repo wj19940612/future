@@ -85,10 +85,10 @@ public class AccountFragment extends BaseFragment {
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
-    //    @BindView(R.id.titleBar)
-//    TitleBar mTitleBar;
-    @BindView(R.id.fragment_account_titleBar_iv_setting)
-    ImageView mSettingImageView;
+    @BindView(R.id.fragmentAccountTitleBar)
+    TitleBar mTitleBar;
+//    @BindView(R.id.fragment_account_titleBar_iv_setting)
+//    ImageView mSettingImageView;
     private Unbinder mBinder;
 
     @Override
@@ -118,28 +118,28 @@ public class AccountFragment extends BaseFragment {
             mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
-           /* mTitleBar.setRightVisible(true);
+            mTitleBar.setRightVisible(true);
             mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     User.getUser().logout();
                     updateAccountInfoView();
                 }
-            });*/
-            mSettingImageView.setOnClickListener(new View.OnClickListener() {
+            });
+       /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     User.getUser().logout();
                     updateAccountInfoView();
                 }
-            });
+            });*/
             requestFundInfo();
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
             mNickname.setText(R.string.nickname_unknown);
-//            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightVisible(true);
 
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.account_mine_integral, getString(R.string.zero)));

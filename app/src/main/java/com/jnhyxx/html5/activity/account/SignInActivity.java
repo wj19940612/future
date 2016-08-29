@@ -2,7 +2,12 @@ package com.jnhyxx.html5.activity.account;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,8 +31,8 @@ import butterknife.OnClick;
 
 public class SignInActivity extends BaseActivity {
 
-    @BindView(R.id.closeButton)
-    ImageView mCloseButton;
+    /* @BindView(R.id.closeButton)
+     ImageView mCloseButton;*/
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.password)
@@ -39,12 +44,20 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
+    @BindView(R.id.login_image_password_type)
+    ImageView imageViewPasswordType;
+    @BindView(R.id.login_image_phone_delete)
+    ImageView ivPhoneDelete;
+
+    private boolean flag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
 
+        mSignUp.setEnabled(true);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
     }
@@ -56,16 +69,45 @@ public class SignInActivity extends BaseActivity {
             if (enable != mSignInButton.isEnabled()) {
                 mSignInButton.setEnabled(enable);
             }
+            ivPhoneDeleteStatus();
+            imageViewPasswordTypeStatus();
         }
     };
 
+    private void imageViewPasswordTypeStatus() {
+        String password = mPassword.getText().toString().trim();
+        if (!TextUtils.isEmpty(password)) {
+            imageViewPasswordType.setVisibility(View.VISIBLE);
+        } else {
+            imageViewPasswordType.setVisibility(View.GONE);
+        }
+    }
+
+    private void ivPhoneDeleteStatus() {
+        String phoneNum = mPhoneNum.getText().toString().trim();
+        if (!TextUtils.isEmpty(phoneNum)) {
+            ivPhoneDelete.setVisibility(View.VISIBLE);
+        } else {
+            ivPhoneDelete.setVisibility(View.GONE);
+        }
+    }
+
     private boolean checkSignInButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
+        if (!TextUtils.isEmpty(phoneNum) && phoneNum.length() > 1) {
+            ivPhoneDelete.setVisibility(View.VISIBLE);
+        } else {
+            ivPhoneDelete.setVisibility(View.GONE);
+        }
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
-
         String password = mPassword.getText().toString().trim();
+        if (!TextUtils.isEmpty(password) && password.length() > 1) {
+            imageViewPasswordType.setVisibility(View.VISIBLE);
+        } else {
+            imageViewPasswordType.setVisibility(View.GONE);
+        }
         if (TextUtils.isEmpty(password) || password.length() < 6) {
             return false;
         }
@@ -73,9 +115,41 @@ public class SignInActivity extends BaseActivity {
         return true;
     }
 
-    @OnClick(R.id.closeButton)
-    void close() {
-        finish();
+    /*  @OnClick(R.id.closeButton)
+      void close() {
+          finish();
+      }
+  */
+    @OnClick({R.id.login_image_phone_delete, R.id.login_image_password_type})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.login_image_phone_delete:
+                String phoneNum = mPhoneNum.getText().toString();
+                if (!TextUtils.isEmpty(phoneNum)) {
+                    mPhoneNum.setText("");
+                }
+                break;
+            case R.id.login_image_password_type:
+                changeEdittextPasswordInputtYPE();
+                break;
+        }
+    }
+
+    private void changeEdittextPasswordInputtYPE() {
+        if (!flag) {
+            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            imageViewPasswordType.setSelected(true);
+        } else {
+            imageViewPasswordType.setSelected(false);
+            mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+        flag = !flag;
+        mPassword.postInvalidate();
+        CharSequence text = mPassword.getText();
+        if (text instanceof Spannable) {
+            Spannable spanText = (Spannable) text;
+            Selection.setSelection(spanText, text.length());
+        }
     }
 
     @OnClick(R.id.signInButton)

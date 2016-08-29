@@ -27,4 +27,8 @@
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
     <color name="common_bg">#EDF0F5</color>
+
+
+    <!--登陆界面的文本输入框的颜色-->
+    <color name="login_edittext_hint">#CBCBCB</color>
 </resources>

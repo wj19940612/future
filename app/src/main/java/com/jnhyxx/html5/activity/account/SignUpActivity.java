@@ -28,16 +28,16 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends BaseActivity {
 
-    @BindView(R.id.phoneNum)
+    @BindView(R.id.activity_register_phoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.messageAuthCode)
+    @BindView(R.id.activity_register_messageAuthCode)
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
     @BindView(R.id.password)
     EditText mPassword;
-    @BindView(R.id.promoteCode)
-    EditText mPromoteCode;
+    //    @BindView(R.id.promoteCode)
+//    EditText mPromoteCode;
     @BindView(R.id.agree_protocol)
     CheckBox mAgreeProtocol;
     @BindView(R.id.service_protocol)
@@ -64,6 +64,12 @@ public class SignUpActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override

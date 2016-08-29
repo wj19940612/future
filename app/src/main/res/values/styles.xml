@@ -30,15 +30,16 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:singleLine">true</item>
     </style>
-
     <style name="SignEditText.PhoneNum">
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">11</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="SignEditText.Password">
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="PrimaryRedButton">
@@ -48,7 +49,7 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">13dp</item>
         <item name="android:textColor">@color/btn_text_primary</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="InputTitle">
@@ -116,6 +117,12 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--推广赚钱-->
+
+    <style name="expandMakeMoneyTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 </resources>

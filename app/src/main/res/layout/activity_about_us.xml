@@ -111,29 +111,29 @@
        -->
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/activity_about_us_rl_company_info"
-                app:el_bottomTxt="@string/account_about_us_company_info_child"
-                app:el_leftTxt="@string/account_about_us_company_info"
+                app:elBottomTxt="@string/account_about_us_company_info_child"
+                app:elLeftTxt="@string/account_about_us_company_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/activity_about_us_rl_manager_team"
-                app:el_bottomTxt="@string/account_about_us_manager_team_child"
-                app:el_leftTxt="@string/account_about_us_manager_team"
+                app:elBottomTxt="@string/account_about_us_manager_team_child"
+                app:elLeftTxt="@string/account_about_us_manager_team"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/activity_about_us_rl_company_culture"
-                app:el_bottomTxt="@string/account_about_us_company_culture_child"
-                app:el_leftTxt="@string/account_about_us_company_culture"
+                app:elBottomTxt="@string/account_about_us_company_culture_child"
+                app:elLeftTxt="@string/account_about_us_company_culture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/activity_about_us_rl_collaborate_case"
-                app:el_bottomTxt="@string/account_about_us_collaborate_case_child"
-                app:el_leftTxt="@string/account_about_us_collaborate_case"
+                app:elBottomTxt="@string/account_about_us_collaborate_case_child"
+                app:elLeftTxt="@string/account_about_us_collaborate_case"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

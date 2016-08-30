@@ -57,7 +57,12 @@ public class GsonRequest<T> extends Request<T> {
 
             CookieManger.getInstance().parse(response.headers);
 
-            T result = new Gson().fromJson(json, type);
+            T result;
+            if (type instanceof Class && ((Class) type).getName().equals(String.class.getName())) {
+                result = (T) new String(json);
+            } else {
+                result = new Gson().fromJson(json, type);
+            }
 
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
 

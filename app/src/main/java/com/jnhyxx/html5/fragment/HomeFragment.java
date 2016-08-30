@@ -22,6 +22,7 @@ import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
@@ -96,14 +97,23 @@ public class HomeFragment extends BaseFragment {
         startScheduleJob(5 * 1000);
     }
 
-    private void requestProductExchangeStatus(Product product) {
-        // TODO: 8/29/16 获取交易所状态或者下一次开市时间
-        
-        Launcher.with(getActivity(), TradeActivity.class)
-                .putExtra(Product.EX_PRODUCT, product)
-                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                .execute();
+    private void requestProductExchangeStatus(final Product product) {
+        API.Order.getExchangeTradeStatus(product.getExchangeId()).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                    @Override
+                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        product.setExchangeStatus(exchangeStatus.isTradeable()
+                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
+
+                        Launcher.with(getActivity(), TradeActivity.class)
+                                .putExtra(Product.EX_PRODUCT, product)
+                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
+                                .execute();
+                    }
+                }).fire();
     }
 
     private void requestOrderReport() {

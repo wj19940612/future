@@ -400,7 +400,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getProductMarketList() {
-            return new API("/quota/quota/getAllQuotaData.do", null);
+            return new API(GET, "/quota/quota/getAllQuotaData.do", null);
         }
     }
 
@@ -442,5 +442,27 @@ public class API extends APIBase {
                             .put(FUTURES_TYPE, id)
                             .put(FUND_TYPE, fundType));
         }
+
+        /**
+         * /order/order/getTradeTime.do 获取当前市场状态;
+         * <br/>可交易状态, 当前交易时间段截止时间
+         * <br/>非交易状态, 下一个开市的时间
+         *
+         * @param exchangeId
+         * @return
+         */
+        public static API getExchangeTradeStatus(int exchangeId) {
+            return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+        }
+    }
+
+    /**
+     * 获取品种分时图数据
+     *
+     * @param varietyType
+     * @return
+     */
+    public static API getTrendData(String varietyType) {
+        return new API(GET, "/quotaStatus/" + varietyType + ".fst", null);
     }
 }

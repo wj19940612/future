@@ -131,7 +131,7 @@
             android:visibility="visible">
 
             <TextView
-                android:id="@+id/marketTime"
+                android:id="@+id/holdingPositionTimeTo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_market_time_status"

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -233,8 +234,59 @@ public abstract class ChartView extends View {
         return super.dispatchTouchEvent(event);
     }
 
+    private GestureDetector mGestureDetector = new GestureDetector(getContext(), new DefaultGestureListener());
+
+    private class DefaultGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String TAG = "TEST";
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            Log.d(TAG, "onSingleTapUp: ");
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            Log.d(TAG, "onLongPress: ");
+            super.onLongPress(e);
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            Log.d(TAG, "onScroll: ex1: " + e1.getX() + ", ex2: " + e2.getX());
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d(TAG, "onFling: ");
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            Log.d(TAG, "onShowPress: ");
+            super.onShowPress(e);
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            Log.d(TAG, "onDown: ");
+            return super.onDown(e);
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            Log.d(TAG, "onSingleTapConfirmed: ");
+            return super.onSingleTapConfirmed(e);
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        mGestureDetector.onTouchEvent(event);
+
         switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);

@@ -10,6 +10,7 @@ import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 
 import com.jnhyxx.chart.domain.TrendViewData;
@@ -19,10 +20,8 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 public class TrendView extends ChartView {
 
@@ -53,15 +52,15 @@ public class TrendView extends ChartView {
             }
         }
 
-        public static List<TrendViewData> createDataList(String data, String[] openMarketTime) {
+        public static List<TrendViewData> createDataList(String rawData, String[] openMarketTime) {
             List<TrendViewData> result = new ArrayList<>();
             HashSet hashSet = new HashSet();
-            int length = data.length();
+            int length = rawData.length();
             int start = 0;
             while (start < length) {
-                int end = data.indexOf("|", start);
+                int end = rawData.indexOf("|", start);
                 if (end > start) {
-                    String singleData = data.substring(start, end);
+                    String singleData = rawData.substring(start, end);
                     String[] splitData = singleData.split(",");
                     String date = splitData[2];
                     start = end + 1;
@@ -122,7 +121,6 @@ public class TrendView extends ChartView {
 
         /**
          * check if time is between time1 and time2 (open interval), time1 <= time < time2
-         *
          *
          * @param time1
          * @param time2
@@ -228,7 +226,7 @@ public class TrendView extends ChartView {
 
     private List<TrendViewData> mDataList;
     private TrendViewData mUnstableData;
-    private Map<Integer, TrendViewData> mVisibleModelList;
+    private SparseArray<TrendViewData> mVisibleList;
 
     private float mPriceAreaWidth;
     private Settings mSettings;
@@ -244,7 +242,7 @@ public class TrendView extends ChartView {
     }
 
     public void init() {
-        mVisibleModelList = new HashMap<>();
+        mVisibleList = new SparseArray<>();
     }
 
     private void setDashLinePaint(Paint paint) {
@@ -515,6 +513,7 @@ public class TrendView extends ChartView {
 
     private float getChartX(TrendViewData model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
+        mVisibleList.put(indexOfXAxis, model);
         return getChartX(indexOfXAxis);
     }
 
@@ -545,7 +544,7 @@ public class TrendView extends ChartView {
 
     @Override
     protected boolean hasThisTouchIndex(int touchIndex) {
-        if (mVisibleModelList != null && mVisibleModelList.containsKey(touchIndex)) {
+        if (mVisibleList != null && mVisibleList.get(touchIndex) != null) {
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
@@ -554,7 +553,7 @@ public class TrendView extends ChartView {
     @Override
     protected void drawTopTouchLines(int touchIndex, int left, int top, int width, int height, Canvas canvas) {
         if (hasThisTouchIndex(touchIndex)) {
-            TrendViewData model = mVisibleModelList.get(touchIndex);
+            TrendViewData model = mVisibleList.get(touchIndex);
             float touchX = getChartX(touchIndex);
             float touchY = getChartY(model.getLastPrice());
 

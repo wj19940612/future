@@ -57,15 +57,25 @@ public class CommonMethodUtils {
     /**
      * 判断输入数字是否为手机号码
      *
-     * @param mobiles
+     * @param phoneNumber
      * @return
      */
-    public static boolean isMobileNum(String mobiles) {
-        Pattern p = Pattern
-                .compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-        Matcher m = p.matcher(mobiles);
-        System.out.println(m.matches() + "---");
-        return m.matches();
+    public static boolean isMobileNum(String phoneNumber) {
+        boolean isValid = false;
+        CharSequence inputStr = phoneNumber;
+        //正则表达式
+
+        String phone="^1[34578]\\d{9}$" ;
+
+
+        Pattern pattern = Pattern.compile(phone);
+        Matcher matcher = pattern.matcher(inputStr);
+
+
+        if(matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
 
     }
 }

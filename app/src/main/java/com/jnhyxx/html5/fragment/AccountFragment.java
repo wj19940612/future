@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,13 +12,15 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
-import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.activity.account.model.TradeDetail;
+import com.jnhyxx.html5.activity.account.model.UserFundInfo;
+import com.jnhyxx.html5.activity.account.model.UserInfo;
 import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.finance.FundInfo;
@@ -34,6 +37,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AccountFragment extends BaseFragment {
     //账户余额
@@ -91,6 +96,8 @@ public class AccountFragment extends BaseFragment {
 
     private Unbinder mBinder;
 
+    private static final int REQUEEST_CODE_LOGIN = 967;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,20 +119,23 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void updateAccountInfoView() {
-        if (User.getUser().isLogin()) {
-            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
-            Log.d(TAG, " " + format);
-            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
-            mSignArea.setVisibility(View.GONE);
-            mFundArea.setVisibility(View.VISIBLE);
-            mTitleBar.setRightVisible(true);
-            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    User.getUser().logout();
-                    updateAccountInfoView();
-                }
-            });
+//        if (User.getUser().isLogin()) {\
+        if (LocalCacheUserInfoManager.getInstance().isLogin()) {
+            User user = User.getUser();
+            // TODO: 2016/8/31 这里会报空指针
+//            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
+//            Log.d(TAG, " " + format);
+//            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
+//            mSignArea.setVisibility(View.GONE);
+//            mFundArea.setVisibility(View.VISIBLE);
+//            mTitleBar.setRightVisible(true);
+//            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    User.getUser().logout();
+//                    updateAccountInfoView();
+//                }
+//            });
 
        /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,21 +159,31 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void requestFundInfo() {
-        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
+//        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+//                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
+//                    @Override
+//                    public void onRespSuccess(FundInfo fundInfo) {
+//                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
+//                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
+//                    }
+//                }).fire();
+        API.Finance.getFundInfo().setTag(TAG)
+                .setCallback(new Callback2<Resp<UserFundInfo>, UserFundInfo>() {
                     @Override
-                    public void onRespSuccess(FundInfo fundInfo) {
-                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
-                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
+                    public void onRespSuccess(UserFundInfo fundInfo) {
+                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getMoneyUsable()));
+                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScoreUsable())));
                     }
                 }).fire();
+
     }
 
     @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
-                Launcher.with(getActivity(), SignInActivity.class).execute();
+//                Launcher.with(getActivity(), SignInActivity.class).execute();
+                startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQUEEST_CODE_LOGIN);
                 break;
             case R.id.signUp:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
@@ -213,7 +233,7 @@ public class AccountFragment extends BaseFragment {
      */
     private void openTradeDetailPage(final boolean isCash) {
 //        if (User.getUser().isLogin()) {
-            // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
+        // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
         /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
                     .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                         @Override
@@ -233,19 +253,42 @@ public class AccountFragment extends BaseFragment {
                                     .execute();
                         }
                     }).fire();*/
-            String token = User.getUser().getToken();
-            Log.d(TAG, "token " + token);
-            API.Finance.getFundInfo("money").setTag(TAG)
-                    .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
-                        @Override
-                        public void onRespSuccess(TradeDetail tradeDetail) {
-                            Launcher.with(getActivity(), TradeDetailActivity.class)
-                                    .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
-                                    .execute();
-                        }
-                    }).fire();
+        String token = User.getUser().getToken();
+        Log.d(TAG, "token " + token);
+//        API.Finance.getFundInfo("money").setTag(TAG)
+//                .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
+//                    @Override
+//                    public void onRespSuccess(TradeDetail tradeDetail) {
+//                        Launcher.with(getActivity(), TradeDetailActivity.class)
+//                                .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
+//                                .execute();
+//                    }
+//                }).fire();
 //        } else {
 //            Launcher.with(getActivity(), SignInActivity.class).execute();
 //        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            UserInfo userInfo = LocalCacheUserInfoManager.getInstance().getUser();
+            Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
+            String userName = userInfo.getUserName();
+            String userNickName = String.format(" ", userName);
+            Log.d(TAG, " 用户昵称 " + userNickName);
+            mNickname.setText(getString(R.string.nickname_logged, userName));
+            mSignArea.setVisibility(View.GONE);
+            mFundArea.setVisibility(View.VISIBLE);
+            mTitleBar.setRightVisible(true);
+            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    User.getUser().logout();
+                    updateAccountInfoView();
+                }
+            });
+        }
     }
 }

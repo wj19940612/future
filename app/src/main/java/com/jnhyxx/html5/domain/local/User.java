@@ -66,5 +66,10 @@ public class User {
         return "";
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "mLoginInfo=" + mLoginInfo +
+                '}';
+    }
 }

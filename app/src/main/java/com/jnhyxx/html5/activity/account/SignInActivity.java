@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.activity.account.model.UserInfo;
 import com.jnhyxx.html5.domain.LoginInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
@@ -170,6 +173,11 @@ public class SignInActivity extends BaseActivity {
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                         User.getUser().setLoginInfo(info);
+                        Log.d(TAG, "登陆信息" + info.toString());
+                        UserInfo userInfo = new Gson().fromJson(resp.getData(), UserInfo.class);
+                        LocalCacheUserInfoManager.getInstance().setUser(userInfo);
+                        Log.d(TAG, "用户信息 " + LocalCacheUserInfoManager.getInstance().getUser().toString());
+                        setResult(RESULT_OK);
                         finish();
                     }
                 }).fire();

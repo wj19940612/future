@@ -171,24 +171,24 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestPositionBriefList() {
-        if (User.getUser().isLogin()) {
-            API.Order.getOrderPositionList(User.getUser().getToken())
-                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
-                        @Override
-                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
-                            mPositionBriefList = positionBriefs;
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
-                            if (updateProductList) {
-                                requestProductList();
-                            } else {
-                                updateProductListView();
-                            }
-                        }
-                    }).setTag(TAG).fire();
-        } else { // clear all product position
-            ProductPkg.clearPositionBriefs(mProductPkgList);
-        }
+//        if (User.getUser().isLogin()) {
+//            API.Order.getOrderPositionList(User.getUser().getToken())
+//                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
+//                        @Override
+//                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
+//                            mPositionBriefList = positionBriefs;
+//                            boolean updateProductList =
+//                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
+//                            if (updateProductList) {
+//                                requestProductList();
+//                            } else {
+//                                updateProductListView();
+//                            }
+//                        }
+//                    }).setTag(TAG).fire();
+//        } else { // clear all product position
+//            ProductPkg.clearPositionBriefs(mProductPkgList);
+//        }
     }
 
     private void updateProductListView() {

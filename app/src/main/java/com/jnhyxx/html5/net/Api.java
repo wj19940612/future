@@ -77,7 +77,7 @@ public class API extends APIBase {
 //                            .put(SIGN, sign));
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
-                            .put(TELE, tele)
+                            .put("userPhone", tele)
                             .put(SIGN, sign));
         }
 
@@ -94,10 +94,10 @@ public class API extends APIBase {
                 e.printStackTrace();
             }
 
-            return new API("/user/sms/findLoginPwdCode",
+            return new API("/user/user/retrievePass.do",
                     new ApiParams()
-                            .put(TELE, tele)
-                            .put(SIGN, sign));
+                            .put("userPhone", tele));
+//                            .put(SIGN, sign));
         }
 
         /**
@@ -175,27 +175,6 @@ public class API extends APIBase {
         }
 
         /**
-         * 找回登录密码-修改登录密码 /user/user/findLoginPwd
-         *
-         * @param phone
-         * @param authCode
-         * @param newPwd
-         */
-//        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
-//            return new API("/user/user/findLoginPwd",
-//                    new ApiParams()
-//                            .put(TELE, phone)
-//                            .put(AUTH_CODE, authCode)
-//                            .put(PASSWORD, newPwd));
-        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
-            return new API("/user/user/retrievePass.do",
-                    new ApiParams()
-                            .put(TELE, phone)
-                            .put(AUTH_CODE, authCode)
-                            .put(PASSWORD, newPwd));
-        }
-
-        /**
          * 接口名：找回密码并更新
          * <p>
          * URL  http://域名/user/user/retrieveUpdatePass.do
@@ -205,12 +184,18 @@ public class API extends APIBase {
          * @param regCode   短信验证码
          * @return
          */
-        public static API modifyPasswordAndUpdate(String userPhone, String userPass, String regCode) {
+//        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
+//            return new API("/user/user/findLoginPwd",
+//                    new ApiParams()
+//                            .put(TELE, phone)
+//                            .put(AUTH_CODE, authCode)
+//                            .put(PASSWORD, newPwd));
+        public static API modifyPwdWhenFindPwd(String userPhone, String regCode, String userPass) {
             return new API("/user/user/retrieveUpdatePass.do",
                     new ApiParams()
-                            .put(TELE, userPhone)
-                            .put(PASSWORD, userPass)
-                            .put(AUTH_CODE, regCode));
+                            .put("userPhone", userPhone)
+                            .put("regCode", regCode)
+                            .put("userPass", userPass));
         }
 
 
@@ -337,9 +322,20 @@ public class API extends APIBase {
 //            return new API("/financy/financy/apiFinancyMain",
 //                    new ApiParams()
 //                            .put("token", token));
-        public static API getFundInfo(String token) {
-            return new API("/users/finance/findFlowList.do",
-                    new ApiParams().put("token", token));
+//        public static API getFundInfo(String token) {
+//            return new API("/users/finance/findFlowList.do",
+//                    new ApiParams().put("token", token));
+//        }
+
+        /**
+         * 接口名：查询用户资金信息
+
+         URL  http://域名/user/finance/findMain.do
+         * @return
+         */
+        public static API getFundInfo() {
+            return new API("/user/finance/findMain.do",
+                    new ApiParams());
         }
 
 

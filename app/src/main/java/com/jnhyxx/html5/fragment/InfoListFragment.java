@@ -74,25 +74,26 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
     }
 
     private void requestInfoList() {
-        if (mType == TYPE_MARKET_ANALYSING) {
-            int SECTION_ID_MARKET_ANALYSING = 58;
-            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
-                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
-                        @Override
-                        public void onRespSuccess(List<Information> informationList) {
-                            updateInfoList(informationList);
-                        }
-                    }).setTag(TAG).setIndeterminate(this).fire();
-        } else {
-            int SECTION_ID_INDUSTRY = 57;
-            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
-                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
-                        @Override
-                        public void onRespSuccess(List<Information> informationList) {
-                            updateInfoList(informationList);
-                        }
-                    }).setTag(TAG).setIndeterminate(this).fire();
-        }
+        // TODO: 2016/8/31 Token全部去掉
+//        if (mType == TYPE_MARKET_ANALYSING) {
+//            int SECTION_ID_MARKET_ANALYSING = 58;
+//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
+//                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
+//                        @Override
+//                        public void onRespSuccess(List<Information> informationList) {
+//                            updateInfoList(informationList);
+//                        }
+//                    }).setTag(TAG).setIndeterminate(this).fire();
+//        } else {
+//            int SECTION_ID_INDUSTRY = 57;
+//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
+//                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
+//                        @Override
+//                        public void onRespSuccess(List<Information> informationList) {
+//                            updateInfoList(informationList);
+//                        }
+//                    }).setTag(TAG).setIndeterminate(this).fire();
+//        }
     }
 
     private void updateInfoList(List<Information> informationList) {

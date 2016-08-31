@@ -65,6 +65,15 @@ public class LoginInfo {
         this.tokenInfo = tokenInfo;
     }
 
+    @Override
+    public String toString() {
+        return "LoginInfo{" +
+                "userInfo=" + userInfo +
+                ", nickStatus=" + nickStatus +
+                ", tokenInfo=" + tokenInfo +
+                '}';
+    }
+
     public static class UserInfoBean {
         private String tele;
         private Object name;
@@ -237,6 +246,31 @@ public class LoginInfo {
         public void setPromotion_url(String promotion_url) {
             this.promotion_url = promotion_url;
         }
+
+        @Override
+        public String toString() {
+            return "UserInfoBean{" +
+                    "tele='" + tele + '\'' +
+                    ", name=" + name +
+                    ", nick='" + nick + '\'' +
+                    ", user_cls='" + user_cls + '\'' +
+                    ", sex='" + sex + '\'' +
+                    ", birth='" + birth + '\'' +
+                    ", head_pic='" + head_pic + '\'' +
+                    ", provice='" + provice + '\'' +
+                    ", city='" + city + '\'' +
+                    ", region='" + region + '\'' +
+                    ", address='" + address + '\'' +
+                    ", reg_date='" + reg_date + '\'' +
+                    ", person_sign=" + person_sign +
+                    ", is_staff='" + is_staff + '\'' +
+                    ", is_set_gesture_pwd='" + is_set_gesture_pwd + '\'' +
+                    ", is_start_gesture='" + is_start_gesture + '\'' +
+                    ", is_openid_login='" + is_openid_login + '\'' +
+                    ", couponcount=" + couponcount +
+                    ", promotion_url='" + promotion_url + '\'' +
+                    '}';
+        }
     }
 
     public static class TokenInfoBean {
@@ -275,6 +309,16 @@ public class LoginInfo {
 
         public void setUserId(Object userId) {
             this.userId = userId;
+        }
+
+        @Override
+        public String toString() {
+            return "TokenInfoBean{" +
+                    "userSecret='" + userSecret + '\'' +
+                    ", token='" + token + '\'' +
+                    ", isdeline=" + isdeline +
+                    ", userId=" + userId +
+                    '}';
         }
     }
 }

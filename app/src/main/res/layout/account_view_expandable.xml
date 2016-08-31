@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/view_expandable_headerlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
         android:clickable="true"
@@ -21,12 +21,17 @@
         <TextView
             android:id="@+id/lefe_txt_view"
             style="@style/AboutAsEntryLeftTextViewStyle"
+            android:layout_centerVertical="true"
             android:text="左边的文字" />
 
-        <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
+        <ImageView
+            android:id="@+id/ivAboutUsRight"
+            style="@style/AboutAsEntryRightImageViewStyle"
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
     <TextView
+
         android:id="@+id/bottom_txt"
         style="@style/AboutAsEntryBottomTextViewStyle"
         android:text="底下的文字" />

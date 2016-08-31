@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+
     tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
 
     <!-- <RelativeLayout
@@ -19,112 +18,128 @@
              android:layout_alignParentRight="true"
              android:src="@android:drawable/ic_menu_close_clear_cancel" />
      </RelativeLayout>-->
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="93dp"
-        android:layout_height="93dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="60dp"
-        android:layout_marginTop="60dp"
-        android:src="@mipmap/ic_launcher" />
-
-    <RelativeLayout
+    <include
+        android:id="@+id/rlFailWarn"
+        layout="@layout/common_fail_warn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="30dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
 
         <ImageView
-            android:id="@+id/help_phoneNumImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/login_icon_phone" />
+            android:id="@+id/imageView2"
+            android:layout_width="93dp"
+            android:layout_height="93dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="60dp"
+            android:src="@mipmap/ic_launcher" />
 
-        <EditText
-            android:id="@+id/phoneNum"
-            style="@style/SignEditText.PhoneNum"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/help_phoneNumImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_icon_phone" />
+
+            <EditText
+                android:id="@+id/phoneNum"
+                style="@style/SignEditText.PhoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/help_phoneNumImage"
+                android:hint="@string/please_input_phone_num"
+                android:textColorHint="@color/login_edittext_hint" />
+
+            <ImageView
+                android:id="@+id/login_image_phone_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/login_icon_delete"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+        <include layout="@layout/split_line_thick" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/help_passwordImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_icon_lock" />
+
+
+            <EditText
+                android:id="@+id/password"
+                style="@style/SignEditText.Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/help_passwordImage"
+                android:hint="@string/please_input_password"
+                android:textColorHint="@color/login_edittext_hint" />
+
+            <ImageView
+                android:id="@+id/login_image_password_type"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/login_btn_password_type"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+
+        <include layout="@layout/split_line_thick" />
+
+
+        <TextView
+            android:id="@+id/signInButton"
+            style="@style/PrimaryRedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/help_phoneNumImage"
-            android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/login_edittext_hint" />
+            android:layout_marginTop="30dp"
+            android:text="@string/sign_in" />
 
-        <ImageView
-            android:id="@+id/login_image_phone_delete"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:src="@drawable/login_icon_delete"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-
-    <include layout="@layout/split_line_thick" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/help_passwordImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/login_icon_lock" />
-
-
-        <EditText
-            android:id="@+id/password"
-            style="@style/SignEditText.Password"
+        <TextView
+            android:id="@+id/signUp"
+            style="@style/PrimaryRedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/help_passwordImage"
-            android:hint="@string/please_input_password"
-            android:textColorHint="@color/login_edittext_hint" />
+            android:layout_marginTop="15dp"
+            android:background="@drawable/login_register_bg_translate"
+            android:text="@string/sign_up_free"
+            android:textColor="#0E2947" />
 
-        <ImageView
-            android:id="@+id/login_image_password_type"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+        <TextView
+            android:id="@+id/forgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:src="@drawable/login_btn_password_type"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-
-    <include layout="@layout/split_line_thick" />
-
-
-    <TextView
-        android:id="@+id/signInButton"
-        style="@style/PrimaryRedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/sign_in" />
-
-    <TextView
-        android:id="@+id/signUp"
-        style="@style/PrimaryRedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/login_register_bg_translate"
-        android:text="@string/sign_up_free"
-        android:textColor="#0E2947" />
-
-    <TextView
-        android:id="@+id/forgetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/forget_password"
-        android:textColor="#358CF3"
-        android:textSize="12sp" />
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/forget_password"
+            android:textColor="#358CF3"
+            android:textSize="12sp" />
+    </LinearLayout>
 </LinearLayout>

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class FundInfo implements Serializable {
 
+    private static final long serialVersionUID = -2187090855913471030L;
     /**
      * usedAmt : 9.99784E7
      * storeAmt : 0.0

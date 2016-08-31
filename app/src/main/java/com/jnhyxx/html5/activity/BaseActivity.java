@@ -115,32 +115,6 @@ public class BaseActivity extends AppCompatActivity implements
         }
     }
 
-//    /**
-//     * 带图片的toast
-//     *
-//     * @param stringId
-//     */
-//    protected void customToast(int stringId) {
-//        customToast(getString(stringId));
-//    }
-//
-//    protected void customToast(String toastTxt) {
-//        if (mToast == null) {
-//            mToast = Toast.makeText(this, toastTxt, Toast.LENGTH_SHORT);
-//        }
-//        mToast.setGravity(Gravity.CENTER, 0, 0);
-//        LinearLayout view = (LinearLayout) mToast.getView();
-//        view.setGravity(Gravity.CENTER);
-//        ImageView imageView = new ImageView(this);
-////        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        imageView.setImageResource(R.drawable.account_trade_warn_list_icon_succeed);
-//        int screenWidth = CommonMethodUtils.getScreenWidth(this);
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(screenWidth / 2, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        params.setMargins(50, 50, 50, 50);
-//        view.addView(imageView, 0, params);
-//        mToast.show();
-//    }
-
     @Override
     public void onDismiss(String tag) {
         if (mProgress != null) {

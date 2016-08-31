@@ -13,14 +13,14 @@
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#25D282</color>
     <color name="redPrimary">#FB4B55</color>
-    
+
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
     <color name="colorSlidingMenu">#1E61B0</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
-    
-    
+
+
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>
     <color name="account_top_blue_text">#358CF3</color>
@@ -31,4 +31,7 @@
 
     <!--登陆界面的文本输入框的颜色-->
     <color name="login_edittext_hint">#CBCBCB</color>
+
+    <!--注册与找回密码界面不可点击按钮背景-->
+    <color name="regiserBtnBack">#a8a8a8</color>
 </resources>

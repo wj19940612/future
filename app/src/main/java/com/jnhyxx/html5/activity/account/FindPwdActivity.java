@@ -21,9 +21,9 @@ import butterknife.OnClick;
 
 public class FindPwdActivity extends BaseActivity {
 
-    @BindView(R.id.phoneNum)
+    @BindView(R.id.findPasswordPhoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.messageAuthCode)
+    @BindView(R.id.findPasswordMessageAuthCode)
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;

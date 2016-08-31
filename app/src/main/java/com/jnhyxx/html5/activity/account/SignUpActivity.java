@@ -3,10 +3,18 @@ package com.jnhyxx.html5.activity.account;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -18,13 +26,19 @@ import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CustomToast;
+import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.jnhyxx.html5.R.id.login_image_password_type;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -44,16 +58,28 @@ public class SignUpActivity extends BaseActivity {
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
-
+    @BindView(R.id.registerTitleBar)
+    TitleBar mtitleBar;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
+
+    @BindView(R.id.rlFailWarn)
+    RelativeLayout mFailWarn;
+    @BindView(R.id.common_fail_tv_warn)
+    TextView mFailWarnText;
+    //获取图片验证码
+    @BindView(R.id.tvRegisterRetrieveImage)
+    TextView tvRegisterRetrieveImage;
+    @BindView(login_image_password_type)
+    ImageView imagePasswordType;
+
+    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-
         mPhoneNum.addTextChangedListener(mValidationWatcher);
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
@@ -61,6 +87,19 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 activeButtons();
+            }
+        });
+        jumpLoginActivity();
+        mFailWarnText.setText(R.string.register_auth_code_fail);
+
+
+    }
+
+    private void jumpLoginActivity() {
+        mtitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
             }
         });
     }
@@ -75,6 +114,13 @@ public class SignUpActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             activeButtons();
+            String phoneNum = mPassword.getText().toString().trim();
+            if (!TextUtils.isEmpty(phoneNum)) {
+                imagePasswordType.setVisibility(View.VISIBLE);
+            } else {
+                imagePasswordType.setVisibility(View.GONE);
+                getRetrieveImage();
+            }
         }
     };
 
@@ -119,8 +165,12 @@ public class SignUpActivity extends BaseActivity {
 
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
-        String phoneNum = mPhoneNum.getText().toString();
-        API.Account.obtainAuthCode(phoneNum)
+        String userPhone = mPhoneNum.getText().toString();
+        if (!CommonMethodUtils.isMobileNum(userPhone)) {
+            ToastUtil.curt(R.string.common_phone_num_fail);
+            return;
+        }
+        API.Account.obtainAuthCode(userPhone)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -137,6 +187,7 @@ public class SignUpActivity extends BaseActivity {
                 }).fire();
     }
 
+    //注册
     @OnClick(R.id.signUpButton)
     void signUp() {
         String phoneNum = mPhoneNum.getText().toString().trim();
@@ -148,9 +199,10 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
+                            // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
+                            CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_successed);
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);
-
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
@@ -159,11 +211,59 @@ public class SignUpActivity extends BaseActivity {
                                             finish();
                                         }
                                     }).show();
+                        } else if (resp.getCode() == 600) {
+                            mFailWarn.setVisibility(View.VISIBLE);
                         } else {
+                            if (mFailWarn.isShown()) {
+                                mFailWarn.setVisibility(View.GONE);
+                            }
                             ToastUtil.show(resp.getMsg());
                         }
                     }
                 }).fire();
+
+    }
+
+    //获取动态验证码
+    @OnClick(R.id.tvRegisterRetrieveImage)
+    void getRegisterRetrieveImage() {
+        getRetrieveImage();
+    }
+
+    private void getRetrieveImage() {
+        String userPhone = mPhoneNum.getText().toString().trim();
+        if (TextUtils.isEmpty(userPhone)) {
+            tvRegisterRetrieveImage.setEnabled(false);
+        } else {
+            tvRegisterRetrieveImage.setEnabled(true);
+            API.Account.getRetrieveImage(userPhone)
+                    .setIndeterminate(this).setTag(TAG)
+                    .setCallback(new Callback<Resp>() {
+                        @Override
+                        public void onReceive(Resp resp) {
+
+                        }
+                    });
+        }
+    }
+
+    //点击后改变文本输入框的输入类型，使密码可见或隐藏
+    @OnClick(login_image_password_type)
+    void changeEdittextPasswordInputtYPE() {
+        if (!flag) {
+            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            imagePasswordType.setSelected(true);
+        } else {
+            imagePasswordType.setSelected(false);
+            mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+        flag = !flag;
+        mPassword.postInvalidate();
+        CharSequence text = mPassword.getText();
+        if (text instanceof Spannable) {
+            Spannable spanText = (Spannable) text;
+            Selection.setSelection(spanText, text.length());
+        }
     }
 
     @Override

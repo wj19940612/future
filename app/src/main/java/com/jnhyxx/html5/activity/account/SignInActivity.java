@@ -10,11 +10,15 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.LoginInfo;
+import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
@@ -47,6 +51,11 @@ public class SignInActivity extends BaseActivity {
 
     private boolean flag = false;
 
+    @BindView(R.id.rlFailWarn)
+    RelativeLayout rlFailWarn;
+    @BindView(R.id.common_fail_tv_warn)
+    TextView mFailWarnTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +65,7 @@ public class SignInActivity extends BaseActivity {
         mSignUp.setEnabled(true);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
+        mFailWarnTv.setText("");
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -90,20 +100,20 @@ public class SignInActivity extends BaseActivity {
 
     private boolean checkSignInButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-        if (!TextUtils.isEmpty(phoneNum) && phoneNum.length() > 1) {
-            ivPhoneDelete.setVisibility(View.VISIBLE);
-        } else {
-            ivPhoneDelete.setVisibility(View.GONE);
-        }
+//        if (!TextUtils.isEmpty(phoneNum) && phoneNum.length() > 1) {
+//            ivPhoneDelete.setVisibility(View.VISIBLE);
+//        } else {
+//            ivPhoneDelete.setVisibility(View.GONE);
+//        }
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
         String password = mPassword.getText().toString().trim();
-        if (!TextUtils.isEmpty(password) && password.length() > 1) {
-            imageViewPasswordType.setVisibility(View.VISIBLE);
-        } else {
-            imageViewPasswordType.setVisibility(View.GONE);
-        }
+//        if (!TextUtils.isEmpty(password) && password.length() > 1) {
+//            imageViewPasswordType.setVisibility(View.VISIBLE);
+//        } else {
+//            imageViewPasswordType.setVisibility(View.GONE);
+//        }
         if (TextUtils.isEmpty(password) || password.length() < 6) {
             return false;
         }
@@ -158,9 +168,9 @@ public class SignInActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        /*LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
+                        LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                         User.getUser().setLoginInfo(info);
-                        finish();*/
+                        finish();
                     }
                 }).fire();
     }
@@ -174,6 +184,8 @@ public class SignInActivity extends BaseActivity {
 
     @OnClick(R.id.forgetPassword)
     void openFindPasswordPage() {
+        // TODO: 2016/8/29 跳过验证码界面，直接修改密码，仅作测试
         Launcher.with(this, FindPwdActivity.class).execute();
+//        Launcher.with(this, ModifyPwdActivity.class).execute();
     }
 }

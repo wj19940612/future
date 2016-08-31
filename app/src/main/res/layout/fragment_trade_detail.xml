@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/listTradeDetail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_trade_detail_integerl_remain"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvIntegerlRemainNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50742"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <view
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/splitLine" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_trade_detail_margin_remain"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvTradeDetailMarginRemain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="183600.2"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="30sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

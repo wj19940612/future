@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-<<<<<<< HEAD
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,15 +6,6 @@
     android:background="#EDF0F5"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.fragment.AccountFragment">
-=======
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#EDF0F5"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.fragment.AccountFragment">
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,41 +14,32 @@
         android:background="@drawable/account_mine_header_bg">
 
         <com.jnhyxx.html5.view.TitleBar
-<<<<<<< HEAD
-            android:background="@android:color/transparent"
             android:id="@+id/fragmentAccountTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:rightVisible="true"
-            app:rightImage="@drawable/account_nav_icon_setting" />
-      <!--  <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/fragment_account_titleBar_iv_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:clickable="true"
-                android:paddingRight="15dp"
-                android:paddingTop="17dp"
-                android:src="@drawable/account_nav_icon_setting" />
-        </RelativeLayout>-->
-=======
-            android:id="@+id/titleBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:barBackground="@android:color/transparent"
+            android:background="@android:color/transparent"
             app:rightImage="@drawable/ic_account_nav_setting"
-            app:rightVisible="true"/>
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
+            app:rightVisible="true"
+            app:barBackground="@android:color/transparent"/>
+        <!--  <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <ImageView
+                  android:id="@+id/fragment_account_titleBar_iv_setting"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentRight="true"
+                  android:clickable="true"
+                  android:paddingRight="15dp"
+                  android:paddingTop="17dp"
+                  android:src="@drawable/account_nav_icon_setting" />
+          </RelativeLayout>-->
 
         <LinearLayout
-            android:layout_below="@+id/fragmentAccountTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/titleBar"
+            android:layout_below="@+id/fragmentAccountTitleBar"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -72,13 +53,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/account_main_pic_user"
-<<<<<<< HEAD
                     app:borderColor="@android:color/holo_red_light"
                     app:borderWidth="3dp" />
-=======
-                    app:border_color="@android:color/holo_red_light"
-                    app:border_width="3dp"/>
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
 
                 <TextView
                     android:id="@+id/nickname"
@@ -87,7 +63,7 @@
                     android:gravity="center_horizontal"
                     android:padding="6dp"
                     android:text="@string/account_not_login"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -98,7 +74,7 @@
                         android:id="@+id/imageView"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
-                        android:src="@drawable/account_main_icon_integration"/>
+                        android:src="@drawable/account_main_icon_integration" />
 
                     <TextView
                         android:id="@+id/score"
@@ -107,14 +83,14 @@
                         android:layout_marginLeft="5dp"
                         android:paddingLeft="5dp"
                         android:text="@string/account_mine_integral"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/account_top_blue_text" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="@color/splitLine"/>
+                android:background="@color/splitLine" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -128,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:text="@string/account_user_balance"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white" />
 
                 <TextView
                     android:id="@+id/balance"
@@ -137,7 +113,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/zero"
                     android:textColor="#FB4B55"
-                    android:textSize="50sp"/>
+                    android:textSize="50sp" />
 
                 <LinearLayout
                     android:id="@+id/signArea"
@@ -159,7 +135,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_in"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/signUp"
@@ -172,7 +148,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_up_free"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/account_top_blue_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -194,7 +170,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/recharge"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/withdraw"
@@ -207,15 +183,11 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/withdraw"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/account_top_blue_text" />
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
-<<<<<<< HEAD
-=======
-
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
     </RelativeLayout>
 
 
@@ -302,220 +274,225 @@
                   android:layout_weight="1"
                   android:text="@string/sign_up_free" />
           </LinearLayout>-->
-    <RelativeLayout
+    <!-- <RelativeLayout
+           android:id="@+id/messageCenter"
+           android:layout_width="match_parent"
+           android:layout_height="60dp"
+           android:background="@android:color/white"
+           android:clickable="true"
+           android:paddingBottom="1dp"
+           android:paddingLeft="16dp">
+
+           <ImageView
+               android:id="@+id/account_image_help_message"
+               android:layout_width="22dp"
+               android:layout_height="22dp"
+               android:layout_centerVertical="true"
+               android:scaleType="centerCrop"
+               android:src="@drawable/list_icon_news"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:layout_toRightOf="@+id/account_image_help_message"
+               android:paddingLeft="16dp"
+               android:text="@string/message_center"
+               android:textColor="@color/account_center_text"/>
+
+           <TextView
+               android:id="@+id/account_tv_message_number"
+               android:layout_width="16dp"
+               android:layout_height="16dp"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:layout_marginRight="43dp"
+               android:layout_toLeftOf="@+id/account_image_help_message_arrow"
+               android:background="@drawable/account_message_warm"/>
+
+           <ImageView
+               android:id="@+id/account_image_help_message_arrow"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:paddingRight="16dp"
+               android:src="@drawable/common_big_arrow_list_icon_more"/>
+       </RelativeLayout>
+
+       <include layout="@layout/split_line"/>
+
+     <RelativeLayout
+         android:id="@+id/fundDetail"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:background="@android:color/white"
+         android:clickable="true"
+         android:paddingBottom="1dp"
+         android:paddingLeft="16dp">
+
+         <ImageView
+             android:id="@+id/account_image_help_fundDetail"
+             android:layout_width="22dp"
+             android:layout_height="22dp"
+             android:layout_centerVertical="true"
+             android:scaleType="centerCrop"
+             android:src="@drawable/account_list_icon_detail"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:layout_toRightOf="@+id/account_image_help_fundDetail"
+             android:paddingLeft="16dp"
+             android:text="@string/account_trade_info"
+             android:textColor="@color/account_center_text"/>
+
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_centerVertical="true"
+             android:paddingRight="16dp"
+             android:src="@drawable/common_big_arrow_list_icon_more"/>
+     </RelativeLayout>
+
+     <include layout="@layout/split_line"/>
+
+     <RelativeLayout
+         android:id="@+id/paidToPromote"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:background="@android:color/white"
+         android:clickable="true"
+         android:paddingBottom="1dp"
+         android:paddingLeft="16dp">
+
+         <ImageView
+             android:id="@+id/account_image_help_paidToPromote"
+             android:layout_width="22dp"
+             android:layout_height="22dp"
+             android:layout_centerVertical="true"
+             android:scaleType="centerCrop"
+             android:src="@drawable/account_list_icon_brand"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:layout_toRightOf="@+id/account_image_help_paidToPromote"
+             android:paddingLeft="16dp"
+             android:text="@string/paid_to_promote"
+             android:textColor="@color/account_center_text"/>
+
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_centerVertical="true"
+             android:paddingRight="16dp"
+             android:src="@drawable/common_big_arrow_list_icon_more"/>
+     </RelativeLayout>
+
+     <include layout="@layout/split_line"/>
+
+     <RelativeLayout
+         android:id="@+id/aboutUs"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:background="@android:color/white"
+         android:clickable="true"
+         android:paddingBottom="1dp"
+         android:paddingLeft="16dp">
+
+         <ImageView
+             android:id="@+id/account_image_help_personalInfo"
+             android:layout_width="22dp"
+             android:layout_height="22dp"
+             android:layout_centerVertical="true"
+             android:scaleType="centerCrop"
+          />
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:layout_toRightOf="@+id/account_image_help_personalInfo"
+             android:paddingLeft="16dp"
+             android:text="@string/account_aboutus"
+             android:textColor="@color/account_center_text"/>
+
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_centerVertical="true"
+             android:paddingRight="16dp"
+             android:src="@drawable/common_big_arrow_list_icon_more"/>
+     </RelativeLayout>-->
+    <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        android:clickable="true"
-        android:paddingBottom="1dp"
-        android:paddingLeft="16dp">
+        app:leftIcon="@drawable/list_icon_news"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/message_center"
+        app:rowTextColor="@android:color/black"
+        app:subText="数字"/>
 
-        <ImageView
-            android:id="@+id/account_image_help_message"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/account_list_icon_news"/>
+    <include layout="@layout/split_line" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/account_image_help_message"
-            android:paddingLeft="16dp"
-            android:text="@string/message_center"
-            android:textColor="@color/account_center_text"/>
+    <com.jnhyxx.html5.view.IconTextRow
 
-        <TextView
-            android:id="@+id/account_tv_message_number"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="43dp"
-            android:layout_toLeftOf="@+id/account_image_help_message_arrow"
-            android:background="@drawable/account_message_warm"/>
-
-        <ImageView
-            android:id="@+id/account_image_help_message_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="16dp"
-            android:src="@drawable/common_big_arrow_list_icon_more"/>
-    </RelativeLayout>
-
-    <include layout="@layout/split_line"/>
-
-    <RelativeLayout
         android:id="@+id/fundDetail"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        android:clickable="true"
-        android:paddingBottom="1dp"
-        android:paddingLeft="16dp">
+        app:leftIcon="@drawable/list_icon_detail"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/account_trade_info"
+        app:rowTextColor="@color/account_center_text" />
 
-        <ImageView
-            android:id="@+id/account_image_help_fundDetail"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/account_list_icon_detail"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/account_image_help_fundDetail"
-            android:paddingLeft="16dp"
-            android:text="@string/account_trade_info"
-            android:textColor="@color/account_center_text"/>
+    <include layout="@layout/split_line" />
+    <!--目前ui上面没有-->
+    <!--<com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/scoreDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        app:leftIcon="@drawable/account_ic_feedback"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/score_detail"
+        app:rowTextColor="@color/account_center_text" />-->
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="16dp"
-            android:src="@drawable/common_big_arrow_list_icon_more"/>
-    </RelativeLayout>
+    <com.jnhyxx.html5.view.IconTextRow
 
-    <include layout="@layout/split_line"/>
-
-    <RelativeLayout
         android:id="@+id/paidToPromote"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        android:clickable="true"
-        android:paddingBottom="1dp"
-        android:paddingLeft="16dp">
+        android:paddingTop="@dimen/dp_1"
+        app:leftIcon="@drawable/list_icon_brand"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/paid_to_promote"
+        app:rowTextColor="@color/account_center_text" />
 
-        <ImageView
-            android:id="@+id/account_image_help_paidToPromote"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/account_list_icon_brand"/>
+    <include layout="@layout/split_line" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/account_image_help_paidToPromote"
-            android:paddingLeft="16dp"
-            android:text="@string/paid_to_promote"
-            android:textColor="@color/account_center_text"/>
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="16dp"
-            android:src="@drawable/common_big_arrow_list_icon_more"/>
-    </RelativeLayout>
-
-    <include layout="@layout/split_line"/>
-
-    <RelativeLayout
+    <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        android:clickable="true"
-        android:paddingBottom="1dp"
-        android:paddingLeft="16dp">
-
-        <ImageView
-            android:id="@+id/account_image_help_personalInfo"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/account_list_icon_aboutus"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/account_image_help_personalInfo"
-            android:paddingLeft="16dp"
-            android:text="@string/account_aboutus"
-            android:textColor="@color/account_center_text"/>
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="16dp"
-            android:src="@drawable/common_big_arrow_list_icon_more"/>
-    </RelativeLayout>
-    <!--    <com.jnhyxx.html5.view.IconTextRow
-            android:id="@+id/messageCenter"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_60"
-            android:background="@android:color/white"
-            app:leftIcon="@drawable/account_list_icon_news"
-            app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-            app:rowText="@string/message_center"
-            app:rowTextColor="@android:color/black" />
-
-      <com.jnhyxx.html5.view.IconTextRow
-          android:id="@+id/fundDetail"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_60"
-          android:background="@android:color/white"
-          app:leftIcon="@drawable/account_list_icon_detail"
-          app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-          app:rowText="@string/account_trade_info"
-          app:rowTextColor="@color/account_center_text" />
-
-      <include layout="@layout/split_line" />
-      &lt;!&ndash;目前ui上面没有&ndash;&gt;
-      &lt;!&ndash;<com.jnhyxx.html5.view.IconTextRow
-          android:id="@+id/scoreDetail"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="6dp"
-          android:background="@android:color/white"
-          android:visibility="gone"
-          app:leftIcon="@drawable/account_ic_feedback"
-          app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-          app:rowText="@string/score_detail"
-          app:rowTextColor="@color/account_center_text" />&ndash;&gt;
-
-
-      <com.jnhyxx.html5.view.IconTextRow
-          android:id="@+id/paidToPromote"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_60"
-          android:background="@android:color/white"
-          android:paddingTop="@dimen/dp_1"
-          app:leftIcon="@drawable/account_list_icon_brand"
-          app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-          app:rowText="@string/paid_to_promote"
-          app:rowTextColor="@color/account_center_text" />
-
-      <include layout="@layout/split_line" />
-
-      <com.jnhyxx.html5.view.IconTextRow
-          android:id="@+id/personalInfo"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_60"
-          android:background="@android:color/white"
-          app:leftIcon="@drawable/account_list_icon_aboutus"
-          app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-          app:rowText="@string/account_aboutus"
-          app:rowTextColor="@color/account_center_text" />-->
+        app:leftIcon="@drawable/list_icon_aboutus"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/account_aboutus"
+        app:rowTextColor="@color/account_center_text" />
 </LinearLayout>

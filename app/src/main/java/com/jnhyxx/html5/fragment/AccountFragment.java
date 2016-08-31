@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -18,12 +17,15 @@ import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.activity.account.model.TradeDetail;
+import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -47,26 +49,27 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.signUp)
     TextView mSignUp;
     //消息中心的未读消息数
-    @BindView(R.id.account_tv_message_number)
-    TextView mMessageNumber;
+    // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText(); 
+//    @BindView(R.id.account_tv_message_number)
+//    TextView mMessageNumber;
     //消息中心
     @BindView(R.id.messageCenter)
-//    IconTextRow mMessageCenter;
-            RelativeLayout mMessageCenter;
+    IconTextRow mMessageCenter;
+    //            RelativeLayout mMessageCenter;
     //交易明细
     @BindView(R.id.fundDetail)
-//    IconTextRow mFundDetail;
-            RelativeLayout mFundDetail;
+    IconTextRow mFundDetail;
+//            RelativeLayout mFundDetail;
 
     //积分明细
 //    @BindView(R.id.scoreDetail)
 //    IconTextRow mScoreDetail;
     @BindView(R.id.aboutUs)
-//    IconTextRow mPersonalInfo;
-            RelativeLayout mPersonalInfo;
+    IconTextRow mPersonalInfo;
+    //            RelativeLayout mPersonalInfo;
     @BindView(R.id.paidToPromote)
-//    IconTextRow mPaidToPromote;
-            RelativeLayout mPaidToPromote;
+    IconTextRow mPaidToPromote;
+    //            RelativeLayout mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
     //登陆和注册按钮的父容器
@@ -79,15 +82,13 @@ public class AccountFragment extends BaseFragment {
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
-<<<<<<< HEAD
     @BindView(R.id.fragmentAccountTitleBar)
     TitleBar mTitleBar;
 //    @BindView(R.id.fragment_account_titleBar_iv_setting)
 //    ImageView mSettingImageView;
-=======
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
+//    @BindView(R.id.titleBar)
+//    TitleBar mTitleBar;
+
     private Unbinder mBinder;
 
     @Override
@@ -125,7 +126,7 @@ public class AccountFragment extends BaseFragment {
                     updateAccountInfoView();
                 }
             });
-<<<<<<< HEAD
+
        /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -133,8 +134,7 @@ public class AccountFragment extends BaseFragment {
                     updateAccountInfoView();
                 }
             });*/
-=======
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
+
             requestFundInfo();
 
         } else {
@@ -196,7 +196,7 @@ public class AccountFragment extends BaseFragment {
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.fundDetail:
-                openFundDetailPage(true);
+                openTradeDetailPage(true);
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
@@ -206,9 +206,15 @@ public class AccountFragment extends BaseFragment {
         }
     }
 
-    private void openFundDetailPage(final boolean isCash) {
-        if (User.getUser().isLogin()) {
-            API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+    /**
+     * 打开交易明细界面
+     *
+     * @param isCash
+     */
+    private void openTradeDetailPage(final boolean isCash) {
+//        if (User.getUser().isLogin()) {
+            // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
+        /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
                     .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                         @Override
                         public void onRespSuccess(FundInfo fundInfo) {
@@ -217,9 +223,29 @@ public class AccountFragment extends BaseFragment {
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
                                     .execute();
                         }
+                    }).fire();*/
+           /* API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+                    .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
+                        @Override
+                        public void onRespSuccess(TradeDetail tradeDetail) {
+                            Launcher.with(getActivity(), TradeDetailActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
+                                    .execute();
+                        }
+                    }).fire();*/
+            String token = User.getUser().getToken();
+            Log.d(TAG, "token " + token);
+            API.Finance.getFundInfo("money").setTag(TAG)
+                    .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
+                        @Override
+                        public void onRespSuccess(TradeDetail tradeDetail) {
+                            Launcher.with(getActivity(), TradeDetailActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
+                                    .execute();
+                        }
                     }).fire();
-        } else {
-            Launcher.with(getActivity(), SignInActivity.class).execute();
-        }
+//        } else {
+//            Launcher.with(getActivity(), SignInActivity.class).execute();
+//        }
     }
 }

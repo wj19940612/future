@@ -47,7 +47,7 @@
     </declare-styleable>
     <!--带圆环的imageView-->
     <declare-styleable name="CircularAnnulusImageView">
-<<<<<<< HEAD
+
         <attr name="borderWidth" format="dimension" />
         <attr name="borderColor" format="color" />
     </declare-styleable>
@@ -56,20 +56,12 @@
         <attr name="elLeftTxt" format="reference|string" />
         <attr name="elDuration" format="integer" />
         <attr name="elBottomTxt" format="reference|string" />
-=======
-        <attr name="border_width" format="dimension"/>
-        <attr name="border_color" format="color"/>
-    </declare-styleable>
-    <!--仿照ExpandableListView，使上面控件点击后，底下控件可以展示-->
-    <declare-styleable name="ExpandableLayout">
-        <attr name="el_leftTxt" format="reference|string"/>
-        <attr name="el_duration" format="integer"/>
-        <attr name="el_bottomTxt" format="reference|string"/>
+        <attr name="elBorderWidth" format="dimension"/>
+        <attr name="elBorderColor" format="color"/>
     </declare-styleable>
 
     <declare-styleable name="OrderConfigurationSelector">
         <attr name="maximum" format="integer"/>
         <attr name="android:textSize"/>
->>>>>>> a5aafa7e478445e7483181e3bec0359ed2b899d6
     </declare-styleable>
 </resources>

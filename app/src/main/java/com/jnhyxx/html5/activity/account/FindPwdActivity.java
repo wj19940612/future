@@ -80,11 +80,12 @@ public class FindPwdActivity extends BaseActivity {
         }
         return true && !mFreezeObtainAuthCode;
     }
+
     //获取验证码
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-        API.Account.obtainAuthCodeWhenFindPwd(phoneNum)
+        API.User.obtainAuthCodeWhenFindPwd(phoneNum)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -106,6 +107,7 @@ public class FindPwdActivity extends BaseActivity {
     void doNextStepButtonClick() {
         final String phoneNum = mPhoneNum.getText().toString().trim();
         final String authCode = mMessageAuthCode.getText().toString().trim();
+
         // TODO: 2016/8/31 目前没有确认短信验证码接口， 
 //        API.Account.authCodeWhenFindPassword(phoneNum, authCode)
 //                .setIndeterminate(this).setTag(TAG)
@@ -113,16 +115,22 @@ public class FindPwdActivity extends BaseActivity {
 //                    @Override
 //                    public void onReceive(Resp resp) {
 //                        if (resp.isSuccess()) {
+        API.User.authCodeWhenFindPassword(phoneNum, authCode)
+                .setIndeterminate(this).setTag(TAG)
+                .setCallback(new Callback<Resp>() {
+                    @Override
+                    public void onReceive(Resp resp) {
+                        if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
                                     .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
                                     .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
                                     .execute();
                             finish();
-//                        } else {
-//                            ToastUtil.show(resp.getMsg());
-//                        }
-//                    }
-//                }).fire();
+                        } else {
+                            ToastUtil.show(resp.getMsg());
+                        }
+                    }
+                }).fire();
     }
 
     @Override
@@ -138,3 +146,6 @@ public class FindPwdActivity extends BaseActivity {
         }
     }
 }
+
+
+

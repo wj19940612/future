@@ -113,7 +113,7 @@ public class ModifyPwdActivity extends BaseActivity {
             modifyPasswordWarn.setVisibility(View.VISIBLE);
         } else {
             modifyPasswordWarn.setVisibility(View.GONE);
-            API.Account.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
+            API.User.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
                     .setIndeterminate(this).setTag(TAG)
                     .setCallback(new Callback<Resp>() {
                         @Override

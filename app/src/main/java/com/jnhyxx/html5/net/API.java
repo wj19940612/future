@@ -42,7 +42,17 @@ public class API extends APIBase {
         super(method, uri, apiParams, version);
     }
 
-    public static class Account {
+    public static class User {
+
+        /**
+         * /user/user/getSystemTime.do 获取服务器系统时间,用于同步
+         *
+         * @return
+         */
+        public static API getSystemTime() {
+            return new API("/user/user/getSystemTime.do", null);
+        }
+
         /**
          * 更新友盟设备号 /user/user/updateUmCode
          *
@@ -442,28 +452,24 @@ public class API extends APIBase {
         }
 
         /**
-         * /futuresquota/getAllCacheData 获取产品行情的简要
+         * /quota/quota/getAllQuotaData.do 获取产品行情数据
          *
          * @return
          */
-        public static API getProductMarketBriefList() {
-            return new API("/futuresquota/getAllCacheData", null);
+        public static API getProductMarketList() {
+            return new API(GET, "/quota/quota/getAllQuotaData.do", null);
         }
     }
 
     public static class Order {
 
         /**
-         * /order/posiOrderCount 获取用户每个产品订单持仓情况的简要
+         * /order/order/getUserPositionCount.do 获取产品订单持仓
          *
-         * @param token
          * @return
          */
-        public static API getOrderPositionList(String token) {
-            return new API("/order/posiOrderCount",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put(VERSION, "0.0.1"));
+        public static API getHomePositions() {
+            return new API("/order/order/getUserPositionCount.do", null);
         }
 
         /**
@@ -493,5 +499,27 @@ public class API extends APIBase {
                             .put(FUTURES_TYPE, id)
                             .put(FUND_TYPE, fundType));
         }
+
+        /**
+         * /order/order/getTradeTime.do 获取当前市场状态;
+         * <br/>可交易状态, 当前交易时间段截止时间
+         * <br/>非交易状态, 下一个开市的时间
+         *
+         * @param exchangeId
+         * @return
+         */
+        public static API getExchangeTradeStatus(int exchangeId) {
+            return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+        }
+    }
+
+    /**
+     * 获取品种分时图数据
+     *
+     * @param varietyType
+     * @return
+     */
+    public static API getTrendData(String varietyType) {
+        return new API(GET, "/quotaStatus/" + varietyType + ".fst", null);
     }
 }

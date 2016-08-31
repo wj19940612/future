@@ -13,16 +13,16 @@ public class CookieManger {
 
     private static String FILE_NAME = "cookie_cache";
 
-    private static CookieManger sParser;
+    private static CookieManger sCookieManger;
 
     private File mAppDataDir;
     private String mRawCookie;
 
     public static CookieManger getInstance() {
-        if (sParser == null) {
-            sParser = new CookieManger();
+        if (sCookieManger == null) {
+            sCookieManger = new CookieManger();
         }
-        return sParser;
+        return sCookieManger;
     }
 
     public void init(File file) {

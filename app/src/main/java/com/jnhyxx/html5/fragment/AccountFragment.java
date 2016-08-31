@@ -121,7 +121,6 @@ public class AccountFragment extends BaseFragment {
     private void updateAccountInfoView() {
 //        if (User.getUser().isLogin()) {\
         if (LocalCacheUserInfoManager.getInstance().isLogin()) {
-            User user = User.getUser();
             // TODO: 2016/8/31 这里会报空指针
 //            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
 //            Log.d(TAG, " " + format);
@@ -138,9 +137,17 @@ public class AccountFragment extends BaseFragment {
 //            });
 
        /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
+        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+            String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick());
+            Log.d(TAG, " " + format);
+            mNickname.setText(getString(R.string.nickname_logged, com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick()));
+            mSignArea.setVisibility(View.GONE);
+            mFundArea.setVisibility(View.VISIBLE);
+            mTitleBar.setRightVisible(true);
+            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User.getUser().logout();
+                    com.jnhyxx.html5.domain.local.User.getUser().logout();
                     updateAccountInfoView();
                 }
             });*/
@@ -190,7 +197,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //充值
             case R.id.recharge:
-                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -202,7 +209,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //提现
             case R.id.withdraw:
-                API.Account.getBankcardInfo(User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -235,6 +242,9 @@ public class AccountFragment extends BaseFragment {
 //        if (User.getUser().isLogin()) {
         // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
         /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+    private void openFundDetailPage(final boolean isCash) {
+        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+            API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
                     .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
                         @Override
                         public void onRespSuccess(FundInfo fundInfo) {
@@ -253,8 +263,6 @@ public class AccountFragment extends BaseFragment {
                                     .execute();
                         }
                     }).fire();*/
-        String token = User.getUser().getToken();
-        Log.d(TAG, "token " + token);
 //        API.Finance.getFundInfo("money").setTag(TAG)
 //                .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
 //                    @Override

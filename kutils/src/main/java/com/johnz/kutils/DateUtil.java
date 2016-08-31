@@ -53,4 +53,10 @@ public class DateUtil {
         }
         return date;
     }
+
+    public static String format(long timestamp) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_FORMAT);
+        Date date = new Date(timestamp);
+        return dateFormat.format(date);
+    }
 }

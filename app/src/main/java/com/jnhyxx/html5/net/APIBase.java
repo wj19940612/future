@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.Request;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.jnhyxx.html5.BuildConfig;
 import com.johnz.kutils.net.ApiCallback;
@@ -18,8 +19,6 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.content.ContentValues.TAG;
-
 public class APIBase extends RequestManager {
 
     public final static String HOST = BuildConfig.API_HOST;
@@ -33,6 +32,7 @@ public class APIBase extends RequestManager {
     private ApiCallback<?> mCallback;
     private ApiParams mApiParams;
     private ApiIndeterminate mIndeterminate;
+    private RetryPolicy mRetryPolicy;
 
     protected APIBase(String uri, ApiParams apiParams) {
         this(Request.Method.POST, uri, apiParams, 0);
@@ -65,6 +65,11 @@ public class APIBase extends RequestManager {
 
     public APIBase setCallback(ApiCallback<?> callback) {
         this.mCallback = callback;
+        return this;
+    }
+
+    public APIBase setRetryPolicy(RetryPolicy policy) {
+        this.mRetryPolicy = policy;
         return this;
     }
 
@@ -112,6 +117,10 @@ public class APIBase extends RequestManager {
 
                 GsonRequest request = new GsonRequest(mMethod, url, headers, mApiParams, type, mCallback);
                 request.setTag(mTag);
+
+                if (mRetryPolicy != null) {
+                    request.setRetryPolicy(mRetryPolicy);
+                }
 
                 enqueue(request);
             }

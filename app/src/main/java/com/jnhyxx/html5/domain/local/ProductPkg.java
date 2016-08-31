@@ -1,7 +1,7 @@
 package com.jnhyxx.html5.domain.local;
 
-import com.jnhyxx.html5.domain.market.MarketBrief;
-import com.jnhyxx.html5.domain.order.PositionBrief;
+import com.jnhyxx.html5.domain.market.MarketData;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 
@@ -10,36 +10,37 @@ import java.util.List;
 public class ProductPkg implements GroupAdapter.Groupable  {
 
     private Product mProduct;
-    private MarketBrief mMarketBrief;
-    private PositionBrief mPositionBrief;
+    private MarketData mMarketData;
+    private HomePositions.Position mPosition;
 
     public ProductPkg(Product product) {
         mProduct = product;
     }
 
-    public void setPositionBrief(PositionBrief positionBrief) {
-        mPositionBrief = positionBrief;
-    }
-
-    public void setMarketBrief(MarketBrief marketBrief) {
-        mMarketBrief = marketBrief;
+    public void setMarketData(MarketData marketData) {
+        mMarketData = marketData;
     }
 
     public Product getProduct() {
         return mProduct;
     }
 
-    public MarketBrief getMarketBrief() {
-        return mMarketBrief;
+    public MarketData getMarketData() {
+        return mMarketData;
     }
 
-    public PositionBrief getPositionBrief() {
-        return mPositionBrief;
+    public HomePositions.Position getPosition() {
+        return mPosition;
     }
 
-    public static void updateProductPkgList(List<ProductPkg> productPkgList, List<Product> productList,
-                                            List<PositionBrief> positionBriefList,
-                                            List<MarketBrief> marketBriefList) {
+    public void setPosition(HomePositions.Position position) {
+        mPosition = position;
+    }
+
+    public static void updateProductPkgList(List<ProductPkg> productPkgList,
+                                            List<Product> productList,
+                                            List<? extends HomePositions.Position> positionList,
+                                            List<MarketData> marketDataList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
@@ -50,21 +51,21 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             Product product = productList.get(i);
             ProductPkg pkg = new ProductPkg(product);
 
-            if (positionBriefList != null ) {
-                for (int j = 0; j < positionBriefList.size(); j++) {
-                    PositionBrief brief = positionBriefList.get(j);
-                    if (product.getVarietyType().equalsIgnoreCase(brief.getInstrumentCode())) {
-                        pkg.setPositionBrief(brief);
+            if (positionList != null ) {
+                for (int j = 0; j < positionList.size(); j++) {
+                    HomePositions.Position position = positionList.get(j);
+                    if (product.getVarietyType().equalsIgnoreCase(position.getVarietyType())) {
+                        pkg.setPosition(position);
                         break;
                     }
                 }
             }
 
-            if (marketBriefList != null) {
-                for (int k = 0; k < marketBriefList.size(); k++) {
-                    MarketBrief marketBrief = marketBriefList.get(k);
-                    if (product.getVarietyType().equalsIgnoreCase(marketBrief.getCode())) {
-                        pkg.setMarketBrief(marketBrief);
+            if (marketDataList != null) {
+                for (int k = 0; k < marketDataList.size(); k++) {
+                    MarketData marketData = marketDataList.get(k);
+                    if (product.getVarietyType().equalsIgnoreCase(marketData.getVarietyType())) {
+                        pkg.setMarketData(marketData);
                         break;
                     }
                 }
@@ -76,19 +77,28 @@ public class ProductPkg implements GroupAdapter.Groupable  {
     }
 
     public static boolean updatePositionInProductPkg(List<ProductPkg> productPkgList,
-                                                     List<PositionBrief> positionBriefList) {
+                                                     List<? extends HomePositions.Position> positionList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
 
         int count = 0;
+        boolean holdingPositionWhenMarketClosed = false;
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
             Product product = pkg.getProduct();
-            for (int j = 0; positionBriefList != null && j < positionBriefList.size(); j++) {
-                PositionBrief positionBrief= positionBriefList.get(j);
-                if (product.getVarietyType().equalsIgnoreCase(positionBrief.getInstrumentCode())) {
-                    pkg.setPositionBrief(positionBrief);
+            for (int j = 0; positionList != null && j < positionList.size(); j++) {
+                HomePositions.Position position = positionList.get(j);
+                if (product.getVarietyType().equalsIgnoreCase(position.getVarietyType())) {
+
+                    if (position.getHandsNum() > 0
+                            && product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
+                        holdingPositionWhenMarketClosed = true;
+                        // product market status is closed, but user has positions
+                        // means we need to refresh product list
+                    }
+
+                    pkg.setPosition(position);
                     count++; // when each product has its position brief, count++.
                     break;
                 }
@@ -97,18 +107,20 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
         boolean haveSameSize = true;
         boolean haveSameProducts = true;
-        if (positionBriefList != null) {
-            haveSameSize = (productPkgList.size() == positionBriefList.size());
+        if (positionList != null) {
+            haveSameSize = (productPkgList.size() == positionList.size());
             haveSameProducts = (count == productPkgList.size());
         }
 
         boolean updateProductList = !(haveSameProducts && haveSameSize);
 
-        return updateProductList;
+        return updateProductList || holdingPositionWhenMarketClosed;
     }
+
+
 
     public static boolean updateMarketInProductPkgList(List<ProductPkg> productPkgList,
-                                                       List<MarketBrief> marketBriefList) {
+                                                       List<MarketData> marketDataList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
@@ -117,10 +129,10 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
             Product product = pkg.getProduct();
-            for (int j = 0; marketBriefList != null && j < marketBriefList.size(); j++) {
-                MarketBrief marketBrief = marketBriefList.get(j);
-                if (product.getVarietyType().equalsIgnoreCase(marketBrief.getCode())) {
-                    pkg.setMarketBrief(marketBrief);
+            for (int j = 0; marketDataList != null && j < marketDataList.size(); j++) {
+                MarketData marketData = marketDataList.get(j);
+                if (product.getVarietyType().equalsIgnoreCase(marketData.getVarietyType())) {
+                    pkg.setMarketData(marketData);
                     count++; // when each product has its position brief, count++.
                     break;
                 }
@@ -129,8 +141,8 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
         boolean haveSameSize = true;
         boolean haveSameProducts = true;
-        if (marketBriefList != null) {
-            haveSameSize = (productPkgList.size() == marketBriefList.size());
+        if (marketDataList != null) {
+            haveSameSize = (productPkgList.size() == marketDataList.size());
             haveSameProducts = (count == productPkgList.size());
         }
 
@@ -139,14 +151,14 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         return updateProductList;
     }
 
-    public static void clearPositionBriefs(List<ProductPkg> productPkgList) {
+    public static void clearPositions(List<ProductPkg> productPkgList) {
         if (productPkgList == null) {
             throw new NullPointerException("productPkgList is null");
         }
 
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
-            pkg.setPositionBrief(null);
+            pkg.setPosition(null);
         }
     }
 

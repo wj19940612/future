@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +26,7 @@ public abstract class ChartView extends View {
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
         BLUE("#358CF3"),
-        YELLOW("#EAC281");
+        RED("#FB4B55");
 
         private String value;
 
@@ -79,8 +78,8 @@ public abstract class ChartView extends View {
     protected int mMiddleExtraSpace; // The middle space between two parts
     protected int mTextMargin; // The margin between text and baseline
 
-    protected int mXRectPadding;
-    private int mYXRectPadding;
+    private int mXRectPadding;
+    private int mYRectPadding;
     private int mTimeLineHeight;
     private int mCenterPartHeight;
 
@@ -133,7 +132,7 @@ public abstract class ChartView extends View {
         // constant
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
         mXRectPadding = (int) dp2Px(RECT_PADDING_DP);
-        mYXRectPadding = mXRectPadding / 2;
+        mYRectPadding = mXRectPadding / 2;
         mMiddleExtraSpace = (int) dp2Px(MIDDLE_EXTRA_SPACE_DP);
         mTimeLineHeight = (int) dp2Px(HEIGHT_TIME_LINE_DP);
         mCenterPartHeight = mMiddleExtraSpace + mTimeLineHeight;
@@ -148,7 +147,6 @@ public abstract class ChartView extends View {
         @Override
         public void handleMessage(Message msg) {
             MotionEvent e = (MotionEvent) msg.obj;
-            Log.d("TEST", "handleMessage onLongPress: e" + e.toString());
             mAction = Action.LONG_PRESS;
             mTouchIndex = calculateTouchIndex(e);
             redraw();
@@ -180,8 +178,8 @@ public abstract class ChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int left = 0 + getPaddingLeft();
-        int top = 0 + getPaddingTop();
+        int left = getLeft();
+        int top = getTop();
         int width = getWidth() - getPaddingLeft() - getPaddingRight();
         int topPartHeight = getTopPartHeight();
 
@@ -209,18 +207,18 @@ public abstract class ChartView extends View {
                 canvas);
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
-        if (mTouchIndex >= 0) {
-            drawTopTouchLines(mTouchIndex, left, top, width, topPartHeight, canvas);
-
-            if (mSettings.isIndexesEnable()) {
-                drawBottomTouchLines(mTouchIndex, left, top + topPartHeight + mCenterPartHeight,
-                        width, getBottomPartHeight(), canvas);
-            }
-
-            onTouchLinesAppear(mTouchIndex);
-        } else {
-            onTouchLinesDisappear();
-        }
+//        if (mTouchIndex >= 0) {
+//            drawTopTouchLines(mTouchIndex, left, top, width, topPartHeight, canvas);
+//
+//            if (mSettings.isIndexesEnable()) {
+//                drawBottomTouchLines(mTouchIndex, left, top + topPartHeight + mCenterPartHeight,
+//                        width, getBottomPartHeight(), canvas);
+//            }
+//
+//            onTouchLinesAppear(mTouchIndex);
+//        } else {
+//            onTouchLinesDisappear();
+//        }
     }
 
     @Override
@@ -233,45 +231,40 @@ public abstract class ChartView extends View {
         return super.dispatchTouchEvent(event);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
-                mHandler.sendMessageDelayed(message, DELAY);
-
-                mDownX = event.getX();
-                mDownY = event.getY();
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
-                        || Math.abs(mDownY - event.getY()) < CLICK_PIXELS) {
-                    return false;
-                }
-
-                mHandler.removeMessages(WHAT_LONG_PRESS);
-                if (mAction == Action.LONG_PRESS) {
-                    int newTouchIndex = calculateTouchIndex(event);
-                    if (newTouchIndex != mTouchIndex) {
-                        if (hasThisTouchIndex(newTouchIndex)) {
-                            mTouchIndex = newTouchIndex;
-                            redraw();
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                mHandler.removeMessages(WHAT_LONG_PRESS);
-                mAction = Action.NONE;
-                mTouchIndex = -1;
-                redraw();
-                return true;
-        }
-        return super.onTouchEvent(event);
-    }
+//
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
+//            case MotionEvent.ACTION_MOVE:
+//                if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
+//                        || Math.abs(mDownY - event.getY()) < CLICK_PIXELS) {
+//                    return false;
+//                }
+//
+//                mHandler.removeMessages(WHAT_LONG_PRESS);
+//                if (mAction == Action.LONG_PRESS) {
+//                    int newTouchIndex = calculateTouchIndex(event);
+//                    if (newTouchIndex != mTouchIndex) {
+//                        if (hasThisTouchIndex(newTouchIndex)) {
+//                            mTouchIndex = newTouchIndex;
+//                            redraw();
+//                            return true;
+//                        }
+//                    }
+//                }
+//
+//                return false;
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_CANCEL:
+//                mHandler.removeMessages(WHAT_LONG_PRESS);
+//                mAction = Action.NONE;
+//                mTouchIndex = -1;
+//                redraw();
+//                return true;
+//        }
+//
+//        return super.onTouchEvent(event);
+//    }
 
     protected boolean hasThisTouchIndex(int touchIndex) {
         return false;
@@ -377,7 +370,7 @@ public abstract class ChartView extends View {
      */
     protected abstract void drawTimeLine(int left, int top, int width, Canvas canvas);
 
-    private int getTopPartHeight() {
+    protected int getTopPartHeight() {
         int originalHeight = getHeight() - getPaddingTop() - getPaddingBottom();
         int topPartHeight = originalHeight - mTimeLineHeight;
         if (mSettings.isIndexesEnable()) {
@@ -386,7 +379,7 @@ public abstract class ChartView extends View {
         return topPartHeight;
     }
 
-    private int getBottomPartHeight() {
+    protected int getBottomPartHeight() {
         int originalHeight = getHeight() - getPaddingTop() - getPaddingBottom();
         if (mSettings.isIndexesEnable()) {
             return originalHeight - mCenterPartHeight - getTopPartHeight();
@@ -459,13 +452,13 @@ public abstract class ChartView extends View {
     /**
      * this is the inverse operation of getCharX(index)
      *
-     * @param x
+     * @param chartX
      * @return
      */
-    protected int getIndexOfXAxis(float x) {
+    protected int getIndexOfXAxis(float chartX) {
         int width = getWidth() - getPaddingLeft() - getPaddingRight();
-        x = x - getPaddingLeft();
-        return (int) (x * mSettings.getXAxis() / width);
+        chartX = chartX - getPaddingLeft();
+        return (int) (chartX * mSettings.getXAxis() / width);
     }
 
     /**
@@ -491,9 +484,9 @@ public abstract class ChartView extends View {
      */
     protected RectF getBigFontBgRectF(float textX, float textY, float textWidth) {
         mRectF.left = textX - mXRectPadding;
-        mRectF.top = textY + mFontMetrics.top - mYXRectPadding;
+        mRectF.top = textY + mFontMetrics.top - mYRectPadding;
         mRectF.right = textX + textWidth + mXRectPadding;
-        mRectF.bottom = textY + mFontMetrics.bottom + mYXRectPadding;
+        mRectF.bottom = textY + mFontMetrics.bottom + mYRectPadding;
         return mRectF;
     }
 

@@ -170,7 +170,8 @@ public class SignUpActivity extends BaseActivity {
             ToastUtil.curt(R.string.common_phone_num_fail);
             return;
         }
-        API.Account.obtainAuthCode(userPhone)
+        String phoneNum = mPhoneNum.getText().toString();
+        API.User.obtainAuthCode(phoneNum)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -193,7 +194,7 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
-        API.Account.signUp(phoneNum, password, authCode, null)
+        API.User.signUp(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
@@ -203,6 +204,8 @@ public class SignUpActivity extends BaseActivity {
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_successed);
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);
+                            com.jnhyxx.html5.domain.local.User.getUser().setLoginInfo(info);
+
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                         @Override
@@ -236,7 +239,7 @@ public class SignUpActivity extends BaseActivity {
             tvRegisterRetrieveImage.setEnabled(false);
         } else {
             tvRegisterRetrieveImage.setEnabled(true);
-            API.Account.getRetrieveImage(userPhone)
+            API.User.getRetrieveImage(userPhone)
                     .setIndeterminate(this).setTag(TAG)
                     .setCallback(new Callback<Resp>() {
                         @Override

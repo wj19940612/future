@@ -7,7 +7,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class ExpandableLayout extends RelativeLayout {
         duration = typedArray.getInt(R.styleable.ExpandableLayout_elDuration, getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
         View view = View.inflate(context, R.layout.account_view_expandable, this);
         TextView tv_leftTxt = (TextView) view.findViewById(R.id.lefe_txt_view);
+        final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.ivAboutUsRight);
         final TextView tv_bottom = (TextView) view.findViewById(R.id.bottom_txt);
         RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.view_expandable_headerlayout);
 //        if (!TextUtils.isEmpty(leftTxt)) {
@@ -58,15 +61,28 @@ public class ExpandableLayout extends RelativeLayout {
         Log.d(TAG, "左边文字 " + leftTxt + "\n右边文字 " + bottomTxt);
         tv_bottom.setVisibility(GONE);
 
+        final RotateAnimation rotateAnimationUp = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimationUp.setDuration(200);
+        rotateAnimationUp.setFillAfter(true);
+        final RotateAnimation rotateAnimationDown = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimationDown.setDuration(200);
+        rotateAnimationDown.setFillAfter(true);
+
+
         rlHeadlayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!isAnimationRunning) {
-                    if (tv_bottom.getVisibility() == VISIBLE)
+                    if (tv_bottom.getVisibility() == VISIBLE) {
                         collapse(tv_bottom);
-                    else
+                        ivAboutUsRight.startAnimation(rotateAnimationDown);
+                    } else {
+                        ivAboutUsRight.startAnimation(rotateAnimationUp);
                         expand(tv_bottom);
+                    }
 
                     isAnimationRunning = true;
                     new Handler().postDelayed(new Runnable() {

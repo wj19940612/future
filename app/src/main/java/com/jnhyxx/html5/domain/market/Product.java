@@ -11,8 +11,8 @@ public class Product implements Serializable, Parcelable {
     public static final String EX_FUND_TYPE = "fund";
     public static final String EX_PRODUCT_LIST = "productList";
 
-    public static final int FUND_TYPE_CASH = 0;
-    public static final int FUND_TYPE_SCORE = 1;
+    public static final int FUND_TYPE_CASH = 1;
+    public static final int FUND_TYPE_SCORE = 0;
 
     public static final String CURRENCY_RMB = "CNY";
 
@@ -23,7 +23,7 @@ public class Product implements Serializable, Parcelable {
     public static final int TAG_HOT = 2;
     public static final int TAG_NONE = 0;
 
-    public static final int IS_DOMESTIC = 1;
+    private static final int IS_DOMESTIC = 1;
 
     /**
      * displayMarketTimes : 06:00;07:00;04:58
@@ -118,12 +118,12 @@ public class Product implements Serializable, Parcelable {
         this.baseline = baseline;
     }
 
-    public int getIsDomestic() {
-        return isDomestic;
+    public boolean isDomestic() {
+        return isDomestic == IS_DOMESTIC;
     }
 
-    public void setIsDomestic(int isDomestic) {
-        this.isDomestic = isDomestic;
+    public boolean isForeign() {
+        return isDomestic != IS_DOMESTIC;
     }
 
     public int getTags() {
@@ -182,12 +182,8 @@ public class Product implements Serializable, Parcelable {
         this.currency = currency;
     }
 
-    public int getDecimalScale() {
+    public int getPriceDecimalScale() {
         return marketPoint;
-    }
-
-    public void setDecimalScale(int decimalScale) {
-        this.marketPoint = decimalScale;
     }
 
     public String getVarietyName() {
@@ -223,7 +219,7 @@ public class Product implements Serializable, Parcelable {
     }
 
     public int getLossProfitScale() {
-        return calLossProfitScale(eachPointMoney / Math.pow(10, getDecimalScale()));
+        return calLossProfitScale(eachPointMoney / Math.pow(10, getPriceDecimalScale()));
     }
 
     private int calLossProfitScale(double v) {

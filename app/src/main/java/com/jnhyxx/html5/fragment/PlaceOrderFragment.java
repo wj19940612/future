@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,9 +12,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
+import com.johnz.kutils.FinanceUtil;
+import com.johnz.kutils.StrUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +52,7 @@ public class PlaceOrderFragment extends BaseFragment {
     TextView mTradeFee;
     @BindView(R.id.rateAndMarketTime)
     TextView mRateAndMarketTime;
-    @BindView(R.id.TotalTobePaid)
+    @BindView(R.id.totalTobePaid)
     TextView mTotalTobePaid;
     @BindView(R.id.lastBidAskPrice)
     TextView mLastBidAskPrice;
@@ -50,21 +61,23 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private Callback mCallback;
 
-    private static final String TYPE = "fragmentType";
-    public static final int TYPE_BUY_LONG = 0;
-    public static final int TYPE_SELL_SHORT = 1;
-    public static final String TAG = "PlaceOrder";
+    private static final String TYPE = "longOrShort";
+    public static final int TYPE_BUY_LONG = 1;
+    public static final int TYPE_SELL_SHORT = 0;
 
-    private int mType;
+    private int mLongOrShort;
+    private Product mProduct;
+    private FuturesFinancing mFuturesFinancing;
+    private SubmittedOrder mSubmittedOrder;
 
     private Unbinder mBinder;
-
     private BlurEngine mBlurEngine;
 
-    public static PlaceOrderFragment newInstance(int type) {
+    public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
-        args.putInt(TYPE, type);
+        args.putInt(TYPE, longOrShort);
+        args.putSerializable(Product.EX_PRODUCT, product);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,7 +97,8 @@ public class PlaceOrderFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mType = getArguments().getInt(TYPE, 0);
+            mLongOrShort = getArguments().getInt(TYPE, 0);
+            mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
         }
     }
 
@@ -101,6 +115,98 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mSubmittedOrder = new SubmittedOrder(mProduct.getVarietyId(), mLongOrShort);
+
+        mTradeQuantitySelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
+                if (configuration instanceof FuturesFinancing.TradeQuantity) {
+                    FuturesFinancing.TradeQuantity tradeQuantity = (FuturesFinancing.TradeQuantity) configuration;
+                    mSubmittedOrder.setHandsNum(tradeQuantity.getQuantity());
+                    updateMarginTradeFeeAndTotal(tradeQuantity);
+                }
+            }
+        });
+        mTouchStopLossSelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
+                if (configuration instanceof FuturesFinancing.StopLoss) {
+
+                    FuturesFinancing.StopLoss stopLoss = (FuturesFinancing.StopLoss) configuration;
+
+                    // 设置止盈
+                    List<FuturesFinancing.StopProfit> stopProfitList = stopLoss.getStopProfitList();
+                    mTouchStopProfitSelector.setOrderConfigurationList(stopProfitList);
+
+                    // 设置手数
+                    List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
+                    mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
+
+                    mSubmittedOrder.setAssetsId(stopLoss.getAssetsBean().getAssetsId());
+                }
+            }
+        });
+        mTouchStopProfitSelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
+                if (configuration instanceof FuturesFinancing.StopProfit) {
+                    FuturesFinancing.StopProfit stopProfit = (FuturesFinancing.StopProfit) configuration;
+                    mSubmittedOrder.setStopProfitPoint(stopProfit.getStopProfitPoint());
+                }
+            }
+        });
+
+        API.Order.getFuturesFinancing(mProduct.getVarietyId()).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
+                    @Override
+                    public void onRespSuccess(FuturesFinancing futuresFinancing) {
+                        mFuturesFinancing = futuresFinancing;
+                        updatePlaceOrderViews();
+                    }
+                }).fire();
+    }
+
+    private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
+        int scale = mProduct.getLossProfitScale();
+
+        // DOMESTIC
+        String marginWithSign = mProduct.getSign()
+                + FinanceUtil.formatWithScale(tradeQuantity.getMargin(), scale);
+        String tradeFeeWithSign = mProduct.getSign()
+                + FinanceUtil.formatWithScale(tradeQuantity.getFee() / mProduct.getRatio(), scale);
+        String totalWithSign = mProduct.getSign()
+                + FinanceUtil.formatWithScale(tradeQuantity.getMargin()
+                + tradeQuantity.getFee() / mProduct.getRatio(), scale);
+        mMargin.setText(marginWithSign);
+        mTradeFee.setText(tradeFeeWithSign);
+        mTotalTobePaid.setText(totalWithSign);
+
+        if (mProduct.isForeign()) {
+            String marginRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
+                    FinanceUtil.formatWithScale(tradeQuantity.getMargin() * mProduct.getRatio()) + " )";
+            mMargin.setText(
+                    StrUtil.mergeTextWithColor(marginWithSign, marginRmb, Color.parseColor("#666666"))
+            );
+            String tradeFeeRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
+                    FinanceUtil.formatWithScale(tradeQuantity.getFee()) + " )";
+            mTradeFee.setText(
+                    StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
+            );
+            String totalRmb = FinanceUtil.UNIT_SIGN_CNY
+                    + (tradeQuantity.getMargin() * mProduct.getRatio() + tradeQuantity.getFee());
+            String totalForeign = "  ( " + totalWithSign + " )";
+            mTotalTobePaid.setText(
+                    StrUtil.mergeTextWithColor(totalRmb, totalForeign, Color.parseColor("#666666"))
+            );
+        }
+    }
+
+    private void updatePlaceOrderViews() {
+        if (isRemoving() || !isAdded()) return;
+
+        // 设置止损
+        mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }
 
     @Override
@@ -119,12 +225,12 @@ public class PlaceOrderFragment extends BaseFragment {
     @OnClick(R.id.confirmButton)
     public void onClick() {
         if (mCallback != null) {
-            mCallback.onConfirmBtnClick();
+            mCallback.onConfirmBtnClick(mSubmittedOrder);
         }
     }
 
     public interface Callback {
-        void onConfirmBtnClick();
+        void onConfirmBtnClick(SubmittedOrder submittedOrder);
     }
 
     @Override

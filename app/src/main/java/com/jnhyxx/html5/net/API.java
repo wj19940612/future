@@ -3,6 +3,7 @@ package com.jnhyxx.html5.net;
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 import com.umeng.message.UmengRegistrar;
@@ -453,6 +454,25 @@ public class API extends APIBase {
          */
         public static API getExchangeTradeStatus(int exchangeId) {
             return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+        }
+
+        /**
+         * /order/variety/getAssetsByVariety.do 获取期货配资数据
+         *
+         * @param varietyId
+         */
+        public static API getFuturesFinancing(int varietyId) {
+            return new API(GET, "/order/variety/getAssetsByVariety.do?varietyId=" + varietyId, null);
+        }
+
+        /**
+         * /order/order/submitOrder.do 提交订单
+         *
+         * @param submittedOrder
+         */
+        public static API submitOrder(SubmittedOrder submittedOrder) {
+            return new API("/order/order/submitOrder.do",
+                    new ApiParams(SubmittedOrder.class, submittedOrder));
         }
     }
 

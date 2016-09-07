@@ -158,7 +158,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
 //        tabText.setText(clickedView.getText());
 //
 //        if (mOnDropDownItemClickListener != null) {
-//            mOnDropDownItemClickListener.onItemClick(v, index);
+//            mOnDropDownItemClickListener.onItemSelected(v, index);
 //        }
 //    }
 //

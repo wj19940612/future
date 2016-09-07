@@ -47,4 +47,12 @@ public class MarketData {
         this.varietyType = varietyType;
     }
 
+    @Override
+    public String toString() {
+        return "MarketData{" +
+                "floatPricePoint='" + floatPricePoint + '\'' +
+                ", varietyType='" + varietyType + '\'' +
+                ", lastPrice=" + lastPrice +
+                '}';
+    }
 }

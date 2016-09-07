@@ -1,9 +1,11 @@
 package com.jnhyxx.html5.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +16,24 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.fragment.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -182,7 +188,7 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         }
         TrendView.Settings settings = new TrendView.Settings();
         settings.setBaseLines(mProduct.getBaseline());
-        settings.setNumberScale(mProduct.getDecimalScale());
+        settings.setNumberScale(mProduct.getPriceDecimalScale());
         settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
         settings.setDisplayMarketTimes(mProduct.getDisplayMarketTimes());
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
@@ -239,9 +245,8 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     }
 
     private void showPlaceOrderFragment(int type) {
-        mPlaceOrderContainer.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(type))
+                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(type, mProduct))
                 .commit();
     }
 
@@ -267,10 +272,35 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     }
 
     @Override
-    public void onConfirmBtnClick() {
-        // TODO: 8/23/16 下单接口 实现
+    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
+        submittedOrder.setPayType(mFundType);
 
-        hidePlaceOrderFragment();
+        Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
+
+        //submitOrder(submittedOrder);
+    }
+
+    private void submitOrder(final SubmittedOrder submittedOrder) {
+        API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback<Resp<JsonObject>>() {
+                    @Override
+                    public void onReceive(Resp<JsonObject> jsonObjectResp) {
+                        if (jsonObjectResp.isSuccess()) {
+                            hidePlaceOrderFragment();
+                        } else {
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.place_an_order_again,
+                                            new SmartDialog.OnClickListener() {
+                                        @Override
+                                        public void onClick(Dialog dialog) {
+                                            submitOrder(submittedOrder);
+                                        }
+                                    }).setNegative(R.string.cancel)
+                                    .show();
+                        }
+                    }
+                }).fire();
+
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

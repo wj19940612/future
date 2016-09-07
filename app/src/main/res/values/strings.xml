@@ -206,9 +206,15 @@
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>
     <string name="sell_volume">卖量</string>
-
     <string name="prompt_market_close_next_trade_time_is">已休市, 下次交易时间 </string>
 
+    <!-- Trade page: place an order -->
+    <string name="touch_stop_loss">触发止损</string>
+    <string name="touch_stop_profit">触发止盈</string>
+    <string name="total_to_be_paid">合计支付</string>
+    <string name="last_bid_ask_price">最新买入价</string>
+    <string name="place_an_order_again">再次下单</string>
+    
     <!--我的界面-->
     <string name="account_trade_info">交易明细</string>
     <string name="account_aboutus">关于我们</string>
@@ -247,11 +253,6 @@
 \n最终，盈投的月利润比以前翻了7-10倍！靠的就是系统的强大风控系统保障下提高了盈利模式。同时靠营销系统每个月客户数量都大了增长。
 \n盈投坦言，现在增长到500多个活跃用户，月利润500多万元。</string>
 
-    <!-- Trade page: place an order -->
-    <string name="touch_stop_loss">触发止损</string>
-    <string name="touch_stop_profit">触发止盈</string>
-    <string name="total_to_be_paid">合计支付</string>
-    <string name="last_bid_ask_price">最新买入价</string>
 
     <!--我的界面/推广挣钱-->
     <string name="account_expand_make_money_right_title">我的用户</string>

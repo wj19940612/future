@@ -93,8 +93,6 @@ public class HomeFragment extends BaseFragment {
         requestOrderReport();
         requestProductList();
         requestProductMarketList();
-
-        startScheduleJob(5 * 1000);
     }
 
     private void requestProductExchangeStatus(final Product product) {
@@ -141,6 +139,13 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         requestHomePositions();
+        startScheduleJob(5 * 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
     }
 
     private void requestHomeAdvertisement() {
@@ -298,7 +303,7 @@ public class HomeFragment extends BaseFragment {
                     MarketData marketData = pkg.getMarketData(); // Market status
                     if (marketData != null) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                                product.getDecimalScale()));
+                                product.getPriceDecimalScale()));
                         mPriceChangePercent.setText(marketData.getUnsignedPercentage());
                         String priceChangePercent = marketData.getPercentage();
                         if (priceChangePercent.startsWith("-")) {

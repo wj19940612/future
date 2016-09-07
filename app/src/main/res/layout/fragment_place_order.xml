@@ -212,7 +212,7 @@
             android:textColor="#A8A8A8"/>
 
         <TextView
-            android:id="@+id/TotalTobePaid"
+            android:id="@+id/totalTobePaid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"

@@ -131,8 +131,22 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
             }
         });
 
+        updateTitleBar();
         updateChartView();
         updateExchangeStatusView();
+    }
+
+    private void updateTitleBar() {
+        View view = mTitleBar.getCustomView();
+        TextView productName = (TextView) view.findViewById(R.id.productName);
+        View productRule = view.findViewById(R.id.productRule);
+        productName.setText(mProduct.getVarietyName() + " " + mProduct.getContractsCode());
+        productRule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void updateExchangeStatusView() {
@@ -144,7 +158,7 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         } else {
             mMarketCloseArea.setVisibility(View.VISIBLE);
             mMarketOpenArea.setVisibility(View.GONE);
-            mNextTradeTime.setText(getString(R.string.next_trade_time_is,
+            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
                     mExchangeStatus.getNextTime()));
         }
     }
@@ -291,11 +305,11 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.place_an_order_again,
                                             new SmartDialog.OnClickListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog) {
-                                            submitOrder(submittedOrder);
-                                        }
-                                    }).setNegative(R.string.cancel)
+                                                @Override
+                                                public void onClick(Dialog dialog) {
+                                                    submitOrder(submittedOrder);
+                                                }
+                                            }).setNegative(R.string.cancel)
                                     .show();
                         }
                     }

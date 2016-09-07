@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -165,6 +167,37 @@ public class PlaceOrderFragment extends BaseFragment {
                         updatePlaceOrderViews();
                     }
                 }).fire();
+
+        updateRateAndMarketTimeView();
+    }
+
+    private void updateRateAndMarketTimeView() {
+        if (mProduct.isForeign()) {
+            mRateAndMarketTime.setText(getString(R.string.currency_converter,
+                    "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + FinanceUtil.UNIT_YUAN));
+        }
+
+        API.Order.getExchangeTradeStatus(mProduct.getExchangeId()).setTag(TAG)
+                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                    @Override
+                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        String marketTimeStr;
+                        if (exchangeStatus.isTradeable()) {
+                            marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
+                                    exchangeStatus.getNextTime());
+                        } else {
+                            marketTimeStr = getString(R.string.prompt_next_trade_time_is,
+                                    exchangeStatus.getNextTime());
+                        }
+                        String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
+                        if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
+                            rateAndMarketTimeStr =  marketTimeStr;
+                        } else {
+                            rateAndMarketTimeStr += "  " + marketTimeStr;
+                        }
+                        mRateAndMarketTime.setText(rateAndMarketTimeStr);
+                    }
+                }).fire();
     }
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
@@ -176,8 +209,7 @@ public class PlaceOrderFragment extends BaseFragment {
         String tradeFeeWithSign = mProduct.getSign()
                 + FinanceUtil.formatWithScale(tradeQuantity.getFee() / mProduct.getRatio(), scale);
         String totalWithSign = mProduct.getSign()
-                + FinanceUtil.formatWithScale(tradeQuantity.getMargin()
-                + tradeQuantity.getFee() / mProduct.getRatio(), scale);
+                + FinanceUtil.formatWithScale(tradeQuantity.getMargin() + tradeQuantity.getFee() / mProduct.getRatio(), scale);
         mMargin.setText(marginWithSign);
         mTradeFee.setText(tradeFeeWithSign);
         mTotalTobePaid.setText(totalWithSign);
@@ -194,7 +226,7 @@ public class PlaceOrderFragment extends BaseFragment {
                     StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
             );
             String totalRmb = FinanceUtil.UNIT_SIGN_CNY
-                    + (tradeQuantity.getMargin() * mProduct.getRatio() + tradeQuantity.getFee());
+                    + FinanceUtil.formatWithScale(tradeQuantity.getMargin() * mProduct.getRatio() + tradeQuantity.getFee());
             String totalForeign = "  ( " + totalWithSign + " )";
             mTotalTobePaid.setText(
                     StrUtil.mergeTextWithColor(totalRmb, totalForeign, Color.parseColor("#666666"))

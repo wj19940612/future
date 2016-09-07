@@ -51,7 +51,7 @@ public class Product implements Serializable, Parcelable {
     private String displayMarketTimes;
     private double decimalScale;
     private String sign;
-    private double fcpInterVal;
+    private double flashChartPriceInterval;
     private String varietyType;
     private int baseline;
     private int isDomestic;
@@ -95,11 +95,11 @@ public class Product implements Serializable, Parcelable {
     }
 
     public double getFlashChartPriceInterval() {
-        return fcpInterVal;
+        return flashChartPriceInterval;
     }
 
     public void setFlashChartPriceInterval(double fcpInterVal) {
-        this.fcpInterVal = fcpInterVal;
+        this.flashChartPriceInterval = fcpInterVal;
     }
 
     public String getVarietyType() {
@@ -243,7 +243,7 @@ public class Product implements Serializable, Parcelable {
         dest.writeString(this.displayMarketTimes);
         dest.writeDouble(this.decimalScale);
         dest.writeString(this.sign);
-        dest.writeDouble(this.fcpInterVal);
+        dest.writeDouble(this.flashChartPriceInterval);
         dest.writeString(this.varietyType);
         dest.writeInt(this.baseline);
         dest.writeInt(this.isDomestic);
@@ -268,7 +268,7 @@ public class Product implements Serializable, Parcelable {
         this.displayMarketTimes = in.readString();
         this.decimalScale = in.readDouble();
         this.sign = in.readString();
-        this.fcpInterVal = in.readDouble();
+        this.flashChartPriceInterval = in.readDouble();
         this.varietyType = in.readString();
         this.baseline = in.readInt();
         this.isDomestic = in.readInt();

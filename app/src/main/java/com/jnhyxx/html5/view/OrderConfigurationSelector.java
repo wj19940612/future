@@ -177,8 +177,12 @@ public class OrderConfigurationSelector extends LinearLayout {
             if (mNumberOfItems <= mMaximum) {
                 selectFixedItem(index);
             } else {
-                selectFixedItem(mMaximum - 1);
-                getFixedItem(mMaximum - 1).setText(configuration.getValue());
+                if (index >= mMaximum - 1) {
+                    selectFixedItem(mMaximum - 1);
+                    getFixedItem(mMaximum - 1).setText(configuration.getValue());
+                } else {
+                    selectFixedItem(index);
+                }
             }
 
             if (mOnItemSelectedListener != null) {

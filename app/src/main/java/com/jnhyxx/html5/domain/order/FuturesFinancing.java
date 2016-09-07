@@ -35,12 +35,12 @@ public class FuturesFinancing {
     /**
      * cvId : 170
      * marginBeat : 332.5
-     * stopWinBeats : {1:66.5,5:332.5,10:665}
+     * stopWinBeats : {"1":66.5,"5":332.5,"10":665}
      * fees : 10
-     * marginBeatHands : {1:50,5:250,10:500,20:1000}
+     * marginBeatHands : {"1":50,"5":250,"10":500,"20":1000}
      * isDefault : 0
-     * handsMultiple : [1,5,10,20]
-     * feesHands : {1:10,5:50,10:100,20:200}
+     * handsMultiple : ["1","5","10","20"]
+     * feesHands : {"1":10,"5":50,"10":100,"20":200}
      * stopLossBeat : 199.5
      * assetsId : 10
      */
@@ -129,24 +129,24 @@ public class FuturesFinancing {
 
     public static class AssetsBean {
         private double marginBeat;
-        private Map<Integer, Double> stopWinBeats;
+        private Map<String, Double> stopWinBeats;
         private int fees;
-        private Map<Integer, Double> marginBeatHands;
+        private Map<String, Double> marginBeatHands;
         private int isDefault;
-        private Map<Integer, Double> feesHands;
+        private Map<String, Double> feesHands;
         private double stopLossBeat;
         private int assetsId;
-        private List<Integer> handsMultiple;
+        private List<String> handsMultiple;
 
-        public Map<Integer, Double> getStopWinBeats() {
+        public Map<String, Double> getStopWinBeats() {
             return stopWinBeats;
         }
 
-        public Map<Integer, Double> getMarginBeatHands() {
+        public Map<String, Double> getMarginBeatHands() {
             return marginBeatHands;
         }
 
-        public Map<Integer, Double> getFeesHands() {
+        public Map<String, Double> getFeesHands() {
             return feesHands;
         }
 
@@ -190,14 +190,14 @@ public class FuturesFinancing {
             this.assetsId = assetsId;
         }
 
-        public List<Integer> getHandsMultiple() {
+        public List<String> getHandsMultiple() {
             return handsMultiple;
         }
 
         @Override
         public String toString() {
             StringBuilder builder = new StringBuilder();
-            for (Map.Entry<Integer, Double> entry : stopWinBeats.entrySet()) {
+            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
                 builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
             }
             return builder.toString();
@@ -295,9 +295,9 @@ public class FuturesFinancing {
 
         public List<StopProfit> getStopProfitList() {
             List<StopProfit> result = new ArrayList<>();
-            Map<Integer, Double> stopWinBeats = assetsBean.getStopWinBeats();
-            for (Map.Entry<Integer, Double> entry : stopWinBeats.entrySet()) {
-                int stopProfitPoint = entry.getKey().intValue();
+            Map<String, Double> stopWinBeats = assetsBean.getStopWinBeats();
+            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+                int stopProfitPoint = Integer.valueOf(entry.getKey()).intValue();
                 double stopProfit = entry.getValue().doubleValue();
                 result.add(new StopProfit(stopProfitPoint, stopProfit, profitLossScale, sign));
             }
@@ -306,18 +306,18 @@ public class FuturesFinancing {
 
         public List<TradeQuantity> getTradeQuantityList() {
             List<TradeQuantity> result = new ArrayList<>();
-            for (Integer integer : assetsBean.getHandsMultiple()) {
-                Double fee = assetsBean.getFeesHands().get(integer);
+            for (String hand : assetsBean.getHandsMultiple()) {
+                Double fee = assetsBean.getFeesHands().get(hand);
                 double feePrimary = 0;
                 if (fee != null) {
                     feePrimary = fee.doubleValue();
                 }
-                Double margin = assetsBean.getMarginBeatHands().get(integer);
+                Double margin = assetsBean.getMarginBeatHands().get(hand);
                 double marginPrimary = 0;
                 if (margin != null) {
                     marginPrimary = margin.doubleValue();
                 }
-                result.add(new TradeQuantity(integer.intValue(), feePrimary, marginPrimary));
+                result.add(new TradeQuantity(Integer.valueOf(hand).intValue(), feePrimary, marginPrimary));
             }
             return result;
         }

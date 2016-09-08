@@ -287,4 +287,15 @@
     <string name="account_trade_detail_margin_remain">剩余保证金(分)</string>
 
     <string name="common_phone_num_fail">手机号码错误，请输入正确的手机号码</string>
+
+    <!--设置模块-->
+    <!--设置界面-->
+    <string name="setting_title">设置</string>
+    <string name="setting_user_name">用户名</string>
+    <string name="setting_real_name">实名认证</string>
+    <string name="setting_bind_bank_card">绑定银行卡</string>
+    <string name="setting_bind_phone">绑定手机</string>
+    <string name="setting_no_attestation">未认证</string>
+    <string name="setting_no_bind">未绑定</string>
+    <string name="setting_login_out">退出</string>
 </resources>

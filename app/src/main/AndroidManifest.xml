@@ -127,7 +127,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.account.AboutUsActivity" />
         <activity android:name=".activity.account.ExpandMakeMoneyActivity" />
-        <activity android:name=".activity.account.tradedetail.TradeDetailActivity"></activity>
+        <activity android:name=".activity.account.tradedetail.TradeDetailActivity" />
+        <activity android:name=".activity.setting.SettingActivity"></activity>
     </application>
 
 </manifest>

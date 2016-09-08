@@ -21,9 +21,10 @@ import butterknife.OnClick;
 
 public class AboutUsActivity extends BaseActivity {
     private static final String TAG = "AboutUsActivity";
+    private static final String SERVIVE_QQ = "3088152027";
     @BindView(R.id.activity_about_us_tv_versionName)
     TextView tv_versionName;
-//    //公司简介
+    //    //公司简介
 //    @BindView(R.id.activity_about_us_rl_company_info)
 //    RelativeLayout rl_companyInfo;
 //    @BindView(R.id.activity_about_us_tv_company_info)
@@ -62,7 +63,7 @@ public class AboutUsActivity extends BaseActivity {
         tv_versionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
     }
 
-    @OnClick({R.id.activity_about_us_rl_company_info, R.id.activity_about_us_rl_manager_team, R.id.activity_about_us_rl_company_culture, R.id.activity_about_us_rl_collaborate_case, R.id.activity_about_us_rl_company_telphone})
+    @OnClick({R.id.activity_about_us_rl_company_info, R.id.activity_about_us_rl_manager_team, R.id.activity_about_us_rl_company_culture, R.id.activity_about_us_rl_collaborate_case, R.id.activity_about_us_rl_company_telphone, R.id.activity_about_us_rl_service_qq})
     public void onClick(View view) {
         switch (view.getId()) {
             //公司信息
@@ -86,6 +87,10 @@ public class AboutUsActivity extends BaseActivity {
                 // TODO: 2016/8/24  
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telphone_number)));
                 startActivity(intent);
+                break;
+            case R.id.activity_about_us_rl_service_qq:
+                String serviceQQUrl = "mqqwpa://im/chat?chat_type=wpa&uin=" + SERVIVE_QQ + "&version=1";
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
                 break;
 
         }

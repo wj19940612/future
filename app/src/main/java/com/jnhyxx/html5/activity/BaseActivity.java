@@ -6,17 +6,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.TimerHandler;
 import com.jnhyxx.html5.view.dialog.Progress;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -33,6 +46,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     protected String TAG;
 
+    Toast mToast;
     private TimerHandler mTimerHandler;
     private Progress mProgress;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

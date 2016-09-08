@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,14 +8,19 @@
     tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
 
     <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/findpasswordTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         app:backFeature="true"
-        app:titleText="@string/modify_password"/>
+        app:titleText="@string/modify_password" />
 
+    <include
+        android:id="@+id/moidifyPasswordWarn"
+        layout="@layout/common_fail_warn"
+        android:visibility="gone"/>
 
-    <include layout="@layout/split_line_thick"/>
+    <include layout="@layout/split_line_thick" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,52 +28,115 @@
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
+        <!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <LinearLayout
+                    <TextView
+                        style="@style/InputTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/new_password"/>
+
+                    <EditText
+                        android:id="@+id/newPassword"
+                        style="@style/SignEditText.Password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/please_input_new_password"/>
+                </LinearLayout>-->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="60dp">
 
-            <TextView
-                style="@style/InputTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_password"/>
+            <ImageView
+                android:id="@+id/help_newPasswordImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_icon_lock" />
+
 
             <EditText
                 android:id="@+id/newPassword"
                 style="@style/SignEditText.Password"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/please_input_new_password"/>
-        </LinearLayout>
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/help_newPasswordImage"
+                android:hint="@string/please_input_password"
+                android:textColorHint="@color/login_edittext_hint" />
 
-        <include layout="@layout/split_line_thick"/>
+            <ImageView
+                android:id="@+id/findpassword_image_password_type"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/login_btn_password_type"
+                android:visibility="gone" />
+        </RelativeLayout>
 
-        <LinearLayout
+        <include layout="@layout/split_line_thick" />
+
+        <!--   <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <TextView
+                   style="@style/InputTitle"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/confirm_password"/>
+
+               <EditText
+                   android:id="@+id/confirmPassword"
+                   style="@style/SignEditText.Password"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:hint="@string/please_repeat_new_password"/>
+           </LinearLayout>-->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="60dp">
 
-            <TextView
-                style="@style/InputTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/confirm_password"/>
+            <ImageView
+                android:id="@+id/help_passwordImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/login_icon_lock" />
+
 
             <EditText
                 android:id="@+id/confirmPassword"
                 style="@style/SignEditText.Password"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/please_repeat_new_password"/>
-        </LinearLayout>
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/help_passwordImage"
+                android:hint="@string/please_repeat_new_password"
+                android:textColorHint="@color/login_edittext_hint" />
 
+            <ImageView
+                android:id="@+id/login_image_password_type"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/login_btn_password_type"
+                android:visibility="gone" />
+        </RelativeLayout>
     </LinearLayout>
 
-    <include layout="@layout/split_line_thick"/>
+    <include layout="@layout/split_line_thick" />
 
     <TextView
         android:id="@+id/confirmButton"
@@ -78,6 +145,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/ok"/>
+        android:layout_marginTop="50dp"
+        android:text="@string/ok" />
 </LinearLayout>

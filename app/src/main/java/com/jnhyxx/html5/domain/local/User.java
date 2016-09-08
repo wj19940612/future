@@ -70,6 +70,12 @@ public class User {
         return "";
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "mLoginInfo=" + mLoginInfo +
+                '}';
+    }
     public double getAvailableBalance() {
         return 0; // TODO: 8/29/16 可用资金
     }

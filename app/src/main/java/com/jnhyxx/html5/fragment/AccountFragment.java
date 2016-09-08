@@ -1,28 +1,34 @@
 package com.jnhyxx.html5.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
-import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.activity.account.model.TradeDetail;
+import com.jnhyxx.html5.activity.account.model.UserFundInfo;
+import com.jnhyxx.html5.activity.account.model.UserInfo;
+import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.finance.FundInfo;
+import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -31,6 +37,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AccountFragment extends BaseFragment {
     //账户余额
@@ -46,26 +54,27 @@ public class AccountFragment extends BaseFragment {
     @BindView(R.id.signUp)
     TextView mSignUp;
     //消息中心的未读消息数
-    @BindView(R.id.account_tv_message_number)
-    TextView mMessageNumber;
+    // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText(); 
+//    @BindView(R.id.account_tv_message_number)
+//    TextView mMessageNumber;
     //消息中心
     @BindView(R.id.messageCenter)
-//    IconTextRow mMessageCenter;
-            RelativeLayout mMessageCenter;
+    IconTextRow mMessageCenter;
+    //            RelativeLayout mMessageCenter;
     //交易明细
     @BindView(R.id.fundDetail)
-//    IconTextRow mFundDetail;
-            RelativeLayout mFundDetail;
+    IconTextRow mFundDetail;
+//            RelativeLayout mFundDetail;
 
     //积分明细
 //    @BindView(R.id.scoreDetail)
 //    IconTextRow mScoreDetail;
     @BindView(R.id.aboutUs)
-//    IconTextRow mPersonalInfo;
-            RelativeLayout mPersonalInfo;
+    IconTextRow mPersonalInfo;
+    //            RelativeLayout mPersonalInfo;
     @BindView(R.id.paidToPromote)
-//    IconTextRow mPaidToPromote;
-            RelativeLayout mPaidToPromote;
+    IconTextRow mPaidToPromote;
+    //            RelativeLayout mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
     //登陆和注册按钮的父容器
@@ -78,9 +87,16 @@ public class AccountFragment extends BaseFragment {
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
-    @BindView(R.id.titleBar)
+    @BindView(R.id.fragmentAccountTitleBar)
     TitleBar mTitleBar;
+//    @BindView(R.id.fragment_account_titleBar_iv_setting)
+//    ImageView mSettingImageView;
+//    @BindView(R.id.titleBar)
+//    TitleBar mTitleBar;
+
     private Unbinder mBinder;
+
+    private static final int REQUEEST_CODE_LOGIN = 967;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +119,24 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void updateAccountInfoView() {
+//        if (User.getUser().isLogin()) {\
+        if (LocalCacheUserInfoManager.getInstance().isLogin()) {
+            // TODO: 2016/8/31 这里会报空指针
+//            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
+//            Log.d(TAG, " " + format);
+//            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
+//            mSignArea.setVisibility(View.GONE);
+//            mFundArea.setVisibility(View.VISIBLE);
+//            mTitleBar.setRightVisible(true);
+//            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    User.getUser().logout();
+//                    updateAccountInfoView();
+//                }
+//            });
+
+       /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
         if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
             String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick());
             Log.d(TAG, " " + format);
@@ -116,14 +150,15 @@ public class AccountFragment extends BaseFragment {
                     com.jnhyxx.html5.domain.local.User.getUser().logout();
                     updateAccountInfoView();
                 }
-            });
+            });*/
+
             requestFundInfo();
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
             mNickname.setText(R.string.nickname_unknown);
-//            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightVisible(true);
 
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.account_mine_integral, getString(R.string.zero)));
@@ -131,21 +166,31 @@ public class AccountFragment extends BaseFragment {
     }
 
     private void requestFundInfo() {
-        API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
-                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
+//        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+//                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
+//                    @Override
+//                    public void onRespSuccess(FundInfo fundInfo) {
+//                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
+//                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
+//                    }
+//                }).fire();
+        API.Finance.getFundInfo().setTag(TAG)
+                .setCallback(new Callback2<Resp<UserFundInfo>, UserFundInfo>() {
                     @Override
-                    public void onRespSuccess(FundInfo fundInfo) {
-                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
-                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
+                    public void onRespSuccess(UserFundInfo fundInfo) {
+                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getMoneyUsable()));
+                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScoreUsable())));
                     }
                 }).fire();
+
     }
 
     @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
-                Launcher.with(getActivity(), SignInActivity.class).execute();
+//                Launcher.with(getActivity(), SignInActivity.class).execute();
+                startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQUEEST_CODE_LOGIN);
                 break;
             case R.id.signUp:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
@@ -178,7 +223,7 @@ public class AccountFragment extends BaseFragment {
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.fundDetail:
-                openFundDetailPage(true);
+                openTradeDetailPage(true);
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
@@ -188,6 +233,15 @@ public class AccountFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 打开交易明细界面
+     *
+     * @param isCash
+     */
+    private void openTradeDetailPage(final boolean isCash) {
+//        if (User.getUser().isLogin()) {
+        // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
+        /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
     private void openFundDetailPage(final boolean isCash) {
         if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
             API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
@@ -199,9 +253,50 @@ public class AccountFragment extends BaseFragment {
                                     .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
                                     .execute();
                         }
-                    }).fire();
-        } else {
-            Launcher.with(getActivity(), SignInActivity.class).execute();
+                    }).fire();*/
+           /* API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
+                    .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
+                        @Override
+                        public void onRespSuccess(TradeDetail tradeDetail) {
+                            Launcher.with(getActivity(), TradeDetailActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
+                                    .execute();
+                        }
+                    }).fire();*/
+//        API.Finance.getFundInfo("money").setTag(TAG)
+//                .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
+//                    @Override
+//                    public void onRespSuccess(TradeDetail tradeDetail) {
+//                        Launcher.with(getActivity(), TradeDetailActivity.class)
+//                                .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
+//                                .execute();
+//                    }
+//                }).fire();
+//        } else {
+//            Launcher.with(getActivity(), SignInActivity.class).execute();
+//        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            UserInfo userInfo = LocalCacheUserInfoManager.getInstance().getUser();
+            Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
+            String userName = userInfo.getUserName();
+            String userNickName = String.format(" ", userName);
+            Log.d(TAG, " 用户昵称 " + userNickName);
+            mNickname.setText(getString(R.string.nickname_logged, userName));
+            mSignArea.setVisibility(View.GONE);
+            mFundArea.setVisibility(View.VISIBLE);
+            mTitleBar.setRightVisible(true);
+            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    User.getUser().logout();
+                    updateAccountInfoView();
+                }
+            });
         }
     }
 }

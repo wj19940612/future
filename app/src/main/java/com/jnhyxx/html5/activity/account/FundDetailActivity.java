@@ -103,7 +103,7 @@ public class FundDetailActivity extends BaseActivity {
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mPageNo ++;
+                    mPageNo++;
                     requestFlowList();
                 }
             });

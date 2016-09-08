@@ -71,8 +71,8 @@ public class CircularAnnulusImageView extends ImageView {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularAnnulusImageView, defStyle, 0);
 
-        mBorderWidth = typedArray.getDimensionPixelSize(R.styleable.CircularAnnulusImageView_border_width, DEFAULT_BORDER_WIDTH);
-        mBorderColor = typedArray.getColor(R.styleable.CircularAnnulusImageView_border_color, DEFAULT_BORDER_COLOR);
+        mBorderWidth = typedArray.getDimensionPixelSize(R.styleable.CircularAnnulusImageView_borderWidth, DEFAULT_BORDER_WIDTH);
+        mBorderColor = typedArray.getColor(R.styleable.CircularAnnulusImageView_borderColor, DEFAULT_BORDER_COLOR);
 
         typedArray.recycle();
 

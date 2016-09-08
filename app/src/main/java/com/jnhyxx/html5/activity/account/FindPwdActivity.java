@@ -21,9 +21,9 @@ import butterknife.OnClick;
 
 public class FindPwdActivity extends BaseActivity {
 
-    @BindView(R.id.phoneNum)
+    @BindView(R.id.findPasswordPhoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.messageAuthCode)
+    @BindView(R.id.findPasswordMessageAuthCode)
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
@@ -81,6 +81,7 @@ public class FindPwdActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
+    //获取验证码
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
@@ -106,6 +107,14 @@ public class FindPwdActivity extends BaseActivity {
     void doNextStepButtonClick() {
         final String phoneNum = mPhoneNum.getText().toString().trim();
         final String authCode = mMessageAuthCode.getText().toString().trim();
+
+        // TODO: 2016/8/31 目前没有确认短信验证码接口， 
+//        API.Account.authCodeWhenFindPassword(phoneNum, authCode)
+//                .setIndeterminate(this).setTag(TAG)
+//                .setCallback(new Callback<Resp>() {
+//                    @Override
+//                    public void onReceive(Resp resp) {
+//                        if (resp.isSuccess()) {
         API.User.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -137,3 +146,6 @@ public class FindPwdActivity extends BaseActivity {
         }
     }
 }
+
+
+

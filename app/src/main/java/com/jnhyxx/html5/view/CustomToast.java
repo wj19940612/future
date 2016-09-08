@@ -63,7 +63,7 @@ public class CustomToast {
             mToast = new Toast(context);
         }
         View mView = LayoutInflater.from(context).inflate(R.layout.common_custom_toast, null);
-        TextView tvToastText = (TextView) mView.findViewById(R.id.common_custom_toast_txt);
+        TextView tvToastText = (TextView) mView.findViewById(R.id.commonCustomToastTxt);
         tvToastText.setText(toastText);
         mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.setView(mView);

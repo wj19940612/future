@@ -18,8 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
-import com.jnhyxx.html5.activity.account.model.UserInfo;
+import com.jnhyxx.html5.domain.model.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.domain.model.UserInfo;
 import com.jnhyxx.html5.domain.LoginInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
@@ -47,10 +47,10 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @BindView(R.id.login_image_password_type)
-    ImageView imageViewPasswordType;
-    @BindView(R.id.login_image_phone_delete)
-    ImageView ivPhoneDelete;
+    @BindView(R.id.loginImagePasswordType)
+    ImageView mImageViewPasswordType;
+    @BindView(R.id.loginImagePhoneDelete)
+    ImageView mIvPhoneDelete;
 
     private boolean flag = false;
 
@@ -86,18 +86,18 @@ public class SignInActivity extends BaseActivity {
     private void imageViewPasswordTypeStatus() {
         String password = mPassword.getText().toString().trim();
         if (!TextUtils.isEmpty(password)) {
-            imageViewPasswordType.setVisibility(View.VISIBLE);
+            mImageViewPasswordType.setVisibility(View.VISIBLE);
         } else {
-            imageViewPasswordType.setVisibility(View.GONE);
+            mImageViewPasswordType.setVisibility(View.GONE);
         }
     }
 
     private void ivPhoneDeleteStatus() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         if (!TextUtils.isEmpty(phoneNum)) {
-            ivPhoneDelete.setVisibility(View.VISIBLE);
+            mIvPhoneDelete.setVisibility(View.VISIBLE);
         } else {
-            ivPhoneDelete.setVisibility(View.GONE);
+            mIvPhoneDelete.setVisibility(View.GONE);
         }
     }
 
@@ -129,16 +129,16 @@ public class SignInActivity extends BaseActivity {
           finish();
       }
   */
-    @OnClick({R.id.login_image_phone_delete, R.id.login_image_password_type})
+    @OnClick({R.id.loginImagePhoneDelete, R.id.loginImagePasswordType})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_image_phone_delete:
+            case R.id.loginImagePhoneDelete:
                 String phoneNum = mPhoneNum.getText().toString();
                 if (!TextUtils.isEmpty(phoneNum)) {
                     mPhoneNum.setText("");
                 }
                 break;
-            case R.id.login_image_password_type:
+            case R.id.loginImagePasswordType:
                 changeEdittextPasswordInputtYPE();
                 break;
         }
@@ -147,9 +147,9 @@ public class SignInActivity extends BaseActivity {
     private void changeEdittextPasswordInputtYPE() {
         if (!flag) {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            imageViewPasswordType.setSelected(true);
+            mImageViewPasswordType.setSelected(true);
         } else {
-            imageViewPasswordType.setSelected(false);
+            mImageViewPasswordType.setSelected(false);
             mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
         flag = !flag;
@@ -175,7 +175,8 @@ public class SignInActivity extends BaseActivity {
                         User.getUser().setLoginInfo(info);
                         Log.d(TAG, "登陆信息" + info.toString());
                         UserInfo userInfo = new Gson().fromJson(resp.getData(), UserInfo.class);
-                        LocalCacheUserInfoManager.getInstance().setUser(userInfo);
+                        LocalCacheUserInfoManager localCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
+                        localCacheUserInfoManager.setUser(userInfo);
                         Log.d(TAG, "用户信息 " + LocalCacheUserInfoManager.getInstance().getUser().toString());
                         setResult(RESULT_OK);
                         finish();
@@ -192,7 +193,6 @@ public class SignInActivity extends BaseActivity {
 
     @OnClick(R.id.forgetPassword)
     void openFindPasswordPage() {
-        // TODO: 2016/8/29 跳过验证码界面，直接修改密码，仅作测试
         Launcher.with(this, FindPwdActivity.class).execute();
 //        Launcher.with(this, ModifyPwdActivity.class).execute();
     }

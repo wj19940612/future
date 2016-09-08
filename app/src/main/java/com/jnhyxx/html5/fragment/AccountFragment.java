@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,15 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
-import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
-import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
-import com.jnhyxx.html5.activity.account.model.TradeDetail;
-import com.jnhyxx.html5.activity.account.model.UserFundInfo;
-import com.jnhyxx.html5.activity.account.model.UserInfo;
-import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
+import com.jnhyxx.html5.domain.model.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.domain.model.UserFundInfo;
+import com.jnhyxx.html5.domain.model.UserInfo;
+import com.jnhyxx.html5.activity.setting.SettingActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
-import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.User;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -95,8 +93,10 @@ public class AccountFragment extends BaseFragment {
 //    TitleBar mTitleBar;
 
     private Unbinder mBinder;
-
+    //登陆的请求码
     private static final int REQUEEST_CODE_LOGIN = 967;
+    //设置界面的请求码
+    private static final int REQUEST_CODE_SETTING = 352;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +104,26 @@ public class AccountFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        startSettingActivity();
+    }
+
+    private void startSettingActivity() {
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getActivity(), SettingActivity.class), REQUEST_CODE_SETTING);
+            }
+        });
     }
 
     @Override
@@ -220,7 +240,8 @@ public class AccountFragment extends BaseFragment {
                         }).fire();
                 break;
             case R.id.messageCenter:
-                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
+                // TODO: 2016/9/8 目前没有系统消息的接口
+//                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.fundDetail:
                 openTradeDetailPage(true);

@@ -13,36 +13,36 @@ import butterknife.ButterKnife;
 public class ExpandMakeMoneyActivity extends BaseActivity {
     //可提佣金数目
     @BindView(R.id.account_expand_make_money_brokerage_number)
-    TextView tv_brokerage_number;
+    TextView mTvBrokerageNumber;
     //提取佣金按钮
-    @BindView(R.id.account_expand_make_money_brokerage_pick_up)
-    TextView tv_brokerage_pickUp;
+    @BindView(R.id.accountExpandMakeMoneyBrokeragePickUp)
+    TextView mTvBrokeragePickUp;
     //代理等级提示 金、银、铜三个等级
-    @BindView(R.id.account_expand_make_money_proxy_grade)
-    TextView tv_proxy_grade;
+    @BindView(R.id.accountExpandMakeMoneyProxyGrade)
+    TextView mTvProxyGrade;
     //我的用户的数量
-    @BindView(R.id.account_expand_make_money_mine_account)
-    TextView tv_mine_account;
+    @BindView(R.id.accountExpandMakeMoneyMineAccount)
+    TextView mTvMineAccount;
     //佣金比例
-    @BindView(R.id.account_expand_make_money_brokerage_scle_number)
-    TextView tv_brokerage_scle;
+    @BindView(R.id.accountExpandMakeMoneyBrokerageScleNumber)
+    TextView mTvBrokerageScle;
     //交易用户数量
-    @BindView(R.id.account_expand_make_money_exchange_account_number)
-    TextView tv_exchange_account_number;
+    @BindView(R.id.accountExpandMakeMoneyExchangeAccountNumber)
+    TextView mtvExchangeAccountNumber;
     //二维码图片，长按保存到手机
-    @BindView(R.id.account_expand_make_money_iv_two_dimensional_code)
-    ImageView iv_twoDimensionalCode;
+    @BindView(R.id.accountExpandMakeMoneyivTwoDimensionalCode)
+    ImageView mIvTwoDimensionalCode;
     //专属链接网址
-    @BindView(R.id.account_expand_make_money_tv_share_web)
-    TextView tv_shareWeb;
+    @BindView(R.id.accountExpandMakeMoneyTvShareWeb)
+    TextView mTvShareWeb;
     //复制网址的按钮
-    @BindView(R.id.account_expand_make_money_tv_share_web_copy)
-    TextView tv_shareWebCopy;
+    @BindView(R.id.accountExpandMakeMoneyTvShareWebCopy)
+    TextView mTvShareWebCopy;
     //邀请码
-    @BindView(R.id.account_expand_make_money_invite_code)
-    TextView tv_inviteCode;
+    @BindView(R.id.accountExpandMakeMoneyInviteCode)
+    TextView mTvInviteCode;
     //复制邀请码
-    @BindView(R.id.account_expand_make_money_invite_code_copy)
+    @BindView(R.id.accountExpandMakeMoneyInviteCodeCopy)
     TextView tv_inviteCodeCopy;
 
     @Override

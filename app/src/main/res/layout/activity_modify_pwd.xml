@@ -107,7 +107,7 @@
             android:layout_height="60dp">
 
             <ImageView
-                android:id="@+id/help_passwordImage"
+                android:id="@+id/helpPasswordImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
@@ -120,12 +120,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/help_passwordImage"
+                android:layout_toRightOf="@+id/helpPasswordImage"
                 android:hint="@string/please_repeat_new_password"
                 android:textColorHint="@color/login_edittext_hint" />
 
             <ImageView
-                android:id="@+id/login_image_password_type"
+                android:id="@+id/loginImagePasswordType"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"

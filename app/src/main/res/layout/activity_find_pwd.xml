@@ -44,7 +44,7 @@
                             android:hint="@string/please_input_phone_num" />-->
 
             <ImageView
-                android:id="@+id/help_phoneNumImage"
+                android:id="@+id/helpPhoneNumImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
@@ -56,7 +56,7 @@
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/help_phoneNumImage"
+                android:layout_toRightOf="@+id/helpPhoneNumImage"
                 android:hint="@string/please_input_phone_num"
                 android:textColorHint="@color/login_edittext_hint" />
 

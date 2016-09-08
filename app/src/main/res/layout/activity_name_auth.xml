@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,11 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/real_name_authorize"/>
+        app:titleText="@string/real_name_authorize" />
+
+    <include
+        android:id="@+id/identityCardWarn"
+        layout="@layout/common_fail_warn"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -25,7 +30,8 @@
             style="@style/InputTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name"/>
+            android:text="@string/name"
+            android:textColor="#262626" />
 
         <EditText
             android:id="@+id/name"
@@ -34,14 +40,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:enabled="false"
-            android:hint="@string/please_input_real_name"/>
+            android:hint="@string/please_input_real_name"
+            android:textColorHint="#CBCBCB" />
     </LinearLayout>
 
-    <include layout="@layout/split_line_thick"/>
+    <include layout="@layout/split_line_thick" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -50,7 +58,8 @@
             style="@style/InputTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/identity_num"/>
+            android:text="@string/identity_num"
+            android:textColor="#262626" />
 
         <EditText
             android:id="@+id/identityNum"
@@ -60,8 +69,25 @@
             android:layout_weight="1"
             android:enabled="false"
             android:hint="@string/please_input_identity_num"
-            android:inputType="number|textCapCharacters"/>
+            android:inputType="number|textCapCharacters"
+            android:textColorHint="#CBCBCB" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="15dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="15dp"
+        android:text="@string/setting_auth_name_hint"
+        android:textColor="#FB4B55"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/submitToAuthButton"
@@ -71,6 +97,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/submit_to_auth"
-        android:visibility="gone"/>
+        android:text="@string/submit_to_auth" />
+
 </LinearLayout>

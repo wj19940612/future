@@ -1,6 +1,4 @@
-package com.jnhyxx.html5.activity.account.model;
-
-import com.jnhyxx.html5.domain.local.User;
+package com.jnhyxx.html5.domain.model;
 
 /**
  * Created by Administrator on 2016/8/31.
@@ -8,6 +6,10 @@ import com.jnhyxx.html5.domain.local.User;
  */
 
 public class LocalCacheUserInfoManager {
+    /**
+     * 是否已经实名认证了
+     */
+    private boolean isAuthName;
     private UserInfo user;
 
     private LocalCacheUserInfoManager() {
@@ -38,4 +40,11 @@ public class LocalCacheUserInfoManager {
         return getUser() != null;
     }
 
+    public boolean isAuthName() {
+        return isAuthName;
+    }
+
+    public void setAuthName(boolean authName) {
+        isAuthName = authName;
+    }
 }

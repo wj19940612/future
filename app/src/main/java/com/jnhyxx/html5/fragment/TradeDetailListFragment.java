@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.account.model.TradeDetail;
+import com.jnhyxx.html5.domain.model.TradeDetail;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

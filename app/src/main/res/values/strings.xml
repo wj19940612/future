@@ -276,7 +276,9 @@
     <!--注册界面-->
     <string name="register_auth_code_fail">验证码错误</string>
     <string name="register_successed">注册成功</string>
-    <string name="register_code_image">请输入动态验证码</string>
+    <string name="register_code_image_hint">请输入动态验证码</string>
+    <string name="register_code_image">图片验证码</string>
+
 
     <!--修改密码-->
     <string name="modify_passWord_success">密码修改成功</string>
@@ -298,4 +300,8 @@
     <string name="setting_no_attestation">未认证</string>
     <string name="setting_no_bind">未绑定</string>
     <string name="setting_login_out">退出</string>
+    <!--实名认证-->
+    <string name="setting_auth_name_hint">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
+    <string name="setting_identity_card_fail">身份证号码错误</string>
+    <string name="setting_identity_card_when_login">请先登录后再认证</string>
 </resources>

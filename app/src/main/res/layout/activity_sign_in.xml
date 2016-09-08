@@ -47,7 +47,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/help_phoneNumImage"
+                android:id="@+id/helpPhoneNumImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
@@ -58,12 +58,12 @@
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/help_phoneNumImage"
+                android:layout_toRightOf="@+id/helpPhoneNumImage"
                 android:hint="@string/please_input_phone_num"
                 android:textColorHint="@color/login_edittext_hint" />
 
             <ImageView
-                android:id="@+id/login_image_phone_delete"
+                android:id="@+id/loginImagePhoneDelete"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/help_passwordImage"
+                android:id="@+id/helpPasswordImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
@@ -93,12 +93,12 @@
                 style="@style/SignEditText.Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/help_passwordImage"
+                android:layout_toRightOf="@+id/helpPasswordImage"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/login_edittext_hint" />
 
             <ImageView
-                android:id="@+id/login_image_password_type"
+                android:id="@+id/loginImagePasswordType"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"

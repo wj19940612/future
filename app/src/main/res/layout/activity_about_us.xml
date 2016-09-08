@@ -29,7 +29,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/activity_about_us_tv_versionName"
+            android:id="@+id/activityAboutUsTvVersionName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -120,35 +120,35 @@
                        android:text="@string/account_about_us_collaborate_case_child" />
        -->
             <com.jnhyxx.html5.view.ExpandableLayout
-                android:id="@+id/activity_about_us_rl_company_info"
+                android:id="@+id/activityAboutUsRlCompanyInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elBottomTxt="@string/account_about_us_company_info_child"
                 app:elLeftTxt="@string/account_about_us_company_info" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
-                android:id="@+id/activity_about_us_rl_manager_team"
+                android:id="@+id/activityAboutUsRlManagerTeam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elBottomTxt="@string/account_about_us_manager_team_child"
                 app:elLeftTxt="@string/account_about_us_manager_team" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
-                android:id="@+id/activity_about_us_rl_company_culture"
+                android:id="@+id/activityAboutUsRlCompanyCulture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elBottomTxt="@string/account_about_us_company_culture_child"
                 app:elLeftTxt="@string/account_about_us_company_culture" />
 
             <com.jnhyxx.html5.view.ExpandableLayout
-                android:id="@+id/activity_about_us_rl_collaborate_case"
+                android:id="@+id/activityAboutUsRlCollaborateCase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:elBottomTxt="@string/account_about_us_collaborate_case_child"
                 app:elLeftTxt="@string/account_about_us_collaborate_case" />
 
             <RelativeLayout
-                android:id="@+id/activity_about_us_rl_company_telphone"
+                android:id="@+id/activityAboutUsRCompanyTelphone"
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
@@ -156,7 +156,7 @@
                     android:text="@string/account_about_us_company_telphone" />
 
                 <TextView
-                    android:id="@+id/account_about_us_activity_expandlist_tv_right"
+                    android:id="@+id/accountAboutUsActivityExpandlistTvRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -165,7 +165,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/activity_about_us_rl_service_qq"
+                android:id="@+id/activityAboutUsRlServiceQq"
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView

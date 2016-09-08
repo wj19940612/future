@@ -16,12 +16,12 @@
         app:titleText="@string/setting_title" />
 
     <RelativeLayout
-        android:clickable="true"
         android:id="@+id/rlUserNameSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
+        android:clickable="true"
         android:padding="15dp">
 
         <TextView
@@ -37,10 +37,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage1"
-            android:text="操盘手  30155151"
             android:textColor="#262626" />
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/helpimage1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,12 +51,12 @@
     <include layout="@layout/split_line_thick"></include>
 
     <RelativeLayout
-        android:clickable="true"
         android:id="@+id/rlRealNameSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
+        android:clickable="true"
         android:padding="15dp">
 
         <TextView
@@ -66,6 +66,7 @@
             android:textColor="#A8A8A8" />
 
         <TextView
+            android:layout_centerVertical="true"
             android:id="@+id/tvRealNameSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,6 +77,7 @@
             android:textColor="@android:color/holo_blue_dark" />
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/helpimage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,12 +88,12 @@
     <include layout="@layout/split_line_thick"></include>
 
     <RelativeLayout
-        android:clickable="true"
         android:id="@+id/rlBindBankCardSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
+        android:clickable="true"
         android:padding="15dp">
 
         <TextView
@@ -101,6 +103,7 @@
             android:textColor="#A8A8A8" />
 
         <TextView
+            android:layout_centerVertical="true"
             android:id="@+id/tvBindBankCardSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,6 +114,7 @@
             android:textColor="@android:color/holo_blue_dark" />
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/helpimage3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,10 +145,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage4"
-            android:text="181****3333"
             android:textColor="#262626" />
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/helpimage4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,6 +168,7 @@
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:background="@android:color/holo_red_light"
+        android:clickable="true"
         android:gravity="center"
         android:text="@string/setting_login_out"
         android:textColor="@android:color/white"

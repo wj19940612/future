@@ -3,13 +3,12 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/transparent"
               android:clickable="true"
               android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.fragment.PlaceOrderFragment">
+              tools:context=".fragment.order.PlaceOrderFragment">
 
     <View
-        android:id="@+id/backClickArea"
+        android:id="@+id/emptyClickArea"
         android:layout_width="match_parent"
         android:layout_height="@dimen/trade_header_height"
         android:background="@android:color/transparent"/>

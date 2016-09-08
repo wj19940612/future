@@ -542,4 +542,22 @@ public class API extends APIBase {
     public static API getTrendData(String varietyType) {
         return new API(GET, "/quotaStatus/" + varietyType + ".fst", null);
     }
+
+    /**
+     * 获得《投资人与用户交易合作协议》网页 url
+     *
+     * @return
+     */
+    public static String getCooperationAgreementUrl() {
+        return getHost() + "/agreement/tradeAndCost.html?nohead=1";
+    }
+
+    /**
+     * 获得《风险告知书》网页 url
+     *
+     * @return
+     */
+    public static String getRiskNoticesUrl() {
+        return getHost() + "/agreement/risk.html?nohead=1";
+    }
 }

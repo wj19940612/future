@@ -10,7 +10,8 @@ public class Preference {
     public interface Key {
         String IS_FOREGROUND = "isForeground";
         String USER_JSON = "userJson";
-        String SERVER_TIME = "ServerTime";
+        String SERVER_TIME = "serverTime";
+        String HAD_SHOW_TRADE_AGREEMENT = "hadShowTradeAgreement";
     }
 
     private static Preference sInstance;
@@ -62,5 +63,13 @@ public class Preference {
 
     public long getServerTime() {
         return mPrefs.getLong(Key.SERVER_TIME, 0);
+    }
+
+    public boolean hadShowTradeAgreement(String userPhone, String varietyType) {
+        return mPrefs.getBoolean(userPhone + Key.HAD_SHOW_TRADE_AGREEMENT + varietyType, false);
+    }
+
+    public void setTradeAgreementShowed(String userPhone, String varietyType) {
+        getEditor().putBoolean(userPhone + Key.HAD_SHOW_TRADE_AGREEMENT + varietyType, true).commit();
     }
 }

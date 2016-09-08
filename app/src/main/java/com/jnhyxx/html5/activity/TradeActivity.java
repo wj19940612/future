@@ -19,13 +19,15 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.chart.TrendView;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
-import com.jnhyxx.html5.fragment.PlaceOrderFragment;
+import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
+import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -42,7 +44,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Callback {
+public class TradeActivity extends BaseActivity implements
+        PlaceOrderFragment.Callback, AgreementFragment.Callback {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -173,9 +176,9 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (User.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
-            mTradePageHeader.setAvailableBalance(User.getUser().getAvailableBalance());
+            mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
         } else {
             mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
         }
@@ -250,17 +253,32 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
-                showPlaceOrderFragment(PlaceOrderFragment.TYPE_BUY_LONG);
+                placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
                 break;
             case R.id.sellShortBtn:
-                showPlaceOrderFragment(PlaceOrderFragment.TYPE_SELL_SHORT);
+                placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
         }
     }
 
-    private void showPlaceOrderFragment(int type) {
+    private void placeOrder(int longOrShort) {
+        String userPhone = LocalUser.getUser().getUserPhone();
+        if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
+            showPlaceOrderFragment(longOrShort);
+        } else {
+            showAgreementFragment(longOrShort);
+        }
+    }
+
+    private void showAgreementFragment(int longOrShort) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(type, mProduct))
+                .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
+                .commit();
+    }
+
+    private void showPlaceOrderFragment(int longOrShort) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
                 .commit();
     }
 
@@ -285,15 +303,6 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         }
     }
 
-    @Override
-    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
-        submittedOrder.setPayType(mFundType);
-
-        Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
-
-        //submitOrder(submittedOrder);
-    }
-
     private void submitOrder(final SubmittedOrder submittedOrder) {
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
@@ -315,6 +324,23 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
                     }
                 }).fire();
 
+    }
+
+    @Override
+    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
+        submittedOrder.setPayType(mFundType);
+
+        Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
+
+        //submitOrder(submittedOrder);
+    }
+
+    @Override
+    public void onAgreeProtocolBtnClick(int longOrShort) {
+        String userPhone = LocalUser.getUser().getUserPhone();
+        Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
+        hidePlaceOrderFragment();
+        placeOrder(longOrShort);
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

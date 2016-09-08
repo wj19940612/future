@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,7 +21,7 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.LoginInfo;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -203,8 +202,8 @@ public class SignUpActivity extends BaseActivity {
                             // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_successed);
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                            User.getUser().setLoginInfo(info);
-                            com.jnhyxx.html5.domain.local.User.getUser().setLoginInfo(info);
+                            LocalUser.getUser().setLoginInfo(info);
+                            LocalUser.getUser().setLoginInfo(info);
 
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

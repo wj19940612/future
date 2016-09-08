@@ -289,4 +289,13 @@
     <string name="account_trade_detail_margin_remain">剩余保证金(分)</string>
 
     <string name="common_phone_num_fail">手机号码错误，请输入正确的手机号码</string>
+
+    <!-- Trade page: agree trade protocol -->
+    <string name="prompt_dear_user">尊敬的用户:
+        \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
+    <string name="unsigned">未签署</string>
+    <string name="trade_cooperation_agreement">《投资人与用户参与相关期货品种交易合作协议》</string>
+    <string name="risk_notices">《风险告知书》</string>
+    <string name="cooperation_agreement_title">合作协议</string>
+    <string name="risk_notices_title">风险告知书</string>
 </resources>

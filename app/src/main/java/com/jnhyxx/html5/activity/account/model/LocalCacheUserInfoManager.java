@@ -1,7 +1,5 @@
 package com.jnhyxx.html5.activity.account.model;
 
-import com.jnhyxx.html5.domain.local.User;
-
 /**
  * Created by Administrator on 2016/8/31.
  * 本地的用户信息缓存

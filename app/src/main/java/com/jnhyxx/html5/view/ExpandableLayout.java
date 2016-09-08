@@ -112,7 +112,6 @@ public class ExpandableLayout extends RelativeLayout {
                 v.requestLayout();
             }
 
-
             @Override
             public boolean willChangeBounds() {
                 return true;

@@ -18,7 +18,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.finance.FundFlowItem;
 import com.jnhyxx.html5.domain.finance.FundInfo;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -72,7 +72,7 @@ public class FundDetailActivity extends BaseActivity {
 
     private void requestFlowList() {
         if (mIsCash) {
-            API.Finance.getCashFlowList(User.getUser().getToken(), mPageNo, mPageSize)
+            API.Finance.getCashFlowList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
                         public void onRespSuccess(List<FundFlowItem> fundFlowItems) {
@@ -80,7 +80,7 @@ public class FundDetailActivity extends BaseActivity {
                         }
                     }).setIndeterminate(this).setTag(TAG).fire();
         } else {
-            API.Finance.getScoreFlowList(User.getUser().getToken(), mPageNo, mPageSize)
+            API.Finance.getScoreFlowList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<FundFlowItem>>, List<FundFlowItem>>() {
                         @Override
                         public void onRespSuccess(List<FundFlowItem> fundFlowItems) {

@@ -17,6 +17,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -73,7 +74,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
         updateBankcardView(getIntent());
 
-        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())
+        API.User.getUserNameAuth(LocalUser.getUser().getToken())
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
                     @Override
@@ -162,7 +163,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                API.User.updateBankcard(com.jnhyxx.html5.domain.local.User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+                API.User.updateBankcard(LocalUser.getUser().getToken(), bankcardNum, payingBank, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp<BankcardAuth>>() {
                             @Override

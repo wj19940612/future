@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.fragment;
+package com.jnhyxx.html5.fragment.order;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -61,8 +62,6 @@ public class PlaceOrderFragment extends BaseFragment {
     @BindView(R.id.confirmButton)
     TextView mConfirmButton;
 
-    private Callback mCallback;
-
     private static final String TYPE = "longOrShort";
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
@@ -74,6 +73,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
+    private Callback mCallback;
 
     public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
@@ -108,7 +108,6 @@ public class PlaceOrderFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBlurEngine = new BlurEngine(container, R.color.blackHalfTransparent);
-
         View view = inflater.inflate(R.layout.fragment_place_order, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
@@ -169,6 +168,12 @@ public class PlaceOrderFragment extends BaseFragment {
                 }).fire();
 
         updateRateAndMarketTimeView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBlurEngine.onResume();
     }
 
     private void updateRateAndMarketTimeView() {

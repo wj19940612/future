@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -122,7 +123,7 @@ public class RechargeActivity extends BaseActivity {
             BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(RESULT_BANKCARD_AUTH);
             if (bankcardAuth.getStatus() != BankcardAuth.STATUS_NOT_FILLED) {
 
-                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(LocalUser.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {

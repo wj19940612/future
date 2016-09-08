@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
     private void initPush() {
         PushAgent pushAgent = PushAgent.getInstance(this);
         pushAgent.setDebugMode(BuildConfig.DEBUG);
-        pushAgent.setMessageChannel(APIBase.HOST);
+        pushAgent.setMessageChannel(APIBase.getHost());
         pushAgent.setResourcePackageName("com.jnhyxx.html5");
         pushAgent.enable(new IUmengRegisterCallback() {
             @Override

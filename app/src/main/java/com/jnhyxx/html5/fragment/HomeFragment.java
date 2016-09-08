@@ -20,6 +20,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
@@ -185,27 +186,8 @@ public class HomeFragment extends BaseFragment {
                 }).fire();
     }
 
-//    private void requestPositionBriefList() {
-//        if (User.getUser().isLogin()) {
-//            API.Order.getOrderPositionList(User.getUser().getToken())
-//                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
-//                        @Override
-//                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
-//                            mPositionBriefList = positionBriefs;
-//                            boolean updateProductList =
-//                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            } else {
-//                                updateProductListView();
-//                            }
-//                        }
-//                    }).setTag(TAG).fire();
-//        } else { // clear all product position
-//            ProductPkg.clearPositionBriefs(mProductPkgList);
-//        }
     private void requestHomePositions(){
-        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override

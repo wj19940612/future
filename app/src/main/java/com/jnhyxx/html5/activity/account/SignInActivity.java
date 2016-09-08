@@ -21,7 +21,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.model.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.activity.account.model.UserInfo;
 import com.jnhyxx.html5.domain.LoginInfo;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
@@ -172,7 +172,7 @@ public class SignInActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                        User.getUser().setLoginInfo(info);
+                        LocalUser.getUser().setLoginInfo(info);
                         Log.d(TAG, "登陆信息" + info.toString());
                         UserInfo userInfo = new Gson().fromJson(resp.getData(), UserInfo.class);
                         LocalCacheUserInfoManager.getInstance().setUser(userInfo);

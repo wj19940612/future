@@ -22,7 +22,6 @@ import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
 import java.text.ParseException;
@@ -39,7 +38,7 @@ public class NameAuthActivity extends BaseActivity {
     EditText mIdentityNum;
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
-    @BindView(R.id.common_fail_tv_warn)
+    @BindView(R.id.commonFailTvWarn)
     TextView mTvFailWarn;
     @BindView(R.id.identityCardWarn)
     RelativeLayout mRlIdentityCardWarn;

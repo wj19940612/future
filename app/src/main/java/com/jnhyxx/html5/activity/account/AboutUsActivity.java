@@ -41,7 +41,7 @@ public class AboutUsActivity extends BaseActivity {
 //    @BindView(R.id.activity_about_us_tv_collaborate_case)
 //    TextView tv_collaborate_case;
     //公司热线
-    @BindView(R.id.activityAboutUsRCompanyTelphone)
+    @BindView(R.id.activityAboutUsRCompanyTelephone)
     RelativeLayout mRlCompanyTelphone;
     //记录被点击的item;
     private int selectPosition = -1;
@@ -59,7 +59,7 @@ public class AboutUsActivity extends BaseActivity {
         mTVVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
     }
 
-    @OnClick({R.id.activityAboutUsRlCompanyInfo, R.id.activityAboutUsRlManagerTeam, R.id.activityAboutUsRlCompanyCulture, R.id.activityAboutUsRlCollaborateCase, R.id.activityAboutUsRCompanyTelphone, R.id.activityAboutUsRlServiceQq})
+    @OnClick({R.id.activityAboutUsRlCompanyInfo, R.id.activityAboutUsRlManagerTeam, R.id.activityAboutUsRlCompanyCulture, R.id.activityAboutUsRlCollaborateCase, R.id.activityAboutUsRCompanyTelephone, R.id.activityAboutUsRlServiceQq})
     public void onClick(View view) {
         switch (view.getId()) {
             //公司信息
@@ -79,9 +79,9 @@ public class AboutUsActivity extends BaseActivity {
                 changeViewStatus(R.id.activityAboutUsRlCollaborateCase);
                 break;
             //公司热线
-            case R.id.activityAboutUsRCompanyTelphone:
+            case R.id.activityAboutUsRCompanyTelephone:
                 // TODO: 2016/8/24  
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telphone_number)));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number)));
                 startActivity(intent);
                 break;
             case R.id.activityAboutUsRlServiceQq:
@@ -101,7 +101,7 @@ public class AboutUsActivity extends BaseActivity {
         boolean tv_companyInfoStatus;
         boolean tvManagerTeamStatus;
         switch (viewId) {
-            case R.id.activityAboutUsRCompanyTelphone:
+            case R.id.activityAboutUsRCompanyTelephone:
                 break;
         }
     }

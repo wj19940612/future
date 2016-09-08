@@ -493,6 +493,6 @@
         android:background="@android:color/white"
         app:leftIcon="@drawable/list_icon_aboutus"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-        app:rowText="@string/account_aboutus"
+        app:rowText="@string/account_aboutUs"
         app:rowTextColor="@color/account_center_text" />
 </LinearLayout>

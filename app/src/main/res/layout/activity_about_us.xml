@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/account_aboutus" />
+        app:titleText="@string/account_aboutUs" />
 
     <LinearLayout
         android:background="@android:color/white"
@@ -148,19 +148,19 @@
                 app:elLeftTxt="@string/account_about_us_collaborate_case" />
 
             <RelativeLayout
-                android:id="@+id/activityAboutUsRCompanyTelphone"
+                android:id="@+id/activityAboutUsRCompanyTelephone"
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
                     style="@style/AboutAsEntryLeftTextViewStyle"
-                    android:text="@string/account_about_us_company_telphone" />
+                    android:text="@string/account_about_us_company_telephone" />
 
                 <TextView
-                    android:id="@+id/accountAboutUsActivityExpandlistTvRight"
+                    android:id="@+id/accountAboutUsActivityExpandListTvRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="@string/account_about_us_company_telphone_number"
+                    android:text="@string/account_about_us_company_telephone_number"
                     android:textColor="#358CF3" />
             </RelativeLayout>
 

@@ -19,7 +19,6 @@
         android:id="@+id/rlUserNameSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
         android:clickable="true"
         android:padding="15dp">
@@ -54,7 +53,6 @@
         android:id="@+id/rlRealNameSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
         android:clickable="true"
         android:padding="15dp">
@@ -91,7 +89,6 @@
         android:id="@+id/rlBindBankCardSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
         android:clickable="true"
         android:padding="15dp">
@@ -125,10 +122,9 @@
     <include layout="@layout/split_line_thick"></include>
 
     <RelativeLayout
-        android:id="@+id/rlUserphoneSetting"
+        android:id="@+id/rlUserPhoneSetting"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/titleBarSetting"
         android:background="@android:color/white"
         android:padding="15dp">
 
@@ -139,7 +135,7 @@
             android:textColor="#A8A8A8" />
 
         <TextView
-            android:id="@+id/tvUserphoneSetting"
+            android:id="@+id/tvUserPhoneSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

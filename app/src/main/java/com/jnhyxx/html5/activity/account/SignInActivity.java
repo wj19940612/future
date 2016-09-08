@@ -56,7 +56,7 @@ public class SignInActivity extends BaseActivity {
 
     @BindView(R.id.rlFailWarn)
     RelativeLayout rlFailWarn;
-    @BindView(R.id.common_fail_tv_warn)
+    @BindView(R.id.commonFailTvWarn)
     TextView mFailWarnTv;
 
     @Override

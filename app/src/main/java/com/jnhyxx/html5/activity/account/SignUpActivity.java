@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -68,7 +67,7 @@ public class SignUpActivity extends BaseActivity {
 
     @BindView(R.id.rlFailWarn)
     RelativeLayout mFailWarn;
-    @BindView(R.id.common_fail_tv_warn)
+    @BindView(R.id.commonFailTvWarn)
     TextView mFailWarnText;
     //获取图片验证码
     @BindView(R.id.tvRegisterRetrieveImage)
@@ -209,7 +208,7 @@ public class SignUpActivity extends BaseActivity {
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
-                            CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_successed);
+                            CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
                             User.getUser().setLoginInfo(info);
                             com.jnhyxx.html5.domain.local.User.getUser().setLoginInfo(info);

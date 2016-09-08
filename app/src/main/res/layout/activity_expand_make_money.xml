@@ -121,7 +121,7 @@
             <TextView
                 style="@style/expandMakeMoneyTextViewStyle"
                 android:gravity="center"
-                android:text="@string/account_expand_make_money_brokerage_scle" />
+                android:text="@string/account_expand_make_money_brokerage_scale" />
 
             <TextView
                 android:id="@+id/accountExpandMakeMoneyBrokerageScleNumber"
@@ -171,7 +171,7 @@
             android:text="@string/account_expand_make_money_two_dimensional_code" />
 
         <ImageView
-            android:id="@+id/accountExpandMakeMoneyivTwoDimensionalCode"
+            android:id="@+id/accountExpandMakeMoneyIvTwoDimensionalCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -183,7 +183,7 @@
         <TextView
             style="@style/expandMakeMoneyTextViewStyle"
             android:padding="10dp"
-            android:text="@string/account_expand_make_money_share_lianjie" />
+            android:text="@string/account_expand_make_money_share_lianJie" />
     </LinearLayout>
 
 

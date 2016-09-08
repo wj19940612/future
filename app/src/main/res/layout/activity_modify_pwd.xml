@@ -8,7 +8,7 @@
     tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/findpasswordTitleBar"
+        android:id="@+id/findPasswordTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -16,7 +16,7 @@
         app:titleText="@string/modify_password" />
 
     <include
-        android:id="@+id/moidifyPasswordWarn"
+        android:id="@+id/modifyPasswordWarn"
         layout="@layout/common_fail_warn"
         android:visibility="gone"/>
 
@@ -71,7 +71,7 @@
                 android:textColorHint="@color/login_edittext_hint" />
 
             <ImageView
-                android:id="@+id/findpassword_image_password_type"
+                android:id="@+id/findPassword_image_password_type"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"

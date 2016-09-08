@@ -30,7 +30,7 @@ public class ExpandMakeMoneyActivity extends BaseActivity {
     @BindView(R.id.accountExpandMakeMoneyExchangeAccountNumber)
     TextView mtvExchangeAccountNumber;
     //二维码图片，长按保存到手机
-    @BindView(R.id.accountExpandMakeMoneyivTwoDimensionalCode)
+    @BindView(R.id.accountExpandMakeMoneyIvTwoDimensionalCode)
     ImageView mIvTwoDimensionalCode;
     //专属链接网址
     @BindView(R.id.accountExpandMakeMoneyTvShareWeb)

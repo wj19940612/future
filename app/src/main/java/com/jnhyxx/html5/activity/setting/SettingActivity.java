@@ -39,7 +39,7 @@ public class SettingActivity extends BaseActivity {
     TextView tvRealNameSetting;
     @BindView(R.id.tvBindBankCardSetting)
     TextView tvBindBankCardSetting;
-    @BindView(R.id.tvUserphoneSetting)
+    @BindView(R.id.tvUserPhoneSetting)
     TextView tvUserphoneSetting;
     @BindView(R.id.tvLoginOutSetting)
     TextView loginOut;

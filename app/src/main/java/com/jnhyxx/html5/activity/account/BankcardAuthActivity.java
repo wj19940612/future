@@ -2,6 +2,7 @@ package com.jnhyxx.html5.activity.account;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,7 +14,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -41,7 +41,10 @@ import butterknife.OnClick;
 public class BankcardAuthActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
 
     public static final String NAME_AUTH_RESULT = "nameAuthResult";
-
+    /**
+     * 解除绑定客服电话
+     */
+    private static final String UNWRAP_SERVICE_TELEPHONE = "0517-87675063";
     @BindView(R.id.cardholderName)
     EditText mCardholderName;
     @BindView(R.id.bankcardNum)
@@ -61,7 +64,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     LinearLayout mBankcardInputArea;
     //解除绑定
     @BindView(R.id.unbindBankcard)
-    Button mUnbindBankcard;
+    TextView mUnbindBankcard;
     //所绑定银行卡的父容器,没有绑定之前不显示
     @BindView(R.id.bankcardImageArea)
     LinearLayout mBankcardImageArea;
@@ -140,7 +143,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         }
 
     }
-//
+
+    //
 //    private void updateBankcardView(Intent intent) {
 //        BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
 //        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {
@@ -247,9 +251,24 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         }).fire();
                 break;
             case R.id.unbindBankcard:
-                SmartDialog.with(getActivity(), R.string.dialog_please_contact_services_to_unbind).show();
+                unwrapBindServiceTelephone();
                 break;
         }
+    }
+
+    // TODO: 2016/9/9 缺少取消按钮 
+    private void unwrapBindServiceTelephone() {
+        String dialogContent = getString(R.string.unBind_dialog_content, UNWRAP_SERVICE_TELEPHONE);
+        SmartDialog.with(getActivity(), dialogContent)
+                .setCancelableOnTouchOutside(false)
+                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel" + UNWRAP_SERVICE_TELEPHONE));
+                        startActivity(intent);
+                    }
+                }).show();
     }
 
     /**

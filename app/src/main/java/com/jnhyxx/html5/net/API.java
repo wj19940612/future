@@ -94,8 +94,8 @@ public class API extends APIBase {
         }
 
         /**
+         * 接口名：获取注册图片验证码  user/user/getRegImage.do
          *
-         接口名：获取注册图片验证码  user/user/getRegImage.do
          * @param userPhone
          * @return
          */
@@ -324,6 +324,39 @@ public class API extends APIBase {
                             .put(TOKEN, token).put("bankNum", bankcardNum)
                             .put("bankName", bankName)
                             .put("phone", phoneNum));
+        }
+
+        /**
+         * 接口名：绑定银行卡
+         * <p>
+         * URL  http://域名/user/user/bindBankCard.do
+         * bankId        Integer   银行列表
+         * bankName      String     银行名
+         * cardNumber    String    银行卡号
+         * cardPhone     String    银行卡对应的手机号
+         *
+         * @param bankId
+         * @param bankName
+         * @return
+         */
+        public static API bindBankCard(Integer bankId, String bankName, String cardNumber, String cardPhone) {
+            return new API("/user/user/bindBankCard.do",
+                    new ApiParams()
+                            .put("bankId", bankId)
+                            .put("bankName", bankName)
+                            .put("cardNumber", cardNumber)
+                            .put("cardPhone", cardPhone));
+        }
+
+        /**
+         *
+         接口名：显示渠道银行列表
+
+         URL  http://域名/user/user/showChannelBankList.do
+         * @return
+         */
+        public static API showChannelBankList() {
+            return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
         /**

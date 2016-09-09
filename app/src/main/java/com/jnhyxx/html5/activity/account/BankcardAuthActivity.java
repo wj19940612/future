@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,11 +26,13 @@ import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,13 +52,13 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     TextView mSubmitToAuthButton;
     @BindView(R.id.payingBank)
     TextView mPayingBank;
-    @BindView(R.id.bankcardInputArea)
-    LinearLayout mBankcardInputArea;
     //银行名称
     @BindView(R.id.bankName)
     TextView mBank;
-    @BindView(R.id.hiddenBankcardNum)
-    TextView mHiddenBankcardNum;
+    @BindView(R.id.bankCardNumber)
+    TextView mBankCardNumber;
+    @BindView(R.id.bankcardInputArea)
+    LinearLayout mBankcardInputArea;
     //解除绑定
     @BindView(R.id.unbindBankcard)
     Button mUnbindBankcard;
@@ -103,9 +106,39 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
             if (user.getIdStatus() == 0) {
                 showAuthNameDialog();
             }
+            // TODO: 2016/9/9 这是当绑定后的界面，目前没有UI
+            //  cardState银行卡状态 0未填写，1已填写，2已认证
+            if (user.getCardState() == 0) {
+                mBankcardInputArea.setVisibility(View.VISIBLE);
+            } else {
+                mBankcardInputArea.setVisibility(View.GONE);
+                mBankcardImageArea.setVisibility(View.VISIBLE);
+
+                if (!TextUtils.isEmpty(user.getIssuingbankName())) {
+                    mBank.setText(user.getIssuingbankName());
+                }
+                // TODO: 2016/9/9 这里是银行卡图标，目前后台没有返回
+                if (TextUtils.isEmpty("银行卡图标网址")) {
+                    String bankIconUrl = "";
+                    Picasso.with(BankcardAuthActivity.this).load(bankIconUrl).into(mBankCardIcon, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.d(TAG, "银行图标下载失败");
+                        }
+                    });
+                }
+                if (!TextUtils.isEmpty(user.getCardNumber())) {
+                    String bankNumber = CommonMethodUtils.bankNumber(user.getCardNumber());
+                    mBankCardNumber.setText(bankNumber);
+                }
+            }
         }
 
-         
     }
 //
 //    private void updateBankcardView(Intent intent) {

@@ -8,6 +8,7 @@
     tools:context="com.jnhyxx.html5.activity.account.BankcardAuthActivity">
 
     <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/bandCardTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
@@ -18,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout style="@style/settingLinearLayout">
 
@@ -138,7 +139,8 @@
         android:id="@+id/bankcardImageArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -200,9 +202,9 @@
             android:background="#262626" />
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
             android:lineSpacingExtra="25dp"
             android:paddingTop="30dp"

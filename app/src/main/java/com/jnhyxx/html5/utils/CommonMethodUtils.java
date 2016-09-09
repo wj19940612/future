@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -255,6 +258,38 @@ public class CommonMethodUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 根据传入的银行卡号码隐藏前面部分,只显示最后四位
+     *
+     * @param bankNumber
+     * @return
+     */
+    public static String bankNumber(String bankNumber) {
+        bankNumber = bankNumber.trim();
+        String safeBankNumber = "";
+//        if (bankNumber.length() == 16) {
+//            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+//        } else if (bankNumber.length() == 19) {
+//            safeBankNumber = "***  ****  ****  **** " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+//        } else {
+//            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+//        }
+
+        Log.d("wj", "银行卡长度 " + bankNumber.length());
+        StringBuilder mStringBuilder = new StringBuilder();
+        for (int i = 1; i < bankNumber.length() - 3; i++) {
+            if ( i % 4 == 0) {
+                mStringBuilder.append("*  ");
+            } else {
+                mStringBuilder.append("*");
+            }
+        }
+        mStringBuilder.append("  ");
+        String starString = mStringBuilder.toString();
+        safeBankNumber = starString + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+        return safeBankNumber;
     }
 
 }

@@ -79,7 +79,7 @@ public class NameAuthActivity extends BaseActivity {
             if (!TextUtils.isEmpty(user.getRealName())) {
                 mName.setText(user.getRealName());
             }
-            if(!TextUtils.isEmpty(user.getIdCard())){
+            if (!TextUtils.isEmpty(user.getIdCard())) {
                 mIdentityNum.setText(user.getIdCard());
             }
         }
@@ -131,7 +131,8 @@ public class NameAuthActivity extends BaseActivity {
                                 public void onReceive(final Resp<NameAuth.Result> resp) {
                                     if (resp.isSuccess()) {
                                         //将是否实名认证状态修改
-                                        LocalCacheUserInfoManager.getInstance().setAuthName(true);
+                                        UserInfo user = LocalCacheUserInfoManager.getInstance().getUser();
+                                        user.setIdStatus(1);
                                         setResult(RESULT_OK);
 
                                         SmartDialog.with(getActivity(), resp.getMsg())

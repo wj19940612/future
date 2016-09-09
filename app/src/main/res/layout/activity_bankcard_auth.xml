@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/bankcard"/>
+        app:titleText="@string/bind_bank_title" />
 
     <LinearLayout
         android:id="@+id/bankcardInputArea"
@@ -21,101 +20,108 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+        <LinearLayout style="@style/settingLinearLayout">
 
             <TextView
-                style="@style/InputTitle"
+                style="@style/settingTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cardholder"/>
+                android:text="@string/cardholder"
+                android:textColor="#262626" />
 
             <EditText
                 android:id="@+id/cardholderName"
-                style="@style/SignEditText"
+                style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/please_input_real_name"/>
+                android:hint="@string/please_input_real_name" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_account_bind_bank" />
         </LinearLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_thick" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+        <LinearLayout style="@style/settingLinearLayout">
 
             <TextView
-                style="@style/InputTitle"
+                style="@style/settingTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/bankcard_num"/>
+                android:text="@string/bankcard_num" />
 
             <EditText
                 android:id="@+id/bankcardNum"
-                style="@style/SignEditText"
+                style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/please_input_your_bankcard_num"
-                android:inputType="number"/>
+                android:inputType="number" />
         </LinearLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_thick" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:id="@+id/llChooseBank"
+            style="@style/settingLinearLayout"
+            android:clickable="true">
 
             <TextView
-                style="@style/InputTitle"
+                style="@style/settingTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/paying_bank"/>
+                android:text="@string/paying_bank" />
 
             <TextView
                 android:id="@+id/payingBank"
-                style="@style/SignEditText"
+                style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/please_choose_bank"/>
+                android:text="@string/please_choose_bank" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_arrow" />
         </LinearLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_thick" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+        <LinearLayout style="@style/settingLinearLayout">
 
             <TextView
-                style="@style/InputTitle"
+                style="@style/settingTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/phone_number2"/>
+                android:text="@string/phone_number2" />
 
             <EditText
                 android:id="@+id/phoneNum"
-                style="@style/SignEditText"
+                style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/bank_reserved_phone_num"
-                android:inputType="phone"/>
+                android:inputType="phone" />
         </LinearLayout>
+
+        <include layout="@layout/split_line_thick" />
+
+        <TextView
+            android:lineSpacingExtra="15dp"
+            android:textSize="12sp"
+            android:textColor="#FB4B55"
+            android:paddingTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/bind_bank_warn" />
 
         <TextView
             android:id="@+id/submitToAuthButton"
@@ -124,8 +130,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/submit_to_auth"/>
+            android:layout_marginTop="50dp"
+            android:text="@string/bind_bank_bind" />
     </LinearLayout>
 
     <LinearLayout
@@ -141,23 +147,23 @@
             android:id="@+id/bank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="招商银行"/>
+            tools:text="招商银行" />
 
         <TextView
             android:id="@+id/hiddenBankcardNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="****1231"/>
+            tools:text="****1231" />
 
         <Button
             android:id="@+id/unbindBankcard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/unbind"/>
+            android:text="@string/unbind" />
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

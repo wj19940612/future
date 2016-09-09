@@ -306,4 +306,9 @@
     <string name="setting_auth_name_hint">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
     <string name="setting_identity_card_fail">身份证号码错误</string>
     <string name="setting_identity_card_when_login">请先登录后再认证</string>
+
+    <!--绑定银行卡-->
+    <string name="bind_bank_title">绑定银行卡</string>
+    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与体现操作</string>
+    <string name="bind_bank_bind">绑定</string>
 </resources>

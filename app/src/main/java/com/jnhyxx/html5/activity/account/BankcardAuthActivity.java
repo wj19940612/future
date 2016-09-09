@@ -17,11 +17,14 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
+import com.jnhyxx.html5.domain.model.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.domain.model.UserInfo;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
@@ -71,42 +74,54 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         mPayingBank.addTextChangedListener(mValidationWatcher);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
 
-        updateBankcardView(getIntent());
+//        updateBankcardView(getIntent());
 
-        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())
-                .setTag(TAG)
-                .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
-                    @Override
-                    public void onRespSuccess(NameAuth nameAuth) {
-                        if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
-                            showAuthNameDialog(nameAuth);
-                        } else {
-                            mCardholderName.setText(nameAuth.getUserName());
-                        }
-                    }
-                }).fire();
-    }
-
-    private void updateBankcardView(Intent intent) {
-        BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {
-            mBankcardInputArea.setVisibility(View.GONE);
-            mBankcardImageArea.setVisibility(View.VISIBLE);
-        } else if (bankcardAuth.getStatus() == BankcardAuth.STATUS_FILLED) {
-            mBankcardNum.setText(bankcardAuth.getBankNum());
-            mPayingBank.setText(bankcardAuth.getBankName());
-            mPhoneNum.setText(bankcardAuth.getPhone());
+//        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())
+//                .setTag(TAG)
+//                .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
+//                    @Override
+//                    public void onRespSuccess(NameAuth nameAuth) {
+//                        if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
+//                            showAuthNameDialog(nameAuth);
+//                        } else {
+//                            mCardholderName.setText(nameAuth.getUserName());
+//                        }
+//                    }
+//                }).fire();
+        LocalCacheUserInfoManager mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
+        if (!mLocalCacheUserInfoManager.isLogin()) {
+            ToastUtil.curt(R.string.nickname_unknown);
+        }
+        UserInfo user = mLocalCacheUserInfoManager.getUser();
+        if (user != null) {
+            if (user.getIdStatus() == 0) {
+                showAuthNameDialog();
+            }
         }
     }
+//
+//    private void updateBankcardView(Intent intent) {
+//        BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+//        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_BE_BOUND) {
+//            mBankcardInputArea.setVisibility(View.GONE);
+//            mBankcardImageArea.setVisibility(View.VISIBLE);
+//        } else if (bankcardAuth.getStatus() == BankcardAuth.STATUS_FILLED) {
+//            mBankcardNum.setText(bankcardAuth.getBankNum());
+//            mPayingBank.setText(bankcardAuth.getBankName());
+//            mPhoneNum.setText(bankcardAuth.getPhone());
+//        }
+//    }
 
-    private void showAuthNameDialog(final NameAuth nameAuth) {
+    //    private void showAuthNameDialog(final NameAuth nameAuth) {
+    private void showAuthNameDialog() {
         SmartDialog.with(getActivity(), R.string.dialog_unauthorized_name)
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        Launcher.with(getActivity(), NameAuthActivity.class)
-                                .putExtra(Launcher.EX_PAYLOAD, nameAuth)
-                                .executeForResult(REQUEST_CODE);
+                        Launcher.with(getActivity(), NameAuthActivity.class);
+                        // TODO: 2016/9/9 原来的逻辑
+//                                .putExtra(Launcher.EX_PAYLOAD, nameAuth)
+//                                .executeForResult(REQUEST_CODE);
                     }
                 })
                 .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
@@ -196,9 +211,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     /**
      * 由提现页面唤起,回传 BankcardAuth
-     *
+     * <p>
      * 由个人信息页面唤起,回传 BankcardAuth NameAuth
-     *
+     * <p>
      * 由充值页面唤起,回传 BankcardAuth
      *
      * @param data

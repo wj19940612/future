@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
 import com.jnhyxx.html5.activity.account.NameAuthActivity;
 import com.jnhyxx.html5.domain.model.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.model.UserInfo;
@@ -45,6 +46,8 @@ public class SettingActivity extends BaseActivity {
     TextView mLoginOut;
     //实名认证的请求码
     private static final int REQUEST_CODE_NAME_AUTH = 900;
+    //绑定银行卡的请求码
+    private static final int REQUEST_CODE_BIND_BANK = 24400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,36 +77,46 @@ public class SettingActivity extends BaseActivity {
                 mTvUserPhoneSetting.setText(phoneNumberMiddle);
                 Log.d(TAG, "手机号码" + userPhone);
             }
-            /**
-             * idStatus实名状态 0未填写，1已填写，2已认证
-             */
-            if (userInfo.getIdStatus() == -1 || !localCacheUserInfoManager.isLogin()) {
-                mTvRealNameSetting.setText(R.string.nickname_unknown);
-                mRlRealNameSetting.setEnabled(false);
-            } else if (userInfo.getIdStatus() == 0) {
-                mTvRealNameSetting.setText(R.string.setting_no_write);
-            } else if (userInfo.getIdStatus() == 1) {
-                mTvRealNameSetting.setText(R.string.setting_write_now);
-            } else if (userInfo.getIdStatus() == 2) {
-                mTvRealNameSetting.setText(R.string.setting_attestation);
-                mRlRealNameSetting.setEnabled(false);
-            }
-            /**
-             * cardState银行卡状态 0未填写，1已填写，2已认证
-             */
-            if (userInfo.getCardState() == -1 || !localCacheUserInfoManager.isLogin()) {
-                mTvBindBankCardSetting.setText(R.string.nickname_unknown);
-                mRlBindBankCardSetting.setEnabled(false);
-            } else if (userInfo.getCardState() == 0) {
-                mTvBindBankCardSetting.setText(R.string.setting_no_write);
-            } else if (userInfo.getCardState() == 1) {
-                mTvBindBankCardSetting.setText(R.string.setting_write_now);
-            } else if (userInfo.getCardState() == 2) {
-                mTvBindBankCardSetting.setText(R.string.setting_attestation);
-                mRlBindBankCardSetting.setEnabled(false);
-            }
+
+            getRealNameStatus(localCacheUserInfoManager, userInfo);
+            getBindBankStatus(localCacheUserInfoManager, userInfo);
+
         }
 
+    }
+
+    private void getBindBankStatus(LocalCacheUserInfoManager localCacheUserInfoManager, UserInfo userInfo) {
+        /**
+         * cardState银行卡状态 0未填写，1已填写，2已认证
+         */
+        if (userInfo.getCardState() == -1 || !localCacheUserInfoManager.isLogin()) {
+            mTvBindBankCardSetting.setText(R.string.nickname_unknown);
+            mRlBindBankCardSetting.setEnabled(false);
+        } else if (userInfo.getCardState() == 0) {
+            mTvBindBankCardSetting.setText(R.string.setting_no_write);
+        } else if (userInfo.getCardState() == 1) {
+            mTvBindBankCardSetting.setText(R.string.setting_write_now);
+        } else if (userInfo.getCardState() == 2) {
+            mTvBindBankCardSetting.setText(R.string.setting_attestation);
+            mRlBindBankCardSetting.setEnabled(false);
+        }
+    }
+
+    private void getRealNameStatus(LocalCacheUserInfoManager localCacheUserInfoManager, UserInfo userInfo) {
+        /**
+         * idStatus实名状态 0未填写，1已填写，2已认证
+         */
+        if (userInfo.getIdStatus() == -1 || !localCacheUserInfoManager.isLogin()) {
+            mTvRealNameSetting.setText(R.string.nickname_unknown);
+            mRlRealNameSetting.setEnabled(false);
+        } else if (userInfo.getIdStatus() == 0) {
+            mTvRealNameSetting.setText(R.string.setting_no_write);
+        } else if (userInfo.getIdStatus() == 1) {
+            mTvRealNameSetting.setText(R.string.setting_write_now);
+        } else if (userInfo.getIdStatus() == 2) {
+            mTvRealNameSetting.setText(R.string.setting_attestation);
+            mRlRealNameSetting.setEnabled(false);
+        }
     }
 
 
@@ -117,6 +130,7 @@ public class SettingActivity extends BaseActivity {
                 Launcher.with(SettingActivity.this, NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
                 break;
             case R.id.rlBindBankCardSetting:
+                Launcher.with(SettingActivity.this, BankcardAuthActivity.class).executeForResult(REQUEST_CODE_BIND_BANK);
                 break;
             case R.id.tvLoginOutSetting:
                 loginOut();
@@ -147,9 +161,12 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LocalCacheUserInfoManager instance = LocalCacheUserInfoManager.getInstance();
+        UserInfo user = instance.getUser();
         if (requestCode == REQUEST_CODE_NAME_AUTH && resultCode == RESULT_OK) {
-            mTvRealNameSetting.setText(R.string.authorized);
-            mRlRealNameSetting.setEnabled(false);
+            if (user != null) {
+                getRealNameStatus(instance, user);
+            }
         }
     }
 }

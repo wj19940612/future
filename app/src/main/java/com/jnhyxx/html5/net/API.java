@@ -560,4 +560,14 @@ public class API extends APIBase {
     public static String getRiskNoticesUrl() {
         return getHost() + "/agreement/risk.html?nohead=1";
     }
+
+    /**
+     * 获取 交易规则 url
+     *
+     * @param varietyType
+     * @return
+     */
+    public static String getTradeRule(String varietyType) {
+        return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
+    }
 }

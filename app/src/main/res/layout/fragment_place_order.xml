@@ -226,6 +226,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/lastBidAskPriceBg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -255,7 +256,8 @@
         </LinearLayout>
 
         <View
-            android:layout_width="1px"
+            android:id="@+id/bottomSplitLine"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#FD6C73"/>
 
@@ -268,6 +270,6 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            tools:text="确认买张"/>
+            tools:text="@string/confirm_buy_long"/>
     </LinearLayout>
 </LinearLayout>

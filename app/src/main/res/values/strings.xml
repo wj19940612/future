@@ -298,4 +298,6 @@
     <string name="risk_notices">《风险告知书》</string>
     <string name="cooperation_agreement_title">合作协议</string>
     <string name="risk_notices_title">风险告知书</string>
+    <string name="confirm_buy_long">确认买涨</string>
+    <string name="confirm_sell_short">确认买跌</string>
 </resources>

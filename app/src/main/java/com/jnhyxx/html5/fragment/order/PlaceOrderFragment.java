@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -37,6 +38,11 @@ import butterknife.Unbinder;
 
 public class PlaceOrderFragment extends BaseFragment {
 
+    private static final String TYPE = "longOrShort";
+    public static final int TYPE_BUY_LONG = 1;
+    public static final int TYPE_SELL_SHORT = 0;
+
+
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
     @BindView(R.id.lastPrice)
@@ -61,10 +67,12 @@ public class PlaceOrderFragment extends BaseFragment {
     TextView mLastBidAskPrice;
     @BindView(R.id.confirmButton)
     TextView mConfirmButton;
-
-    private static final String TYPE = "longOrShort";
-    public static final int TYPE_BUY_LONG = 1;
-    public static final int TYPE_SELL_SHORT = 0;
+    @BindView(R.id.lastBidAskPriceBg)
+    LinearLayout mLastBidAskPriceBg;
+    @BindView(R.id.emptyClickArea)
+    View mEmptyClickArea;
+    @BindView(R.id.bottomSplitLine)
+    View mBottomSplitLine;
 
     private int mLongOrShort;
     private Product mProduct;
@@ -168,6 +176,18 @@ public class PlaceOrderFragment extends BaseFragment {
                 }).fire();
 
         updateRateAndMarketTimeView();
+        updateBuyAskPriceBgAndConfirmBtn();
+    }
+
+    private void updateBuyAskPriceBgAndConfirmBtn() {
+        mConfirmButton.setText(mLongOrShort == TYPE_BUY_LONG ?
+                R.string.confirm_buy_long : R.string.confirm_sell_short);
+        mLastBidAskPriceBg.setBackgroundResource(mLongOrShort == TYPE_BUY_LONG ?
+                R.color.redPrimary : R.color.greenPrimary);
+        mConfirmButton.setBackgroundResource(mLongOrShort == TYPE_BUY_LONG ?
+                R.drawable.btn_red_primary : R.drawable.btn_green_primary);
+        mBottomSplitLine.setBackgroundColor(mLongOrShort == TYPE_BUY_LONG ?
+                Color.parseColor("#FD6C73") : Color.parseColor("#47D690"));
     }
 
     @Override
@@ -196,7 +216,7 @@ public class PlaceOrderFragment extends BaseFragment {
                         }
                         String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
                         if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
-                            rateAndMarketTimeStr =  marketTimeStr;
+                            rateAndMarketTimeStr = marketTimeStr;
                         } else {
                             rateAndMarketTimeStr += "  " + marketTimeStr;
                         }
@@ -259,10 +279,16 @@ public class PlaceOrderFragment extends BaseFragment {
         mCallback = null;
     }
 
-    @OnClick(R.id.confirmButton)
-    public void onClick() {
-        if (mCallback != null) {
-            mCallback.onConfirmBtnClick(mSubmittedOrder);
+    @OnClick({R.id.emptyClickArea, R.id.confirmButton})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.emptyClickArea:
+                break;
+            case R.id.confirmButton:
+                if (mCallback != null) {
+                    mCallback.onConfirmBtnClick(mSubmittedOrder);
+                }
+                break;
         }
     }
 

@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -93,6 +95,7 @@ public class TradeActivity extends BaseActivity implements
     private int mFundType;
     private List<Product> mProductList;
     private ExchangeStatus mExchangeStatus;
+    private AnimationDrawable mQuestionMark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +150,14 @@ public class TradeActivity extends BaseActivity implements
         productRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
+                        .execute();
+                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhone(), mProduct.getVarietyType());
             }
         });
+        ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
+        mQuestionMark = (AnimationDrawable) ruleIcon.getBackground();
     }
 
     private void updateExchangeStatusView() {
@@ -181,6 +189,13 @@ public class TradeActivity extends BaseActivity implements
             mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
         } else {
             mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
+        }
+
+        String userPhone = LocalUser.getUser().getUserPhone();
+        if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
+            mQuestionMark.stop();
+        } else {
+            mQuestionMark.start();
         }
 
         startScheduleJob(60 * 1000);
@@ -282,7 +297,7 @@ public class TradeActivity extends BaseActivity implements
                 .commit();
     }
 
-    private void hidePlaceOrderFragment() {
+    private void hideFragmentOfContainer() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -309,7 +324,7 @@ public class TradeActivity extends BaseActivity implements
                     @Override
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
-                            hidePlaceOrderFragment();
+                            hideFragmentOfContainer();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.place_an_order_again,
@@ -329,17 +344,15 @@ public class TradeActivity extends BaseActivity implements
     @Override
     public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
         submittedOrder.setPayType(mFundType);
-
         Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
-
-        //submitOrder(submittedOrder);
+        submitOrder(submittedOrder);
     }
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getUserPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
-        hidePlaceOrderFragment();
+        hideFragmentOfContainer();
         placeOrder(longOrShort);
     }
 

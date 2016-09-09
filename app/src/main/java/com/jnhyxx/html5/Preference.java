@@ -12,6 +12,7 @@ public class Preference {
         String USER_JSON = "userJson";
         String SERVER_TIME = "serverTime";
         String HAD_SHOW_TRADE_AGREEMENT = "hadShowTradeAgreement";
+        String IS_TRADE_RULE_CLICKED = "isTradeRuleClicked";
     }
 
     private static Preference sInstance;
@@ -71,5 +72,13 @@ public class Preference {
 
     public void setTradeAgreementShowed(String userPhone, String varietyType) {
         getEditor().putBoolean(userPhone + Key.HAD_SHOW_TRADE_AGREEMENT + varietyType, true).commit();
+    }
+
+    public boolean isTradeRuleClicked(String userPhone, String varietyType) {
+        return mPrefs.getBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, false);
+    }
+
+    public void setTradeRuleClicked(String userPhone, String varietyType) {
+        getEditor().putBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, true).commit();
     }
 }

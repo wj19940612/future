@@ -300,4 +300,6 @@
     <string name="risk_notices_title">风险告知书</string>
     <string name="confirm_buy_long">确认买涨</string>
     <string name="confirm_sell_short">确认买跌</string>
+    <string name="today_position">今持仓</string>
+    <string name="pre_position">昨持仓</string>
 </resources>

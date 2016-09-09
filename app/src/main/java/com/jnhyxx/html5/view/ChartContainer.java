@@ -55,8 +55,20 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mContainer.addView(trendView, POS_TREND, params);
     }
 
+    public void addMarketDataView(MarketDataView marketDataView) {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mContainer.addView(marketDataView, POS_PLATE, params);
+    }
+
+
     public TrendView getTrendView() {
         return (TrendView) mContainer.getChildAt(POS_TREND);
+    }
+
+    public MarketDataView getMarketDataView() {
+        return (MarketDataView) mContainer.getChildAt(POS_PLATE);
     }
 
 //    private void initPopupWindow() {

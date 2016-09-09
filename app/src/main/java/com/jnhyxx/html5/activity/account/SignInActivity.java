@@ -195,5 +195,5 @@ public class SignInActivity extends BaseActivity {
     void openFindPasswordPage() {
         Launcher.with(this, FindPwdActivity.class).execute();
 //        Launcher.with(this, ModifyPwdActivity.class).execute();
-    }
 }
+        }

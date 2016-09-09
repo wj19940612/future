@@ -16,18 +16,51 @@ import java.util.List;
  */
 
 public class UserInfo {
-
     /**
-     * moneyUsable : 94724.14  可用资金余额
-     * scoreUsable : 85282      可用积分余额
-     * userName : 二级渠道newtest116 用户昵称
-     * userPhone : 13777804454     用户手机号
+     * moneyUsable可用资金余额
      */
-
     private double moneyUsable;
+    /**
+     * scoreUsable可用积分余额
+     */
     private int scoreUsable;
+    /**
+     * userName用户昵称
+     */
     private String userName;
+    /**
+     * userPhone用户手机号
+     */
     private String userPhone;
+    /**
+     * idStatus实名状态 0未填写，1已填写，2已认证
+     */
+    private int idStatus = -1;
+    /**
+     * realName实名
+     */
+    private String realName;
+    /**
+     * cardPhone银行卡对应的手机号
+     */
+    private String cardPhone;
+    /**
+     * issuingbankName银行名
+     */
+    private String issuingbankName;
+    /**
+     * idCard身份证号
+     */
+    private String idCard;
+    /**
+     * cardState银行卡状态 0未填写，1已填写，2已认证
+     */
+    private int cardState;
+    private int id;
+    /**
+     * cardNumber银行卡号
+     */
+    private String cardNumber;
 
     public static UserInfo objectFromData(String str) {
 
@@ -105,6 +138,70 @@ public class UserInfo {
         this.userPhone = userPhone;
     }
 
+    public int getIdStatus() {
+        return idStatus;
+    }
+
+    public void setIdStatus(int idStatus) {
+        this.idStatus = idStatus;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getCardPhone() {
+        return cardPhone;
+    }
+
+    public void setCardPhone(String cardPhone) {
+        this.cardPhone = cardPhone;
+    }
+
+    public String getIssuingbankName() {
+        return issuingbankName;
+    }
+
+    public void setIssuingbankName(String issuingbankName) {
+        this.issuingbankName = issuingbankName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public int getCardState() {
+        return cardState;
+    }
+
+    public void setCardState(int cardState) {
+        this.cardState = cardState;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -112,6 +209,14 @@ public class UserInfo {
                 ", scoreUsable=" + scoreUsable +
                 ", userName='" + userName + '\'' +
                 ", userPhone='" + userPhone + '\'' +
+                ", idStatus=" + idStatus +
+                ", realName='" + realName + '\'' +
+                ", cardPhone='" + cardPhone + '\'' +
+                ", issuingbankName='" + issuingbankName + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", cardState=" + cardState +
+                ", id=" + id +
+                ", cardNumber='" + cardNumber + '\'' +
                 '}';
     }
 }

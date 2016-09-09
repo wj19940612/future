@@ -76,8 +76,11 @@ public class NameAuthActivity extends BaseActivity {
         LocalCacheUserInfoManager localCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
         UserInfo user = localCacheUserInfoManager.getUser();
         if (user != null) {
-            if (!TextUtils.isEmpty(user.getUserName())) {
-                mName.setText(user.getUserName());
+            if (!TextUtils.isEmpty(user.getRealName())) {
+                mName.setText(user.getRealName());
+            }
+            if(!TextUtils.isEmpty(user.getIdCard())){
+                mIdentityNum.setText(user.getIdCard());
             }
         }
         if (localCacheUserInfoManager.isAuthName()) {

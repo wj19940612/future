@@ -71,7 +71,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage2"
-            android:text="@string/setting_no_attestation"
             android:textColor="@android:color/holo_blue_dark" />
 
         <ImageView

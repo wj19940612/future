@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.domain.model;
+package com.jnhyxx.html5.domain.account;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

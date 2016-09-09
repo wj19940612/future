@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.domain.model;
+package com.jnhyxx.html5.domain.account;
 
 /**
  * Created by Administrator on 2016/8/31.

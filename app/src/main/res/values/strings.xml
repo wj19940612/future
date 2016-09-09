@@ -311,4 +311,5 @@
     <string name="bind_bank_title">绑定银行卡</string>
     <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与体现操作</string>
     <string name="bind_bank_bind">绑定</string>
+    <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
 </resources>

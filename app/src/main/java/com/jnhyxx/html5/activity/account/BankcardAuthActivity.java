@@ -10,19 +10,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.model.LocalCacheUserInfoManager;
-import com.jnhyxx.html5.domain.model.UserInfo;
+import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -50,17 +51,22 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     TextView mPayingBank;
     @BindView(R.id.bankcardInputArea)
     LinearLayout mBankcardInputArea;
-    @BindView(R.id.bank)
+    //银行名称
+    @BindView(R.id.bankName)
     TextView mBank;
     @BindView(R.id.hiddenBankcardNum)
     TextView mHiddenBankcardNum;
+    //解除绑定
     @BindView(R.id.unbindBankcard)
     Button mUnbindBankcard;
+    //所绑定银行卡的父容器,没有绑定之前不显示
     @BindView(R.id.bankcardImageArea)
     LinearLayout mBankcardImageArea;
     @BindView(R.id.fragmentContainer)
     FrameLayout mFragmentContainer;
-
+    //银行的图标
+    @BindView(R.id.bankCardIcon)
+    ImageView mBankCardIcon;
     NameAuth.Result mNameAuthResult;
 
     @Override
@@ -98,6 +104,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 showAuthNameDialog();
             }
         }
+
+         
     }
 //
 //    private void updateBankcardView(Intent intent) {
@@ -170,8 +178,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.payingBank:
+                mBankcardInputArea.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
+                ToastUtil.curt("请选择银行");
                 break;
             case R.id.submitToAuthButton:
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);

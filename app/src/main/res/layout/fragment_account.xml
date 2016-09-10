@@ -15,7 +15,7 @@
         android:background="@drawable/account_mine_header_bg">
 
         <com.jnhyxx.html5.view.TitleBar
-            android:id="@+id/fragmentAccountTitleBar"
+            android:id="@+id/titleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -26,7 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/fragmentAccountTitleBar"
+            android:layout_below="@+id/titleBar"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -195,7 +195,7 @@
     <include layout="@layout/split_line"/>
 
     <com.jnhyxx.html5.view.IconTextRow
-        android:id="@+id/fundDetail"
+        android:id="@+id/tradeDetail"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"

@@ -39,6 +39,12 @@ import butterknife.Unbinder;
 import static android.app.Activity.RESULT_OK;
 
 public class AccountFragment extends BaseFragment {
+    //登陆的请求码
+    private static final int REQUEST_CODE_LOGIN = 967;
+    //设置界面的请求码
+    private static final int REQUEST_CODE_SETTING = 352;
+
+
     //账户余额
     @BindView(R.id.balance)
     TextView mBalance;
@@ -51,28 +57,17 @@ public class AccountFragment extends BaseFragment {
     //注册
     @BindView(R.id.signUp)
     TextView mSignUp;
-    //消息中心的未读消息数
-    // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText(); 
-//    @BindView(R.id.account_tv_message_number)
-//    TextView mMessageNumber;
+    // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText();
     //消息中心
     @BindView(R.id.messageCenter)
     IconTextRow mMessageCenter;
-    //            RelativeLayout mMessageCenter;
     //交易明细
-    @BindView(R.id.fundDetail)
-    IconTextRow mFundDetail;
-//            RelativeLayout mFundDetail;
-
-    //积分明细
-//    @BindView(R.id.scoreDetail)
-//    IconTextRow mScoreDetail;
+    @BindView(R.id.tradeDetail)
+    IconTextRow mTradeDetail;
     @BindView(R.id.aboutUs)
-    IconTextRow mPersonalInfo;
-    //            RelativeLayout mPersonalInfo;
+    IconTextRow mAboutUs;
     @BindView(R.id.paidToPromote)
     IconTextRow mPaidToPromote;
-    //            RelativeLayout mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
     //登陆和注册按钮的父容器
@@ -85,18 +80,10 @@ public class AccountFragment extends BaseFragment {
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
-    @BindView(R.id.fragmentAccountTitleBar)
+    @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-//    @BindView(R.id.fragment_account_titleBar_iv_setting)
-//    ImageView mSettingImageView;
-//    @BindView(R.id.titleBar)
-//    TitleBar mTitleBar;
 
     private Unbinder mBinder;
-    //登陆的请求码
-    private static final int REQUEEST_CODE_LOGIN = 967;
-    //设置界面的请求码
-    private static final int REQUEST_CODE_SETTING = 352;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,22 +94,12 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        startSettingActivity();
-    }
-
-    private void startSettingActivity() {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), SettingActivity.class), REQUEST_CODE_SETTING);
+                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
     }
@@ -206,12 +183,11 @@ public class AccountFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.fundDetail, R.id.aboutUs, R.id.paidToPromote})
+    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
-//                Launcher.with(getActivity(), SignInActivity.class).execute();
-                startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQUEEST_CODE_LOGIN);
+                Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
                 break;
             case R.id.signUp:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
@@ -244,7 +220,7 @@ public class AccountFragment extends BaseFragment {
                 // TODO: 2016/9/8 目前没有系统消息的接口
 //                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
-            case R.id.fundDetail:
+            case R.id.tradeDetail:
                 openTradeDetailPage(true);
                 break;
             case R.id.aboutUs:
@@ -302,7 +278,7 @@ public class AccountFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEEST_CODE_LOGIN && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
             UserInfo userInfo = LocalCacheUserInfoManager.getInstance().getUser();
             Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
             String userName = userInfo.getUserName();

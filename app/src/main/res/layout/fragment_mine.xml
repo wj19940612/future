@@ -177,10 +177,7 @@
 
         </LinearLayout>
     </RelativeLayout>
-
-
-    <!-- 分割线 颜色 不对 -->
-
+    
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
@@ -192,7 +189,10 @@
         app:rowTextColor="@android:color/black"
         app:subText="数字"/>
 
-    <include layout="@layout/split_line"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
@@ -204,20 +204,25 @@
         app:rowText="@string/account_trade_info"
         app:rowTextColor="@color/account_center_text"/>
 
-    <include layout="@layout/split_line"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        android:paddingTop="@dimen/dp_1"
         app:leftIcon="@drawable/list_icon_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
         app:rowTextColor="@color/account_center_text"/>
 
-    <include layout="@layout/split_line"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"

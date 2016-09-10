@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.LoginInfo;
 
-public class User {
+public class LocalUser {
 
     public interface AsyncCallback<T> {
         void get(T t);
@@ -14,25 +14,25 @@ public class User {
 
     private LoginInfo mLoginInfo;
 
-    private static User sUser;
+    private static LocalUser sLocalUser;
     private static boolean sReload;
 
-    public static User getUser() {
-        if (sUser == null || sReload) {
-            sUser = loadFromPreference();
+    public static LocalUser getUser() {
+        if (sLocalUser == null || sReload) {
+            sLocalUser = loadFromPreference();
         }
-        return sUser;
+        return sLocalUser;
     }
 
-    private static User loadFromPreference() {
+    private static LocalUser loadFromPreference() {
         sReload = false;
         String userJson = Preference.get().getUserJson();
         if (!TextUtils.isEmpty(userJson)) {
             Gson gson = new Gson();
-            return gson.fromJson(userJson, User.class);
+            return gson.fromJson(userJson, LocalUser.class);
         }
 
-        return new User();
+        return new LocalUser();
     }
 
     private void saveToPreference() {
@@ -76,8 +76,13 @@ public class User {
                 "mLoginInfo=" + mLoginInfo +
                 '}';
     }
+
     public double getAvailableBalance() {
         return 0; // TODO: 8/29/16 可用资金
+    }
+
+    public String getUserPhone() {
+        return "13567124531"; // TODO: 9/8/16 获取用户手机号,作为唯一用户标示
     }
 
 }

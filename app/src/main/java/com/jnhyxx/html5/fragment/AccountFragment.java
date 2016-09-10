@@ -17,16 +17,15 @@ import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.activity.setting.SettingActivity;
+import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
-import com.jnhyxx.html5.activity.setting.SettingActivity;
-import com.jnhyxx.html5.domain.BankcardAuth;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -219,7 +218,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //充值
             case R.id.recharge:
-                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(LocalUser.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -231,7 +230,7 @@ public class AccountFragment extends BaseFragment {
                 break;
             //提现
             case R.id.withdraw:
-                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
+                API.User.getBankcardInfo(LocalUser.getUser().getToken()).setTag(TAG)
                         .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
                             @Override
                             public void onRespSuccess(BankcardAuth bankcardAuth) {
@@ -316,7 +315,7 @@ public class AccountFragment extends BaseFragment {
             mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    User.getUser().logout();
+                    LocalUser.getUser().logout();
                     updateAccountInfoView();
                 }
             });

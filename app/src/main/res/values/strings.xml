@@ -206,8 +206,17 @@
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>
     <string name="sell_volume">卖量</string>
+    <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
+    <string name="prompt_next_trade_time_is">下次交易时间 %1$s</string>
 
-    <string name="prompt_market_close_next_trade_time_is">已休市, 下次交易时间 </string>
+    <!-- Trade page: place an order -->
+    <string name="touch_stop_loss">触发止损</string>
+    <string name="touch_stop_profit">触发止盈</string>
+    <string name="total_to_be_paid">合计支付</string>
+    <string name="last_bid_ask_price">最新买入价</string>
+    <string name="place_an_order_again">再次下单</string>
+    <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
+    <string name="currency_converter">汇率换算: %1$s</string>
 
     <!--我的界面-->
     <string name="account_trade_info">交易明细</string>
@@ -216,8 +225,6 @@
     <string name="account_mine_integral">%1$s 分</string>
     <string name="account_user_balance">余额(元)</string>
 
-    <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
-    <string name="next_trade_time_is">下次交易时间 %1$s</string>
     <!--我的界面/消息中心/消息详情-->
     <string name="account_message_center_info_title">消息详情</string>
 
@@ -247,11 +254,6 @@
 \n\n最终，盈投的月利润比以前翻了7-10倍！靠的就是系统的强大风控系统保障下提高了盈利模式。同时靠营销系统每个月客户数量都大了增长。
 \n盈投坦言，现在增长到500多个活跃用户，月利润500多万元。</string>
 
-    <!-- Trade page: place an order -->
-    <string name="touch_stop_loss">触发止损</string>
-    <string name="touch_stop_profit">触发止盈</string>
-    <string name="total_to_be_paid">合计支付</string>
-    <string name="last_bid_ask_price">最新买入价</string>
 
     <!--我的界面/推广挣钱-->
     <string name="account_expand_make_money_right_title">我的用户</string>
@@ -313,4 +315,17 @@
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">您是否要拨打客服电话:\n  %1$s  \n解绑换卡</string>
+
+    <!-- Trade page: agree trade protocol -->
+    <string name="prompt_dear_user">尊敬的用户:
+        \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
+    <string name="unsigned">未签署</string>
+    <string name="trade_cooperation_agreement">《投资人与用户参与相关期货品种交易合作协议》</string>
+    <string name="risk_notices">《风险告知书》</string>
+    <string name="cooperation_agreement_title">合作协议</string>
+    <string name="risk_notices_title">风险告知书</string>
+    <string name="confirm_buy_long">确认买涨</string>
+    <string name="confirm_sell_short">确认买跌</string>
+    <string name="today_position">今持仓</string>
+    <string name="pre_position">昨持仓</string>
 </resources>

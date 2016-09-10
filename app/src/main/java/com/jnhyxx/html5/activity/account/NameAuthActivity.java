@@ -15,6 +15,8 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
+
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -115,7 +117,6 @@ public class NameAuthActivity extends BaseActivity {
 
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
-//        String token = com.jnhyxx.html5.domain.local.User.getUser().getToken();
         String realName = mName.getText().toString().trim();
         String identityNum = mIdentityNum.getText().toString().trim();
         if (LocalCacheUserInfoManager.getInstance().isLogin()) {

@@ -164,7 +164,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
 
     @Override
     public String getGroupName() {
-        if (getProduct().getIsDomestic() == Product.IS_DOMESTIC) {
+        if (getProduct().isDomestic()) {
             return "国内期货";
         }
         return "国外期货";

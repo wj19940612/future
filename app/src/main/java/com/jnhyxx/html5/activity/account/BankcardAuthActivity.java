@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -224,7 +224,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                API.User.updateBankcard(com.jnhyxx.html5.domain.local.User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+
+                API.User.updateBankcard(LocalUser.getUser().getToken(), bankcardNum, payingBank, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp<BankcardAuth>>() {
                             @Override
@@ -309,4 +310,3 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 }
-

@@ -23,7 +23,6 @@ public class TrendChart extends ChartView {
     private TrendViewData mUnstableData;
     private SparseArray<TrendViewData> mVisibleList;
 
-    private float mPriceAreaWidth;
     private TrendView.Settings mSettings;
 
     public TrendChart(Context context) {
@@ -151,7 +150,7 @@ public class TrendChart extends ChartView {
                     .floatValue();
 
             float pricePadding = mDataList.get(0).getLastPrice() * 0.0025f;
-            /** expand max ~ min to not make trend line touch top and bottom **/
+            /** expand max ~ min to not let trend line touch top and bottom **/
             baselines[0] = max + pricePadding;
             baselines[baselines.length - 1] = min - pricePadding;
             for (int i = baselines.length - 2; i > 0; i--) {
@@ -161,7 +160,15 @@ public class TrendChart extends ChartView {
     }
 
     @Override
-    protected void drawBaseLines(float[] baselines, int left, float top, int width, int height, Canvas canvas) {
+    protected void calculateIndexesBaseLines(float[] indexesBaseLines) {
+
+    }
+
+    @Override
+    protected void drawBaseLines(boolean indexesEnable,
+                                 float[] baselines, int left, int top, int width, int height,
+                                 float[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                 Canvas canvas) {
         if (baselines == null || baselines.length < 2) return;
 
         float verticalInterval = height * 1.0f / (baselines.length - 1);
@@ -205,13 +212,6 @@ public class TrendChart extends ChartView {
         path.lineTo(chartX, topY - verticalInterval);
         setBaseLinePaint(sPaint);
         canvas.drawPath(path, sPaint);
-    }
-
-    private float calculatePriceWidth(float baseline) {
-        String preClosePrice = formatNumber(baseline);
-        sPaint.setTextSize(mBigFontSize);
-        float priceWidth = sPaint.measureText(preClosePrice);
-        return getBigFontBgRectF(0, 0, priceWidth).width();
     }
 
     @Override
@@ -266,8 +266,7 @@ public class TrendChart extends ChartView {
                 float priceWidth = sPaint.measureText(unstablePrice);
                 float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
                 float priceX = left + width - priceMargin - priceWidth;
-                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText,
-                        sPaint.measureText(unstablePrice));
+                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText, priceWidth);
                 //// the center of rect is connected to dashLine
                 //// add offset and let the bottom of rect connect to dashLine
                 float rectHeight = blueRect.height();

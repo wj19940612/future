@@ -349,10 +349,10 @@ public class API extends APIBase {
         }
 
         /**
+         * 接口名：显示渠道银行列表
+         * <p>
+         * URL  http://域名/user/user/showChannelBankList.do
          *
-         接口名：显示渠道银行列表
-
-         URL  http://域名/user/user/showChannelBankList.do
          * @return
          */
         public static API showChannelBankList() {
@@ -390,6 +390,28 @@ public class API extends APIBase {
 
         public static API loginOut() {
             return new API("/user/user/logout.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：获取用户是否修改过昵称信息
+         * URL  http://域名/user/user/findIsUpdateNickName.do
+         */
+        public static API findIsUpdateNickName() {
+            return new API("/user/user/findIsUpdateNickName.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：修改昵称
+         * <p>
+         * http://域名/user/user/updateNickName.do
+         *
+         * @param nickName
+         * @return
+         */
+        public static API updateNickName(String nickName) {
+            return new API("/user/user/updateNickName.do",
+                    new ApiParams()
+                            .put("nickName", nickName));
         }
     }
 

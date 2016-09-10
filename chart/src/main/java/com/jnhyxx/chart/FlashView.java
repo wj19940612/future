@@ -59,6 +59,13 @@ public class FlashView extends ChartView {
         }
     }
 
+    @Override
+    public void setSettings(ChartSettings settings) {
+        mSettings = (Settings) settings;
+        super.setSettings(settings);
+        redraw();
+    }
+
     private void setDashLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.STROKE);
@@ -195,30 +202,32 @@ public class FlashView extends ChartView {
         setRealTimeLinePaint(sPaint);
         canvas.drawPath(path, sPaint);
 
-        // horizontal dash line to vertical line
-        path = getPath();
-        path.moveTo(chartX, chartY);
-        path.lineTo(width - mPriceAreaWidth, chartY);
-        setDashLinePaint(sPaint);
-        canvas.drawPath(path, sPaint);
+        if (size > 0) {
+            // horizontal dash line to vertical line
+            path = getPath();
+            path.moveTo(chartX, chartY);
+            path.lineTo(width - mPriceAreaWidth, chartY);
+            setDashLinePaint(sPaint);
+            canvas.drawPath(path, sPaint);
 
-        // unstable price with rect bg
-        setUnstablePricePaint(sPaint);
-        String unstablePrice = formatNumber(currentPrice);
-        float priceWidth = sPaint.measureText(unstablePrice);
-        float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
-        float priceX = left + width - priceMargin - priceWidth;
-        RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText, priceWidth);
-        //// the center of rect is connected to dashLine
-        //// add offset and let the bottom of rect connect to dashLine
-        float rectHeight = blueRect.height();
-        blueRect.top -= rectHeight / 2;
-        blueRect.bottom -= rectHeight / 2;
-        setUnstablePriceBgPaint(sPaint);
-        canvas.drawRoundRect(blueRect, 2, 2, sPaint);
-        float priceY = chartY - rectHeight / 2 + mOffset4CenterText;
-        setUnstablePricePaint(sPaint);
-        canvas.drawText(unstablePrice, priceX, priceY, sPaint);
+            // unstable price with rect bg
+            setUnstablePricePaint(sPaint);
+            String unstablePrice = formatNumber(currentPrice);
+            float priceWidth = sPaint.measureText(unstablePrice);
+            float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
+            float priceX = left + width - priceMargin - priceWidth;
+            RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText, priceWidth);
+            //// the center of rect is connected to dashLine
+            //// add offset and let the bottom of rect connect to dashLine
+            float rectHeight = blueRect.height();
+            blueRect.top -= rectHeight / 2;
+            blueRect.bottom -= rectHeight / 2;
+            setUnstablePriceBgPaint(sPaint);
+            canvas.drawRoundRect(blueRect, 2, 2, sPaint);
+            float priceY = chartY - rectHeight / 2 + mOffset4CenterText;
+            setUnstablePricePaint(sPaint);
+            canvas.drawText(unstablePrice, priceX, priceY, sPaint);
+        }
     }
 
     @Override
@@ -255,13 +264,17 @@ public class FlashView extends ChartView {
 
         private double flashChartPriceInterval;
 
-        public Settings(double flashChartPriceInterval) {
+        public Settings() {
             super();
-            this.flashChartPriceInterval = flashChartPriceInterval;
+            this.flashChartPriceInterval = 0;
         }
 
         public double getFlashChartPriceInterval() {
             return flashChartPriceInterval;
+        }
+
+        public void setFlashChartPriceInterval(double flashChartPriceInterval) {
+            this.flashChartPriceInterval = flashChartPriceInterval;
         }
     }
 }

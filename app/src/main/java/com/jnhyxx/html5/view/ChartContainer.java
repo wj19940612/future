@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.R;
 
@@ -55,6 +56,13 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mContainer.addView(trendView, POS_TREND, params);
     }
 
+    public void addFlashView(FlashView flashView) {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mContainer.addView(flashView, POS_FLASH, params);
+    }
+
     public void addMarketDataView(MarketDataView marketDataView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -62,13 +70,28 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mContainer.addView(marketDataView, POS_PLATE, params);
     }
 
-
     public TrendView getTrendView() {
         return (TrendView) mContainer.getChildAt(POS_TREND);
     }
 
+    public FlashView getFlashView() {
+        return (FlashView) mContainer.getChildAt(POS_FLASH);
+    }
+
     public MarketDataView getMarketDataView() {
         return (MarketDataView) mContainer.getChildAt(POS_PLATE);
+    }
+
+    public void showTrendView() {
+        onTabClick(POS_TREND);
+    }
+
+    public void showFlashView() {
+        onTabClick(POS_FLASH);
+    }
+
+    public void showMarketDataView() {
+        onTabClick(POS_PLATE);
     }
 
 //    private void initPopupWindow() {
@@ -146,6 +169,13 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         }
     }
 
+    private void showChild(int pos) {
+        for (int i = 0; i < mContainer.getChildCount(); i++) {
+            mContainer.getChildAt(i).setVisibility(GONE);
+        }
+        mContainer.getChildAt(pos).setVisibility(VISIBLE);
+    }
+
 //    public void setTabEnable(int position, boolean enable) {
 //        mTabsLayout = (LinearLayout) findViewById(R.id.tabs);
 //        LinearLayout tab = (LinearLayout) mTabsLayout.getChildAt(position);
@@ -195,6 +225,16 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         }
         TextView tab = (TextView) mTabsLayout.getChildAt(pos);
         tab.setSelected(true);
+
+        for (int i = 0; i < mContainer.getChildCount(); i++) {
+            View view = mContainer.getChildAt(i);
+            if (view != null) {
+                view.setVisibility(GONE);
+            }
+        }
+        if (pos < mContainer.getChildCount()) {
+            mContainer.getChildAt(pos).setVisibility(VISIBLE);
+        }
     }
 
 }

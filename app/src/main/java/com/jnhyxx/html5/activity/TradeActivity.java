@@ -20,21 +20,23 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
-import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
-import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
+import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
+import com.jnhyxx.html5.view.MarketDataView;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -226,6 +228,25 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+
+        FlashView flashView = mChartContainer.getFlashView();
+        if (flashView == null) {
+            flashView = new FlashView(this);
+            mChartContainer.addFlashView(flashView);
+        }
+        FlashView.Settings settings1 = new FlashView.Settings();
+        settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
+        settings1.setNumberScale(mProduct.getPriceDecimalScale());
+        settings1.setBaseLines(9);
+        flashView.setSettings(settings1);
+
+        MarketDataView marketDataView = mChartContainer.getMarketDataView();
+        if (marketDataView == null) {
+            marketDataView = new MarketDataView(this);
+            mChartContainer.addMarketDataView(marketDataView);
+        }
+
+        mChartContainer.showTrendView();
     }
 
     private void requestTrendDataAndSet() {

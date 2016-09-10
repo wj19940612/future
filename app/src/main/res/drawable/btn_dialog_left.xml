@@ -30,7 +30,7 @@
                 android:bottomRightRadius="0dp"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@color/colorPrimary"/>
+            <solid android:color="#a8a8a8"/>
         </shape>
     </item>
 

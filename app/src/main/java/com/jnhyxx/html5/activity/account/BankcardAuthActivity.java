@@ -98,7 +98,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         mBankcardNum.addTextChangedListener(mValidationWatcher);
         mPayingBank.addTextChangedListener(mValidationWatcher);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
-
 //        updateBankcardView(getIntent());
 
 //        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())

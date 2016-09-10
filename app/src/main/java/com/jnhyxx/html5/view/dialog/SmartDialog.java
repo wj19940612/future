@@ -3,6 +3,7 @@ package com.jnhyxx.html5.view.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ public class SmartDialog {
 
     private String mMessageText;
 
+    private String mTitleText = "";
+
     private boolean mCancelableOnTouchOutside;
 
     private Dialog mDialog;
@@ -66,10 +69,26 @@ public class SmartDialog {
         return dialog;
     }
 
+    public static SmartDialog with(Activity activity, int resid, int titleId) {
+        SmartDialog dialog = new SmartDialog(activity);
+        addMap(activity, dialog);
+        dialog.setMessage(resid);
+        dialog.setTitle(titleId);
+        return dialog;
+    }
+
+    public static SmartDialog with(Activity activity, String msg, String titleTxt) {
+        SmartDialog dialog = new SmartDialog(activity);
+        addMap(activity, dialog);
+        dialog.setMessage(msg);
+        dialog.setTitle(titleTxt);
+        return dialog;
+    }
+
     /**
-     * @deprecated use {@link #with(Activity activity, String msg)} instead
      * @param activity
      * @return
+     * @deprecated use {@link #with(Activity activity, String msg)} instead
      */
     public static SmartDialog with(Activity activity) {
         SmartDialog dialog = new SmartDialog(activity);
@@ -157,6 +176,16 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setTitle(int titleId) {
+        mTitleText = mActivity.getText(titleId).toString();
+        return this;
+    }
+
+    private SmartDialog setTitle(String title) {
+        mTitleText = title;
+        return this;
+    }
+
     public void show() {
         create();
 
@@ -199,9 +228,13 @@ public class SmartDialog {
         mPosition = (TextView) view.findViewById(R.id.position);
         mSingleButton = (TextView) view.findViewById(R.id.singleButton);
 
-        mTitle.setVisibility(View.INVISIBLE);
+//        mTitle.setVisibility(View.INVISIBLE);
         mMessage.setText(mMessageText);
-
+        if (TextUtils.isEmpty(mTitleText)) {
+            mTitle.setVisibility(View.GONE);
+        } else {
+            mTitle.setText(mTitleText);
+        }
         if (mIsDoubleButtons) {
             mSingleButton.setVisibility(View.GONE);
             mDoubleButtons.setVisibility(View.VISIBLE);

@@ -29,7 +29,7 @@ public class Product implements Serializable, Parcelable {
      * displayMarketTimes : 06:00;07:00;04:58
      * decimalScale : 0.2
      * sign : $
-     * fcpInterVal : 20
+     * flashChartPriceInterval : 20
      * varietyType : CL
      * baseline : 2
      * isDomestic : 0

@@ -269,16 +269,12 @@ public class CommonMethodUtils {
     public static String bankNumber(String bankNumber) {
         bankNumber = bankNumber.trim();
         String safeBankNumber = "";
-//        if (bankNumber.length() == 16) {
-//            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
-//        } else if (bankNumber.length() == 19) {
-//            safeBankNumber = "***  ****  ****  **** " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
-//        } else {
-//            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
-//        }
-
-        Log.d("wj", "银行卡长度 " + bankNumber.length());
-        StringBuilder mStringBuilder = new StringBuilder();
+        //不管多少长度，只显示16位 ，最后四位显示。
+        if (bankNumber.length() == 16) {
+            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+        }
+        //根据长度生成*
+        /*StringBuilder mStringBuilder = new StringBuilder();
         for (int i = 1; i < bankNumber.length() - 3; i++) {
             if ( i % 4 == 0) {
                 mStringBuilder.append("*  ");
@@ -288,7 +284,7 @@ public class CommonMethodUtils {
         }
         mStringBuilder.append("  ");
         String starString = mStringBuilder.toString();
-        safeBankNumber = starString + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
+        safeBankNumber = starString + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());*/
         return safeBankNumber;
     }
 

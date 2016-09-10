@@ -152,10 +152,12 @@
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
+                    android:layout_centerVertical="true"
                     style="@style/AboutAsEntryLeftTextViewStyle"
                     android:text="@string/account_about_us_company_telephone" />
 
                 <TextView
+                    android:layout_centerVertical="true"
                     android:id="@+id/accountAboutUsActivityExpandListTvRight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -169,10 +171,12 @@
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
+                    android:layout_centerVertical="true"
                     style="@style/AboutAsEntryLeftTextViewStyle"
                     android:text="@string/account_about_us_service_qq" />
 
                 <TextView
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

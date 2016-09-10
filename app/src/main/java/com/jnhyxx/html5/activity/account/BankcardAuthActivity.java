@@ -1,15 +1,20 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,7 +34,9 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.jnhyxx.umenglibrary.UmengLib;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
@@ -44,7 +51,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     /**
      * 解除绑定客服电话
      */
-    private static final String UNWRAP_SERVICE_TELEPHONE = "0517-87675063";
+    public static final String UNWRAP_SERVICE_TELEPHONE = "0517-87675063";
     @BindView(R.id.cardholderName)
     EditText mCardholderName;
     @BindView(R.id.bankcardNum)
@@ -73,7 +80,13 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     //银行的图标
     @BindView(R.id.bankCardIcon)
     ImageView mBankCardIcon;
+    /**
+     * 头部信息
+     */
+    @BindView(R.id.bandCardTitle)
+    TitleBar mTitleBar;
     NameAuth.Result mNameAuthResult;
+    //如果使用dialog拨打电话，会出现ActivityNotFound异常;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,18 +118,33 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
             ToastUtil.curt(R.string.nickname_unknown);
         }
         UserInfo user = mLocalCacheUserInfoManager.getUser();
+        showBankBindStatus(user);
+
+    }
+
+    /**
+     * 这是显示银行卡是否绑定的方法，
+     * 如果没有绑定，显示绑定银行卡界面，
+     * 若果绑定了，显示银行卡信息
+     *
+     * @param user
+     */
+
+    private void showBankBindStatus(UserInfo user) {
         if (user != null) {
+            //一般不会出现，在设置界面做了判断，没有登录不可进入这个界面
             if (user.getIdStatus() == 0) {
                 showAuthNameDialog();
             }
-            // TODO: 2016/9/9 这是当绑定后的界面，目前没有UI
+            // TODO: 2016/9/9 这是没有绑定
             //  cardState银行卡状态 0未填写，1已填写，2已认证
             if (user.getCardState() == 0) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
             } else {
+                //这是绑定了的界面
                 mBankcardInputArea.setVisibility(View.GONE);
                 mBankcardImageArea.setVisibility(View.VISIBLE);
-
+                mTitleBar.setTitle(R.string.bankcard);
                 if (!TextUtils.isEmpty(user.getIssuingbankName())) {
                     mBank.setText(user.getIssuingbankName());
                 }
@@ -141,7 +169,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 }
             }
         }
-
     }
 
     //
@@ -256,7 +283,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         }
     }
 
-    // TODO: 2016/9/9 缺少取消按钮 
+    boolean mIsCall = false;
+
+    // TODO: 2016/9/9 缺少取消按钮
     private void unwrapBindServiceTelephone() {
         String dialogContent = getString(R.string.unBind_dialog_content, UNWRAP_SERVICE_TELEPHONE);
         SmartDialog.with(getActivity(), dialogContent)
@@ -264,11 +293,29 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel" + UNWRAP_SERVICE_TELEPHONE));
+                        boolean showing = dialog.isShowing();
+                        dialog.dismiss();
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + UNWRAP_SERVICE_TELEPHONE));
                         startActivity(intent);
+                    }
+                })
+                .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
                         dialog.dismiss();
                     }
-                }).show();
+                })
+                .show();
+    }
+
+    @Override
+    protected void onStart() {
+        if (mIsCall) {
+
+            mIsCall = false;
+        }
+        Log.d("wj", "====mIsCall " + mIsCall);
+        super.onStart();
     }
 
     /**

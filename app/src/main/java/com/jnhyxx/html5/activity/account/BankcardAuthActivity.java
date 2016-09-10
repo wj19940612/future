@@ -264,9 +264,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        dialog.dismiss();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel" + UNWRAP_SERVICE_TELEPHONE));
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 }).show();
     }

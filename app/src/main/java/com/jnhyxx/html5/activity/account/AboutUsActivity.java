@@ -17,7 +17,7 @@ import butterknife.OnClick;
 
 public class AboutUsActivity extends BaseActivity {
     private static final String TAG = "AboutUsActivity";
-    private static final String SERVIVE_QQ = "3088152027";
+    private static final String SERVICE_QQ = "3088152027";
     @BindView(R.id.activityAboutUsTvVersionName)
     TextView mTVVersionName;
     //    //公司简介
@@ -42,7 +42,7 @@ public class AboutUsActivity extends BaseActivity {
 //    TextView tv_collaborate_case;
     //公司热线
     @BindView(R.id.activityAboutUsRCompanyTelephone)
-    RelativeLayout mRlCompanyTelphone;
+    RelativeLayout mRlCompanyTelephone;
     //记录被点击的item;
     private int selectPosition = -1;
 
@@ -85,7 +85,7 @@ public class AboutUsActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.activityAboutUsRlServiceQq:
-                String serviceQQUrl = "mqqwpa://im/chat?chat_type=wpa&uin=" + SERVIVE_QQ + "&version=1";
+                String serviceQQUrl = "mqqwpa://im/chat?chat_type=wpa&uin=" + SERVICE_QQ + "&version=1";
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
                 break;
 

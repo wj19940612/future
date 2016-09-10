@@ -18,23 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            app:barBackground="@android:color/transparent"
             app:rightImage="@drawable/ic_account_nav_setting"
-            app:rightVisible="true"
-            app:barBackground="@android:color/transparent"/>
-        <!--  <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
-              <ImageView
-                  android:id="@+id/fragment_account_titleBar_iv_setting"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_alignParentRight="true"
-                  android:clickable="true"
-                  android:paddingRight="15dp"
-                  android:paddingTop="17dp"
-                  android:src="@drawable/account_nav_icon_setting" />
-          </RelativeLayout>-->
+            app:rightVisible="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,8 +36,8 @@
                 android:orientation="vertical">
 
                 <com.jnhyxx.html5.view.CircularAnnulusImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="74dp"
+                    android:layout_height="74dp"
                     android:src="@drawable/account_main_pic_user"
                     app:borderColor="@android:color/holo_red_light"
                     app:borderWidth="3dp" />
@@ -61,30 +47,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:padding="6dp"
+                    android:paddingTop="12dp"
                     android:text="@string/account_not_login"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
 
-                <LinearLayout
+                   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:gravity="center"
+                       android:paddingTop="10dp">
+
+                       <ImageView
+                           android:id="@+id/imageView"
+                           android:layout_width="12dp"
+                           android:layout_height="12dp"
+                           android:src="@drawable/account_main_icon_integration" />
+
+                       <TextView
+                           android:id="@+id/score"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="5dp"
+                           android:paddingLeft="5dp"
+                           android:text="@string/account_mine_integral"
+                           android:textColor="@color/account_top_blue_text" />
+                   </LinearLayout>
+               <!-- <TextView
+                    android:id="@+id/score"
+                    android:gravity="center"
+                    android:drawablePadding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:src="@drawable/account_main_icon_integration" />
-
-                    <TextView
-                        android:id="@+id/score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:paddingLeft="5dp"
-                        android:text="@string/account_mine_integral"
-                        android:textColor="@color/account_top_blue_text" />
-                </LinearLayout>
+                    android:drawableLeft="@drawable/account_main_icon_integration"
+                    android:paddingTop="10dp"
+                    android:text="@string/account_mine_integral"
+                    android:textColor="@color/account_top_blue_text" />-->
             </LinearLayout>
 
             <View
@@ -191,258 +189,16 @@
     </RelativeLayout>
 
 
-    <!--原来的设计，账户余额和我的积分，可以删除-->
-    <!--    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:id="@+id/balance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/account_balance"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/splitLine" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:id="@+id/score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/account_score"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-          <LinearLayout
-              android:id="@+id/signArea"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:padding="16dp">
-
-              <TextView
-                  android:id="@+id/signInButton"
-                  style="@style/SignInButton"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_marginRight="32dp"
-                  android:layout_weight="1"
-                  android:text="@string/sign_in" />
-
-              <TextView
-                  android:id="@+id/signUp"
-                  style="@style/SignInButton"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:text="@string/sign_up_free" />
-          </LinearLayout>-->
-    <!-- <RelativeLayout
-           android:id="@+id/messageCenter"
-           android:layout_width="match_parent"
-           android:layout_height="60dp"
-           android:background="@android:color/white"
-           android:clickable="true"
-           android:paddingBottom="1dp"
-           android:paddingLeft="16dp">
-
-           <ImageView
-               android:id="@+id/account_image_help_message"
-               android:layout_width="22dp"
-               android:layout_height="22dp"
-               android:layout_centerVertical="true"
-               android:scaleType="centerCrop"
-               android:src="@drawable/list_icon_news"/>
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_centerVertical="true"
-               android:layout_toRightOf="@+id/account_image_help_message"
-               android:paddingLeft="16dp"
-               android:text="@string/message_center"
-               android:textColor="@color/account_center_text"/>
-
-           <TextView
-               android:id="@+id/account_tv_message_number"
-               android:layout_width="16dp"
-               android:layout_height="16dp"
-               android:layout_alignParentRight="true"
-               android:layout_centerVertical="true"
-               android:layout_marginRight="43dp"
-               android:layout_toLeftOf="@+id/account_image_help_message_arrow"
-               android:background="@drawable/account_message_warm"/>
-
-           <ImageView
-               android:id="@+id/account_image_help_message_arrow"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignParentRight="true"
-               android:layout_centerVertical="true"
-               android:paddingRight="16dp"
-               android:src="@drawable/common_big_arrow_list_icon_more"/>
-       </RelativeLayout>
-
-       <include layout="@layout/split_line"/>
-
-     <RelativeLayout
-         android:id="@+id/fundDetail"
-         android:layout_width="match_parent"
-         android:layout_height="60dp"
-         android:background="@android:color/white"
-         android:clickable="true"
-         android:paddingBottom="1dp"
-         android:paddingLeft="16dp">
-
-         <ImageView
-             android:id="@+id/account_image_help_fundDetail"
-             android:layout_width="22dp"
-             android:layout_height="22dp"
-             android:layout_centerVertical="true"
-             android:scaleType="centerCrop"
-             android:src="@drawable/account_list_icon_detail"/>
-
-         <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerVertical="true"
-             android:layout_toRightOf="@+id/account_image_help_fundDetail"
-             android:paddingLeft="16dp"
-             android:text="@string/account_trade_info"
-             android:textColor="@color/account_center_text"/>
-
-
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
-             android:layout_centerVertical="true"
-             android:paddingRight="16dp"
-             android:src="@drawable/common_big_arrow_list_icon_more"/>
-     </RelativeLayout>
-
-     <include layout="@layout/split_line"/>
-
-     <RelativeLayout
-         android:id="@+id/paidToPromote"
-         android:layout_width="match_parent"
-         android:layout_height="60dp"
-         android:background="@android:color/white"
-         android:clickable="true"
-         android:paddingBottom="1dp"
-         android:paddingLeft="16dp">
-
-         <ImageView
-             android:id="@+id/account_image_help_paidToPromote"
-             android:layout_width="22dp"
-             android:layout_height="22dp"
-             android:layout_centerVertical="true"
-             android:scaleType="centerCrop"
-             android:src="@drawable/account_list_icon_brand"/>
-
-         <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerVertical="true"
-             android:layout_toRightOf="@+id/account_image_help_paidToPromote"
-             android:paddingLeft="16dp"
-             android:text="@string/paid_to_promote"
-             android:textColor="@color/account_center_text"/>
-
-
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
-             android:layout_centerVertical="true"
-             android:paddingRight="16dp"
-             android:src="@drawable/common_big_arrow_list_icon_more"/>
-     </RelativeLayout>
-
-     <include layout="@layout/split_line"/>
-
-     <RelativeLayout
-         android:id="@+id/aboutUs"
-         android:layout_width="match_parent"
-         android:layout_height="60dp"
-         android:background="@android:color/white"
-         android:clickable="true"
-         android:paddingBottom="1dp"
-         android:paddingLeft="16dp">
-
-         <ImageView
-             android:id="@+id/account_image_help_personalInfo"
-             android:layout_width="22dp"
-             android:layout_height="22dp"
-             android:layout_centerVertical="true"
-             android:scaleType="centerCrop"
-          />
-
-         <TextView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerVertical="true"
-             android:layout_toRightOf="@+id/account_image_help_personalInfo"
-             android:paddingLeft="16dp"
-             android:text="@string/account_aboutus"
-             android:textColor="@color/account_center_text"/>
-
-
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentRight="true"
-             android:layout_centerVertical="true"
-             android:paddingRight="16dp"
-             android:src="@drawable/common_big_arrow_list_icon_more"/>
-     </RelativeLayout>-->
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        app:leftIcon="@drawable/list_icon_news"
+        app:leftIcon="@drawable/ic_account_list_news"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/message_center"
         app:rowTextColor="@android:color/black"
-        app:subText="数字"/>
+        app:subText="数字" />
 
     <include layout="@layout/split_line" />
 
@@ -452,7 +208,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        app:leftIcon="@drawable/list_icon_detail"
+        app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_trade_info"
         app:rowTextColor="@color/account_center_text" />
@@ -479,7 +235,7 @@
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
         android:paddingTop="@dimen/dp_1"
-        app:leftIcon="@drawable/list_icon_brand"
+        app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
         app:rowTextColor="@color/account_center_text" />
@@ -491,7 +247,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         android:background="@android:color/white"
-        app:leftIcon="@drawable/list_icon_aboutus"
+        app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_aboutUs"
         app:rowTextColor="@color/account_center_text" />

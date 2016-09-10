@@ -8,17 +8,21 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
 import com.jnhyxx.html5.activity.account.NameAuthActivity;
 import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.account.UserIsModifyNickName;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.view.CustomToast;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -134,7 +138,7 @@ public class SettingActivity extends BaseActivity {
         switch (view.getId()) {
             //用户名
             case R.id.rlUserNameSetting:
-                Launcher.with(SettingActivity.this, ModifyNickNameActivity.class).executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
+                updateNickName();
                 break;
             case R.id.rlRealNameSetting:
                 Launcher.with(SettingActivity.this, NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
@@ -147,6 +151,21 @@ public class SettingActivity extends BaseActivity {
                 break;
         }
     }
+
+    private void updateNickName() {
+        API.User.findIsUpdateNickName().setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<UserIsModifyNickName>>() {
+
+            @Override
+            protected void onRespSuccess(Resp<UserIsModifyNickName> resp) {
+                if (!resp.getData().isBIsSetNickName()) {
+                    Launcher.with(SettingActivity.this, ModifyNickNameActivity.class).executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
+                }else{
+                    ToastUtil.curt(R.string.modify_nick_name_twice);
+                }
+            }
+        }).fire();
+    }
+
 
     //退出登陆
     private void loginOut() {
@@ -161,7 +180,9 @@ public class SettingActivity extends BaseActivity {
                     if (resp.isSuccess()) {
                         localCacheUserInfoManager.setUser(null);
                         mTvUserPhoneSetting.setText("");
-                        mTvUserNameSetting.setText("");
+                        mTvUserNameSetting.setText(R.string.nickname_unknown);
+                        mTvBindBankCardSetting.setText(R.string.nickname_unknown);
+                        mTvRealNameSetting.setText(R.string.nickname_unknown);
                     }
                 }
             }).fire();

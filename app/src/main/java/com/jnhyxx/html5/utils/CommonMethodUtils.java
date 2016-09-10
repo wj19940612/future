@@ -295,17 +295,22 @@ public class CommonMethodUtils {
      * @return
      */
     public static boolean getNicknameStatus(String nickName) {
-        nickName = nickName.trim();
-        Pattern number = Pattern.compile("[0-9]*");
-        Matcher numberMatcher = number.matcher(nickName);
-        Pattern letter = Pattern.compile("[a-zA-Z]");
-        Matcher letterMatcher = letter.matcher(nickName);
-        Pattern chinese = Pattern.compile("[\u4e00-\u9fa5]");
-        Matcher chineseMatcher = chinese.matcher(nickName);
-        if (numberMatcher.matches() && letterMatcher.matches() && chineseMatcher.matches()) {
-            return true;
-        }
-        return false;
+//        nickName = nickName.trim();
+//        Pattern number = Pattern.compile("[0-9]*");
+//        Matcher numberMatcher = number.matcher(nickName);
+//        Pattern letter = Pattern.compile("[a-zA-Z]");
+//        Matcher letterMatcher = letter.matcher(nickName);
+//        Pattern chinese = Pattern.compile("[\u4e00-\u9fa5]");
+//        Matcher chineseMatcher = chinese.matcher(nickName);
+//        if (numberMatcher.matches() && letterMatcher.matches() && chineseMatcher.matches()) {
+//            return true;
+//        }
+//
+
+        String all = "^[\\u4E00-\\u9FA5\\uF900-\\uFA2D\\w]{2,16}";//{2,10}表示字符的长度是2-10
+        Pattern pattern = Pattern.compile(all);
+        boolean result = Pattern.matches(all, nickName);
+        return result;
     }
 
 }

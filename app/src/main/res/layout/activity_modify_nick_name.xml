@@ -14,13 +14,17 @@
         app:backFeature="true"
         app:titleText="@string/modify_nick_name_title" />
 
+    <include layout="@layout/common_fail_warn"
+        android:id="@+id/modifyNickNameFailWarnWarn"
+        android:visibility="gone"/>
+
     <LinearLayout style="@style/settingLinearLayout">
 
         <TextView
             style="@style/settingTitleTextView"
-            android:minWidth="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="50dp"
             android:text="@string/modify_nick_name"
             android:textColor="#262626" />
 
@@ -30,8 +34,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLength="16"
             android:hint="@string/modify_nick_name_editText_hint"
+            android:maxLength="16"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -45,22 +49,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="15dp"
-        android:textSize="12sp"
-        android:layout_marginBottom="50dp"
+        android:text="@string/modify_nick_name_warn"
         android:textColor="#FB4B55"
-        android:text="@string/modify_nick_name_warn" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/submitNickName"
         style="@style/PrimaryRedButton"
-        android:textSize="17sp"
-        android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/ok" />
+        android:text="@string/ok"
+        android:textColor="@android:color/white"
+        android:textSize="17sp" />
 </LinearLayout>

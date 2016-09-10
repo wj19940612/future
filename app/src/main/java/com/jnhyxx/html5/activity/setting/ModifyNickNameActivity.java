@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -29,6 +30,10 @@ public class ModifyNickNameActivity extends BaseActivity {
     EditText mEtModifyNickName;
     @BindView(R.id.submitNickName)
     TextView mSubmitNickName;
+    @BindView(R.id.modifyNickNameFailWarnWarn)
+    RelativeLayout mModifyNickNameFailWarnWarn;
+    @BindView(R.id.commonFailTvWarn)
+    TextView mCommonFailTvWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +41,23 @@ public class ModifyNickNameActivity extends BaseActivity {
         setContentView(R.layout.activity_modify_nick_name);
         ButterKnife.bind(this);
 
+
+        mCommonFailTvWarn.setText(R.string.modify_nick_name_submit_warn);
+        setOnClickListener();
+    }
+
+    private void setOnClickListener() {
         mEtModifyNickName.addTextChangedListener(mValidationWatcher);
         mSubmitNickName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nickName = mEtModifyNickName.getText().toString();
+                String nickName = mEtModifyNickName.getText().toString().trim();
                 if (nickName.length() < 2) {
                     ToastUtil.curt(R.string.common_txt_length_fail);
                     return;
                 }
                 if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-                    ToastUtil.curt(R.string.modify_nick_name_submit_warn);
+                    mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
                     return;
                 }
                 submitNickName(nickName);
@@ -77,6 +88,9 @@ public class ModifyNickNameActivity extends BaseActivity {
             boolean etModifyNickName = getEtModifyNickName();
             if (etModifyNickName != mSubmitNickName.isEnabled()) {
                 mSubmitNickName.setEnabled(etModifyNickName);
+            }
+            if (!etModifyNickName && mCommonFailTvWarn.isShown()) {
+                mModifyNickNameFailWarnWarn.setVisibility(View.GONE);
             }
         }
     };

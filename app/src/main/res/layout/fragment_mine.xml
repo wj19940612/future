@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
               android:background="#EDF0F5"
               android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.fragment.AccountFragment">
+              tools:context=".fragment.MineFragment">
 
     <!-- 层级可优化 -->
     <RelativeLayout

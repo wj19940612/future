@@ -38,7 +38,7 @@ import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AccountFragment extends BaseFragment {
+public class MineFragment extends BaseFragment {
     //登陆的请求码
     private static final int REQUEST_CODE_LOGIN = 967;
     //设置界面的请求码
@@ -88,7 +88,7 @@ public class AccountFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_mine, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
     }

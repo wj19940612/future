@@ -125,14 +125,19 @@
         <activity
             android:name=".activity.account.MessageCenterListItemInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.account.AboutUsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.account.ExpandMakeMoneyActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.account.tradedetail.TradeDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.setting.SettingActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.AboutUsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.account.ExpandMakeMoneyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.account.tradedetail.TradeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.setting.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.setting.ModifyNickNameActivity"></activity>
     </application>
 
 </manifest>

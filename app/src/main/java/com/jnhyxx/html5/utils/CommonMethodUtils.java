@@ -288,5 +288,25 @@ public class CommonMethodUtils {
         return safeBankNumber;
     }
 
+    /**
+     * 限制昵称只能输入中文、字母和数字
+     *
+     * @param nickName
+     * @return
+     */
+    public static boolean getNicknameStatus(String nickName) {
+        nickName = nickName.trim();
+        Pattern number = Pattern.compile("[0-9]*");
+        Matcher numberMatcher = number.matcher(nickName);
+        Pattern letter = Pattern.compile("[a-zA-Z]");
+        Matcher letterMatcher = letter.matcher(nickName);
+        Pattern chinese = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher chineseMatcher = chinese.matcher(nickName);
+        if (numberMatcher.matches() && letterMatcher.matches() && chineseMatcher.matches()) {
+            return true;
+        }
+        return false;
+    }
+
 }
 

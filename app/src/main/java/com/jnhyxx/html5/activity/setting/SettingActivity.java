@@ -48,6 +48,10 @@ public class SettingActivity extends BaseActivity {
     private static final int REQUEST_CODE_NAME_AUTH = 900;
     //绑定银行卡的请求码
     private static final int REQUEST_CODE_BIND_BANK = 24400;
+    //修改昵称的请求码
+    private static final int REQUEST_CODE_MODIFY_NICK_NAME = 45900;
+
+    LocalCacheUserInfoManager mLocalCacheUserInfoManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +62,19 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initData() {
-        LocalCacheUserInfoManager localCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        UserInfo userInfo = localCacheUserInfoManager.getUser();
-        if (!localCacheUserInfoManager.isLogin()) {
+        mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
+        UserInfo userInfo = mLocalCacheUserInfoManager.getUser();
+        if (!mLocalCacheUserInfoManager.isLogin()) {
             mTvRealNameSetting.setText(R.string.nickname_unknown);
             mRlRealNameSetting.setEnabled(false);
             mTvBindBankCardSetting.setText(R.string.nickname_unknown);
             mRlBindBankCardSetting.setEnabled(false);
+            mTvUserNameSetting.setText(R.string.nickname_unknown);
+            mRlUserNameSetting.setEnabled(false);
         }
         if (userInfo != null) {
             Log.d(TAG, "用户信息 " + userInfo.toString());
-            if (!TextUtils.isEmpty(userInfo.getUserName())) {
-                mTvUserNameSetting.setText(userInfo.getUserName());
-            }
+            getUserNickName(userInfo);
             if (!TextUtils.isEmpty(userInfo.getUserPhone())) {
                 String userPhone = userInfo.getUserPhone();
                 String phoneNumberMiddle = CommonMethodUtils.hidePhoneNumberMiddle(userPhone);
@@ -78,11 +82,16 @@ public class SettingActivity extends BaseActivity {
                 Log.d(TAG, "手机号码" + userPhone);
             }
 
-            getRealNameStatus(localCacheUserInfoManager, userInfo);
-            getBindBankStatus(localCacheUserInfoManager, userInfo);
-
+            getRealNameStatus(mLocalCacheUserInfoManager, userInfo);
+            getBindBankStatus(mLocalCacheUserInfoManager, userInfo);
         }
 
+    }
+
+    private void getUserNickName(UserInfo userInfo) {
+        if (!TextUtils.isEmpty(userInfo.getUserName())) {
+            mTvUserNameSetting.setText(userInfo.getUserName());
+        }
     }
 
     private void getBindBankStatus(LocalCacheUserInfoManager localCacheUserInfoManager, UserInfo userInfo) {
@@ -125,6 +134,7 @@ public class SettingActivity extends BaseActivity {
         switch (view.getId()) {
             //用户名
             case R.id.rlUserNameSetting:
+                Launcher.with(SettingActivity.this, ModifyNickNameActivity.class).executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
                 break;
             case R.id.rlRealNameSetting:
                 Launcher.with(SettingActivity.this, NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
@@ -166,6 +176,11 @@ public class SettingActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE_NAME_AUTH && resultCode == RESULT_OK) {
             if (user != null) {
                 getRealNameStatus(instance, user);
+            }
+        }
+        if (requestCode == REQUEST_CODE_MODIFY_NICK_NAME && resultCode == RESULT_OK) {
+            if (user != null) {
+                getUserNickName(user);
             }
         }
     }

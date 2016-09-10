@@ -313,4 +313,15 @@
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">您是否要拨打客服电话:\n  %1$s  \n解绑换卡</string>
+
+    <!--修改昵称-->
+    <string name="modify_nick_name">昵称</string>
+    <string name="modify_nick_name_title">修改昵称</string>
+    <string name="modify_nick_name_warn">昵称只能由中文、英文、数字组成,暂只支持修改一次。</string>
+    <string name="modify_nick_name_success">昵称修改成功</string>
+    <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
+    <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
+
+    <!-- **********************************************************************   公共的字符    **********************************************************************-->
+    <string name="common_txt_length_fail">请至少输入2个字符</string>
 </resources>

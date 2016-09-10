@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.LoginInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -52,16 +51,14 @@ public class SignUpActivity extends BaseActivity {
     TextView mObtainAuthCode;
     @BindView(R.id.password)
     EditText mPassword;
-    //    @BindView(R.id.promoteCode)
-//    EditText mPromoteCode;
     @BindView(R.id.agree_protocol)
     CheckBox mAgreeProtocol;
     @BindView(R.id.service_protocol)
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
-    @BindView(R.id.registerTitleBar)
-    TitleBar mtitleBar;
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -83,6 +80,7 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+
         mPhoneNum.addTextChangedListener(mValidationWatcher);
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
@@ -104,7 +102,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void jumpLoginActivity() {
-        mtitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
@@ -210,8 +208,8 @@ public class SignUpActivity extends BaseActivity {
                             // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                            LocalUser.getUser().setLoginInfo(info);
-                            LocalUser.getUser().setLoginInfo(info);
+                            LocalUser.getUser().setUserInfo(info);
+                            LocalUser.getUser().setUserInfo(info);
 
                             SmartDialog.with(getActivity(), resp.getMsg())
                                     .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

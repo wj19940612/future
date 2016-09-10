@@ -19,7 +19,6 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.setting.SettingActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -55,7 +54,7 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.signInButton)
     TextView mSignIn;
     //注册
-    @BindView(R.id.signUp)
+    @BindView(R.id.signUpButton)
     TextView mSignUp;
     // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText();
     //消息中心
@@ -120,9 +119,9 @@ public class MineFragment extends BaseFragment {
 //        if (User.getUser().isLogin()) {\
         if (LocalCacheUserInfoManager.getInstance().isLogin()) {
             // TODO: 2016/8/31 这里会报空指针
-//            String format = String.format(" ", User.getUser().getLoginInfo().getUserInfo().getNick());
+//            String format = String.format(" ", User.getUser().getUserInfo().getUserInfo().getNick());
 //            Log.d(TAG, " " + format);
-//            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getLoginInfo().getUserInfo().getNick()));
+//            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getUserInfo().getUserInfo().getNick()));
 //            mSignArea.setVisibility(View.GONE);
 //            mFundArea.setVisibility(View.VISIBLE);
 //            mTitleBar.setRightVisible(true);
@@ -136,9 +135,9 @@ public class MineFragment extends BaseFragment {
 
        /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
         if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
-            String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick());
+            String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getUserInfo().getUserInfo().getNick());
             Log.d(TAG, " " + format);
-            mNickname.setText(getString(R.string.nickname_logged, com.jnhyxx.html5.domain.local.User.getUser().getLoginInfo().getUserInfo().getNick()));
+            mNickname.setText(getString(R.string.nickname_logged, com.jnhyxx.html5.domain.local.User.getUser().getUserInfo().getUserInfo().getNick()));
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
@@ -183,13 +182,13 @@ public class MineFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.signInButton, R.id.signUp, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
                 Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
                 break;
-            case R.id.signUp:
+            case R.id.signUpButton:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             //充值

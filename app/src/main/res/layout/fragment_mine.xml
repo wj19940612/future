@@ -7,7 +7,6 @@
               android:orientation="vertical"
               tools:context=".fragment.MineFragment">
 
-    <!-- 层级可优化 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,7 +124,7 @@
                         android:textColor="@android:color/white"/>
 
                     <TextView
-                        android:id="@+id/signUp"
+                        android:id="@+id/signUpButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -177,7 +176,7 @@
 
         </LinearLayout>
     </RelativeLayout>
-    
+
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"

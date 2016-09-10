@@ -20,7 +20,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="93dp"
@@ -61,7 +60,6 @@
                 android:visibility="gone"/>
         </RelativeLayout>
 
-
         <include layout="@layout/split_line_thick"/>
 
         <RelativeLayout
@@ -74,7 +72,6 @@
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/login_icon_lock"/>
-
 
             <EditText
                 android:id="@+id/password"
@@ -107,7 +104,7 @@
             android:text="@string/sign_in"/>
 
         <TextView
-            android:id="@+id/signUp"
+            android:id="@+id/signUpButton"
             style="@style/PrimaryRedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

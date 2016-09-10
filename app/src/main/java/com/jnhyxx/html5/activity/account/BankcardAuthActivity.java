@@ -19,7 +19,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
@@ -101,7 +100,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //                    }
 //                }).fire();
         LocalCacheUserInfoManager mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        if (!mLocalCacheUserInfoManager.isLogin()) {
+        if (!LocalUser.getUser().isLogin()) {
             ToastUtil.curt(R.string.nickname_unknown);
         }
         UserInfo user = mLocalCacheUserInfoManager.getUser();

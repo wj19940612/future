@@ -98,7 +98,7 @@ public class WithdrawActivity extends BaseActivity {
         }
 
         double amount = Double.valueOf(withdrawAmount);
-        API.Finance.withdraw(LocalUser.getUser().getLoginInfo().getTokenInfo().getToken(), amount)
+        API.Finance.withdraw(LocalUser.getUser().getUserInfo().getTokenInfo().getToken(), amount)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {

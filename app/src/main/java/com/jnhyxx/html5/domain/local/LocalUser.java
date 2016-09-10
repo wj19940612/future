@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.Preference;
-import com.jnhyxx.html5.domain.LoginInfo;
+import com.jnhyxx.html5.domain.account.UserInfo;
 
 public class LocalUser {
 
@@ -12,7 +12,7 @@ public class LocalUser {
         void get(T t);
     }
 
-    private LoginInfo mLoginInfo;
+    private UserInfo mUserInfo;
 
     private static LocalUser sLocalUser;
     private static boolean sReload;
@@ -41,21 +41,21 @@ public class LocalUser {
         sReload = true;
     }
 
-    public void setLoginInfo(LoginInfo loginInfo) {
-        mLoginInfo = loginInfo;
+    public void setUserInfo(UserInfo userInfo) {
+        mUserInfo = userInfo;
         saveToPreference();
     }
 
-    public LoginInfo getLoginInfo() {
-        return mLoginInfo;
+    public UserInfo getUserInfo() {
+        return mUserInfo;
     }
 
     public boolean isLogin() {
-        return mLoginInfo != null;
+        return mUserInfo != null;
     }
 
     public void logout() {
-        mLoginInfo = null;
+        mUserInfo = null;
         saveToPreference();
     }
 
@@ -64,16 +64,13 @@ public class LocalUser {
      * @return
      */
     public String getToken() {
-        if (getLoginInfo() != null) {
-            return getLoginInfo().getTokenInfo().getToken();
-        }
         return "";
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "mLoginInfo=" + mLoginInfo +
+                "mUserInfo=" + mUserInfo +
                 '}';
     }
 

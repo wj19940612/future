@@ -1,19 +1,5 @@
 package com.jnhyxx.html5.domain.account;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by Administrator on 2016/8/31.
- */
-
 public class UserFundInfo {
 
     /**
@@ -38,50 +24,6 @@ public class UserFundInfo {
     private int scoreUsable;
     private String updateTime;
     private int userId;
-
-    public static UserFundInfo objectFromData(String str) {
-
-        return new Gson().fromJson(str, UserFundInfo.class);
-    }
-
-    public static UserFundInfo objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), UserFundInfo.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static List<UserFundInfo> arrayUserFundInfoFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<UserFundInfo>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
-
-    public static List<UserFundInfo> arrayUserFundInfoFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<UserFundInfo>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
-    }
 
     public String getCreateTime() {
         return createTime;

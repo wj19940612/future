@@ -22,6 +22,7 @@ import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.MarketData;
+import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
@@ -30,6 +31,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
@@ -84,8 +86,7 @@ public class HomeFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
-                    // TODO: 8/29/16 要先请求socket连接地址和端口
-                    requestProductExchangeStatus(pkg.getProduct());
+                    requestServerIpAndPort(pkg);
                 }
             }
         });
@@ -94,6 +95,17 @@ public class HomeFragment extends BaseFragment {
         requestOrderReport();
         requestProductList();
         requestProductMarketList();
+    }
+
+    private void requestServerIpAndPort(final ProductPkg pkg) {
+        API.Market.getMarketServerIpAndPort().setTag(TAG)
+                .setCallback(new Callback2<Resp<MarketServer>, MarketServer>() {
+                    @Override
+                    public void onRespSuccess(MarketServer marketServer) {
+                        NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+                        requestProductExchangeStatus(pkg.getProduct());
+                    }
+                }).fire();
     }
 
     private void requestProductExchangeStatus(final Product product) {

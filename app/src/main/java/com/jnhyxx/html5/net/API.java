@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -537,8 +536,7 @@ public class API extends APIBase {
     public static class Market {
 
         /**
-         * /market/futureCommodity/select 获取首页产品列表
-         * /order/variety/getVariety.do
+         * /order/variety/getVariety.do 获取首页产品列表
          *
          * @return
          */
@@ -553,6 +551,15 @@ public class API extends APIBase {
          */
         public static API getProductMarketList() {
             return new API(GET, "/quota/quota/getAllQuotaData.do", null);
+        }
+
+        /**
+         * /quota/quota/getAllIpPortByCode.do 获取行情服务器 ip & port
+         *
+         * @return
+         */
+        public static API getMarketServerIpAndPort() {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
         }
     }
 

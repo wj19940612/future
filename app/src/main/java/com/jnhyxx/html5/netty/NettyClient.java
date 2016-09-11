@@ -24,9 +24,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
 
-    private final static String DEFAULT_HOST = "139.196.178.195";
-    private final static int DEFAULT_PORT = 13502;
-
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
 
@@ -136,7 +133,7 @@ public class NettyClient {
         }
     }
 
-    public void setHostAndPort(String host, String port) {
+    public void setIpAndPort(String host, String port) {
         try {
             this.mHost = host;
             this.mPort = Integer.valueOf(port);
@@ -167,11 +164,6 @@ public class NettyClient {
 
     private void connect() {
         if (mClosed && mBootstrap != null) return;
-        Log.d("TEST", "connect: ");
-        if (mHost == null || mPort == null) {
-            mHost = DEFAULT_HOST;
-            mPort = DEFAULT_PORT;
-        }
 
         ChannelFuture channelFuture = mBootstrap.connect(mHost, mPort);
         channelFuture.addListener(new ChannelFutureListener() {

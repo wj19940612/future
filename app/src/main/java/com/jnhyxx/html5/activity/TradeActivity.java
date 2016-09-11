@@ -24,6 +24,7 @@ import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
@@ -50,6 +51,8 @@ import butterknife.OnClick;
 
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback {
+
+    private static final int REQ_CODE_SIGN_IN = -1;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -117,7 +120,8 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setOnViewClickListener(new TradePageHeader.OnViewClickListener() {
             @Override
             public void onSignInButtonClick() {
-
+                Launcher.with(getActivity(), SignInActivity.class)
+                        .executeForResult(REQ_CODE_SIGN_IN);
             }
 
             @Override
@@ -140,8 +144,28 @@ public class TradeActivity extends BaseActivity implements
         });
 
         updateTitleBar();
+        updateTradePagerHeader();
         updateChartView();
         updateExchangeStatusView();
+
+        requestHoldingOrderList();
+    }
+
+    private void updateTradePagerHeader() {
+        if (LocalUser.getUser().isLogin()) {
+            mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
+            mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
+        } else {
+            mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
+            updateTradePagerHeader();
+        }
     }
 
     private void updateTitleBar() {
@@ -155,7 +179,7 @@ public class TradeActivity extends BaseActivity implements
                 Launcher.with(getActivity(), WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
                         .execute();
-                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhone(), mProduct.getVarietyType());
+                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhoneNum(), mProduct.getVarietyType());
             }
         });
         ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
@@ -186,14 +210,7 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (LocalUser.getUser().isLogin()) {
-            mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
-            mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
-        } else {
-            mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
-        }
-
-        String userPhone = LocalUser.getUser().getUserPhone();
+        String userPhone = LocalUser.getUser().getUserPhoneNum();
         if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
             mQuestionMark.stop();
         } else {
@@ -201,6 +218,10 @@ public class TradeActivity extends BaseActivity implements
         }
 
         startScheduleJob(60 * 1000);
+    }
+
+    private void requestHoldingOrderList() {
+
     }
 
     @Override
@@ -298,7 +319,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void placeOrder(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhone();
+        String userPhone = LocalUser.getUser().getUserPhoneNum();
         if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
             showPlaceOrderFragment(longOrShort);
         } else {
@@ -371,7 +392,7 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhone();
+        String userPhone = LocalUser.getUser().getUserPhoneNum();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         hideFragmentOfContainer();
         placeOrder(longOrShort);

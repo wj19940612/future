@@ -57,7 +57,7 @@
 
         <TextView
             android:id="@+id/addBankcardButton"
-            style="@style/PrimaryRedButton"
+            style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -144,7 +144,7 @@
 
         <TextView
             android:id="@+id/confirmButton"
-            style="@style/PrimaryRedButton"
+            style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

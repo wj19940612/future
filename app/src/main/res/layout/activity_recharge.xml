@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/nextStepButton"
-            style="@style/PrimaryRedButton"
+            style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="true"

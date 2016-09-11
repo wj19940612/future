@@ -8,7 +8,7 @@
     tools:context="com.jnhyxx.html5.activity.account.SignUpActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/registerTitleBar"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -54,21 +54,21 @@
                    android:layout_weight="1"
                    android:hint="@string/please_input_phone_num"/>-->
             <ImageView
-                android:id="@+id/help_phoneNumImage"
+                android:id="@+id/helpPhoneNumImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/login_icon_phone" />
 
             <EditText
-                android:id="@+id/activity_register_phoneNum"
+                android:id="@+id/activityRegisterPhoneNum"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/help_phoneNumImage"
+                android:layout_toRightOf="@+id/helpPhoneNumImage"
                 android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
         </RelativeLayout>
 
         <include layout="@layout/split_line_thick" />
@@ -101,14 +101,14 @@
                 android:src="@drawable/login_icon_code" />
 
             <EditText
-                android:id="@+id/activity_register_messageAuthCode"
+                android:id="@+id/activityRegisterMessageAuthCode"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/help_messageAuthCode"
                 android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <TextView
                 android:id="@+id/obtainAuthCode"
@@ -163,19 +163,33 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/help_RetrieveImage"
-                android:hint="@string/register_code_image"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:hint="@string/register_code_image_hint"
+                android:textColorHint="@color/grayHint" />
 
             <TextView
-                android:text="动态验证码"
                 android:id="@+id/tvRegisterRetrieveImage"
                 android:layout_width="85dp"
                 android:layout_height="34dp"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="5dp"
+                android:layout_alignTop="@+id/etRegisterRetrieveImage"
                 android:clickable="true"
                 android:gravity="center"
+                android:text="@string/register_code_image"
+                android:textColor="@android:color/black"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/ivRegisterRetrieveImage"
+                android:layout_width="85dp"
+                android:layout_height="34dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/etRegisterRetrieveImage"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/register_code_image"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
         </RelativeLayout>
@@ -206,7 +220,7 @@
             android:layout_height="60dp">
 
             <ImageView
-                android:id="@+id/help_passwordImage"
+                android:id="@+id/helpPasswordImage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
@@ -219,12 +233,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/help_passwordImage"
+                android:layout_toRightOf="@+id/helpPasswordImage"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <ImageView
-                android:id="@+id/login_image_password_type"
+                android:id="@+id/showPasswordButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
@@ -291,11 +305,16 @@
 
     <TextView
         android:id="@+id/signUpButton"
-        style="@style/PrimaryRedButton"
+        style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
         android:text="@string/sign_up_free" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

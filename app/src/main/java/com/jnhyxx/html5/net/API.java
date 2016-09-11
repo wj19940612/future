@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.net;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.BuildConfig;
@@ -11,7 +13,7 @@ import com.umeng.message.UmengRegistrar;
 import java.security.NoSuchAlgorithmException;
 
 public class API extends APIBase {
-
+    private static final String TAG = "API";
     private static final int GET = Request.Method.GET;
 
     public static final String TELE = "tele";
@@ -88,8 +90,22 @@ public class API extends APIBase {
 //                            .put(SIGN, sign));
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
-                            .put("userPhone", tele)
-                            .put(SIGN, sign));
+                            .put("userPhone", tele));
+//                            .put(SIGN, sign)
+        }
+
+        /**
+         * 接口名：获取注册图片验证码  user/user/getRegImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+
+        public static API getRegisterImage(String userPhone) {
+
+            return new API("/user/user/getRegImage.do",
+                    new ApiParams()
+                            .put("userPhone", userPhone));
         }
 
         /**
@@ -119,10 +135,11 @@ public class API extends APIBase {
          * @return
          */
         public static API authCodeWhenFindPassword(String tele, String code) {
-            return new API("/user/sms/authLoginPwdCode",
+//            return new API("/user/sms/authLoginPwdCode",
+            return new API("/user/user/checkRetriveMsgCode.do",
                     new ApiParams()
-                            .put(TELE, tele)
-                            .put(CODE, code));
+                            .put("userPhone", tele)
+                            .put("msgCode", code));
         }
 
         /**
@@ -133,7 +150,14 @@ public class API extends APIBase {
          * @param regCode
          */
         public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
-            return new API("/user/register.do",
+//            return new API("/user/register.do"
+            try {
+                password = SecurityUtil.md5Encrypt(password);
+                Log.d(TAG, "注册时密码MD5加密" + password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return new API("/user/user/register.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
                             .put("userPass", password)
@@ -157,8 +181,11 @@ public class API extends APIBase {
          */
         public static API signIn(String phoneNum, String password) {
             try {
-                if (!BuildConfig.DEBUG)  // TODO: 8/26/16 正式时候添加, 后期删除
-                    password = SecurityUtil.md5Encrypt(password);
+                // TODO: 8/26/16 正式时候添加, 后期删除  
+                // TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
+//                if (!BuildConfig.DEBUG)
+                password = SecurityUtil.md5Encrypt(password);
+                Log.d(TAG, "登陆密码MD5加密" + password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -186,13 +213,12 @@ public class API extends APIBase {
         }
 
         /**
-         * 接口名：找回密码并更新
+         * 接口名：更新通过短信验证码找回的密码
          * <p>
          * URL  http://域名/user/user/retrieveUpdatePass.do
          *
          * @param userPhone 用户手机号
          * @param userPass  用户密码
-         * @param regCode   短信验证码
          * @return
          */
 //        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
@@ -201,11 +227,21 @@ public class API extends APIBase {
 //                            .put(TELE, phone)
 //                            .put(AUTH_CODE, authCode)
 //                            .put(PASSWORD, newPwd));
-        public static API modifyPwdWhenFindPwd(String userPhone, String regCode, String userPass) {
-            return new API("/user/user/retrieveUpdatePass.do",
+        public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
+//            return new API("/user/user/retrieveUpdatePass.do",
+//                    new ApiParams()
+//                            .put("userPhone", userPhone)
+//                            .put("regCode", regCode)
+//                            .put("userPass", userPass));
+            try {
+                userPass = SecurityUtil.md5Encrypt(userPass);
+                Log.d(TAG, "找回密码密码MD5加密" + userPass);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return new API("/user/user/updatePass.do",
                     new ApiParams()
                             .put("userPhone", userPhone)
-                            .put("regCode", regCode)
                             .put("userPass", userPass));
         }
 
@@ -263,15 +299,13 @@ public class API extends APIBase {
         /**
          * /user/user/authUser 实名认证
          *
-         * @param token
          * @param realName
          * @param identityNum
          * @return
          */
-        public static API authUserName(String token, String realName, String identityNum) {
-            return new API("/user/user/authUser",
+        public static API authUserName(String realName, String identityNum) {
+            return new API("/user/user/certification.do",
                     new ApiParams()
-                            .put(TOKEN, token)
                             .put("realName", realName)
                             .put("idCard", identityNum));
         }
@@ -291,6 +325,39 @@ public class API extends APIBase {
                             .put(TOKEN, token).put("bankNum", bankcardNum)
                             .put("bankName", bankName)
                             .put("phone", phoneNum));
+        }
+
+        /**
+         * 接口名：绑定银行卡
+         * <p>
+         * URL  http://域名/user/user/bindBankCard.do
+         * bankId        Integer   银行列表
+         * bankName      String     银行名
+         * cardNumber    String    银行卡号
+         * cardPhone     String    银行卡对应的手机号
+         *
+         * @param bankId
+         * @param bankName
+         * @return
+         */
+        public static API bindBankCard(Integer bankId, String bankName, String cardNumber, String cardPhone) {
+            return new API("/user/user/bindBankCard.do",
+                    new ApiParams()
+                            .put("bankId", bankId)
+                            .put("bankName", bankName)
+                            .put("cardNumber", cardNumber)
+                            .put("cardPhone", cardPhone));
+        }
+
+        /**
+         * 接口名：显示渠道银行列表
+         * <p>
+         * URL  http://域名/user/user/showChannelBankList.do
+         *
+         * @return
+         */
+        public static API showChannelBankList() {
+            return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
         /**
@@ -321,6 +388,32 @@ public class API extends APIBase {
                     new ApiParams()
                             .put(TYPE, 2));
         }
+
+        public static API loginOut() {
+            return new API("/user/user/logout.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：获取用户是否修改过昵称信息
+         * URL  http://域名/user/user/findIsUpdateNickName.do
+         */
+        public static API findIsUpdateNickName() {
+            return new API("/user/user/findIsUpdateNickName.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：修改昵称
+         * <p>
+         * http://域名/user/user/updateNickName.do
+         *
+         * @param nickName
+         * @return
+         */
+        public static API updateNickName(String nickName) {
+            return new API("/user/user/updateNickName.do",
+                    new ApiParams()
+                            .put("nickName", nickName));
+        }
     }
 
     public static class Finance {
@@ -340,8 +433,9 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询用户资金信息
-
-         URL  http://域名/user/finance/findMain.do
+         * <p>
+         * URL  http://域名/user/finance/findMain.do
+         *
          * @return
          */
         public static API getFundInfo() {

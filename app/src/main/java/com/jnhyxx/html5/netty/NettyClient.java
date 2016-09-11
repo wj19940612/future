@@ -7,11 +7,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
-import com.luckin.magnifier.model.market.MarketData;
-import com.luckin.magnifier.model.newmodel.Response;
-import com.luckin.magnifier.model.newmodel.Strategy;
-import com.luckin.magnifier.model.newmodel.futures.FuturesQuotaData;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +48,7 @@ public class NettyClient {
          * @param data
          * @return if the data need to be filtered return true, false otherwise
          */
-        boolean filter(FuturesQuotaData data);
+        boolean filter(FullMarketData data);
     }
 
     public static NettyClient getInstance() {
@@ -84,7 +80,7 @@ public class NettyClient {
             @Override
             public void onReceiveData(String data) {
                 if (data.indexOf("msgType") > -1) {
-                    handleRealTimeStrategy(data);
+                    //handleRealTimeStrategy(data);
                 } else {
                     handleRealTimeQuotaData(data);
                 }
@@ -97,44 +93,22 @@ public class NettyClient {
         };
     }
 
-    private void handleRealTimeStrategy(String data) {
-        Response<Strategy> response =
-                new Gson().fromJson(data, new TypeToken<Response<Strategy>>() {
-                }.getType());
-        if (response.isSuccess() && mId != null) {
-            Strategy strategy = response.getData();
-            if (mId.toString().equalsIgnoreCase(strategy.getFuturesCode())) {
-                onReceiveStrategy(response.getData());
-            }
-        }
-    }
-
     private void handleRealTimeQuotaData(String data) {
         try {
-            MarketData marketData = new Gson().fromJson(data, MarketData.class);
-            FuturesQuotaData quotaData = new FuturesQuotaData(marketData);
+            FullMarketData marketData = new Gson().fromJson(data, FullMarketData.class);
 
-            if (mQuotaDataFilter != null && mQuotaDataFilter.filter(quotaData)) {
+            if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) {
                 return;
             }
             if (mId != null) {
-                onReceiveSingleData(quotaData);
+                onReceiveSingleData(marketData);
             }
         } catch (JsonSyntaxException e) {
             onError(e.getMessage());
         }
     }
 
-    private void onReceiveStrategy(Strategy data) {
-        for (int i = 0; i < mHandlerList.size(); i++) {
-            Handler handler = mHandlerList.get(i);
-            Message message = handler.obtainMessage(NettyHandler.WHAT_STRATEGY, data);
-            handler.sendMessage(message);
-        }
-    }
-
-
-    private void onReceiveSingleData(FuturesQuotaData data) {
+    private void onReceiveSingleData(FullMarketData data) {
         for (int i = 0; i < mHandlerList.size(); i++) {
             Handler handler = mHandlerList.get(i);
             Message message = handler.obtainMessage(NettyHandler.WHAT_SINGLE_DATA, data);

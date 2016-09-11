@@ -37,11 +37,11 @@ public class ModifyPwdActivity extends BaseActivity {
     EditText mConfirmPassword;
     @BindView(R.id.confirmButton)
     TextView mConfirmButton;
-    @BindView(R.id.findpasswordTitleBar)
+    @BindView(R.id.findPasswordTitleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.moidifyPasswordWarn)
+    @BindView(R.id.modifyPasswordWarn)
     RelativeLayout modifyPasswordWarn;
-    @BindView(R.id.common_fail_tv_warn)
+    @BindView(R.id.commonFailTvWarn)
     TextView tvFailWarn;
     private String mPhone;
     private String mAuthCode;
@@ -61,7 +61,7 @@ public class ModifyPwdActivity extends BaseActivity {
         processIntent(getIntent());
 
         initTitleBar();
-        tvFailWarn.setText(R.string.newpassword_different_from_confimpassword);
+        tvFailWarn.setText(R.string.newPassword_different_from_confimPassword);
     }
 
     private void initTitleBar() {
@@ -113,7 +113,7 @@ public class ModifyPwdActivity extends BaseActivity {
             modifyPasswordWarn.setVisibility(View.VISIBLE);
         } else {
             modifyPasswordWarn.setVisibility(View.GONE);
-            API.User.modifyPwdWhenFindPwd(mPhone, mAuthCode, mNewPwd)
+            API.User.modifyPwdWhenFindPwd(mPhone,  mNewPwd)
                     .setIndeterminate(this).setTag(TAG)
                     .setCallback(new Callback<Resp>() {
                         @Override

@@ -120,14 +120,29 @@
         <activity
             android:name=".activity.order.OrderActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.TradeActivity"/>
-        <activity android:name=".activity.order.OrderDetailActivity"/>
+        <activity
+            android:name=".activity.TradeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.order.OrderDetailActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.account.MessageCenterListItemInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.setting.ModifyNickNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.account.AboutUsActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.account.AboutUsActivity"/>
-        <activity android:name=".activity.account.ExpandMakeMoneyActivity"/>
-        <activity android:name=".activity.account.tradedetail.TradeDetailActivity"></activity>
+        <activity
+            android:name=".activity.account.ExpandMakeMoneyActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.tradedetail.TradeDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.setting.SettingActivity"
+            android:screenOrientation="portrait"/>
 
         <!--WebView activity-->
         <activity

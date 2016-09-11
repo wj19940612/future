@@ -7,6 +7,7 @@ public class BankcardAuth implements Serializable {
     public static final int STATUS_NOT_FILLED = 0;
     public static final int STATUS_BE_BOUND = 1;
     public static final int STATUS_FILLED = 2;
+    private static final long serialVersionUID = -7562311036404591843L;
 
     /**
      * bankNum : 6225885866059181

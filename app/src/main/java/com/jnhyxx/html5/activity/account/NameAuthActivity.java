@@ -7,19 +7,25 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.NameAuth;
+import com.jnhyxx.html5.domain.account.UserInfo;
+
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+
+import java.text.ParseException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +39,10 @@ public class NameAuthActivity extends BaseActivity {
     EditText mIdentityNum;
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
+    @BindView(R.id.commonFailTvWarn)
+    TextView mTvFailWarn;
+    @BindView(R.id.identityCardWarn)
+    RelativeLayout mRlIdentityCardWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +54,24 @@ public class NameAuthActivity extends BaseActivity {
         mIdentityNum.addTextChangedListener(mValidationWatcher);
 
         updateNameAuthView(getIntent());
+        mTvFailWarn.setText(R.string.setting_identity_card_fail);
     }
 
     private void updateNameAuthView(Intent intent) {
-        NameAuth nameAuth = (NameAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-        mName.setText(nameAuth.getUserName());
-        mIdentityNum.setText(nameAuth.getIdCardNum());
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo != null) {
+            mName.setText(userInfo.getRealName());
+            mIdentityNum.setText(userInfo.getIdCard());
 
-        if (nameAuth.getStatus() == NameAuth.STATUS_BE_BOUND) {
-            mName.setEnabled(false);
-            mIdentityNum.setEnabled(false);
-            mSubmitToAuthButton.setVisibility(View.GONE);
-        } else {
-            mName.setEnabled(true);
-            mIdentityNum.setEnabled(true);
-            mSubmitToAuthButton.setVisibility(View.VISIBLE);
+            if (userInfo.getIdStatus() == UserInfo.ID_STATUS_STATUS_AUTHERIZED) {
+                mName.setEnabled(false);
+                mIdentityNum.setEnabled(false);
+                mSubmitToAuthButton.setVisibility(View.GONE);
+            } else {
+                mName.setEnabled(true);
+                mIdentityNum.setEnabled(true);
+                mSubmitToAuthButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -83,36 +96,56 @@ public class NameAuthActivity extends BaseActivity {
 
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
-        String token = LocalUser.getUser().getToken();
         String realName = mName.getText().toString().trim();
         String identityNum = mIdentityNum.getText().toString().trim();
-        API.User.authUserName(token, realName, identityNum)
-                .setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback<Resp<NameAuth.Result>>() {
-                    @Override
-                    public void onReceive(final Resp<NameAuth.Result> resp) {
-                        if (resp.isSuccess()) {
-                            SmartDialog.with(getActivity(), resp.getMsg())
-                                    .setCancelableOnTouchOutside(false)
-                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                            sendResultForCalling(resp.getData());
-                                            finish();
-                                        }
-                                    }).show();
-                        } else {
-                            SmartDialog.with(getActivity(), resp.getMsg()).show();
-                        }
-                    }
-                }).fire();
+        if (LocalUser.getUser().isLogin()) {
+            try {
+                boolean cardValidate = CommonMethodUtils.IDCardValidate(identityNum);
+                if (cardValidate) {
+                    mRlIdentityCardWarn.setVisibility(View.GONE);
+                    API.User.authUserName(realName, identityNum)
+                            .setTag(TAG)
+                            .setIndeterminate(this)
+                            .setCallback(new Callback<Resp<NameAuth.Result>>() {
+                                @Override
+                                public void onReceive(final Resp<NameAuth.Result> resp) {
+                                    if (resp.isSuccess()) {
+                                        //将是否实名认证状态修改
+                                        UserInfo user = LocalUser.getUser().getUserInfo();
+                                        user.setIdStatus(1);
+                                        setResult(RESULT_OK);
+
+                                        SmartDialog.with(getActivity(), resp.getMsg())
+                                                .setCancelableOnTouchOutside(false)
+                                                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(Dialog dialog) {
+                                                        dialog.dismiss();
+                                                        sendResultForCalling(resp.getData());
+                                                        finish();
+                                                    }
+                                                }).show();
+                                    } else {
+                                        SmartDialog.with(getActivity(), resp.getMsg()).show();
+                                    }
+                                }
+                            }).fire();
+                } else {
+                    mRlIdentityCardWarn.setVisibility(View.VISIBLE);
+                    ToastUtil.curt("请输入正确的身份证号码");
+                    return;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            ToastUtil.curt(R.string.setting_identity_card_when_login);
+        }
     }
 
     /**
      * 由银行卡认证页面唤起,在实名认证成功后返回结果
-     *
+     * <p>
      * 由个人信息页唤起,实名认证后返回结果
      *
      * @param result

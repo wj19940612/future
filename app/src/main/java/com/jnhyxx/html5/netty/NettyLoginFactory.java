@@ -1,6 +1,6 @@
 package com.jnhyxx.html5.netty;
 
-import com.luckin.magnifier.utils.SecurityUtil;
+import com.johnz.kutils.SecurityUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -117,7 +117,7 @@ public class MineFragment extends BaseFragment {
 
     private void updateAccountInfoView() {
 //        if (User.getUser().isLogin()) {\
-        if (LocalCacheUserInfoManager.getInstance().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             // TODO: 2016/8/31 这里会报空指针
 //            String format = String.format(" ", User.getUser().getUserInfo().getUserInfo().getNick());
 //            Log.d(TAG, " " + format);
@@ -278,7 +278,7 @@ public class MineFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            UserInfo userInfo = LocalCacheUserInfoManager.getInstance().getUser();
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
             Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
             String userName = userInfo.getUserName();
             String userNickName = String.format(" ", userName);

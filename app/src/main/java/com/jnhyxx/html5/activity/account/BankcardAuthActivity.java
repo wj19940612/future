@@ -99,11 +99,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //                        }
 //                    }
 //                }).fire();
-        LocalCacheUserInfoManager mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
         if (!LocalUser.getUser().isLogin()) {
             ToastUtil.curt(R.string.nickname_unknown);
         }
-        UserInfo user = mLocalCacheUserInfoManager.getUser();
+        UserInfo user = LocalUser.getUser().getUserInfo();
         if (user != null) {
             if (user.getIdStatus() == 0) {
                 showAuthNameDialog();

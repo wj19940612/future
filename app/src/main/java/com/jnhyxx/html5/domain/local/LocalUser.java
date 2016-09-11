@@ -9,14 +9,14 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 public class LocalUser {
 
     public interface AsyncCallback<T> {
+
         void get(T t);
     }
-
     private UserInfo mUserInfo;
 
     private static LocalUser sLocalUser;
-    private static boolean sReload;
 
+    private static boolean sReload;
     public static LocalUser getUser() {
         if (sLocalUser == null || sReload) {
             sLocalUser = loadFromPreference();
@@ -67,19 +67,19 @@ public class LocalUser {
         return "";
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "mUserInfo=" + mUserInfo +
-                '}';
-    }
-
     public double getAvailableBalance() {
         return 0; // TODO: 8/29/16 可用资金
     }
 
     public String getUserPhone() {
         return "13567124531"; // TODO: 9/8/16 获取用户手机号,作为唯一用户标示
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mUserInfo=" + mUserInfo +
+                '}';
     }
 
 }

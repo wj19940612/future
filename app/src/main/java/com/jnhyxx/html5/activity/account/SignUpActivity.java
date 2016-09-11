@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -207,8 +208,7 @@ public class SignUpActivity extends BaseActivity {
                         if (resp.isSuccess()) {
                             // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
-                            LoginInfo info = new Gson().fromJson(resp.getData(), LoginInfo.class);
-                            LocalUser.getUser().setUserInfo(info);
+                            UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
 
                             SmartDialog.with(getActivity(), resp.getMsg())

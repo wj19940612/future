@@ -34,13 +34,11 @@
     <style name="SignEditText.PhoneNum">
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">11</item>
-        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="SignEditText.Password">
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
-        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="PrimaryBigButton">

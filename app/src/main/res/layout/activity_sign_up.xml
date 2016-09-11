@@ -68,7 +68,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/helpPhoneNumImage"
                 android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
         </RelativeLayout>
 
         <include layout="@layout/split_line_thick" />
@@ -108,7 +108,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/help_messageAuthCode"
                 android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <TextView
                 android:id="@+id/obtainAuthCode"
@@ -164,7 +164,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/help_RetrieveImage"
                 android:hint="@string/register_code_image_hint"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <TextView
                 android:id="@+id/tvRegisterRetrieveImage"
@@ -235,10 +235,10 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/helpPasswordImage"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <ImageView
-                android:id="@+id/loginImagePasswordType"
+                android:id="@+id/showPasswordButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
@@ -305,7 +305,7 @@
 
     <TextView
         android:id="@+id/signUpButton"
-        style="@style/PrimaryRedButton"
+        style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

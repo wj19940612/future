@@ -40,7 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.loginImagePasswordType;
+import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
@@ -70,7 +70,7 @@ public class SignUpActivity extends BaseActivity {
     //获取图片验证码
     @BindView(R.id.tvRegisterRetrieveImage)
     TextView mTvRegisterRetrieveImage;
-    @BindView(R.id.loginImagePasswordType)
+    @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
     @BindView(R.id.ivRegisterRetrieveImage)
     ImageView mIvRegisterRetrieveImage;
@@ -277,7 +277,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     //点击后改变文本输入框的输入类型，使密码可见或隐藏
-    @OnClick(loginImagePasswordType)
+    @OnClick(showPasswordButton)
     void changeEdittextPasswordInputtYPE() {
         if (!flag) {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());

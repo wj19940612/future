@@ -43,15 +43,20 @@
         <item name="android:paddingLeft">10dp</item>
     </style>
 
-    <style name="PrimaryRedButton">
+    <style name="PrimaryBigButton">
         <item name="android:background">@drawable/btn_primary</item>
-        <!-- <item name="android:background">@drawable/btn_register_select</item>-->
         <item name="android:clickable">true</item>
         <item name="android:enabled">false</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">13dp</item>
         <item name="android:textColor">@color/btn_text_primary</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="PrimaryBigButton.Inverse">
+        <item name="android:background">@drawable/btn_primary_inverse</item>
+        <item name="android:enabled">true</item>
+        <item name="android:textColor">@color/btn_text_primary_inverse</item>
     </style>
 
     <style name="InputTitle">
@@ -148,6 +153,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">#CBCBCB</item>
     </style>
+
     <style name="settingLinearLayout">
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>

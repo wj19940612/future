@@ -68,7 +68,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/help_newPasswordImage"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <ImageView
                 android:id="@+id/findPassword_image_password_type"
@@ -122,10 +122,10 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/helpPasswordImage"
                 android:hint="@string/please_repeat_new_password"
-                android:textColorHint="@color/login_edittext_hint" />
+                android:textColorHint="@color/grayHint" />
 
             <ImageView
-                android:id="@+id/loginImagePasswordType"
+                android:id="@+id/showPasswordButton"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
@@ -140,7 +140,7 @@
 
     <TextView
         android:id="@+id/confirmButton"
-        style="@style/PrimaryRedButton"
+        style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

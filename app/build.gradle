@@ -15,6 +15,7 @@ android {
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
+
     }
 
     java.util.Properties properties = new Properties();
@@ -88,12 +89,8 @@ dependencies {
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-    compile project(':SlidingMenu')
     compile project(':PushSDK')
-    compile project(':kutils')
-    compile project(':chart')
     compile project(':SlidingMenu')
-    compile project(':PushSDK')
     compile project(':kutils')
     compile project(':chart')
     compile 'com.android.support:appcompat-v7:24.2.0'
@@ -107,8 +104,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile files('libs/netty-all-4.1.5.final.jar')
-
-
-
 
 }

@@ -8,7 +8,7 @@
     tools:context="com.jnhyxx.html5.activity.account.SignUpActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/registerTitleBar"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -86,7 +86,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
 
     private void requestMessageList() {
         if (mType == TYPE_SYSTEM) {
-            API.Message.getSystemMessageList(User.getUser().getToken(), mPageNo, mPageSize)
+            API.Message.getSystemMessageList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
                         public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
@@ -94,7 +94,7 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                         }
                     }).setTag(TAG).setIndeterminate(this).fire();
         } else {
-            API.Message.getTradeMessageList(User.getUser().getToken(), mPageNo, mPageSize)
+            API.Message.getTradeMessageList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
                     .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
                         @Override
                         public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {

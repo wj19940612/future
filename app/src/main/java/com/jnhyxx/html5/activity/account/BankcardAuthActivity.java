@@ -25,8 +25,8 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -112,12 +112,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //                        }
 //                    }
 //                }).fire();
-        LocalCacheUserInfoManager mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        if (!mLocalCacheUserInfoManager.isLogin()) {
+        if (!LocalUser.getUser().isLogin()) {
             ToastUtil.curt(R.string.nickname_unknown);
         }
-        UserInfo user = mLocalCacheUserInfoManager.getUser();
-        showBankBindStatus(user);
+        showBankBindStatus();
 
     }
 
@@ -129,7 +127,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
      * @param user
      */
 
-    private void showBankBindStatus(UserInfo user) {
+    private void showBankBindStatus() {
+        UserInfo user = LocalUser.getUser().getUserInfo();
         if (user != null) {
             //一般不会出现，在设置界面做了判断，没有登录不可进入这个界面
             if (user.getIdStatus() == 0) {
@@ -250,7 +249,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                API.User.updateBankcard(com.jnhyxx.html5.domain.local.User.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+
+                API.User.updateBankcard(LocalUser.getUser().getToken(), bankcardNum, payingBank, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp<BankcardAuth>>() {
                             @Override
@@ -355,4 +355,3 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 }
-

@@ -3,13 +3,12 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/transparent"
               android:clickable="true"
               android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.fragment.PlaceOrderFragment">
+              tools:context=".fragment.order.PlaceOrderFragment">
 
     <View
-        android:id="@+id/backClickArea"
+        android:id="@+id/emptyClickArea"
         android:layout_width="match_parent"
         android:layout_height="@dimen/trade_header_height"
         android:background="@android:color/transparent"/>
@@ -192,7 +191,7 @@
         android:paddingTop="5dp"
         android:textColor="#808080"
         android:textSize="11sp"
-        tools:text="汇率换算: 1美元=6.8元, 持仓时间至凌晨5:00自动平仓"/>
+        tools:text="汇率换算: 1美元=6.8元, 持仓时间至凌晨5:00"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -212,7 +211,7 @@
             android:textColor="#A8A8A8"/>
 
         <TextView
-            android:id="@+id/TotalTobePaid"
+            android:id="@+id/totalTobePaid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
@@ -227,6 +226,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/lastBidAskPriceBg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -256,7 +256,8 @@
         </LinearLayout>
 
         <View
-            android:layout_width="1px"
+            android:id="@+id/bottomSplitLine"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#FD6C73"/>
 
@@ -269,6 +270,6 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            tools:text="确认买张"/>
+            tools:text="@string/confirm_buy_long"/>
     </LinearLayout>
 </LinearLayout>

@@ -12,16 +12,13 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
-import com.jnhyxx.html5.domain.finance.FundInfo;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -101,7 +98,7 @@ public class WithdrawActivity extends BaseActivity {
         }
 
         double amount = Double.valueOf(withdrawAmount);
-        API.Finance.withdraw(User.getUser().getLoginInfo().getTokenInfo().getToken(), amount)
+        API.Finance.withdraw(LocalUser.getUser().getToken(), amount)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {

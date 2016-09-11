@@ -4,35 +4,35 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.Preference;
-import com.jnhyxx.html5.domain.LoginInfo;
+import com.jnhyxx.html5.domain.account.UserInfo;
 
-public class User {
+public class LocalUser {
 
     public interface AsyncCallback<T> {
+
         void get(T t);
     }
+    private UserInfo mUserInfo;
 
-    private LoginInfo mLoginInfo;
+    private static LocalUser sLocalUser;
 
-    private static User sUser;
     private static boolean sReload;
-
-    public static User getUser() {
-        if (sUser == null || sReload) {
-            sUser = loadFromPreference();
+    public static LocalUser getUser() {
+        if (sLocalUser == null || sReload) {
+            sLocalUser = loadFromPreference();
         }
-        return sUser;
+        return sLocalUser;
     }
 
-    private static User loadFromPreference() {
+    private static LocalUser loadFromPreference() {
         sReload = false;
         String userJson = Preference.get().getUserJson();
         if (!TextUtils.isEmpty(userJson)) {
             Gson gson = new Gson();
-            return gson.fromJson(userJson, User.class);
+            return gson.fromJson(userJson, LocalUser.class);
         }
 
-        return new User();
+        return new LocalUser();
     }
 
     private void saveToPreference() {
@@ -41,21 +41,21 @@ public class User {
         sReload = true;
     }
 
-    public void setLoginInfo(LoginInfo loginInfo) {
-        mLoginInfo = loginInfo;
+    public void setUserInfo(UserInfo userInfo) {
+        mUserInfo = userInfo;
         saveToPreference();
     }
 
-    public LoginInfo getLoginInfo() {
-        return mLoginInfo;
+    public UserInfo getUserInfo() {
+        return mUserInfo;
     }
 
     public boolean isLogin() {
-        return mLoginInfo != null;
+        return mUserInfo != null;
     }
 
     public void logout() {
-        mLoginInfo = null;
+        mUserInfo = null;
         saveToPreference();
     }
 
@@ -64,20 +64,22 @@ public class User {
      * @return
      */
     public String getToken() {
-        if (getLoginInfo() != null) {
-            return getLoginInfo().getTokenInfo().getToken();
-        }
         return "";
+    }
+
+    public double getAvailableBalance() {
+        return 0; // TODO: 8/29/16 可用资金
+    }
+
+    public String getUserPhone() {
+        return "13567124531"; // TODO: 9/8/16 获取用户手机号,作为唯一用户标示
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "mLoginInfo=" + mLoginInfo +
+                "mUserInfo=" + mUserInfo +
                 '}';
-    }
-    public double getAvailableBalance() {
-        return 0; // TODO: 8/29/16 可用资金
     }
 
 }

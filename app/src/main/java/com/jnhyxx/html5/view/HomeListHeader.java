@@ -6,7 +6,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.order.OrderReport;
-import com.jnhyxx.html5.net.APIBase;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
@@ -132,7 +130,6 @@ public class HomeListHeader extends FrameLayout {
 
 
     public void nextAdvertisement() {
-        Log.d("John", "nextAdvertisement: " + mViewPager.getCurrentItem() );
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
     }
 

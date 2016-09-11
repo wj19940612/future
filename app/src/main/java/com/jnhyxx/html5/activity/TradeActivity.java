@@ -1,33 +1,45 @@
 package com.jnhyxx.html5.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.TrendView;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderActivity;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
-import com.jnhyxx.html5.fragment.PlaceOrderFragment;
+import com.jnhyxx.html5.fragment.order.AgreementFragment;
+import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
+import com.jnhyxx.html5.view.MarketDataView;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -36,7 +48,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Callback {
+public class TradeActivity extends BaseActivity implements
+        PlaceOrderFragment.Callback, AgreementFragment.Callback {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -84,6 +97,7 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     private int mFundType;
     private List<Product> mProductList;
     private ExchangeStatus mExchangeStatus;
+    private AnimationDrawable mQuestionMark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +139,27 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
             }
         });
 
+        updateTitleBar();
         updateChartView();
         updateExchangeStatusView();
+    }
+
+    private void updateTitleBar() {
+        View view = mTitleBar.getCustomView();
+        TextView productName = (TextView) view.findViewById(R.id.productName);
+        View productRule = view.findViewById(R.id.productRule);
+        productName.setText(mProduct.getVarietyName() + " " + mProduct.getContractsCode());
+        productRule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
+                        .execute();
+                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhone(), mProduct.getVarietyType());
+            }
+        });
+        ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
+        mQuestionMark = (AnimationDrawable) ruleIcon.getBackground();
     }
 
     private void updateExchangeStatusView() {
@@ -138,7 +171,7 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         } else {
             mMarketCloseArea.setVisibility(View.VISIBLE);
             mMarketOpenArea.setVisibility(View.GONE);
-            mNextTradeTime.setText(getString(R.string.next_trade_time_is,
+            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
                     mExchangeStatus.getNextTime()));
         }
     }
@@ -153,11 +186,18 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (User.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
-            mTradePageHeader.setAvailableBalance(User.getUser().getAvailableBalance());
+            mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
         } else {
             mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
+        }
+
+        String userPhone = LocalUser.getUser().getUserPhone();
+        if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
+            mQuestionMark.stop();
+        } else {
+            mQuestionMark.start();
         }
 
         startScheduleJob(60 * 1000);
@@ -182,12 +222,31 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         }
         TrendView.Settings settings = new TrendView.Settings();
         settings.setBaseLines(mProduct.getBaseline());
-        settings.setNumberScale(mProduct.getDecimalScale());
+        settings.setNumberScale(mProduct.getPriceDecimalScale());
         settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
         settings.setDisplayMarketTimes(mProduct.getDisplayMarketTimes());
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+
+        FlashView flashView = mChartContainer.getFlashView();
+        if (flashView == null) {
+            flashView = new FlashView(this);
+            mChartContainer.addFlashView(flashView);
+        }
+        FlashView.Settings settings1 = new FlashView.Settings();
+        settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
+        settings1.setNumberScale(mProduct.getPriceDecimalScale());
+        settings1.setBaseLines(9);
+        flashView.setSettings(settings1);
+
+        MarketDataView marketDataView = mChartContainer.getMarketDataView();
+        if (marketDataView == null) {
+            marketDataView = new MarketDataView(this);
+            mChartContainer.addMarketDataView(marketDataView);
+        }
+
+        mChartContainer.showTrendView();
     }
 
     private void requestTrendDataAndSet() {
@@ -230,22 +289,36 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
-                showPlaceOrderFragment(PlaceOrderFragment.TYPE_BUY_LONG);
+                placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
                 break;
             case R.id.sellShortBtn:
-                showPlaceOrderFragment(PlaceOrderFragment.TYPE_SELL_SHORT);
+                placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
         }
     }
 
-    private void showPlaceOrderFragment(int type) {
-        mPlaceOrderContainer.setVisibility(View.VISIBLE);
+    private void placeOrder(int longOrShort) {
+        String userPhone = LocalUser.getUser().getUserPhone();
+        if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
+            showPlaceOrderFragment(longOrShort);
+        } else {
+            showAgreementFragment(longOrShort);
+        }
+    }
+
+    private void showAgreementFragment(int longOrShort) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(type))
+                .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
                 .commit();
     }
 
-    private void hidePlaceOrderFragment() {
+    private void showPlaceOrderFragment(int longOrShort) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
+                .commit();
+    }
+
+    private void hideFragmentOfContainer() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -266,11 +339,42 @@ public class TradeActivity extends BaseActivity implements PlaceOrderFragment.Ca
         }
     }
 
-    @Override
-    public void onConfirmBtnClick() {
-        // TODO: 8/23/16 下单接口 实现
+    private void submitOrder(final SubmittedOrder submittedOrder) {
+        API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback<Resp<JsonObject>>() {
+                    @Override
+                    public void onReceive(Resp<JsonObject> jsonObjectResp) {
+                        if (jsonObjectResp.isSuccess()) {
+                            hideFragmentOfContainer();
+                        } else {
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.place_an_order_again,
+                                            new SmartDialog.OnClickListener() {
+                                                @Override
+                                                public void onClick(Dialog dialog) {
+                                                    submitOrder(submittedOrder);
+                                                }
+                                            }).setNegative(R.string.cancel)
+                                    .show();
+                        }
+                    }
+                }).fire();
 
-        hidePlaceOrderFragment();
+    }
+
+    @Override
+    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
+        submittedOrder.setPayType(mFundType);
+        Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
+        submitOrder(submittedOrder);
+    }
+
+    @Override
+    public void onAgreeProtocolBtnClick(int longOrShort) {
+        String userPhone = LocalUser.getUser().getUserPhone();
+        Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
+        hideFragmentOfContainer();
+        placeOrder(longOrShort);
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

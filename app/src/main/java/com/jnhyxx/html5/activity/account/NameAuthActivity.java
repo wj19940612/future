@@ -13,8 +13,9 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.NameAuth;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -57,40 +58,20 @@ public class NameAuthActivity extends BaseActivity {
     }
 
     private void updateNameAuthView(Intent intent) {
-        // TODO: 2016/9/8 原来的逻辑
-//        NameAuth nameAuth = (NameAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-//        if (nameAuth != null) {
-//            mName.setText(nameAuth.getUserName());
-//            mIdentityNum.setText(nameAuth.getIdCardNum());
-//        }
-//
-//        if (nameAuth.getStatus() == NameAuth.STATUS_BE_BOUND) {
-//            mName.setEnabled(false);
-//            mIdentityNum.setEnabled(false);
-//            mSubmitToAuthButton.setVisibility(View.GONE);
-//        } else {
-//            mName.setEnabled(true);
-//            mIdentityNum.setEnabled(true);
-//            mSubmitToAuthButton.setVisibility(View.VISIBLE);
-//        }
-        LocalCacheUserInfoManager localCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        UserInfo user = localCacheUserInfoManager.getUser();
-        if (user != null) {
-            if (!TextUtils.isEmpty(user.getRealName())) {
-                mName.setText(user.getRealName());
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo != null) {
+            mName.setText(userInfo.getRealName());
+            mIdentityNum.setText(userInfo.getIdCard());
+
+            if (userInfo.getIdStatus() == UserInfo.ID_STATUS_STATUS_AUTHERIZED) {
+                mName.setEnabled(false);
+                mIdentityNum.setEnabled(false);
+                mSubmitToAuthButton.setVisibility(View.GONE);
+            } else {
+                mName.setEnabled(true);
+                mIdentityNum.setEnabled(true);
+                mSubmitToAuthButton.setVisibility(View.VISIBLE);
             }
-            if (!TextUtils.isEmpty(user.getIdCard())) {
-                mIdentityNum.setText(user.getIdCard());
-            }
-        }
-        if (localCacheUserInfoManager.isAuthName()) {
-            mName.setEnabled(false);
-            mIdentityNum.setEnabled(false);
-            mSubmitToAuthButton.setVisibility(View.GONE);
-        } else {
-            mName.setEnabled(true);
-            mIdentityNum.setEnabled(true);
-            mSubmitToAuthButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -115,10 +96,9 @@ public class NameAuthActivity extends BaseActivity {
 
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
-//        String token = com.jnhyxx.html5.domain.local.User.getUser().getToken();
         String realName = mName.getText().toString().trim();
         String identityNum = mIdentityNum.getText().toString().trim();
-        if (LocalCacheUserInfoManager.getInstance().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             try {
                 boolean cardValidate = CommonMethodUtils.IDCardValidate(identityNum);
                 if (cardValidate) {
@@ -131,7 +111,7 @@ public class NameAuthActivity extends BaseActivity {
                                 public void onReceive(final Resp<NameAuth.Result> resp) {
                                     if (resp.isSuccess()) {
                                         //将是否实名认证状态修改
-                                        UserInfo user = LocalCacheUserInfoManager.getInstance().getUser();
+                                        UserInfo user = LocalUser.getUser().getUserInfo();
                                         user.setIdStatus(1);
                                         setResult(RESULT_OK);
 

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderDetailActivity;
-import com.jnhyxx.html5.domain.local.User;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.SettlementOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
@@ -92,7 +92,7 @@ public class SettlementFragment extends BaseFragment {
             }
         });
 
-        API.Order.getSettlementOrderList(User.getUser().getToken(),
+        API.Order.getSettlementOrderList(LocalUser.getUser().getToken(),
                 mPageNo, mPageSize, mProduct.getVarietyId(), mFundType)
                 .setCallback(new Callback2<Resp<List<SettlementOrder>>, List<SettlementOrder>>() {
                     @Override

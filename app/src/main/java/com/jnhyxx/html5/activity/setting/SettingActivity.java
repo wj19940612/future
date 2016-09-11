@@ -13,7 +13,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
 import com.jnhyxx.html5.activity.account.NameAuthActivity;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.account.UserIsModifyNickName;
 import com.jnhyxx.html5.net.API;
@@ -23,6 +22,11 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.CustomToast;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -30,7 +34,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
+
     private static final String TAG = "SettingActivity";
+
+    //实名认证的请求码
+    private static final int REQUEST_CODE_NAME_AUTH = 900;
+    //绑定银行卡的请求码
+    private static final int REQUEST_CODE_BIND_BANK = 24400;
+    //修改昵称的请求码
+    private static final int REQUEST_CODE_MODIFY_NICK_NAME = 45900;
+
     @BindView(R.id.rlUserNameSetting)
     RelativeLayout mRlUserNameSetting;
     @BindView(R.id.rlRealNameSetting)
@@ -48,14 +61,6 @@ public class SettingActivity extends BaseActivity {
     TextView mTvUserPhoneSetting;
     @BindView(R.id.tvLoginOutSetting)
     TextView mLoginOut;
-    //实名认证的请求码
-    private static final int REQUEST_CODE_NAME_AUTH = 900;
-    //绑定银行卡的请求码
-    private static final int REQUEST_CODE_BIND_BANK = 24400;
-    //修改昵称的请求码
-    private static final int REQUEST_CODE_MODIFY_NICK_NAME = 45900;
-
-    LocalCacheUserInfoManager mLocalCacheUserInfoManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +71,8 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initData() {
-        mLocalCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        UserInfo userInfo = mLocalCacheUserInfoManager.getUser();
-        if (!mLocalCacheUserInfoManager.isLogin()) {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (!LocalUser.getUser().isLogin()) {
             mTvRealNameSetting.setText(R.string.nickname_unknown);
             mRlRealNameSetting.setEnabled(false);
             mTvBindBankCardSetting.setText(R.string.nickname_unknown);
@@ -86,8 +90,8 @@ public class SettingActivity extends BaseActivity {
                 Log.d(TAG, "手机号码" + userPhone);
             }
 
-            getRealNameStatus(mLocalCacheUserInfoManager, userInfo);
-            getBindBankStatus(mLocalCacheUserInfoManager, userInfo);
+            getRealNameStatus(userInfo);
+            getBindBankStatus(userInfo);
         }
 
     }
@@ -97,12 +101,11 @@ public class SettingActivity extends BaseActivity {
             mTvUserNameSetting.setText(userInfo.getUserName());
         }
     }
-
-    private void getBindBankStatus(LocalCacheUserInfoManager localCacheUserInfoManager, UserInfo userInfo) {
+    private void getBindBankStatus(UserInfo userInfo) {
         /**
          * cardState银行卡状态 0未填写，1已填写，2已认证
          */
-        if (userInfo.getCardState() == -1 || !localCacheUserInfoManager.isLogin()) {
+        if (userInfo.getCardState() == -1 || !LocalUser.getUser().isLogin()) {
             mTvBindBankCardSetting.setText(R.string.nickname_unknown);
             mRlBindBankCardSetting.setEnabled(false);
         } else if (userInfo.getCardState() == 0) {
@@ -115,11 +118,11 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-    private void getRealNameStatus(LocalCacheUserInfoManager localCacheUserInfoManager, UserInfo userInfo) {
+    private void getRealNameStatus(UserInfo userInfo) {
         /**
          * idStatus实名状态 0未填写，1已填写，2已认证
          */
-        if (userInfo.getIdStatus() == -1 || !localCacheUserInfoManager.isLogin()) {
+        if (userInfo.getIdStatus() == -1 || !LocalUser.getUser().isLogin()) {
             mTvRealNameSetting.setText(R.string.nickname_unknown);
             mRlRealNameSetting.setEnabled(false);
         } else if (userInfo.getIdStatus() == 0) {
@@ -169,39 +172,33 @@ public class SettingActivity extends BaseActivity {
 
     //退出登陆
     private void loginOut() {
-        final LocalCacheUserInfoManager localCacheUserInfoManager = LocalCacheUserInfoManager.getInstance();
-        Log.d(TAG, "用户是否登陆  " + localCacheUserInfoManager.isLogin());
-        if (localCacheUserInfoManager.isLogin()) {
-            API.User.loginOut().setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp>() {
-                @Override
-                public void onReceive(Resp resp) {
-                    Log.d(TAG, "退出登陆 " + resp.getCode() + "\n" + resp.getMsg());
-                    ToastUtil.curt(resp.getMsg());
-                    if (resp.isSuccess()) {
-                        localCacheUserInfoManager.setUser(null);
-                        mTvUserPhoneSetting.setText("");
-                        mTvUserNameSetting.setText(R.string.nickname_unknown);
-                        mTvBindBankCardSetting.setText(R.string.nickname_unknown);
-                        mTvRealNameSetting.setText(R.string.nickname_unknown);
-                    }
-                }
-            }).fire();
+
+        if (LocalUser.getUser().isLogin()) {
+            API.User.loginOut().setTag(TAG).setIndeterminate(this)
+                    .setCallback(new Callback1<Resp>() {
+                        @Override
+                        protected void onRespSuccess(Resp resp) {
+                            Log.d(TAG, "退出登陆 " + resp.getCode() + "\n" + resp.getMsg());
+                            LocalUser.getUser().logout();
+                            mTvUserPhoneSetting.setText("");
+                            mTvUserNameSetting.setText("");
+                        }
+                    }).fire();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LocalCacheUserInfoManager instance = LocalCacheUserInfoManager.getInstance();
-        UserInfo user = instance.getUser();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (requestCode == REQUEST_CODE_NAME_AUTH && resultCode == RESULT_OK) {
-            if (user != null) {
-                getRealNameStatus(instance, user);
+            if (userInfo != null) {
+                getRealNameStatus(userInfo);
             }
         }
         if (requestCode == REQUEST_CODE_MODIFY_NICK_NAME && resultCode == RESULT_OK) {
-            if (user != null) {
-                getUserNickName(user);
+            if (userInfo != null) {
+                getUserNickName(userInfo);
             }
         }
     }

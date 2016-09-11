@@ -1,8 +1,9 @@
 package com.jnhyxx.html5;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.jnhyxx.html5.activity.MainActivity;
@@ -22,9 +23,15 @@ import com.wo.main.WP_App;
 
 import java.util.Map;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static Context sContext;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

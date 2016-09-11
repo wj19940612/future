@@ -36,19 +36,18 @@ public class SignInActivity extends BaseActivity {
     EditText mPhoneNum;
     @BindView(R.id.password)
     EditText mPassword;
+
+    @BindView(R.id.clearPhoneNumButton)
+    ImageView mClearPhoneNumButton;
+    @BindView(R.id.showPasswordButton)
+    ImageView mShowPasswordButton;
+
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
     @BindView(R.id.forgetPassword)
     TextView mForgetPassword;
     @BindView(R.id.signInButton)
     TextView mSignInButton;
-
-    @BindView(R.id.loginImagePasswordType)
-    ImageView mImageViewPasswordType;
-    @BindView(R.id.loginImagePhoneDelete)
-    ImageView mIvPhoneDelete;
-
-    private boolean flag = false;
 
     @BindView(R.id.rlFailWarn)
     RelativeLayout rlFailWarn;
@@ -74,65 +73,51 @@ public class SignInActivity extends BaseActivity {
             if (enable != mSignInButton.isEnabled()) {
                 mSignInButton.setEnabled(enable);
             }
-            ivPhoneDeleteStatus();
-            imageViewPasswordTypeStatus();
+
+            boolean visible = checkClearPhoneNumButtonVisible();
+            mClearPhoneNumButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+            visible = checkShowPasswordButtonVisible();
+            mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     };
 
-    private void imageViewPasswordTypeStatus() {
-        String password = mPassword.getText().toString().trim();
-        if (!TextUtils.isEmpty(password)) {
-            mImageViewPasswordType.setVisibility(View.VISIBLE);
-        } else {
-            mImageViewPasswordType.setVisibility(View.GONE);
-        }
-    }
-
-    private void ivPhoneDeleteStatus() {
+    private boolean checkClearPhoneNumButtonVisible() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         if (!TextUtils.isEmpty(phoneNum)) {
-            mIvPhoneDelete.setVisibility(View.VISIBLE);
-        } else {
-            mIvPhoneDelete.setVisibility(View.GONE);
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkShowPasswordButtonVisible() {
+        String password = mPassword.getText().toString().trim();
+        if (!TextUtils.isEmpty(password)) {
+            return true;
+        }
+        return false;
     }
 
     private boolean checkSignInButtonEnable() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-//        if (!TextUtils.isEmpty(phoneNum) && phoneNum.length() > 1) {
-//            ivPhoneDelete.setVisibility(View.VISIBLE);
-//        } else {
-//            ivPhoneDelete.setVisibility(View.GONE);
-//        }
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
         String password = mPassword.getText().toString().trim();
-//        if (!TextUtils.isEmpty(password) && password.length() > 1) {
-//            imageViewPasswordType.setVisibility(View.VISIBLE);
-//        } else {
-//            imageViewPasswordType.setVisibility(View.GONE);
-//        }
         if (TextUtils.isEmpty(password) || password.length() < 6) {
             return false;
         }
-
         return true;
     }
 
-    /*  @OnClick(R.id.closeButton)
-      void close() {
-          finish();
-      }
-  */
-    @OnClick({R.id.loginImagePhoneDelete, R.id.loginImagePasswordType, R.id.signInButton, R.id.signUpButton, R.id.forgetPassword})
+    @OnClick({R.id.clearPhoneNumButton, R.id.showPasswordButton, R.id.signInButton, R.id.signUpButton, R.id.forgetPassword})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.loginImagePhoneDelete:
+            case R.id.clearPhoneNumButton:
                 mPhoneNum.setText("");
                 break;
-            case R.id.loginImagePasswordType:
-                changeEdittextPasswordInputtYPE();
+            case R.id.showPasswordButton:
+                changePasswordInputType();
                 break;
             case R.id.signInButton:
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
@@ -155,7 +140,6 @@ public class SignInActivity extends BaseActivity {
                 break;
             case R.id.signUpButton:
                 Launcher.with(this, SignUpActivity.class).execute();
-                finish();
                 break;
             case R.id.forgetPassword:
                 Launcher.with(this, FindPwdActivity.class).execute();
@@ -163,15 +147,14 @@ public class SignInActivity extends BaseActivity {
         }
     }
 
-    private void changeEdittextPasswordInputtYPE() {
-        if (!flag) {
-            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            mImageViewPasswordType.setSelected(true);
-        } else {
-            mImageViewPasswordType.setSelected(false);
+    private void changePasswordInputType() {
+        if (mShowPasswordButton.isSelected()) {
+            mShowPasswordButton.setSelected(false);
             mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        } else {
+            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mShowPasswordButton.setSelected(true);
         }
-        flag = !flag;
         mPassword.postInvalidate();
         CharSequence text = mPassword.getText();
         if (text instanceof Spannable) {

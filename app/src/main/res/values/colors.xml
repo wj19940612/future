@@ -17,6 +17,7 @@
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
     <color name="colorSlidingMenu">#1E61B0</color>
+    <color name="grayHint">#CBCBCB</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
 
@@ -27,10 +28,6 @@
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
     <color name="common_bg">#EDF0F5</color>
-
-
-    <!--登陆界面的文本输入框的颜色-->
-    <color name="login_edittext_hint">#CBCBCB</color>
 
     <!--注册与找回密码界面不可点击按钮背景-->
     <color name="regiserBtnBack">#a8a8a8</color>

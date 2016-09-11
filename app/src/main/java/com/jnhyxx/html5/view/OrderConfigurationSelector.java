@@ -34,7 +34,7 @@ public class OrderConfigurationSelector extends LinearLayout {
     private int mTextSize;
     private int mSelectedIndex;
 
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemSelectedListener mOnItemSelectedListener;
 
     private List<? extends OrderConfiguration> mOrderConfigurationList;
 
@@ -42,10 +42,12 @@ public class OrderConfigurationSelector extends LinearLayout {
 
     public interface OrderConfiguration {
         String getValue();
+
+        boolean isDefault();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(OrderConfiguration configuration, int position);
+    public interface OnItemSelectedListener {
+        void onItemSelected(OrderConfiguration configuration, int position);
     }
 
     public OrderConfigurationSelector(Context context) {
@@ -85,10 +87,10 @@ public class OrderConfigurationSelector extends LinearLayout {
     }
 
     private void initSelectorItems() {
-        addView(createItem(0));
+        addView(createVisibleItem(0));
         for (int i = 1; i < mMaximum; i++) {
             addView(createSplitLine());
-            addView(createItem(i));
+            addView(createVisibleItem(i));
         }
     }
 
@@ -106,7 +108,7 @@ public class OrderConfigurationSelector extends LinearLayout {
                     @Override
                     public void onDismiss() {
                         v.setBackgroundResource(R.drawable.bg_order_config_selector_item);
-                        selectItem(mSelectedIndex);
+                        selectFixedItem(mSelectedIndex);
                     }
                 });
                 v.setBackgroundResource(R.drawable.bg_order_config_selector_last_item);
@@ -135,18 +137,19 @@ public class OrderConfigurationSelector extends LinearLayout {
         mOrderConfigurationList = configurationList;
         if (mNumberOfItems <= mMaximum) {
             for (int i = 0; i < mNumberOfItems; i++) {
-                TextView item = getItem(i);
+                showFixedItem(i);
+                TextView item = getFixedItem(i);
                 item.setText(mOrderConfigurationList.get(i).getValue());
             }
             for (int i = mNumberOfItems; i < mMaximum; i++) {
-                hideItem(i);
+                hideFixedItem(i);
             }
         } else {
             for (int i = 0; i < mMaximum - 1; i++) {
-                TextView item = getItem(i);
+                TextView item = getFixedItem(i);
                 item.setText(mOrderConfigurationList.get(i).getValue());
             }
-            TextView item = getItem(mMaximum - 1);
+            TextView item = getFixedItem(mMaximum - 1);
             item.setText("...");
             List<? extends OrderConfiguration> hiddenList = mOrderConfigurationList.subList(
                     mMaximum - 1, mOrderConfigurationList.size());
@@ -155,19 +158,52 @@ public class OrderConfigurationSelector extends LinearLayout {
             ListView listView = (ListView) mPopupWindow.getContentView().findViewById(android.R.id.list);
             listView.setAdapter(adapter);
         }
-    }
 
-    private void selectItem(int index) {
-        mSelectedIndex = index;
-        int visualSize = Math.min(mNumberOfItems, mMaximum);
-        for (int i = 0; i < visualSize; i++) {
-            unHighLightItem(i);
+        int defaultIndex = 0;
+        for (int i = 0; i < mOrderConfigurationList.size(); i++) {
+            if (mOrderConfigurationList.get(i).isDefault()) {
+                defaultIndex = i;
+                break;
+            }
         }
-        highLightItem(index);
+        selectItem(defaultIndex);
     }
 
-    private void highLightItem(int index) {
-        getItem(index).setSelected(true);
+    public void selectItem(int index) {
+        if (mOrderConfigurationList == null) return;
+
+        if (index >= 0 && index < mOrderConfigurationList.size()) {
+            OrderConfiguration configuration = mOrderConfigurationList.get(index);
+            if (mNumberOfItems <= mMaximum) {
+                selectFixedItem(index);
+            } else {
+                if (index >= mMaximum - 1) {
+                    selectFixedItem(mMaximum - 1);
+                    getFixedItem(mMaximum - 1).setText(configuration.getValue());
+                } else {
+                    selectFixedItem(index);
+                }
+            }
+
+            if (mOnItemSelectedListener != null) {
+                mOnItemSelectedListener.onItemSelected(configuration, index);
+            }
+        }
+    }
+
+    private void selectFixedItem(int index) {
+        int visualSize = Math.min(mNumberOfItems, mMaximum);
+        if (index >= 0 && index < visualSize) {
+            mSelectedIndex = index;
+            for (int i = 0; i < visualSize; i++) {
+                unHighLightFixedItem(i);
+            }
+            highLightFixedItem(index);
+        }
+    }
+
+    private void highLightFixedItem(int index) {
+        getFixedItem(index).setSelected(true);
         int visualSize = Math.min(mNumberOfItems, mMaximum);
         if (index == 0) {
             getSplitLine(index + 1).setVisibility(INVISIBLE);
@@ -179,8 +215,8 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
     }
 
-    private void unHighLightItem(int index) {
-        getItem(index).setSelected(false);
+    private void unHighLightFixedItem(int index) {
+        getFixedItem(index).setSelected(false);
         int visualSize = Math.min(mNumberOfItems, mMaximum);
         if (index == 0) {
             getSplitLine(index + 1).setVisibility(VISIBLE);
@@ -192,14 +228,21 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
     }
 
-    private void hideItem(int index) {
+    private void hideFixedItem(int index) {
         if (index > 0) {
-            getItem(index).setVisibility(GONE);
+            getFixedItem(index).setVisibility(GONE);
             getSplitLine(index).setVisibility(GONE);
         }
     }
 
-    private TextView getItem(int index) {
+    private void showFixedItem(int index) {
+        if (index > 0) {
+            getFixedItem(index).setVisibility(VISIBLE);
+            getSplitLine(index).setVisibility(VISIBLE);
+        }
+    }
+
+    private TextView getFixedItem(int index) {
         return (TextView) getChildAt(index * 2);
     }
 
@@ -237,7 +280,7 @@ public class OrderConfigurationSelector extends LinearLayout {
         return textView;
     }
 
-    private TextView createItem(int position) {
+    private TextView createVisibleItem(int position) {
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_PADDING_DP,
                 getResources().getDisplayMetrics());
         TextView textView = new TextView(getContext());
@@ -263,8 +306,8 @@ public class OrderConfigurationSelector extends LinearLayout {
         return view;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
+    public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
+        mOnItemSelectedListener = onItemSelectedListener;
     }
 
     private OnClickListener mHideItemClickListener = new OnClickListener() {
@@ -273,13 +316,8 @@ public class OrderConfigurationSelector extends LinearLayout {
             mPopupWindow.dismiss();
             int lastIndex = mMaximum - 1;
             int position = (int) view.getTag(KEY_POSITION);
-            position = position + mMaximum - 1;
-            OrderConfiguration configuration = mOrderConfigurationList.get(position);
-            selectItem(lastIndex);
-            getItem(lastIndex).setText(configuration.getValue());
-            if (mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(configuration, position);
-            }
+            position = position + lastIndex;
+            selectItem(position);
         }
     };
 
@@ -292,9 +330,6 @@ public class OrderConfigurationSelector extends LinearLayout {
                 showPopupWindow(view);
             } else {
                 selectItem(position);
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(mOrderConfigurationList.get(position), position);
-                }
             }
         }
     };

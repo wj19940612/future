@@ -96,7 +96,6 @@ dependencies {
     compile project(':PushSDK')
     compile project(':kutils')
     compile project(':chart')
-
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
@@ -107,4 +106,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.2.0'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile files('libs/netty-all-4.1.5.final.jar')
 }

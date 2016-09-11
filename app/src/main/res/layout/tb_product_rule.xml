@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/colorPrimary"
@@ -11,11 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="美原油 CL1609"
         android:textColor="@android:color/white"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        tools:text="美原油 CL1609"/>
 
     <LinearLayout
+        android:id="@+id/productRule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/productName"
@@ -29,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/productName"
-            android:src="@drawable/ic_question"/>
+            android:background="@drawable/ic_question"/>
 
         <TextView
             android:layout_width="wrap_content"

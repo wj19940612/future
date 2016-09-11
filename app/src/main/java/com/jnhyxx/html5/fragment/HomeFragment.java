@@ -20,6 +20,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
 import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
@@ -93,8 +94,6 @@ public class HomeFragment extends BaseFragment {
         requestOrderReport();
         requestProductList();
         requestProductMarketList();
-
-        startScheduleJob(5 * 1000);
     }
 
     private void requestProductExchangeStatus(final Product product) {
@@ -141,6 +140,13 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         requestHomePositions();
+        startScheduleJob(5 * 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
     }
 
     private void requestHomeAdvertisement() {
@@ -180,27 +186,8 @@ public class HomeFragment extends BaseFragment {
                 }).fire();
     }
 
-//    private void requestPositionBriefList() {
-//        if (User.getUser().isLogin()) {
-//            API.Order.getOrderPositionList(User.getUser().getToken())
-//                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
-//                        @Override
-//                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
-//                            mPositionBriefList = positionBriefs;
-//                            boolean updateProductList =
-//                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            } else {
-//                                updateProductListView();
-//                            }
-//                        }
-//                    }).setTag(TAG).fire();
-//        } else { // clear all product position
-//            ProductPkg.clearPositionBriefs(mProductPkgList);
-//        }
     private void requestHomePositions(){
-        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override
@@ -317,7 +304,7 @@ public class HomeFragment extends BaseFragment {
                     MarketData marketData = pkg.getMarketData(); // Market status
                     if (marketData != null) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                                product.getDecimalScale()));
+                                product.getPriceDecimalScale()));
                         mPriceChangePercent.setText(marketData.getUnsignedPercentage());
                         String priceChangePercent = marketData.getPercentage();
                         if (priceChangePercent.startsWith("-")) {

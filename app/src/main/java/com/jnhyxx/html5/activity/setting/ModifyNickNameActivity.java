@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.account.LocalCacheUserInfoManager;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -61,7 +61,7 @@ public class ModifyNickNameActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp>() {
                     @Override
                     protected void onRespSuccess(Resp resp) {
-                        UserInfo user = LocalCacheUserInfoManager.getInstance().getUser();
+                        UserInfo user = LocalUser.getUser().getUserInfo();
                         user.setUserName(nickName);
                         setResult(RESULT_OK);
                         ToastUtil.curt(R.string.modify_nick_name_success);

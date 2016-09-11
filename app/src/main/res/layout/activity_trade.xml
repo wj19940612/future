@@ -117,7 +117,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/bluePrimary"
                 android:gravity="center"
-                android:text="@string/next_trade_time_is"
+                android:text="@string/prompt_next_trade_time_is"
                 android:textColor="#666666"
                 android:textSize="15sp"/>
         </LinearLayout>

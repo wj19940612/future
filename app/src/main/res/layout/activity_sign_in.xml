@@ -29,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="34dp"
+        android:paddingRight="34dp">
 
 
         <ImageView
@@ -45,13 +45,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/helpPhoneNumImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_phone" />
 
             <EditText
                 android:id="@+id/phoneNum"
@@ -71,6 +64,15 @@
                 android:clickable="true"
                 android:src="@drawable/login_icon_delete"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/helpPhoneNumImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/loginImagePhoneDelete"
+                android:layout_toRightOf="@+id/loginImagePhoneDelete"
+                android:src="@drawable/login_icon_phone" />
         </RelativeLayout>
 
 
@@ -82,8 +84,8 @@
 
             <ImageView
                 android:id="@+id/helpPasswordImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:src="@drawable/login_icon_lock" />
 

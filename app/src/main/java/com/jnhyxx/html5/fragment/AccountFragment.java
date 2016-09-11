@@ -228,6 +228,7 @@ public class AccountFragment extends BaseFragment {
 //                                        .execute();
 //                            }
 //                        }).fire();
+                // TODO: 2016/9/11 这里目前缺少判断，应该判断银行卡绑定状态 
                 break;
             //提现
             case R.id.withdraw:

@@ -3,7 +3,11 @@ package com.jnhyxx.html5.activity.account;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -11,9 +15,12 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +36,14 @@ public class FindPwdActivity extends BaseActivity {
     TextView mObtainAuthCode;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
-
+    @BindView(R.id.inputImageCode)
+    EditText mInputImageCode;
+    @BindView(R.id.RetrieveImageCode)
+    ImageView mRetrieveImageCode;
+    @BindView(R.id.imageCode)
+    LinearLayout mImageCode;
+    @BindView(R.id.FailWarn)
+    CommonFailWarn mCommonFailWarn;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -85,7 +99,11 @@ public class FindPwdActivity extends BaseActivity {
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
-        API.User.obtainAuthCodeWhenFindPwd(phoneNum)
+        String regImageCode = null;
+        if (mImageCode.isShown()) {
+            regImageCode = mInputImageCode.getText().toString().trim();
+        }
+        API.User.obtainAuthCodeWhenFindPwd(phoneNum, regImageCode)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -98,9 +116,39 @@ public class FindPwdActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                        } else if (resp.getCode() == 601) {
+                            showFailWarnView(resp);
+                            getRetrieveImageCode();
+                        } else {
+                            showFailWarnView(resp);
                         }
                     }
                 }).fire();
+    }
+
+    private void getRetrieveImageCode() {
+        ToastUtil.curt("获取注册验证码");
+        String userPhone = mPhoneNum.getText().toString().trim();
+        if (TextUtils.isEmpty(userPhone)) return;
+        String url = CommonMethodUtils.imageCodeUri(userPhone);
+        Log.d(TAG, "注册页面图片验证码地址  " + url);
+        Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                mImageCode.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError() {
+                // TODO: 2016/9/8  目前先做这样处理
+                ToastUtil.curt("图片验证码下载失败，请点击短信验证码再次下载");
+            }
+        });
+    }
+
+    private void showFailWarnView(Resp resp) {
+        mCommonFailWarn.setCenterTxt(resp.getMsg());
+        mCommonFailWarn.setVisibility(View.VISIBLE);
     }
 
     //下一步跳转

@@ -113,7 +113,7 @@ public class API extends APIBase {
          *
          * @param tele
          */
-        public static API obtainAuthCodeWhenFindPwd(String tele) {
+        public static API obtainAuthCodeWhenFindPwd(String tele,String regImageCode) {
             String sign = null;
             try {
                 sign = SecurityUtil.md5Encrypt(tele + "luckin");

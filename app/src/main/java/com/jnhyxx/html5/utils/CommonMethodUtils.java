@@ -7,6 +7,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.jnhyxx.html5.BuildConfig;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -311,5 +313,20 @@ public class CommonMethodUtils {
         return result;
     }
 
+    /**
+     * 拼接的获取图片验证码的地址
+     * @param userPhone
+     * @return
+     */
+    public static String imageCodeUri(String userPhone){
+        String url="";
+        if (!TextUtils.isEmpty(userPhone)){
+            String mHost = BuildConfig.API_HOST;
+            String mUri = "/user/user/getRegImage.do";
+            String user = "?userPhone=";
+            url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
+        }
+       return url;
+    }
 }
 

@@ -14,9 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -36,8 +34,6 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
-
-import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +69,7 @@ public class SignUpActivity extends BaseActivity {
     LinearLayout mImageCode;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
-    @BindView(R.id.ivRegisterRetrieveImage)
+    @BindView(R.id.RetrieveImageCode)
     ImageView mIvRegisterRetrieveImage;
     private boolean flag = false;
 
@@ -198,7 +194,7 @@ public class SignUpActivity extends BaseActivity {
     //注册
     @OnClick(R.id.signUpButton)
     void signUp() {
-        // TODO: 2016/9/12 目前还不知道出现图片验证码后该如何调用接口，是否需要上传 
+        // TODO: 2016/9/12 目前还不知道出现图片验证码后该如何调用接口，是否需要上传
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
@@ -232,10 +228,7 @@ public class SignUpActivity extends BaseActivity {
         ToastUtil.curt("获取注册验证码");
         String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-        String mHost = BuildConfig.API_HOST;
-        String mUri = "/user/user/getRegImage.do";
-        String user = "?userPhone=";
-        String url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
+        String url = CommonMethodUtils.imageCodeUri(userPhone);
         Log.d(TAG, "注册页面图片验证码地址  " + url);
         Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
             @Override

@@ -102,7 +102,7 @@
                 android:textColorHint="@color/grayHint" />
 
             <ImageView
-                android:id="@+id/ivRegisterRetrieveImage"
+                android:id="@+id/RetrieveImageCode"
                 android:layout_width="85dp"
                 android:layout_height="34dp"
                 android:src="@mipmap/ic_launcher"

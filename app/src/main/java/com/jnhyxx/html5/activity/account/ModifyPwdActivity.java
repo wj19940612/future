@@ -18,6 +18,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -40,9 +41,7 @@ public class ModifyPwdActivity extends BaseActivity {
     @BindView(R.id.findPasswordTitleBar)
     TitleBar mTitleBar;
     @BindView(R.id.modifyPasswordWarn)
-    RelativeLayout modifyPasswordWarn;
-    @BindView(R.id.commonFailTvWarn)
-    TextView tvFailWarn;
+    CommonFailWarn mModifyPasswordWarn;
     private String mPhone;
     private String mAuthCode;
     private String mNewPwd;
@@ -61,7 +60,6 @@ public class ModifyPwdActivity extends BaseActivity {
         processIntent(getIntent());
 
         initTitleBar();
-        tvFailWarn.setText(R.string.newPassword_different_from_confimPassword);
     }
 
     private void initTitleBar() {
@@ -110,10 +108,9 @@ public class ModifyPwdActivity extends BaseActivity {
     public void onClick() {
         Log.d(TAG, "新密码与提交密码是否相同  " + TextUtils.equals(mNewPwd, confirmPassword));
         if (!TextUtils.equals(mNewPwd, confirmPassword)) {
-            modifyPasswordWarn.setVisibility(View.VISIBLE);
+            ToastUtil.curt(R.string.newPassword_different_from_confimPassword);
         } else {
-            modifyPasswordWarn.setVisibility(View.GONE);
-            API.User.modifyPwdWhenFindPwd(mPhone,  mNewPwd)
+            API.User.modifyPwdWhenFindPwd(mPhone, mNewPwd)
                     .setIndeterminate(this).setTag(TAG)
                     .setCallback(new Callback<Resp>() {
                         @Override
@@ -129,7 +126,8 @@ public class ModifyPwdActivity extends BaseActivity {
                                         }).show();
                                 CustomToast.getInstance().custommakeText(ModifyPwdActivity.this, R.string.modify_passWord_success);
                             } else {
-                                ToastUtil.show(resp.getMsg());
+                                mModifyPasswordWarn.setVisibility(View.VISIBLE);
+                                mModifyPasswordWarn.setCenterTxt(resp.getMsg());
                             }
                         }
                     }).fire();

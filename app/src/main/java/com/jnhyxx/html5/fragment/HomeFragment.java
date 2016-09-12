@@ -99,11 +99,14 @@ public class HomeFragment extends BaseFragment {
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<MarketServer>, MarketServer>() {
+                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
                     @Override
-                    public void onRespSuccess(MarketServer marketServer) {
-                        NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
-                        requestProductExchangeStatus(pkg.getProduct());
+                    public void onRespSuccess(List<MarketServer> marketServers) {
+                        if (marketServers != null && marketServers.size() > 0) {
+                            MarketServer marketServer = marketServers.get(0);
+                            NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+                            requestProductExchangeStatus(pkg.getProduct());
+                        }
                     }
                 }).fire();
     }

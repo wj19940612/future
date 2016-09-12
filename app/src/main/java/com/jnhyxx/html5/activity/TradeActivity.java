@@ -151,6 +151,12 @@ public class TradeActivity extends BaseActivity implements
         requestHoldingOrderList();
     }
 
+    private void requestHoldingOrderList() {
+        if (!LocalUser.getUser().isLogin()) return;
+
+        // TODO: 9/12/16
+    }
+
     private void updateTradePagerHeader() {
         if (LocalUser.getUser().isLogin()) {
             mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
@@ -165,6 +171,7 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateTradePagerHeader();
+            requestHoldingOrderList();
         }
     }
 
@@ -218,10 +225,6 @@ public class TradeActivity extends BaseActivity implements
         }
 
         startScheduleJob(60 * 1000);
-    }
-
-    private void requestHoldingOrderList() {
-
     }
 
     @Override

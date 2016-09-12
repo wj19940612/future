@@ -84,6 +84,11 @@ android {
     dexOptions {
         javaMaxHeapSize '4g'
     }
+
+    packagingOptions {
+        exclude "META-INF/INDEX.LIST" // will not include INDEX file
+        exclude "META-INF/io.netty.versions.properties"
+    }
 }
 
 dependencies {

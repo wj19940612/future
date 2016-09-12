@@ -213,7 +213,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：更新通过短信验证码找回的密码
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/retrieveUpdatePass.do
          *
          * @param userPhone 用户手机号
@@ -247,7 +247,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：获取找回密码图片验证码
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/getRetrieveImage.do
          *
          * @param userPhone
@@ -328,7 +328,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：绑定银行卡
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/bindBankCard.do
          * bankId        Integer   银行列表
          * bankName      String     银行名
@@ -350,7 +350,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：显示渠道银行列表
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/showChannelBankList.do
          *
          * @return
@@ -402,7 +402,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：修改昵称
-         * <p>
+         * <p/>
          * http://域名/user/user/updateNickName.do
          *
          * @param nickName
@@ -432,7 +432,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询用户资金信息
-         * <p>
+         * <p/>
          * URL  http://域名/user/finance/findMain.do
          *
          * @return
@@ -584,22 +584,21 @@ public class API extends APIBase {
         }
 
         /**
-         * /order/futures/balancedList 获取结算订单列表
+         * /order/order/getVarietySettleOrders.do 获取结算订单列表
          *
-         * @param token
          * @param pageNo
          * @param pageSize
-         * @param id
-         * @param fundType @return
+         * @param contractsCode
+         * @param payType
+         * @return
          */
-        public static API getSettlementOrderList(String token, int pageNo, int pageSize, int id, int fundType) {
-            return new API("/order/futures/balancedList",
+        public static API getSettlementOrderList(String contractsCode, int payType, int pageNo, int pageSize) {
+            return new API(GET, "/order/order/getVarietySettleOrders.do",
                     new ApiParams()
-                            .put(TOKEN, token)
+                            .put("contractsCode", contractsCode)
+                            .put("payType", payType)
                             .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize)
-                            .put(FUTURES_TYPE, id)
-                            .put(FUND_TYPE, fundType));
+                            .put(PAGE_SIZE, pageSize));
         }
 
         /**
@@ -611,7 +610,9 @@ public class API extends APIBase {
          * @return
          */
         public static API getExchangeTradeStatus(int exchangeId) {
-            return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+            return new API(GET, "/order/order/getTradeTime.do",
+                    new ApiParams()
+                            .put("exchangeId", exchangeId));
         }
 
         /**
@@ -620,7 +621,9 @@ public class API extends APIBase {
          * @param varietyId
          */
         public static API getFuturesFinancing(int varietyId) {
-            return new API(GET, "/order/variety/getAssetsByVariety.do?varietyId=" + varietyId, null);
+            return new API(GET, "/order/variety/getAssetsByVariety.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId));
         }
 
         /**
@@ -631,6 +634,20 @@ public class API extends APIBase {
         public static API submitOrder(SubmittedOrder submittedOrder) {
             return new API("/order/order/submitOrder.do",
                     new ApiParams(SubmittedOrder.class, submittedOrder));
+        }
+
+        /**
+         * /order/order/getOrderInfo.do 获取结算订单详情
+         *
+         * @param showId
+         * @param fundType
+         * @return
+         */
+        public static API getOrderDetail(String showId, int fundType) {
+            return new API("/order/order/getOrderInfo.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("fundType", fundType));
         }
     }
 

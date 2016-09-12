@@ -14,5 +14,6 @@
         android:gravity="center"
         android:padding="5dp"
         android:text="有错误"
+        android:drawablePadding="5dp"
         android:textColor="@android:color/white" />
 </RelativeLayout>

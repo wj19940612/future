@@ -160,4 +160,12 @@
         <item name="android:paddingRight">15dp</item>
         <item name="android:orientation">horizontal</item>
     </style>
+    <!--公共的失败提示-->
+    <style name="commonFailWarn">
+        <item name="android:background">@android:color/holo_red_light</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">visible</item>
+    </style>
 </resources>

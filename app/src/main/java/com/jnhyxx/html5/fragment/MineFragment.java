@@ -95,6 +95,14 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
+        if (LocalUser.getUser().isLogin()) {
+            mTitleBar.setRightVisible(true);
+        }else{
+            mTitleBar.setRightVisible(true);
+        }
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

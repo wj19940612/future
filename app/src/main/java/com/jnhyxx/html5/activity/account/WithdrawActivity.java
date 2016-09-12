@@ -55,15 +55,6 @@ public class WithdrawActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         updateBankInfoView(getIntent());
-//
-//        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-//                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
-//                    @Override
-//                    public void onRespSuccess(FundInfo fundInfo) {
-//                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
-//                    }
-//                }).fire();
-
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

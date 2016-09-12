@@ -339,4 +339,10 @@
     <string name="confirm_sell_short">确认买跌</string>
     <string name="today_position">今持仓</string>
     <string name="pre_position">昨持仓</string>
+
+    <!--充值、提现-->
+    <string name="warm_hint">温馨提示:</string>
+    <string name="add_bank_card">添加银行卡</string>
+    <string name="bank_name_card_number">%1$1  %1$2</string>
+    <string name="withdraw_least_money_hint">金额>=20元</string>
 </resources>

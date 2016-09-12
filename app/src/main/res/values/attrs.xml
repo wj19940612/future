@@ -73,4 +73,7 @@
         <attr name="centerDrawable" format="reference" />
         <attr name="centerDrawablePadding" format="reference|dimension" />
     </declare-styleable>
+    <declare-styleable name="SetHintTextSizeEditText">
+        <attr name="hintTextSize" format="dimension" />
+    </declare-styleable>
 </resources>

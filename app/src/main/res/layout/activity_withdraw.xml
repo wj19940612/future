@@ -21,8 +21,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="16dp">
+        android:background="@color/bluePrimary"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -31,6 +31,7 @@
             android:paddingBottom="15dp"
             android:paddingTop="25dp"
             android:text="@string/account_balance"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -48,38 +49,52 @@
         android:id="@+id/bankcardNotFilledArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/btn_withdraw"
         android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/prompt_bankcard_not_be_bound"
-            android:textColor="#FF7300" />
-
-        <TextView
             android:id="@+id/addBankcardButton"
-            style="@style/PrimaryBigButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:enabled="true"
-            android:text="@string/add_bankcard_right_now" />
+            android:drawableLeft="@drawable/ic_withdraw_addcard"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:padding="13dp"
+            android:text="@string/add_bank_card"
+            android:textColor="#A8A8A8"
+            android:textSize="16sp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/bankcardInfoArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:visibility="visible">
 
-        <include layout="@layout/split_line_thick" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/bank_name_card_number" />
 
-        <LinearLayout
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_money"
+            android:drawablePadding="5dp"
+            android:hint="@string/withdraw_least_money_hint"
+            android:text="1551515115"
+            android:textColor="#262626"
+            android:textColorHint="#CBCBCB" />
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -92,6 +107,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView"
                     style="@style/InputTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,7 +157,7 @@
                     android:paddingRight="2dp"
                     android:text=">" />
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout>-->
 
         <include layout="@layout/split_line_thick" />
 
@@ -160,19 +176,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="温馨提示:"
-        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="30dp"
+        android:text="@string/warm_hint"
+        android:textColor="#FB4B55"
         android:textSize="12sp" />
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:lineSpacingExtra="3dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="3dp"
-        android:text="@string/prompt_withdraw"
-        android:textSize="12sp" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/prompt_withdraw"
+            android:textColor="#ABABAB"
+            android:textSize="12sp" />
+    </ScrollView>
+
 </LinearLayout>

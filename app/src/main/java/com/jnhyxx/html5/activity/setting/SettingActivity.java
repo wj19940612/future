@@ -114,7 +114,6 @@ public class SettingActivity extends BaseActivity {
             mTvBindBankCardSetting.setText(R.string.setting_write_now);
         } else if (userInfo.getCardState() == 2) {
             mTvBindBankCardSetting.setText(R.string.setting_attestation);
-            mRlBindBankCardSetting.setEnabled(false);
         }
     }
 

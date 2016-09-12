@@ -77,13 +77,15 @@
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/bank_name_card_number" />
+            android:paddingLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/default_bank_name_card_number" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -91,7 +93,7 @@
             android:drawableLeft="@drawable/ic_money"
             android:drawablePadding="5dp"
             android:hint="@string/withdraw_least_money_hint"
-            android:text="1551515115"
+            android:textSize="16sp"
             android:textColor="#262626"
             android:textColorHint="#CBCBCB" />
         <!--<LinearLayout
@@ -162,14 +164,15 @@
         <include layout="@layout/split_line_thick" />
 
         <TextView
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:id="@+id/confirmButton"
-            style="@style/PrimaryBigButton"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/btn_obtain_auth_code"
             android:enabled="true"
+            android:clickable="true"
+            android:padding="13sp"
             android:text="@string/ok" />
     </LinearLayout>
 

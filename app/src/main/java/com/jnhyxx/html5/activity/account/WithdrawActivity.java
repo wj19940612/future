@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -54,7 +55,6 @@ public class WithdrawActivity extends BaseActivity {
         setContentView(R.layout.activity_withdraw);
         ButterKnife.bind(this);
 
-        updateBankInfoView(getIntent());
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,19 +64,26 @@ public class WithdrawActivity extends BaseActivity {
 
     }
 
-    private void updateBankInfoView(Intent intent) {
-        mBankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-        updateBankInfoView(mBankcardAuth);
-    }
-
-    private void updateBankInfoView(BankcardAuth bankcardAuth) {
-        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_NOT_FILLED) {
-            mBankcardNotFilledArea.setVisibility(View.VISIBLE);
-            mBankcardInfoArea.setVisibility(View.GONE);
-        } else {
-            mBankcardNotFilledArea.setVisibility(View.GONE);
-            mBankcardInfoArea.setVisibility(View.VISIBLE);
-            mWithdrawBankcard.setText(bankcardAuth.getHiddenSummary());
+    private void updateBankInfoView() {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo != null) {
+            if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
+                mBankcardNotFilledArea.setVisibility(View.VISIBLE);
+                mBankcardInfoArea.setVisibility(View.GONE);
+            } else {
+                mBankcardNotFilledArea.setVisibility(View.GONE);
+                mBankcardInfoArea.setVisibility(View.VISIBLE);
+                String cardNumber = userInfo.getCardNumber();
+                String bankName = userInfo.getIssuingbankName();
+                StringBuffer mStringBuffer = new StringBuffer();
+                mStringBuffer.append(bankName);
+                mStringBuffer.append("  ");
+                if (!TextUtils.isEmpty(bankName)) {
+                    mStringBuffer.append("*");
+                    mStringBuffer.append(cardNumber.substring(cardNumber.length() - 4));
+                }
+                mWithdrawBankcard.setText(mStringBuffer.toString());
+            }
         }
     }
 
@@ -112,7 +119,6 @@ public class WithdrawActivity extends BaseActivity {
     @OnClick(R.id.addBankcardButton)
     void addBankcard() {
         Launcher.with(this, BankcardAuthActivity.class)
-                .putExtra(Launcher.EX_PAYLOAD, mBankcardAuth)
                 .executeForResult(REQUEST_CODE);
     }
 
@@ -120,8 +126,7 @@ public class WithdrawActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            BankcardAuth bankcardAuth = (BankcardAuth) data.getSerializableExtra(RESULT_BANKCARD_AUTH);
-            updateBankInfoView(bankcardAuth);
+            updateBankInfoView();
         }
     }
 

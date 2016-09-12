@@ -270,9 +270,7 @@ public class CommonMethodUtils {
         bankNumber = bankNumber.trim();
         String safeBankNumber = "";
         //不管多少长度，只显示16位 ，最后四位显示。
-        if (bankNumber.length() == 16) {
-            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
-        }
+        safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
         //根据长度生成*
         /*StringBuilder mStringBuilder = new StringBuilder();
         for (int i = 1; i < bankNumber.length() - 3; i++) {

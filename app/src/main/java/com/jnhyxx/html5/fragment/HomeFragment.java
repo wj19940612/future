@@ -104,8 +104,10 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(List<MarketServer> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
                             MarketServer marketServer = marketServers.get(0);
+                            Product product = pkg.getProduct();
                             NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
-                            requestProductExchangeStatus(pkg.getProduct());
+                            NettyClient.getInstance().setContractCode(product.getContractsCode());
+                            requestProductExchangeStatus(product);
                         }
                     }
                 }).fire();

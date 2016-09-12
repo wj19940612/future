@@ -35,6 +35,7 @@ import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
@@ -224,12 +225,16 @@ public class TradeActivity extends BaseActivity implements
             mQuestionMark.start();
         }
 
+        NettyClient.getInstance().start();
+
         startScheduleJob(60 * 1000);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        NettyClient.getInstance().stop();
+
         stopScheduleJob();
     }
 

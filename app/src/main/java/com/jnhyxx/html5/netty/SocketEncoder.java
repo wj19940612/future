@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2015 www.caniu.com - 版权所有
- * 
- * This software is the confidential and proprietary information of
- * luckin Group. You shall not disclose such confidential information 
- * and shall use it only in accordance with the terms of the license 
- * agreement you entered into with www.cainiu.com
- */
 package com.jnhyxx.html5.netty;
 
 import android.text.TextUtils;

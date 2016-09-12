@@ -1,5 +1,15 @@
 package com.jnhyxx.html5.domain.account;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/8/31.
  * 登陆成功后返回的数据
@@ -71,6 +81,64 @@ public class UserInfo {
      * cardNumber银行卡号
      */
     private String cardNumber;
+    /**
+     * icon : https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1473647868883060881.png
+     * bIsSetNickName : false
+     * bankId : 3
+     */
+    /**
+     * icon银行图标
+     */
+    private String icon;
+    /**
+     * bIsSetNickName是否修改过昵称 false未修改true已修改
+     */
+    private boolean bIsSetNickName;
+    private int bankId;
+
+    public static UserInfo objectFromData(String str) {
+
+        return new Gson().fromJson(str, UserInfo.class);
+    }
+
+    public static UserInfo objectFromData(String str, String key) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+
+            return new Gson().fromJson(jsonObject.getString(str), UserInfo.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static List<UserInfo> arrayUserInfoFromData(String str) {
+
+        Type listType = new TypeToken<ArrayList<UserInfo>>() {
+        }.getType();
+
+        return new Gson().fromJson(str, listType);
+    }
+
+    public static List<UserInfo> arrayUserInfoFromData(String str, String key) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+            Type listType = new TypeToken<ArrayList<UserInfo>>() {
+            }.getType();
+
+            return new Gson().fromJson(jsonObject.getString(str), listType);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList();
+
+
+    }
 
     public double getMoneyUsable() {
         return moneyUsable;
@@ -168,6 +236,30 @@ public class UserInfo {
         this.cardNumber = cardNumber;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public boolean isBIsSetNickName() {
+        return bIsSetNickName;
+    }
+
+    public void setBIsSetNickName(boolean bIsSetNickName) {
+        this.bIsSetNickName = bIsSetNickName;
+    }
+
+    public int getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(int bankId) {
+        this.bankId = bankId;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -183,6 +275,9 @@ public class UserInfo {
                 ", cardState=" + cardState +
                 ", id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
+                ", icon='" + icon + '\'' +
+                ", bIsSetNickName=" + bIsSetNickName +
+                ", bankId=" + bankId +
                 '}';
     }
 }

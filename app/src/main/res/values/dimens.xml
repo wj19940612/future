@@ -14,6 +14,7 @@
     <dimen name="market_status_area_height">77dp</dimen>
     <dimen name="market_date_row_padding">14dp</dimen>
 
+    <dimen name="drawable_left_padding">5dp</dimen>
 
     <dimen name="dp_0">0dp</dimen>
     <dimen name="dp_1">1dp</dimen>

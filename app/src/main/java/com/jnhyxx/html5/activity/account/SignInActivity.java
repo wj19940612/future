@@ -10,7 +10,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -51,7 +50,7 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @BindView(R.id.rlFailWarn)
+    @BindView(R.id.FailWarn)
     CommonFailWarn rlFailWarn;
 
     @Override

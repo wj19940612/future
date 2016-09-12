@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -8,11 +7,13 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +31,13 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
+
+import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,13 +66,11 @@ public class SignUpActivity extends BaseActivity {
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
-    @BindView(R.id.rlFailWarn)
-    RelativeLayout mFailWarn;
-    @BindView(R.id.commonFailTvWarn)
-    TextView mFailWarnText;
+    @BindView(R.id.FailWarn)
+    CommonFailWarn mFailWarn;
     //获取图片验证码
-    @BindView(R.id.tvRegisterRetrieveImage)
-    TextView mTvRegisterRetrieveImage;
+    @BindView(R.id.imageCode)
+    LinearLayout mImageCode;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
     @BindView(R.id.ivRegisterRetrieveImage)
@@ -92,14 +93,6 @@ public class SignUpActivity extends BaseActivity {
             }
         });
         jumpLoginActivity();
-        mFailWarnText.setText(R.string.register_auth_code_fail);
-
-        mTvRegisterRetrieveImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getRegisterImage();
-            }
-        });
     }
 
     private void jumpLoginActivity() {
@@ -107,6 +100,7 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
+                finish();
             }
         });
     }
@@ -189,6 +183,13 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                        } else if (resp.getCode() == 601) {
+                            getRegisterImage();
+                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setCenterTxt(resp.getMsg());
+                        } else {
+                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setCenterTxt(resp.getMsg());
                         }
                     }
                 }).fire();
@@ -197,6 +198,7 @@ public class SignUpActivity extends BaseActivity {
     //注册
     @OnClick(R.id.signUpButton)
     void signUp() {
+        // TODO: 2016/9/12 目前还不知道出现图片验证码后该如何调用接口，是否需要上传 
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
@@ -210,70 +212,43 @@ public class SignUpActivity extends BaseActivity {
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-
-                            SmartDialog.with(getActivity(), resp.getMsg())
-                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                            finish();
-                                        }
-                                    }).show();
-                        } else if (resp.getCode() == 600) {
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            // TODO: 2016/9/12 原来的代码，目前不知道用途
+//                            SmartDialog.with(getActivity(), resp.getMsg())
+//                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(Dialog dialog) {
+//                                            dialog.dismiss();
+//                                            finish();
+//                                        }
+//                                    }).show();
                         } else {
-                            if (mFailWarn.isShown()) {
-                                mFailWarn.setVisibility(View.GONE);
-                            }
-                            ToastUtil.show(resp.getMsg());
+                            mFailWarn.setCenterTxt(resp.getMsg());
                         }
                     }
                 }).fire();
-
-    }
-
-    //获取动态验证码
-    @OnClick(R.id.tvRegisterRetrieveImage)
-    void getRegisterRetrieveImage() {
-        getRegisterImage();
     }
 
     private void getRegisterImage() {
         ToastUtil.curt("获取注册验证码");
         String userPhone = mPhoneNum.getText().toString().trim();
-        if (TextUtils.isEmpty(userPhone)) {
-            mTvRegisterRetrieveImage.setEnabled(false);
-        } else {
-            mTvRegisterRetrieveImage.setEnabled(true);
-//            API.User.getRegisterImage(userPhone)
-//                    .setIndeterminate(this).setTag(TAG)
-//                    .setCallback(new Callback<Resp>() {
-//                        @Override
-//                        public void onReceive(Resp resp) {
-//                           Log.d(TAG,"msg"+resp.getMsg()+" \ncode "+resp.getCode()+"\n data"+resp.getData().toString()+" \n 错误信息"+resp.getErrparam()+"\n 类型"+resp.getMsgType());
-//                        }
-//                    }).fire();
-            Toast.makeText(getApplicationContext(), "开始下载图片", Toast.LENGTH_SHORT).show();
-            String mHost = BuildConfig.API_HOST;
-            String mUri = "/user/user/getRegImage.do";
-            String user = "?userPhone=";
-            String url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
-            ToastUtil.curt(url);
-            mIvRegisterRetrieveImage.setVisibility(View.VISIBLE);
-            Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
-                @Override
-                public void onSuccess() {
-                    mTvRegisterRetrieveImage.setVisibility(View.GONE);
-                }
+        if (TextUtils.isEmpty(userPhone)) return;
+        String mHost = BuildConfig.API_HOST;
+        String mUri = "/user/user/getRegImage.do";
+        String user = "?userPhone=";
+        String url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
+        Log.d(TAG, "注册页面图片验证码地址  " + url);
+        Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                mImageCode.setVisibility(View.VISIBLE);
+            }
 
-                @Override
-                public void onError() {
-                    // TODO: 2016/9/8  目前先做这样处理
-                    mTvRegisterRetrieveImage.setText("获取失败，点击重新下载");
-                }
-            });
-
-        }
+            @Override
+            public void onError() {
+                // TODO: 2016/9/8  目前先做这样处理
+                ToastUtil.curt("图片验证码下载失败，请点击短信验证码再次下载");
+            }
+        });
     }
 
     //点击后改变文本输入框的输入类型，使密码可见或隐藏

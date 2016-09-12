@@ -18,6 +18,12 @@ android {
 
         multiDexEnabled true
 
+        // todo 加入此行代码，防止出现 Error:Execution failed for task ':app:transformResourcesWithMergeJavaResForMicroilDebug'.
+        // com.android.build.api.transform.TransformException: com.android.builder.packaging.DuplicateFileException: Duplicate files copied in APK META-INF/INDEX.LIST
+        packagingOptions {
+            exclude "META-INF/INDEX.LIST" // will not include INDEX file
+            exclude "META-INF/io.netty.versions.properties" // will not include INDEX file
+        }
     }
 
     java.util.Properties properties = new Properties();

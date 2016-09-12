@@ -120,7 +120,6 @@ public class API extends APIBase {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-
             return new API("/user/user/retrievePass.do",
                     new ApiParams()
                             .put("userPhone", tele));
@@ -445,16 +444,16 @@ public class API extends APIBase {
 
 
         /**
-         * 用户提现申请 /financy/financy/apiWithdraw
+         * 接口名：用户提现
+         * <p>
+         * URL  http://域名/user/finance/draw.do
          *
-         * @param token
-         * @param amount
+         * @param money
          */
-        public static API withdraw(String token, double amount) {
-            return new API("/financy/financy/apiWithdraw",
+        public static API withdraw(double money) {
+            return new API("/user/finance/draw.do",
                     new ApiParams()
-                            .put(TOKEN, token)
-                            .put("inoutAmt", amount));
+                            .put("money", money));
         }
 
         /**

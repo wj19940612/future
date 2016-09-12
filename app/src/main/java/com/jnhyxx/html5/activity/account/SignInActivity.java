@@ -22,7 +22,9 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
@@ -50,9 +52,7 @@ public class SignInActivity extends BaseActivity {
     TextView mSignInButton;
 
     @BindView(R.id.rlFailWarn)
-    RelativeLayout rlFailWarn;
-    @BindView(R.id.commonFailTvWarn)
-    TextView mFailWarnTv;
+    CommonFailWarn rlFailWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class SignInActivity extends BaseActivity {
         mSignUpButton.setEnabled(true);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
-        mFailWarnTv.setText("");
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -111,7 +110,7 @@ public class SignInActivity extends BaseActivity {
     }
 
     @OnClick({R.id.clearPhoneNumButton, R.id.showPasswordButton, R.id.signInButton, R.id.signUpButton, R.id.forgetPassword})
-    public void onClick(View view) {
+    public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.clearPhoneNumButton:
                 mPhoneNum.setText("");
@@ -129,11 +128,15 @@ public class SignInActivity extends BaseActivity {
                             public void onReceive(Resp<JsonObject> jsonObjectResp) {
                                 if (jsonObjectResp.isSuccess()) {
                                     UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
-                                    LocalUser.getUser().setUserInfo(userInfo );
+                                    LocalUser.getUser().setUserInfo(userInfo);
                                     setResult(RESULT_OK);
+                                    ToastUtil.curt("登陆成功");
                                     finish();
                                 } else {
                                     // TODO: 9/10/16 登入错误处理
+                                    ToastUtil.curt(jsonObjectResp.getMsg());
+                                    rlFailWarn.setVisibility(View.VISIBLE);
+                                    rlFailWarn.setCenterTxt(jsonObjectResp.getMsg());
                                 }
                             }
                         }).fire();

@@ -43,14 +43,11 @@
                             android:layout_weight="1"
                             android:hint="@string/please_input_phone_num" />-->
 
-            <ImageView
-                android:id="@+id/helpPhoneNumImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_phone" />
+
 
             <EditText
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/login_icon_phone"
                 android:layout_centerVertical="true"
                 android:id="@+id/findPasswordPhoneNum"
                 style="@style/SignEditText.PhoneNum"
@@ -100,18 +97,15 @@
                       android:text="@string/obtain_auth_code"
                       android:textColor="@android:color/white"
                       android:textSize="13sp" />-->
-            <ImageView
-                android:id="@+id/help_messageAuthCode"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_code" />
+
 
             <EditText
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/login_icon_code"
                 android:layout_centerVertical="true"
                 android:id="@+id/findPasswordMessageAuthCode"
                 style="@style/SignEditText.PhoneNum"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/help_messageAuthCode"
                 android:hint="@string/please_input_msg_auth_code"
@@ -146,13 +140,5 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
         android:text="@string/next_step" />
-
-    <!--    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/please_contact_service_if_issues_happen" />-->
 
 </LinearLayout>

@@ -163,14 +163,6 @@ public class MineFragment extends BaseFragment {
     }
 
     private void requestFundInfo() {
-//        API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-//                .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
-//                    @Override
-//                    public void onRespSuccess(FundInfo fundInfo) {
-//                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getUsedAmt()));
-//                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScore())));
-//                    }
-//                }).fire();
         API.Finance.getFundInfo().setTag(TAG)
                 .setCallback(new Callback2<Resp<UserFundInfo>, UserFundInfo>() {
                     @Override
@@ -288,13 +280,13 @@ public class MineFragment extends BaseFragment {
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
-            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    LocalUser.getUser().logout();
-                    updateAccountInfoView();
-                }
-            });
+//            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    LocalUser.getUser().logout();
+//                    updateAccountInfoView();
+//                }
+//            });
         }
     }
 }

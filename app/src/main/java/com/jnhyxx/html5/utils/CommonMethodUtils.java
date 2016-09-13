@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.domain.account.UserInfo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -315,18 +316,34 @@ public class CommonMethodUtils {
 
     /**
      * 拼接的获取图片验证码的地址
+     *
      * @param userPhone
      * @return
      */
-    public static String imageCodeUri(String userPhone,String imageUrl){
-        String url="";
-        if (!TextUtils.isEmpty(userPhone)){
+    public static String imageCodeUri(String userPhone, String imageUrl) {
+        String url = "";
+        if (!TextUtils.isEmpty(userPhone)) {
             String mHost = BuildConfig.API_HOST;
 //            String mUri = "/user/user/getRegImage.do";
             String user = "?userPhone=";
             url = new StringBuilder(mHost).append(imageUrl).append(user).append(userPhone).toString();
         }
-       return url;
+        return url;
+    }
+
+    /**
+     * 判断用户是否实名认证
+     *
+     * @param userInfo
+     * @return
+     */
+    public static boolean isNameAuth(UserInfo userInfo) {
+        if (userInfo == null) {
+            return false;
+        } else if (userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_WRITE || userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
+            return true;
+        }
+        return false;
     }
 }
 

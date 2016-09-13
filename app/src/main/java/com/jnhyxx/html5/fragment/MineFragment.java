@@ -25,6 +25,8 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -44,6 +46,9 @@ public class MineFragment extends BaseFragment {
     private static final int REQUEST_CODE_SETTING = 352;
     //注册的请求码
     private static final int REQUEST_CODE_REGISTER = 6260;
+    //提现的请求码
+    private static final int REQUEST_CODE_WITHDRAW = 6329;
+
 
     //账户余额
     @BindView(R.id.balance)
@@ -101,7 +106,7 @@ public class MineFragment extends BaseFragment {
         if (LocalUser.getUser().isLogin()) {
             mTitleBar.setRightVisible(true);
         } else {
-            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightVisible(false);
         }
 
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
@@ -177,15 +182,7 @@ public class MineFragment extends BaseFragment {
                 break;
             //提现
             case R.id.withdraw:
-                API.User.getBankcardInfo(LocalUser.getUser().getToken()).setTag(TAG)
-                        .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
-                            @Override
-                            public void onRespSuccess(BankcardAuth bankcardAuth) {
-                                Launcher.with(getActivity(), WithdrawActivity.class)
-                                        .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
-                                        .execute();
-                            }
-                        }).fire();
+                startWithDrawActivity();
                 break;
             case R.id.messageCenter:
                 // TODO: 2016/9/8 目前没有系统消息的接口
@@ -199,6 +196,16 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.paidToPromote:
                 break;
+        }
+    }
+
+    private void startWithDrawActivity() {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        //如果没有实名认证，先实名认证
+        if (!CommonMethodUtils.isNameAuth(userInfo)) {
+            ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
+        } else {
+            Launcher.with(getActivity(), WithdrawActivity.class).executeForResult(REQUEST_CODE_WITHDRAW);
         }
     }
 

@@ -28,13 +28,13 @@ public class UserInfo {
      */
     public static final int BANK_CARD_AUTH_STATUS_NOT_WRITE = 0;
     public static final int BANK_CARD_AUTH_STATUS_WRITE = 1;
-    private static final int BANK_CARD_AUTH_STATUS_ATTESTATION = 2;
+    public static final int BANK_CARD_AUTH_STATUS_ATTESTATION = 2;
     /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      */
     public static final int REAL_NAME_AUTH_STATUS_NOT_WRITE = 0;
     public static final int REAL_NAME_AUTH_STATUS_WRITE = 1;
-    private static final int REAL_NAME_AUTH_STATUS_ATTESTATION = 2;
+    public static final int REAL_NAME_AUTH_STATUS_ATTESTATION = 2;
 
     /**
      * moneyUsable可用资金余额

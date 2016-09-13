@@ -96,7 +96,7 @@ public class NameAuthActivity extends BaseActivity {
 
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
-        String realName = mName.getText().toString().trim();
+        final String realName = mName.getText().toString().trim();
         String identityNum = mIdentityNum.getText().toString().trim();
         if (LocalUser.getUser().isLogin()) {
             try {
@@ -112,6 +112,7 @@ public class NameAuthActivity extends BaseActivity {
                                     if (resp.isSuccess()) {
                                         //将是否实名认证状态修改
                                         UserInfo user = LocalUser.getUser().getUserInfo();
+                                        user.setRealName(realName);
                                         user.setIdStatus(1);
                                         setResult(RESULT_OK);
 

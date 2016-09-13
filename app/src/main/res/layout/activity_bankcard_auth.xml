@@ -14,6 +14,10 @@
         app:backFeature="true"
         app:titleText="@string/bind_bank_title" />
 
+    <com.jnhyxx.html5.view.CommonFailWarn
+        android:id="@+id/commonFailTvWarn"
+        style="@style/commonFailWarn" />
+
     <LinearLayout
         android:id="@+id/bankcardInputArea"
         android:layout_width="match_parent"

@@ -71,7 +71,6 @@ public class CommonFailWarn extends RelativeLayout {
     }
 
     private void init() {
-        // TODO: 2016/9/11 使用后没有出现布局
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (mCenterView != null) {
             addView(mCenterView, layoutParams);

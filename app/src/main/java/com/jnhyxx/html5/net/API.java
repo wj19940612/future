@@ -76,7 +76,7 @@ public class API extends APIBase {
          *
          * @param tele
          */
-        public static API obtainAuthCode(String tele,String regImageCode) {
+        public static API obtainAuthCode(String tele, String regImageCode) {
             String sign = null;
             try {
                 sign = SecurityUtil.md5Encrypt(tele + "luckin");
@@ -109,7 +109,7 @@ public class API extends APIBase {
          *
          * @param tele
          */
-        public static API obtainAuthCodeWhenFindPwd(String tele,String regImageCode) {
+        public static API obtainAuthCodeWhenFindPwd(String tele, String regImageCode) {
             String sign = null;
             try {
                 sign = SecurityUtil.md5Encrypt(tele + "luckin");
@@ -303,23 +303,6 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("realName", realName)
                             .put("idCard", identityNum));
-        }
-
-        /**
-         * /user/user/updatebank 认证银行卡
-         *
-         * @param token
-         * @param bankcardNum
-         * @param bankName
-         * @param phoneNum
-         * @return
-         */
-        public static API updateBankcard(String token, String bankcardNum, String bankName, String phoneNum) {
-            return new API("/user/user/updatebank",
-                    new ApiParams()
-                            .put(TOKEN, token).put("bankNum", bankcardNum)
-                            .put("bankName", bankName)
-                            .put("phone", phoneNum));
         }
 
         /**

@@ -34,6 +34,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.jnhyxx.umenglibrary.UmengLib;
@@ -52,6 +53,11 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
      * 解除绑定客服电话
      */
     public static final String UNWRAP_SERVICE_TELEPHONE = "0517-87675063";
+    /**
+     * 实名认证的请求码
+     */
+    private static final int REQUEST_CODE_NAME_AUTH = 5500;
+
     @BindView(R.id.cardholderName)
     EditText mCardholderName;
     @BindView(R.id.bankcardNum)
@@ -85,6 +91,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
      */
     @BindView(R.id.bandCardTitle)
     TitleBar mTitleBar;
+    @BindView(R.id.commonFailTvWarn)
+    CommonFailWarn mCommonFailTvWarn;
+
     NameAuth.Result mNameAuthResult;
 
     @Override
@@ -119,8 +128,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
      * 这是显示银行卡是否绑定的方法，
      * 如果没有绑定，显示绑定银行卡界面，
      * 若果绑定了，显示银行卡信息
-     *
-     * @param user
      */
 
     private void showBankBindStatus() {
@@ -140,6 +147,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
             //  cardState银行卡状态 0未填写，1已填写，2已认证
             if (userInfo.getCardState() == 0) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
+                mBankcardImageArea.setVisibility(View.GONE);
             } else {
                 //这是绑定了的界面
                 mBankcardInputArea.setVisibility(View.GONE);
@@ -188,10 +196,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        Launcher.with(getActivity(), NameAuthActivity.class);
-                        // TODO: 2016/9/9 原来的逻辑
-//                                .putExtra(Launcher.EX_PAYLOAD, nameAuth)
-//                                .executeForResult(REQUEST_CODE);
+                        Launcher.with(getActivity(), NameAuthActivity.class).executeForResult(REQUEST_CODE);
                     }
                 })
                 .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
@@ -207,9 +212,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            mNameAuthResult = (NameAuth.Result) data.getSerializableExtra(NAME_AUTH_RESULT);
-            mCardholderName.setText(mNameAuthResult.getRealName());
+        if (requestCode == REQUEST_CODE_NAME_AUTH && resultCode == RESULT_OK) {
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            if (userInfo == null) return;
+            mCardholderName.setText(userInfo.getRealName());
             SmartDialog.dismiss(this);
         }
     }
@@ -249,29 +255,41 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-
-                API.User.updateBankcard(LocalUser.getUser().getToken(), bankcardNum, payingBank, phoneNum)
+                // TODO: 2016/9/13 这里的银行Id没有赋值 
+                int bankId = -1;
+//                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
+//                        .setIndeterminate(this).setTag(TAG)
+//                        .setCallback(new Callback<Resp<BankcardAuth>>() {
+//                            @Override
+//                            public void onReceive(final Resp<BankcardAuth> resp) {
+//                                if (resp.isSuccess()) {
+//                                    SmartDialog.with(getActivity(), resp.getMsg())
+//                                            .setCancelableOnTouchOutside(false)
+//                                            .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(Dialog dialog) {
+//                                                    dialog.dismiss();
+//                                                    BankcardAuth auth = resp.getData();
+//                                                    auth.setStatus(BankcardAuth.STATUS_FILLED);
+//                                                    setResultForCalling(auth);
+//                                                    finish();
+//                                                }
+//                                            }).show();
+//
+//                                } else {
+//                                    mCommonFailTvWarn.setCenterTxt(r);
+//                                }
+//                            }
+//                        }).fire();
+                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
-                        .setCallback(new Callback<Resp<BankcardAuth>>() {
+                        .setCallback(new Callback<Resp>() {
                             @Override
-                            public void onReceive(final Resp<BankcardAuth> resp) {
+                            public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
 
-                                    SmartDialog.with(getActivity(), resp.getMsg())
-                                            .setCancelableOnTouchOutside(false)
-                                            .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                                @Override
-                                                public void onClick(Dialog dialog) {
-                                                    dialog.dismiss();
-                                                    BankcardAuth auth = resp.getData();
-                                                    auth.setStatus(BankcardAuth.STATUS_FILLED);
-                                                    setResultForCalling(auth);
-                                                    finish();
-                                                }
-                                            }).show();
-
                                 } else {
-                                    SmartDialog.with(getActivity(), resp.getMsg()).show();
+                                    mCommonFailTvWarn.setCenterTxt(resp.getMsg());
                                 }
                             }
                         }).fire();
@@ -284,7 +302,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     boolean mIsCall = false;
 
-    // TODO: 2016/9/9 缺少取消按钮
     private void unwrapBindServiceTelephone() {
         String dialogContent = getString(R.string.unBind_dialog_content, UNWRAP_SERVICE_TELEPHONE);
         SmartDialog.with(getActivity(), dialogContent)
@@ -305,16 +322,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                     }
                 })
                 .show();
-    }
-
-    @Override
-    protected void onStart() {
-        if (mIsCall) {
-
-            mIsCall = false;
-        }
-        Log.d("wj", "====mIsCall " + mIsCall);
-        super.onStart();
     }
 
     /**

@@ -13,90 +13,92 @@
         app:backFeature="true"
         app:titleText="@string/real_name_authorize" />
 
-    <include
+    <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/identityCardWarn"
-        layout="@layout/common_fail_warn"
-        android:visibility="gone" />
+        style="@style/commonFailWarn" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/InputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="#262626" />
+
+            <EditText
+                android:inputType="textPersonName"
+                android:id="@+id/name"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:hint="@string/please_input_real_name"
+                android:textColorHint="#CBCBCB" />
+        </LinearLayout>
+
+        <include layout="@layout/split_line_thick" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/InputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/identity_num"
+                android:textColor="#262626" />
+
+            <EditText
+                android:digits="0123456789Xx"
+                android:id="@+id/identityNum"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:hint="@string/please_input_identity_num"
+                android:maxLength="18"
+                android:textColorHint="#CBCBCB" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@android:color/black" />
+
         <TextView
-            style="@style/InputTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/name"
-            android:textColor="#262626" />
-
-        <EditText
-            android:id="@+id/name"
-            style="@style/SignEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:hint="@string/please_input_real_name"
-            android:textColorHint="#CBCBCB" />
-    </LinearLayout>
-
-    <include layout="@layout/split_line_thick" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+            android:lineSpacingExtra="15dp"
+            android:paddingTop="15dp"
+            android:text="@string/setting_auth_name_hint"
+            android:textColor="#FB4B55"
+            android:textSize="12sp" />
 
         <TextView
-            style="@style/InputTitle"
-            android:layout_width="wrap_content"
+            android:id="@+id/submitToAuthButton"
+            style="@style/PrimaryBigButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/identity_num"
-            android:textColor="#262626" />
-
-        <EditText
-            android:id="@+id/identityNum"
-            style="@style/SignEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:hint="@string/please_input_identity_num"
-            android:inputType="number|textCapCharacters"
-            android:textColorHint="#CBCBCB" />
+            android:layout_marginTop="16dp"
+            android:text="@string/submit_to_auth" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@android:color/black" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="15dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="15dp"
-        android:text="@string/setting_auth_name_hint"
-        android:textColor="#FB4B55"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/submitToAuthButton"
-        style="@style/PrimaryBigButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/submit_to_auth" />
-
 </LinearLayout>

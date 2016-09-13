@@ -61,7 +61,7 @@ public class WithdrawActivity extends BaseActivity {
 
             }
         });
-
+        updateBankInfoView();
     }
 
     private void updateBankInfoView() {

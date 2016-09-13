@@ -89,6 +89,7 @@
             android:text="@string/default_bank_name_card_number" />
 
         <EditText
+            android:id="@+id/rechargeAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_money"

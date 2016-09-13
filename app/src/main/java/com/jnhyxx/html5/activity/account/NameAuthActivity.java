@@ -1,20 +1,18 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.account.UserInfo;
-
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -22,10 +20,8 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.ViewUtil;
-
-import java.text.ParseException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,10 +35,8 @@ public class NameAuthActivity extends BaseActivity {
     EditText mIdentityNum;
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
-    @BindView(R.id.commonFailTvWarn)
-    TextView mTvFailWarn;
     @BindView(R.id.identityCardWarn)
-    RelativeLayout mRlIdentityCardWarn;
+    CommonFailWarn mRlIdentityCardWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +47,10 @@ public class NameAuthActivity extends BaseActivity {
         mName.addTextChangedListener(mValidationWatcher);
         mIdentityNum.addTextChangedListener(mValidationWatcher);
 
-        updateNameAuthView(getIntent());
-        mTvFailWarn.setText(R.string.setting_identity_card_fail);
+        updateNameAuthView();
     }
 
-    private void updateNameAuthView(Intent intent) {
+    private void updateNameAuthView() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo != null) {
             mName.setText(userInfo.getRealName());
@@ -97,48 +90,50 @@ public class NameAuthActivity extends BaseActivity {
     @OnClick(R.id.submitToAuthButton)
     public void onClick() {
         final String realName = mName.getText().toString().trim();
-        String identityNum = mIdentityNum.getText().toString().trim();
+        final String identityNum = mIdentityNum.getText().toString().trim();
         if (LocalUser.getUser().isLogin()) {
-            try {
-                boolean cardValidate = CommonMethodUtils.IDCardValidate(identityNum);
-                if (cardValidate) {
-                    mRlIdentityCardWarn.setVisibility(View.GONE);
-                    API.User.authUserName(realName, identityNum)
-                            .setTag(TAG)
-                            .setIndeterminate(this)
-                            .setCallback(new Callback<Resp<NameAuth.Result>>() {
-                                @Override
-                                public void onReceive(final Resp<NameAuth.Result> resp) {
-                                    if (resp.isSuccess()) {
-                                        //将是否实名认证状态修改
-                                        UserInfo user = LocalUser.getUser().getUserInfo();
-                                        user.setRealName(realName);
-                                        user.setIdStatus(1);
-                                        setResult(RESULT_OK);
-
-                                        SmartDialog.with(getActivity(), resp.getMsg())
-                                                .setCancelableOnTouchOutside(false)
-                                                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(Dialog dialog) {
-                                                        dialog.dismiss();
-                                                        sendResultForCalling(resp.getData());
-                                                        finish();
-                                                    }
-                                                }).show();
-                                    } else {
-                                        SmartDialog.with(getActivity(), resp.getMsg()).show();
+            // TODO: 2016/9/13 目前这个判断有问题，无法输入X
+//            boolean cardValidate = CommonMethodUtils.IDCardValidate(identityNum);
+//            if (cardValidate) {
+                API.User.authUserName(realName, identityNum)
+                        .setTag(TAG)
+                        .setIndeterminate(this)
+                        .setCallback(new Callback<Resp>() {
+                            @Override
+                            public void onReceive(Resp resp) {
+                                if (resp.isSuccess()) {
+                                    //将是否实名认证状态修改
+                                    UserInfo user = LocalUser.getUser().getUserInfo();
+                                    user.setRealName(realName);
+                                    user.setIdCard(identityNum);
+                                    user.setIdStatus(1);
+                                    setResult(RESULT_OK);
+                                    Log.d(TAG,"实名认证后的用户信息"+user.toString());
+                                    if(mRlIdentityCardWarn.isShown()){
+                                        mRlIdentityCardWarn.setVisibility(View.GONE);
                                     }
+                                    // TODO: 2016/9/13 原来的逻辑
+//                                        SmartDialog.with(getActivity(), resp.getMsg())
+//                                                .setCancelableOnTouchOutside(false)
+//                                                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+//                                                    @Override
+//                                                    public void onClick(Dialog dialog) {
+//                                                        dialog.dismiss();
+//                                                        sendResultForCalling(resp.getData());
+//                                                        finish();
+//                                                    }
+//                                                }).show();
+                                    ToastUtil.curt(R.string.auth_name_write_success);
+                                    finish();
+                                } else {
+                                    mRlIdentityCardWarn.setCenterTxt(resp.getMsg());
+                                    mRlIdentityCardWarn.setVisibility(View.VISIBLE);
                                 }
-                            }).fire();
-                } else {
-                    mRlIdentityCardWarn.setVisibility(View.VISIBLE);
-                    ToastUtil.curt("请输入正确的身份证号码");
-                    return;
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                            }
+                        }).fire();
+//            }
+//            mRlIdentityCardWarn.setCenterTxt(R.string.setting_identity_card_fail);
+//            mRlIdentityCardWarn.setVisibility(View.VISIBLE);
         } else {
             ToastUtil.curt(R.string.setting_identity_card_when_login);
         }
@@ -151,6 +146,7 @@ public class NameAuthActivity extends BaseActivity {
      *
      * @param result
      */
+
     private void sendResultForCalling(NameAuth.Result result) {
         if (getCallingActivity() == null) return;
         String fromClass = getCallingActivity().getClassName();

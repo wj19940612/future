@@ -48,7 +48,8 @@ public class MineFragment extends BaseFragment {
     private static final int REQUEST_CODE_REGISTER = 6260;
     //提现的请求码
     private static final int REQUEST_CODE_WITHDRAW = 6329;
-
+    //充值的请求码
+    private static final int REQUEST_CODE_RECHARGE = 560;
 
     //账户余额
     @BindView(R.id.balance)
@@ -124,9 +125,14 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateAccountInfoView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        updateAccountInfoView();
     }
 
     private void updateAccountInfoView() {
@@ -179,6 +185,7 @@ public class MineFragment extends BaseFragment {
 //                            }
 //                        }).fire();
                 // TODO: 2016/9/11 这里目前缺少判断，应该判断银行卡绑定状态
+                startRechargeActivity();
                 break;
             //提现
             case R.id.withdraw:
@@ -196,6 +203,19 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.paidToPromote:
                 break;
+        }
+    }
+
+    private void startRechargeActivity() {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (CommonMethodUtils.isNameAuth(userInfo)) {
+            if (CommonMethodUtils.isBankAuth(userInfo)) {
+                Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
+            } else {
+                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
+            }
+        } else {
+            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
         }
     }
 

@@ -1,13 +1,11 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -18,8 +16,8 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
@@ -34,10 +32,14 @@ public class RechargeActivity extends BaseActivity {
     TextView mNextStepButton;
     @BindView(R.id.rechargeAmount)
     EditText mRechargeAmount;
-    @BindView(R.id.paymentGroup)
-    RadioGroup mPaymentGroup;
-
-    private RadioButton[] mPaymentButtons;
+    @BindView(R.id.bankCardPay)
+    RelativeLayout mBankCardPay;
+    @BindView(R.id.aliPayPay)
+    RelativeLayout mAliPayPay;
+//    @BindView(R.id.paymentGroup)
+//    RadioGroup mPaymentGroup;
+//
+//    private RadioButton[] mPaymentButtons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,41 +47,53 @@ public class RechargeActivity extends BaseActivity {
         setContentView(R.layout.activity_recharge);
         ButterKnife.bind(this);
 
-        mPaymentButtons = new RadioButton[3];
-        int[] buttonTexts = new int[]{R.string.bankcard_payment, R.string.alipay_payment, R.string.wechat_payment};
-        for (int i = 0; i < mPaymentButtons.length; i++) {
-            mPaymentButtons[i] = createRadioButton(buttonTexts[i]);
-            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            mPaymentGroup.addView(mPaymentButtons[i], params);
+//        mPaymentButtons = new RadioButton[3];
+//        int[] buttonTexts = new int[]{R.string.bankcard_payment, R.string.alipay_payment, R.string.wechat_payment};
+//        for (int i = 0; i < mPaymentButtons.length; i++) {
+//            mPaymentButtons[i] = createRadioButton(buttonTexts[i]);
+//            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT);
+//            mPaymentGroup.addView(mPaymentButtons[i], params);
+//        }
+        mRechargeAmount.addTextChangedListener(mValidationWatcher);
+        checkBankcardAuth();
+    }
+
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            boolean validation = checkValidation();
+            if (validation != mNextStepButton.isEnabled()) {
+                mNextStepButton.setEnabled(validation);
+            }
         }
+    };
 
-        checkBankcardAuth(getIntent());
+    private void checkBankcardAuth() {
+        // TODO: 2016/9/13 判断银行卡信息，后面可能用到
+//        final BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+//        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_NOT_FILLED ||
+//                TextUtils.isEmpty(bankcardAuth.getPhone())) {
+//            SmartDialog.with(getActivity(), R.string.dialog_your_bankcard_info_is_not_complete)
+//                    .setCancelableOnTouchOutside(false)
+//                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+//                        @Override
+//                        public void onClick(Dialog dialog) {
+//                            Launcher.with(getActivity(), BankcardAuthActivity.class)
+//                                    .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
+//                                    .executeForResult(REQUEST_CODE);
+//                        }
+//                    })
+//                    .show();
+//        }
     }
 
-    private void checkBankcardAuth(Intent intent) {
-        final BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_NOT_FILLED ||
-                TextUtils.isEmpty(bankcardAuth.getPhone())) {
-            SmartDialog.with(getActivity(), R.string.dialog_your_bankcard_info_is_not_complete)
-                    .setCancelableOnTouchOutside(false)
-                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                        @Override
-                        public void onClick(Dialog dialog) {
-                            Launcher.with(getActivity(), BankcardAuthActivity.class)
-                                    .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
-                                    .executeForResult(REQUEST_CODE);
-                        }
-                    })
-                    .show();
-        }
-    }
-
-    private RadioButton createRadioButton(int buttonText) {
-        RadioButton button = new RadioButton(this);
-        button.setText(buttonText);
-        return button;
-    }
+//    private RadioButton createRadioButton(int buttonText) {
+//        RadioButton button = new RadioButton(this);
+//        button.setText(buttonText);
+//        return button;
+//    }
 
     @OnClick(R.id.nextStepButton)
     public void onClick() {
@@ -102,12 +116,13 @@ public class RechargeActivity extends BaseActivity {
         }
 
         boolean hasPayment = false;
-        for (int i = 0; i < mPaymentButtons.length; i++) {
-            if (mPaymentButtons[i].isChecked()) {
-                hasPayment = true;
-                break;
-            }
-        }
+        // TODO: 2016/9/13 判断支付方式
+//        for (int i = 0; i < mPaymentButtons.length; i++) {
+//            if (mPaymentButtons[i].isChecked()) {
+//                hasPayment = true;
+//                break;
+//            }
+//        }
         if (!hasPayment) {
             ToastUtil.show(getString(R.string.payments_cannot_be_empty));
             return false;

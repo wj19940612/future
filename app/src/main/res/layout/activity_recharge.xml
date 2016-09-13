@@ -29,8 +29,10 @@
             android:textColor="#262626" />
 
         <EditText
+            android:textColorHint="@color/editText_hint_color"
             android:id="@+id/rechargeAmount"
             style="@style/SignEditText"
+            android:textColor="@color/editText_color_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

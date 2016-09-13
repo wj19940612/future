@@ -31,4 +31,7 @@
 
     <!--注册与找回密码界面不可点击按钮背景-->
     <color name="regiserBtnBack">#a8a8a8</color>
+    <!--EditText的hint文字颜色-->
+    <color name="editText_hint_color">#CBCBCB</color>
+    <color name="editText_color_input">#262626</color>
 </resources>

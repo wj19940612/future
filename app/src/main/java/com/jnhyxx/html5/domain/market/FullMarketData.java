@@ -2,6 +2,8 @@ package com.jnhyxx.html5.domain.market;
 
 public class FullMarketData {
 
+
+
     /**
      * askPrice : 45.14
      * askVolume : 24
@@ -38,7 +40,8 @@ public class FullMarketData {
     private double upDropPrice; //涨跌值
     private double upDropSpeed; //涨跌幅
     private long upTime; // 行情时间戳
-    private int volume; //交易总数量
+    private int positionVolume;//今日持仓量
+    private int prePositionVolume;//昨日持仓量
 
     public double getAskPrice() {
         return askPrice;
@@ -168,11 +171,35 @@ public class FullMarketData {
         this.upTime = upTime;
     }
 
-    public int getVolume() {
-        return volume;
+    public int getPositionVolume() {
+        return positionVolume;
     }
 
-    public void setVolume(int volume) {
-        this.volume = volume;
+    public int getPrePositionVolume() {
+        return prePositionVolume;
+    }
+
+    @Override
+    public String toString() {
+        return "FullMarketData{" +
+                "askPrice=" + askPrice +
+                ", askVolume=" + askVolume +
+                ", bidPrice=" + bidPrice +
+                ", bidVolume=" + bidVolume +
+                ", highestPrice=" + highestPrice +
+                ", instrumentId='" + instrumentId + '\'' +
+                ", lastPrice=" + lastPrice +
+                ", lowestPrice=" + lowestPrice +
+                ", openPrice=" + openPrice +
+                ", preClsPrice=" + preClsPrice +
+                ", preSetPrice=" + preSetPrice +
+                ", settlePrice=" + settlePrice +
+                ", tradeDay='" + tradeDay + '\'' +
+                ", upDropPrice=" + upDropPrice +
+                ", upDropSpeed=" + upDropSpeed +
+                ", upTime=" + upTime +
+                ", positionVolume=" + positionVolume +
+                ", prePositionVolume=" + prePositionVolume +
+                '}';
     }
 }

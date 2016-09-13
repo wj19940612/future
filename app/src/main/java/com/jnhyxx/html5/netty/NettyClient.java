@@ -79,20 +79,20 @@ public class NettyClient {
 
             @Override
             public void onReceiveData(String data) {
-                Log.d(TAG, "onReceiveData: " + data);
                 handleRealTimeQuotaData(data);
-
             }
 
             @Override
             public void onError(ChannelHandlerContext ctx, Throwable cause) {
-
+                Log.d(TAG, "onError: ");
             }
         };
     }
 
     private void handleRealTimeQuotaData(String data) {
         try {
+            if (data.indexOf("lastPrice") == -1) return;
+
             FullMarketData marketData = new Gson().fromJson(data, FullMarketData.class);
 
             if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) {

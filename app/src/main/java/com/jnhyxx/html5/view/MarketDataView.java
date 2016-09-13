@@ -7,11 +7,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.market.FullMarketData;
+import com.jnhyxx.html5.domain.market.Product;
+import com.johnz.kutils.FinanceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MarketDataView extends FrameLayout {
+
+    private static final String NO_DATA = "—";
 
     @BindView(R.id.todayPosition)
     TextView mTodayPosition;
@@ -46,35 +51,21 @@ public class MarketDataView extends FrameLayout {
         ButterKnife.bind(this);
     }
 
-    public void setTodayPosition(TextView todayPosition) {
-        mTodayPosition = todayPosition;
+    public void setMarketData(FullMarketData marketData, Product product) {
+        if (product.isForeign()) {
+            mTodayPosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume()));
+            mPrePosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume()));
+
+            int priceScale = product.getPriceDecimalScale();
+            mTodaySettlement.setText(getPrice(marketData.getSettlePrice(), priceScale));
+            mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
+        }
     }
 
-    public void setPrePosition(TextView prePosition) {
-        mPrePosition = prePosition;
-    }
-
-    public void setTodaySettlement(TextView todaySettlement) {
-        mTodaySettlement = todaySettlement;
-    }
-
-    public void setPreSettlement(TextView preSettlement) {
-        mPreSettlement = preSettlement;
-    }
-
-    public void setTotalHands(TextView totalHands) {
-        mTotalHands = totalHands;
-    }
-
-    public void setTotalAmount(TextView totalAmount) {
-        mTotalAmount = totalAmount;
-    }
-
-    public void setRisingLimit(TextView risingLimit) {
-        mRisingLimit = risingLimit;
-    }
-
-    public void setDownLimit(TextView downLimit) {
-        mDownLimit = downLimit;
+    private String getPrice(double price, int priceScale) {
+        if (price == 0) {
+            return NO_DATA;
+        }
+        return FinanceUtil.formatWithScale(price, priceScale);
     }
 }

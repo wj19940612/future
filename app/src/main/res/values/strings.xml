@@ -209,6 +209,10 @@
     <string name="sell_volume">卖量</string>
     <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
     <string name="prompt_next_trade_time_is">下次交易时间 %1$s</string>
+    <string name="today_open">今开 %1$s</string>
+    <string name="pre_close">昨收 %1$s</string>
+    <string name="highest">最高 %1$s</string>
+    <string name="lowest">最低 %1$s</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>

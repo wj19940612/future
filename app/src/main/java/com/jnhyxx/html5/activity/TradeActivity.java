@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +23,15 @@ import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.TrendView;
+import com.jnhyxx.chart.domain.FlashViewData;
+import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
@@ -36,12 +40,15 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
+import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageHeader;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
 import java.util.List;
@@ -53,7 +60,7 @@ import butterknife.OnClick;
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback {
 
-    private static final int REQ_CODE_SIGN_IN = -1;
+    private static final int REQ_CODE_SIGN_IN = 1;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -215,6 +222,73 @@ public class TradeActivity extends BaseActivity implements
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
     }
 
+    private NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveData(FullMarketData data) {
+            updateFourMainPrices(data);
+            updateLastPriceView(data);
+            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+            updateChartView(data);
+            mBuyLongBtn.setText(getString(R.string.buy_long)
+                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
+            mSellShortBtn.setText(getString(R.string.sell_short)
+                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+        }
+    };
+
+    private void updateChartView(FullMarketData data) {
+        TrendView trendView = mChartContainer.getTrendView();
+        if (trendView != null) {
+            List<TrendViewData> dataList = trendView.getDataList();
+            TrendViewData lastData = dataList.get(dataList.size() - 1);
+            String date = DateUtil.addOneMinute(lastData.getDate(), TrendViewData.DATE_FORMAT);
+            TrendView.Settings settings = trendView.getSettings();
+            if (TrendView.Util.isValidDate(date, settings.getOpenMarketTimes())) {
+                float lastPrice = (float) data.getLastPrice();
+                TrendViewData unstableData = new TrendViewData(lastData.getContractId(), lastPrice, date);
+                trendView.setUnstableData(unstableData);
+            }
+        }
+        FlashView flashView = mChartContainer.getFlashView();
+        if (flashView != null) {
+            flashView.addData(new FlashViewData((float) data.getLastPrice()));
+        }
+        MarketDataView marketDataView = mChartContainer.getMarketDataView();
+        if (marketDataView != null) {
+            marketDataView.setMarketData(data, mProduct);
+        }
+    }
+
+    private void updateFourMainPrices(FullMarketData data) {
+        int scale = mProduct.getPriceDecimalScale();
+        mOpenPrice.setText(getString(R.string.today_open, FinanceUtil.formatWithScale(data.getOpenPrice(), scale)));
+        mPreClosePrice.setText(getString(R.string.pre_close, FinanceUtil.formatWithScale(data.getPreClsPrice(), scale)));
+        mHighestPrice.setText(getString(R.string.highest, FinanceUtil.formatWithScale(data.getHighestPrice(), scale)));
+        mLowestPrice.setText(getString(R.string.lowest, FinanceUtil.formatWithScale(data.getLowestPrice(), scale)));
+    }
+
+    private void updateLastPriceView(FullMarketData data) {
+        mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
+        double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
+        double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
+        int textColor;
+        if (priceChangeValue >= 0) {
+            textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
+            mLastPrice.setTextColor(textColor);
+            mPriceChange.setTextColor(textColor);
+            String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                    + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+            mPriceChange.setText(priceChangeStr);
+        } else {
+            textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
+            mLastPrice.setTextColor(textColor);
+            mPriceChange.setTextColor(textColor);
+            String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                    + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+            mPriceChange.setText(priceChangeStr);
+        }
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -225,15 +299,17 @@ public class TradeActivity extends BaseActivity implements
             mQuestionMark.start();
         }
 
-        NettyClient.getInstance().start();
-
         startScheduleJob(60 * 1000);
+
+        NettyClient.getInstance().start();
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
 
         stopScheduleJob();
     }

@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
-import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
@@ -121,15 +121,23 @@ public class HomeFragment extends BaseFragment {
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
                         product.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(getActivity(), TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .execute();
+//
+//                        Launcher.with(getActivity(), TradeActivity.class)
+//                                .putExtra(Product.EX_PRODUCT, product)
+//                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+//                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+//                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
+//                                .execute();
                     }
                 }).fire();
+
+// TODO: 9/13/16 delete later and uncomment onRespSuccess
+        Launcher.with(getActivity(), TradeActivity.class)
+                .putExtra(Product.EX_PRODUCT, product)
+                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, new ExchangeStatus())
+                .execute();
     }
 
     private void requestOrderReport() {

@@ -10,8 +10,7 @@ public abstract class NettyHandler extends Handler {
     public static final int WHAT_ERROR = 0;
     public static final int WHAT_DATA = 1;
 
-    protected void onReceiveSingleData(FullMarketData data) {
-    }
+    protected abstract void onReceiveData(FullMarketData data);
 
     protected void onError(String message) {
     }
@@ -24,7 +23,7 @@ public abstract class NettyHandler extends Handler {
                 onError((String) msg.obj);
                 break;
             case WHAT_DATA:
-                onReceiveSingleData((FullMarketData) msg.obj);
+                onReceiveData((FullMarketData) msg.obj);
                 break;
         }
     }

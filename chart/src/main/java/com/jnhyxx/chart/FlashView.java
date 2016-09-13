@@ -69,7 +69,7 @@ public class FlashView extends ChartView {
     private void setDashLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(new DashPathEffect(new float[]{8, 3}, 1));
+        paint.setPathEffect(new DashPathEffect(new float[]{8, 4}, 1));
     }
 
     private void setUnstablePricePaint(Paint paint) {
@@ -228,6 +228,11 @@ public class FlashView extends ChartView {
             setUnstablePricePaint(sPaint);
             canvas.drawText(unstablePrice, priceX, priceY, sPaint);
         }
+    }
+
+    @Override
+    protected float getChartX(int index) {
+        return index * INTERVAL_OF_POINTS + getPaddingLeft();
     }
 
     @Override

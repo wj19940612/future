@@ -280,6 +280,7 @@
     <string name="register_succeed">注册成功</string>
     <string name="register_code_image_hint">请输入动态验证码</string>
     <string name="register_code_image">图片验证码</string>
+    <string name="register_get_image_code">获取图片验证码</string>
 
 
     <!--修改密码-->

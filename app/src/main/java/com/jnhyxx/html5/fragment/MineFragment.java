@@ -39,10 +39,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class MineFragment extends BaseFragment {
     //登陆的请求码
-    private static final int REQUEST_CODE_LOGIN = 967;
+    private static final int REQUEST_CODE_LOGIN = 9670;
     //设置界面的请求码
     private static final int REQUEST_CODE_SETTING = 352;
-
+    //注册的请求码
+    private static final int REQUEST_CODE_REGISTER = 6260;
 
     //账户余额
     @BindView(R.id.balance)
@@ -99,7 +100,7 @@ public class MineFragment extends BaseFragment {
         // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
         if (LocalUser.getUser().isLogin()) {
             mTitleBar.setRightVisible(true);
-        }else{
+        } else {
             mTitleBar.setRightVisible(true);
         }
 
@@ -124,40 +125,10 @@ public class MineFragment extends BaseFragment {
     }
 
     private void updateAccountInfoView() {
-//        if (User.getUser().isLogin()) {\
         if (LocalUser.getUser().isLogin()) {
-            // TODO: 2016/8/31 这里会报空指针
-//            String format = String.format(" ", User.getUser().getUserInfo().getUserInfo().getNick());
-//            Log.d(TAG, " " + format);
-//            mNickname.setText(getString(R.string.nickname_logged, User.getUser().getUserInfo().getUserInfo().getNick()));
-//            mSignArea.setVisibility(View.GONE);
-//            mFundArea.setVisibility(View.VISIBLE);
-//            mTitleBar.setRightVisible(true);
-//            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    User.getUser().logout();
-//                    updateAccountInfoView();
-//                }
-//            });
-
-       /*     mSettingImageView.setOnClickListener(new View.OnClickListener() {
-        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
-            String format = String.format(" ", com.jnhyxx.html5.domain.local.User.getUser().getUserInfo().getUserInfo().getNick());
-            Log.d(TAG, " " + format);
-            mNickname.setText(getString(R.string.nickname_logged, com.jnhyxx.html5.domain.local.User.getUser().getUserInfo().getUserInfo().getNick()));
-            mSignArea.setVisibility(View.GONE);
-            mFundArea.setVisibility(View.VISIBLE);
-            mTitleBar.setRightVisible(true);
-            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    com.jnhyxx.html5.domain.local.User.getUser().logout();
-                    updateAccountInfoView();
-                }
-            });*/
-
-            requestFundInfo();
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            upDateUserInfoView(userInfo);
+//            requestFundInfo();
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
@@ -189,7 +160,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
                 break;
             case R.id.signUpButton:
-                Launcher.with(getActivity(), SignUpActivity.class).execute();
+                Launcher.with(getActivity(), SignUpActivity.class).executeForResult(REQUEST_CODE_REGISTER);
                 break;
             //充值
             case R.id.recharge:
@@ -278,23 +249,27 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            UserInfo userInfo = LocalUser.getUser().getUserInfo();
-            Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
-            String userName = userInfo.getUserName();
-            String userNickName = String.format(" ", userName);
-            Log.d(TAG, " 用户昵称 " + userNickName);
-            mNickname.setText(getString(R.string.nickname_logged, userName));
-            mSignArea.setVisibility(View.GONE);
-            mFundArea.setVisibility(View.VISIBLE);
-            mTitleBar.setRightVisible(true);
-//            mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    LocalUser.getUser().logout();
-//                    updateAccountInfoView();
-//                }
-//            });
+            upDateUserInfoView(userInfo);
+        } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
+            upDateUserInfoView(userInfo);
+        } else if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+            updateAccountInfoView();
         }
+    }
+
+    private void upDateUserInfoView(UserInfo userInfo) {
+        if (userInfo == null) return;
+        String userName = userInfo.getUserName();
+        double moneyUsable = userInfo.getMoneyUsable();
+        int scoreUsable = userInfo.getScoreUsable();
+        mNickname.setText(getString(R.string.nickname_logged, userName));
+        mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
+        mScore.setText(getString(R.string.account_mine_integral, scoreUsable + ""));
+        mSignArea.setVisibility(View.GONE);
+        mFundArea.setVisibility(View.VISIBLE);
+        mTitleBar.setRightVisible(true);
     }
 }

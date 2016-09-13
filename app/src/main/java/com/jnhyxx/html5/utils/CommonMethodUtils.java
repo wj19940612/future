@@ -318,13 +318,13 @@ public class CommonMethodUtils {
      * @param userPhone
      * @return
      */
-    public static String imageCodeUri(String userPhone){
+    public static String imageCodeUri(String userPhone,String imageUrl){
         String url="";
         if (!TextUtils.isEmpty(userPhone)){
             String mHost = BuildConfig.API_HOST;
-            String mUri = "/user/user/getRegImage.do";
+//            String mUri = "/user/user/getRegImage.do";
             String user = "?userPhone=";
-            url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
+            url = new StringBuilder(mHost).append(imageUrl).append(user).append(userPhone).toString();
         }
        return url;
     }

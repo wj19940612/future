@@ -67,6 +67,8 @@ public class SignUpActivity extends BaseActivity {
     //获取图片验证码
     @BindView(R.id.imageCode)
     LinearLayout mImageCode;
+    @BindView(R.id.registerRetrieveImage)
+    EditText mRegisterRetrieveImage;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
     @BindView(R.id.RetrieveImageCode)
@@ -161,13 +163,16 @@ public class SignUpActivity extends BaseActivity {
 
     @OnClick(R.id.obtainAuthCode)
     void obtainAuthCode() {
-        String userPhone = mPhoneNum.getText().toString();
-        if (!CommonMethodUtils.isMobileNum(userPhone)) {
+        String phoneNum = mPhoneNum.getText().toString();
+        String imageCode = "";
+        if (!CommonMethodUtils.isMobileNum(phoneNum)) {
             ToastUtil.curt(R.string.common_phone_num_fail);
             return;
         }
-        String phoneNum = mPhoneNum.getText().toString();
-        API.User.obtainAuthCode(phoneNum)
+        if (mRegisterRetrieveImage.isShown()) {
+            imageCode = mRegisterRetrieveImage.getText().toString().trim();
+        }
+        API.User.obtainAuthCode(phoneNum, imageCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -228,12 +233,13 @@ public class SignUpActivity extends BaseActivity {
         ToastUtil.curt("获取注册验证码");
         String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-        String url = CommonMethodUtils.imageCodeUri(userPhone);
+        String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
         Log.d(TAG, "注册页面图片验证码地址  " + url);
         Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
                 mImageCode.setVisibility(View.VISIBLE);
+
             }
 
             @Override

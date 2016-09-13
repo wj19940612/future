@@ -76,7 +76,7 @@ public class API extends APIBase {
          *
          * @param tele
          */
-        public static API obtainAuthCode(String tele) {
+        public static API obtainAuthCode(String tele,String regImageCode) {
             String sign = null;
             try {
                 sign = SecurityUtil.md5Encrypt(tele + "luckin");
@@ -84,14 +84,10 @@ public class API extends APIBase {
                 e.printStackTrace();
             }
             // TODO: 2016/8/30 原来的获取验证码接口
-//            return new API("/user/sms/getRegCode",
-//                    new ApiParams()
-//                            .put(TELE, tele)
-//                            .put(SIGN, sign));
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
-                            .put("userPhone", tele));
-//                            .put(SIGN, sign)
+                            .put("userPhone", tele)
+                            .put("regImageCode", regImageCode));
         }
 
         /**

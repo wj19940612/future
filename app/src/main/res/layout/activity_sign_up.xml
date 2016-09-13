@@ -91,7 +91,7 @@
             android:visibility="gone">
 
             <EditText
-                android:id="@+id/etRegisterRetrieveImage"
+                android:id="@+id/registerRetrieveImage"
                 style="@style/SignEditText.Password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

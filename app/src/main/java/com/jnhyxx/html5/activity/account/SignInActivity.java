@@ -133,6 +133,7 @@ public class SignInActivity extends BaseActivity {
                                     finish();
                                 } else {
                                     // TODO: 9/10/16 登入错误处理
+                                    mPassword.setText("");
                                     ToastUtil.curt(jsonObjectResp.getMsg());
                                     rlFailWarn.setVisibility(View.VISIBLE);
                                     rlFailWarn.setCenterTxt(jsonObjectResp.getMsg());
@@ -142,6 +143,7 @@ public class SignInActivity extends BaseActivity {
                 break;
             case R.id.signUpButton:
                 Launcher.with(this, SignUpActivity.class).execute();
+                finish();
                 break;
             case R.id.forgetPassword:
                 Launcher.with(this, FindPwdActivity.class).execute();

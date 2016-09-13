@@ -130,7 +130,7 @@ public class FindPwdActivity extends BaseActivity {
         ToastUtil.curt("获取注册验证码");
         String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-        String url = CommonMethodUtils.imageCodeUri(userPhone);
+        String url = CommonMethodUtils.imageCodeUri(userPhone,"/user/user/checkRetriveMsgCode.do");
         Log.d(TAG, "注册页面图片验证码地址  " + url);
         Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
             @Override

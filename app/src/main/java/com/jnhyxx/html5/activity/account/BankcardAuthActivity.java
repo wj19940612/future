@@ -86,7 +86,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     @BindView(R.id.bandCardTitle)
     TitleBar mTitleBar;
     NameAuth.Result mNameAuthResult;
-    //如果使用dialog拨打电话，会出现ActivityNotFound异常;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +111,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //                        }
 //                    }
 //                }).fire();
-        if (!LocalUser.getUser().isLogin()) {
-            ToastUtil.curt(R.string.nickname_unknown);
-        }
-        showBankBindStatus();
 
+        showBankBindStatus();
     }
 
     /**
@@ -128,27 +124,32 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
      */
 
     private void showBankBindStatus() {
-        UserInfo user = LocalUser.getUser().getUserInfo();
-        if (user != null) {
+        LocalUser localUser = LocalUser.getUser();
+        UserInfo userInfo = localUser.getUserInfo();
+        if (!localUser.isLogin()) {
+            ToastUtil.curt(R.string.nickname_unknown);
+            finish();
+            return;
+        }
+        if (userInfo != null) {
             //一般不会出现，在设置界面做了判断，没有登录不可进入这个界面
-            if (user.getIdStatus() == 0) {
+            if (userInfo.getIdStatus() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
                 showAuthNameDialog();
             }
             // TODO: 2016/9/9 这是没有绑定
             //  cardState银行卡状态 0未填写，1已填写，2已认证
-            if (user.getCardState() == 0) {
+            if (userInfo.getCardState() == 0) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
             } else {
                 //这是绑定了的界面
                 mBankcardInputArea.setVisibility(View.GONE);
                 mBankcardImageArea.setVisibility(View.VISIBLE);
                 mTitleBar.setTitle(R.string.bankcard);
-                if (!TextUtils.isEmpty(user.getIssuingbankName())) {
-                    mBank.setText(user.getIssuingbankName());
+                if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
+                    mBank.setText(userInfo.getIssuingbankName());
                 }
-                // TODO: 2016/9/9 这里是银行卡图标，目前后台没有返回
-                if (TextUtils.isEmpty("银行卡图标网址")) {
-                    String bankIconUrl = "";
+                String bankIconUrl = userInfo.getIcon();
+                if (!TextUtils.isEmpty(bankIconUrl)) {
                     Picasso.with(BankcardAuthActivity.this).load(bankIconUrl).into(mBankCardIcon, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
@@ -161,8 +162,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         }
                     });
                 }
-                if (!TextUtils.isEmpty(user.getCardNumber())) {
-                    String bankNumber = CommonMethodUtils.bankNumber(user.getCardNumber());
+                if (!TextUtils.isEmpty(userInfo.getCardNumber())) {
+                    String bankNumber = CommonMethodUtils.bankNumber(userInfo.getCardNumber());
                     mBankCardNumber.setText(bankNumber);
                 }
             }
@@ -182,7 +183,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //        }
 //    }
 
-    //    private void showAuthNameDialog(final NameAuth nameAuth) {
     private void showAuthNameDialog() {
         SmartDialog.with(getActivity(), R.string.dialog_unauthorized_name)
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {

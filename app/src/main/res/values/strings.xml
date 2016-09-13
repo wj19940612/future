@@ -353,4 +353,12 @@
     <string name="aliPay_pay">支付宝支付</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_hint">资金冲提采用银联、支付宝两种方式\n双管监督,让您的资金更安全</string>
+
+
+    <!--提款记录-->
+    <string name="withdraw_record_title">提款记录</string>
+    <string name="withdraw_status_success">成功</string>
+    <string name="withdraw_status_fail">成功</string>
+    <string name="withdraw_status_auditing">待审核</string>
+    <string name="withdraw_money">%1$s元</string>
 </resources>

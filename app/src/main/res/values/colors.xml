@@ -21,13 +21,21 @@
 
     <color name="blackHalfTransparent">#7F000000</color>
 
-    <!--********************************分割线的颜色****************************************-->
+
+    <!--*************************************公共颜色**************************************************-->
+    <!--****分割线的颜色********-->
     <!--未铺满的分割线颜色-->
     <color name="splitLineNotOverspread">#e5e5e5</color>
     <!--铺满的分割线颜色-->
     <color name="splitLineOverspread">#cdcdcd</color>
 
+    <color name="common_rise_activity_sum">#fb4b55</color>
+    <color name="common_drop">#25d282</color>
+    <color name="common_assist">#358cf3</color>
 
+
+
+    <!--*************************************公共颜色**************************************************-->
 
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>

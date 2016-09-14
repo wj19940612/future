@@ -236,7 +236,7 @@ public class TrendChart extends ChartView {
                 }
             }
 
-            if (mUnstableData != null) {
+            if (mUnstableData != null && mDataList.size() > 0) {
                 chartX = getChartX(mUnstableData);
                 chartY = getChartY(mUnstableData.getLastPrice());
                 path.lineTo(chartX, chartY);

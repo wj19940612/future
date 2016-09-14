@@ -649,6 +649,20 @@ public class API extends APIBase {
                             .put("showId", showId)
                             .put("fundType", fundType));
         }
+
+        /**
+         * /order/order/getVarietyPositionOrders.do 获取用户持仓中订单
+         *
+         * @param varietyId
+         * @param fundType
+         * @return
+         */
+        public static API getHoldingOrderList(int varietyId, int fundType) {
+            return new API(GET, "/order/order/getVarietyPositionOrders.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("fundType", fundType));
+        }
     }
 
     /**

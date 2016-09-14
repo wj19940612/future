@@ -303,7 +303,6 @@ public class API extends APIBase {
          * bankName      String     银行名
          * cardNumber    String    银行卡号
          * cardPhone     String    银行卡对应的手机号
-         *
          * @param bankId
          * @param bankName
          * @return

@@ -97,6 +97,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     NameAuth.Result mNameAuthResult;
 
+    ChannelBankList mChannelBankList = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -254,9 +256,9 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 mTitleBar.setTitle(R.string.bankcard);
                 break;
             case R.id.submitToAuthButton:
-                String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
-                String payingBank = ViewUtil.getTextTrim(mPayingBank);
-                String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+                final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
+                final String payingBank = ViewUtil.getTextTrim(mPayingBank);
+                final String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
                 // TODO: 2016/9/13 这里的银行Id没有赋值 
                 int bankId = -1;
 //                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
@@ -283,13 +285,23 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 //                                }
 //                            }
 //                        }).fire();
+                if (mChannelBankList == null) {
+                    ToastUtil.curt(R.string.bind_bank_is_empty);
+                    return;
+                }
                 API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp>() {
                             @Override
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
-
+                                    ToastUtil.curt("银行卡提交成功");
+                                    UserInfo userInfo = LocalUser.getUser().getUserInfo();
+                                    userInfo.setIssuingbankName(payingBank);
+                                    userInfo.setCardNumber(bankcardNum);
+                                    userInfo.setCardPhone(phoneNum);
+                                    userInfo.setCardState(1);
+                                    setResult(RESULT_OK);
                                 } else {
                                     mCommonFailTvWarn.setCenterTxt(resp.getMsg());
                                 }
@@ -359,6 +371,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     @Override
     public void onBankItemClick(ChannelBankList bank) {
+        mChannelBankList = bank;
         mPayingBank.setText(bank.getName());
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();

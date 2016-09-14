@@ -144,15 +144,14 @@ public class NettyClient {
         }
     }
 
-    public void setContractCode(String contractCode) {
-        mContractCode = contractCode;
-    }
-
     public void setQuotaDataFilter(QuotaDataFilter quotaDataFilter) {
         mQuotaDataFilter = quotaDataFilter;
     }
 
-    public void start() {
+    public void start(String contractCode) {
+        stop();
+
+        mContractCode = contractCode;
         mClosed = false;
 
         mWorkerGroup = new NioEventLoopGroup();

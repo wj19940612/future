@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
@@ -151,18 +151,22 @@ public class TradeActivity extends BaseActivity implements
             }
         });
 
-        updateTitleBar();
         updateTradePagerHeader();
-        updateChartView();
-        updateExchangeStatusView();
+        updateProductRelatedViews();
 
         requestHoldingOrderList();
+    }
+
+    private void updateProductRelatedViews() {
+        updateTitleBar();
+        updateChartView();
+        updateExchangeStatusView();
     }
 
     private void requestHoldingOrderList() {
         if (!LocalUser.getUser().isLogin()) return;
 
-        // TODO: 9/12/16
+        
     }
 
     private void updateTradePagerHeader() {
@@ -199,19 +203,33 @@ public class TradeActivity extends BaseActivity implements
         });
         ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
         mQuestionMark = (AnimationDrawable) ruleIcon.getBackground();
+        updateQuestionMarker();
     }
 
     private void updateExchangeStatusView() {
-        if (mExchangeStatus.isTradeable()) {
-            mMarketCloseArea.setVisibility(View.GONE);
-            mMarketOpenArea.setVisibility(View.VISIBLE);
-            mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
-                    mExchangeStatus.getNextTime()));
+        if (mExchangeStatus.getExchangeId() != mProduct.getExchangeId()) {
+            API.Order.getExchangeTradeStatus(mProduct.getExchangeId()).setTag(TAG)
+                    .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                        @Override
+                        public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                            mExchangeStatus = exchangeStatus;
+                            mProduct.setExchangeStatus(exchangeStatus.isTradeable()
+                                    ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
+                            updateExchangeStatusView();
+                        }
+                    }).fire();
         } else {
-            mMarketCloseArea.setVisibility(View.VISIBLE);
-            mMarketOpenArea.setVisibility(View.GONE);
-            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
-                    mExchangeStatus.getNextTime()));
+            if (mExchangeStatus.isTradeable()) {
+                mMarketCloseArea.setVisibility(View.GONE);
+                mMarketOpenArea.setVisibility(View.VISIBLE);
+                mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
+                        mExchangeStatus.getNextTime()));
+            } else {
+                mMarketCloseArea.setVisibility(View.VISIBLE);
+                mMarketOpenArea.setVisibility(View.GONE);
+                mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
+                        mExchangeStatus.getNextTime()));
+            }
         }
     }
 
@@ -292,26 +310,30 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        updateQuestionMarker();
+        startScheduleJob(60 * 1000, 60 * 1000);
+    }
+
+    private void updateQuestionMarker() {
         String userPhone = LocalUser.getUser().getUserPhoneNum();
         if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
             mQuestionMark.stop();
         } else {
             mQuestionMark.start();
         }
-
-        startScheduleJob(60 * 1000);
-
-        NettyClient.getInstance().start();
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        stopScheduleJob();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
-
-        stopScheduleJob();
     }
 
     @Override
@@ -342,8 +364,9 @@ public class TradeActivity extends BaseActivity implements
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
-        settings1.setBaseLines(9);
+        settings1.setBaseLines(9); // TODO: 9/14/16 写实 9 条基线 remove later
         flashView.setSettings(settings1);
+        flashView.clearData();
 
         MarketDataView marketDataView = mChartContainer.getMarketDataView();
         if (marketDataView == null) {
@@ -352,6 +375,19 @@ public class TradeActivity extends BaseActivity implements
         }
 
         mChartContainer.showTrendView();
+
+        // start socket
+        NettyClient.getInstance().setQuotaDataFilter(new NettyClient.QuotaDataFilter() {
+            @Override
+            public boolean filter(FullMarketData data) {
+                return !data.getInstrumentId().equalsIgnoreCase(mProduct.getContractsCode());
+            }
+        });
+        NettyClient.getInstance().start(mProduct.getContractsCode());
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
+
+        // request Trend Data
+        requestTrendDataAndSet();
     }
 
     private void requestTrendDataAndSet() {
@@ -384,7 +420,7 @@ public class TradeActivity extends BaseActivity implements
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
                     mProduct = product;
-                    updateChartView();
+                    updateProductRelatedViews();
                 }
             }
         });
@@ -470,7 +506,6 @@ public class TradeActivity extends BaseActivity implements
     @Override
     public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
         submittedOrder.setPayType(mFundType);
-        Log.d(TAG, "onConfirmBtnClick: " + submittedOrder);
         submitOrder(submittedOrder);
     }
 

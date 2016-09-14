@@ -59,6 +59,12 @@ public class FlashView extends ChartView {
         }
     }
 
+    public void clearData() {
+        if (mPointList != null) {
+            mPointList.clear();
+        }
+    }
+
     @Override
     public void setSettings(ChartSettings settings) {
         mSettings = (Settings) settings;

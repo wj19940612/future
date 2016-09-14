@@ -181,6 +181,9 @@ public class SettingActivity extends BaseActivity {
                             LocalUser.getUser().logout();
                             mTvUserPhoneSetting.setText("");
                             mTvUserNameSetting.setText("");
+                            mTvBindBankCardSetting.setText("");
+                            mTvRealNameSetting.setText("");
+                            finish();
                             setResult(RESULT_OK);
                         }
                     }).fire();

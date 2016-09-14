@@ -124,15 +124,12 @@ public class MineFragment extends BaseFragment {
         mBinder.unbind();
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        updateAccountInfoView();
-    }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        updateAccountInfoView();
     }
 
     private void updateAccountInfoView() {
@@ -222,7 +219,7 @@ public class MineFragment extends BaseFragment {
     private void startWithDrawActivity() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         //如果没有实名认证，先实名认证
-        // TODO: 2016/9/13 仅作测试使用,正式的时候需要放开 
+        // TODO: 2016/9/13 仅作测试使用,正式的时候需要放开
 //        if (!CommonMethodUtils.isNameAuth(userInfo)) {
             ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
 //        } else {

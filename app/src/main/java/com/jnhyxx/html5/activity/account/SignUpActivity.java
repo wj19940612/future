@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -34,6 +34,9 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,9 +62,8 @@ public class SignUpActivity extends BaseActivity {
     TextView mSignUpButton;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    private boolean mFreezeObtainAuthCode;
-    private int mCounter;
-
+    @BindView(R.id.imageCodeLoadHint)
+    TextView mImageCodeLoadHint;
     @BindView(R.id.FailWarn)
     CommonFailWarn mFailWarn;
     //获取图片验证码
@@ -72,8 +74,11 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
     @BindView(R.id.RetrieveImageCode)
-    ImageView mIvRegisterRetrieveImage;
+    ImageView mRetrieveImage;
+
     private boolean flag = false;
+    private boolean mFreezeObtainAuthCode;
+    private int mCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +166,25 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick(R.id.obtainAuthCode)
-    void obtainAuthCode() {
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.imageCodeLoadHint})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.obtainAuthCode:
+                obtainAuthCode();
+                break;
+            case R.id.signInButton:
+                signUp();
+                break;
+            case R.id.RetrieveImageCode:
+                getRegisterImage();
+                break;
+            case R.id.imageCodeLoadHint:
+                getRegisterImage();
+                break;
+        }
+    }
+
+    private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
         String imageCode = "";
         if (!CommonMethodUtils.isMobileNum(phoneNum)) {
@@ -172,6 +194,7 @@ public class SignUpActivity extends BaseActivity {
         if (mRegisterRetrieveImage.isShown()) {
             imageCode = mRegisterRetrieveImage.getText().toString().trim();
         }
+        Log.d(TAG, "注册获取图片验证码的手机号码 " + phoneNum + "所输入的图片验证码" + imageCode);
         API.User.obtainAuthCode(phoneNum, imageCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -186,6 +209,7 @@ public class SignUpActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == 601) {
                             getRegisterImage();
+                            mImageCode.setVisibility(View.VISIBLE);
                             mFailWarn.setVisibility(View.VISIBLE);
                             mFailWarn.setCenterTxt(resp.getMsg());
                         } else {
@@ -222,8 +246,13 @@ public class SignUpActivity extends BaseActivity {
 //                                            finish();
 //                                        }
 //                                    }).show();
+                            if (mFailWarn.isShown()) {
+                                mFailWarn.setVisibility(View.GONE);
+                            }
+                            finish();
                         } else {
                             mFailWarn.setCenterTxt(resp.getMsg());
+                            mFailWarn.setVisibility(View.VISIBLE);
                         }
                     }
                 }).fire();
@@ -231,23 +260,37 @@ public class SignUpActivity extends BaseActivity {
 
     private void getRegisterImage() {
         ToastUtil.curt("获取注册验证码");
-        String userPhone = mPhoneNum.getText().toString().trim();
-        if (TextUtils.isEmpty(userPhone)) return;
-        String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-        Log.d(TAG, "注册页面图片验证码地址  " + url);
-        Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
+        final String userPhone = mPhoneNum.getText().toString().trim();
+        new Thread(new Runnable() {
             @Override
-            public void onSuccess() {
-                mImageCode.setVisibility(View.VISIBLE);
+            public void run() {
+                if (TextUtils.isEmpty(userPhone)) return;
+                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
+                Log.d(TAG, "注册页面图片验证码地址  " + url);
+                Picasso picasso = Picasso.with(SignUpActivity.this);
+                RequestCreator requestCreator = picasso.load(url);
+                try {
+                    final Bitmap bitmap = requestCreator.get();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (bitmap != null) {
+                                mRetrieveImage.setImageBitmap(bitmap);
+                                mImageCodeLoadHint.setVisibility(View.GONE);
+                                mRetrieveImage.setVisibility(View.VISIBLE);
+                            } else {
+                                mImageCodeLoadHint.setVisibility(View.VISIBLE);
+                                mRetrieveImage.setVisibility(View.GONE);
+                            }
+                        }
+                    });
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+        }).start();
 
-            @Override
-            public void onError() {
-                // TODO: 2016/9/8  目前先做这样处理
-                ToastUtil.curt("图片验证码下载失败，请点击短信验证码再次下载");
-            }
-        });
     }
 
     //点击后改变文本输入框的输入类型，使密码可见或隐藏

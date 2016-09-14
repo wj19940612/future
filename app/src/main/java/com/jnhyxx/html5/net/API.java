@@ -110,16 +110,11 @@ public class API extends APIBase {
          * @param tele
          */
         public static API obtainAuthCodeWhenFindPwd(String tele, String regImageCode) {
-            String sign = null;
-            try {
-                sign = SecurityUtil.md5Encrypt(tele + "luckin");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
             return new API("/user/user/retrievePass.do",
                     new ApiParams()
-                            .put("userPhone", tele));
-//                            .put(SIGN, sign));
+                            .put("userPhone", tele)
+                            .put("regImageCode", regImageCode));
+
         }
 
         /**
@@ -223,11 +218,6 @@ public class API extends APIBase {
 //                            .put(AUTH_CODE, authCode)
 //                            .put(PASSWORD, newPwd));
         public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
-//            return new API("/user/user/retrieveUpdatePass.do",
-//                    new ApiParams()
-//                            .put("userPhone", userPhone)
-//                            .put("regCode", regCode)
-//                            .put("userPass", userPass));
             try {
                 userPass = SecurityUtil.md5Encrypt(userPass);
                 Log.d(TAG, "找回密码密码MD5加密" + userPass);
@@ -416,6 +406,7 @@ public class API extends APIBase {
          *
          * @return
          */
+        // TODO: 2016/9/13 以前的接口，目前不用 
         public static API getFundInfo() {
             return new API("/user/finance/findMain.do",
                     new ApiParams());
@@ -479,6 +470,22 @@ public class API extends APIBase {
                             .put(TYPE, type)
                             .put(PAGE_NO, offset)
                             .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * 接口名：查询用户单笔提现记录详细信息
+         * URL  http://域名/user/finance/findIOInfo.do
+         *
+         * @param type   type=-1提现记录
+         * @param offset 提现记录起始点
+         * @param size   每次提现记录显示条数
+         * @return
+         */
+        public static API getWithdrawRecord(int type, int offset, int size) {
+            return new API("/user/finance/findIOInfo.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
         }
     }
 

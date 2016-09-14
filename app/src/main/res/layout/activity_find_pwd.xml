@@ -46,17 +46,6 @@
             android:orientation="horizontal">
 
 
-            <EditText
-                android:id="@+id/findPasswordMessageAuthCode"
-                style="@style/SignEditText.PhoneNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/login_icon_code"
-                android:drawablePadding="@dimen/drawable_left_padding"
-                android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint" />
-
             <TextView
                 android:id="@+id/obtainAuthCode"
                 android:layout_width="85dp"
@@ -72,6 +61,19 @@
                 android:text="@string/obtain_auth_code"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/findPasswordMessageAuthCode"
+                style="@style/SignEditText.PhoneNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/obtainAuthCode"
+                android:layout_alignBottom="@+id/obtainAuthCode"
+                android:layout_alignParentStart="true"
+                android:drawableLeft="@drawable/login_icon_code"
+                android:drawablePadding="@dimen/drawable_left_padding"
+                android:hint="@string/please_input_msg_auth_code"
+                android:textColorHint="@color/grayHint" />
         </RelativeLayout>
 
         <include layout="@layout/split_line_thick" />
@@ -89,23 +91,39 @@
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
-                <EditText
-                    android:id="@+id/inputImageCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_login_image_code"
-                    android:drawablePadding="@dimen/drawable_left_padding"
-                    android:hint="@string/register_code_image_hint"
-                    android:textColorHint="@color/grayHint"
-                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/imageCodeLoadHint"
+                    android:layout_width="85dp"
+                    android:layout_height="34dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="下载失败，请点击重新发送"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/RetrieveImageCode"
                     android:layout_width="85dp"
                     android:layout_height="34dp"
                     android:layout_alignParentRight="true"
-                    android:src="@mipmap/ic_launcher"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
                     android:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/inputImageCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/ic_login_image_code"
+                    android:drawablePadding="@dimen/drawable_left_padding"
+                    android:hint="@string/register_code_image_hint"
+                    android:textColorHint="@color/grayHint"
+                    android:textSize="13sp" />
             </RelativeLayout>
 
             <include layout="@layout/split_line_thick" />

@@ -61,7 +61,7 @@
         android:id="@+id/saleGetMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/drawable_left_padding"
+        android:layout_marginRight="20dp"
         android:text="2321313"
         android:textColor="@android:color/holo_red_light" />
 </LinearLayout>

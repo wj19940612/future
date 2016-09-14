@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,6 +23,9 @@ import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +49,8 @@ public class FindPwdActivity extends BaseActivity {
     LinearLayout mImageCode;
     @BindView(R.id.FailWarn)
     CommonFailWarn mCommonFailWarn;
+    @BindView(R.id.imageCodeLoadHint)
+    TextView imageCodeLoadHint;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -96,20 +103,38 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     //获取验证码
-    @OnClick(R.id.obtainAuthCode)
-    void obtainAuthCode() {
+    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.imageCodeLoadHint, R.id.RetrieveImageCode})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.obtainAuthCode:
+                obtainAuthCode();
+                break;
+            case R.id.nextStepButton:
+                doNextStepButtonClick();
+                break;
+            case R.id.imageCodeLoadHint:
+                getRetrieveImageCode();
+                break;
+            case R.id.RetrieveImageCode:
+                getRetrieveImageCode();
+                break;
+        }
+    }
+
+    private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String regImageCode = null;
         if (mImageCode.isShown()) {
             regImageCode = mInputImageCode.getText().toString().trim();
         }
+        Log.d(TAG, "手机号码：" + phoneNum + "\n 图片验证码" + regImageCode);
         API.User.obtainAuthCodeWhenFindPwd(phoneNum, regImageCode)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        ToastUtil.show(resp.getMsg());
+                        Log.d(TAG, resp.getMsg() + "\n找回密码返回的 code " + resp.getCode());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -118,32 +143,62 @@ public class FindPwdActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == 601) {
                             showFailWarnView(resp);
-                            getRetrieveImageCode();
+                            mImageCode.setVisibility(View.VISIBLE);
                         } else {
                             showFailWarnView(resp);
                         }
                     }
                 }).fire();
+        getRetrieveImageCode();
     }
 
     private void getRetrieveImageCode() {
-        ToastUtil.curt("获取注册验证码");
-        String userPhone = mPhoneNum.getText().toString().trim();
+        final String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-        String url = CommonMethodUtils.imageCodeUri(userPhone,"/user/user/checkRetriveMsgCode.do");
-        Log.d(TAG, "注册页面图片验证码地址  " + url);
-        Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
+         final String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
+        Log.d(TAG, "找回密码页面图片验证码地址  " + url);
+//        Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
+//            @Override
+//            public void onSuccess() {
+//                imageCodeLoadHint.setVisibility(View.GONE);
+//                mRetrieveImageCode.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void onError() {
+//                // TODO: 2016/9/8  目前先做这样处理
+//                imageCodeLoadHint.setVisibility(View.VISIBLE);
+//            }
+//        });
+        new Thread(new Runnable() {
             @Override
-            public void onSuccess() {
-                mImageCode.setVisibility(View.VISIBLE);
-            }
+            public void run() {
+                if (TextUtils.isEmpty(userPhone)) return;
+                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
+                Picasso picasso = Picasso.with(FindPwdActivity.this);
+                RequestCreator requestCreator = picasso.load(url);
+                try {
+                    final Bitmap bitmap = requestCreator.get();
+                    Log.d(TAG, "下载的图片验证码 " + bitmap);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (bitmap != null) {
+                                mRetrieveImageCode.setImageBitmap(bitmap);
+                                imageCodeLoadHint.setVisibility(View.GONE);
+                                mRetrieveImageCode.setVisibility(View.VISIBLE);
+                            } else {
+                                imageCodeLoadHint.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
 
-            @Override
-            public void onError() {
-                // TODO: 2016/9/8  目前先做这样处理
-                ToastUtil.curt("图片验证码下载失败，请点击短信验证码再次下载");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }).start();
+
     }
 
     private void showFailWarnView(Resp resp) {
@@ -151,19 +206,9 @@ public class FindPwdActivity extends BaseActivity {
         mCommonFailWarn.setVisibility(View.VISIBLE);
     }
 
-    //下一步跳转
-    @OnClick(R.id.nextStepButton)
-    void doNextStepButtonClick() {
+    private void doNextStepButtonClick() {
         final String phoneNum = mPhoneNum.getText().toString().trim();
         final String authCode = mMessageAuthCode.getText().toString().trim();
-
-        // TODO: 2016/8/31 目前没有确认短信验证码接口， 
-//        API.Account.authCodeWhenFindPassword(phoneNum, authCode)
-//                .setIndeterminate(this).setTag(TAG)
-//                .setCallback(new Callback<Resp>() {
-//                    @Override
-//                    public void onReceive(Resp resp) {
-//                        if (resp.isSuccess()) {
         API.User.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {

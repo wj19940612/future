@@ -21,6 +21,13 @@
 
     <color name="blackHalfTransparent">#7F000000</color>
 
+    <!--********************************分割线的颜色****************************************-->
+    <!--未铺满的分割线颜色-->
+    <color name="splitLineNotOverspread">#e5e5e5</color>
+    <!--铺满的分割线颜色-->
+    <color name="splitLineOverspread">#cdcdcd</color>
+
+
 
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>
@@ -34,4 +41,6 @@
     <!--EditText的hint文字颜色-->
     <color name="editText_hint_color">#CBCBCB</color>
     <color name="editText_color_input">#262626</color>
+
+
 </resources>

@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,10 +16,12 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.ViewUtil;
 
@@ -36,6 +41,10 @@ public class RechargeActivity extends BaseActivity {
     RelativeLayout mBankCardPay;
     @BindView(R.id.aliPayPay)
     RelativeLayout mAliPayPay;
+    @BindView(R.id.payMethodMatherView)
+    LinearLayout mPayMethodMatherView;
+    @BindView(R.id.commonFail)
+    CommonFailWarn mCommonFail;
 //    @BindView(R.id.paymentGroup)
 //    RadioGroup mPaymentGroup;
 //
@@ -95,10 +104,37 @@ public class RechargeActivity extends BaseActivity {
 //        return button;
 //    }
 
-    @OnClick(R.id.nextStepButton)
-    public void onClick() {
-        if (checkValidation()) {
+    @OnClick({R.id.nextStepButton, R.id.bankCardPay, R.id.aliPayPay})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.nextStepButton:
+                submitRechargeNUmber();
+                break;
+            case R.id.bankCardPay:
+                selectPayMethod(0);
+                break;
+            case R.id.aliPayPay:
+                selectPayMethod(1);
+                break;
+        }
+    }
 
+    private void submitRechargeNUmber() {
+        String rechargeNumber = mRechargeAmount.getText().toString().trim();
+        double amount = Double.valueOf(rechargeNumber);
+        if (checkValidation()) {
+            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
+                    .setCallback(new Callback<Resp>() {
+                        @Override
+                        public void onReceive(Resp resp) {
+                            if (resp.isSuccess()) {
+                                Log.d(TAG, "发起充值成功");
+                            } else {
+                                mCommonFail.setCenterTxt(resp.getMsg());
+                                mCommonFail.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).fire();
         }
     }
 
@@ -123,11 +159,16 @@ public class RechargeActivity extends BaseActivity {
 //                break;
 //            }
 //        }
+        for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
+            if (mPayMethodMatherView.getChildAt(i).isSelected()) {
+                hasPayment = true;
+                break;
+            }
+        }
         if (!hasPayment) {
             ToastUtil.show(getString(R.string.payments_cannot_be_empty));
             return false;
         }
-
         return true;
     }
 
@@ -150,6 +191,18 @@ public class RechargeActivity extends BaseActivity {
                         }).fire();
 
             }
+        }
+    }
+
+    private void selectPayMethod(int index) {
+        if (index < 0 || index > 2) return;
+        unSelectAll();
+        mPayMethodMatherView.getChildAt(index).setSelected(true);
+    }
+
+    private void unSelectAll() {
+        for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
+            mPayMethodMatherView.getChildAt(i).setSelected(false);
         }
     }
 }

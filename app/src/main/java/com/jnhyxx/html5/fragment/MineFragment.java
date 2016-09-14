@@ -125,7 +125,6 @@ public class MineFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -205,26 +204,26 @@ public class MineFragment extends BaseFragment {
 
     private void startRechargeActivity() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (CommonMethodUtils.isNameAuth(userInfo)) {
-            if (CommonMethodUtils.isBankAuth(userInfo)) {
+//        if (CommonMethodUtils.isNameAuth(userInfo)) {
+//            if (CommonMethodUtils.isBankAuth(userInfo)) {
                 Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
-            } else {
-                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
-            }
-        } else {
-            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
-        }
+//            } else {
+//                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
+//            }
+//        } else {
+//            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
+//        }
     }
 
     private void startWithDrawActivity() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         //如果没有实名认证，先实名认证
         // TODO: 2016/9/13 仅作测试使用,正式的时候需要放开
-//        if (!CommonMethodUtils.isNameAuth(userInfo)) {
+        if (!CommonMethodUtils.isNameAuth(userInfo)) {
             ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
-//        } else {
-//            Launcher.with(getActivity(), WithdrawActivity.class).executeForResult(REQUEST_CODE_WITHDRAW);
-//        }
+        } else {
+            Launcher.with(getActivity(), WithdrawActivity.class).executeForResult(REQUEST_CODE_WITHDRAW);
+        }
     }
 
     /**

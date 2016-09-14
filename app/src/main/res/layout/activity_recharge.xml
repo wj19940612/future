@@ -13,6 +13,10 @@
         app:backFeature="true"
         app:titleText="@string/recharge" />
 
+    <com.jnhyxx.html5.view.CommonFailWarn
+        android:id="@+id/commonFail"
+        style="@style/commonFailWarn" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -29,23 +33,18 @@
             android:textColor="#262626" />
 
         <EditText
-            android:textColorHint="@color/editText_hint_color"
             android:id="@+id/rechargeAmount"
             style="@style/SignEditText"
-            android:textColor="@color/editText_color_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_recharge_amount"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/editText_color_input"
+            android:textColorHint="@color/editText_hint_color" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="@dimen/common_view_margin"
-        android:layout_marginRight="@dimen/common_view_margin"
-        android:background="@color/splitLine" />
+    <include layout="@layout/split_line_thick" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,89 +61,96 @@
             android:text="@string/please_choose_payment"
             android:textColor="#a8a8a8" />
 
-
-        <RelativeLayout
-            android:id="@+id/bankCardPay"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/payMethodMatherView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_withdraw"
-            android:clickable="true">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/helpIcBankCardPay"
-                android:layout_width="wrap_content"
+
+            <RelativeLayout
+                android:id="@+id/bankCardPay"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/ic_bank_card_pay" />
+                android:background="@drawable/btn_withdraw"
+                android:clickable="true">
 
-            <TextView
-                android:id="@+id/helpBankCardPay"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/helpIcBankCardPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_bank_card_pay" />
+
+                <TextView
+                    android:id="@+id/helpBankCardPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/helpIcBankCardPay"
+                    android:paddingTop="10dp"
+                    android:text="@string/bank_card_pay"
+                    android:textColor="#262626"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/helpBankCardPay"
+                    android:layout_toRightOf="@+id/helpIcBankCardPay"
+                    android:paddingTop="8dp"
+                    android:text="@string/bank_card_pay_hint"
+                    android:textColor="#a8a8a8"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_superscript_recommend" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/aliPayPay"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/helpIcBankCardPay"
-                android:paddingTop="10dp"
-                android:text="@string/bank_card_pay"
-                android:textColor="#262626"
-                android:textSize="16sp" />
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_withdraw"
+                android:clickable="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/helpBankCardPay"
-                android:layout_toRightOf="@+id/helpIcBankCardPay"
-                android:paddingTop="8dp"
-                android:text="@string/bank_card_pay_hint"
-                android:textColor="#a8a8a8"
-                android:textSize="12sp" />
+                <ImageView
+                    android:id="@+id/helpIcAliPayPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_alipay" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_superscript_recommend" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/helpAliPayPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/helpIcAliPayPay"
+                    android:paddingTop="10dp"
+                    android:text="@string/aliPay_pay"
+                    android:textColor="#262626"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:id="@+id/aliPayPay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_withdraw"
-            android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/helpAliPayPay"
+                    android:layout_toRightOf="@+id/helpIcAliPayPay"
+                    android:paddingTop="8dp"
+                    android:text="@string/aliPay_pay_hint"
+                    android:textColor="#a8a8a8"
+                    android:textSize="12sp" />
 
-            <ImageView
-                android:id="@+id/helpIcAliPayPay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/ic_alipay" />
-
-            <TextView
-                android:id="@+id/helpAliPayPay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/helpIcAliPayPay"
-                android:paddingTop="10dp"
-                android:text="@string/aliPay_pay"
-                android:textColor="#262626"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/helpAliPayPay"
-                android:layout_toRightOf="@+id/helpIcAliPayPay"
-                android:paddingTop="8dp"
-                android:text="@string/aliPay_pay_hint"
-                android:textColor="#a8a8a8"
-                android:textSize="12sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_superscript_recommend" />
-        </RelativeLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_superscript_recommend" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/nextStepButton"
@@ -174,7 +180,6 @@
         android:layout_weight="1" />
 
     <TextView
-        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -182,5 +187,6 @@
         android:gravity="center"
         android:lineSpacingExtra="10dp"
         android:text="@string/recharge_hint"
-        android:textColor="#A8A8A8" />
+        android:textColor="#A8A8A8"
+        android:textSize="12sp" />
 </LinearLayout>

@@ -412,6 +412,17 @@ public class API extends APIBase {
                     new ApiParams());
         }
 
+        /**
+         * 接口名：用户充值
+         * <p>
+         * URL  http://域名/user/finance/deposit.do
+         *
+         * @param money
+         * @return
+         */
+        public static API rechargeMoney(double money) {
+            return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
+        }
 
         /**
          * 接口名：用户提现

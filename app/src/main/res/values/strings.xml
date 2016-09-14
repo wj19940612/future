@@ -317,6 +317,7 @@
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">您是否要拨打客服电话:\n  %1$s  \n解绑换卡</string>
+    <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>
 
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>

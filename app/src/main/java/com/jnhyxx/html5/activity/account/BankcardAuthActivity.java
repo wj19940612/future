@@ -25,6 +25,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.NameAuth;
+import com.jnhyxx.html5.domain.account.ChannelBankList;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
@@ -196,7 +197,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        Launcher.with(getActivity(), NameAuthActivity.class).executeForResult(REQUEST_CODE);
+                        Launcher.with(getActivity(), NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
+                        dialog.dismiss();
                     }
                 })
                 .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
@@ -249,7 +251,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 mBankcardInputArea.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
-                ToastUtil.curt("请选择银行");
+                mTitleBar.setTitle(R.string.bankcard);
                 break;
             case R.id.submitToAuthButton:
                 String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
@@ -356,9 +358,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     }
 
     @Override
-    public void onBankItemClick(BankListFragment.Bank bank) {
-        mPayingBank.setText(bank.name);
+    public void onBankItemClick(ChannelBankList bank) {
+        mPayingBank.setText(bank.getName());
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        mBankcardInputArea.setVisibility(View.VISIBLE);
     }
 }

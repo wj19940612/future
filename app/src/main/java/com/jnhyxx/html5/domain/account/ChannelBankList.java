@@ -25,11 +25,20 @@ public class ChannelBankList implements Serializable {
      * limitSingle : 10000
      * name : 中国工商银行
      */
-
+    //银行图标
     private String icon;
     private int id;
+    /**
+     * 单日最高提现额度
+     */
     private int limitDay;
+    /**
+     * 单笔最高提现额度
+     */
     private int limitSingle;
+    /**
+     * 银行名称
+     */
     private String name;
 
     public static ChannelBankList objectFromData(String str) {

@@ -207,7 +207,7 @@ public class SettlementFragment extends BaseFragment {
                         lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
                     }
-                    String lossProfitInner = "(" + FinanceUtil.formatWithScale(lossProfit * rate) + ")";
+                    String lossProfitInner = "(" + FinanceUtil.formatWithScale(FinanceUtil.multiply(lossProfit, rate).doubleValue()) + ")";
                     mLossProfit.setTextColor(color);
                     mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, "\n" + lossProfitInner, 0.5f, grayColor));
 

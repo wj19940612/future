@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.johnz.kutils.FinanceUtil;
+import com.johnz.kutils.StrUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +74,8 @@ public class TradePageHeader extends FrameLayout {
 
     private ViewGroup[] mHeaders;
 
+    private int mHeaderIndex;
+
     public TradePageHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -87,15 +91,20 @@ public class TradePageHeader extends FrameLayout {
                     (int) getResources().getDimension(R.dimen.trade_header_height));
             addView(mHeaders[i], i, params);
         }
+        mHeaderIndex = -1;
         showView(HEADER_UNLOGIN);
         ButterKnife.bind(this);
     }
 
     public void showView(int headerIndex) {
+        if (mHeaderIndex == headerIndex) return;
+
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).setVisibility(GONE);
         }
         getChildAt(headerIndex).setVisibility(VISIBLE);
+
+        mHeaderIndex = headerIndex;
     }
 
     public void setOnViewClickListener(OnViewClickListener listener) {
@@ -104,6 +113,25 @@ public class TradePageHeader extends FrameLayout {
 
     public void setTotalProfitUnit(String unit) {
         mTotalProfitAndUnit.setText(getContext().getString(R.string.holding_position_total_profit_and_unit, unit));
+    }
+
+    public void setTotalProfit(double totalProfit, boolean isForeign, double ratio) {
+        int color = ContextCompat.getColor(getContext(), R.color.greenPrimary);
+        if (totalProfit >= 0) {
+            color = ContextCompat.getColor(getContext(), R.color.redPrimary);
+        }
+        mTotalProfit.setTextColor(color);
+
+        String totalProfitStr = totalProfit >= 0 ? "+" + totalProfit : "" + totalProfit;
+        if (isForeign) {
+            double totalProfitInner = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
+            String totalProfitInnerStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitInner)
+                    : FinanceUtil.formatWithScale(totalProfitInner);
+            totalProfitInnerStr = "(" + totalProfitInnerStr + ")";
+            mTotalProfit.setText(StrUtil.mergeTextWithRatio(totalProfitStr, totalProfitInnerStr, 0.5f));
+        } else {
+            mTotalProfit.setText(totalProfitStr);
+        }
     }
 
     public void setAvailableBalance(double availableBalance) {

@@ -33,6 +33,7 @@ import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
+import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
@@ -42,6 +43,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.presenter.OrderPresenter;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
@@ -59,7 +61,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TradeActivity extends BaseActivity implements
-        PlaceOrderFragment.Callback, AgreementFragment.Callback {
+        PlaceOrderFragment.Callback,
+        AgreementFragment.Callback,
+        OrderPresenter.IHoldingOrderView {
 
     private static final int REQ_CODE_SIGN_IN = 1;
 
@@ -111,11 +115,15 @@ public class TradeActivity extends BaseActivity implements
     private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
 
+    private OrderPresenter mOrderPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
+
+        mOrderPresenter = new OrderPresenter(this);
 
         initData(getIntent());
 
@@ -153,20 +161,17 @@ public class TradeActivity extends BaseActivity implements
         });
 
         updateTradePagerHeader();
+
         updateProductRelatedViews();
 
-        requestHoldingOrderList();
+        mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
     private void updateProductRelatedViews() {
         updateTitleBar();
         updateChartView();
         updateExchangeStatusView();
-    }
-
-    private void requestHoldingOrderList() {
-        if (!LocalUser.getUser().isLogin()) return;
-
+        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit());
     }
 
     private void updateTradePagerHeader() {
@@ -183,7 +188,7 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateTradePagerHeader();
-            requestHoldingOrderList();
+            mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         }
     }
 
@@ -251,6 +256,8 @@ public class TradeActivity extends BaseActivity implements
                     + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
             mSellShortBtn.setText(getString(R.string.sell_short)
                     + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+
+            mOrderPresenter.setAskBidPrices(data.getAskPrice(), data.getBidPrice());
         }
     };
 
@@ -334,6 +341,12 @@ public class TradeActivity extends BaseActivity implements
         super.onStop();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mOrderPresenter.unbind();
     }
 
     @Override
@@ -515,6 +528,21 @@ public class TradeActivity extends BaseActivity implements
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         hideFragmentOfContainer();
         placeOrder(longOrShort);
+    }
+
+    @Override
+    public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
+
+    }
+
+    @Override
+    public void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
+        if (hasHoldingOrders) {
+            mTradePageHeader.showView(TradePageHeader.HEADER_HOLDING_POSITION);
+            mTradePageHeader.setTotalProfit(totalProfit, mProduct.isForeign(), ratio);
+        } else {
+            updateTradePagerHeader();
+        }
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

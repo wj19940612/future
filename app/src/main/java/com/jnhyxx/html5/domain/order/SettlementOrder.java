@@ -2,15 +2,7 @@ package com.jnhyxx.html5.domain.order;
 
 import java.io.Serializable;
 
-public class SettlementOrder implements Serializable {
-
-    public static final int DIRECTION_LONG = 0;
-    public static final int DIRECTION_SHORT = 1;
-
-    public static final int SELL_OUT_MAKERT_PRICE = 0;
-    public static final int SELL_OUT_STOP_PROFIT = 1;
-    public static final int SELL_OUT_STOP_LOSS = 2;
-    public static final int SELL_OUT_SYSTEM_CLEAR = 3;
+public class SettlementOrder extends AbsOrder implements Serializable {
 
     /**
      * currencyUnit : 美元

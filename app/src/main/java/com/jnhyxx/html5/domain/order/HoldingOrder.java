@@ -1,6 +1,6 @@
 package com.jnhyxx.html5.domain.order;
 
-public class HoldingOrder {
+public class HoldingOrder extends AbsOrder {
 
     /**
      * buyTime : 1473821298000

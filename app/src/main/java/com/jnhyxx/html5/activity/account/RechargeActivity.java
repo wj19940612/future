@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
@@ -122,19 +124,26 @@ public class RechargeActivity extends BaseActivity {
     private void submitRechargeNUmber() {
         String rechargeNumber = mRechargeAmount.getText().toString().trim();
         double amount = Double.valueOf(rechargeNumber);
+        if (amount < 50) {
+            ToastUtil.show(getString(R.string.recharge_amount_should_larger_than_50));
+            return;
+        }
         if (checkValidation()) {
-            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
-                    .setCallback(new Callback<Resp>() {
-                        @Override
-                        public void onReceive(Resp resp) {
-                            if (resp.isSuccess()) {
-                                Log.d(TAG, "发起充值成功");
-                            } else {
-                                mCommonFail.setCenterTxt(resp.getMsg());
-                                mCommonFail.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }).fire();
+//            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
+//                    .setCallback(new Callback<Resp>() {
+//                        @Override
+//                        public void onReceive(Resp resp) {
+//                            if (resp.isSuccess()) {
+//                                Log.d(TAG, "发起充值成功");
+//                            } else {
+//                                mCommonFail.setCenterTxt(resp.getMsg());
+//                                mCommonFail.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    }).fire();
+//            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
+            String url = "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount;
+            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", url).execute();
         }
     }
 
@@ -145,11 +154,11 @@ public class RechargeActivity extends BaseActivity {
             return false;
         }
 
-        double amount = Double.valueOf(rechargeAmount);
-        if (amount < 50) {
-            ToastUtil.show(getString(R.string.recharge_amount_should_larger_than_50));
-            return false;
-        }
+//        double amount = Double.valueOf(rechargeAmount);
+//        if (amount < 50) {
+//            ToastUtil.show(getString(R.string.recharge_amount_should_larger_than_50));
+//            return false;
+//        }
 
         boolean hasPayment = false;
         // TODO: 2016/9/13 判断支付方式

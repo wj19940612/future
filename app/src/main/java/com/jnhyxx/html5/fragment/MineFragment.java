@@ -129,6 +129,11 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         updateAccountInfoView();
+
+//        String time = "2016-08-19 14:14:05";
+//        String year = CommonMethodUtils.getYear(time);
+//        String hour = CommonMethodUtils.getHour(time);
+//        Log.d(TAG, "具体的年 " + year + "具体时间" + hour);
     }
 
     private void updateAccountInfoView() {
@@ -206,7 +211,7 @@ public class MineFragment extends BaseFragment {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
 //        if (CommonMethodUtils.isNameAuth(userInfo)) {
 //            if (CommonMethodUtils.isBankAuth(userInfo)) {
-                Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
+        Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
 //            } else {
 //                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
 //            }

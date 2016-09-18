@@ -206,4 +206,21 @@ public class WithdrawRecord implements Serializable {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "WithdrawRecord{" +
+                "commission=" + commission +
+                ", id=" + id +
+                ", money=" + money +
+                ", remark='" + remark + '\'' +
+                ", selfOrderId='" + selfOrderId + '\'' +
+                ", status=" + status +
+                ", type=" + type +
+                ", typeDetail=" + typeDetail +
+                ", updateTime='" + updateTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 }

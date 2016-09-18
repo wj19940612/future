@@ -114,7 +114,7 @@ public class CommonMethodUtils {
      * @return true 有效：false 无效
      * @throws ParseException
      */
-    public static boolean IDCardValidate(String identityCard )  {
+    public static boolean IDCardValidate(String identityCard) {
         String regx = "[0-9]{17}x";
         String reg1 = "[0-9]{15}";
         String regex = "[0-9]{18}";
@@ -218,6 +218,31 @@ public class CommonMethodUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取年、月、日
+     *
+     * @param dateTime
+     * @return
+     */
+    public static String getYear(String dateTime) {
+        String monthTime = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy--MM--DD");
+        monthTime = simpleDateFormat.format(dateTime);
+        return monthTime;
+    }
+
+    public static String getHour(String hourTime) {
+        hourTime = hourTime.trim();
+        String hourDate = "";
+        String[] time = hourTime.split(" ");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        if (time.length==2){
+            hourTime = time[1];
+        }
+        hourDate = simpleDateFormat.format(hourTime);
+        return hourDate;
     }
 }
 

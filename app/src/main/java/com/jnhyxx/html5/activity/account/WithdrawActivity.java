@@ -58,7 +58,7 @@ public class WithdrawActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Launcher.with(WithdrawActivity.this, WithDrawRecordActivity.class).execute();
             }
         });
         updateBankInfoView();

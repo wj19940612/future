@@ -360,7 +360,7 @@
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>
     <string name="withdraw_status_success">成功</string>
-    <string name="withdraw_status_fail">成功</string>
+    <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">待审核</string>
-    <string name="withdraw_money">%1$s元</string>
+    <string name="withdraw_money">%1$d元</string>
 </resources>

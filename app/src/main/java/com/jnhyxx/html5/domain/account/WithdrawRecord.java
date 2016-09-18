@@ -20,10 +20,25 @@ public class WithdrawRecord implements Serializable {
     private static final long serialVersionUID = -470395285557119048L;
 
     //提现
-    public static final int RECORD_TYPE_WITHDRAW =-1 ;
+    public static final int RECORD_TYPE_WITHDRAW = -1;
     //充值
     public static final int RECORD_TYPE_RECHARGE = 1;
 
+    /**
+     * 充提状态，充提均使用该字段 0表示刚刚发起（充提）1表示审批通过（提现）2表示转账中（提现）3表示充提成功（充提）4表示提现拒绝（提现）5表示转账失败（提现',
+     */
+    //冲提刚刚发起
+    public static final int WITHDRAW_AND_RECHARGE_INITIATE = 0;
+    //提现审批通过
+    public static final int WITHDRAW_PASS = 1;
+    //提现转账中
+    public static final int TRANSFERING = 2;
+    //充提成功
+    public static final int WITHDRAW_RECHARGE_SUCCESS = 3;
+    //提现拒绝
+    public static final int WITHDRAW_REFUSE = 4;
+    //提现失败
+    public static final int WITHDRAW_FAIL = 5;
 
 
     /**

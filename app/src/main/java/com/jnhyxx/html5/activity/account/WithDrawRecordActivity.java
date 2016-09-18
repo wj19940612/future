@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.account.WithdrawRecord;
-import com.jnhyxx.html5.fragment.InfoListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -36,6 +34,8 @@ public class WithDrawRecordActivity extends BaseActivity {
 
     @BindView(R.id.withdrawRecord)
     ListView mWithdrawRecordList;
+    @BindView(R.id.empty)
+    TextView mEmpty;
 
     private int mSize = 0;
     private int mOffset;
@@ -74,7 +74,10 @@ public class WithDrawRecordActivity extends BaseActivity {
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
-        if (withdrawRecordList == null) return;
+        if (withdrawRecordList == null) {
+            mWithdrawRecordList.setEmptyView(mEmpty);
+            return;
+        }
         if (mFooter == null) {
             mFooter = new TextView(WithDrawRecordActivity.this);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,

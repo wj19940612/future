@@ -303,6 +303,7 @@ public class API extends APIBase {
          * bankName      String     银行名
          * cardNumber    String    银行卡号
          * cardPhone     String    银行卡对应的手机号
+         *
          * @param bankId
          * @param bankName
          * @return
@@ -486,13 +487,27 @@ public class API extends APIBase {
          * 接口名：查询用户单笔提现记录详细信息
          * URL  http://域名/user/finance/findIOInfo.do
          *
+         * @param type type=-1提现记录 提现记录id号
+         * @param id
+         * @return
+         */
+        public static API getWithdrawRecordInfo(int type, int id) {
+            return new API("/user/finance/findIOInfo.do", new ApiParams()
+                    .put("type", type)
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询用户提现记录
+         * URL  http://域名/user/finance/findIOList.do
+         *
          * @param type   type=-1提现记录
          * @param offset 提现记录起始点
          * @param size   每次提现记录显示条数
          * @return
          */
-        public static API getWithdrawRecord(int type, int offset, int size) {
-            return new API("/user/finance/findIOInfo.do", new ApiParams()
+        public static API getWithdrawRecordList(int type, int offset, int size) {
+            return new API("/user/finance/findIOList.do", new ApiParams()
                     .put("type", type)
                     .put("offset", offset)
                     .put("size", size));

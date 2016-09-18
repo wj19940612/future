@@ -17,8 +17,10 @@ import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
+import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.activity.setting.SettingActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
+import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -50,6 +52,9 @@ public class MineFragment extends BaseFragment {
     private static final int REQUEST_CODE_WITHDRAW = 6329;
     //充值的请求码
     private static final int REQUEST_CODE_RECHARGE = 560;
+    //资金明细与积分明细
+    private static final int REQUEST_CODE_TRADE_DETAIL = 961;
+
 
     //账户余额
     @BindView(R.id.balance)
@@ -197,7 +202,7 @@ public class MineFragment extends BaseFragment {
 //                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
-                openTradeDetailPage(true);
+                openTradeDetailPage();
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
@@ -209,15 +214,15 @@ public class MineFragment extends BaseFragment {
 
     private void startRechargeActivity() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-//        if (CommonMethodUtils.isNameAuth(userInfo)) {
-//            if (CommonMethodUtils.isBankAuth(userInfo)) {
-        Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
-//            } else {
-//                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
-//            }
-//        } else {
-//            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
-//        }
+        if (CommonMethodUtils.isNameAuth(userInfo)) {
+            if (CommonMethodUtils.isBankAuth(userInfo)) {
+                Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
+            } else {
+                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
+            }
+        } else {
+            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
+        }
     }
 
     private void startWithDrawActivity() {
@@ -234,11 +239,11 @@ public class MineFragment extends BaseFragment {
     /**
      * 打开交易明细界面
      *
-     * @param isCash
+     * @param
      */
-    private void openTradeDetailPage(final boolean isCash) {
-//        if (User.getUser().isLogin()) {
-        // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
+    private void openTradeDetailPage() {
+        if (LocalUser.getUser().isLogin()) {
+            // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
         /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
     private void openFundDetailPage(final boolean isCash) {
         if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
@@ -252,27 +257,10 @@ public class MineFragment extends BaseFragment {
                                     .execute();
                         }
                     }).fire();*/
-           /* API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-                    .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
-                        @Override
-                        public void onRespSuccess(TradeDetail tradeDetail) {
-                            Launcher.with(getActivity(), TradeDetailActivity.class)
-                                    .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
-                                    .execute();
-                        }
-                    }).fire();*/
-//        API.Finance.getFundInfo("money").setTag(TAG)
-//                .setCallback(new Callback2<Resp<TradeDetail>, TradeDetail>() {
-//                    @Override
-//                    public void onRespSuccess(TradeDetail tradeDetail) {
-//                        Launcher.with(getActivity(), TradeDetailActivity.class)
-//                                .putExtra(Launcher.EX_PAYLOAD, tradeDetail)
-//                                .execute();
-//                    }
-//                }).fire();
-//        } else {
-//            Launcher.with(getActivity(), SignInActivity.class).execute();
-//        }
+            Launcher.with(getActivity(), TradeDetailActivity.class).executeForResult(REQUEST_CODE_TRADE_DETAIL);
+        } else {
+            Launcher.with(getActivity(), SignInActivity.class).execute();
+        }
     }
 
     @Override

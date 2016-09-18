@@ -9,7 +9,9 @@ import android.support.v4.view.ViewPager;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.InfoListFragment;
+import com.jnhyxx.html5.fragment.TradeDetailListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 
@@ -31,6 +33,8 @@ public class TradeDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
+        mViewPager.setAdapter(new tradeDetailFragmentAdapter(getSupportFragmentManager(), getActivity()));
+        mSlidingTabLayout.setViewPager(mViewPager);
 
     }
 
@@ -57,9 +61,9 @@ public class TradeDetailActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
+                    return TradeDetailListFragment.newInstance(TradeDetailListFragment.TYPE_FUND);
                 case 1:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
+                    return TradeDetailListFragment.newInstance(TradeDetailListFragment.TYPE_INTEGRAL);
             }
             return null;
         }

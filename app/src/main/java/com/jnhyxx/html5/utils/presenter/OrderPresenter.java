@@ -24,7 +24,7 @@ public class OrderPresenter {
 
     /**
      * 刷新策略:
-     *
+     * <p/>
      * 2s 间隔, 刷新5次
      * 4s 间隔, 刷新10次
      * 8s 间隔, 刷新20次
@@ -34,6 +34,7 @@ public class OrderPresenter {
 
     public interface IHoldingOrderView {
         void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList);
+
         void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio);
     }
 
@@ -57,24 +58,32 @@ public class OrderPresenter {
         boolean hasHoldingOrders = false;
         double ratio = 0;
         boolean refresh = false;
+        boolean refreshNow = false;
 
         for (HoldingOrder holdingOrder : sHoldingOrderList) {
             int orderStatus = holdingOrder.getOrderStatus();
             if (orderStatus >= HoldingOrder.ORDER_STATUS_HOLDING && orderStatus < HoldingOrder.ORDER_STATUS_SETTLED) {
                 // 持仓中、卖处理中的订单
-                BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    BigDecimal diff = FinanceUtil.subtraction(bidPrice, holdingOrder.getRealAvgPrice());
-                    totalProfit = totalProfit.add(diff);
-                } else {
-                    BigDecimal diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), askPrice);
-                    totalProfit = totalProfit.add(diff);
-                }
-                totalProfit = totalProfit.multiply(eachPointMoney);
                 hasHoldingOrders = true;
                 ratio = holdingOrder.getRatio();
 
-                
+                BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
+                BigDecimal diff;
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                    diff = FinanceUtil.subtraction(bidPrice, holdingOrder.getRealAvgPrice());
+                } else {
+                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), askPrice);
+                }
+                diff = diff.multiply(eachPointMoney);
+
+                if (diff.doubleValue() >= holdingOrder.getStopWin()) {
+                    refreshNow = true;
+                }
+                if (diff.doubleValue() <= holdingOrder.getStopLoss()) {
+                    refreshNow = true;
+                }
+
+                totalProfit = totalProfit.add(diff);
             }
 
             // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
@@ -86,6 +95,10 @@ public class OrderPresenter {
 
         if (mHoldingOrderView != null && mBindActivity) {
             mHoldingOrderView.onShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
+        }
+
+        if (refreshNow) { // 触及风控刷新
+            loadHoldingOrderList(mVarietyId, mFundType);
         }
 
         if (refresh) {

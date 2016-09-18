@@ -663,6 +663,18 @@ public class API extends APIBase {
                             .put("varietyId", varietyId)
                             .put("fundType", fundType));
         }
+
+        /**
+         * /order/order/getOrderStatus.do 获取订单状态
+         *
+         * @param showId
+         * @return
+         */
+        public static API getOrderStatus(String showId) {
+            return new API(GET, "/order/order/getOrderStatus.do",
+                    new ApiParams()
+                            .put("showId", showId));
+        }
     }
 
     /**

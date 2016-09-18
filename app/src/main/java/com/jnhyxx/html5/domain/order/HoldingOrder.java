@@ -29,8 +29,8 @@ public class HoldingOrder extends AbsOrder {
     private double realAvgPrice;
     private int realMarketVal;
     private String showId;
-    private int stopLossPrice;
-    private int stopWinPrice;
+    private double stopLossPrice;
+    private double stopWinPrice;
 
     public long getBuyTime() {
         return buyTime;
@@ -120,7 +120,7 @@ public class HoldingOrder extends AbsOrder {
         this.showId = showId;
     }
 
-    public int getStopLoss() {
+    public double getStopLoss() {
         return stopLossPrice;
     }
 
@@ -128,7 +128,7 @@ public class HoldingOrder extends AbsOrder {
         this.stopLossPrice = stopLoss;
     }
 
-    public int getStopWin() {
+    public double getStopWin() {
         return stopWinPrice;
     }
 

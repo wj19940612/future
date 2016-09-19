@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
@@ -22,6 +23,7 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
@@ -82,6 +84,13 @@ public class PlaceOrderFragment extends BaseFragment {
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
     private Callback mCallback;
+
+    private NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveData(FullMarketData data) {
+
+        }
+    };
 
     public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
@@ -261,7 +270,6 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updatePlaceOrderViews() {
         if (isRemoving() || !isAdded()) return;
-
         // 设置止损
         mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }

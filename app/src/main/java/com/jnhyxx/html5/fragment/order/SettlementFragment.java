@@ -39,6 +39,7 @@ public class SettlementFragment extends BaseFragment {
     ListView mList;
     @BindView(android.R.id.empty)
     TextView mEmpty;
+
     private Unbinder mBinder;
 
     private Product mProduct;

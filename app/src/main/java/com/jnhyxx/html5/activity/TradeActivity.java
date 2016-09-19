@@ -117,6 +117,22 @@ public class TradeActivity extends BaseActivity implements
 
     private OrderPresenter mOrderPresenter;
 
+    private NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveData(FullMarketData data) {
+            updateFourMainPrices(data);
+            updateLastPriceView(data);
+            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+            updateChartView(data);
+            mBuyLongBtn.setText(getString(R.string.buy_long)
+                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
+            mSellShortBtn.setText(getString(R.string.sell_short)
+                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+
+            mOrderPresenter.setAskBidPrices(data.getAskPrice(), data.getBidPrice());
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +172,10 @@ public class TradeActivity extends BaseActivity implements
 
             @Override
             public void onProfitAreaClick() {
-
+                Launcher.with(getActivity(), OrderActivity.class)
+                        .putExtra(Product.EX_PRODUCT, mProduct)
+                        .putExtra(Product.EX_FUND_TYPE, mFundType)
+                        .execute();
             }
         });
 
@@ -245,22 +264,6 @@ public class TradeActivity extends BaseActivity implements
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
     }
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
-        @Override
-        protected void onReceiveData(FullMarketData data) {
-            updateFourMainPrices(data);
-            updateLastPriceView(data);
-            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
-            updateChartView(data);
-            mBuyLongBtn.setText(getString(R.string.buy_long)
-                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
-            mSellShortBtn.setText(getString(R.string.sell_short)
-                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
-
-            mOrderPresenter.setAskBidPrices(data.getAskPrice(), data.getBidPrice());
-        }
-    };
-
     private void updateChartView(FullMarketData data) {
         TrendView trendView = mChartContainer.getTrendView();
         if (trendView != null) {
@@ -319,6 +322,7 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         startScheduleJob(60 * 1000, 60 * 1000);
+        mOrderPresenter.onResume();
     }
 
     private void updateQuestionMarker() {
@@ -334,19 +338,14 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mOrderPresenter.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mOrderPresenter.unbind();
+        NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override

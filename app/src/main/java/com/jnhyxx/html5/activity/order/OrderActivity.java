@@ -75,7 +75,7 @@ public class OrderActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new HoldingFragment();
+                    return HoldingFragment.newInstance(mProduct, mFundType);
                 case 1:
                     return SettlementFragment.newInstance(mProduct, mFundType);
             }

@@ -44,9 +44,12 @@ public class OrderPresenter {
         mHandler = new Handler();
     }
 
-    public void unbind() {
+    public void onResume() {
+        mBindActivity = true;
+    }
+
+    public void onPause() {
         mBindActivity = false;
-        mHandler = null;
     }
 
     public void setAskBidPrices(double askPrice, double bidPrice) {
@@ -57,8 +60,8 @@ public class OrderPresenter {
         BigDecimal totalProfit = new BigDecimal(0);
         boolean hasHoldingOrders = false;
         double ratio = 0;
+        boolean refreshDelay = false;
         boolean refresh = false;
-        boolean refreshNow = false;
 
         for (HoldingOrder holdingOrder : sHoldingOrderList) {
             int orderStatus = holdingOrder.getOrderStatus();
@@ -77,10 +80,10 @@ public class OrderPresenter {
                 diff = diff.multiply(eachPointMoney);
 
                 if (diff.doubleValue() >= holdingOrder.getStopWin()) {
-                    refreshNow = true;
+                    refresh = true;
                 }
                 if (diff.doubleValue() <= holdingOrder.getStopLoss()) {
-                    refreshNow = true;
+                    refresh = true;
                 }
 
                 totalProfit = totalProfit.add(diff);
@@ -89,7 +92,7 @@ public class OrderPresenter {
             // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
             if (orderStatus == HoldingOrder.ORDER_STATUS_PAID_UNHOLDING
                     || orderStatus == HoldingOrder.ORDER_STATUS_CLOSING) {
-                refresh = true;
+                refreshDelay = true;
             }
         }
 
@@ -97,11 +100,11 @@ public class OrderPresenter {
             mHoldingOrderView.onShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
         }
 
-        if (refreshNow) { // 触及风控刷新
+        if (refresh) { // 触及风控刷新
             loadHoldingOrderList(mVarietyId, mFundType);
         }
 
-        if (refresh) {
+        if (refreshDelay && mHandler != null) {
             if (mRefreshCount++ < 5) {
                 mHandler.postDelayed(new Runnable() {
                     @Override

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bluePrimary"
+        android:paddingBottom="14dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="14dp">
+
+        <TextView
+            android:id="@+id/totalProfitAndUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/holding_position_total_profit_and_unit"
+            android:textColor="#CCCCCC"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/totalProfit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/totalProfitAndUnit"
+            android:maxLines="1"
+            android:text="+0"
+            android:textColor="@color/redPrimary"
+            android:textSize="35sp"/>
+
+        <TextView
+            android:id="@+id/oneKeyClosePositionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_red_one_key_close"
+            android:gravity="center"
+            android:minWidth="120dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/one_key_close_position"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+</LinearLayout>

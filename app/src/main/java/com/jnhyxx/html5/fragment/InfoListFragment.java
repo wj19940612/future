@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,25 +75,27 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
 
     private void requestInfoList() {
         // TODO: 2016/8/31 Token全部去掉
-//        if (mType == TYPE_MARKET_ANALYSING) {
-//            int SECTION_ID_MARKET_ANALYSING = 58;
-//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
+        if (mType == TYPE_MARKET_ANALYSING) {
+            int SECTION_ID_MARKET_ANALYSING = 58;
+            Log.d(TAG, "交易明细类型 " + mType+"行情分析" );
+//            API.User.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
 //                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
 //                        @Override
 //                        public void onRespSuccess(List<Information> informationList) {
 //                            updateInfoList(informationList);
 //                        }
 //                    }).setTag(TAG).setIndeterminate(this).fire();
-//        } else {
-//            int SECTION_ID_INDUSTRY = 57;
-//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
+        } else {
+            int SECTION_ID_INDUSTRY = 57;
+            Log.d(TAG, "交易明细类型 " + mType+"行业资讯" );
+//            API.User.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
 //                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
 //                        @Override
 //                        public void onRespSuccess(List<Information> informationList) {
 //                            updateInfoList(informationList);
 //                        }
 //                    }).setTag(TAG).setIndeterminate(this).fire();
-//        }
+        }
     }
 
     private void updateInfoList(List<Information> informationList) {

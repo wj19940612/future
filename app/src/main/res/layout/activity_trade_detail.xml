@@ -12,8 +12,8 @@
         android:id="@+id/tradeDetailTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/account_trade_info"
-        app:backFeature="true"/>
+        app:backFeature="true"
+        app:titleText="@string/account_trade_info" />
 
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/tradeDetailSlidingTabLayout"
@@ -29,23 +29,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="15dp">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:padding="15dp">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/remainTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="剩余积分(分)"
+                android:text="@string/account_trade_detail_margin_remain"
                 android:textColor="@android:color/white" />
 
             <TextView
+                android:id="@+id/remainNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/remainTitle"
@@ -53,13 +54,13 @@
                 android:lines="1"
                 android:text="151651"
                 android:textColor="#FB4B55"
-                android:textSize="40sp"
+                android:textSize="35sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="1px"
-            android:layout_height="10dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:background="@color/splitLineNotOverspread" />
@@ -69,16 +70,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:padding="15dp">
+            android:paddingLeft="15dp">
 
             <TextView
                 android:id="@+id/blockedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="剩余积分(分)"
+                android:text="@string/money_Frozen"
                 android:textColor="@android:color/white" />
 
             <TextView
+                android:id="@+id/blockedNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/blockedTitle"
@@ -86,7 +88,7 @@
                 android:lines="1"
                 android:text="15651.1"
                 android:textColor="#FB4B55"
-                android:textSize="40sp"
+                android:textSize="35sp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </LinearLayout>

@@ -290,6 +290,12 @@
     <!--交易明细-->
     <string name="account_trade_detail_integral_remain">剩余积分(分)</string>
     <string name="account_trade_detail_margin_remain">剩余保证金(分)</string>
+    <string name="integral_Frozen">冻结积分(分)</string>
+    <string name="money_Frozen">冻结资金(元)</string>
+    <string name="remain_money">剩余资金(元)</string>
+    <string name="remain_money_number">%1$f</string>
+    <string name="remain_money_number_drop">%1$f元</string>
+    <string name="remain_money_number_sum">%1$f元</string>
 
     <string name="common_phone_num_fail">手机号码错误，请输入正确的手机号码</string>
 

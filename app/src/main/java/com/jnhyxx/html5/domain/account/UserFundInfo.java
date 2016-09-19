@@ -6,36 +6,75 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/8/31.
+ * 用户资金信息
  */
 
-public class UserFundInfo {
-
+public class UserFundInfo implements Serializable{
+    private static final long serialVersionUID = 695390150803880416L;
     /**
-     moneyUsable  可用资金余额,
-     redbagUsable 可用红包余额,
-     scoreUsable  可用积分余额,
-     moneyFrozen  冻结资金,
-     moneyDrawUsable 可提现资金余额,
-     margin       当前用户保证金余额,
-     marginScore  积分保证金,
-     createTime   创建时间
-     updateTime   更新时间
+     * createTime : 2016-08-16 15:33:14
+     * margin : 4972.0
+     * marginScore : 25003.0
+     * moneyDrawUsable : 105726.14
+     * moneyFrozen : -0.02
+     * moneyUsable : 105726.14
+     * redbagUsable : 0.0
+     * scoreUsable : -1603300.0
+     * updateTime : 2016-08-19 14:14:05
+     * userId : 37
      */
 
+    /**
+     *  `moneyUsable`  '可用资金余额',
+     `redbagUsable` '可用红包余额',
+     `scoreUsable` '可用积分余额',
+     `moneyFrozen` '冻结资金',
+     `moneyDrawUsable` '可提现资金余额',
+     `margin`  '当前用户保证金余额',
+     `marginScore` '积分保证金',
+     createTime 创建时间
+     updateTime 更新时间
+     */
+
+    /**
+     *    createTime 创建时间
+     */
     private String createTime;
-    private int margin;
-    private int marginScore;
-    private int moneyDrawUsable;
-    private int moneyFrozen;
-    private int moneyUsable;
-    private int redbagUsable;
-    private int scoreUsable;
+    /**
+     *   '当前用户保证金余额',
+     */
+    private double margin;
+    /**
+     * '积分保证金',
+     */
+    private double marginScore;
+    /**
+     * '可提现资金余额',
+     */
+    private double moneyDrawUsable;
+    /**
+     * '冻结资金',
+     */
+    private double moneyFrozen;
+    /**
+     * '可用资金余额',
+     */
+    private double moneyUsable;
+    /**
+     *  '可用红包余额',
+     */
+    private double redbagUsable;
+    /**
+     * '可用积分余额',
+     */
+    private double scoreUsable;
     private String updateTime;
     private int userId;
 
@@ -91,59 +130,59 @@ public class UserFundInfo {
         this.createTime = createTime;
     }
 
-    public int getMargin() {
+    public double getMargin() {
         return margin;
     }
 
-    public void setMargin(int margin) {
+    public void setMargin(double margin) {
         this.margin = margin;
     }
 
-    public int getMarginScore() {
+    public double getMarginScore() {
         return marginScore;
     }
 
-    public void setMarginScore(int marginScore) {
+    public void setMarginScore(double marginScore) {
         this.marginScore = marginScore;
     }
 
-    public int getMoneyDrawUsable() {
+    public double getMoneyDrawUsable() {
         return moneyDrawUsable;
     }
 
-    public void setMoneyDrawUsable(int moneyDrawUsable) {
+    public void setMoneyDrawUsable(double moneyDrawUsable) {
         this.moneyDrawUsable = moneyDrawUsable;
     }
 
-    public int getMoneyFrozen() {
+    public double getMoneyFrozen() {
         return moneyFrozen;
     }
 
-    public void setMoneyFrozen(int moneyFrozen) {
+    public void setMoneyFrozen(double moneyFrozen) {
         this.moneyFrozen = moneyFrozen;
     }
 
-    public int getMoneyUsable() {
+    public double getMoneyUsable() {
         return moneyUsable;
     }
 
-    public void setMoneyUsable(int moneyUsable) {
+    public void setMoneyUsable(double moneyUsable) {
         this.moneyUsable = moneyUsable;
     }
 
-    public int getRedbagUsable() {
+    public double getRedbagUsable() {
         return redbagUsable;
     }
 
-    public void setRedbagUsable(int redbagUsable) {
+    public void setRedbagUsable(double redbagUsable) {
         this.redbagUsable = redbagUsable;
     }
 
-    public int getScoreUsable() {
+    public double getScoreUsable() {
         return scoreUsable;
     }
 
-    public void setScoreUsable(int scoreUsable) {
+    public void setScoreUsable(double scoreUsable) {
         this.scoreUsable = scoreUsable;
     }
 
@@ -161,5 +200,21 @@ public class UserFundInfo {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserFundInfo{" +
+                "createTime='" + createTime + '\'' +
+                ", margin=" + margin +
+                ", marginScore=" + marginScore +
+                ", moneyDrawUsable=" + moneyDrawUsable +
+                ", moneyFrozen=" + moneyFrozen +
+                ", moneyUsable=" + moneyUsable +
+                ", redbagUsable=" + redbagUsable +
+                ", scoreUsable=" + scoreUsable +
+                ", updateTime='" + updateTime + '\'' +
+                ", userId=" + userId +
+                '}';
     }
 }

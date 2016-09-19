@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
+import com.jnhyxx.html5.activity.account.FundDetailActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
@@ -23,8 +25,11 @@ import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
@@ -33,6 +38,9 @@ import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -121,6 +129,8 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
+
+
     }
 
     @Override
@@ -145,7 +155,6 @@ public class MineFragment extends BaseFragment {
         if (LocalUser.getUser().isLogin()) {
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
             upDateUserInfoView(userInfo);
-//            requestFundInfo();
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
@@ -158,17 +167,6 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void requestFundInfo() {
-        API.Finance.getFundInfo().setTag(TAG)
-                .setCallback(new Callback2<Resp<UserFundInfo>, UserFundInfo>() {
-                    @Override
-                    public void onRespSuccess(UserFundInfo fundInfo) {
-                        mBalance.setText(FinanceUtil.formatWithScale(fundInfo.getMoneyUsable()));
-                        mScore.setText(getString(R.string.account_mine_integral, FinanceUtil.formatWithScale(fundInfo.getScoreUsable())));
-                    }
-                }).fire();
-
-    }
 
     @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote})
     public void onClick(View view) {
@@ -200,14 +198,35 @@ public class MineFragment extends BaseFragment {
             case R.id.messageCenter:
                 // TODO: 2016/9/8 目前没有系统消息的接口
 //                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
+                API.Finance.getFundSwitchIntegral("money", 0, 10).setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp<List<TradeDetail>>>() {
+                    @Override
+                    public void onReceive(Resp<List<TradeDetail>> listResp) {
+                        List<TradeDetail> data = listResp.getData();
+                        ToastUtil.curt("资金查询成功" + listResp.getMsg() + "返回的信息" + listResp.getData().toString());
+                        for (int i = 0; i < data.size(); i++) {
+                            Log.d(TAG, "资金明细查询结果" + data.get(i).toString());
+                        }
+                    }
+                }).fire();
                 break;
             case R.id.tradeDetail:
-                openTradeDetailPage();
+                openTradeDetailPage(true);
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
+
                 break;
             case R.id.paidToPromote:
+                API.Finance.getFundSwitchIntegral("score", 0, 10).setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp<List<TradeDetail>>>() {
+                    @Override
+                    public void onReceive(Resp<List<TradeDetail>> listResp) {
+                        ToastUtil.curt("积分查询成功" + listResp.getMsg() + "返回的信息" + listResp.getData().toString());
+                        List<TradeDetail> data = listResp.getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            Log.d(TAG, "积分明细查询结果" + data.get(i).toString());
+                        }
+                    }
+                }).fire();
                 break;
         }
     }
@@ -241,23 +260,28 @@ public class MineFragment extends BaseFragment {
      *
      * @param
      */
-    private void openTradeDetailPage() {
+    private void openTradeDetailPage(final boolean isCash) {
         if (LocalUser.getUser().isLogin()) {
             // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
-        /*    API.Finance.getFundInfo(User.getUser().getToken()).setTag(TAG)
-    private void openFundDetailPage(final boolean isCash) {
-        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
-            API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
-                    .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
-                        @Override
-                        public void onRespSuccess(FundInfo fundInfo) {
-                            Launcher.with(getActivity(), FundDetailActivity.class)
-                                    .putExtra(Launcher.EX_PAYLOAD, fundInfo)
-                                    .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
-                                    .execute();
-                        }
-                    }).fire();*/
-            Launcher.with(getActivity(), TradeDetailActivity.class).executeForResult(REQUEST_CODE_TRADE_DETAIL);
+//                    API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
+//                            .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
+//                                @Override
+//                                public void onRespSuccess(FundInfo fundInfo) {
+//                                    Launcher.with(getActivity(), FundDetailActivity.class)
+//                                            .putExtra(Launcher.EX_PAYLOAD, fundInfo)
+//                                            .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
+//                                            .execute();
+//                                }
+//                            }).fire();
+            API.Finance.getFundInfo().setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<UserFundInfo>>() {
+                @Override
+                protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                    UserFundInfo userFundInfo = resp.getData();
+                    Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
+                    Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).executeForResult(REQUEST_CODE_TRADE_DETAIL);
+                }
+            }).fire();
+
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }

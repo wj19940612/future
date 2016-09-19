@@ -406,7 +406,6 @@ public class API extends APIBase {
          *
          * @return
          */
-        // TODO: 2016/9/13 以前的接口，目前不用 
         public static API getFundInfo() {
             return new API("/user/finance/findMain.do",
                     new ApiParams());
@@ -470,17 +469,20 @@ public class API extends APIBase {
         }
 
         /**
+         接口名：资金或积分明细
+
+         URL  http://域名/user/finance/findFlowList.do
          * @param type     type=money为资金明细，type=score为积分明细
          * @param offset   流水起点
          * @param pageSize 流水显示条数
          * @return
          */
         public static API getFundSwitchIntegral(String type, int offset, int pageSize) {
-            return new API("/users/finance/findFlowList.do",
+            return new API("/user/finance/findFlowList.do",
                     new ApiParams()
-                            .put(TYPE, type)
-                            .put(PAGE_NO, offset)
-                            .put(PAGE_SIZE, pageSize));
+                            .put("type", type)
+                            .put("offset", offset)
+                            .put("size", pageSize));
         }
 
         /**

@@ -30,11 +30,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2016/8/30.
+ * Created by ${wangJie} on 2016/9/19.
+ * 资金明细
  */
 
-public class TradeDetailListFragment extends ListFragment implements ApiIndeterminate {
-    private static final String TAG = "TradeDetailListFragment";
+public class FundDetailFragment extends ListFragment implements ApiIndeterminate {
+
+    private static final String TAG = "FundDetailFragment";
 
     //积分
     public static final String TYPE_INTEGRAL = "score";
@@ -42,9 +44,9 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     public static final String TYPE_FUND = "money";
 
     //流水显示条数
-    private static final int mSize = 15;
+    private static final int mSize = 20;
     //流水起点
-    private static int mOffset;
+    private static int mOffset = 0;
 
     /**
      * bundle所传递的fragmentId，代表是哪一个fragment
@@ -65,12 +67,17 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     private TradeDetailAdapter mTradeDetailAdapter;
 
 
-    public static TradeDetailListFragment newInstance(String type) {
-        TradeDetailListFragment mTradeDetailListFragment = new TradeDetailListFragment();
+    public static FundDetailFragment newInstance(String type) {
+        FundDetailFragment mFundDetailFragment = new FundDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TYPE, type);
-        mTradeDetailListFragment.setArguments(bundle);
-        return mTradeDetailListFragment;
+        mFundDetailFragment.setArguments(bundle);
+        return mFundDetailFragment;
+    }
+
+    public static FundDetailFragment newInstance() {
+        FundDetailFragment mFundDetailFragment = new FundDetailFragment();
+        return mFundDetailFragment;
     }
 
     @Override
@@ -91,45 +98,35 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mOffset = 0;
         mSet = new HashSet<>();
         setEmptyText(getString(R.string.there_is_no_info_for_now));
+//        getListView().setDivider(null);
         getTradeInfoList();
     }
 
-    public void getTradeInfoList() {
-        Log.d(TAG, "所选的fragment " + mFragmentType);
-        if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-            Log.d(TAG, "交易明细类型  资金明细" + "每次获取的量 " + mOffset);
-            API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
-                    .setTag(TAG)
-                    .setIndeterminate(this)
-                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                        @Override
-                        public void onReceive(Resp<List<TradeDetail>> listResp) {
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
-                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
-                            setAdapter(mTradeDetailList);
+    public void getTradeInfoList() {
+
+        Log.d(TAG, "交易明细类型  资金明细" + "每次获取的量 " + mOffset);
+        API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<Resp<List<TradeDetail>>>() {
+                    @Override
+                    public void onReceive(Resp<List<TradeDetail>> listResp) {
+
+                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+                        for (int i = 0; i < mTradeDetailList.size(); i++) {
+                            Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
                         }
-                    }).fire();
-        } else if (TextUtils.equals(mFragmentType, TYPE_INTEGRAL)) {
-            Log.d(TAG, "交易明细类型  积分明细" + "每次获取的量 " + mOffset);
-            API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
-                    .setTag(TAG).setIndeterminate(this)
-                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                        @Override
-                        public void onReceive(Resp<List<TradeDetail>> listResp) {
-                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
-                            setAdapter(mTradeDetailList);
-                        }
-                    }).fire();
-        }
+                        setAdapter(mTradeDetailList);
+                    }
+                }).fire();
+
     }
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
@@ -146,8 +143,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    mOffset++;
-                    mOffset = mOffset + 10;
+                    mOffset++;
                     getTradeInfoList();
                 }
             });
@@ -183,7 +179,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         setListShown(true);
     }
 
-    public class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {
+    class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {
         Context context;
 
         public TradeDetailAdapter(Context context) {
@@ -223,7 +219,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             }
 
             public void bindingData(TradeDetail item, Context context) {
-                Log.d(TAG, "模型" + item.toString());
                 String createTime = item.getCreateTime().trim();
                 String[] time = createTime.split(" ");
                 if (time.length == 2) {
@@ -232,21 +227,9 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 } else {
                     mTimeHour.setText(createTime);
                 }
-                if (item.getType() >0) {
-                    mDataType.setBackgroundResource(R.drawable.bg_red_primary);
-                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
-//                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_sum, item.getMoney()));
-                    mTradeDetailMarginRemain.setText( String.valueOf(item.getMoney())+"元");
-
-                } else {
-                    mDataType.setBackgroundResource(R.drawable.bg_green_primary);
-                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_drop));
-//                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_drop, item.getMoney()));
-                    mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()));
-                }
-                mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()+"元"));
-                mDataType.setText(item.getRemark());
-                mTradeDetail.setText(String.valueOf(item.getTypeDetail()));
+//                mDataType.setText(item.getTypeDetail());
+                mTradeDetail.setText(item.getRemark());
+                mTradeDetailMarginRemain.setText(String.valueOf(item.getScoreLeft()));
             }
         }
 

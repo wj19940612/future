@@ -70,6 +70,13 @@ public class LocalUser {
         return 0;
     }
 
+    public double getAvailableScore() {
+        if (mUserInfo != null) {
+            return mUserInfo.getScoreUsable();
+        }
+        return 0;
+    }
+
     public String getUserPhoneNum() {
         if (mUserInfo != null) {
             return mUserInfo.getUserPhone();

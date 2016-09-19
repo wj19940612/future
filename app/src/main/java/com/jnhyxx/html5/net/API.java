@@ -609,10 +609,11 @@ public class API extends APIBase {
          * @param exchangeId
          * @return
          */
-        public static API getExchangeTradeStatus(int exchangeId) {
+        public static API getExchangeTradeStatus(int exchangeId, String varietyType) {
             return new API(GET, "/order/order/getTradeTime.do",
                     new ApiParams()
-                            .put("exchangeId", exchangeId));
+                            .put("exchangeId", exchangeId)
+                            .put("varietyType", varietyType));
         }
 
         /**
@@ -647,7 +648,7 @@ public class API extends APIBase {
             return new API("/order/order/getOrderInfo.do",
                     new ApiParams()
                             .put("showId", showId)
-                            .put("fundType", fundType));
+                            .put("payType", fundType));
         }
 
         /**
@@ -661,7 +662,7 @@ public class API extends APIBase {
             return new API(GET, "/order/order/getVarietyPositionOrders.do",
                     new ApiParams()
                             .put("varietyId", varietyId)
-                            .put("fundType", fundType));
+                            .put("payType", fundType));
         }
 
         /**

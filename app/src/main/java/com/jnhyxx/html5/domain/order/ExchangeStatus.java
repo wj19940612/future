@@ -17,6 +17,8 @@ public class ExchangeStatus implements Serializable {
     private String nextTime;
     private boolean isCycle;
     private boolean status;
+    private long exchangeNextTime;
+    private long inventoryNextTime;
 
     public int getExchangeId() {
         return exchangeId;
@@ -48,5 +50,33 @@ public class ExchangeStatus implements Serializable {
 
     public void setTradeable(boolean tradeable) {
         this.status = tradeable;
+    }
+
+    public long getExchangeNextTime() {
+        return exchangeNextTime;
+    }
+
+    public void setExchangeNextTime(long exchangeNextTime) {
+        this.exchangeNextTime = exchangeNextTime;
+    }
+
+    public long getInventoryNextTime() {
+        return inventoryNextTime;
+    }
+
+    public void setInventoryNextTime(long inventoryNextTime) {
+        this.inventoryNextTime = inventoryNextTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ExchangeStatus{" +
+                "exchangeId=" + exchangeId +
+                ", nextTime='" + nextTime + '\'' +
+                ", isCycle=" + isCycle +
+                ", status=" + status +
+                ", exchangeNextTime=" + exchangeNextTime +
+                ", inventoryNextTime=" + inventoryNextTime +
+                '}';
     }
 }

@@ -178,8 +178,10 @@ public class TradeActivity extends BaseActivity implements
                         .execute();
             }
         });
+        mTradePageHeader.setAvailableBalanceUnit(
+                mFundType == Product.FUND_TYPE_CASH ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE);
 
-        updateTradePagerHeader();
+        updateSignTradePagerHeader();
 
         updateProductRelatedViews();
 
@@ -193,10 +195,12 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit());
     }
 
-    private void updateTradePagerHeader() {
+    private void updateSignTradePagerHeader() {
         if (LocalUser.getUser().isLogin()) {
             mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
-            mTradePageHeader.setAvailableBalance(LocalUser.getUser().getAvailableBalance());
+            mTradePageHeader.setAvailableBalance(
+                    mFundType == Product.FUND_TYPE_CASH ?
+                    LocalUser.getUser().getAvailableBalance() : LocalUser.getUser().getAvailableScore());
         } else {
             mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
         }
@@ -206,7 +210,7 @@ public class TradeActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
-            updateTradePagerHeader();
+            updateSignTradePagerHeader();
             mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         }
     }
@@ -232,7 +236,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void updateExchangeStatusView() {
         if (mExchangeStatus.getExchangeId() != mProduct.getExchangeId()) {
-            API.Order.getExchangeTradeStatus(mProduct.getExchangeId()).setTag(TAG)
+            API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
                     .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                         @Override
                         public void onRespSuccess(ExchangeStatus exchangeStatus) {
@@ -346,6 +350,7 @@ public class TradeActivity extends BaseActivity implements
         super.onDestroy();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mNettyHandler = null;
     }
 
     @Override
@@ -460,15 +465,21 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void showAgreementFragment(int longOrShort) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
-                .commit();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
+                    .commit();
+        }
     }
 
     private void showPlaceOrderFragment(int longOrShort) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
-                .commit();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
+                    .commit();
+        }
     }
 
     private void hideFragmentOfContainer() {
@@ -500,6 +511,7 @@ public class TradeActivity extends BaseActivity implements
                         if (jsonObjectResp.isSuccess()) {
                             hideFragmentOfContainer();
                             ToastUtil.show(jsonObjectResp.getMsg());
+                            mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.place_an_order_again,
@@ -538,9 +550,10 @@ public class TradeActivity extends BaseActivity implements
     public void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
         if (hasHoldingOrders) {
             mTradePageHeader.showView(TradePageHeader.HEADER_HOLDING_POSITION);
-            mTradePageHeader.setTotalProfit(totalProfit, mProduct.isForeign(), ratio);
+            mTradePageHeader.setTotalProfit(totalProfit, mProduct.isForeign(),
+                    mProduct.getLossProfitScale(), ratio);
         } else {
-            updateTradePagerHeader();
+            updateSignTradePagerHeader();
         }
     }
 

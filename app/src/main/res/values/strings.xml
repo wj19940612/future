@@ -198,7 +198,7 @@
     <string name="play_rule">玩法规则</string>
     <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
     <string name="one_key_close_position">一建平仓</string>
-    <string name="available_balance_and_unit">可用资金 (元)</string>
+    <string name="available_balance_and_unit">可用资金 (%1$s)</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
     <string name="trend_chart">分时图</string>
     <string name="kline_chart">日线图</string>

@@ -112,7 +112,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestProductExchangeStatus(final Product product) {
-        API.Order.getExchangeTradeStatus(product.getExchangeId()).setTag(TAG)
+        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType()).setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
@@ -120,7 +120,6 @@ public class HomeFragment extends BaseFragment {
                         product.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
 
-                        // TODO: 9/19/16 modify fund type to cash later
                         Launcher.with(getActivity(), TradeActivity.class)
                                 .putExtra(Product.EX_PRODUCT, product)
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)

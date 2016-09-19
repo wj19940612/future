@@ -82,7 +82,7 @@ public class OrderPresenter {
                 if (diff.doubleValue() >= holdingOrder.getStopWin()) {
                     refresh = true;
                 }
-                if (diff.doubleValue() <= holdingOrder.getStopLoss()) {
+                if (diff.doubleValue() <= holdingOrder.getStopLoss() * -1) {
                     refresh = true;
                 }
 

@@ -26,6 +26,8 @@ public class TradePageHeader extends FrameLayout {
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
 
+    @BindView(R.id.availableBalanceAndUnit)
+    TextView mAvailableBalanceAndUnit;
     @BindView(R.id.availableBalance)
     TextView mAvailableBalance;
     @BindView(R.id.orderListBtn)
@@ -87,7 +89,7 @@ public class TradePageHeader extends FrameLayout {
         mHeaders[HEADER_AVAILABLE_BALANCE] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_available_balance, null);
         mHeaders[HEADER_HOLDING_POSITION] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_holding_position, null);
         for (int i = 0; i < mHeaders.length; i++) {
-            FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     (int) getResources().getDimension(R.dimen.trade_header_height));
             addView(mHeaders[i], i, params);
         }
@@ -115,14 +117,16 @@ public class TradePageHeader extends FrameLayout {
         mTotalProfitAndUnit.setText(getContext().getString(R.string.holding_position_total_profit_and_unit, unit));
     }
 
-    public void setTotalProfit(double totalProfit, boolean isForeign, double ratio) {
+    public void setTotalProfit(double totalProfit, boolean isForeign, int scale, double ratio) {
         int color = ContextCompat.getColor(getContext(), R.color.greenPrimary);
         if (totalProfit >= 0) {
             color = ContextCompat.getColor(getContext(), R.color.redPrimary);
         }
         mTotalProfit.setTextColor(color);
 
-        String totalProfitStr = totalProfit >= 0 ? "+" + totalProfit : "" + totalProfit;
+        String totalProfitStr = totalProfit >= 0 ?
+                "+" + FinanceUtil.formatWithScale(totalProfit, scale):
+                "" + FinanceUtil.formatWithScale(totalProfit, scale);
         if (isForeign) {
             double totalProfitInner = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
             String totalProfitInnerStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitInner)
@@ -136,5 +140,9 @@ public class TradePageHeader extends FrameLayout {
 
     public void setAvailableBalance(double availableBalance) {
         mAvailableBalance.setText(FinanceUtil.formatWithScale(availableBalance));
+    }
+
+    public void setAvailableBalanceUnit(String unit) {
+        mAvailableBalanceAndUnit.setText(getContext().getString(R.string.available_balance_and_unit, unit));
     }
 }

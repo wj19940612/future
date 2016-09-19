@@ -16,7 +16,7 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onSuccess(T t) {
-        Log.d(getTag(), "onSuccess: " + t.toString());
+        Log.d("VolleyHttp", "onSuccess: " + t.toString());
         onReceive(t);
     }
 

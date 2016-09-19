@@ -159,20 +159,21 @@ public class WithDrawRecordActivity extends BaseActivity {
                     mSaleDateMonth.setText(date[0]);
                     mSaleDateHour.setText(date[1]);
                 }
-                mSaleGetMoney.setText(getString(R.string.withdraw_money, item.getMoney()));
+//                mSaleGetMoney.setText(getString(R.string.withdraw_money, item.getMoney()));
+                mSaleGetMoney.setText( String.valueOf(item.getMoney())+"元");
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.withdraw_status_success);
-                    mSaleGetMoney.setTextColor(getColor(R.color.common_drop));
+                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_drop));
                     //如果提现失败或者拒绝
                 } else if (item.getStatus() == WithdrawRecord.WITHDRAW_FAIL || item.getStatus() == WithdrawRecord.WITHDRAW_REFUSE) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_red_primary);
                     mSaleStatus.setText(R.string.withdraw_status_fail);
-                    mSaleGetMoney.setTextColor(getColor(R.color.common_rise_activity_sum));
+                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
                 } else {
                     mSaleStatus.setBackgroundResource(R.drawable.btn_dialog_left);
                     mSaleStatus.setText(R.string.withdraw_status_auditing);
-                    mSaleGetMoney.setTextColor(getColor(R.color.splitLineOverspread));
+                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.splitLineOverspread));
                 }
             }
         }

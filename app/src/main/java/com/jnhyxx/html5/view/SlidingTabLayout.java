@@ -19,6 +19,7 @@ package com.jnhyxx.html5.view;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -30,6 +31,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.jnhyxx.html5.R;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -131,6 +134,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     /**
      * Sets the padding to be used for controlling the selected tab width.
      * Add by JohnZ
+     *
      * @param padding
      */
     public void setSelectedIndicatorPadding(int padding) {
@@ -187,6 +191,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
      */
     protected TextView createDefaultTabView(Context context) {
         TextView textView = new TextView(context);
+        textView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.tab_text));
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -320,6 +325,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
+            }
+
+            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                View view = mTabStrip.getChildAt(i);
+                view.setSelected(false);
+            }
+            if (position < mTabStrip.getChildCount()) {
+                mTabStrip.getChildAt(position).setSelected(true);
             }
         }
 

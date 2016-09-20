@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
 import com.jnhyxx.html5.R;
@@ -37,7 +38,7 @@ public class OrderActivity extends BaseActivity {
         initData(getIntent());
 
         mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
+        mSlidingTabLayout.setDividerColors(ContextCompat.getColor(this, android.R.color.transparent));
         mViewPager.setAdapter(new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType));
         mSlidingTabLayout.setViewPager(mViewPager);
     }

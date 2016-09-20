@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,7 @@ public class TradeActivity extends BaseActivity implements
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
+            Log.d("TEST", "onReceiveData: " + data); // TODO: 9/20/16 delete
             updateFourMainPrices(data);
             updateLastPriceView(data);
             mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
@@ -381,7 +383,7 @@ public class TradeActivity extends BaseActivity implements
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
-        settings1.setBaseLines(9); // TODO: 9/14/16 写实 9 条基线 remove later
+        settings1.setBaseLines(9); // TODO: 9/14/16 写实 9 条基线 delete
         flashView.setSettings(settings1);
         flashView.clearData();
 
@@ -400,8 +402,8 @@ public class TradeActivity extends BaseActivity implements
                 return !data.getInstrumentId().equalsIgnoreCase(mProduct.getContractsCode());
             }
         });
-        NettyClient.getInstance().start(mProduct.getContractsCode());
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
+        NettyClient.getInstance().start(mProduct.getContractsCode());
 
         // request Trend Data
         requestTrendDataAndSet();
@@ -504,6 +506,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
+        Log.d("TEST", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

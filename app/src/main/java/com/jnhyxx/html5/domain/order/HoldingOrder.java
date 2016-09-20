@@ -135,4 +135,23 @@ public class HoldingOrder extends AbsOrder {
     public void setStopWin(int stopWin) {
         this.stopWinPrice = stopWin;
     }
+
+    @Override
+    public String toString() {
+        return "HoldingOrder{" +
+                "buyTime=" + buyTime +
+                ", currencyUnit='" + currencyUnit + '\'' +
+                ", direction=" + direction +
+                ", eachPointMoney=" + eachPointMoney +
+                ", handsNum=" + handsNum +
+                ", orderStatus=" + orderStatus +
+                ", orderTime=" + orderTime +
+                ", ratio=" + ratio +
+                ", realAvgPrice=" + realAvgPrice +
+                ", realMarketVal=" + realMarketVal +
+                ", showId='" + showId + '\'' +
+                ", stopLossPrice=" + stopLossPrice +
+                ", stopWinPrice=" + stopWinPrice +
+                '}';
+    }
 }

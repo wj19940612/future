@@ -17,7 +17,8 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderDetailActivity;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderDetail;
-import com.jnhyxx.html5.domain.order.SettlementOrder;
+import com.jnhyxx.html5.domain.order.SettledOrder;
+import com.jnhyxx.html5.domain.order.SettledOrderSet;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -83,14 +84,14 @@ public class SettlementFragment extends BaseFragment {
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                final SettlementOrder settlementOrder = (SettlementOrder) adapterView.getItemAtPosition(position);
-                if (settlementOrder != null) {
-                    API.Order.getOrderDetail(settlementOrder.getShowId(), mFundType).setTag(TAG)
+                final SettledOrder settledOrder = (SettledOrder) adapterView.getItemAtPosition(position);
+                if (settledOrder != null) {
+                    API.Order.getOrderDetail(settledOrder.getShowId(), mFundType).setTag(TAG)
                             .setCallback(new Callback2<Resp<OrderDetail>, OrderDetail>() {
                                 @Override
                                 public void onRespSuccess(OrderDetail orderDetail) {
                                     Launcher.with(getActivity(), OrderDetailActivity.class)
-                                            .putExtra(Launcher.EX_PAYLOAD, settlementOrder)
+                                            .putExtra(Launcher.EX_PAYLOAD, settledOrder)
                                             .putExtra(Launcher.EX_PAYLOAD_1, orderDetail)
                                             .putExtra(Product.EX_PRODUCT, mProduct)
                                             .execute();
@@ -100,20 +101,20 @@ public class SettlementFragment extends BaseFragment {
             }
         });
 
-        API.Order.getSettlementOrderList(mProduct.getContractsCode(), mFundType, mPageNo, mPageSize)
-                .setCallback(new Callback2<Resp<List<SettlementOrder>>, List<SettlementOrder>>() {
+        API.Order.getSettlementOrderList(mProduct.getVarietyId(), mFundType, mPageNo, mPageSize)
+                .setCallback(new Callback2<Resp<SettledOrderSet>, SettledOrderSet>() {
                     @Override
-                    public void onRespSuccess(List<SettlementOrder> settlementOrders) {
-                        updateSettlementOrderListView(settlementOrders);
+                    public void onRespSuccess(SettledOrderSet settledOrderSet) {
+                        updateSettlementOrderListView(settledOrderSet.getData());
                     }
                 }).setTag(TAG).fire();
     }
 
-    private void updateSettlementOrderListView(List<SettlementOrder> settlementOrders) {
-        if (settlementOrders == null) return;
+    private void updateSettlementOrderListView(List<SettledOrder> settlementOrderList) {
+        if (settlementOrderList == null) return;
 
         SettlementAdapter adapter = new SettlementAdapter(getContext(), mProduct);
-        adapter.addAll(settlementOrders);
+        adapter.addAll(settlementOrderList);
         mList.setAdapter(adapter);
     }
 
@@ -123,7 +124,7 @@ public class SettlementFragment extends BaseFragment {
         mBinder.unbind();
     }
 
-    static class SettlementAdapter extends ArrayAdapter<SettlementOrder> {
+    static class SettlementAdapter extends ArrayAdapter<SettledOrder> {
 
         private Product mProduct;
 
@@ -160,7 +161,7 @@ public class SettlementFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(SettlementOrder item, Context context, Product product) {
+            public void bindingData(SettledOrder item, Context context, Product product) {
                 String sellTime;
                 if (DateUtil.isInThisYear(item.getSellTime())) {
                     sellTime = DateUtil.format(item.getSellTime(), "MM/dd hh:mm");
@@ -173,7 +174,7 @@ public class SettlementFragment extends BaseFragment {
                 }
 
                 int tradeType = item.getDirection();
-                if (tradeType == SettlementOrder.DIRECTION_LONG) {
+                if (tradeType == SettledOrder.DIRECTION_LONG) {
                     mTradeType.setText(R.string.bullish);
                     mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
                 } else {
@@ -182,11 +183,11 @@ public class SettlementFragment extends BaseFragment {
                 }
 
                 int sellType = item.getUnwindType();
-                if (sellType == SettlementOrder.SELL_OUT_SYSTEM_CLEAR) {
+                if (sellType == SettledOrder.SELL_OUT_SYSTEM_CLEAR) {
                     mSellType.setText(R.string.time_up_sale);
-                } else if (sellType == SettlementOrder.SELL_OUT_STOP_LOSS) {
+                } else if (sellType == SettledOrder.SELL_OUT_STOP_LOSS) {
                     mSellType.setText(R.string.stop_loss_sale);
-                } else if (sellType == SettlementOrder.SELL_OUT_STOP_PROFIT) {
+                } else if (sellType == SettledOrder.SELL_OUT_STOP_PROFIT) {
                     mSellType.setText(R.string.stop_profit_sale);
                 } else {
                     mSellType.setText(R.string.market_price_sale);

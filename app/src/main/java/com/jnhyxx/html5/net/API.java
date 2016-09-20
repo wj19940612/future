@@ -588,14 +588,14 @@ public class API extends APIBase {
          *
          * @param pageNo
          * @param pageSize
-         * @param contractsCode
+         * @param varietyId
          * @param payType
          * @return
          */
-        public static API getSettlementOrderList(String contractsCode, int payType, int pageNo, int pageSize) {
+        public static API getSettlementOrderList(int varietyId, int payType, int pageNo, int pageSize) {
             return new API(GET, "/order/order/getVarietySettleOrders.do",
                     new ApiParams()
-                            .put("contractsCode", contractsCode)
+                            .put("varietyId", varietyId)
                             .put("payType", payType)
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
@@ -645,7 +645,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getOrderDetail(String showId, int fundType) {
-            return new API("/order/order/getOrderInfo.do",
+            return new API(GET, "/order/order/getOrderInfo.do",
                     new ApiParams()
                             .put("showId", showId)
                             .put("payType", fundType));

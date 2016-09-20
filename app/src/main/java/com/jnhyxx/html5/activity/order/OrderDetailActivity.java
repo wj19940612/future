@@ -10,7 +10,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderDetail;
-import com.jnhyxx.html5.domain.order.SettlementOrder;
+import com.jnhyxx.html5.domain.order.SettledOrder;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -52,7 +52,7 @@ public class OrderDetailActivity extends BaseActivity {
     TextView mOrderId;
 
     private Product mProduct;
-    private SettlementOrder mSettlementOrder;
+    private SettledOrder mSettledOrder;
     private OrderDetail mOrderDetail;
 
     @Override
@@ -69,8 +69,8 @@ public class OrderDetailActivity extends BaseActivity {
     private void initView() {
         mLossProfitUnit.setText(getString(R.string.settlement_loss_profit_unit, mProduct.getCurrencyUnit()));
 
-        int tradeType = mSettlementOrder.getDirection();
-        if (tradeType == SettlementOrder.DIRECTION_LONG) {
+        int tradeType = mSettledOrder.getDirection();
+        if (tradeType == SettledOrder.DIRECTION_LONG) {
             mTradeType.setText(R.string.bullish);
             mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
         } else {
@@ -79,8 +79,8 @@ public class OrderDetailActivity extends BaseActivity {
         }
 
         if (mProduct.isForeign()) {
-            double lossProfit = mSettlementOrder.getWinOrLoss();
-            double rate = mSettlementOrder.getRatio();
+            double lossProfit = mSettledOrder.getWinOrLoss();
+            double rate = mSettledOrder.getRatio();
             int grayColor = Color.parseColor("#CCCCCC"); //gray
             int color;
             String lossProfitForeign;
@@ -96,7 +96,7 @@ public class OrderDetailActivity extends BaseActivity {
             mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, lossProfitRmb, 0.35f, grayColor));
 
         } else {
-            double lossProfit = mSettlementOrder.getWinOrLoss();
+            double lossProfit = mSettledOrder.getWinOrLoss();
             int color;
             String lossProfitRmb;
             if (lossProfit < 0) {
@@ -126,11 +126,11 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private int getSellTypeText(int sellType) {
-        if (sellType == SettlementOrder.SELL_OUT_SYSTEM_CLEAR) {
+        if (sellType == SettledOrder.SELL_OUT_SYSTEM_CLEAR) {
             return R.string.time_up_sale;
-        } else if (sellType == SettlementOrder.SELL_OUT_STOP_LOSS) {
+        } else if (sellType == SettledOrder.SELL_OUT_STOP_LOSS) {
             return R.string.stop_loss_sale;
-        } else if (sellType == SettlementOrder.SELL_OUT_STOP_PROFIT) {
+        } else if (sellType == SettledOrder.SELL_OUT_STOP_PROFIT) {
             return R.string.stop_profit_sale;
         } else {
             return R.string.market_price_sale;
@@ -138,7 +138,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initData(Intent intent) {
-        mSettlementOrder = (SettlementOrder) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+        mSettledOrder = (SettledOrder) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mOrderDetail = (OrderDetail) intent.getSerializableExtra(Launcher.EX_PAYLOAD_1);
         mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
     }

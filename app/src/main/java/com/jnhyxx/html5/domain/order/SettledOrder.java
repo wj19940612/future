@@ -2,26 +2,28 @@ package com.jnhyxx.html5.domain.order;
 
 import java.io.Serializable;
 
-public class SettlementOrder extends AbsOrder implements Serializable {
+public class SettledOrder extends AbsOrder implements Serializable {
 
     /**
+     * batchNoTime : 0
      * currencyUnit : 美元
-     * direction : 1
+     * direction : 0
      * handsNum : 1
      * orderStatus : 4
-     * orderTime : 1473400472000
+     * orderTime : 1474342989000
      * ratio : 6.65
-     * realAvgPrice : 1338.8
-     * realMarketVal : 133880
-     * sellTime : 1473400307000
-     * showId : 115d
-     * stopLossPrice : 240
-     * stopWinPrice : 400
-     * unwindAvgPrice : 1337.5
-     * unwindType : 0
-     * winOrLoss : -130
+     * realAvgPrice : 43.64
+     * realMarketVal : 43640
+     * sellTime : 1474343063000
+     * showId : 11mj
+     * stopLossPrice : 10
+     * stopWinPrice : 10
+     * unwindAvgPrice : 43.65
+     * unwindType : 2
+     * winOrLoss : -10
      */
 
+    private int batchNoTime;
     private String currencyUnit;
     private int direction;
     private int handsNum;
@@ -36,7 +38,15 @@ public class SettlementOrder extends AbsOrder implements Serializable {
     private int stopWinPrice;
     private double unwindAvgPrice;
     private int unwindType;
-    private double winOrLoss;
+    private int winOrLoss;
+
+    public int getBatchNoTime() {
+        return batchNoTime;
+    }
+
+    public void setBatchNoTime(int batchNoTime) {
+        this.batchNoTime = batchNoTime;
+    }
 
     public String getCurrencyUnit() {
         return currencyUnit;
@@ -150,11 +160,11 @@ public class SettlementOrder extends AbsOrder implements Serializable {
         this.unwindType = unwindType;
     }
 
-    public double getWinOrLoss() {
+    public int getWinOrLoss() {
         return winOrLoss;
     }
 
-    public void setWinOrLoss(double winOrLoss) {
+    public void setWinOrLoss(int winOrLoss) {
         this.winOrLoss = winOrLoss;
     }
 }

@@ -16,13 +16,13 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onSuccess(T t) {
-        Log.d("VolleyHttp", "onSuccess: " + t.toString());
+        Log.d("VolleyHttp", getUrl() + " onSuccess: " + t.toString());
         onReceive(t);
     }
 
     @Override
     public void onFailure(VolleyError volleyError) {
-        Log.d("wj", volleyError.toString());
+        Log.d("VolleyHttp", getUrl() + volleyError.toString());
         int toastResId = R.string.api_error_network;
         if (volleyError instanceof NullResponseError) {
             toastResId = R.string.api_error_null;

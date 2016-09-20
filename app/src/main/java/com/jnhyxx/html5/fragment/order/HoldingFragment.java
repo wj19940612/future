@@ -3,11 +3,14 @@ package com.jnhyxx.html5.fragment.order;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -33,6 +36,12 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
     TextView mTotalProfit;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
+    @BindView(android.R.id.empty)
+    LinearLayout mEmpty;
+    @BindView(R.id.lossProfitArea)
+    RelativeLayout mLossProfitArea;
+    @BindView(R.id.totalProfitRmb)
+    TextView mTotalProfitRmb;
 
     private Unbinder mBinder;
 
@@ -89,6 +98,10 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mList.setEmptyView(mEmpty);
+        mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
+                mProduct.getCurrencyUnit()));
+
         mOrderPresenter = new OrderPresenter(this);
         mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
@@ -107,7 +120,33 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
 
     @Override
     public void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
-
+        if (hasHoldingOrders) {
+            if (mLossProfitArea.getVisibility() == View.GONE) {
+                mLossProfitArea.setVisibility(View.VISIBLE);
+            }
+            int scale = mProduct.getLossProfitScale();
+            String totalProfitStr;
+            String totalProfitRmbStr;
+            if (totalProfit >= 0) {
+                mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_red_one_key_close);
+                totalProfitStr = "+" + FinanceUtil.formatWithScale(totalProfit, scale);
+                totalProfitRmbStr = "+" + FinanceUtil.formatWithScale(totalProfit * ratio);
+            } else {
+                mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_green_one_key_close);
+                totalProfitStr = FinanceUtil.formatWithScale(totalProfit, scale);
+                totalProfitRmbStr = FinanceUtil.formatWithScale(totalProfit * ratio);
+            }
+            mTotalProfit.setText(totalProfitStr);
+            if (mProduct.isForeign()) {
+                mTotalProfitRmb.setText("(" + totalProfitRmbStr + FinanceUtil.UNIT_YUAN + ")");
+            }
+        } else {
+            if (mLossProfitArea.getVisibility() == View.VISIBLE) {
+                mLossProfitArea.setVisibility(View.GONE);
+            }
+        }
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

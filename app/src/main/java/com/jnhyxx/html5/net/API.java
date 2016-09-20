@@ -735,6 +735,15 @@ public class API extends APIBase {
             return new API("/user/qureypagingSonUser.do", new ApiParams().put("page", page).put("pageSize", pageSize));
         }
 
+        /**
+         * 接口名：前端获取：获取渠道等级及广告
+         * URL  http://域名/user/getLevelsForUser.do
+         *
+         * @return
+         */
+        public static API getChannelScoreAndAd() {
+            return new API("/user/getLevelsForUser.do", new ApiParams());
+        }
         
     }
 }

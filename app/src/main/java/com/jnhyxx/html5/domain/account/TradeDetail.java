@@ -26,18 +26,18 @@ public class TradeDetail implements Serializable {
     public static final int INTEGRAL_DETAIL_TABLE = 791;
     private static final long serialVersionUID = -7454080372304618453L;
     /**
-     * id         流水id
-     * type       流水类型，,
-     * typeDetail 流水具体类型,
-     * remark     流水描述,
-     * money      本次流水现金发生金额,
-     * moneyLeft  本次流水后现金剩余,
-     * score      本次流水积分发生金额,
-     * scoreLeft  本次流水后积分剩余,
-     * createTime 流水创建时间
+     * createTime : 2016-09-18 15:28:03
+     * id : 74
+     * remark : 赠送积分
+     * score : 100000
+     * scoreLeft : -1603300
+     * type : 3
+     * typeDetail : 3002
+     * userId : 37
+     * money : 2.2
      */
 
-    private long createTime;
+    private String createTime;
     private int id;
     private String remark;
     private int score;
@@ -91,11 +91,11 @@ public class TradeDetail implements Serializable {
 
     }
 
-    public long getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -162,17 +162,11 @@ public class TradeDetail implements Serializable {
     public void setMoney(double money) {
         this.money = money;
     }
-//    public String getFormattedCreateDate() {
-//        String[] createDate = getCreateTime().trim().split(" ");
-//        if (createDate.length == 2) {
-//            return createDate[0] + "\n" + createDate[1];
-//        }
-//        return getCreateDate();
-//    }
+
     @Override
     public String toString() {
         return "TradeDetail{" +
-                "createTime=" + createTime +
+                "createTime='" + createTime + '\'' +
                 ", id=" + id +
                 ", remark='" + remark + '\'' +
                 ", score=" + score +

@@ -146,9 +146,11 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
             if (userInfo.getIdStatus() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
                 showAuthNameDialog();
             }
+            setOldBindBankInfo(userInfo);
+
             // TODO: 2016/9/9 这是没有绑定
             //  cardState银行卡状态 0未填写，1已填写，2已认证
-            if (userInfo.getCardState() == 0) {
+            if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE || userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_WRITE) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
                 mBankcardImageArea.setVisibility(View.GONE);
             } else {
@@ -179,6 +181,14 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 }
             }
         }
+    }
+
+    private void setOldBindBankInfo(UserInfo userInfo) {
+        // TODO: 2016/9/18 目前没有所填写的银行卡的所属用户的信息
+        mCardholderName.setText("");
+        mBankcardNum.setText(userInfo.getCardNumber());
+        mPhoneNum.setText(userInfo.getCardPhone());
+        mPayingBank.setText(userInfo.getIssuingbankName());
     }
 
     //
@@ -289,6 +299,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                     ToastUtil.curt(R.string.bind_bank_is_empty);
                     return;
                 }
+                bankId = mChannelBankList.getId();
+                Log.d(TAG, "提交的银行数据" + "\n银行ID" + bankId + "\n银行名" + payingBank + "\n银行卡号" + bankcardNum + "\n手机号" + phoneNum);
                 API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp>() {
@@ -371,6 +383,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     @Override
     public void onBankItemClick(ChannelBankList bank) {
+        Log.d(TAG, "选择的银行信息" + bank.toString());
         mChannelBankList = bank;
         mPayingBank.setText(bank.getName());
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);

@@ -95,7 +95,6 @@ public class UserInfo {
      */
     private boolean bIsSetNickName;
     private int bankId;
-
     public static UserInfo objectFromData(String str) {
 
         return new Gson().fromJson(str, UserInfo.class);

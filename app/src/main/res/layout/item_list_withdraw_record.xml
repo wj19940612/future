@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/saleStatus"
-        android:layout_width="41dp"
+        android:layout_width="52dp"
         android:layout_height="25dp"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="20dp"
@@ -51,6 +51,15 @@
         android:text="买涨"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tradeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="0dp"

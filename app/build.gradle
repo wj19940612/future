@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.jnhyxx.html5"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         buildConfigField('String', 'API_HOST', '\"http://www.jnhyxx.com\"')
@@ -73,7 +73,6 @@ android {
             versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://139.129.205.244\"')
         }
-
         ryt {
             applicationIdSuffix '.ryt'
             versionCode 1
@@ -106,7 +105,6 @@ dependencies {
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')
-
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'

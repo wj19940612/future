@@ -63,7 +63,13 @@
           </extensions>
         </Objective-C-extensions>
         <XML>
+<<<<<<< HEAD
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+=======
+          <option name="XML_KEEP_LINE_BREAKS" value="false" />
+          <option name="XML_ALIGN_ATTRIBUTES" value="false" />
+          <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
+>>>>>>> withdrawRecord
         </XML>
         <codeStyleSettings language="XML">
           <option name="FORCE_REARRANGE_MODE" value="1" />

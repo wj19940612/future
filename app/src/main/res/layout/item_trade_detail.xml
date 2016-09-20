@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="55dp"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
 
     <TextView
-        android:id="@+id/tvTradeDetailYear"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:id="@+id/dateYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="2012/12/12" />
+        android:gravity="center"
+        android:text="2012/12/12"
+        android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/tvTradeDetailHour"
+        android:id="@+id/dateHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTradeDetailYear"
-        android:paddingLeft="10dp"
-        android:text="8:18:12" />
+        android:layout_below="@+id/dateYear"
+        android:paddingTop="7dp"
+        android:text="8:18:12"
+        android:textColor="#666666"
+        android:textSize="16sp" />
 
     <View
         android:id="@+id/helpLine"
         android:layout_width="1px"
         android:layout_height="45dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/tvTradeDetailYear"
+        android:layout_toRightOf="@+id/dateYear"
         android:background="@android:color/holo_red_dark" />
 
     <TextView
-        android:id="@+id/tvDataType"
+        android:id="@+id/tradeDetailDataType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -41,12 +46,12 @@
         android:text="数据类型" />
 
     <TextView
-        android:id="@+id/tvTradeDetailType"
+        android:id="@+id/dateTypeDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/tvDataType"
+        android:layout_toRightOf="@+id/tradeDetailDataType"
         android:text="美原油"
         android:textSize="15sp" />
 

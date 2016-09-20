@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
+import com.jnhyxx.html5.domain.message.MessageList;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -33,6 +35,14 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
     private static final String TYPE = "fragmentType";
     public static final int TYPE_MARKET_ANALYSING = 0;
     public static final int TYPE_INDUSTRY_NEWS = 1;
+
+
+    //首页资讯
+    public static final int TYPE_MESSAGE_HOME_PAGE = 0;
+    //列表资讯
+    public static final int TYPE_MESSAGE_lIST = 1;
+    //弹窗资讯
+    public static final int TYPE_MESSAGE_POPUP = 2;
 
     private OnNewItemClickListener mListener;
     private int mType;
@@ -73,30 +83,42 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
     }
 
     private void requestInfoList() {
-        // TODO: 2016/8/31 Token全部去掉
 //        if (mType == TYPE_MARKET_ANALYSING) {
 //            int SECTION_ID_MARKET_ANALYSING = 58;
-//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
-//                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
-//                        @Override
-//                        public void onRespSuccess(List<Information> informationList) {
-//                            updateInfoList(informationList);
-//                        }
-//                    }).setTag(TAG).setIndeterminate(this).fire();
+//            Log.d(TAG, "交易明细类型 " + mType + "行情分析");
+////            API.User.getInfo(User.getUser().getToken(), SECTION_ID_MARKET_ANALYSING, mPageNo, mPageSize)
+////                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
+////                        @Override
+////                        public void onRespSuccess(List<Information> informationList) {
+////                            updateInfoList(informationList);
+////                        }
+////                    }).setTag(TAG).setIndeterminate(this).fire();
 //        } else {
 //            int SECTION_ID_INDUSTRY = 57;
-//            API.Account.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
-//                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
-//                        @Override
-//                        public void onRespSuccess(List<Information> informationList) {
-//                            updateInfoList(informationList);
-//                        }
-//                    }).setTag(TAG).setIndeterminate(this).fire();
+//            Log.d(TAG, "交易明细类型 " + mType + "行业资讯");
+////            API.User.getInfo(User.getUser().getToken(), SECTION_ID_INDUSTRY, mPageNo, mPageSize)
+////                    .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
+////                        @Override
+////                        public void onRespSuccess(List<Information> informationList) {
+////                            updateInfoList(informationList);
+////                        }
+////                    }).setTag(TAG).setIndeterminate(this).fire();
 //        }
+
+        API.User.findNewsList(mType, mPageNo, mPageSize).setTag(TAG).setIndeterminate(this).setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {
+            @Override
+            public void onRespSuccess(List<MessageList> messageLists) {
+                for (int i = 0; i < messageLists.size(); i++) {
+                    Log.d(TAG, "type是 " + mType + "\n 获取的数据 " + messageLists.get(i) + "\n");
+                }
+                updateInfoList(messageLists);
+
+            }
+        }).fire();
     }
 
-    private void updateInfoList(List<Information> informationList) {
-        if (informationList == null || isDetached()) return;
+    private void updateInfoList(List<MessageList> messageLists) {
+        if (messageLists == null || isDetached()) return;
         if (mFooter == null) {
             mFooter = new TextView(getContext());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
@@ -114,7 +136,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             getListView().addFooterView(mFooter);
         }
 
-        if (informationList.size() < mPageSize) {
+        if (messageLists.size() < mPageSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
             getListView().removeFooterView(mFooter);
@@ -125,7 +147,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             setListAdapter(mNewsListAdapter);
         }
 
-        for (Information item : informationList) {
+        for (MessageList item : messageLists) {
             if (mSet.add(item.getId())) {
                 mNewsListAdapter.add(item);
             }
@@ -144,10 +166,10 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
     }
 
     private interface OnNewItemClickListener {
-        void onNewItemClick(Information information);
+        void onNewItemClick(MessageList messageList);
     }
 
-    static class NewsListAdapter extends ArrayAdapter<Information> {
+    static class NewsListAdapter extends ArrayAdapter<MessageList> {
 
         public NewsListAdapter(Context context) {
             super(context, 0);
@@ -181,21 +203,21 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(Information item, Context context) {
-                if (item.getSection() == Information.SECTION_MARKET_ANALYSING) {
-                    mTitle.setVisibility(View.GONE);
-                    mSummary.setText(item.getSummary());
-                    mCreateDate.setText(item.getCreateDate());
-                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
-                            item.getCmtCount(), item.getReadCount()));
-                } else {
-                    mTitle.setVisibility(View.VISIBLE);
-                    mTitle.setText(item.getTitle());
-                    mSummary.setText(item.getSummary());
-                    mCreateDate.setText(item.getCreateDate());
-                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
-                            item.getCmtCount(), item.getReadCount()));
-                }
+            public void bindingData(MessageList item, Context context) {
+//                if (item.getSection() == Information.SECTION_MARKET_ANALYSING) {
+//                    mTitle.setVisibility(View.GONE);
+//                    mSummary.setText(item.getSummary());
+//                    mCreateDate.setText(item.getCreateDate());
+//                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
+//                            item.getCmtCount(), item.getReadCount()));
+//                } else {
+//                    mTitle.setVisibility(View.VISIBLE);
+//                    mTitle.setText(item.getTitle());
+//                    mSummary.setText(item.getSummary());
+//                    mCreateDate.setText(item.getCreateDate());
+//                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
+//                            item.getCmtCount(), item.getReadCount()));
+//                }
             }
         }
     }

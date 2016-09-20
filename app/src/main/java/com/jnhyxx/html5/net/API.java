@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -169,16 +168,17 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
-        public static API signIn(String phoneNum, String password) {
-            try {
+        public static API login(String phoneNum, String password) {
+//            try {
                 // TODO: 8/26/16 正式时候添加, 后期删除  
                 // TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
 //                if (!BuildConfig.DEBUG)
-                password = SecurityUtil.md5Encrypt(password);
-                Log.d(TAG, "登陆密码MD5加密" + password);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+                // TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
+//                password = SecurityUtil.md5Encrypt(password);
+//                Log.d(TAG, "登陆密码MD5加密" + password);
+//            } catch (NoSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
             // TODO: 2016/8/30 原来的网址
             return new API("/user/user/login.do",
                     new ApiParams()
@@ -303,6 +303,7 @@ public class API extends APIBase {
          * bankName      String     银行名
          * cardNumber    String    银行卡号
          * cardPhone     String    银行卡对应的手机号
+         *
          * @param bankId
          * @param bankName
          * @return
@@ -356,6 +357,11 @@ public class API extends APIBase {
                             .put(TYPE, 2));
         }
 
+        /**
+         * 退出
+         *
+         * @return
+         */
         public static API loginOut() {
             return new API("/user/user/logout.do", new ApiParams());
         }
@@ -381,6 +387,45 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("nickName", nickName));
         }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型   0为首页资讯,1为列表资讯,2为弹窗资讯
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API("/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+        }
     }
 
     public static class Finance {
@@ -405,7 +450,6 @@ public class API extends APIBase {
          *
          * @return
          */
-        // TODO: 2016/9/13 以前的接口，目前不用 
         public static API getFundInfo() {
             return new API("/user/finance/findMain.do",
                     new ApiParams());
@@ -469,30 +513,48 @@ public class API extends APIBase {
         }
 
         /**
+         * 接口名：资金或积分明细
+         * <p>
+         * URL  http://域名/user/finance/findFlowList.do
+         *
          * @param type     type=money为资金明细，type=score为积分明细
          * @param offset   流水起点
          * @param pageSize 流水显示条数
          * @return
          */
         public static API getFundSwitchIntegral(String type, int offset, int pageSize) {
-            return new API("/users/finance/findFlowList.do",
+            return new API("/user/finance/findFlowList.do",
                     new ApiParams()
-                            .put(TYPE, type)
-                            .put(PAGE_NO, offset)
-                            .put(PAGE_SIZE, pageSize));
+                            .put("type", type)
+                            .put("offset", offset)
+                            .put("size", pageSize));
         }
 
         /**
          * 接口名：查询用户单笔提现记录详细信息
          * URL  http://域名/user/finance/findIOInfo.do
          *
+         * @param type type=-1提现记录 提现记录id号
+         * @param id
+         * @return
+         */
+        public static API getWithdrawRecordInfo(int type, int id) {
+            return new API("/user/finance/findIOInfo.do", new ApiParams()
+                    .put("type", type)
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询用户提现记录
+         * URL  http://域名/user/finance/findIOList.do
+         *
          * @param type   type=-1提现记录
          * @param offset 提现记录起始点
          * @param size   每次提现记录显示条数
          * @return
          */
-        public static API getWithdrawRecord(int type, int offset, int size) {
-            return new API("/user/finance/findIOInfo.do", new ApiParams()
+        public static API getWithdrawRecordList(int type, int offset, int size) {
+            return new API("/user/finance/findIOList.do", new ApiParams()
                     .put("type", type)
                     .put("offset", offset)
                     .put("size", size));
@@ -658,5 +720,30 @@ public class API extends APIBase {
      */
     public static String getTradeRule(String varietyType) {
         return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
+    }
+
+    public static class Extend {
+        /**
+         * 接口名：根据登录用户获取他推广出来的子用户信息
+         * URL  http://域名/user/qureypagingSonUser.do
+         *
+         * @param page
+         * @param pageSize
+         * @return
+         */
+        public static API getExtendUserManage(int page, int pageSize) {
+            return new API("/user/qureypagingSonUser.do", new ApiParams().put("page", page).put("pageSize", pageSize));
+        }
+
+        /**
+         * 接口名：前端获取：获取渠道等级及广告
+         * URL  http://域名/user/getLevelsForUser.do
+         *
+         * @return
+         */
+        public static API getChannelScoreAndAd() {
+            return new API("/user/getLevelsForUser.do", new ApiParams());
+        }
+
     }
 }

@@ -72,6 +72,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         mTradeDetailListFragment.setArguments(bundle);
         return mTradeDetailListFragment;
     }
+    public static TradeDetailListFragment newInstance() {
+        return  new TradeDetailListFragment();
+    }
+
+//    public void setData(String type) {
+//        this.mFragmentType = type;
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,11 +90,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     }
 
 
-    public void onActivityCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -97,10 +99,10 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         getTradeInfoList();
     }
 
+
     public void getTradeInfoList() {
         Log.d(TAG, "所选的fragment " + mFragmentType);
         if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-            Log.d(TAG, "交易明细类型  资金明细" + "每次获取的量 " + mOffset);
             API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
                     .setTag(TAG)
                     .setIndeterminate(this)
@@ -116,7 +118,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                         }
                     }).fire();
         } else if (TextUtils.equals(mFragmentType, TYPE_INTEGRAL)) {
-            Log.d(TAG, "交易明细类型  积分明细" + "每次获取的量 " + mOffset);
             API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
                     .setTag(TAG).setIndeterminate(this)
                     .setCallback(new Callback<Resp<List<TradeDetail>>>() {
@@ -130,6 +131,19 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                         }
                     }).fire();
         }
+//        if (TextUtils.isEmpty(mFragmentType)) return;
+//        API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
+//                .setTag(TAG).setIndeterminate(this)
+//                .setCallback(new Callback<Resp<List<TradeDetail>>>() {
+//                    @Override
+//                    public void onReceive(Resp<List<TradeDetail>> listResp) {
+//                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+//                        for (int i = 0; i < mTradeDetailList.size(); i++) {
+//                            Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
+//                        }
+//                        setAdapter(mTradeDetailList);
+//                    }
+//                }).fire();
     }
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
@@ -232,11 +246,11 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 } else {
                     mTimeHour.setText(createTime);
                 }
-                if (item.getType() >0) {
+                if (item.getType() > 0) {
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
                     mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
 //                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_sum, item.getMoney()));
-                    mTradeDetailMarginRemain.setText( String.valueOf(item.getMoney())+"元");
+                    mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()) + "元");
 
                 } else {
                     mDataType.setBackgroundResource(R.drawable.bg_green_primary);
@@ -244,7 +258,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 //                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_drop, item.getMoney()));
                     mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()));
                 }
-                mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()+"元"));
+                mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney() + "元"));
                 mDataType.setText(item.getRemark());
                 mTradeDetail.setText(String.valueOf(item.getTypeDetail()));
             }

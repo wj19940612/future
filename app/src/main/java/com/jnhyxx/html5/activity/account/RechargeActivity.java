@@ -129,21 +129,21 @@ public class RechargeActivity extends BaseActivity {
             return;
         }
         if (checkValidation()) {
-//            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
-//                    .setCallback(new Callback<Resp>() {
-//                        @Override
-//                        public void onReceive(Resp resp) {
-//                            if (resp.isSuccess()) {
-//                                Log.d(TAG, "发起充值成功");
-//                            } else {
-//                                mCommonFail.setCenterTxt(resp.getMsg());
-//                                mCommonFail.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                    }).fire();
-//            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
+            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
+                    .setCallback(new Callback<Resp>() {
+                        @Override
+                        public void onReceive(Resp resp) {
+                            if (resp.isSuccess()) {
+                                Log.d(TAG, "发起充值成功");
+                            } else {
+                                mCommonFail.setCenterTxt(resp.getMsg());
+                                mCommonFail.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).fire();
+////            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
             String url = "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount;
-            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", url).execute();
+//            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", url).execute();
         }
     }
 

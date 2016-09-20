@@ -75,6 +75,7 @@ public class RechargeWebViewActivity extends BaseActivity {
 //        CookieSyncManager.getInstance().sync();
 
 
+
         CookieSyncManager.createInstance(context);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);

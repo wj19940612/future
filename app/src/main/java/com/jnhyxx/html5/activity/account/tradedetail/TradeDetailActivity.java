@@ -18,6 +18,7 @@ import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.fragment.FundDetailFragment;
 import com.jnhyxx.html5.fragment.IntegralDetailFragment;
 import com.jnhyxx.html5.fragment.TradeDetailListFragment;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 
@@ -49,6 +50,9 @@ public class TradeDetailActivity extends BaseActivity {
 
 
     ArrayList<Fragment> fragmentList;
+
+
+    TradeDetailFragmentAdapter mTradeDetailFragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +86,10 @@ public class TradeDetailActivity extends BaseActivity {
                         mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMarginScore()));
                         break;
                 }
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -105,17 +106,25 @@ public class TradeDetailActivity extends BaseActivity {
 
     private void initViewPager() {
         fragmentList = new ArrayList<>();
-        FundDetailFragment fundDetailFragment = FundDetailFragment.newInstance();
-        fragmentList.add(fundDetailFragment);
-        IntegralDetailFragment integralDetailFragment = IntegralDetailFragment.newInstance();
-        fragmentList.add(integralDetailFragment);
+//        FundDetailFragment fundDetailFragment = FundDetailFragment.newInstance();
+//        fragmentList.add(fundDetailFragment);
+//        IntegralDetailFragment integralDetailFragment = IntegralDetailFragment.newInstance();
+//        fragmentList.add(integralDetailFragment);
+
+//        TradeDetailListFragment fundTradeDetailListFragment = TradeDetailListFragment.newInstance();
+//        fundTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_FUND);
+//        fragmentList.add(fundTradeDetailListFragment);
+//        TradeDetailListFragment integralTradeDetailListFragment = TradeDetailListFragment.newInstance();
+//        integralTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_INTEGRAL);
+//        fragmentList.add(integralTradeDetailListFragment);
+
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
-//        mViewPager.setAdapter(new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this));
-        mViewPager.setAdapter(new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList));
+        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
+//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
+        mViewPager.setAdapter(mTradeDetailFragmentAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
-
 
     }
 
@@ -145,7 +154,7 @@ public class TradeDetailActivity extends BaseActivity {
             return super.getPageTitle(position);
         }
 
-        //        @Override
+        @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:

@@ -11,26 +11,22 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
-import com.jnhyxx.html5.activity.account.FundDetailActivity;
+import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.activity.setting.SettingActivity;
-import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
-import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -39,7 +35,6 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -197,7 +192,7 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.messageCenter:
                 // TODO: 2016/9/8 目前没有系统消息的接口
-//                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
+                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 API.Finance.getFundSwitchIntegral("money", 0, 10).setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp<List<TradeDetail>>>() {
                     @Override
                     public void onReceive(Resp<List<TradeDetail>> listResp) {

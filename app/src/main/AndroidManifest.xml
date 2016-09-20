@@ -150,7 +150,7 @@
             android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.account.WithDrawRecordActivity" />
-        <activity android:name=".activity.account.RechargeWebViewActivity"></activity>
+        <activity android:name=".activity.account.RechargeWebViewActivity" />
     </application>
 
 </manifest>

@@ -1,28 +1,20 @@
 package com.jnhyxx.html5.activity.account.tradedetail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
-import com.jnhyxx.html5.fragment.FundDetailFragment;
-import com.jnhyxx.html5.fragment.IntegralDetailFragment;
 import com.jnhyxx.html5.fragment.TradeDetailListFragment;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -118,17 +110,19 @@ public class TradeDetailActivity extends BaseActivity {
 //        integralTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_INTEGRAL);
 //        fragmentList.add(integralTradeDetailListFragment);
 
+        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
+//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mTradeDetailFragmentAdapter);
+
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
-        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
-//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
-        mViewPager.setAdapter(mTradeDetailFragmentAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
 
     }
 
-    class TradeDetailFragmentAdapter extends FragmentPagerAdapter {
+    class TradeDetailFragmentAdapter extends FragmentStatePagerAdapter {
         Context mContext;
         ArrayList<Fragment> fragments;
 

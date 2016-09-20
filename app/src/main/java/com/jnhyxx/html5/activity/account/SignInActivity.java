@@ -120,7 +120,7 @@ public class SignInActivity extends BaseActivity {
             case R.id.signInButton:
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
                 String password = ViewUtil.getTextTrim(mPassword);
-                API.User.signIn(phoneNum, password).setTag(TAG)
+                API.User.login(phoneNum, password).setTag(TAG)
                         .setIndeterminate(this)
                         .setCallback(new Callback<Resp<JsonObject>>() {
                             @Override

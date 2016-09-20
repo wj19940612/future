@@ -1,11 +1,11 @@
 package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,8 +17,8 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.RechargeAsyncTask;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -31,12 +31,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RechargeActivity extends BaseActivity {
+public class RechargeActivity extends BaseActivity implements RechargeAsyncTask.RechargeListener {
 
     public static final String RESULT_BANKCARD_AUTH = "bankcardAuthResult";
 
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
+    // TODO: 2016/9/20 显示下载下来的html
+    @BindView(R.id.html)
+    TextView html;
     @BindView(R.id.rechargeAmount)
     EditText mRechargeAmount;
     @BindView(R.id.bankCardPay)
@@ -128,20 +131,23 @@ public class RechargeActivity extends BaseActivity {
             ToastUtil.show(getString(R.string.recharge_amount_should_larger_than_50));
             return;
         }
+//        /user/finance/deposit.do
         if (checkValidation()) {
-            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
-                    .setCallback(new Callback<Resp>() {
-                        @Override
-                        public void onReceive(Resp resp) {
-                            if (resp.isSuccess()) {
-                                Log.d(TAG, "发起充值成功");
-                            } else {
-                                mCommonFail.setCenterTxt(resp.getMsg());
-                                mCommonFail.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }).fire();
-////            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
+            new RechargeAsyncTask(amount, this).execute("http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount);
+            // TODO: 2016/9/20 返回的是html，不能直接解析
+//            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
+//                    .setCallback(new Callback<Resp>() {
+//                        @Override
+//                        public void onReceive(Resp resp) {
+//                            if (resp.isSuccess()) {
+//                                Log.d(TAG, "发起充值成功");
+//                            } else {
+//                                mCommonFail.setCenterTxt(resp.getMsg());
+//                                mCommonFail.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    }).fire();
+//            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
             String url = "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount;
 //            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", url).execute();
         }
@@ -212,6 +218,15 @@ public class RechargeActivity extends BaseActivity {
     private void unSelectAll() {
         for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
             mPayMethodMatherView.getChildAt(i).setSelected(false);
+        }
+    }
+
+    @Override
+    public void getData(String result) {
+        if (!TextUtils.isEmpty(result)) {
+            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", result).execute();
+            Spanned spanned = Html.fromHtml(result);
+            html.setText(spanned);
         }
     }
 }

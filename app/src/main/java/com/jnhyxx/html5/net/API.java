@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -169,16 +168,17 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
-        public static API signIn(String phoneNum, String password) {
-            try {
+        public static API login(String phoneNum, String password) {
+//            try {
                 // TODO: 8/26/16 正式时候添加, 后期删除  
                 // TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
 //                if (!BuildConfig.DEBUG)
-                password = SecurityUtil.md5Encrypt(password);
-                Log.d(TAG, "登陆密码MD5加密" + password);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+                // TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
+//                password = SecurityUtil.md5Encrypt(password);
+//                Log.d(TAG, "登陆密码MD5加密" + password);
+//            } catch (NoSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
             // TODO: 2016/8/30 原来的网址
             return new API("/user/user/login.do",
                     new ApiParams()
@@ -744,6 +744,6 @@ public class API extends APIBase {
         public static API getChannelScoreAndAd() {
             return new API("/user/getLevelsForUser.do", new ApiParams());
         }
-        
+
     }
 }

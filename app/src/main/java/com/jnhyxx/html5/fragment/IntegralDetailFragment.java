@@ -38,8 +38,6 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
 
     //积分
     public static final String TYPE_INTEGRAL = "score";
-    //资金
-    public static final String TYPE_FUND = "money";
 
     //流水显示条数
     private static final int mSize = 20;
@@ -109,7 +107,6 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
 
     public void getTradeInfoList() {
 
-        Log.d(TAG, "交易明细类型  资金明细" + "每次获取的量 " + mOffset);
         API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -119,7 +116,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
 
                         mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
                         for (int i = 0; i < mTradeDetailList.size(); i++) {
-                            Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
+                            Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
                         }
                         setAdapter(mTradeDetailList);
                     }
@@ -156,7 +153,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
 
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
-            setListAdapter(mTradeDetailAdapter);
+            getListView().setAdapter(mTradeDetailAdapter);
         }
 
         for (TradeDetail item : mTradeDetailLists) {
@@ -225,7 +222,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
                 } else {
                     mTimeHour.setText(createTime);
                 }
-//                mDataType.setText(item.getTypeDetail());
+                mDataType.setText(String.valueOf(item.getTypeDetail()));
                 mTradeDetail.setText(item.getRemark());
                 mTradeDetailMarginRemain.setText(String.valueOf(item.getScoreLeft()));
             }

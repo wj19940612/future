@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,9 +36,6 @@ import butterknife.ButterKnife;
 public class FundDetailFragment extends ListFragment implements ApiIndeterminate {
 
     private static final String TAG = "FundDetailFragment";
-
-    //积分
-    public static final String TYPE_INTEGRAL = "score";
     //资金
     public static final String TYPE_FUND = "money";
 
@@ -111,7 +107,6 @@ public class FundDetailFragment extends ListFragment implements ApiIndeterminate
 
     public void getTradeInfoList() {
 
-        Log.d(TAG, "交易明细类型  资金明细" + "每次获取的量 " + mOffset);
         API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -158,7 +153,7 @@ public class FundDetailFragment extends ListFragment implements ApiIndeterminate
 
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
-            setListAdapter(mTradeDetailAdapter);
+            getListView().setAdapter(mTradeDetailAdapter);
         }
 
         for (TradeDetail item : mTradeDetailLists) {
@@ -178,6 +173,7 @@ public class FundDetailFragment extends ListFragment implements ApiIndeterminate
     public void onDismiss(String tag) {
         setListShown(true);
     }
+
 
     class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {
         Context context;
@@ -227,7 +223,7 @@ public class FundDetailFragment extends ListFragment implements ApiIndeterminate
                 } else {
                     mTimeHour.setText(createTime);
                 }
-//                mDataType.setText(item.getTypeDetail());
+                mDataType.setText(String.valueOf(item.getTypeDetail()));
                 mTradeDetail.setText(item.getRemark());
                 mTradeDetailMarginRemain.setText(String.valueOf(item.getScoreLeft()));
             }

@@ -67,15 +67,27 @@ public class InfoFragment extends BaseFragment {
             return super.getPageTitle(position);
         }
 
+        //        @Override
+//        public Fragment getItem(int position) {
+//            switch (position) {
+//                case 0:
+//                    return new Fragment();
+//                case 1:
+//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
+//                case 2:
+//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
+//            }
+//            return null;
+//        }//
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new Fragment();
+                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_HOME_PAGE);
                 case 1:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
+                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_lIST);
                 case 2:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
+                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_POPUP);
             }
             return null;
         }

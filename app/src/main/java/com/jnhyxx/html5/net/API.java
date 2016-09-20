@@ -357,6 +357,11 @@ public class API extends APIBase {
                             .put(TYPE, 2));
         }
 
+        /**
+         * 退出
+         *
+         * @return
+         */
         public static API loginOut() {
             return new API("/user/user/logout.do", new ApiParams());
         }
@@ -381,6 +386,45 @@ public class API extends APIBase {
             return new API("/user/user/updateNickName.do",
                     new ApiParams()
                             .put("nickName", nickName));
+        }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型   0为首页资讯,1为列表资讯,2为弹窗资讯
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API("/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 
@@ -469,9 +513,10 @@ public class API extends APIBase {
         }
 
         /**
-         接口名：资金或积分明细
-
-         URL  http://域名/user/finance/findFlowList.do
+         * 接口名：资金或积分明细
+         * <p>
+         * URL  http://域名/user/finance/findFlowList.do
+         *
          * @param type     type=money为资金明细，type=score为积分明细
          * @param offset   流水起点
          * @param pageSize 流水显示条数

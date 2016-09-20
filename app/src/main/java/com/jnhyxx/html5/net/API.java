@@ -721,4 +721,20 @@ public class API extends APIBase {
     public static String getTradeRule(String varietyType) {
         return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
     }
+
+    public static class Extend {
+        /**
+         * 接口名：根据登录用户获取他推广出来的子用户信息
+         * URL  http://域名/user/qureypagingSonUser.do
+         *
+         * @param page
+         * @param pageSize
+         * @return
+         */
+        public static API getExtendUserManage(int page, int pageSize) {
+            return new API("/user/qureypagingSonUser.do", new ApiParams().put("page", page).put("pageSize", pageSize));
+        }
+
+        
+    }
 }

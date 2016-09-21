@@ -44,7 +44,7 @@ public class RechargeAsyncTask extends AsyncTask<String, Void, String> {
             httpConn.setDoInput(true);
             httpConn.setUseCaches(false);
             httpConn.setRequestMethod("POST");
-            httpConn.setRequestProperty("Content-Type", "application/Json");
+            httpConn.setRequestProperty("Content-Type", "text/html");
             httpConn.setRequestProperty("Connection", "Keep-Alive");
             httpConn.setRequestProperty("Charset", "UTF-8");
 //            httpConn.setRequestProperty("Content-Length", data.length() + "");

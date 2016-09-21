@@ -39,12 +39,6 @@ public class RechargeWebViewActivity extends BaseActivity {
 //            synCookies(RechargeWebViewActivity.this, url);
             //加载需要显示的网页
             Log.d(TAG, "url" + url);
-
-            String urlPath = url.substring(1, url.length() - 2).trim();
-
-            Log.d(TAG, "URL" + urlPath);
-//            mWebview.loadDataWithBaseURL(null, url, "text/html", "utf-8", null);
-//            mWebview.loadUrl(urlPath);
             mWebview.loadData(url, "text/html", "utf-8");
 //            设置Web视图
             mWebview.setWebViewClient(new WebViewClient());

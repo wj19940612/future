@@ -3,7 +3,10 @@ package com.jnhyxx.html5.activity.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,6 +27,9 @@ import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -218,8 +224,28 @@ public class RechargeActivity extends BaseActivity implements RechargeAsyncTask.
 
     @Override
     public void getData(String result) {
+        String escapeHtml = Html.escapeHtml(result);
+        Log.d(TAG, "escapeHtml" + escapeHtml);
+        Spanned spanned = Html.fromHtml(result);
+        Log.d(TAG, "spanned" + spanned.toString());
+        String toHtml = Html.toHtml(spanned);
+        Log.d(TAG, "toHtml" + toHtml);
+        String data = null;
         if (!TextUtils.isEmpty(result)) {
-            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", result).execute();
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+            } catch (JSONException e) {
+                // TODO: 2016/9/21 目前是截取的数据，容易出问题 
+                String message = e.getMessage();
+                data = message.substring(message.indexOf("<"), message.lastIndexOf(">") + 1);
+                Log.d(TAG, "截取后的充值界面的html代码" + data);
+                e.printStackTrace();
+            } finally {
+                if (!TextUtils.isEmpty(data)) {
+                    Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", data).execute();
+                }
+            }
+
         }
     }
 }

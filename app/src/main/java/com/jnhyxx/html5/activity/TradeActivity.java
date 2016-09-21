@@ -181,13 +181,14 @@ public class TradeActivity extends BaseActivity implements
             }
         });
         mTradePageHeader.setAvailableBalanceUnit(
-                mFundType == Product.FUND_TYPE_CASH ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE);
+                mFundType == Product.FUND_TYPE_CASH
+                        ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE);
 
         updateSignTradePagerHeader();
-
         updateProductRelatedViews();
-
         mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     private void updateProductRelatedViews() {
@@ -329,6 +330,7 @@ public class TradeActivity extends BaseActivity implements
         updateQuestionMarker();
         startScheduleJob(60 * 1000, 60 * 1000);
         mOrderPresenter.onResume();
+        NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     private void updateQuestionMarker() {
@@ -345,12 +347,12 @@ public class TradeActivity extends BaseActivity implements
         super.onPause();
         stopScheduleJob();
         mOrderPresenter.onPause();
+        NettyClient.getInstance().stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
@@ -395,16 +397,6 @@ public class TradeActivity extends BaseActivity implements
 
         mChartContainer.showTrendView();
 
-        // start socket
-        NettyClient.getInstance().setQuotaDataFilter(new NettyClient.QuotaDataFilter() {
-            @Override
-            public boolean filter(FullMarketData data) {
-                return !data.getInstrumentId().equalsIgnoreCase(mProduct.getContractsCode());
-            }
-        });
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
-        NettyClient.getInstance().start(mProduct.getContractsCode());
-
         // request Trend Data
         requestTrendDataAndSet();
     }
@@ -440,6 +432,9 @@ public class TradeActivity extends BaseActivity implements
                 if (product != null) {
                     mProduct = product;
                     updateProductRelatedViews();
+                    NettyClient.getInstance().stop();
+                    NettyClient.getInstance().start(mProduct.getContractsCode());
+                    mMenu.toggle();
                 }
             }
         });
@@ -546,7 +541,6 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
-
     }
 
     @Override

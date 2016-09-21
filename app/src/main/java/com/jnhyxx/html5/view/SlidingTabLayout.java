@@ -72,7 +72,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private static final int TITLE_OFFSET_DIPS = 24;
     private static final int TAB_VIEW_PADDING_DIPS = 16;
-    private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
+    private static final int TAB_VIEW_TEXT_SIZE_SP = 14;
 
     private int mTitleOffset;
 
@@ -261,6 +261,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         if (mViewPager != null) {
             scrollToTab(mViewPager.getCurrentItem(), 0);
+
+            highlightItem(mViewPager.getCurrentItem());
         }
     }
 
@@ -327,15 +329,19 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
 
-            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
-                View view = mTabStrip.getChildAt(i);
-                view.setSelected(false);
-            }
-            if (position < mTabStrip.getChildCount()) {
-                mTabStrip.getChildAt(position).setSelected(true);
-            }
+            highlightItem(position);
         }
+    }
 
+    // Add by JohnZ
+    private void highlightItem(int position) {
+        for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+            View view = mTabStrip.getChildAt(i);
+            view.setSelected(false);
+        }
+        if (position < mTabStrip.getChildCount()) {
+            mTabStrip.getChildAt(position).setSelected(true);
+        }
     }
 
     private class TabClickListener implements View.OnClickListener {

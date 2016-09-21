@@ -19,6 +19,7 @@ public class OrderPresenter {
     private boolean mBindActivity;
 
     private static List<HoldingOrder> sHoldingOrderList;
+
     private int mVarietyId;
     private int mFundType;
 
@@ -42,6 +43,7 @@ public class OrderPresenter {
         mHoldingOrderView = holdingOrderView;
         mBindActivity = true;
         mHandler = new Handler();
+        mRefreshCount = 0;
     }
 
     public void onResume() {
@@ -50,6 +52,10 @@ public class OrderPresenter {
 
     public void onPause() {
         mBindActivity = false;
+    }
+
+    public List<HoldingOrder> getHoldingOrderList() {
+        return sHoldingOrderList;
     }
 
     public void setAskBidPrices(double askPrice, double bidPrice) {
@@ -127,6 +133,8 @@ public class OrderPresenter {
                     }
                 }, 8 * 1000);
             }
+        } else {
+            mRefreshCount = 0;
         }
     }
 
@@ -146,6 +154,5 @@ public class OrderPresenter {
                         }
                     }
                 }).fire();
-
     }
 }

@@ -149,7 +149,6 @@ public class API extends APIBase {
          * @param regCode
          */
         public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
-//            return new API("/user/register.do"
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "注册时密码MD5加密" + password);
@@ -180,15 +179,11 @@ public class API extends APIBase {
          */
         public static API signIn(String phoneNum, String password) {
             try {
-                // TODO: 8/26/16 正式时候添加, 后期删除  
-                // TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
-//                if (!BuildConfig.DEBUG)
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "登陆密码MD5加密" + password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            // TODO: 2016/8/30 原来的网址
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)

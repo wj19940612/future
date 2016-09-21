@@ -5,30 +5,40 @@ import java.io.Serializable;
 public class OrderDetail implements Serializable {
 
     /**
-     * buyTime : 1472615097000
+     * batchNoTime : 0
+     * buyTime : 1473660116000
      * buyType : 0
-     * contractsCode : CL1610
+     * contractsCode : GC1610
      * handsNum : 1
-     * id : 111
-     * marginMoney : 180
-     * realAvgPrice : 92
-     * sellTime : 1472621755000
-     * unwindAvgPrice : 92
-     * unwindType : 0
+     * marginMoney : 270
+     * realAvgPrice : 1328.4
+     * sellTime : 1473660160000
+     * showId : 117v
+     * unwindAvgPrice : 1330
+     * unwindType : 2
      * userFees : 10
      */
 
+    private int batchNoTime;
     private long buyTime;
     private int buyType;
     private String contractsCode;
     private int handsNum;
-    private int showId;
     private double marginMoney;
-    private int realAvgPrice;
+    private double realAvgPrice;
     private long sellTime;
-    private int unwindAvgPrice;
+    private String showId;
+    private double unwindAvgPrice;
     private int unwindType;
     private double userFees;
+
+    public int getBatchNoTime() {
+        return batchNoTime;
+    }
+
+    public void setBatchNoTime(int batchNoTime) {
+        this.batchNoTime = batchNoTime;
+    }
 
     public long getBuyTime() {
         return buyTime;
@@ -62,27 +72,11 @@ public class OrderDetail implements Serializable {
         this.handsNum = handsNum;
     }
 
-    public int getShowId() {
-        return showId;
-    }
-
-    public void setShowId(int showId) {
-        this.showId = showId;
-    }
-
-    public double getMarginMoney() {
-        return marginMoney;
-    }
-
-    public void setMarginMoney(double marginMoney) {
-        this.marginMoney = marginMoney;
-    }
-
-    public int getRealAvgPrice() {
+    public double getRealAvgPrice() {
         return realAvgPrice;
     }
 
-    public void setRealAvgPrice(int realAvgPrice) {
+    public void setRealAvgPrice(double realAvgPrice) {
         this.realAvgPrice = realAvgPrice;
     }
 
@@ -94,8 +88,12 @@ public class OrderDetail implements Serializable {
         this.sellTime = sellTime;
     }
 
-    public int getUnwindAvgPrice() {
-        return unwindAvgPrice;
+    public String getShowId() {
+        return showId;
+    }
+
+    public void setShowId(String showId) {
+        this.showId = showId;
     }
 
     public void setUnwindAvgPrice(int unwindAvgPrice) {
@@ -110,11 +108,33 @@ public class OrderDetail implements Serializable {
         this.unwindType = unwindType;
     }
 
+    public double getMarginMoney() {
+        return marginMoney;
+    }
+
+    public double getUnwindAvgPrice() {
+        return unwindAvgPrice;
+    }
+
     public double getUserFees() {
         return userFees;
     }
 
-    public void setUserFees(double userFees) {
-        this.userFees = userFees;
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "batchNoTime=" + batchNoTime +
+                ", buyTime=" + buyTime +
+                ", buyType=" + buyType +
+                ", contractsCode='" + contractsCode + '\'' +
+                ", handsNum=" + handsNum +
+                ", marginMoney=" + marginMoney +
+                ", realAvgPrice=" + realAvgPrice +
+                ", sellTime=" + sellTime +
+                ", showId='" + showId + '\'' +
+                ", unwindAvgPrice=" + unwindAvgPrice +
+                ", unwindType=" + unwindType +
+                ", userFees=" + userFees +
+                '}';
     }
 }

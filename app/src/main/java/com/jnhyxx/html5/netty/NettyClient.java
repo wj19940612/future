@@ -25,7 +25,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
 
-    private static final String TAG = "Netty";
+    private static final String TAG = "TEST";
 
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
@@ -149,8 +149,6 @@ public class NettyClient {
     }
 
     public void start(String contractCode) {
-        stop();
-
         mContractCode = contractCode;
         mClosed = false;
 
@@ -164,6 +162,10 @@ public class NettyClient {
 
     private void connect() {
         if (mClosed && mBootstrap != null) return;
+
+        if (mQuotaDataFilter == null) {
+            mQuotaDataFilter = new DefaultQuotaDataFilter(mContractCode);
+        }
 
         ChannelFuture channelFuture = mBootstrap.connect(mHost, mPort);
         channelFuture.addListener(new ChannelFutureListener() {
@@ -185,8 +187,23 @@ public class NettyClient {
 
     public void stop() {
         mClosed = true;
+        mContractCode = null;
         if (mWorkerGroup != null) {
             mWorkerGroup.shutdownGracefully();
+        }
+    }
+
+    private static class DefaultQuotaDataFilter implements QuotaDataFilter {
+
+        private String mContractCode;
+
+        public DefaultQuotaDataFilter(String contractCode) {
+            mContractCode = contractCode;
+        }
+
+        @Override
+        public boolean filter(FullMarketData data) {
+            return !data.getInstrumentId().equalsIgnoreCase(mContractCode);
         }
     }
 }

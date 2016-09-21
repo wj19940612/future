@@ -5,8 +5,6 @@ public class Resp<T> {
 
     private int code;
     private String msg;
-    private int msgType;
-    private String errparam;
     private T data;
 
     public int getCode() {
@@ -19,14 +17,6 @@ public class Resp<T> {
 
     public void setMsg(){
         msg = "";
-    }
-
-    public Integer getMsgType() {
-        return msgType;
-    }
-
-    public String getErrparam() {
-        return errparam;
     }
 
     public T getData() {
@@ -46,7 +36,6 @@ public class Resp<T> {
         return "Response{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
-                ", errparam='" + errparam + '\'' +
                 ", data=" + data +
                 '}';
     }

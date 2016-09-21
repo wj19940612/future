@@ -31,14 +31,14 @@ public class SettledOrder extends AbsOrder implements Serializable {
     private long orderTime;
     private double ratio;
     private double realAvgPrice;
-    private int realMarketVal;
+    private double realMarketVal;
     private long sellTime;
     private String showId;
-    private int stopLossPrice;
-    private int stopWinPrice;
+    private double stopLossPrice;
+    private double stopWinPrice;
     private double unwindAvgPrice;
     private int unwindType;
-    private int winOrLoss;
+    private double winOrLoss;
 
     public int getBatchNoTime() {
         return batchNoTime;
@@ -104,14 +104,6 @@ public class SettledOrder extends AbsOrder implements Serializable {
         this.realAvgPrice = realAvgPrice;
     }
 
-    public int getRealMarketVal() {
-        return realMarketVal;
-    }
-
-    public void setRealMarketVal(int realMarketVal) {
-        this.realMarketVal = realMarketVal;
-    }
-
     public long getSellTime() {
         return sellTime;
     }
@@ -126,22 +118,6 @@ public class SettledOrder extends AbsOrder implements Serializable {
 
     public void setShowId(String showId) {
         this.showId = showId;
-    }
-
-    public int getStopLossPrice() {
-        return stopLossPrice;
-    }
-
-    public void setStopLossPrice(int stopLossPrice) {
-        this.stopLossPrice = stopLossPrice;
-    }
-
-    public int getStopWinPrice() {
-        return stopWinPrice;
-    }
-
-    public void setStopWinPrice(int stopWinPrice) {
-        this.stopWinPrice = stopWinPrice;
     }
 
     public double getUnwindAvgPrice() {
@@ -160,11 +136,19 @@ public class SettledOrder extends AbsOrder implements Serializable {
         this.unwindType = unwindType;
     }
 
-    public int getWinOrLoss() {
-        return winOrLoss;
+    public double getRealMarketVal() {
+        return realMarketVal;
     }
 
-    public void setWinOrLoss(int winOrLoss) {
-        this.winOrLoss = winOrLoss;
+    public double getStopLossPrice() {
+        return stopLossPrice;
+    }
+
+    public double getStopWinPrice() {
+        return stopWinPrice;
+    }
+
+    public double getWinOrLoss() {
+        return winOrLoss;
     }
 }

@@ -1,6 +1,9 @@
 package com.jnhyxx.html5.domain.order;
 
-public class HoldingOrder extends AbsOrder {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class HoldingOrder extends AbsOrder implements Parcelable {
 
     /**
      * buyTime : 1473821298000
@@ -154,4 +157,57 @@ public class HoldingOrder extends AbsOrder {
                 ", stopWinPrice=" + stopWinPrice +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.buyTime);
+        dest.writeString(this.currencyUnit);
+        dest.writeInt(this.direction);
+        dest.writeInt(this.eachPointMoney);
+        dest.writeInt(this.handsNum);
+        dest.writeInt(this.orderStatus);
+        dest.writeLong(this.orderTime);
+        dest.writeDouble(this.ratio);
+        dest.writeDouble(this.realAvgPrice);
+        dest.writeInt(this.realMarketVal);
+        dest.writeString(this.showId);
+        dest.writeDouble(this.stopLossPrice);
+        dest.writeDouble(this.stopWinPrice);
+    }
+
+    public HoldingOrder() {
+    }
+
+    protected HoldingOrder(Parcel in) {
+        this.buyTime = in.readLong();
+        this.currencyUnit = in.readString();
+        this.direction = in.readInt();
+        this.eachPointMoney = in.readInt();
+        this.handsNum = in.readInt();
+        this.orderStatus = in.readInt();
+        this.orderTime = in.readLong();
+        this.ratio = in.readDouble();
+        this.realAvgPrice = in.readDouble();
+        this.realMarketVal = in.readInt();
+        this.showId = in.readString();
+        this.stopLossPrice = in.readDouble();
+        this.stopWinPrice = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<HoldingOrder> CREATOR = new Parcelable.Creator<HoldingOrder>() {
+        @Override
+        public HoldingOrder createFromParcel(Parcel source) {
+            return new HoldingOrder(source);
+        }
+
+        @Override
+        public HoldingOrder[] newArray(int size) {
+            return new HoldingOrder[size];
+        }
+    };
 }

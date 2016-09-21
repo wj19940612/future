@@ -22,7 +22,7 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onFailure(VolleyError volleyError) {
-        Log.d("VolleyHttp", getUrl() + volleyError.toString());
+        Log.d("VolleyHttp", getUrl() + " " + volleyError.toString());
         int toastResId = R.string.api_error_network;
         if (volleyError instanceof NullResponseError) {
             toastResId = R.string.api_error_null;

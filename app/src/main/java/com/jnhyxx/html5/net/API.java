@@ -170,10 +170,9 @@ public class API extends APIBase {
          */
         public static API login(String phoneNum, String password) {
 //            try {
-                // TODO: 8/26/16 正式时候添加, 后期删除  
-                // TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
-//                if (!BuildConfig.DEBUG)
-                // TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
+////                 TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
+////                if (!BuildConfig.DEBUG)
+////                 TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
 //                password = SecurityUtil.md5Encrypt(password);
 //                Log.d(TAG, "登陆密码MD5加密" + password);
 //            } catch (NoSuchAlgorithmException e) {

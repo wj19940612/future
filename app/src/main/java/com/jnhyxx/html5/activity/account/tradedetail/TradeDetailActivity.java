@@ -113,6 +113,7 @@ public class TradeDetailActivity extends BaseActivity {
         mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
 //        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
         mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setCurrentItem(0,false);
         mViewPager.setAdapter(mTradeDetailFragmentAdapter);
 
 
@@ -144,6 +145,7 @@ public class TradeDetailActivity extends BaseActivity {
                     return mContext.getString(R.string.fund_detail);
                 case 1:
                     return mContext.getString(R.string.score_detail);
+
             }
             return super.getPageTitle(position);
         }

@@ -4,23 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.domain.account.UserInfo;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -238,11 +229,26 @@ public class CommonMethodUtils {
         String hourDate = "";
         String[] time = hourTime.split(" ");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        if (time.length==2){
+        if (time.length == 2) {
             hourTime = time[1];
         }
         hourDate = simpleDateFormat.format(hourTime);
         return hourDate;
+    }
+
+    /**
+     * 用来处理交易名义界面的remark的具体描述
+     *
+     * @param typeDetail
+     * @param remark
+     * @return
+     */
+    public static String getRemarkInfo(String typeDetail, String remark) {
+        if (TextUtils.isEmpty(remark)) return "";
+        if (remark.contains(typeDetail)) {
+            remark = remark.replace(typeDetail, "");
+        }
+        return remark;
     }
 }
 

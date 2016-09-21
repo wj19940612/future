@@ -1,15 +1,6 @@
 package com.jnhyxx.html5.domain.account;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/8/30.
@@ -39,57 +30,65 @@ public class TradeDetail implements Serializable {
 
     private String createTime;
     private int id;
+    /**
+     * 流水描述
+     */
     private String remark;
-    private int score;
-    private int scoreLeft;
+    /**
+     * '本次流水积分发生金额',
+     */
+    private double score;
+    /**
+     * '本次流水后积分剩余',
+     */
+    private double scoreLeft;
+    /**
+     * 流水类型
+     */
     private int type;
+    /**
+     * 流水具体类型
+     */
     private int typeDetail;
     private int userId;
+    /**
+     * 本次流水现金发生金额'
+     */
     private double money;
+    /**
+     * '本次流水后现金剩余',
+     */
+    private double moneyLeft;
 
-    public static TradeDetail objectFromData(String str) {
-
-        return new Gson().fromJson(str, TradeDetail.class);
+    public int getIoOrderId() {
+        return ioOrderId;
     }
 
-    public static TradeDetail objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), TradeDetail.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public void setIoOrderId(int ioOrderId) {
+        this.ioOrderId = ioOrderId;
     }
 
-    public static List<TradeDetail> arrayTradeDetailFromData(String str) {
+    /**
+     *
+     */
+    private int ioOrderId;
 
-        Type listType = new TypeToken<ArrayList<TradeDetail>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
+    public double getMoneyLeft() {
+        return moneyLeft;
     }
 
-    public static List<TradeDetail> arrayTradeDetailFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<TradeDetail>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
+    public void setMoneyLeft(double moneyLeft) {
+        this.moneyLeft = moneyLeft;
     }
+
+    public void setScoreLeft(double scoreLeft) {
+        this.scoreLeft = scoreLeft;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
 
     public String getCreateTime() {
         return createTime;
@@ -115,20 +114,13 @@ public class TradeDetail implements Serializable {
         this.remark = remark;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 
-    public int getScoreLeft() {
+    public double getScoreLeft() {
         return scoreLeft;
-    }
-
-    public void setScoreLeft(int scoreLeft) {
-        this.scoreLeft = scoreLeft;
     }
 
     public int getType() {
@@ -163,6 +155,7 @@ public class TradeDetail implements Serializable {
         this.money = money;
     }
 
+
     @Override
     public String toString() {
         return "TradeDetail{" +
@@ -175,6 +168,7 @@ public class TradeDetail implements Serializable {
                 ", typeDetail=" + typeDetail +
                 ", userId=" + userId +
                 ", money=" + money +
+                ", moneyLeft=" + moneyLeft +
                 '}';
     }
 }

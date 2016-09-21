@@ -20,12 +20,10 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
 import com.jnhyxx.html5.activity.setting.SettingActivity;
-import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
@@ -34,8 +32,6 @@ import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -193,16 +189,6 @@ public class MineFragment extends BaseFragment {
             case R.id.messageCenter:
                 // TODO: 2016/9/8 目前没有系统消息的接口
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
-                API.Finance.getFundSwitchIntegral("money", 0, 10).setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                    @Override
-                    public void onReceive(Resp<List<TradeDetail>> listResp) {
-                        List<TradeDetail> data = listResp.getData();
-                        ToastUtil.curt("资金查询成功" + listResp.getMsg() + "返回的信息" + listResp.getData().toString());
-                        for (int i = 0; i < data.size(); i++) {
-                            Log.d(TAG, "资金明细查询结果" + data.get(i).toString());
-                        }
-                    }
-                }).fire();
                 break;
             case R.id.tradeDetail:
                 openTradeDetailPage(true);
@@ -212,16 +198,6 @@ public class MineFragment extends BaseFragment {
 
                 break;
             case R.id.paidToPromote:
-                API.Finance.getFundSwitchIntegral("score", 0, 10).setTag(TAG).setIndeterminate(this).setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                    @Override
-                    public void onReceive(Resp<List<TradeDetail>> listResp) {
-                        ToastUtil.curt("积分查询成功" + listResp.getMsg() + "返回的信息" + listResp.getData().toString());
-                        List<TradeDetail> data = listResp.getData();
-                        for (int i = 0; i < data.size(); i++) {
-                            Log.d(TAG, "积分明细查询结果" + data.get(i).toString());
-                        }
-                    }
-                }).fire();
                 break;
         }
     }

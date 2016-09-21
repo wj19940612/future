@@ -20,6 +20,8 @@ import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.CommonMethodUtils;
+import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.johnz.kutils.net.ApiIndeterminate;
 
 import java.util.ArrayList;
@@ -64,6 +66,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
     private TradeDetailAdapter mTradeDetailAdapter;
 
+    boolean isLoaded;
 
     public static TradeDetailListFragment newInstance(String type) {
         TradeDetailListFragment mTradeDetailListFragment = new TradeDetailListFragment();
@@ -72,13 +75,10 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         mTradeDetailListFragment.setArguments(bundle);
         return mTradeDetailListFragment;
     }
-    public static TradeDetailListFragment newInstance() {
-        return  new TradeDetailListFragment();
-    }
 
-//    public void setData(String type) {
-//        this.mFragmentType = type;
-//    }
+    public static TradeDetailListFragment newInstance() {
+        return new TradeDetailListFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,54 +96,61 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         mOffset = 0;
         mSet = new HashSet<>();
         setEmptyText(getString(R.string.there_is_no_info_for_now));
-        getTradeInfoList();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isAdded() && getUserVisibleHint() && !isLoaded) {
+            getTradeInfoList();
+            isLoaded = true;
+        }
+    }
 
     public void getTradeInfoList() {
         Log.d(TAG, "所选的fragment " + mFragmentType);
-        if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-            API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
-                    .setTag(TAG)
-                    .setIndeterminate(this)
-                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                        @Override
-                        public void onReceive(Resp<List<TradeDetail>> listResp) {
-
-                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
-                            setAdapter(mTradeDetailList);
-                        }
-                    }).fire();
-        } else if (TextUtils.equals(mFragmentType, TYPE_INTEGRAL)) {
-            API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
-                    .setTag(TAG).setIndeterminate(this)
-                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-                        @Override
-                        public void onReceive(Resp<List<TradeDetail>> listResp) {
-                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
-                            setAdapter(mTradeDetailList);
-                        }
-                    }).fire();
-        }
-//        if (TextUtils.isEmpty(mFragmentType)) return;
-//        API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
-//                .setTag(TAG).setIndeterminate(this)
-//                .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-//                    @Override
-//                    public void onReceive(Resp<List<TradeDetail>> listResp) {
-//                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-//                        for (int i = 0; i < mTradeDetailList.size(); i++) {
-//                            Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
+//        if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
+//            API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
+//                    .setTag(TAG)
+//                    .setIndeterminate(this)
+//                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
+//                        @Override
+//                        public void onReceive(Resp<List<TradeDetail>> listResp) {
+//
+//                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+//                            for (int i = 0; i < mTradeDetailList.size(); i++) {
+//                                Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
+//                            }
+//                            setAdapter(mTradeDetailList);
 //                        }
-//                        setAdapter(mTradeDetailList);
-//                    }
-//                }).fire();
+//                    }).fire();
+//        } else if (TextUtils.equals(mFragmentType, TYPE_INTEGRAL)) {
+//            API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
+//                    .setTag(TAG).setIndeterminate(this)
+//                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
+//                        @Override
+//                        public void onReceive(Resp<List<TradeDetail>> listResp) {
+//                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+//                            for (int i = 0; i < mTradeDetailList.size(); i++) {
+//                                Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
+//                            }
+//                            setAdapter(mTradeDetailList);
+//                        }
+//                    }).fire();
+//        }
+        if (TextUtils.isEmpty(mFragmentType)) return;
+        API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback<Resp<List<TradeDetail>>>() {
+                    @Override
+                    public void onReceive(Resp<List<TradeDetail>> listResp) {
+                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+                        for (int i = 0; i < mTradeDetailList.size(); i++) {
+                            Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
+                        }
+                        setAdapter(mTradeDetailList);
+                    }
+                }).fire();
     }
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
@@ -237,32 +244,59 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             }
 
             public void bindingData(TradeDetail item, Context context) {
-                Log.d(TAG, "模型" + item.toString());
                 String createTime = item.getCreateTime().trim();
                 String[] time = createTime.split(" ");
                 if (time.length == 2) {
+                    // TODO: 2016/9/21 未做转换的  返回的是时间格式  2016-09-21 14:11"50   转换成 09/21
                     mTimeYear.setText(time[0]);
                     mTimeHour.setText(time[1]);
+//                    String yearDate = time[0];
+//                    if (yearDate.contains("-")) {
+//                        Log.d(TAG, "时间中含有-");
+//                        yearDate = yearDate.substring(5, yearDate.length());
+//                        yearDate = yearDate.replace("-", "/");
+//                    }
+//                    mTimeHour.setText(yearDate);
+//
+//                    String hourDate = time[1];
+//                    if (hourDate.contains(":")) {
+//                        hourDate = hourDate.substring(0, hourDate.lastIndexOf(":"));
+//                    }
+//                    mTimeHour.setText(hourDate);
+
                 } else {
                     mTimeHour.setText(createTime);
                 }
+
+                /**
+                 * 最右侧数据，如果是资金  最后为元;
+                 *            如果是积分  最后是分
+                 *            如果是正数  最前面是+
+                 *            如果是负数  最前面是-
+                 */
+                StringBuffer mStringBuffer = new StringBuffer();
+
                 if (item.getType() > 0) {
+                    mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
                     mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
-//                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_sum, item.getMoney()));
-                    mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()) + "元");
-
                 } else {
+                    mStringBuffer.append("-");
                     mDataType.setBackgroundResource(R.drawable.bg_green_primary);
                     mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_drop));
-//                    mTradeDetailMarginRemain.setText(getString(R.string.remain_money_number_drop, item.getMoney()));
-                    mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney()));
                 }
-                mTradeDetailMarginRemain.setText(String.valueOf(item.getMoney() + "元"));
-                mDataType.setText(item.getRemark());
-                mTradeDetail.setText(String.valueOf(item.getTypeDetail()));
+                String data = new RemarkHandleUtil().get(item.getTypeDetail());
+                mDataType.setText(data);
+                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
+                if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
+                    mStringBuffer.append(String.valueOf(item.getMoney()));
+                    mStringBuffer.append("元");
+                } else {
+                    mStringBuffer.append(String.valueOf(item.getScore()));
+                    mStringBuffer.append("分");
+                }
+                mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }
         }
-
     }
 }

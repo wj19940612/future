@@ -377,14 +377,16 @@
     <string name="withdraw_record_success">提现成功</string>
     <string name="withdraw_record_fail">提现失败</string>
     <string name="withdraw_record_number_hint">提现金额</string>
-    <string name="withdraw_record_number">%1$s$nbsp元</string>
+    <string name="withdraw_record_number">%1$s  元</string>
     <string name="withdraw_record_status">提现状态</string>
     <string name="withdraw_record_real_account_hint">实际到账</string>
-    <string name="withdraw_record_real_account">%1$s$nbsp元</string>
+    <string name="withdraw_record_real_account">%1$s  元</string>
     <string name="withdraw_record_poundage_hint">手续费</string>
-    <string name="withdraw_record_poundage">%1$s$nbsp元</string>
+    <string name="withdraw_record_poundage">%1$s  元</string>
     <string name="withdraw_record_bank_hint">提现银行</string>
-    <string name="withdraw_record_bank">%1$s(尾号 %1$d)</string>
+    <string name="withdraw_record_bank">%1$s(尾号 %2$s)</string>
     <string name="withdraw_record_time">提现时间</string>
     <string name="withdraw_record_account_time">到账时间</string>
+
+    <string name="common_success">成功</string>
 </resources>

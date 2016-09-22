@@ -37,13 +37,14 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:layout_marginEnd="5dp"
             android:id="@+id/leftLine"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="35dp"
             android:layout_weight="1"
-            android:background="@color/withdraw_detailing"/>
+            android:background="@drawable/bg_withdraw_record_info_line"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/detail"
@@ -57,28 +58,111 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:id="@+id/rightLine"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="35dp"
             android:layout_weight="1"
-            android:background="@color/withdraw_detailing"/>
+            android:background="@drawable/bg_withdraw_record_info_line"
+            android:enabled="false"/>
 
         <TextView
             android:id="@+id/withdrawTitleStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_apply_normal"
             android:gravity="center"
-            android:text="@string/withdraw_record_fail"
+            android:text="成功"
             android:textColor="#262626"
             android:textSize="12sp"/>
     </LinearLayout>
+    <!--    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:paddingTop="28dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingLeft="45dp"
+                android:paddingRight="45dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_apply"/>
+
+                <TextView
+                    android:id="@+id/leftLine"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_withdraw_record_info_line"
+                    android:enabled="false"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_apply_deal"/>
+
+                <TextView
+                    android:id="@+id/rightLine"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_withdraw_record_info_line"
+                    android:enabled="false"/>
+
+                <ImageView
+                    android:id="@+id/handleResultImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_apply_normal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/withdraw_record_apply_for"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/withdraw_record_detail"/>
+
+                <TextView
+                    android:paddingRight="10dp"
+                    android:id="@+id/handleResultTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/common_success"/>
+            </LinearLayout>
+        </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"

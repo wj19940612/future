@@ -89,7 +89,7 @@ public class TitleBar extends RelativeLayout {
         // left view
         int paddingHorizontal = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                 getResources().getDisplayMetrics());
-        params =  new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         mLeftView = new TextView(getContext());
         mLeftView.setGravity(Gravity.CENTER);
@@ -173,7 +173,8 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void setRightVisible(boolean rightVisible) {
-        mRightView.setVisibility(rightVisible ? VISIBLE: INVISIBLE);
+        mRightVisible = rightVisible;
+        mRightView.setVisibility(mRightVisible ? VISIBLE : INVISIBLE);
     }
 
     public void setOnRightViewClickListener(View.OnClickListener listener) {

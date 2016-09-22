@@ -1,11 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDF0F5"
-    android:orientation="vertical"
-    tools:context=".fragment.MineFragment">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#EDF0F5"
+              android:orientation="vertical"
+              tools:context=".fragment.MineFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:background="@android:color/transparent"
             app:barBackground="@android:color/transparent"
             app:rightImage="@drawable/ic_account_nav_setting"
-            app:rightVisible="true" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/account_main_pic_user"
                     app:borderColor="@color/account_top_blue_text"
-                    app:borderWidth="3dp" />
+                    app:borderWidth="3dp"/>
 
                 <TextView
                     android:id="@+id/nickname"
@@ -50,24 +50,24 @@
                     android:gravity="center_horizontal"
                     android:paddingTop="12dp"
                     android:text="@string/account_not_login"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
 
                 <TextView
-                    android:drawablePadding="@dimen/drawable_left_padding"
                     android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/account_main_icon_integration"
+                    android:drawablePadding="@dimen/drawable_left_padding"
                     android:paddingTop="10dp"
                     android:text="@string/account_mine_integral"
-                    android:textColor="@color/account_top_blue_text" />
+                    android:textColor="@color/account_top_blue_text"/>
             </LinearLayout>
 
             <View
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="@color/splitLine" />
+                android:background="@color/splitLine"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:text="@string/account_user_balance"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     android:id="@+id/balance"
@@ -90,7 +90,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/zero"
                     android:textColor="#FB4B55"
-                    android:textSize="50sp" />
+                    android:textSize="50sp"/>
 
                 <LinearLayout
                     android:id="@+id/signArea"
@@ -112,7 +112,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_in"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"/>
 
                     <TextView
                         android:id="@+id/signUpButton"
@@ -125,7 +125,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_up_free"
-                        android:textColor="@color/account_top_blue_text" />
+                        android:textColor="@color/account_top_blue_text"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -148,7 +148,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/recharge"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"/>
 
                     <TextView
                         android:id="@+id/withdraw"
@@ -161,7 +161,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/withdraw"
-                        android:textColor="@color/account_top_blue_text" />
+                        android:textColor="@color/account_top_blue_text"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -176,12 +176,12 @@
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/message_center"
         app:rowTextColor="@android:color/black"
-        app:subText="数字" />
+        app:subText="数字"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLine2" />
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
@@ -191,12 +191,12 @@
         app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_trade_info"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowTextColor="@color/account_center_text"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLine2" />
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
@@ -206,12 +206,12 @@
         app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowTextColor="@color/account_center_text"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLine2" />
+        android:background="@color/splitLine2"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
@@ -221,5 +221,5 @@
         app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_aboutUs"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowTextColor="@color/account_center_text"/>
 </LinearLayout>

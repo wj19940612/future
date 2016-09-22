@@ -18,6 +18,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.RechargeAsyncTask;
 import com.jnhyxx.html5.net.Resp;
@@ -136,21 +137,17 @@ public class RechargeActivity extends BaseActivity implements RechargeAsyncTask.
         if (checkValidation()) {
             new RechargeAsyncTask(amount, this).execute("http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount);
             // TODO: 2016/9/20 返回的是html，不能直接解析
-//            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this)
-//                    .setCallback(new Callback<Resp>() {
-//                        @Override
-//                        public void onReceive(Resp resp) {
-//                            if (resp.isSuccess()) {
-//                                Log.d(TAG, "发起充值成功");
-//                            } else {
-//                                mCommonFail.setCenterTxt(resp.getMsg());
-//                                mCommonFail.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                    }).fire();
-//            String ss=   "http://newtest.jnhyxx.com/user/finance/deposit.do?money="+amount;
+            API.Finance.rechargeMoney(amount).setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<String>>() {
+
+                @Override
+                protected void onRespSuccess(Resp<String> resp) {
+                    String data = resp.getData();
+                    Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", data).execute();
+                }
+            }).fire();
+
+            String ss = "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount;
             String url = "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount;
-//            Launcher.with(RechargeActivity.this, RechargeWebViewActivity.class).putExtra("url", url).execute();
         }
     }
 

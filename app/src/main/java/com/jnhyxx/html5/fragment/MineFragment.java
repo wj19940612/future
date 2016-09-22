@@ -104,15 +104,10 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
-        if (LocalUser.getUser().isLogin()) {
-            mTitleBar.setRightVisible(true);
-        } else {
-            mTitleBar.setRightVisible(false);
-        }
+
 
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
@@ -120,8 +115,17 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        ToastUtil.curt("用户是否登陆 " + LocalUser.getUser().isLogin());
+        if (LocalUser.getUser().isLogin()) {
+            mTitleBar.setRightVisible(true);
+        } else {
+            mTitleBar.setRightVisible(false);
+        }
     }
 
     @Override
@@ -267,7 +271,9 @@ public class MineFragment extends BaseFragment {
             upDateUserInfoView(userInfo);
         } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
             upDateUserInfoView(userInfo);
-        } else if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+        }
+        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+            mTitleBar.setRightVisible(false);
             updateAccountInfoView();
         }
     }

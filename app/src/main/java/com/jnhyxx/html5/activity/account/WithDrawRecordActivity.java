@@ -9,16 +9,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.account.withdraw.WithdrawRecordInfoActivity;
 import com.jnhyxx.html5.domain.account.WithdrawRecord;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.johnz.kutils.Launcher;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * 提现记录
  */
-public class WithDrawRecordActivity extends BaseActivity {
+public class WithDrawRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.withdrawRecord)
     ListView mWithdrawRecordList;
@@ -54,6 +57,7 @@ public class WithDrawRecordActivity extends BaseActivity {
         mOffset = 0;
         mSet = new HashSet<>();
         getWithdrawRecordList();
+        mWithdrawRecordList.setOnItemClickListener(this);
     }
 
     public void getWithdrawRecordList() {
@@ -114,6 +118,13 @@ public class WithDrawRecordActivity extends BaseActivity {
         mWithdrawRecordAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        WithdrawRecord withdrawRecord = (WithdrawRecord) parent.getAdapter().getItem(position);
+        int withdrawRecordId = withdrawRecord.getId();
+        Launcher.with(WithDrawRecordActivity.this, WithdrawRecordInfoActivity.class).putExtra(WithdrawRecordInfoActivity.WITHDRAW_RECORD_INFO_ID, withdrawRecordId).execute();
+    }
+
     class WithdrawRecordAdapter extends ArrayAdapter<WithdrawRecord> {
 
         private Context mContext;
@@ -160,7 +171,7 @@ public class WithDrawRecordActivity extends BaseActivity {
                     mSaleDateHour.setText(date[1]);
                 }
 //                mSaleGetMoney.setText(getString(R.string.withdraw_money, item.getMoney()));
-                mSaleGetMoney.setText( String.valueOf(item.getMoney())+"元");
+                mSaleGetMoney.setText(String.valueOf(item.getMoney()) + "元");
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.withdraw_status_success);

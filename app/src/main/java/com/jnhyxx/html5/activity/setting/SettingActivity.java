@@ -177,8 +177,8 @@ public class SettingActivity extends BaseActivity {
                             mTvUserNameSetting.setText("");
                             mTvBindBankCardSetting.setText("");
                             mTvRealNameSetting.setText("");
-                            finish();
                             setResult(RESULT_OK);
+                            finish();
                         }
                     }).fire();
         }

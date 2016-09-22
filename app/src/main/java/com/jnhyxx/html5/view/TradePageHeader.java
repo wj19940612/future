@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.johnz.kutils.FinanceUtil;
-import com.johnz.kutils.StrUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +22,8 @@ public class TradePageHeader extends FrameLayout {
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
     TextView mTotalProfit;
+    @BindView(R.id.totalProfitRmb)
+    TextView mTotalProfitRmb;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
 
@@ -117,22 +118,24 @@ public class TradePageHeader extends FrameLayout {
         mTotalProfitAndUnit.setText(getContext().getString(R.string.holding_position_total_profit_and_unit, unit));
     }
 
-    public void setTotalProfit(double totalProfit, boolean isForeign, int scale, double ratio) {
+    public void setTotalProfit(double totalProfit, boolean isForeign, int scale, double ratio, String fundUnit) {
         int color = ContextCompat.getColor(getContext(), R.color.greenPrimary);
         if (totalProfit >= 0) {
             color = ContextCompat.getColor(getContext(), R.color.redPrimary);
         }
         mTotalProfit.setTextColor(color);
+        mTotalProfitRmb.setTextColor(color);
 
         String totalProfitStr = totalProfit >= 0 ?
                 "+" + FinanceUtil.formatWithScale(totalProfit, scale):
                 "" + FinanceUtil.formatWithScale(totalProfit, scale);
         if (isForeign) {
-            double totalProfitInner = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
-            String totalProfitInnerStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitInner)
-                    : FinanceUtil.formatWithScale(totalProfitInner);
-            totalProfitInnerStr = "(" + totalProfitInnerStr + ")";
-            mTotalProfit.setText(StrUtil.mergeTextWithRatio(totalProfitStr, totalProfitInnerStr, 0.5f));
+            double totalProfitRmb = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
+            String totalProfitRmbStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitRmb)
+                    : FinanceUtil.formatWithScale(totalProfitRmb);
+            totalProfitRmbStr = "(" + totalProfitRmbStr + fundUnit + ")";
+            mTotalProfit.setText(totalProfitStr);
+            mTotalProfitRmb.setText(totalProfitRmbStr);
         } else {
             mTotalProfit.setText(totalProfitStr);
         }

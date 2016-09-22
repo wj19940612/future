@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                    android:layout_height="@dimen/trade_header_height"
+                android:layout_height="@dimen/trade_header_height"
                 android:background="@color/bluePrimary"
-                android:padding="16dp">
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,8 +23,8 @@
         android:background="@drawable/btn_blue_trade_page"
         android:gravity="center"
         android:minWidth="@dimen/trade_header_btn_width"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:text="@string/sign_in"
         android:textColor="@android:color/white"/>
 </RelativeLayout>

@@ -112,6 +112,7 @@ public class TradeActivity extends BaseActivity implements
 
     private Product mProduct;
     private int mFundType;
+    private String mFundUnit;
     private List<Product> mProductList;
     private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
@@ -187,10 +188,7 @@ public class TradeActivity extends BaseActivity implements
                         .execute();
             }
         });
-        mTradePageHeader.setAvailableBalanceUnit(
-                mFundType == Product.FUND_TYPE_CASH
-                        ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE);
-
+        mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         updateSignTradePagerHeader();
         updateProductRelatedViews();
         mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
@@ -276,6 +274,7 @@ public class TradeActivity extends BaseActivity implements
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
+        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE;
     }
 
     private void updateChartView(FullMarketData data) {
@@ -565,7 +564,7 @@ public class TradeActivity extends BaseActivity implements
         if (hasHoldingOrders) {
             mTradePageHeader.showView(TradePageHeader.HEADER_HOLDING_POSITION);
             mTradePageHeader.setTotalProfit(totalProfit, mProduct.isForeign(),
-                    mProduct.getLossProfitScale(), ratio);
+                    mProduct.getLossProfitScale(), ratio, mFundUnit);
         } else {
             updateSignTradePagerHeader();
         }

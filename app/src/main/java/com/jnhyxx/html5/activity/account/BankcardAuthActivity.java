@@ -1,12 +1,8 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +10,10 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,17 +30,20 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.TitleBar;
+import com.jnhyxx.html5.view.WheelView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.jnhyxx.umenglibrary.UmengLib;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,6 +101,12 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     ChannelBankList mChannelBankList = null;
 
+
+    private ArrayList<ChannelBankList> mChannelBankLists;
+    //wheelView中的数据
+    private ArrayList<String> dataList;
+    private UserInfo mUserInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,22 +143,22 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
 
     private void showBankBindStatus() {
         LocalUser localUser = LocalUser.getUser();
-        UserInfo userInfo = localUser.getUserInfo();
+        mUserInfo = localUser.getUserInfo();
         if (!localUser.isLogin()) {
             ToastUtil.curt(R.string.nickname_unknown);
             finish();
             return;
         }
-        if (userInfo != null) {
+        if (mUserInfo != null) {
             //一般不会出现，在设置界面做了判断，没有登录不可进入这个界面
-            if (userInfo.getIdStatus() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
+            if (mUserInfo.getIdStatus() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
                 showAuthNameDialog();
             }
-            setOldBindBankInfo(userInfo);
+            setOldBindBankInfo(mUserInfo);
 
             // TODO: 2016/9/9 这是没有绑定
             //  cardState银行卡状态 0未填写，1已填写，2已认证
-            if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE || userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_WRITE) {
+            if (mUserInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE || mUserInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_WRITE) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
                 mBankcardImageArea.setVisibility(View.GONE);
             } else {
@@ -158,10 +166,10 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                 mBankcardInputArea.setVisibility(View.GONE);
                 mBankcardImageArea.setVisibility(View.VISIBLE);
                 mTitleBar.setTitle(R.string.bankcard);
-                if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
-                    mBank.setText(userInfo.getIssuingbankName());
+                if (!TextUtils.isEmpty(mUserInfo.getIssuingbankName())) {
+                    mBank.setText(mUserInfo.getIssuingbankName());
                 }
-                String bankIconUrl = userInfo.getIcon();
+                String bankIconUrl = mUserInfo.getIcon();
                 if (!TextUtils.isEmpty(bankIconUrl)) {
                     Picasso.with(BankcardAuthActivity.this).load(bankIconUrl).into(mBankCardIcon, new com.squareup.picasso.Callback() {
                         @Override
@@ -175,8 +183,8 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                         }
                     });
                 }
-                if (!TextUtils.isEmpty(userInfo.getCardNumber())) {
-                    String bankNumber = CommonMethodUtils.bankNumber(userInfo.getCardNumber());
+                if (!TextUtils.isEmpty(mUserInfo.getCardNumber())) {
+                    String bankNumber = CommonMethodUtils.bankNumber(mUserInfo.getCardNumber());
                     mBankCardNumber.setText(bankNumber);
                 }
             }
@@ -260,41 +268,18 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.payingBank:
-                mBankcardInputArea.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
-                mTitleBar.setTitle(R.string.bankcard);
+                // TODO: 2016/9/21 目前仿照h5界面的设计
+//                mBankcardInputArea.setVisibility(View.GONE);
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
+//                mTitleBar.setTitle(R.string.bankcard);
+                showBankDialog();
                 break;
             case R.id.submitToAuthButton:
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                // TODO: 2016/9/13 这里的银行Id没有赋值 
                 int bankId = -1;
-//                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
-//                        .setIndeterminate(this).setTag(TAG)
-//                        .setCallback(new Callback<Resp<BankcardAuth>>() {
-//                            @Override
-//                            public void onReceive(final Resp<BankcardAuth> resp) {
-//                                if (resp.isSuccess()) {
-//                                    SmartDialog.with(getActivity(), resp.getMsg())
-//                                            .setCancelableOnTouchOutside(false)
-//                                            .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(Dialog dialog) {
-//                                                    dialog.dismiss();
-//                                                    BankcardAuth auth = resp.getData();
-//                                                    auth.setStatus(BankcardAuth.STATUS_FILLED);
-//                                                    setResultForCalling(auth);
-//                                                    finish();
-//                                                }
-//                                            }).show();
-//
-//                                } else {
-//                                    mCommonFailTvWarn.setCenterTxt(r);
-//                                }
-//                            }
-//                        }).fire();
                 if (mChannelBankList == null) {
                     ToastUtil.curt(R.string.bind_bank_is_empty);
                     return;
@@ -326,7 +311,69 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         }
     }
 
-    boolean mIsCall = false;
+    private void showBankDialog() {
+        getChannelBnkList();
+
+    }
+
+
+    private void getChannelBnkList() {
+
+        API.User.showChannelBankList()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<ArrayList<ChannelBankList>>, ArrayList<ChannelBankList>>() {
+
+                    @Override
+                    public void onRespSuccess(ArrayList<ChannelBankList> channelBankLists) {
+                        mChannelBankLists = channelBankLists;
+                        if (channelBankLists != null && !channelBankLists.isEmpty()) {
+//                            WheelView mWheelView = new WheelView(BankcardAuthActivity.this);
+                            View view = LayoutInflater.from(BankcardAuthActivity.this).inflate(R.layout.dialog_wheel_view, null);
+                            final WheelView mWheelView = (WheelView) view
+                                    .findViewById(R.id.wheelView);
+                            mWheelView.setOffset(1);
+                            mWheelView.setSeletion(0);// 设置默认被选中的项目
+
+                            mWheelView.setItemObjects((channelBankLists));// 实际内容
+                            mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+                                @Override
+                                public void onSelected(int selectedIndex, Object item) {
+                                    if (item instanceof ChannelBankList) {
+                                        mChannelBankList = (ChannelBankList) item;
+                                        mPayingBank.setText(((ChannelBankList) item).getName());
+                                    } else {
+                                        Log.d(TAG, "返回的数据不是银行列表model类型");
+                                    }
+                                }
+                            });
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(BankcardAuthActivity.this)
+                                    .setView(view)
+                                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mChannelBankList = null;
+                                            mPayingBank.setText(mUserInfo.getIssuingbankName());
+                                        }
+                                    });
+                            Window window = getWindow();
+                            window.setGravity(Gravity.BOTTOM);
+                            builder.show();
+
+                        } else {
+                            ToastUtil.curt("暂时没有可供选择的银行");
+                        }
+                    }
+                }).fire();
+    }
+
 
     private void unwrapBindServiceTelephone() {
         String dialogContent = getString(R.string.unBind_dialog_content, UNWRAP_SERVICE_TELEPHONE);
@@ -390,4 +437,6 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         mBankcardInputArea.setVisibility(View.VISIBLE);
     }
+
+
 }

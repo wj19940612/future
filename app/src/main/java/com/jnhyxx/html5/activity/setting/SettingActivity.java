@@ -8,25 +8,18 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
 import com.jnhyxx.html5.activity.account.NameAuthActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.account.UserIsModifyNickName;
-import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback1;
-import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
-import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -101,6 +94,7 @@ public class SettingActivity extends BaseActivity {
             mTvUserNameSetting.setText(userInfo.getUserName());
         }
     }
+
     private void getBindBankStatus(UserInfo userInfo) {
         /**
          * cardState银行卡状态 0未填写，1已填写，2已认证
@@ -161,7 +155,7 @@ public class SettingActivity extends BaseActivity {
             protected void onRespSuccess(Resp<UserIsModifyNickName> resp) {
                 if (!resp.getData().isBIsSetNickName()) {
                     Launcher.with(SettingActivity.this, ModifyNickNameActivity.class).executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
-                }else{
+                } else {
                     ToastUtil.curt(R.string.modify_nick_name_twice);
                 }
             }
@@ -200,6 +194,11 @@ public class SettingActivity extends BaseActivity {
             }
         }
         if (requestCode == REQUEST_CODE_MODIFY_NICK_NAME && resultCode == RESULT_OK) {
+            if (userInfo != null) {
+                getUserNickName(userInfo);
+            }
+        }
+        if (requestCode == REQUEST_CODE_BIND_BANK && resultCode == RESULT_OK) {
             if (userInfo != null) {
                 getUserNickName(userInfo);
             }

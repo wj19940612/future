@@ -34,7 +34,6 @@
     <color name="common_assist">#358cf3</color>
 
 
-
     <!--*************************************公共颜色**************************************************-->
 
     <!--我的fragment-->
@@ -42,7 +41,7 @@
     <color name="account_top_blue_text">#358CF3</color>
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
-    <color name="common_bg">#EDF0F5</color>
+    <color name="common_bg">#e5e5e5</color>
 
     <!--注册与找回密码界面不可点击按钮背景-->
     <color name="regiserBtnBack">#a8a8a8</color>
@@ -51,4 +50,7 @@
     <color name="editText_color_input">#262626</color>
 
 
+    <!--提现记录详情界面-->
+    <color name="withdraw_detailed">#358cf3</color>
+    <color name="withdraw_detailing">#A8A8A8</color>
 </resources>

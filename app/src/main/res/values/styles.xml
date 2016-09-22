@@ -168,4 +168,19 @@
         <item name="android:gravity">center</item>
         <item name="android:visibility">gone</item>
     </style>
+    <!--提现记录详情界面的右边的文字样式-->
+    <style name="withDrawInfoRightText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#358cf3</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <!--提现记录详情界面的左边文字的样式-->
+    <style name="withDrawInfoLeftText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#358cf3</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

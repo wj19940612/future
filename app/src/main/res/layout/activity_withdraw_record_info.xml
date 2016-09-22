@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_withdraw_record_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.withdraw.WithdrawRecordInfoActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/withdraw_record_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:paddingLeft="45dp"
+        android:paddingRight="45dp">
+
+        <TextView
+            android:id="@+id/applyFor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_apply"
+            android:gravity="center"
+            android:text="@string/withdraw_record_apply_for"
+            android:textColor="#262626"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/leftLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@color/withdraw_detailing"/>
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_apply_deal"
+            android:text="@string/withdraw_record_detail"
+            android:textColor="#262626"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/rightLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@color/withdraw_detailing"/>
+
+        <TextView
+            android:id="@+id/withdrawTitleStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_apply_normal"
+            android:gravity="center"
+            android:text="@string/withdraw_record_fail"
+            android:textColor="#262626"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/common_view_margin"
+        android:paddingRight="@dimen/common_view_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_number_hint"/>
+
+            <TextView
+                android:id="@+id/moneyNumber"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_number"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_status"/>
+
+            <TextView
+                android:id="@+id/withdrawStatus"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_status"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_real_account_hint"/>
+
+            <TextView
+                android:id="@+id/realAccount"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_real_account"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_poundage_hint"/>
+
+            <TextView
+                android:id="@+id/poundageNumber"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_poundage"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_bank_hint"/>
+
+            <TextView
+                android:id="@+id/bankName"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_bank"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_time"/>
+
+            <TextView
+                android:id="@+id/time"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_time"/>
+        </RelativeLayout>
+
+        <include layout="@layout/split_line_thick"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdraw_record_account_time"/>
+
+            <TextView
+                android:id="@+id/accountTime"
+                style="@style/withDrawInfoRightText"
+                android:layout_alignParentRight="true"
+                android:text="@string/withdraw_record_account_time"/>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

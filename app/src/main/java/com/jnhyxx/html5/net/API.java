@@ -169,15 +169,15 @@ public class API extends APIBase {
          * @param password
          */
         public static API login(String phoneNum, String password) {
-            try {
-//                 TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
-//                if (!BuildConfig.DEBUG)
-//                 TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
-                password = SecurityUtil.md5Encrypt(password);
-                Log.d(TAG, "登陆密码MD5加密" + password);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+//            try {
+////                 TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
+////                if (!BuildConfig.DEBUG)
+////                 TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
+//                password = SecurityUtil.md5Encrypt(password);
+//                Log.d(TAG, "登陆密码MD5加密" + password);
+//            } catch (NoSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
             // TODO: 2016/8/30 原来的网址
             return new API("/user/user/login.do",
                     new ApiParams()

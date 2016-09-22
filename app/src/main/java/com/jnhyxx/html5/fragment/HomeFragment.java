@@ -91,8 +91,8 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        requestHomeAdvertisement();
-        requestOrderReport();
+        //requestHomeAdvertisement();
+        //requestOrderReport();
         requestProductList();
         requestProductMarketList();
     }

@@ -338,13 +338,13 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
                     String lossProfitRmbStr;
                     double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
                     if (diff.doubleValue() >= 0) {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mHands.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
                         lossProfitRmbStr = "(+" + FinanceUtil.formatWithScale(diffRmb) + ")";
                     } else {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                        mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mHands.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);

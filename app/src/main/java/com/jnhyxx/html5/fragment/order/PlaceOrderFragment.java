@@ -24,8 +24,6 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.netty.NettyClient;
-import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
@@ -81,21 +79,11 @@ public class PlaceOrderFragment extends BaseFragment {
     private Product mProduct;
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
+    private FullMarketData mMarketData;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
     private Callback mCallback;
-
-    private NettyHandler mNettyHandler = new NettyHandler() {
-        @Override
-        protected void onReceiveData(FullMarketData data) {
-            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
-            updateLastPriceView(data);
-            mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
-                    FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()) :
-                    FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
-        }
-    };
 
     public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
@@ -138,8 +126,6 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
-
         mSubmittedOrder = new SubmittedOrder(mProduct.getVarietyId(), mLongOrShort);
 
         mTradeQuantitySelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
@@ -182,7 +168,6 @@ public class PlaceOrderFragment extends BaseFragment {
         });
 
         API.Order.getFuturesFinancing(mProduct.getVarietyId()).setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
@@ -193,6 +178,21 @@ public class PlaceOrderFragment extends BaseFragment {
 
         updateRateAndMarketTimeView();
         updateBuyAskPriceBgAndConfirmBtn();
+    }
+
+    public void setMarketData(FullMarketData data) {
+        mMarketData = data;
+        updateMarketDataRelatedView();
+    }
+
+    private void updateMarketDataRelatedView() {
+        if (!isAdded() || mMarketData == null) return;
+
+        mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
+        updateLastPriceView(mMarketData);
+        mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
+                FinanceUtil.formatWithScale(mMarketData.getAskPrice(), mProduct.getPriceDecimalScale()) :
+                FinanceUtil.formatWithScale(mMarketData.getBidPrice(), mProduct.getPriceDecimalScale()));
     }
 
     private void updateLastPriceView(FullMarketData data) {
@@ -300,13 +300,6 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
-        mNettyHandler = null;
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBlurEngine.onDestroyView();
@@ -323,6 +316,9 @@ public class PlaceOrderFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.emptyClickArea:
+                if (mCallback != null) {
+                    mCallback.onPlaceOrderFragmentEmptyAreaClick();
+                }
                 break;
             case R.id.confirmButton:
                 if (mCallback != null) {
@@ -334,6 +330,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
         void onConfirmBtnClick(SubmittedOrder submittedOrder);
+        void onPlaceOrderFragmentEmptyAreaClick();
     }
 
     @Override

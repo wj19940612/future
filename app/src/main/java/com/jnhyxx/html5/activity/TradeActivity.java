@@ -130,10 +130,17 @@ public class TradeActivity extends BaseActivity implements
                     + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
             mSellShortBtn.setText(getString(R.string.sell_short)
                     + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
-
             mOrderPresenter.setAskBidPrices(data.getAskPrice(), data.getBidPrice());
+            updatePlaceOrderFragment(data);
         }
     };
+
+    private void updatePlaceOrderFragment(FullMarketData data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null && fragment instanceof PlaceOrderFragment) {
+            ((PlaceOrderFragment) fragment).setMarketData(data);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -532,11 +539,21 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
+    public void onPlaceOrderFragmentEmptyAreaClick() {
+        hideFragmentOfContainer();
+    }
+
+    @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getUserPhoneNum();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         hideFragmentOfContainer();
         placeOrder(longOrShort);
+    }
+
+    @Override
+    public void onAgreementFragmentEmptyAreaClick() {
+        hideFragmentOfContainer();
     }
 
     @Override

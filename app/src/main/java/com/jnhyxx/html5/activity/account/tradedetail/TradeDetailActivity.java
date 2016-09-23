@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
@@ -110,10 +110,10 @@ public class TradeDetailActivity extends BaseActivity {
 //        integralTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_INTEGRAL);
 //        fragmentList.add(integralTradeDetailListFragment);
 
-        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
-//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(0,false);
+        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
+//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
         mViewPager.setAdapter(mTradeDetailFragmentAdapter);
 
 
@@ -123,7 +123,7 @@ public class TradeDetailActivity extends BaseActivity {
 
     }
 
-    class TradeDetailFragmentAdapter extends FragmentStatePagerAdapter {
+    class TradeDetailFragmentAdapter extends FragmentPagerAdapter {
         Context mContext;
         ArrayList<Fragment> fragments;
 

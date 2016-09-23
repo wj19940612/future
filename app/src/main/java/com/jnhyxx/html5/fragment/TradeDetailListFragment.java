@@ -181,16 +181,16 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             getListView().removeFooterView(mFooter);
         }
 
+
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
-            setListAdapter(mTradeDetailAdapter);
         }
-
         for (TradeDetail item : mTradeDetailLists) {
             if (mSet.add(item.getId())) {
                 mTradeDetailAdapter.add(item);
             }
         }
+        setListAdapter(mTradeDetailAdapter);
         mTradeDetailAdapter.notifyDataSetChanged();
     }
 

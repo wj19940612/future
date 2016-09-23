@@ -44,7 +44,7 @@ public class MineFragment extends BaseFragment {
     //登陆的请求码
     private static final int REQUEST_CODE_LOGIN = 9670;
     //设置界面的请求码
-    private static final int REQUEST_CODE_SETTING = 352;
+    private static final int REQUEST_CODE_SETTING = 3520;
     //注册的请求码
     private static final int REQUEST_CODE_REGISTER = 6260;
     //提现的请求码
@@ -106,15 +106,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
 
-
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
-            }
-        });
     }
 
     @Override
@@ -126,6 +118,14 @@ public class MineFragment extends BaseFragment {
         } else {
             mTitleBar.setRightVisible(false);
         }
+        // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
+
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
+            }
+        });
     }
 
     @Override
@@ -264,7 +264,6 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
@@ -276,6 +275,7 @@ public class MineFragment extends BaseFragment {
             mTitleBar.setRightVisible(false);
             updateAccountInfoView();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void upDateUserInfoView(UserInfo userInfo) {

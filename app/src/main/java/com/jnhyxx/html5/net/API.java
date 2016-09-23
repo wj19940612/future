@@ -139,7 +139,6 @@ public class API extends APIBase {
          * @param regCode
          */
         public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
-//            return new API("/user/register.do"
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "注册时密码MD5加密" + password);
@@ -168,6 +167,7 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
+
         public static API login(String phoneNum, String password) {
 //            try {
 ////                 TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
@@ -179,6 +179,15 @@ public class API extends APIBase {
 //                e.printStackTrace();
 //            }
             // TODO: 2016/8/30 原来的网址
+
+       /* public static API signIn(String phoneNum, String password) {
+            try {
+                password = SecurityUtil.md5Encrypt(password);
+                Log.d(TAG, "登陆密码MD5加密" + password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }*/
+
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
@@ -203,7 +212,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：更新通过短信验证码找回的密码
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/retrieveUpdatePass.do
          *
          * @param userPhone 用户手机号
@@ -232,7 +241,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：获取找回密码图片验证码
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/getRetrieveImage.do
          *
          * @param userPhone
@@ -296,7 +305,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：绑定银行卡
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/bindBankCard.do
          * bankId        Integer   银行列表
          * bankName      String     银行名
@@ -318,7 +327,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：显示渠道银行列表
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/showChannelBankList.do
          *
          * @return
@@ -375,7 +384,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：修改昵称
-         * <p>
+         * <p/>
          * http://域名/user/user/updateNickName.do
          *
          * @param nickName
@@ -444,7 +453,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询用户资金信息
-         * <p>
+         * <p/>
          * URL  http://域名/user/finance/findMain.do
          *
          * @return
@@ -593,8 +602,7 @@ public class API extends APIBase {
     public static class Market {
 
         /**
-         * /market/futureCommodity/select 获取首页产品列表
-         * /order/variety/getVariety.do
+         * /order/variety/getVariety.do 获取首页产品列表
          *
          * @return
          */
@@ -609,6 +617,15 @@ public class API extends APIBase {
          */
         public static API getProductMarketList() {
             return new API(GET, "/quota/quota/getAllQuotaData.do", null);
+        }
+
+        /**
+         * /quota/quota/getAllIpPortByCode.do 获取行情服务器 ip & port
+         *
+         * @return
+         */
+        public static API getMarketServerIpAndPort() {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
         }
     }
 
@@ -633,22 +650,21 @@ public class API extends APIBase {
         }
 
         /**
-         * /order/futures/balancedList 获取结算订单列表
+         * /order/order/getVarietySettleOrders.do 获取结算订单列表
          *
-         * @param token
          * @param pageNo
          * @param pageSize
-         * @param id
-         * @param fundType @return
+         * @param varietyId
+         * @param payType
+         * @return
          */
-        public static API getSettlementOrderList(String token, int pageNo, int pageSize, int id, int fundType) {
-            return new API("/order/futures/balancedList",
+        public static API getSettlementOrderList(int varietyId, int payType, int pageNo, int pageSize) {
+            return new API(GET, "/order/order/getVarietySettleOrders.do",
                     new ApiParams()
-                            .put(TOKEN, token)
+                            .put("varietyId", varietyId)
+                            .put("payType", payType)
                             .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize)
-                            .put(FUTURES_TYPE, id)
-                            .put(FUND_TYPE, fundType));
+                            .put(PAGE_SIZE, pageSize));
         }
 
         /**
@@ -659,8 +675,11 @@ public class API extends APIBase {
          * @param exchangeId
          * @return
          */
-        public static API getExchangeTradeStatus(int exchangeId) {
-            return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+        public static API getExchangeTradeStatus(int exchangeId, String varietyType) {
+            return new API(GET, "/order/order/getTradeTime.do",
+                    new ApiParams()
+                            .put("exchangeId", exchangeId)
+                            .put("varietyType", varietyType));
         }
 
         /**
@@ -669,7 +688,9 @@ public class API extends APIBase {
          * @param varietyId
          */
         public static API getFuturesFinancing(int varietyId) {
-            return new API(GET, "/order/variety/getAssetsByVariety.do?varietyId=" + varietyId, null);
+            return new API(GET, "/order/variety/getAssetsByVariety.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId));
         }
 
         /**
@@ -680,6 +701,62 @@ public class API extends APIBase {
         public static API submitOrder(SubmittedOrder submittedOrder) {
             return new API("/order/order/submitOrder.do",
                     new ApiParams(SubmittedOrder.class, submittedOrder));
+        }
+
+        /**
+         * /order/order/getOrderInfo.do 获取结算订单详情
+         *
+         * @param showId
+         * @param fundType
+         * @return
+         */
+        public static API getOrderDetail(String showId, int fundType) {
+            return new API(GET, "/order/order/getOrderInfo.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("payType", fundType));
+        }
+
+        /**
+         * /order/order/getVarietyPositionOrders.do 获取用户持仓中订单
+         *
+         * @param varietyId
+         * @param fundType
+         * @return
+         */
+        public static API getHoldingOrderList(int varietyId, int fundType) {
+            return new API(GET, "/order/order/getVarietyPositionOrders.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", fundType));
+        }
+
+        /**
+         * /order/order/getOrderStatus.do 获取订单状态
+         *
+         * @param showId
+         * @return
+         */
+        public static API getOrderStatus(String showId) {
+            return new API(GET, "/order/order/getOrderStatus.do",
+                    new ApiParams()
+                            .put("showId", showId));
+        }
+
+        /**
+         * /order/order/unwind.do 平仓
+         *
+         * @param showId
+         * @param fundType
+         * @param unwindPrice
+         * @return
+         */
+        public static API closeHoldingOrder(String showId, int payType, double unwindPrice) {
+            return new API("/order/order/unwind.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("payType", payType)
+                            .put("unwindPrice", unwindPrice));
         }
     }
 

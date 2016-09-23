@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain.account;
 
+import java.io.Serializable;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,8 +18,9 @@ import java.util.List;
  * 用户资金信息
  */
 
-public class UserFundInfo implements Serializable{
+public class UserFundInfo implements Serializable {
     private static final long serialVersionUID = 695390150803880416L;
+
     /**
      * createTime : 2016-08-16 15:33:14
      * margin : 4972.0
@@ -31,17 +34,6 @@ public class UserFundInfo implements Serializable{
      * userId : 37
      */
 
-    /**
-     *  `moneyUsable`  '可用资金余额',
-     `redbagUsable` '可用红包余额',
-     `scoreUsable` '可用积分余额',
-     `moneyFrozen` '冻结资金',
-     `moneyDrawUsable` '可提现资金余额',
-     `margin`  '当前用户保证金余额',
-     `marginScore` '积分保证金',
-     createTime 创建时间
-     updateTime 更新时间
-     */
 
     /**
      *    createTime 创建时间
@@ -77,50 +69,6 @@ public class UserFundInfo implements Serializable{
     private double scoreUsable;
     private String updateTime;
     private int userId;
-
-    public static UserFundInfo objectFromData(String str) {
-
-        return new Gson().fromJson(str, UserFundInfo.class);
-    }
-
-    public static UserFundInfo objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), UserFundInfo.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static List<UserFundInfo> arrayUserFundInfoFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<UserFundInfo>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
-
-    public static List<UserFundInfo> arrayUserFundInfoFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<UserFundInfo>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
-    }
 
     public String getCreateTime() {
         return createTime;

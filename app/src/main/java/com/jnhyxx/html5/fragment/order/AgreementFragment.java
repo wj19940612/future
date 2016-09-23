@@ -40,6 +40,9 @@ public class AgreementFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.emptyClickArea:
+                if (mCallback != null) {
+                    mCallback.onAgreementFragmentEmptyAreaClick();
+                }
                 break;
             case R.id.tradeCooperationAgreement:
                 Launcher.with(getActivity(), WebViewActivity.class)
@@ -63,6 +66,8 @@ public class AgreementFragment extends BaseFragment {
 
     public interface Callback {
         void onAgreeProtocolBtnClick(int longOrShort);
+        void onAgreementFragmentEmptyAreaClick();
+
     }
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;

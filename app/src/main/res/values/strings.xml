@@ -173,6 +173,8 @@
     <string name="stop_profit_sale">止盈卖出</string>
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>
+    <string name="market_price_buy">市价买入</string>
+    <string name="close_positions">平仓</string>
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -196,7 +198,7 @@
     <string name="play_rule">玩法规则</string>
     <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
     <string name="one_key_close_position">一建平仓</string>
-    <string name="available_balance_and_unit">可用资金 (元)</string>
+    <string name="available_balance_and_unit">可用资金 (%1$s)</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
     <string name="trend_chart">分时图</string>
     <string name="kline_chart">日线图</string>
@@ -208,6 +210,10 @@
     <string name="sell_volume">卖量</string>
     <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
     <string name="prompt_next_trade_time_is">下次交易时间 %1$s</string>
+    <string name="today_open">今开 %1$s</string>
+    <string name="pre_close">昨收 %1$s</string>
+    <string name="highest">最高 %1$s</string>
+    <string name="lowest">最低 %1$s</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>
@@ -217,6 +223,19 @@
     <string name="place_an_order_again">再次下单</string>
     <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
     <string name="currency_converter">汇率换算: %1$s</string>
+    <string name="confirm_buy_long">确认买涨</string>
+    <string name="confirm_sell_short">确认买跌</string>
+    <string name="today_position">今持仓</string>
+    <string name="pre_position">昨持仓</string>
+
+    <!-- Trade page: agree trade protocol -->
+    <string name="prompt_dear_user">尊敬的用户:
+        \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
+    <string name="unsigned">未签署</string>
+    <string name="trade_cooperation_agreement">《投资人与用户参与相关期货品种交易合作协议》</string>
+    <string name="risk_notices">《风险告知书》</string>
+    <string name="cooperation_agreement_title">合作协议</string>
+    <string name="risk_notices_title">风险告知书</string>
 
     <!--我的界面-->
     <string name="account_trade_info">交易明细</string>
@@ -337,7 +356,9 @@
     <!-- **********************************************************************   公共的字符    **********************************************************************-->
     <string name="common_txt_length_fail">请至少输入2个字符</string>
 
-    <!-- Trade page: agree trade protocol -->
+
+    //可能为冲突
+ <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
     <string name="prompt_dear_user">尊敬的用户:
         \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
     <string name="unsigned">未签署</string>
@@ -348,7 +369,7 @@
     <string name="confirm_buy_long">确认买涨</string>
     <string name="confirm_sell_short">确认买跌</string>
     <string name="today_position">今持仓</string>
-    <string name="pre_position">昨持仓</string>
+    <string name="pre_position">昨持仓</string>-->
 
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
@@ -389,4 +410,9 @@
     <string name="withdraw_record_account_time">到账时间</string>
 
     <string name="common_success">成功</string>
+
+    <string name="stop_profit">止盈</string>
+    <string name="last_price">最新价</string>
+
+
 </resources>

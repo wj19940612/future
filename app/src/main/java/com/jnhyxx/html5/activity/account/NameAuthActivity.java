@@ -17,7 +17,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
@@ -56,7 +55,7 @@ public class NameAuthActivity extends BaseActivity {
             mName.setText(userInfo.getRealName());
             mIdentityNum.setText(userInfo.getIdCard());
 
-            if (userInfo.getIdStatus() == UserInfo.ID_STATUS_STATUS_AUTHERIZED) {
+            if (userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
                 mName.setEnabled(false);
                 mIdentityNum.setEnabled(false);
                 mSubmitToAuthButton.setVisibility(View.GONE);

@@ -87,6 +87,10 @@ public class APIBase extends RequestManager {
     public void fire() {
         synchronized (sCurrentUrls) {
             String url = new StringBuilder(getHost()).append(mUri).toString();
+            if (mMethod == Request.Method.GET && mApiParams != null) {
+                url = url + mApiParams.toString();
+                mApiParams = null;
+            }
 
             ApiHeaders headers = new ApiHeaders();
             String cookies = CookieManger.getInstance().getCookies();

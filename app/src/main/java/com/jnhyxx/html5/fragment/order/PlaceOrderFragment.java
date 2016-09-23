@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
@@ -41,7 +43,6 @@ public class PlaceOrderFragment extends BaseFragment {
     private static final String TYPE = "longOrShort";
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
-
 
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
@@ -78,6 +79,7 @@ public class PlaceOrderFragment extends BaseFragment {
     private Product mProduct;
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
+    private FullMarketData mMarketData;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -166,7 +168,6 @@ public class PlaceOrderFragment extends BaseFragment {
         });
 
         API.Order.getFuturesFinancing(mProduct.getVarietyId()).setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
@@ -177,6 +178,43 @@ public class PlaceOrderFragment extends BaseFragment {
 
         updateRateAndMarketTimeView();
         updateBuyAskPriceBgAndConfirmBtn();
+    }
+
+    public void setMarketData(FullMarketData data) {
+        mMarketData = data;
+        updateMarketDataRelatedView();
+    }
+
+    private void updateMarketDataRelatedView() {
+        if (!isAdded() || mMarketData == null) return;
+
+        mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
+        updateLastPriceView(mMarketData);
+        mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
+                FinanceUtil.formatWithScale(mMarketData.getAskPrice(), mProduct.getPriceDecimalScale()) :
+                FinanceUtil.formatWithScale(mMarketData.getBidPrice(), mProduct.getPriceDecimalScale()));
+    }
+
+    private void updateLastPriceView(FullMarketData data) {
+        mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
+        double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
+        double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
+        int textColor;
+        if (priceChangeValue >= 0) {
+            textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
+            mLastPrice.setTextColor(textColor);
+            mPriceChange.setTextColor(textColor);
+            String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                    + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+            mPriceChange.setText(priceChangeStr);
+        } else {
+            textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
+            mLastPrice.setTextColor(textColor);
+            mPriceChange.setTextColor(textColor);
+            String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                    + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+            mPriceChange.setText(priceChangeStr);
+        }
     }
 
     private void updateBuyAskPriceBgAndConfirmBtn() {
@@ -202,7 +240,7 @@ public class PlaceOrderFragment extends BaseFragment {
                     "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + FinanceUtil.UNIT_YUAN));
         }
 
-        API.Order.getExchangeTradeStatus(mProduct.getExchangeId()).setTag(TAG)
+        API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
@@ -226,32 +264,28 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
-        int scale = mProduct.getLossProfitScale();
-
         // DOMESTIC
-        String marginWithSign = mProduct.getSign()
-                + FinanceUtil.formatWithScale(tradeQuantity.getMargin(), scale);
-        String tradeFeeWithSign = mProduct.getSign()
-                + FinanceUtil.formatWithScale(tradeQuantity.getFee() / mProduct.getRatio(), scale);
-        String totalWithSign = mProduct.getSign()
-                + FinanceUtil.formatWithScale(tradeQuantity.getMargin() + tradeQuantity.getFee() / mProduct.getRatio(), scale);
+        String marginWithSign = mProduct.getSign() + tradeQuantity.getMargin();
+        String tradeFeeWithSign = mProduct.getSign() + tradeQuantity.getFee();
+        String totalWithSign = mProduct.getSign() + (tradeQuantity.getMargin() + tradeQuantity.getFee());
         mMargin.setText(marginWithSign);
         mTradeFee.setText(tradeFeeWithSign);
         mTotalTobePaid.setText(totalWithSign);
 
-        if (mProduct.isForeign()) {
+        if (mProduct.isForeign() && mFuturesFinancing != null) {
+            double ratio = mFuturesFinancing.getRatio();
             String marginRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
-                    FinanceUtil.formatWithScale(tradeQuantity.getMargin() * mProduct.getRatio()) + " )";
+                    FinanceUtil.formatWithScale(tradeQuantity.getMargin() * ratio) + " )";
             mMargin.setText(
                     StrUtil.mergeTextWithColor(marginWithSign, marginRmb, Color.parseColor("#666666"))
             );
             String tradeFeeRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
-                    FinanceUtil.formatWithScale(tradeQuantity.getFee()) + " )";
+                    FinanceUtil.formatWithScale(tradeQuantity.getFee() * ratio) + " )";
             mTradeFee.setText(
                     StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
             );
             String totalRmb = FinanceUtil.UNIT_SIGN_CNY
-                    + FinanceUtil.formatWithScale(tradeQuantity.getMargin() * mProduct.getRatio() + tradeQuantity.getFee());
+                    + FinanceUtil.formatWithScale((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
             String totalForeign = "  ( " + totalWithSign + " )";
             mTotalTobePaid.setText(
                     StrUtil.mergeTextWithColor(totalRmb, totalForeign, Color.parseColor("#666666"))
@@ -261,7 +295,6 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updatePlaceOrderViews() {
         if (isRemoving() || !isAdded()) return;
-
         // 设置止损
         mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }
@@ -283,6 +316,9 @@ public class PlaceOrderFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.emptyClickArea:
+                if (mCallback != null) {
+                    mCallback.onPlaceOrderFragmentEmptyAreaClick();
+                }
                 break;
             case R.id.confirmButton:
                 if (mCallback != null) {
@@ -294,6 +330,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
         void onConfirmBtnClick(SubmittedOrder submittedOrder);
+        void onPlaceOrderFragmentEmptyAreaClick();
     }
 
     @Override

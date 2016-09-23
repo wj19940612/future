@@ -8,11 +8,9 @@ import com.jnhyxx.html5.domain.market.FullMarketData;
 public abstract class NettyHandler extends Handler {
 
     public static final int WHAT_ERROR = 0;
-    public static final int WHAT_SINGLE_DATA = 1;
-    public static final int WHAT_STRATEGY = 2;
+    public static final int WHAT_DATA = 1;
 
-    protected void onReceiveSingleData(FullMarketData data) {
-    }
+    protected abstract void onReceiveData(FullMarketData data);
 
     protected void onError(String message) {
     }
@@ -24,8 +22,8 @@ public abstract class NettyHandler extends Handler {
             case WHAT_ERROR:
                 onError((String) msg.obj);
                 break;
-            case WHAT_SINGLE_DATA:
-                onReceiveSingleData((FullMarketData) msg.obj);
+            case WHAT_DATA:
+                onReceiveData((FullMarketData) msg.obj);
                 break;
         }
     }

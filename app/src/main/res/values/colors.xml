@@ -9,6 +9,7 @@
     <color name="splitLineDark">#3B4856</color>
     <color name="splitLineDark2">#233142</color>
     <color name="splitBlock">#0C233C</color>
+    <color name="splitBlockLight">#F4F4F2</color>
 
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#25D282</color>
@@ -35,6 +36,7 @@
 
 
     <!--*************************************公共颜色**************************************************-->
+
 
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>

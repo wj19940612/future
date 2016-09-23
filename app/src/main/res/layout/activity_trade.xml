@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/market_status_area_height"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:textColor="#666666"
-                tools:text="@string/market_close"/>
+                android:text="@string/market_close"/>
 
             <TextView
                 android:id="@+id/nextTradeTime"
@@ -128,7 +128,7 @@
             android:layout_height="@dimen/market_status_area_height"
             android:background="@color/bluePrimary"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/holdingPositionTimeTo"

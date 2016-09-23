@@ -8,15 +8,11 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 
 public class LocalUser {
 
-    public interface AsyncCallback<T> {
-
-        void get(T t);
-    }
     private UserInfo mUserInfo;
 
     private static LocalUser sLocalUser;
-
     private static boolean sReload;
+
     public static LocalUser getUser() {
         if (sLocalUser == null || sReload) {
             sLocalUser = loadFromPreference();
@@ -68,11 +64,24 @@ public class LocalUser {
     }
 
     public double getAvailableBalance() {
-        return 0; // TODO: 8/29/16 可用资金
+        if (mUserInfo != null) {
+            return mUserInfo.getMoneyUsable();
+        }
+        return 0;
     }
 
-    public String getUserPhone() {
-        return "13567124531"; // TODO: 9/8/16 获取用户手机号,作为唯一用户标示
+    public double getAvailableScore() {
+        if (mUserInfo != null) {
+            return mUserInfo.getScoreUsable();
+        }
+        return 0;
+    }
+
+    public String getUserPhoneNum() {
+        if (mUserInfo != null) {
+            return mUserInfo.getUserPhone();
+        }
+        return "";
     }
 
     @Override

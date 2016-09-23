@@ -170,7 +170,7 @@
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_news"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
@@ -186,7 +186,7 @@
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
@@ -201,7 +201,7 @@
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
@@ -216,7 +216,7 @@
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"

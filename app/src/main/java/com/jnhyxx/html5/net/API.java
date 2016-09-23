@@ -671,6 +671,22 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("showId", showId));
         }
+
+        /**
+         * /order/order/unwind.do 平仓
+         *
+         * @param showId
+         * @param fundType
+         * @param unwindPrice
+         * @return
+         */
+        public static API closeHoldingOrder(String showId, int payType, double unwindPrice) {
+            return new API("/order/order/unwind.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("payType", payType)
+                            .put("unwindPrice", unwindPrice));
+        }
     }
 
     /**

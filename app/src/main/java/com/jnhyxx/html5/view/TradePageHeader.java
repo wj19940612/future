@@ -37,13 +37,16 @@ public class TradePageHeader extends FrameLayout {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @OnClick({R.id.totalProfit, R.id.oneKeyClosePositionBtn, R.id.orderListBtn, R.id.signInButton})
+    @OnClick({R.id.totalProfit, R.id.totalProfitRmb, R.id.oneKeyClosePositionBtn, R.id.orderListBtn, R.id.signInButton})
     public void onClick(View view) {
 
         if (mListener == null) return;
 
         switch (view.getId()) {
             case R.id.totalProfit:
+                mListener.onProfitAreaClick();
+                break;
+            case R.id.totalProfitRmb:
                 mListener.onProfitAreaClick();
                 break;
             case R.id.oneKeyClosePositionBtn:

@@ -29,9 +29,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class HoldingFragment extends BaseFragment implements OrderPresenter.IHoldingOrderView {
+public class HoldingFragment extends BaseFragment
+        implements OrderPresenter.IHoldingOrderView {
 
     @BindView(android.R.id.list)
     ListView mList;
@@ -52,14 +54,13 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
 
     private Product mProduct;
     private int mFundType;
-    private OrderPresenter mOrderPresenter;
     private HoldingOrderAdapter mHoldingOrderAdapter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
             Log.d("TEST", "onReceiveData: " + data); // TODO: 9/20/16 delete
-            mOrderPresenter.setAskBidPrices(data.getAskPrice(), data.getBidPrice());
+            OrderPresenter.getInstance().setFullMarketData(data);
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
             }
@@ -154,14 +155,14 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
     @Override
     public void onResume() {
         super.onResume();
-        mOrderPresenter.onResume();
+        OrderPresenter.getInstance().register(this);
         NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mOrderPresenter.onPause();
+        OrderPresenter.getInstance().unregister(this);
         NettyClient.getInstance().stop();
     }
 
@@ -172,9 +173,8 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
 
-        mOrderPresenter = new OrderPresenter(this);
-        onShowHoldingOrderList(mOrderPresenter.getHoldingOrderList());
-        mOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+        onShowHoldingOrderList(OrderPresenter.getInstance().getHoldingOrderList());
+        OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
@@ -184,6 +184,12 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
         if (holdingOrderList != null) {
             if (mHoldingOrderAdapter == null) {
                 mHoldingOrderAdapter = new HoldingOrderAdapter(getContext(), mProduct, holdingOrderList);
+                mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
+                    @Override
+                    public void onItemClosePositionClick(HoldingOrder order) {
+                        OrderPresenter.getInstance().closePosition(mFundType, order);
+                    }
+                });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
@@ -224,12 +230,22 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
         }
     }
 
+    @OnClick(R.id.oneKeyClosePositionBtn)
+    public void onClick() {
+        OrderPresenter.getInstance().closeAllHoldingPositions(mFundType);
+    }
+
     static class HoldingOrderAdapter extends BaseAdapter {
+
+        public interface Callback {
+            void onItemClosePositionClick(HoldingOrder order);
+        }
 
         private Context mContext;
         private Product mProduct;
         private List<HoldingOrder> mHoldingOrderList;
         private FullMarketData mFullMarketData;
+        private Callback mCallback;
 
         public HoldingOrderAdapter(Context context, Product product, List<HoldingOrder> holdingOrderList) {
             mContext = context;
@@ -244,6 +260,10 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
         public void setHoldingOrderList(List<HoldingOrder> holdingOrderList) {
             mHoldingOrderList = holdingOrderList;
             notifyDataSetChanged();
+        }
+
+        public void setCallback(Callback callback) {
+            mCallback = callback;
         }
 
         @Override
@@ -271,7 +291,7 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData, mContext);
+            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData, mContext, mCallback);
             return convertView;
         }
 
@@ -299,7 +319,7 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(HoldingOrder item, Product product, FullMarketData data, Context context) {
+            public void bindingData(final HoldingOrder item, Product product, FullMarketData data, Context context, final Callback callback) {
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
                 mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
                         + product.getCurrencyUnit());
@@ -309,7 +329,9 @@ public class HoldingFragment extends BaseFragment implements OrderPresenter.IHol
                 mClosePositionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (callback != null) {
+                            callback.onItemClosePositionClick(item);
+                        }
                     }
                 });
                 if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {

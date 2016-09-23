@@ -42,3 +42,6 @@ captures/
 
 # Keystore files
 # *.jks
+
+# backup files
+projectFilesBackup/

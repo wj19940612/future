@@ -358,7 +358,7 @@
 
 
     //可能为冲突
- <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
+    <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
     <string name="prompt_dear_user">尊敬的用户:
         \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
     <string name="unsigned">未签署</string>

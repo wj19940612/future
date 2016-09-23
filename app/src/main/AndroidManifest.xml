@@ -158,6 +158,8 @@
         <activity
             android:name=".activity.account.withdraw.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".TestViewPager.TestTradeActivity">
+        </activity>
     </application>
 
 </manifest>

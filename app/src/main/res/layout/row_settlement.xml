@@ -3,74 +3,87 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@android:color/white"
-              android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:paddingBottom="4dp"
-              android:paddingRight="16dp"
-              android:paddingTop="4dp"
-              android:weightSum="5.5">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:paddingBottom="12dp"
-        android:paddingTop="12dp">
-
-        <TextView
-            android:id="@+id/sellDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:lineSpacingExtra="3dp"
-            android:textColor="#666666"
-            tools:text="07/28\n10:24"/>
-    </LinearLayout>
+              android:orientation="vertical">
 
     <View
-        android:layout_width="1px"
-        android:layout_height="match_parent"
-        android:background="@color/splitLine"/>
+        android:id="@+id/splitBlock"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent"/>
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4.5"
-        android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp">
 
-        <TextView
-            android:id="@+id/tradeType"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/bg_red_primary"
-            android:paddingBottom="6dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="6dp"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            tools:text="买涨"/>
+            android:layout_weight="1"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp">
 
-        <TextView
-            android:id="@+id/sellType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:layout_toRightOf="@id/tradeType"
-            android:textColor="#666666"
-            tools:text="市价卖出"/>
+            <TextView
+                android:id="@+id/sellDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                tools:text="07/28\n10:24"/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/lossProfit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            tools:text="+20美元"/>
-    </RelativeLayout>
+        <View
+            android:layout_width="0.7dp"
+            android:layout_height="match_parent"
+            android:background="@color/splitLine"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tradeType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/bg_red_primary"
+                android:paddingBottom="6dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="6dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tools:text="买涨"/>
+
+            <TextView
+                android:id="@+id/sellType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@id/tradeType"
+                android:textColor="#666666"
+                tools:text="市价卖出"/>
+
+            <TextView
+                android:id="@+id/lossProfit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="right"
+                tools:text="+20美元"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 </LinearLayout>

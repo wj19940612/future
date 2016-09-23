@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class Launcher {
 
     public static final String EX_PAYLOAD = "payload";
+    public static final String EX_PAYLOAD_1 = "payload1";
+    public static final String EX_PAYLOAD_2 = "payload2";
 
     private static Launcher sInstance;
 

@@ -1,8 +1,10 @@
 package com.jnhyxx.html5.net;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.jnhyxx.html5.App;
-import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 import com.umeng.message.UmengRegistrar;
@@ -10,7 +12,7 @@ import com.umeng.message.UmengRegistrar;
 import java.security.NoSuchAlgorithmException;
 
 public class API extends APIBase {
-
+    private static final String TAG = "API";
     private static final int GET = Request.Method.GET;
 
     public static final String TELE = "tele";
@@ -87,8 +89,22 @@ public class API extends APIBase {
 //                            .put(SIGN, sign));
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
-                            .put("userPhone", tele)
-                            .put(SIGN, sign));
+                            .put("userPhone", tele));
+//                            .put(SIGN, sign)
+        }
+
+        /**
+         * 接口名：获取注册图片验证码  user/user/getRegImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+
+        public static API getRegisterImage(String userPhone) {
+
+            return new API("/user/user/getRegImage.do",
+                    new ApiParams()
+                            .put("userPhone", userPhone));
         }
 
         /**
@@ -118,10 +134,11 @@ public class API extends APIBase {
          * @return
          */
         public static API authCodeWhenFindPassword(String tele, String code) {
-            return new API("/user/sms/authLoginPwdCode",
+//            return new API("/user/sms/authLoginPwdCode",
+            return new API("/user/user/checkRetriveMsgCode.do",
                     new ApiParams()
-                            .put(TELE, tele)
-                            .put(CODE, code));
+                            .put("userPhone", tele)
+                            .put("msgCode", code));
         }
 
         /**
@@ -132,7 +149,13 @@ public class API extends APIBase {
          * @param regCode
          */
         public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
-            return new API("/user/register.do",
+            try {
+                password = SecurityUtil.md5Encrypt(password);
+                Log.d(TAG, "注册时密码MD5加密" + password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return new API("/user/user/register.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
                             .put("userPass", password)
@@ -156,12 +179,11 @@ public class API extends APIBase {
          */
         public static API signIn(String phoneNum, String password) {
             try {
-                if (!BuildConfig.DEBUG)  // TODO: 8/26/16 正式时候添加, 后期删除
-                    password = SecurityUtil.md5Encrypt(password);
+                password = SecurityUtil.md5Encrypt(password);
+                Log.d(TAG, "登陆密码MD5加密" + password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            // TODO: 2016/8/30 原来的网址
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
@@ -185,13 +207,12 @@ public class API extends APIBase {
         }
 
         /**
-         * 接口名：找回密码并更新
-         * <p>
+         * 接口名：更新通过短信验证码找回的密码
+         * <p/>
          * URL  http://域名/user/user/retrieveUpdatePass.do
          *
          * @param userPhone 用户手机号
          * @param userPass  用户密码
-         * @param regCode   短信验证码
          * @return
          */
 //        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
@@ -200,18 +221,28 @@ public class API extends APIBase {
 //                            .put(TELE, phone)
 //                            .put(AUTH_CODE, authCode)
 //                            .put(PASSWORD, newPwd));
-        public static API modifyPwdWhenFindPwd(String userPhone, String regCode, String userPass) {
-            return new API("/user/user/retrieveUpdatePass.do",
+        public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
+//            return new API("/user/user/retrieveUpdatePass.do",
+//                    new ApiParams()
+//                            .put("userPhone", userPhone)
+//                            .put("regCode", regCode)
+//                            .put("userPass", userPass));
+            try {
+                userPass = SecurityUtil.md5Encrypt(userPass);
+                Log.d(TAG, "找回密码密码MD5加密" + userPass);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return new API("/user/user/updatePass.do",
                     new ApiParams()
                             .put("userPhone", userPhone)
-                            .put("regCode", regCode)
                             .put("userPass", userPass));
         }
 
 
         /**
          * 接口名：获取找回密码图片验证码
-         * <p>
+         * <p/>
          * URL  http://域名/user/user/getRetrieveImage.do
          *
          * @param userPhone
@@ -262,15 +293,13 @@ public class API extends APIBase {
         /**
          * /user/user/authUser 实名认证
          *
-         * @param token
          * @param realName
          * @param identityNum
          * @return
          */
-        public static API authUserName(String token, String realName, String identityNum) {
-            return new API("/user/user/authUser",
+        public static API authUserName(String realName, String identityNum) {
+            return new API("/user/user/certification.do",
                     new ApiParams()
-                            .put(TOKEN, token)
                             .put("realName", realName)
                             .put("idCard", identityNum));
         }
@@ -290,6 +319,39 @@ public class API extends APIBase {
                             .put(TOKEN, token).put("bankNum", bankcardNum)
                             .put("bankName", bankName)
                             .put("phone", phoneNum));
+        }
+
+        /**
+         * 接口名：绑定银行卡
+         * <p/>
+         * URL  http://域名/user/user/bindBankCard.do
+         * bankId        Integer   银行列表
+         * bankName      String     银行名
+         * cardNumber    String    银行卡号
+         * cardPhone     String    银行卡对应的手机号
+         *
+         * @param bankId
+         * @param bankName
+         * @return
+         */
+        public static API bindBankCard(Integer bankId, String bankName, String cardNumber, String cardPhone) {
+            return new API("/user/user/bindBankCard.do",
+                    new ApiParams()
+                            .put("bankId", bankId)
+                            .put("bankName", bankName)
+                            .put("cardNumber", cardNumber)
+                            .put("cardPhone", cardPhone));
+        }
+
+        /**
+         * 接口名：显示渠道银行列表
+         * <p/>
+         * URL  http://域名/user/user/showChannelBankList.do
+         *
+         * @return
+         */
+        public static API showChannelBankList() {
+            return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
         /**
@@ -320,6 +382,32 @@ public class API extends APIBase {
                     new ApiParams()
                             .put(TYPE, 2));
         }
+
+        public static API loginOut() {
+            return new API("/user/user/logout.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：获取用户是否修改过昵称信息
+         * URL  http://域名/user/user/findIsUpdateNickName.do
+         */
+        public static API findIsUpdateNickName() {
+            return new API("/user/user/findIsUpdateNickName.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：修改昵称
+         * <p/>
+         * http://域名/user/user/updateNickName.do
+         *
+         * @param nickName
+         * @return
+         */
+        public static API updateNickName(String nickName) {
+            return new API("/user/user/updateNickName.do",
+                    new ApiParams()
+                            .put("nickName", nickName));
+        }
     }
 
     public static class Finance {
@@ -339,8 +427,9 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询用户资金信息
-
-         URL  http://域名/user/finance/findMain.do
+         * <p/>
+         * URL  http://域名/user/finance/findMain.do
+         *
          * @return
          */
         public static API getFundInfo() {
@@ -442,8 +531,7 @@ public class API extends APIBase {
     public static class Market {
 
         /**
-         * /market/futureCommodity/select 获取首页产品列表
-         * /order/variety/getVariety.do
+         * /order/variety/getVariety.do 获取首页产品列表
          *
          * @return
          */
@@ -458,6 +546,15 @@ public class API extends APIBase {
          */
         public static API getProductMarketList() {
             return new API(GET, "/quota/quota/getAllQuotaData.do", null);
+        }
+
+        /**
+         * /quota/quota/getAllIpPortByCode.do 获取行情服务器 ip & port
+         *
+         * @return
+         */
+        public static API getMarketServerIpAndPort() {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
         }
     }
 
@@ -482,22 +579,21 @@ public class API extends APIBase {
         }
 
         /**
-         * /order/futures/balancedList 获取结算订单列表
+         * /order/order/getVarietySettleOrders.do 获取结算订单列表
          *
-         * @param token
          * @param pageNo
          * @param pageSize
-         * @param id
-         * @param fundType @return
+         * @param varietyId
+         * @param payType
+         * @return
          */
-        public static API getSettlementOrderList(String token, int pageNo, int pageSize, int id, int fundType) {
-            return new API("/order/futures/balancedList",
+        public static API getSettlementOrderList(int varietyId, int payType, int pageNo, int pageSize) {
+            return new API(GET, "/order/order/getVarietySettleOrders.do",
                     new ApiParams()
-                            .put(TOKEN, token)
+                            .put("varietyId", varietyId)
+                            .put("payType", payType)
                             .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize)
-                            .put(FUTURES_TYPE, id)
-                            .put(FUND_TYPE, fundType));
+                            .put(PAGE_SIZE, pageSize));
         }
 
         /**
@@ -508,8 +604,88 @@ public class API extends APIBase {
          * @param exchangeId
          * @return
          */
-        public static API getExchangeTradeStatus(int exchangeId) {
-            return new API(GET, "/order/order/getTradeTime.do?exchangeId=" + exchangeId, null);
+        public static API getExchangeTradeStatus(int exchangeId, String varietyType) {
+            return new API(GET, "/order/order/getTradeTime.do",
+                    new ApiParams()
+                            .put("exchangeId", exchangeId)
+                            .put("varietyType", varietyType));
+        }
+
+        /**
+         * /order/variety/getAssetsByVariety.do 获取期货配资数据
+         *
+         * @param varietyId
+         */
+        public static API getFuturesFinancing(int varietyId) {
+            return new API(GET, "/order/variety/getAssetsByVariety.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId));
+        }
+
+        /**
+         * /order/order/submitOrder.do 提交订单
+         *
+         * @param submittedOrder
+         */
+        public static API submitOrder(SubmittedOrder submittedOrder) {
+            return new API("/order/order/submitOrder.do",
+                    new ApiParams(SubmittedOrder.class, submittedOrder));
+        }
+
+        /**
+         * /order/order/getOrderInfo.do 获取结算订单详情
+         *
+         * @param showId
+         * @param fundType
+         * @return
+         */
+        public static API getOrderDetail(String showId, int fundType) {
+            return new API(GET, "/order/order/getOrderInfo.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("payType", fundType));
+        }
+
+        /**
+         * /order/order/getVarietyPositionOrders.do 获取用户持仓中订单
+         *
+         * @param varietyId
+         * @param fundType
+         * @return
+         */
+        public static API getHoldingOrderList(int varietyId, int fundType) {
+            return new API(GET, "/order/order/getVarietyPositionOrders.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", fundType));
+        }
+
+        /**
+         * /order/order/getOrderStatus.do 获取订单状态
+         *
+         * @param showId
+         * @return
+         */
+        public static API getOrderStatus(String showId) {
+            return new API(GET, "/order/order/getOrderStatus.do",
+                    new ApiParams()
+                            .put("showId", showId));
+        }
+
+        /**
+         * /order/order/unwind.do 平仓
+         *
+         * @param showId
+         * @param fundType
+         * @param unwindPrice
+         * @return
+         */
+        public static API closeHoldingOrder(String showId, int payType, double unwindPrice) {
+            return new API("/order/order/unwind.do",
+                    new ApiParams()
+                            .put("showId", showId)
+                            .put("payType", payType)
+                            .put("unwindPrice", unwindPrice));
         }
     }
 
@@ -521,5 +697,33 @@ public class API extends APIBase {
      */
     public static API getTrendData(String varietyType) {
         return new API(GET, "/quotaStatus/" + varietyType + ".fst", null);
+    }
+
+    /**
+     * 获得《投资人与用户交易合作协议》网页 url
+     *
+     * @return
+     */
+    public static String getCooperationAgreementUrl() {
+        return getHost() + "/agreement/tradeAndCost.html?nohead=1";
+    }
+
+    /**
+     * 获得《风险告知书》网页 url
+     *
+     * @return
+     */
+    public static String getRiskNoticesUrl() {
+        return getHost() + "/agreement/risk.html?nohead=1";
+    }
+
+    /**
+     * 获取 交易规则 url
+     *
+     * @param varietyType
+     * @return
+     */
+    public static String getTradeRule(String varietyType) {
+        return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
     }
 }

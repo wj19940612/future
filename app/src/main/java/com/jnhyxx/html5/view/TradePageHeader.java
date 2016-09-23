@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,13 @@ public class TradePageHeader extends FrameLayout {
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
     TextView mTotalProfit;
+    @BindView(R.id.totalProfitRmb)
+    TextView mTotalProfitRmb;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
 
+    @BindView(R.id.availableBalanceAndUnit)
+    TextView mAvailableBalanceAndUnit;
     @BindView(R.id.availableBalance)
     TextView mAvailableBalance;
     @BindView(R.id.orderListBtn)
@@ -32,13 +37,16 @@ public class TradePageHeader extends FrameLayout {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @OnClick({R.id.totalProfit, R.id.oneKeyClosePositionBtn, R.id.orderListBtn, R.id.signInButton})
+    @OnClick({R.id.totalProfit, R.id.totalProfitRmb, R.id.oneKeyClosePositionBtn, R.id.orderListBtn, R.id.signInButton})
     public void onClick(View view) {
 
         if (mListener == null) return;
 
         switch (view.getId()) {
             case R.id.totalProfit:
+                mListener.onProfitAreaClick();
+                break;
+            case R.id.totalProfitRmb:
                 mListener.onProfitAreaClick();
                 break;
             case R.id.oneKeyClosePositionBtn:
@@ -72,6 +80,8 @@ public class TradePageHeader extends FrameLayout {
 
     private ViewGroup[] mHeaders;
 
+    private int mHeaderIndex;
+
     public TradePageHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -83,19 +93,24 @@ public class TradePageHeader extends FrameLayout {
         mHeaders[HEADER_AVAILABLE_BALANCE] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_available_balance, null);
         mHeaders[HEADER_HOLDING_POSITION] = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.header_holding_position, null);
         for (int i = 0; i < mHeaders.length; i++) {
-            FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     (int) getResources().getDimension(R.dimen.trade_header_height));
             addView(mHeaders[i], i, params);
         }
+        mHeaderIndex = -1;
         showView(HEADER_UNLOGIN);
         ButterKnife.bind(this);
     }
 
     public void showView(int headerIndex) {
+        if (mHeaderIndex == headerIndex) return;
+
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).setVisibility(GONE);
         }
         getChildAt(headerIndex).setVisibility(VISIBLE);
+
+        mHeaderIndex = headerIndex;
     }
 
     public void setOnViewClickListener(OnViewClickListener listener) {
@@ -106,7 +121,34 @@ public class TradePageHeader extends FrameLayout {
         mTotalProfitAndUnit.setText(getContext().getString(R.string.holding_position_total_profit_and_unit, unit));
     }
 
+    public void setTotalProfit(double totalProfit, boolean isForeign, int scale, double ratio, String fundUnit) {
+        int color = ContextCompat.getColor(getContext(), R.color.greenPrimary);
+        if (totalProfit >= 0) {
+            color = ContextCompat.getColor(getContext(), R.color.redPrimary);
+        }
+        mTotalProfit.setTextColor(color);
+        mTotalProfitRmb.setTextColor(color);
+
+        String totalProfitStr = totalProfit >= 0 ?
+                "+" + FinanceUtil.formatWithScale(totalProfit, scale):
+                "" + FinanceUtil.formatWithScale(totalProfit, scale);
+        if (isForeign) {
+            double totalProfitRmb = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
+            String totalProfitRmbStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitRmb)
+                    : FinanceUtil.formatWithScale(totalProfitRmb);
+            totalProfitRmbStr = "(" + totalProfitRmbStr + fundUnit + ")";
+            mTotalProfit.setText(totalProfitStr);
+            mTotalProfitRmb.setText(totalProfitRmbStr);
+        } else {
+            mTotalProfit.setText(totalProfitStr);
+        }
+    }
+
     public void setAvailableBalance(double availableBalance) {
         mAvailableBalance.setText(FinanceUtil.formatWithScale(availableBalance));
+    }
+
+    public void setAvailableBalanceUnit(String unit) {
+        mAvailableBalanceAndUnit.setText(getContext().getString(R.string.available_balance_and_unit, unit));
     }
 }

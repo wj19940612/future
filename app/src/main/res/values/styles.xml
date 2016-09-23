@@ -34,18 +34,15 @@
     <style name="SignEditText.PhoneNum">
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">11</item>
-        <item name="android:paddingLeft">10dp</item>
     </style>
 
     <style name="SignEditText.Password">
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
-        <item name="android:paddingLeft">10dp</item>
     </style>
 
-    <style name="PrimaryRedButton">
+    <style name="PrimaryBigButton">
         <item name="android:background">@drawable/btn_primary</item>
-        <!--  <item name="android:background">@drawable/btn_register_select</item>-->
         <item name="android:clickable">true</item>
         <item name="android:enabled">false</item>
         <item name="android:gravity">center</item>
@@ -54,10 +51,17 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="PrimaryBigButton.Inverse">
+        <item name="android:background">@drawable/btn_primary_inverse</item>
+        <item name="android:enabled">true</item>
+        <item name="android:textColor">@color/btn_text_primary_inverse</item>
+    </style>
+
     <style name="InputTitle">
         <item name="android:minWidth">80dp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+
 
     <style name="HomeListHeaderButton">
         <item name="android:drawablePadding">8dp</item>
@@ -129,5 +133,31 @@
     <style name="expandMakeMoneyTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--颜色为#262626的头部TextView-->
+    <style name="settingTitleTextView">
+        <item name="android:textColor">#262626</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minWidth">80dp</item>
+    </style>
+    <!--设置界面的文本输入框样式-->
+    <style name="settingEditTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#262626</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColorHint">#CBCBCB</item>
+    </style>
+
+    <style name="settingLinearLayout">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 </resources>

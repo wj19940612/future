@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_message_center_list_item_info"
+    android:id="@+id/activityMessageCenterListItemInfo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDF0F5"
@@ -10,7 +10,7 @@
     tools:context="com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/account_message_info_titleBar"
+        android:id="@+id/accountMessageInfoTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
@@ -25,7 +25,7 @@
         android:paddingRight="15dp">
 
         <TextView
-            android:id="@+id/message_center_info_title"
+            android:id="@+id/messageCenterInfoTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -36,7 +36,7 @@
             android:lineSpacingExtra="25dp"/>
 
         <TextView
-            android:id="@+id/message_center_info_time"
+            android:id="@+id/messageCenterInfoTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

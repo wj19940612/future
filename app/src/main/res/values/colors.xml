@@ -9,6 +9,7 @@
     <color name="splitLineDark">#3B4856</color>
     <color name="splitLineDark2">#233142</color>
     <color name="splitBlock">#0C233C</color>
+    <color name="splitBlockLight">#F4F4F2</color>
 
     <color name="colorDisable">#DDDDDD</color>
     <color name="greenPrimary">#25D282</color>
@@ -17,9 +18,9 @@
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
     <color name="colorSlidingMenu">#1E61B0</color>
+    <color name="grayHint">#CBCBCB</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
-
 
     <!--我的fragment-->
     <color name="account_center_text">#262626</color>
@@ -27,10 +28,6 @@
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
     <color name="common_bg">#EDF0F5</color>
-
-
-    <!--登陆界面的文本输入框的颜色-->
-    <color name="login_edittext_hint">#CBCBCB</color>
 
     <!--注册与找回密码界面不可点击按钮背景-->
     <color name="regiserBtnBack">#a8a8a8</color>

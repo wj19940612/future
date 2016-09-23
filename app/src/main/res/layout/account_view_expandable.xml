@@ -7,7 +7,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/view_expandable_headerlayout"
+        android:id="@+id/viewExpandableHeaderLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="1dp"
@@ -19,7 +19,7 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/lefe_txt_view"
+            android:id="@+id/leftTxtView"
             style="@style/AboutAsEntryLeftTextViewStyle"
             android:layout_centerVertical="true"
             android:text="左边的文字" />
@@ -32,7 +32,7 @@
 
     <TextView
 
-        android:id="@+id/bottom_txt"
+        android:id="@+id/bottomTxt"
         style="@style/AboutAsEntryBottomTextViewStyle"
         android:text="底下的文字" />
 

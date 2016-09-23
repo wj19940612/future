@@ -57,7 +57,7 @@ public class UpgradeUtil {
 
     private static boolean hasNewVersionCode(Context context) {
         String domain = getDomain(context);
-        if (domain.equals(APIBase.HOST)) {
+        if (domain.equals(APIBase.getHost())) {
             String newVersion = getVersionCode(context);
             String currentVersion = AppInfo.getVersionName(context);
             if (newVersion.compareTo(currentVersion) > 0) {

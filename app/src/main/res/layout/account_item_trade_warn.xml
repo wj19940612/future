@@ -13,26 +13,26 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/account_trade_warn_image_status"
+            android:id="@+id/accountTradeWarnImageStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/account_trade_warn_list_icon_bad" />
 
         <TextView
-            android:id="@+id/account_trade_warn_tv_title"
+            android:id="@+id/accountTradeWarnTvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/account_trade_warn_image_status"
+            android:layout_toRightOf="@+id/accountTradeWarnImageStatus"
             android:text="交易提醒通知"
             android:textColor="#262626" />
 
         <TextView
-            android:id="@+id/account_trade_warn_tv_time"
+            android:id="@+id/accountTradeWarnTvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/account_trade_warn_tv_title"
+            android:layout_alignBottom="@+id/accountTradeWarnTvTitle"
             android:layout_alignParentRight="true"
             android:text="2016-12-12 12:12:12"
             android:textColor="#ABABAB"

@@ -13,7 +13,7 @@ public class ApiParams {
 
     public ApiParams(Class<?> clazz, Object object) {
         Field[] fields = clazz.getDeclaredFields();
-        for (Field field: fields) {
+        for (Field field : fields) {
             field.setAccessible(true);
 
             if (Modifier.isStatic(field.getModifiers())) {
@@ -42,6 +42,21 @@ public class ApiParams {
 
     public HashMap<String, String> get() {
         return mParams;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        if (mParams != null && !mParams.isEmpty()) {
+            builder.append("?");
+            for (Object key : mParams.keySet()) {
+                builder.append(key).append("=").append(mParams.get(key)).append("&");
+            }
+            if (builder.toString().endsWith("&")) {
+                builder.deleteCharAt(builder.length() - 1);
+            }
+        }
+        return builder.toString();
     }
 
 }

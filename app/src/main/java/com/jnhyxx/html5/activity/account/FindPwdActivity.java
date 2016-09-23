@@ -103,6 +103,7 @@ public class FindPwdActivity extends BaseActivity {
                 }).fire();
     }
 
+    //下一步跳转
     @OnClick(R.id.nextStepButton)
     void doNextStepButtonClick() {
         final String phoneNum = mPhoneNum.getText().toString().trim();

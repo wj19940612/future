@@ -9,6 +9,11 @@ public class DateUtil {
 
     public static String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    public static String format(long time, String toFormat) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(toFormat);
+        return dateFormat.format(new Date(time));
+    }
+
     public static String format(String time, String fromFormat, String toFormat) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(fromFormat);
         try {
@@ -21,22 +26,30 @@ public class DateUtil {
         return "";
     }
 
+    public static boolean isInThisYear(long time) {
+        Date date = new Date(time);
+        return isInThisYear(date);
+    }
+
     public static boolean isInThisYear(String time, String fromFormat) {
         if (time.length() != fromFormat.length()) {
             return false;
         }
-
         SimpleDateFormat dateFormat = new SimpleDateFormat(fromFormat);
         try {
             Date date = dateFormat.parse(time);
-            Calendar today = Calendar.getInstance();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            return today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR);
+            return isInThisYear(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean isInThisYear(Date date) {
+        Calendar today = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR);
     }
 
     public static String addOneMinute(String date, String format) {

@@ -13,7 +13,7 @@ import android.webkit.WebView;
 
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.fragment.AccountFragment;
+import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
     private void initPush() {
         PushAgent pushAgent = PushAgent.getInstance(this);
         pushAgent.setDebugMode(BuildConfig.DEBUG);
-        pushAgent.setMessageChannel(APIBase.HOST);
+        pushAgent.setMessageChannel(APIBase.getHost());
         pushAgent.setResourcePackageName("com.jnhyxx.html5");
         pushAgent.enable(new IUmengRegisterCallback() {
             @Override
@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity {
                 case 1:
                     return new InfoFragment();
                 case 2:
-                    return new AccountFragment();
+                    return new MineFragment();
             }
             return null;
         }

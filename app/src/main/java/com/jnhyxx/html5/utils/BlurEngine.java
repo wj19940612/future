@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RSRuntimeException;
@@ -25,29 +26,51 @@ import java.lang.ref.WeakReference;
 public class BlurEngine {
 
     private static final float BITMAP_SCALE = 0.4f;
-    private static final float BLUR_RADIUS = 10f;
+    private static final float BLUR_RADIUS = 8f;
     private static final int ANIM_DURATION = 500;
 
     private BlurTask mBlurTask;
     private ImageView mBlurBackgroundView;
+    private ViewGroup mViewGroup;
     private int mBackgroundRes;
 
     public BlurEngine(ViewGroup viewGroup) {
         mBlurTask = new BlurTask(viewGroup);
-        mBlurTask.execute(getScreenshot(viewGroup));
+        mViewGroup = viewGroup;
+        mBackgroundRes = -1;
     }
 
     public BlurEngine(ViewGroup viewGroup, int backgroundRes) {
         mBlurTask = new BlurTask(viewGroup);
-        mBlurTask.execute(getScreenshot(viewGroup));
+        mViewGroup = viewGroup;
         mBackgroundRes = backgroundRes;
     }
 
     private Bitmap getScreenshot(View v) {
-        Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        Bitmap bitmap = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         v.draw(canvas);
         return bitmap;
+    }
+
+    private Bitmap getPureBitmap(View v, int backgroundRes) {
+        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        Bitmap bitmap = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        bitmap.eraseColor(ContextCompat.getColor(v.getContext(), backgroundRes));
+        return bitmap;
+    }
+
+    public void onResume() {
+        if (mBlurBackgroundView == null) {
+            if (mBackgroundRes == -1) {
+                mBlurTask.execute(getScreenshot(mViewGroup));
+            } else {
+                mBlurTask.execute(getPureBitmap(mViewGroup, mBackgroundRes));
+            }
+        }
     }
 
     public void onDestroyView() {
@@ -117,10 +140,6 @@ public class BlurEngine {
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT);
 
-                    if (mBackgroundRes != 0) {
-                        mBlurBackgroundView.setBackgroundResource(mBackgroundRes);
-                    }
-
                     viewGroup.addView(mBlurBackgroundView, 0, params);
                 } else {
                     throw new RuntimeException("the ViewGroup of blurEngine must be a FrameLayout");
@@ -149,25 +168,19 @@ public class BlurEngine {
         }
 
         private Bitmap doBlur(Context context, Bitmap bm) {
-            int width = Math.round(bm.getWidth() * BITMAP_SCALE);
-            int height = Math.round(bm.getHeight() * BITMAP_SCALE);
-
-            Bitmap inputBitmap = Bitmap.createScaledBitmap(bm, width, height, false);
-            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
-
             try {
                 final RenderScript rs = RenderScript.create(context);
                 final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
 
-                final Allocation input = Allocation.createFromBitmap(rs, inputBitmap);
-                final Allocation output = Allocation.createFromBitmap(rs, outputBitmap);
+                final Allocation input = Allocation.createFromBitmap(rs, bm);
+                final Allocation output = Allocation.createTyped(rs, input.getType());
 
                 script.setRadius(BLUR_RADIUS);
                 script.setInput(input);
                 script.forEach(output);
 
-                output.copyTo(outputBitmap);
-                return outputBitmap;
+                output.copyTo(bm);
+                return bm;
             } catch (RSRuntimeException e) {
                 // RenderScript known error : https://code.google.com/p/android/issues/detail?id=71347
                 e.printStackTrace();

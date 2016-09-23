@@ -74,6 +74,7 @@ public abstract class ChartView extends View {
     protected float mBigFontSize;
     protected int mBigFontHeight;
     protected float mOffset4CenterBigText;
+    protected float mPriceAreaWidth;
 
     protected int mMiddleExtraSpace; // The middle space between two parts
     protected int mTextMargin; // The margin between text and baseline
@@ -188,23 +189,22 @@ public abstract class ChartView extends View {
         int top2 = -1;
         if (mSettings.isIndexesEnable()) {
             top2 = top + getTopPartHeight() + mCenterPartHeight;
+
+            calculateIndexesBaseLines(mSettings.getIndexesBaseLines());
         }
+
         drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
 
-        drawBaseLines(mSettings.getBaseLines(), left, top, width, topPartHeight, canvas);
-
-        if (mSettings.isIndexesEnable()) {
-            calculateIndexesBaseLines(mSettings.getIndexesBaseLines());
-
-            drawIndexesBaseLines(mSettings.getIndexesBaseLines(),
-                    left, top + getTopPartHeight() + mCenterPartHeight,
-                    width, getBottomPartHeight(), canvas);
-        }
+        drawBaseLines(mSettings.isIndexesEnable(),
+                mSettings.getBaseLines(), left, top, width, topPartHeight,
+                mSettings.getIndexesBaseLines(), left, top2, width, getBottomPartHeight(),
+                canvas);
 
         drawRealTimeData(mSettings.isIndexesEnable(),
                 left, top, width, topPartHeight,
-                left, top + getTopPartHeight() + mCenterPartHeight, width, getBottomPartHeight(),
+                left, top2, width, getBottomPartHeight(),
                 canvas);
+
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
 //        if (mTouchIndex >= 0) {
@@ -323,37 +323,28 @@ public abstract class ChartView extends View {
 
     protected abstract void calculateBaseLines(float[] baselines);
 
-    protected void calculateIndexesBaseLines(float[] indexesBaseLines) {
-
-    }
+    protected abstract void calculateIndexesBaseLines(float[] indexesBaseLines);
 
     /**
-     * draw top baselines
+     * draw top baselines and bottom indexes baselines
      *
+     * @param indexesEnable
      * @param baselines
      * @param left
-     * @param top       the first baseline Y axis
+     * @param top
      * @param width
-     * @param height    the total height of several top baselines without text and textMargin
-     * @param canvas
-     */
-    protected abstract void drawBaseLines(float[] baselines, int left, float top, int width, int height,
-                                          Canvas canvas);
-
-    /**
-     * draw bottom indexes baselines
-     *
+     * @param height
      * @param indexesBaseLines
-     * @param left
-     * @param top              the first baseline Y axis
-     * @param width
-     * @param height           the total height of several bottom baselines without text and textMargin
+     * @param left2
+     * @param top2
+     * @param width2
+     * @param height2
      * @param canvas
      */
-    protected void drawIndexesBaseLines(float[] indexesBaseLines,
-                                        int left, int top, int width, int height,
-                                        Canvas canvas) {
-    }
+    protected abstract void drawBaseLines(boolean indexesEnable,
+            float[] baselines, int left, int top, int width, int height,
+            float[] indexesBaseLines, int left2, int top2, int width2, int height2,
+            Canvas canvas);
 
     protected abstract void drawRealTimeData(boolean indexesEnable,
                                              int left, int top, int width, int height,
@@ -488,6 +479,19 @@ public abstract class ChartView extends View {
         mRectF.right = textX + textWidth + mXRectPadding;
         mRectF.bottom = textY + mFontMetrics.bottom + mYRectPadding;
         return mRectF;
+    }
+
+    /**
+     * this method is used to calculate the width of the big font size price text with rect bg
+     *
+     * @param price
+     * @return
+     */
+    protected float calculatePriceWidth(float price) {
+        String preClosePrice = formatNumber(price);
+        sPaint.setTextSize(mBigFontSize);
+        float priceWidth = sPaint.measureText(preClosePrice);
+        return getBigFontBgRectF(0, 0, priceWidth).width();
     }
 
     protected float dp2Px(float value) {

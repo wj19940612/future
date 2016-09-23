@@ -15,6 +15,8 @@ android {
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
+
+        multiDexEnabled true
     }
 
     java.util.Properties properties = new Properties();
@@ -56,6 +58,7 @@ android {
             versionCode 1
             versionName '1.0.0'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+            minSdkVersion 21
         }
         tst {
             applicationId 'com.jnhyxx.test'
@@ -77,6 +80,15 @@ android {
             buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize '4g'
+    }
+
+    packagingOptions {
+        exclude "META-INF/INDEX.LIST" // will not include INDEX file
+        exclude "META-INF/io.netty.versions.properties"
+    }
 }
 
 dependencies {
@@ -92,11 +104,9 @@ dependencies {
     compile project(':PushSDK')
     compile project(':kutils')
     compile project(':chart')
-    compile project(':SlidingMenu')
     compile project(':PushSDK')
     compile project(':kutils')
     compile project(':chart')
-
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
@@ -105,6 +115,12 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:cardview-v7:24.2.0'
+    compile 'com.android.support:multidex:1.0.0'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile files('libs/netty-buffer-4.1.5.final.jar')
+    compile files('libs/netty-codec-4.1.5.final.jar')
+    compile files('libs/netty-common-4.1.5.final.jar')
+    compile files('libs/netty-transport-4.1.5.final.jar')
+    compile files('libs/netty-resolver-4.1.5.final.jar')
 }

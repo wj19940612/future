@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class ProfileSummary implements Serializable{
 
+    private static final long serialVersionUID = -4122948002374790493L;
     /**
      * bankNum : null
      * userStatus : 0

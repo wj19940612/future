@@ -22,10 +22,10 @@ import com.jnhyxx.html5.R;
 
 public class ExpandableLayout extends RelativeLayout {
     private static final String TAG = "ExpandableLayout";
-    private Integer duration;
-    private Animation animation;
-    private Boolean isAnimationRunning = false;
-    private Boolean isOpened = false;
+    private Integer mDuration;
+    private Animation mAnimation;
+    private Boolean mIsAnimationRunning = false;
+    private Boolean mIsOpened = false;
 
     public ExpandableLayout(Context context) {
         super(context);
@@ -45,12 +45,12 @@ public class ExpandableLayout extends RelativeLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableLayout);
         CharSequence bottomTxt = typedArray.getText(R.styleable.ExpandableLayout_elBottomTxt);
         CharSequence leftTxt = typedArray.getText(R.styleable.ExpandableLayout_elLeftTxt);
-        duration = typedArray.getInt(R.styleable.ExpandableLayout_elDuration, getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
+        mDuration = typedArray.getInt(R.styleable.ExpandableLayout_elDuration, getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
         View view = View.inflate(context, R.layout.account_view_expandable, this);
-        TextView tv_leftTxt = (TextView) view.findViewById(R.id.lefe_txt_view);
+        TextView tv_leftTxt = (TextView) view.findViewById(R.id.leftTxtView);
         final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.ivAboutUsRight);
-        final TextView tv_bottom = (TextView) view.findViewById(R.id.bottom_txt);
-        RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.view_expandable_headerlayout);
+        final TextView tv_bottom = (TextView) view.findViewById(R.id.bottomTxt);
+        RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.viewExpandableHeaderLayout);
 //        if (!TextUtils.isEmpty(leftTxt)) {
 //            tv_leftTxt.setText(leftTxt);
 //        } else {
@@ -75,7 +75,7 @@ public class ExpandableLayout extends RelativeLayout {
             @Override
             public void onClick(View view) {
 
-                if (!isAnimationRunning) {
+                if (!mIsAnimationRunning) {
                     if (tv_bottom.getVisibility() == VISIBLE) {
                         collapse(tv_bottom);
                         ivAboutUsRight.startAnimation(rotateAnimationDown);
@@ -84,13 +84,13 @@ public class ExpandableLayout extends RelativeLayout {
                         expand(tv_bottom);
                     }
 
-                    isAnimationRunning = true;
+                    mIsAnimationRunning = true;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            isAnimationRunning = false;
+                            mIsAnimationRunning = false;
                         }
-                    }, duration);
+                    }, mDuration);
                 }
             }
         });
@@ -103,33 +103,32 @@ public class ExpandableLayout extends RelativeLayout {
         v.getLayoutParams().height = 0;
         v.setVisibility(VISIBLE);
 
-        animation = new Animation() {
+        mAnimation = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if (interpolatedTime == 1)
-                    isOpened = true;
+                    mIsOpened = true;
                 v.getLayoutParams().height = (interpolatedTime == 1) ? LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
                 v.requestLayout();
             }
-
 
             @Override
             public boolean willChangeBounds() {
                 return true;
             }
         };
-        animation.setDuration(duration);
-        v.startAnimation(animation);
+        mAnimation.setDuration(mDuration);
+        v.startAnimation(mAnimation);
     }
 
     public void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
-        animation = new Animation() {
+        mAnimation = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                    isOpened = false;
+                    mIsOpened = false;
                 } else {
                     v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
@@ -142,12 +141,12 @@ public class ExpandableLayout extends RelativeLayout {
             }
         };
 
-        animation.setDuration(duration);
-        v.startAnimation(animation);
+        mAnimation.setDuration(mDuration);
+        v.startAnimation(mAnimation);
     }
 
     @Override
     public void setLayoutAnimationListener(Animation.AnimationListener animationListener) {
-        animation.setAnimationListener(animationListener);
+        mAnimation.setAnimationListener(animationListener);
     }
 }

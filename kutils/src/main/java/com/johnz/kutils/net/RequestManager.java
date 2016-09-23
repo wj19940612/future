@@ -33,7 +33,6 @@ public class RequestManager {
     }
 
     public static void enqueue(Request<?> request) {
-        TAG = request.getTag() != null? request.getTag().toString(): VOLLEY_TAG;
 
         Log.d(TAG, "enqueue: " + request.toString());
 

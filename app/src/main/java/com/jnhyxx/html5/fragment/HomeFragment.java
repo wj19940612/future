@@ -19,8 +19,10 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.domain.HomeAdvertisement;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
+import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
@@ -29,6 +31,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
@@ -83,35 +86,53 @@ public class HomeFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
-                    // TODO: 8/29/16 要先请求socket连接地址和端口
-                    requestProductExchangeStatus(pkg.getProduct());
+                    requestServerIpAndPort(pkg);
                 }
             }
         });
 
-        requestHomeAdvertisement();
-        requestOrderReport();
+        //requestHomeAdvertisement();
+        //requestOrderReport();
         requestProductList();
         requestProductMarketList();
+    }
 
-        startScheduleJob(5 * 1000);
+    private void requestServerIpAndPort(final ProductPkg pkg) {
+        API.Market.getMarketServerIpAndPort().setTag(TAG)
+                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                    @Override
+                    public void onRespSuccess(List<MarketServer> marketServers) {
+                        if (marketServers != null && marketServers.size() > 0) {
+                            MarketServer marketServer = marketServers.get(0);
+                            NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+                            requestProductExchangeStatus(pkg.getProduct());
+                        }
+                    }
+                }).fire();
     }
 
     private void requestProductExchangeStatus(final Product product) {
-        API.Order.getExchangeTradeStatus(product.getExchangeId()).setTag(TAG)
+        Launcher.with(getActivity(), TradeActivity.class)
+                .putExtra(Product.EX_PRODUCT, product)
+                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)
+                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, new ExchangeStatus())
+                .execute();
+
+        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType()).setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
                         product.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(getActivity(), TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .execute();
+//
+//                        Launcher.with(getActivity(), TradeActivity.class)
+//                                .putExtra(Product.EX_PRODUCT, product)
+//                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)
+//                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+//                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
+//                                .execute();
                     }
                 }).fire();
     }
@@ -141,6 +162,13 @@ public class HomeFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         requestHomePositions();
+        startScheduleJob(5 * 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
     }
 
     private void requestHomeAdvertisement() {
@@ -180,27 +208,8 @@ public class HomeFragment extends BaseFragment {
                 }).fire();
     }
 
-//    private void requestPositionBriefList() {
-//        if (User.getUser().isLogin()) {
-//            API.Order.getOrderPositionList(User.getUser().getToken())
-//                    .setCallback(new Callback2<Resp<List<PositionBrief>>, List<PositionBrief>>() {
-//                        @Override
-//                        public void onRespSuccess(List<PositionBrief> positionBriefs) {
-//                            mPositionBriefList = positionBriefs;
-//                            boolean updateProductList =
-//                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mPositionBriefList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            } else {
-//                                updateProductListView();
-//                            }
-//                        }
-//                    }).setTag(TAG).fire();
-//        } else { // clear all product position
-//            ProductPkg.clearPositionBriefs(mProductPkgList);
-//        }
     private void requestHomePositions(){
-        if (com.jnhyxx.html5.domain.local.User.getUser().isLogin()) {
+        if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override
@@ -317,7 +326,7 @@ public class HomeFragment extends BaseFragment {
                     MarketData marketData = pkg.getMarketData(); // Market status
                     if (marketData != null) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                                product.getDecimalScale()));
+                                product.getPriceDecimalScale()));
                         mPriceChangePercent.setText(marketData.getUnsignedPercentage());
                         String priceChangePercent = marketData.getPercentage();
                         if (priceChangePercent.startsWith("-")) {

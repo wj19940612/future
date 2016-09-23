@@ -21,14 +21,14 @@ import java.util.Set;
 
 public class APIBase extends RequestManager {
 
-    public final static String HOST = BuildConfig.API_HOST;
+    private final static String HOST = BuildConfig.API_HOST;
+    private static String mHost;
 
     private static Set<String> sCurrentUrls = new HashSet<>();
 
     private int mMethod;
     private String mTag;
     private String mUri;
-    private String mHost;
     private ApiCallback<?> mCallback;
     private ApiParams mApiParams;
     private ApiIndeterminate mIndeterminate;
@@ -73,13 +73,24 @@ public class APIBase extends RequestManager {
         return this;
     }
 
+    public static String getHost() {
+        if (TextUtils.isEmpty(mHost)) {
+            mHost = HOST;
+        }
+        return mHost;
+    }
+
+    public static void setHost(String host) {
+        mHost = host;
+    }
+
     public void fire() {
         synchronized (sCurrentUrls) {
-            if (TextUtils.isEmpty(mHost)) {
-                mHost = HOST;
+            String url = new StringBuilder(getHost()).append(mUri).toString();
+            if (mMethod == Request.Method.GET && mApiParams != null) {
+                url = url + mApiParams.toString();
+                mApiParams = null;
             }
-
-            String url = new StringBuilder(mHost).append(mUri).toString();
 
             ApiHeaders headers = new ApiHeaders();
             String cookies = CookieManger.getInstance().getCookies();

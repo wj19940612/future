@@ -139,7 +139,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="30dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -150,22 +150,6 @@
                     android:id="@+id/margin"
                     style="@style/OrderDetailItemContent"
                     tools:text="180美元"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/OrderDetailItemTitle"
-                    android:text="@string/contract_deadline"/>
-
-                <TextView
-                    android:id="@+id/contractDeadline"
-                    style="@style/OrderDetailItemContent"
-                    tools:text="2016/07/29 04:58:00"/>
             </LinearLayout>
 
             <View

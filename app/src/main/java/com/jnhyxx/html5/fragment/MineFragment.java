@@ -106,12 +106,6 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         ToastUtil.curt("用户是否登陆 " + LocalUser.getUser().isLogin());
         if (LocalUser.getUser().isLogin()) {
             mTitleBar.setRightVisible(true);

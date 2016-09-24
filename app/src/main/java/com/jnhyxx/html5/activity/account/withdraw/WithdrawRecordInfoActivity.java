@@ -144,7 +144,6 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed);
             mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
-        if (withDrawRecordInfo == null) return;
 
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {

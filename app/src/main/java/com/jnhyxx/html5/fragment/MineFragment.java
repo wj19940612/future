@@ -3,12 +3,12 @@ package com.jnhyxx.html5.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -67,10 +67,12 @@ public class MineFragment extends BaseFragment {
     //注册
     @BindView(R.id.signUpButton)
     TextView mSignUp;
-    // TODO: 2016/8/29 消息中心的消息数可以使用TitleBar.setSubText();
-    //消息中心
+    //    //消息中心
+    @BindView(R.id.messageNumber)
+    TextView mMessageNumber;
     @BindView(R.id.messageCenter)
-    IconTextRow mMessageCenter;
+    RelativeLayout mMessageCenter;
+    //    IconTextRow mMessageCenter;
     //交易明细
     @BindView(R.id.tradeDetail)
     IconTextRow mTradeDetail;
@@ -104,25 +106,6 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ToastUtil.curt("用户是否登陆 " + LocalUser.getUser().isLogin());
-        if (LocalUser.getUser().isLogin()) {
-            mTitleBar.setRightVisible(true);
-        } else {
-            mTitleBar.setRightVisible(false);
-        }
-        // TODO: 2016/9/12 判断用户是否登陆，如果没有登陆，则设置不可打开
-
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
-            }
-        });
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
@@ -133,11 +116,12 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         updateAccountInfoView();
-
-//        String time = "2016-08-19 14:14:05";
-//        String year = CommonMethodUtils.getYear(time);
-//        String hour = CommonMethodUtils.getHour(time);
-//        Log.d(TAG, "具体的年 " + year + "具体时间" + hour);
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
+            }
+        });
     }
 
     private void updateAccountInfoView() {
@@ -149,7 +133,7 @@ public class MineFragment extends BaseFragment {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
             mNickname.setText(R.string.nickname_unknown);
-            mTitleBar.setRightVisible(true);
+            mTitleBar.setRightVisible(false);
 
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.account_mine_integral, getString(R.string.zero)));
@@ -168,16 +152,6 @@ public class MineFragment extends BaseFragment {
                 break;
             //充值
             case R.id.recharge:
-//                API.User.getBankcardInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
-//                        .setCallback(new Callback2<Resp<BankcardAuth>, BankcardAuth>() {
-//                            @Override
-//                            public void onRespSuccess(BankcardAuth bankcardAuth) {
-//                                Launcher.with(getActivity(), RechargeActivity.class)
-//                                        .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
-//                                        .execute();
-//                            }
-//                        }).fire();
-                // TODO: 2016/9/11 这里目前缺少判断，应该判断银行卡绑定状态
                 startRechargeActivity();
                 break;
             //提现

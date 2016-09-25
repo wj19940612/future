@@ -3,14 +3,13 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#EDF0F5"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context=".fragment.MineFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/account_mine_header_bg">
 
         <com.jnhyxx.html5.view.TitleBar
@@ -167,21 +166,63 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.jnhyxx.html5.view.IconTextRow
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#EDF0F5"/>
+
+    <!-- <com.jnhyxx.html5.view.IconTextRow
+         android:id="@+id/messageCenter"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:background="@android:color/white"
+         app:leftIcon="@drawable/ic_account_list_news"
+         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+         app:rowText="@string/message_center"
+         app:rowTextColor="@android:color/black"
+         app:subText="2"
+         app:subTextBackground="@drawable/account_message_warm"/>-->
+    <RelativeLayout
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/white"
-        app:leftIcon="@drawable/ic_account_list_news"
-        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-        app:rowText="@string/message_center"
-        app:rowTextColor="@android:color/black"
-        app:subText="数字"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_account_list_news"
+            android:drawablePadding="16dp"
+            android:gravity="center"
+            android:text="@string/message_center"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/messageNumber"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toLeftOf="@+id/helpImage"
+            android:background="@drawable/account_message_warm"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+        <ImageView
+
+            android:id="@+id/helpImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/common_big_arrow_list_icon_more"/>
+    </RelativeLayout>
+
+    <include layout="@layout/split_line_overspread"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
@@ -193,10 +234,7 @@
         app:rowText="@string/account_trade_info"
         app:rowTextColor="@color/account_center_text"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2"/>
+    <include layout="@layout/split_line_overspread"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
@@ -208,10 +246,7 @@
         app:rowText="@string/paid_to_promote"
         app:rowTextColor="@color/account_center_text"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2"/>
+    <include layout="@layout/split_line_overspread"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
@@ -222,4 +257,6 @@
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_aboutUs"
         app:rowTextColor="@color/account_center_text"/>
+
+    <include layout="@layout/split_line_overspread"/>
 </LinearLayout>

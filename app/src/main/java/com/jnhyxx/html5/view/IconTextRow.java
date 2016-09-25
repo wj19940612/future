@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -88,7 +87,7 @@ public class IconTextRow extends LinearLayout {
         mSubTextView.setText(mSubText);
         mSubTextView.setGravity(Gravity.RIGHT);
         mSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSubTextSize);
-        mSubTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(Color.GRAY));
+        mSubTextView.setTextColor(mSubTextColor!= null ? mSubTextColor : ColorStateList.valueOf(Color.GRAY));
          
         addView(mSubTextView, params);
 

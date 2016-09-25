@@ -134,7 +134,7 @@ public class NameAuthActivity extends BaseActivity {
 //            mRlIdentityCardWarn.setCenterTxt(R.string.setting_identity_card_fail);
 //            mRlIdentityCardWarn.setVisibility(View.VISIBLE);
         } else {
-            ToastUtil.curt(R.string.setting_identity_card_when_login);
+            ToastUtil.curt(R.string.settings_identity_card_when_login);
         }
     }
 

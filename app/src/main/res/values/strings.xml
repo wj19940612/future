@@ -320,20 +320,20 @@
 
     <!--设置模块-->
     <!--设置界面-->
-    <string name="setting_title">设置</string>
-    <string name="setting_user_name">用户名</string>
-    <string name="setting_real_name">实名认证</string>
-    <string name="setting_bind_bank_card">绑定银行卡</string>
-    <string name="setting_bind_phone">绑定手机</string>
-    <string name="setting_no_write">未填写</string>
-    <string name="setting_write_now">已填写</string>
-    <string name="setting_attestation">已认证</string>
-    <string name="setting_no_bind">未绑定</string>
-    <string name="setting_login_out">退出</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_username">用户名</string>
+    <string name="settings_real_name_auth">实名认证</string>
+    <string name="settings_bind_bank_card">绑定银行卡</string>
+    <string name="settings_bind_phone">绑定手机</string>
+    <string name="settings_no_write">未填写</string>
+    <string name="settings_write_now">已填写</string>
+    <string name="settings_attestation">已认证</string>
+    <string name="settings_no_bind">未绑定</string>
+    <string name="settings_login_out">退出登录</string>
     <!--实名认证-->
-    <string name="setting_auth_name_hint">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
-    <string name="setting_identity_card_fail">身份证格式错误，请输入15位或18位身份证号码</string>
-    <string name="setting_identity_card_when_login">请先登录后再认证</string>
+    <string name="settings_auth_name_hint">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
+    <string name="settings_identity_card_fail">身份证格式错误，请输入15位或18位身份证号码</string>
+    <string name="settings_identity_card_when_login">请先登录后再认证</string>
     <string name="auth_name_write_success">实名认证填写成功</string>
 
     <!--绑定银行卡-->

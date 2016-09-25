@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="15dp"
             android:paddingTop="15dp"
-            android:text="@string/setting_auth_name_hint"
+            android:text="@string/settings_auth_name_hint"
             android:textColor="#FB4B55"
             android:textSize="12sp" />
 

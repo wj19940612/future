@@ -51,7 +51,7 @@ public class SignInActivity extends BaseActivity {
     TextView mSignInButton;
 
     @BindView(R.id.FailWarn)
-    CommonFailWarn rlFailWarn;
+    CommonFailWarn mCommonFailWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,14 +129,12 @@ public class SignInActivity extends BaseActivity {
                                     UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
                                     LocalUser.getUser().setUserInfo(userInfo);
                                     setResult(RESULT_OK);
-                                    ToastUtil.curt("登陆成功");
+                                    ToastUtil.curt(R.string.login_success);
                                     finish();
                                 } else {
                                     // TODO: 9/10/16 登入错误处理
-                                    mPassword.setText("");
-                                    ToastUtil.curt(jsonObjectResp.getMsg());
-                                    rlFailWarn.setVisibility(View.VISIBLE);
-                                    rlFailWarn.setCenterTxt(jsonObjectResp.getMsg());
+                                    mCommonFailWarn.setVisibility(View.VISIBLE);
+                                    mCommonFailWarn.setCenterTxt(jsonObjectResp.getMsg());
                                 }
                             }
                         }).fire();
@@ -146,8 +144,8 @@ public class SignInActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.forgetPassword:
-                if (rlFailWarn.isShown()) {
-                    rlFailWarn.setVisibility(View.GONE);
+                if (mCommonFailWarn.isShown()) {
+                    mCommonFailWarn.setVisibility(View.GONE);
                 }
                 Launcher.with(this, FindPwdActivity.class).execute();
                 break;

@@ -46,17 +46,17 @@ import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
-    @BindView(R.id.activityRegisterPhoneNum)
+    @BindView(R.id.phoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.activityRegisterMessageAuthCode)
+    @BindView(R.id.registerAuthCode)
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
     @BindView(R.id.password)
     EditText mPassword;
-    @BindView(R.id.agree_protocol)
+    @BindView(R.id.agreeProtocol)
     CheckBox mAgreeProtocol;
-    @BindView(R.id.service_protocol)
+    @BindView(R.id.serviceProtocol)
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
@@ -64,7 +64,7 @@ public class SignUpActivity extends BaseActivity {
     TitleBar mTitleBar;
     @BindView(R.id.imageCodeLoadHint)
     TextView mImageCodeLoadHint;
-    @BindView(R.id.FailWarn)
+    @BindView(R.id.failWarn)
     CommonFailWarn mFailWarn;
     //获取图片验证码
     @BindView(R.id.imageCode)

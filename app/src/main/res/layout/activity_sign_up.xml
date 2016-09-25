@@ -21,7 +21,7 @@
         app:titleText="@string/sign_up_free" />
 
     <com.jnhyxx.html5.view.CommonFailWarn
-        android:id="@+id/FailWarn"
+        android:id="@+id/failWarn"
         style="@style/commonFailWarn" />
 
     <include layout="@layout/split_line_thick" />
@@ -36,7 +36,7 @@
 
 
         <EditText
-            android:id="@+id/activityRegisterPhoneNum"
+            android:id="@+id/phoneNum"
             style="@style/SignEditText.PhoneNum"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -55,7 +55,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/activityRegisterMessageAuthCode"
+                android:id="@+id/registerAuthCode"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/agree_protocol"
+            android:id="@+id/agreeProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
@@ -182,7 +182,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/service_protocol"
+            android:id="@+id/serviceProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"

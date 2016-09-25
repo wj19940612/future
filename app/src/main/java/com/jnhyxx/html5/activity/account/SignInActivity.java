@@ -50,7 +50,7 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @BindView(R.id.FailWarn)
+    @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
 
     @Override

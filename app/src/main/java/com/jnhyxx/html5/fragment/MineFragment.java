@@ -19,7 +19,7 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity;
-import com.jnhyxx.html5.activity.setting.SettingActivity;
+import com.jnhyxx.html5.activity.setting.SettingsActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -123,7 +123,7 @@ public class MineFragment extends BaseFragment {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(getActivity(), SettingActivity.class).executeForResult(REQUEST_CODE_SETTING);
+                Launcher.with(getActivity(), SettingsActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
     }

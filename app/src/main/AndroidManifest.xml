@@ -142,7 +142,7 @@
             android:name=".activity.account.tradedetail.TradeDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.setting.SettingActivity"
+            android:name=".activity.setting.SettingsActivity"
             android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
 
     <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/failWarn"
-        style="@style/commonFailWarn"
-        app:centerText="@string/login_switch_auth_code_or_userName_fail"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,4 +126,4 @@
             android:textColor="#358CF3"
             android:textSize="12sp"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

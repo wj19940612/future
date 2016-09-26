@@ -33,11 +33,13 @@ public class CommonFailWarn extends RelativeLayout {
     //显示的时间
     private static final int SHOW_TIME = 2000;
 
+    private static final int PADDING = 5;
+
     private CharSequence mCenterTxt;
     private int mCenterSize;
+    private int mDrawLeftPadding;
     private ColorStateList mCenterTxtColor;
     private Drawable mCenterDrawable;
-    private int mDrawLeftPadding;
 
     private TextView mCenterView;
     private boolean mViewVisible;
@@ -85,6 +87,10 @@ public class CommonFailWarn extends RelativeLayout {
         setBackgroundResource(R.color.common_rise_activity_sum);
         setGravity(Gravity.CENTER);
 
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
+                getResources().getDisplayMetrics());
+
+        setPadding(padding, padding, padding, padding);
         init();
         typedArray.recycle();
     }

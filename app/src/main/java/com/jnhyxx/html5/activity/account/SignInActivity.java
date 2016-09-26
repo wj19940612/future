@@ -143,9 +143,6 @@ public class SignInActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.forgetPassword:
-//                if (mCommonFailWarn.isShown()) {
-//                    mCommonFailWarn.setVisibility(View.GONE);
-//                }
                 Launcher.with(this, FindPwdActivity.class).execute();
                 break;
         }

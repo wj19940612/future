@@ -83,13 +83,13 @@ public class IconTextRow extends LinearLayout {
         mTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(Color.BLACK));
         addView(mTextView, params);
 
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams(padding, padding);
         params.setMargins(0, 0, padding, 0);
         mSubTextView = new TextView(getContext());
         mSubTextView.setText(mSubText);
-        mSubTextView.setGravity(Gravity.RIGHT);
+        mSubTextView.setGravity(Gravity.CENTER);
         mSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSubTextSize);
-        mSubTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(Color.GRAY));
+        mSubTextView.setTextColor(mSubTextColor != null ? mSubTextColor : ColorStateList.valueOf(Color.GRAY));
         if (mSubTextViewBg != null) {
             mSubTextView.setBackground(mSubTextViewBg);
         }

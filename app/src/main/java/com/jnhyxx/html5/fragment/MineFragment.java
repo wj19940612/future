@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -68,11 +67,8 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.signUpButton)
     TextView mSignUp;
     //    //消息中心
-    @BindView(R.id.messageNumber)
-    TextView mMessageNumber;
     @BindView(R.id.messageCenter)
-    RelativeLayout mMessageCenter;
-    //    IconTextRow mMessageCenter;
+    IconTextRow mMessageCenter;
     //交易明细
     @BindView(R.id.tradeDetail)
     IconTextRow mTradeDetail;

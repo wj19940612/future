@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -47,7 +46,7 @@ public class FindPwdActivity extends BaseActivity {
     ImageView mRetrieveImageCode;
     @BindView(R.id.imageCode)
     LinearLayout mImageCode;
-    @BindView(R.id.FailWarn)
+    @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
     @BindView(R.id.imageCodeLoadHint)
     TextView imageCodeLoadHint;

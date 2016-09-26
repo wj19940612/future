@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity.account.withdraw;
+package com.jnhyxx.html5.activity.account;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -135,16 +135,15 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
     private void updateView(WithDrawRecordInfo withDrawRecordInfo) {
         // TODO: 2016/9/22 原来的方法，不符合UI,后面可能会用到
         if (withDrawRecordInfo == null) return;
-        Drawable mNormalDrawable = getResources().getDrawable(R.drawable.ic_apply_normal, null);
-        mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
+            Drawable mNormalDrawable = getResources().getDrawable(R.drawable.ic_apply_normal);
+            mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
 
-        Drawable mFailDrawable = getResources().getDrawable(R.drawable.ic_apply_fail, null);
-        mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
+            Drawable mFailDrawable = getResources().getDrawable(R.drawable.ic_apply_fail);
+            mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
 
-        Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed, null);
-        mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
+            Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed);
+            mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
-        if (withDrawRecordInfo == null) return;
 
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {

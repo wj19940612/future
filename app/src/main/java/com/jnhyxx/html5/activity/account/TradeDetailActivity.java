@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity.account.tradedetail;
+package com.jnhyxx.html5.activity.account;
 
 import android.content.Context;
 import android.os.Bundle;

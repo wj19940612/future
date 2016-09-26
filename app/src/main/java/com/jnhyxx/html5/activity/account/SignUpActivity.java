@@ -46,17 +46,17 @@ import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
-    @BindView(R.id.activityRegisterPhoneNum)
+    @BindView(R.id.phoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.activityRegisterMessageAuthCode)
+    @BindView(R.id.registerAuthCode)
     EditText mMessageAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
     @BindView(R.id.password)
     EditText mPassword;
-    @BindView(R.id.agree_protocol)
+    @BindView(R.id.agreeProtocol)
     CheckBox mAgreeProtocol;
-    @BindView(R.id.service_protocol)
+    @BindView(R.id.serviceProtocol)
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
@@ -64,7 +64,7 @@ public class SignUpActivity extends BaseActivity {
     TitleBar mTitleBar;
     @BindView(R.id.imageCodeLoadHint)
     TextView mImageCodeLoadHint;
-    @BindView(R.id.FailWarn)
+    @BindView(R.id.failWarn)
     CommonFailWarn mFailWarn;
     //获取图片验证码
     @BindView(R.id.imageCode)
@@ -95,10 +95,10 @@ public class SignUpActivity extends BaseActivity {
                 activeButtons();
             }
         });
-        jumpLoginActivity();
+        initTitleBar();
     }
 
-    private void jumpLoginActivity() {
+    private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,11 +209,10 @@ public class SignUpActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == 601) {
                             getRegisterImage();
-                            mImageCode.setVisibility(View.VISIBLE);
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setVisible(true);
                             mFailWarn.setCenterTxt(resp.getMsg());
                         } else {
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setVisible(true);
                             mFailWarn.setCenterTxt(resp.getMsg());
                         }
                     }
@@ -259,7 +258,6 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void getRegisterImage() {
-        ToastUtil.curt("获取注册验证码");
         final String userPhone = mPhoneNum.getText().toString().trim();
         new Thread(new Runnable() {
             @Override
@@ -295,7 +293,7 @@ public class SignUpActivity extends BaseActivity {
 
     //点击后改变文本输入框的输入类型，使密码可见或隐藏
     @OnClick(showPasswordButton)
-    void changeEdittextPasswordInputtYPE() {
+    void changePasswordInputType() {
         if (!flag) {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             mImagePasswordType.setSelected(true);

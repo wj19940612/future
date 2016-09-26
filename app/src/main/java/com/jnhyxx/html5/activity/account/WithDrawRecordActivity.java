@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.account.withdraw.WithdrawRecordInfoActivity;
 import com.jnhyxx.html5.domain.account.WithdrawRecord;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
 
     <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/failWarn"
         style="@style/commonFailWarn"
-        app:centerText="@string/login_switch_auth_code_or_userName_fail" />
+        app:centerText="@string/login_switch_auth_code_or_userName_fail"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp">
+        android:paddingLeft="34dp"
+        android:paddingRight="34dp">
 
         <ImageView
             android:id="@+id/logo"
@@ -26,7 +26,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="60dp"
             android:layout_marginTop="60dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:drawableLeft="@drawable/login_icon_phone"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/grayHint" />
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:id="@+id/clearPhoneNumButton"
@@ -51,13 +51,13 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:src="@drawable/login_icon_delete"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:drawableLeft="@drawable/login_icon_lock"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint" />
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:id="@+id/showPasswordButton"
@@ -85,13 +85,13 @@
                 android:layout_centerVertical="true"
                 android:clickable="true"
                 android:src="@drawable/login_btn_password_type"
-                android:visibility="invisible" />
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/signInButton"
@@ -99,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/sign_in" />
+            android:text="@string/sign_in"/>
 
         <TextView
             android:id="@+id/signUpButton"
@@ -107,22 +107,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="@string/sign_up_free" />
+            android:text="@string/sign_up_free"
+            android:textColor="0E2947"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <TextView
-            android:layout_marginBottom="20dp"
             android:id="@+id/forgetPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
             android:gravity="center_vertical"
             android:text="@string/forget_password"
             android:textColor="#358CF3"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
     </LinearLayout>
 </LinearLayout>

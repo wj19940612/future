@@ -132,7 +132,6 @@ public class SignInActivity extends BaseActivity {
                                     ToastUtil.curt(R.string.login_success);
                                     finish();
                                 } else {
-                                    // TODO: 9/10/16 登入错误处理
                                     mCommonFailWarn.setVisibility(View.VISIBLE);
                                     mCommonFailWarn.setCenterTxt(jsonObjectResp.getMsg());
                                 }

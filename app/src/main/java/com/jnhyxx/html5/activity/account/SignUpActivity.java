@@ -295,7 +295,7 @@ public class SignUpActivity extends BaseActivity {
 
     //点击后改变文本输入框的输入类型，使密码可见或隐藏
     @OnClick(showPasswordButton)
-    void changeEdittextPasswordInputtYPE() {
+    void changePasswordInputType() {
         if (!flag) {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             mImagePasswordType.setSelected(true);

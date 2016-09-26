@@ -159,7 +159,6 @@ public class MineFragment extends BaseFragment {
                 startWithDrawActivity();
                 break;
             case R.id.messageCenter:
-                // TODO: 2016/9/8 目前没有系统消息的接口
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
@@ -167,7 +166,6 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
-
                 break;
             case R.id.paidToPromote:
                 break;
@@ -190,7 +188,6 @@ public class MineFragment extends BaseFragment {
     private void startWithDrawActivity() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         //如果没有实名认证，先实名认证
-        // TODO: 2016/9/13 仅作测试使用,正式的时候需要放开
         if (!CommonMethodUtils.isNameAuth(userInfo)) {
             ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
         } else {

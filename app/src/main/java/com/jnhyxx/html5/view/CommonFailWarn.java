@@ -12,7 +12,9 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,7 +35,7 @@ public class CommonFailWarn extends RelativeLayout {
     //显示的时间
     private static final int SHOW_TIME = 2000;
 
-    private static final int PADDING = 5;
+    private static final int ANIMATION_TIME = 500;
 
     private CharSequence mCenterTxt;
     private int mCenterSize;
@@ -113,18 +115,25 @@ public class CommonFailWarn extends RelativeLayout {
 
     public void setVisible(boolean viewVisible) {
         this.mViewVisible = viewVisible;
+        float translationY = getTranslationY();
+        TranslateAnimation translateDownAnimation = new TranslateAnimation(0, 0, 0, translationY);
+        translateDownAnimation.setFillAfter(true);
+        translateDownAnimation.setDuration(ANIMATION_TIME);
+        translateDownAnimation.start();
+
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top);
+        startAnimation(animation);
+
         this.setVisibility(mViewVisible ? VISIBLE : GONE);
         if (isShown()) {
-            AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
-            alphaAnimation.setDuration(SHOW_TIME);
-            alphaAnimation.setFillAfter(true);
-            this.setAnimation(alphaAnimation);
             mHandler.sendEmptyMessageDelayed(HIDE_VIEW_TAG, SHOW_TIME);
         }
     }
 
     private void handleHide() {
         setVisible(false);
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_top);
+        startAnimation(animation);
         mHandler.removeMessages(HIDE_VIEW_TAG);
     }
 

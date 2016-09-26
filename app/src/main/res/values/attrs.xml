@@ -68,6 +68,7 @@
 
     <!--公共的中间有文字，旁边有图片的警告-->
     <declare-styleable name="CommonFailWarn">
+        <attr name="visible" format="boolean"/>
         <attr name="centerText" format="reference|string"/>
         <attr name="centerTextSize" format="dimension"/>
         <attr name="centerTextColor" format="color"/>

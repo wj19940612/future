@@ -95,10 +95,10 @@ public class SignUpActivity extends BaseActivity {
                 activeButtons();
             }
         });
-        jumpLoginActivity();
+        initTitleBar();
     }
 
-    private void jumpLoginActivity() {
+    private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,11 +209,10 @@ public class SignUpActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == 601) {
                             getRegisterImage();
-                            mImageCode.setVisibility(View.VISIBLE);
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setVisible(true);
                             mFailWarn.setCenterTxt(resp.getMsg());
                         } else {
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.setVisible(true);
                             mFailWarn.setCenterTxt(resp.getMsg());
                         }
                     }
@@ -259,7 +258,6 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void getRegisterImage() {
-        ToastUtil.curt("获取注册验证码");
         final String userPhone = mPhoneNum.getText().toString().trim();
         new Thread(new Runnable() {
             @Override

@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity.account.withdraw;
+package com.jnhyxx.html5.activity.account;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

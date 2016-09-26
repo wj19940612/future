@@ -13,7 +13,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
@@ -23,17 +22,19 @@ import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ModifyNickNameActivity extends BaseActivity {
 
     @BindView(R.id.etModifyNickName)
     EditText mEtModifyNickName;
-    @BindView(R.id.submitNickName)
-    TextView mSubmitNickName;
     @BindView(R.id.modifyNickNameFailWarnWarn)
     RelativeLayout mModifyNickNameFailWarnWarn;
     @BindView(R.id.commonFailTvWarn)
     TextView mCommonFailTvWarn;
+
+    @BindView(R.id.confirmButton)
+    TextView mConfirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +42,8 @@ public class ModifyNickNameActivity extends BaseActivity {
         setContentView(R.layout.activity_modify_nick_name);
         ButterKnife.bind(this);
 
-
         mCommonFailTvWarn.setText(R.string.modify_nick_name_submit_warn);
-        setOnClickListener();
-    }
-
-    private void setOnClickListener() {
         mEtModifyNickName.addTextChangedListener(mValidationWatcher);
-        mSubmitNickName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nickName = mEtModifyNickName.getText().toString().trim();
-                if (nickName.length() < 2) {
-                    ToastUtil.curt(R.string.common_txt_length_fail);
-                    return;
-                }
-                if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-                    mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
-                    return;
-                }
-                submitNickName(nickName);
-            }
-        });
     }
 
     private void submitNickName(final String nickName) {
@@ -74,11 +55,11 @@ public class ModifyNickNameActivity extends BaseActivity {
                     protected void onRespSuccess(Resp resp) {
                         UserInfo user = LocalUser.getUser().getUserInfo();
                         user.setUserName(nickName);
+                        user.setNickNameModified();
                         setResult(RESULT_OK);
                         ToastUtil.curt(R.string.modify_nick_name_success);
                     }
-                })
-                .fire();
+                }).fire();
     }
 
     ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -86,8 +67,8 @@ public class ModifyNickNameActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable s) {
             boolean etModifyNickName = getEtModifyNickName();
-            if (etModifyNickName != mSubmitNickName.isEnabled()) {
-                mSubmitNickName.setEnabled(etModifyNickName);
+            if (etModifyNickName != mConfirmButton.isEnabled()) {
+                mConfirmButton.setEnabled(etModifyNickName);
             }
             if (!etModifyNickName && mCommonFailTvWarn.isShown()) {
                 mModifyNickNameFailWarnWarn.setVisibility(View.GONE);
@@ -101,5 +82,19 @@ public class ModifyNickNameActivity extends BaseActivity {
             return false;
         }
         return true;
+    }
+
+    @OnClick(R.id.confirmButton)
+    public void onClick() {
+        String nickName = mEtModifyNickName.getText().toString().trim();
+        if (nickName.length() < 2) {
+            ToastUtil.curt(R.string.common_txt_length_fail);
+            return;
+        }
+        if (!CommonMethodUtils.getNicknameStatus(nickName)) {
+            mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
+            return;
+        }
+        submitNickName(nickName);
     }
 }

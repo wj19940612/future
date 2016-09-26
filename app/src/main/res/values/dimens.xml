@@ -3,8 +3,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Common -->
     <dimen name="radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="splitLineHeight">0.5dp</dimen>
 
     <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
@@ -21,7 +23,6 @@
 
     <!-- Order -->
     <dimen name="one_key_close_radius">20dp</dimen>
-
 
 
 </resources>

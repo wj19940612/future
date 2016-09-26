@@ -375,14 +375,6 @@ public class API extends APIBase {
         }
 
         /**
-         * 接口名：获取用户是否修改过昵称信息
-         * URL  http://域名/user/user/findIsUpdateNickName.do
-         */
-        public static API findIsUpdateNickName() {
-            return new API("/user/user/findIsUpdateNickName.do", new ApiParams());
-        }
-
-        /**
          * 接口名：修改昵称
          * <p/>
          * http://域名/user/user/updateNickName.do

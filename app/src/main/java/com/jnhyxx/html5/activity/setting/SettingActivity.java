@@ -10,7 +10,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
 import com.jnhyxx.html5.activity.account.NameAuthActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
-import com.jnhyxx.html5.domain.account.NickNameIsModified;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
@@ -37,8 +36,8 @@ public class SettingActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.username)
-    IconTextRow mUsername;
+    @BindView(R.id.nickname)
+    IconTextRow mNickname;
     @BindView(R.id.realNameAuth)
     IconTextRow mRealNameAuth;
     @BindView(R.id.bandingBankcard)
@@ -60,7 +59,7 @@ public class SettingActivity extends BaseActivity {
     private void initData() {
         if (LocalUser.getUser().isLogin()) {
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
-            mUsername.setSubText(userInfo.getUserName());
+            mNickname.setSubText(userInfo.getUserName());
             mBindingPhone.setSubText(userInfo.getUserPhone());
             mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
             mBandingBankcard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
@@ -69,14 +68,14 @@ public class SettingActivity extends BaseActivity {
 
     private int getBindBankcardAuthStatusRes(int authStatus) {
         /**
-         * cardState银行卡状态 0未填写，1已填写，2已认证
+         * cardState银行卡状态 0未填写，1未绑定，2已绑定
          */
         if (authStatus == UserInfo.BANK_CARD_AUTH_STATUS_WRITE) {
-            return R.string.settings_write_now;
+            return R.string.unbound;
         } else if (authStatus == UserInfo.BANK_CARD_AUTH_STATUS_ATTESTATION) {
-            return R.string.settings_attestation;
+            return R.string.bound;
         }
-        return R.string.settings_no_write;
+        return R.string.unfilled;
     }
 
     private int getRealNameAuthStatusRes(int authStatus) {
@@ -84,28 +83,11 @@ public class SettingActivity extends BaseActivity {
          * idStatus实名状态 0未填写，1已填写，2已认证
          */
         if (authStatus == UserInfo.REAL_NAME_AUTH_STATUS_WRITE) {
-            return R.string.settings_write_now;
+            return R.string.filled;
         } else if (authStatus == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
-            return R.string.settings_attestation;
+            return R.string.authorized;
         }
-        return R.string.settings_no_write;
-    }
-
-    private void updateNickName() {
-        API.User.findIsUpdateNickName()
-                .setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback1<Resp<NickNameIsModified>>() {
-            @Override
-            protected void onRespSuccess(Resp<NickNameIsModified> resp) {
-                if (!resp.getData().isModified()) {
-                    Launcher.with(getActivity(), ModifyNickNameActivity.class)
-                            .executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
-                } else {
-                    ToastUtil.curt(R.string.modify_nick_name_twice); // TODO: 9/25/16 文字需要产品提供, 服务端返回
-                }
-            }
-        }).fire();
+        return R.string.unfilled;
     }
 
     private void logout() {
@@ -115,7 +97,7 @@ public class SettingActivity extends BaseActivity {
                         @Override
                         protected void onRespSuccess(Resp resp) {
                             LocalUser.getUser().logout();
-                            mUsername.setSubText("");
+                            mNickname.setSubText("");
                             mRealNameAuth.setSubText("");
                             mBandingBankcard.setSubText("");
                             mBindingPhone.setSubText("");
@@ -134,18 +116,18 @@ public class SettingActivity extends BaseActivity {
             mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
         }
         if (requestCode == REQUEST_CODE_MODIFY_NICK_NAME && resultCode == RESULT_OK) {
-            mUsername.setSubText(userInfo.getUserName());
+            mNickname.setSubText(userInfo.getUserName());
         }
         if (requestCode == REQUEST_CODE_BINDING_BANKCARD && resultCode == RESULT_OK) {
             mBandingBankcard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
         }
     }
 
-    @OnClick({R.id.username, R.id.realNameAuth, R.id.bandingBankcard, R.id.logoutButton})
+    @OnClick({R.id.nickname, R.id.realNameAuth, R.id.bandingBankcard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.username:
-                updateNickName();
+            case R.id.nickname:
+                openModifyNicknamePage();
                 break;
             case R.id.realNameAuth:
                 Launcher.with(getActivity(), NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
@@ -156,6 +138,16 @@ public class SettingActivity extends BaseActivity {
             case R.id.logoutButton:
                 logout();
                 break;
+        }
+    }
+
+    private void openModifyNicknamePage() {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo.isNickNameModifiedBefore()) {
+            ToastUtil.curt(R.string.nick_name_can_be_modified_once_only);
+        } else {
+            Launcher.with(getActivity(), ModifyNickNameActivity.class)
+                    .executeForResult(REQUEST_CODE_MODIFY_NICK_NAME);
         }
     }
 }

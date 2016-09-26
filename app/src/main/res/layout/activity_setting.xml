@@ -13,21 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/settings_title"/>
+        app:titleText="@string/settings"/>
 
     <com.jnhyxx.html5.view.IconTextRow
-        android:id="@+id/username"
+        android:id="@+id/nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
-        app:rowText="@string/settings_username"
+        app:rowText="@string/nickname"
         app:rowTextColor="#A8A8A8"
         app:subTextColor="#262626"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.7dp"
+        android:layout_height="@dimen/splitLineHeight"
         android:background="@color/splitLine"/>
 
     <com.jnhyxx.html5.view.IconTextRow
@@ -36,13 +36,13 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
-        app:rowText="@string/settings_real_name_auth"
+        app:rowText="@string/real_name_authorize"
         app:rowTextColor="#A8A8A8"
         app:subTextColor="@color/blueAssist"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.7dp"
+        android:layout_height="@dimen/splitLineHeight"
         android:background="@color/splitLine"/>
 
     <com.jnhyxx.html5.view.IconTextRow
@@ -51,13 +51,13 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
-        app:rowText="@string/settings_bind_bank_card"
+        app:rowText="@string/binding_bank_card"
         app:rowTextColor="#A8A8A8"
         app:subTextColor="@color/blueAssist"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.7dp"
+        android:layout_height="@dimen/splitLineHeight"
         android:background="@color/splitLine"/>
 
     <com.jnhyxx.html5.view.IconTextRow
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
-        app:rowText="@string/settings_bind_phone"
+        app:rowText="@string/binding_phone"
         app:rowTextColor="#A8A8A8"
         app:subTextColor="#262626"/>
 
@@ -83,7 +83,7 @@
         android:clickable="true"
         android:gravity="center"
         android:padding="16dp"
-        android:text="@string/settings_login_out"
+        android:text="@string/logout"
         android:textColor="@android:color/white"
         android:textSize="16sp"/>
 </LinearLayout>

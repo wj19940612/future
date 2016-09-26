@@ -197,12 +197,12 @@ public class UserInfo {
         this.icon = icon;
     }
 
-    public boolean isBIsSetNickName() {
+    public boolean isNickNameModifiedBefore() {
         return bIsSetNickName;
     }
 
-    public void setBIsSetNickName(boolean bIsSetNickName) {
-        this.bIsSetNickName = bIsSetNickName;
+    public void setNickNameModified() {
+        this.bIsSetNickName = true;
     }
 
     public int getBankId() {

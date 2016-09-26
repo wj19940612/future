@@ -7,15 +7,18 @@
     <string name="network_error_please_reload">网络连接失败 请重新加载</string>
     <string name="refresh">刷新</string>
 
+
     <!-- Network error  -->
     <string name="network_error">网络异常</string>
     <string name="network_time_out">网络超时</string>
     <string name="json_parse_error">数据解析异常</string>
 
+
     <!-- WebView promotion -->
     <string name="save_image">保存图片</string>
     <string name="save_qrcode_to">二维码保存至%1$s</string>
     <string name="save_qrcode_failure">二维码保存失败</string>
+
 
     <!-- Upgrade -->
     <string name="discovery_new_version">发现新版本</string>
@@ -30,9 +33,11 @@
     <string name="download_complete">下载完成</string>
     <string name="permission_granted_success">权限授予成功</string>
 
+
     <!-- Important notification -->
     <string name="i_get_it">我知道了</string>
     <string name="check_detail">查看详情</string>
+
 
     <!-- API -->
     <string name="api_error_null">服务器返回空数据</string>
@@ -41,10 +46,12 @@
     <string name="api_error_parse">数据解析异常</string>
     <string name="api_error_server">服务器异常</string>
 
+
     <!-- Main -->
     <string name="home">首页</string>
     <string name="information">资讯</string>
     <string name="mine">我的</string>
+
 
     <!-- Local Prompt -->
     <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；
@@ -53,10 +60,12 @@
         \n4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</string>
     <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
 
+
     <!-- Dialog -->
     <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
     <string name="dialog_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
     <string name="dialog_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
+
 
     <!-- Account -->
     <string name="nickname_unknown">您好,请先登录</string>
@@ -105,10 +114,22 @@
     <string name="withdraw_bankcard">提现银行卡</string>
     <string name="add_bankcard_right_now">马上添加银行卡</string>
     <string name="profile">个人信息</string>
-    <string name="real_name_authorize">实名认证</string>
-    <string name="unauthorized">未认证</string>
+
+    <!--Settings-->
+    <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>
+    <string name="unauthorized">未认证</string>
     <string name="authorized">已认证</string>
+    <string name="unbound">未绑定</string>
+    <string name="bound">已绑定</string>
+    <string name="nickname">昵称</string>
+    <string name="settings">设置</string>
+    <string name="binding_bank_card">绑定银行卡</string>
+    <string name="binding_phone">绑定手机</string>
+    <string name="logout">退出登录</string>
+    <string name="real_name_authorize">实名认证</string>
+    <string name="nick_name_can_be_modified_once_only">昵称只支持修改一次</string>
+
     <string name="bankcard">银行卡</string>
     <string name="phone_authorize">手机认证</string>
     <string name="name">姓名</string>
@@ -292,8 +313,6 @@
     <string name="common_copy_text">复制</string>
 
 
-    <!--登陆界面-->
-    <string name="login_switch_auth_code_or_userName_fail">用户名或密码错误</string>
     <!--注册界面-->
     <string name="register_auth_code_fail">验证码错误</string>
     <string name="register_succeed">注册成功</string>
@@ -318,18 +337,6 @@
 
     <string name="common_phone_num_fail">手机号码错误，请输入正确的手机号码</string>
 
-    <!--设置模块-->
-    <!--设置界面-->
-    <string name="settings_title">设置</string>
-    <string name="settings_username">用户名</string>
-    <string name="settings_real_name_auth">实名认证</string>
-    <string name="settings_bind_bank_card">绑定银行卡</string>
-    <string name="settings_bind_phone">绑定手机</string>
-    <string name="settings_no_write">未填写</string>
-    <string name="settings_write_now">已填写</string>
-    <string name="settings_attestation">已认证</string>
-    <string name="settings_no_bind">未绑定</string>
-    <string name="settings_login_out">退出登录</string>
     <!--实名认证-->
     <string name="settings_auth_name_hint">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
     <string name="settings_identity_card_fail">身份证格式错误，请输入15位或18位身份证号码</string>
@@ -352,7 +359,6 @@
     <string name="modify_nick_name_success">昵称修改成功</string>
     <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
     <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
-    <string name="modify_nick_name_twice">目前只支持一次昵称修改，您已经做过修改</string>
     <!-- **********************************************************************   公共的字符    **********************************************************************-->
     <string name="common_txt_length_fail">请至少输入2个字符</string>
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_setting"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.setting.SettingActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_setting"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.setting.SettingActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBarSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/setting_title" />
+        app:titleText="@string/setting_title"/>
 
     <RelativeLayout
         android:id="@+id/rlUserNameSetting"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting_user_name"
-            android:textColor="#A8A8A8" />
+            android:textColor="#A8A8A8"/>
 
         <TextView
             android:id="@+id/tvUserNameSetting"
@@ -36,15 +36,15 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage1"
-            android:textColor="#262626" />
+            android:textColor="#262626"/>
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/helpimage1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_arrow" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
     </RelativeLayout>
 
     <include layout="@layout/split_line_thick"></include>
@@ -61,25 +61,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting_real_name"
-            android:textColor="#A8A8A8" />
+            android:textColor="#A8A8A8"/>
 
         <TextView
-            android:layout_centerVertical="true"
             android:id="@+id/tvRealNameSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage2"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="@android:color/holo_blue_dark"/>
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/helpimage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_arrow" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
     </RelativeLayout>
 
     <include layout="@layout/split_line_thick"></include>
@@ -96,26 +96,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting_bind_bank_card"
-            android:textColor="#A8A8A8" />
+            android:textColor="#A8A8A8"/>
 
         <TextView
-            android:layout_centerVertical="true"
             android:id="@+id/tvBindBankCardSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage3"
             android:text="@string/setting_no_bind"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="@android:color/holo_blue_dark"/>
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/helpimage3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_arrow" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
     </RelativeLayout>
 
     <include layout="@layout/split_line_thick"></include>
@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting_bind_phone"
-            android:textColor="#A8A8A8" />
+            android:textColor="#A8A8A8"/>
 
         <TextView
             android:id="@+id/tvUserPhoneSetting"
@@ -140,15 +140,15 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/helpimage4"
-            android:textColor="#262626" />
+            android:textColor="#262626"/>
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/helpimage4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_arrow" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
     </RelativeLayout>
 
     <include layout="@layout/split_line_thick"></include>
@@ -156,16 +156,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/tvLoginOutSetting"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:background="@android:color/holo_red_light"
+        android:background="@drawable/btn_exit"
         android:clickable="true"
         android:gravity="center"
         android:text="@string/setting_login_out"
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 </LinearLayout>

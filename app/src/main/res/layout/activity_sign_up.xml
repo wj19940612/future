@@ -101,7 +101,7 @@
 
             <EditText
                 android:id="@+id/registerRetrieveIma"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:drawableLeft="@drawable/ic_login_image_code"
@@ -130,11 +130,9 @@
                 android:background="@color/colorPrimary"/>
         </RelativeLayout>
 
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_height="60dp">
 
             <ImageView
                 android:id="@+id/showPasswordButton"
@@ -150,16 +148,16 @@
             <EditText
                 android:id="@+id/password"
                 style="@style/SignEditText.Password"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/showPasswordButton"
+                android:layout_toLeftOf="@+id/showPasswordButton"
                 android:drawableLeft="@drawable/login_icon_lock"
                 android:drawablePadding="@dimen/common_view_margin"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"
-                />
+                android:textSize="@dimen/mine_editTest_size"/>
+
         </RelativeLayout>
 
         <include layout="@layout/split_line_thick"/>
@@ -170,17 +168,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/common_view_margin"
+        android:paddingRight="@dimen/common_view_margin">
 
         <CheckBox
             android:id="@+id/agreeProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:button="@drawable/checkbox_register"
+
             android:gravity="center"
+            android:paddingStart="5dp"
             android:text="@string/read_and_agreed"
             android:textColor="#666666"
-            android:textSize="13sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/serviceProtocol"

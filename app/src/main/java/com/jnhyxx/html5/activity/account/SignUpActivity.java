@@ -100,7 +100,9 @@ public class SignUpActivity extends BaseActivity {
         mPassword.addTextChangedListener(mValidationWatcher);
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mAgreeProtocol.setChecked(isChecked);
+                mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
                 activeButtons();
             }
         });
@@ -296,7 +298,7 @@ public class SignUpActivity extends BaseActivity {
                                 mImageCode.setVisibility(View.VISIBLE);
                                 mRetrieveImage.setImageBitmap(bitmap);
                             } else {
-                                mFailWarn.setVisible(true,true);
+                                mFailWarn.setVisible(true, true);
                                 mFailWarn.setCenterTxt(R.string.network_error_load_image);
                             }
                         }

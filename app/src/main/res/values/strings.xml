@@ -76,7 +76,7 @@
     <string name="password">密码</string>
     <string name="promote_code">推广码</string>
     <string name="obtain_auth_code">获取验证码</string>
-    <string name="read_and_agreed">我已阅读并同意</string>
+    <string name="read_and_agreed">  我已阅读并同意</string>
     <string name="service_protocol">《服务协议》</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
@@ -301,7 +301,7 @@
     <string name="register_code_image_hint">请输入动态验证码</string>
     <string name="register_code_image">图片验证码</string>
     <string name="register_get_image_code">获取图片验证码</string>
-    <string name="service_protocol_title">威盘原油宝服务协议</string>
+    <string name="service_protocol_title">微盘原油宝服务协议</string>
 
     <!--修改密码-->
     <string name="modify_passWord_success">密码修改成功</string>

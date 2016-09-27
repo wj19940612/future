@@ -25,7 +25,6 @@ import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
@@ -50,8 +49,7 @@ public class SignUpActivity extends BaseActivity {
 
     private static final String TAG = "SignUpActivity";
 
-    //服务协议的接口
-    public static final String SERVICE_PROTOCOL = APIBase.getHost() + "/xieyi/agreement.html";
+
 
 
     public static final String SERVICE_PROTOCOL_INFO_TITLE = "service_protocol_title";
@@ -197,7 +195,7 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.serviceProtocol:
                 Launcher.with(SignUpActivity.this, WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_URL, SERVICE_PROTOCOL)
+                        .putExtra(WebViewActivity.EX_URL, API.getRegisterServiceProtocol())
                         .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
                 break;
         }

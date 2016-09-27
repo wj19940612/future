@@ -44,8 +44,6 @@ public class UserInfo {
     public static final int BANKCARD_STATUS_AUTHERIZED = 2;*/
 
 
-    public static final int RESPONSE_ERROR_CODE = 601;
-
     /**
      * moneyUsable可用资金余额
      */

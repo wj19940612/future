@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.message.MessageList;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -105,7 +104,10 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
 ////                    }).setTag(TAG).setIndeterminate(this).fire();
 //        }
 
-        API.User.findNewsList(mType, mPageNo, mPageSize).setTag(TAG).setIndeterminate(this).setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {
+        API.User.findNewsList(mType, mPageNo, mPageSize)
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {
             @Override
             public void onRespSuccess(List<MessageList> messageLists) {
                 for (int i = 0; i < messageLists.size(); i++) {

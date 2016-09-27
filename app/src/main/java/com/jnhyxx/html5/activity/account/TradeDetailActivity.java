@@ -98,22 +98,10 @@ public class TradeDetailActivity extends BaseActivity {
 
     private void initViewPager() {
         fragmentList = new ArrayList<>();
-//        FundDetailFragment fundDetailFragment = FundDetailFragment.newInstance();
-//        fragmentList.add(fundDetailFragment);
-//        IntegralDetailFragment integralDetailFragment = IntegralDetailFragment.newInstance();
-//        fragmentList.add(integralDetailFragment);
-
-//        TradeDetailListFragment fundTradeDetailListFragment = TradeDetailListFragment.newInstance();
-//        fundTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_FUND);
-//        fragmentList.add(fundTradeDetailListFragment);
-//        TradeDetailListFragment integralTradeDetailListFragment = TradeDetailListFragment.newInstance();
-//        integralTradeDetailListFragment.setData(TradeDetailListFragment.TYPE_INTEGRAL);
-//        fragmentList.add(integralTradeDetailListFragment);
 
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(0,false);
         mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
-//        mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this, fragmentList);
         mViewPager.setAdapter(mTradeDetailFragmentAdapter);
 
 
@@ -125,18 +113,12 @@ public class TradeDetailActivity extends BaseActivity {
 
     class TradeDetailFragmentAdapter extends FragmentPagerAdapter {
         Context mContext;
-        ArrayList<Fragment> fragments;
 
         public TradeDetailFragmentAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.mContext = context;
         }
 
-        public TradeDetailFragmentAdapter(FragmentManager fm, Context context, ArrayList<Fragment> fragmentArrayList) {
-            super(fm);
-            this.mContext = context;
-            this.fragments = fragmentArrayList;
-        }
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -160,14 +142,6 @@ public class TradeDetailActivity extends BaseActivity {
             }
             return null;
         }
-//        // TODO: 2016/9/19 目前有问题，没有复用
-//        @Override
-//        public Fragment getItem(int position) {
-//            if (fragments != null && !fragments.isEmpty()) {
-//                return fragments.get(position);
-//            }
-//            return null;
-//        }
 
         @Override
         public int getCount() {

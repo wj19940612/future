@@ -114,17 +114,14 @@ public class CommonFailWarn extends RelativeLayout {
         setDrawLeft(mCenterDrawable);
         setVisible(mViewVisible, isFirst);
     }
+
     public void setVisible(boolean viewVisible) {
-        this.setVisible(viewVisible,true);
+        this.setVisible(viewVisible, true);
     }
+
     public void setVisible(boolean viewVisible, boolean isFirst) {
         this.mViewVisible = viewVisible;
         this.isFirst = isFirst;
-//        float translationY = getTranslationY();
-//        TranslateAnimation translateDownAnimation = new TranslateAnimation(0, 0, 0, translationY);
-//        translateDownAnimation.setFillAfter(true);
-//        translateDownAnimation.setDuration(ANIMATION_TIME);
-//        translateDownAnimation.start();
         this.setVisibility(mViewVisible ? VISIBLE : INVISIBLE);
         if (isFirst) {
             Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top);
@@ -186,6 +183,15 @@ public class CommonFailWarn extends RelativeLayout {
         mCenterTxt = centerTxt;
         if (TextUtils.isEmpty(mCenterTxt)) return;
         mCenterView.setText(mCenterTxt);
+        setVisible(true);
+    }
+
+    public void show(CharSequence charSequence) {
+        setCenterTxt(charSequence);
+    }
+
+    public void show(int resId) {
+        setCenterTxt(resId);
     }
 
     public void setCenterTxtSize(int centerTxtSize) {

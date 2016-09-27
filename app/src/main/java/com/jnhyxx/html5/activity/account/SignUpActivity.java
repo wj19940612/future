@@ -50,8 +50,6 @@ public class SignUpActivity extends BaseActivity {
     private static final String TAG = "SignUpActivity";
 
 
-
-
     public static final String SERVICE_PROTOCOL_INFO_TITLE = "service_protocol_title";
 
 
@@ -224,7 +222,7 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
                             getRegisterImage();
-                        } else if (resp.getCode() == 601) {
+                        } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
                             getRegisterImage();
                             mFailWarn.setVisible(true);
                             mFailWarn.setCenterTxt(resp.getMsg());

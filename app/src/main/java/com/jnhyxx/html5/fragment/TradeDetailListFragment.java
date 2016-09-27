@@ -115,35 +115,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
     public void getTradeInfoList() {
         Log.d(TAG, "所选的fragment " + mFragmentType);
-//        if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-//            API.Finance.getFundSwitchIntegral(TYPE_FUND, mOffset, mSize)
-//                    .setTag(TAG)
-//                    .setIndeterminate(this)
-//                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-//                        @Override
-//                        public void onReceive(Resp<List<TradeDetail>> listResp) {
-//
-//                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-//                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-//                                Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
-//                            }
-//                            setAdapter(mTradeDetailList);
-//                        }
-//                    }).fire();
-//        } else if (TextUtils.equals(mFragmentType, TYPE_INTEGRAL)) {
-//            API.Finance.getFundSwitchIntegral(TYPE_INTEGRAL, mOffset, mSize)
-//                    .setTag(TAG).setIndeterminate(this)
-//                    .setCallback(new Callback<Resp<List<TradeDetail>>>() {
-//                        @Override
-//                        public void onReceive(Resp<List<TradeDetail>> listResp) {
-//                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-//                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-//                                Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
-//                            }
-//                            setAdapter(mTradeDetailList);
-//                        }
-//                    }).fire();
-//        }
 
         API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
                 .setTag(TAG).setIndeterminate(this)

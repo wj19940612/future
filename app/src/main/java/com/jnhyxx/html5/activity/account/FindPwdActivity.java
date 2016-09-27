@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -137,7 +136,7 @@ public class FindPwdActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                        } else if (resp.getCode() == UserInfo.RESPONSE_ERROR_CODE) {
+                        } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
                             showFailWarnView(resp);
                             mImageCode.setVisibility(View.VISIBLE);
                             getRetrieveImageCode();

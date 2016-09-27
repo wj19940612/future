@@ -28,7 +28,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
@@ -43,18 +42,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
 
     private static final String TAG = "SignUpActivity";
-
-
-
-
-    public static final String SERVICE_PROTOCOL_INFO_TITLE = "service_protocol_title";
-
-
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.registerAuthCode)
@@ -80,7 +71,7 @@ public class SignUpActivity extends BaseActivity {
     EditText mRegisterRetrieveImage;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
-    @BindView(R.id.RetrieveImageCode)
+    @BindView(R.id.retrieveImageCode)
     ImageView mRetrieveImage;
 
     private boolean flag = false;
@@ -112,7 +103,6 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
-                onBackPressed();
             }
         });
     }
@@ -120,14 +110,7 @@ public class SignUpActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
@@ -181,7 +164,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.serviceProtocol})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.retrieveImageCode, R.id.serviceProtocol, R.id.showPasswordButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -190,7 +173,7 @@ public class SignUpActivity extends BaseActivity {
             case R.id.signInButton:
                 signUp();
                 break;
-            case R.id.RetrieveImageCode:
+            case R.id.retrieveImageCode:
                 getRegisterImage();
                 break;
             case R.id.serviceProtocol:
@@ -198,16 +181,16 @@ public class SignUpActivity extends BaseActivity {
                         .putExtra(WebViewActivity.EX_URL, API.getRegisterServiceProtocol())
                         .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
                 break;
+            case R.id.showPasswordButton:
+                changePasswordInputType();
+                break;
+
         }
     }
 
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
         String imageCode = "";
-        if (!CommonMethodUtils.isMobileNum(phoneNum)) {
-            ToastUtil.curt(R.string.common_phone_num_fail);
-            return;
-        }
         if (mRegisterRetrieveImage.isShown()) {
             imageCode = mRegisterRetrieveImage.getText().toString().trim();
         }
@@ -224,41 +207,32 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
                             getRegisterImage();
-                        } else if (resp.getCode() == 601) {
+                        } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
                             getRegisterImage();
-                            mFailWarn.setVisible(true);
-                            mFailWarn.setCenterTxt(resp.getMsg());
+                            mFailWarn.show(resp.getMsg());
                         } else {
-                            mFailWarn.setVisible(true);
-                            mFailWarn.setCenterTxt(resp.getMsg());
+                            mFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();
     }
 
-    //注册
-    @OnClick(R.id.signUpButton)
-    void signUp() {
+    public void signUp() {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.signUp(phoneNum, password, authCode, null)
+        API.User.register(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-                            if (mFailWarn.isShown()) {
-                                mFailWarn.setVisibility(View.GONE);
-                            }
-                            onBackPressed();
+
                         } else {
-                            mFailWarn.setCenterTxt(resp.getMsg());
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.show(View.VISIBLE);
                         }
                     }
                 }).fire();
@@ -285,8 +259,9 @@ public class SignUpActivity extends BaseActivity {
                                 mImageCode.setVisibility(View.VISIBLE);
                                 mRetrieveImage.setImageBitmap(bitmap);
                             } else {
-                                mFailWarn.setVisible(true, true);
-                                mFailWarn.setCenterTxt(R.string.network_error_load_image);
+                                // TODO: 2016/9/27 这里产品每明确
+//                                mFailWarn.setVisible(true, true);
+//                                mFailWarn.show(R.string.network_error_load_image);
                             }
                         }
                     });
@@ -299,9 +274,7 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
-    //点击后改变文本输入框的输入类型，使密码可见或隐藏
-    @OnClick(showPasswordButton)
-    void changePasswordInputType() {
+    private void changePasswordInputType() {
         if (!flag) {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             mImagePasswordType.setSelected(true);

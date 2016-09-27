@@ -1,15 +1,5 @@
 package com.jnhyxx.html5.domain.account;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Administrator on 2016/8/31.
  * 登陆成功后返回的数据
@@ -20,31 +10,17 @@ public class UserInfo {
     /**
      * 银行卡绑定状态  0未填写，1已填写，2已认证
      */
+    public static final int BANKCARD_STATUS_UNFILLED = 0;
+    public static final int BANKCARD_STATUS_FILLED = 1;
+    public static final int BANKCARD_STATUS_BOUND = 2;
 
-    public static final int BANK_CARD_AUTH_STATUS_NOT_WRITE = 0;
-    public static final int BANK_CARD_AUTH_STATUS_WRITE = 1;
-    public static final int BANK_CARD_AUTH_STATUS_ATTESTATION = 2;
     /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      */
-    public static final int REAL_NAME_AUTH_STATUS_NOT_WRITE = 0;
-    public static final int REAL_NAME_AUTH_STATUS_WRITE = 1;
-    public static final int REAL_NAME_AUTH_STATUS_ATTESTATION = 2;
+    public static final int REAL_NAME_STATUS_UNFILLED = 0;
+    public static final int REAL_NAME_STATUS_FILLED = 1;
+    public static final int REAL_NAME_STATUS_VERIFIED = 2;
 
-
-    // TODO: 2016/9/23 冲突的数据，可能没有问题 
-   /* public static final int ID_STATUS_STATUS_FILL = 1;
-    public static final int ID_STATUS_STATUS_AUTHERIZED = 2;
-
-    */
-    /**
-     * idStatus实名状态 0未填写，1已填写，2已认证
-     *//*
-    public static final int BANKCARD_STATUS_FILL = 1;
-    public static final int BANKCARD_STATUS_AUTHERIZED = 2;*/
-
-
-    public static final int RESPONSE_ERROR_CODE = 601;
 
     /**
      * moneyUsable可用资金余额
@@ -105,50 +81,6 @@ public class UserInfo {
      */
     private boolean bIsSetNickName;
     private int bankId;
-
-    public static UserInfo objectFromData(String str) {
-
-        return new Gson().fromJson(str, UserInfo.class);
-    }
-
-    public static UserInfo objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), UserInfo.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static List<UserInfo> arrayUserInfoFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<UserInfo>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
-
-    public static List<UserInfo> arrayUserInfoFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<UserInfo>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
-    }
 
     public double getMoneyUsable() {
         return moneyUsable;
@@ -254,12 +186,12 @@ public class UserInfo {
         this.icon = icon;
     }
 
-    public boolean isBIsSetNickName() {
+    public boolean isNickNameModifiedBefore() {
         return bIsSetNickName;
     }
 
-    public void setBIsSetNickName(boolean bIsSetNickName) {
-        this.bIsSetNickName = bIsSetNickName;
+    public void setNickNameModified() {
+        this.bIsSetNickName = true;
     }
 
     public int getBankId() {

@@ -97,8 +97,7 @@ public class ModifyPwdActivity extends BaseActivity {
     @OnClick(R.id.confirmButton)
     public void onClick() {
         if (!TextUtils.equals(mNewPwd, confirmPassword)) {
-            mModifyPasswordWarn.setVisible(true);
-            mModifyPasswordWarn.setCenterTxt(R.string.newPassword_different_from_confimPassword);
+            mModifyPasswordWarn.show(R.string.newPassword_different_from_confimPassword);
         } else {
             API.User.modifyPwdWhenFindPwd(mPhone, mNewPwd)
                     .setIndeterminate(this).setTag(TAG)
@@ -108,8 +107,7 @@ public class ModifyPwdActivity extends BaseActivity {
                             if (resp.isSuccess()) {
                                 CustomToast.getInstance().custommakeText(ModifyPwdActivity.this, R.string.modify_passWord_success);
                             } else {
-                                mModifyPasswordWarn.setVisible(true);
-                                mModifyPasswordWarn.setCenterTxt(resp.getMsg());
+                                mModifyPasswordWarn.show(resp.getMsg());
                             }
                         }
                     }).fire();

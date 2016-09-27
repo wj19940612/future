@@ -187,7 +187,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_trade_detail, null);
+                convertView = LayoutInflater.from(context).inflate(R.layout.row_trade_detail, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {

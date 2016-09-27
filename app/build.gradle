@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.jnhyxx.html5"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         buildConfigField('String', 'API_HOST', '\"http://www.jnhyxx.com\"')

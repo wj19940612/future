@@ -3,6 +3,9 @@ package com.jnhyxx.html5.net;
 
 public class Resp<T> {
 
+    //请求错误次数超限制返回码
+    public static final int CODE_ERROR_REQUEST_OVERRUN = 601;
+
     private int code;
     private String msg;
     private T data;
@@ -15,7 +18,7 @@ public class Resp<T> {
         return msg;
     }
 
-    public void setMsg(){
+    public void setMsg() {
         msg = "";
     }
 
@@ -27,13 +30,17 @@ public class Resp<T> {
         return code == 200;
     }
 
+    public boolean isTokenExpired() {
+        return code == 503;
+    }
+
     public boolean hasData() {
         return data != null;
     }
 
     @Override
     public String toString() {
-        return "Response{" +
+        return "Resp{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

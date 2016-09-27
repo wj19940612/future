@@ -100,13 +100,10 @@
             android:name=".activity.account.WithdrawActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.ProfileActivity"
+            android:name=".activity.account.NameVerifyActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.NameAuthActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.account.BankcardAuthActivity"
+            android:name=".activity.account.BankcardBindingActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.account.RechargeActivity"
@@ -142,7 +139,7 @@
             android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.setting.SettingActivity"
+            android:name=".activity.setting.SettingsActivity"
             android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->

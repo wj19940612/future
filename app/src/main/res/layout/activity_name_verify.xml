@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.account.NameAuthActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".activity.account.NameVerifyActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/real_name_authorize" />
+        app:titleText="@string/real_name_authorize"/>
 
-    <com.jnhyxx.html5.view.CommonFailWarn
-        android:id="@+id/identityCardWarn"
-        style="@style/commonFailWarn" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="60dp">
 
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/identityCardWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_view_margin"
+            android:layout_marginRight="@dimen/common_view_margin"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView"
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textColor="#262626" />
+                android:textColor="#262626"/>
 
             <EditText
-                android:inputType="textPersonName"
                 android:id="@+id/name"
                 style="@style/SignEditText"
                 android:layout_width="0dp"
@@ -47,51 +48,61 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:hint="@string/please_input_real_name"
-                android:textColorHint="#CBCBCB" />
+                android:inputType="textPersonName"
+                android:textColorHint="#CBCBCB"/>
         </LinearLayout>
+    </RelativeLayout>
 
-        <include layout="@layout/split_line_thick" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/common_view_margin"
+        android:paddingRight="@dimen/common_view_margin">
+
+        <include layout="@layout/split_line_thick"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:gravity="center"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <TextView
+
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/identity_num"
-                android:textColor="#262626" />
+                android:textColor="#262626"/>
 
             <EditText
-                android:digits="0123456789Xx"
                 android:id="@+id/identityNum"
                 style="@style/SignEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:digits="0123456789Xx"
                 android:enabled="false"
                 android:hint="@string/please_input_identity_num"
                 android:maxLength="18"
-                android:textColorHint="#CBCBCB" />
+                android:textColorHint="#CBCBCB"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@android:color/black" />
+            android:background="@android:color/black"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="15dp"
             android:paddingTop="15dp"
-            android:text="@string/setting_auth_name_hint"
+            android:text="@string/settings_auth_name_hint"
             android:textColor="#FB4B55"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/submitToAuthButton"
@@ -99,6 +110,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/submit_to_auth" />
+            android:text="@string/submit_to_auth"/>
     </LinearLayout>
 </LinearLayout>

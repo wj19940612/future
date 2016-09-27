@@ -35,6 +35,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/phoneNum"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="0dp"
@@ -67,6 +68,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/password"
                 style="@style/SignEditText.Password"
                 android:layout_width="0dp"

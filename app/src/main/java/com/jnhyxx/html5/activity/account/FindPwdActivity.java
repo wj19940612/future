@@ -140,12 +140,13 @@ public class FindPwdActivity extends BaseActivity {
                         } else if (resp.getCode() == UserInfo.RESPONSE_ERROR_CODE) {
                             showFailWarnView(resp);
                             mImageCode.setVisibility(View.VISIBLE);
+                            getRetrieveImageCode();
                         } else {
                             showFailWarnView(resp);
                         }
                     }
                 }).fire();
-        getRetrieveImageCode();
+
     }
 
     private void getRetrieveImageCode() {
@@ -153,19 +154,6 @@ public class FindPwdActivity extends BaseActivity {
         if (TextUtils.isEmpty(userPhone)) return;
         final String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
         Log.d(TAG, "找回密码页面图片验证码地址  " + url);
-//        Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
-//            @Override
-//            public void onSuccess() {
-//                imageCodeLoadHint.setVisibility(View.GONE);
-//                mRetrieveImageCode.setVisibility(View.VISIBLE);
-//            }
-//
-//            @Override
-//            public void onError() {
-//                // TODO: 2016/9/8  目前先做这样处理
-//                imageCodeLoadHint.setVisibility(View.VISIBLE);
-//            }
-//        });
         new Thread(new Runnable() {
             @Override
             public void run() {

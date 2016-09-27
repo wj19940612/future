@@ -32,6 +32,7 @@
 
 
             <EditText
+                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/newPassword"
                 style="@style/SignEditText.Password"
                 android:layout_width="match_parent"
@@ -60,6 +61,7 @@
             android:layout_height="60dp">
 
             <EditText
+                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/confirmPassword"
                 style="@style/SignEditText.Password"
                 android:layout_width="match_parent"

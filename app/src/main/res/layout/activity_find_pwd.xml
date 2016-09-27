@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:textSize="@dimen/mine_editTest_size"
             android:id="@+id/findPasswordPhoneNum"
             style="@style/SignEditText.PhoneNum"
             android:layout_width="match_parent"
@@ -68,6 +69,7 @@
                 android:textSize="13sp"/>
 
             <EditText
+                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/findPasswordMessageAuthCode"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="wrap_content"
@@ -101,21 +103,21 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="@dimen/mine_view_bottom_radius"
-                    android:background="@mipmap/ic_launcher"
                     android:clickable="true"
                     android:visibility="visible"/>
 
                 <EditText
-
+                    android:layout_marginBottom="10dp"
                     android:id="@+id/inputImageCode"
-                    style="@style/SignEditText.PhoneNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:background="@null"
                     android:drawableLeft="@drawable/ic_login_image_code"
                     android:drawablePadding="@dimen/drawable_left_padding"
                     android:hint="@string/register_code_image_hint"
-                    android:textColorHint="@color/grayHint"/>
+                    android:textColorHint="@color/grayHint"
+                    android:textSize="12sp"/>
             </RelativeLayout>
 
             <include layout="@layout/split_line_thick"/>

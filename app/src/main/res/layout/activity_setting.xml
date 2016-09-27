@@ -118,7 +118,7 @@
             android:src="@drawable/ic_arrow"/>
     </RelativeLayout>
 
-    <include layout="@layout/split_line_thick"></include>
+    <include layout="@layout/split_line_thick"/>
 
     <RelativeLayout
         android:id="@+id/rlUserPhoneSetting"

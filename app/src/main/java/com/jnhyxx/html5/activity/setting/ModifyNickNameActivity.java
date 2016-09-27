@@ -47,10 +47,6 @@ public class ModifyNickNameActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String nickName = mEtModifyNickName.getText().toString().trim();
-                if (nickName.length() < 2) {
-                    ToastUtil.curt(R.string.common_txt_length_fail);
-                    return;
-                }
                 if (!CommonMethodUtils.getNicknameStatus(nickName)) {
                     mModifyNickNameFailWarnWarn.setVisible(true);
                     return;

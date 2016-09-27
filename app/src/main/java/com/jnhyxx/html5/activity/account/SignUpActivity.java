@@ -28,7 +28,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
@@ -72,7 +71,7 @@ public class SignUpActivity extends BaseActivity {
     EditText mRegisterRetrieveImage;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
-    @BindView(R.id.RetrieveImageCode)
+    @BindView(R.id.retrieveImageCode)
     ImageView mRetrieveImage;
 
     private boolean flag = false;
@@ -165,7 +164,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.serviceProtocol, R.id.signUpButton, R.id.showPasswordButton})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.retrieveImageCode, R.id.serviceProtocol, R.id.showPasswordButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -174,16 +173,13 @@ public class SignUpActivity extends BaseActivity {
             case R.id.signInButton:
                 signUp();
                 break;
-            case R.id.RetrieveImageCode:
+            case R.id.retrieveImageCode:
                 getRegisterImage();
                 break;
             case R.id.serviceProtocol:
                 Launcher.with(SignUpActivity.this, WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_URL, API.getRegisterServiceProtocol())
                         .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
-                break;
-            case R.id.signUpButton:
-                signUp();
                 break;
             case R.id.showPasswordButton:
                 changePasswordInputType();
@@ -195,10 +191,6 @@ public class SignUpActivity extends BaseActivity {
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
         String imageCode = "";
-        if (!CommonMethodUtils.isMobileNum(phoneNum)) {
-            ToastUtil.curt(R.string.common_phone_num_fail);
-            return;
-        }
         if (mRegisterRetrieveImage.isShown()) {
             imageCode = mRegisterRetrieveImage.getText().toString().trim();
         }
@@ -217,11 +209,9 @@ public class SignUpActivity extends BaseActivity {
                             getRegisterImage();
                         } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
                             getRegisterImage();
-                            mFailWarn.setVisible(true);
-                            mFailWarn.setCenterTxt(resp.getMsg());
+                            mFailWarn.show(resp.getMsg());
                         } else {
-                            mFailWarn.setVisible(true);
-                            mFailWarn.setCenterTxt(resp.getMsg());
+                            mFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();
@@ -237,17 +227,12 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-                            if (mFailWarn.isShown()) {
-                                mFailWarn.setVisibility(View.GONE);
-                            }
-                            onBackPressed();
+
                         } else {
-                            mFailWarn.setCenterTxt(resp.getMsg());
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            mFailWarn.show(View.VISIBLE);
                         }
                     }
                 }).fire();
@@ -274,8 +259,9 @@ public class SignUpActivity extends BaseActivity {
                                 mImageCode.setVisibility(View.VISIBLE);
                                 mRetrieveImage.setImageBitmap(bitmap);
                             } else {
-                                mFailWarn.setVisible(true, true);
-                                mFailWarn.setCenterTxt(R.string.network_error_load_image);
+                                // TODO: 2016/9/27 这里产品每明确
+//                                mFailWarn.setVisible(true, true);
+//                                mFailWarn.show(R.string.network_error_load_image);
                             }
                         }
                     });

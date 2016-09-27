@@ -97,7 +97,7 @@
                 android:layout_height="60dp">
 
                 <ImageView
-                    android:id="@+id/RetrieveImageCode"
+                    android:id="@+id/retrieveImageCode"
                     android:layout_width="85dp"
                     android:layout_height="34dp"
                     android:layout_alignParentBottom="true"

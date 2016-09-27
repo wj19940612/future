@@ -42,7 +42,7 @@ public class FindPwdActivity extends BaseActivity {
     TextView mNextStepButton;
     @BindView(R.id.inputImageCode)
     EditText mInputImageCode;
-    @BindView(R.id.RetrieveImageCode)
+    @BindView(R.id.retrieveImageCode)
     ImageView mRetrieveImageCode;
     @BindView(R.id.imageCode)
     LinearLayout mImageCode;
@@ -101,7 +101,7 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     //获取验证码
-    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.RetrieveImageCode})
+    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.retrieveImageCode})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -110,7 +110,7 @@ public class FindPwdActivity extends BaseActivity {
             case R.id.nextStepButton:
                 doNextStepButtonClick();
                 break;
-            case R.id.RetrieveImageCode:
+            case R.id.retrieveImageCode:
                 getRetrieveImageCode();
                 break;
         }

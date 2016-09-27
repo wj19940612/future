@@ -20,26 +20,6 @@ public class AboutUsActivity extends BaseActivity {
     private static final String SERVICE_QQ = "3088152027";
     @BindView(R.id.activityAboutUsTvVersionName)
     TextView mTVVersionName;
-    //    //公司简介
-//    @BindView(R.id.activity_about_us_rl_company_info)
-//    RelativeLayout rl_companyInfo;
-//    @BindView(R.id.activity_about_us_tv_company_info)
-//    TextView tv_companyInfo;
-//    //管理团队
-//    @BindView(R.id.activity_about_us_rl_manager_team)
-//    RelativeLayout rl_manager_team;
-//    @BindView(R.id.activity_about_us_tv_manager_team)
-//    TextView tv_manager_team;
-//    //企业文化
-//    @BindView(R.id.activity_about_us_rl_company_culture)
-//    RelativeLayout rl_company_cultrue;
-//    @BindView(R.id.activity_about_us_tv_company_culture)
-//    TextView tv_company_cultrue;
-//    //合作案例
-//    @BindView(R.id.activity_about_us_rl_collaborate_case)
-//    RelativeLayout rl_collaborate_case;
-//    @BindView(R.id.activity_about_us_tv_collaborate_case)
-//    TextView tv_collaborate_case;
     //公司热线
     @BindView(R.id.activityAboutUsRCompanyTelephone)
     RelativeLayout mRlCompanyTelephone;

@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.account;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,7 +55,6 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    // TODO: 2016/9/22 原来的布局，不符合UI
     @BindView(R.id.applyFor)
     TextView mApplyFor;
     @BindView(R.id.leftLine)
@@ -103,6 +103,8 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
 //    TextView mAccountTime;
     @BindView(R.id.activity_withdraw_record_info)
     LinearLayout mActivityWithdrawRecordInfo;
+    @BindView(R.id.accountTimeHint)
+    TextView mAccountTimeHint;
 
 
     private int mWithDrawId;
@@ -133,16 +135,15 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
 
 
     private void updateView(WithDrawRecordInfo withDrawRecordInfo) {
-        // TODO: 2016/9/22 原来的方法，不符合UI,后面可能会用到
         if (withDrawRecordInfo == null) return;
-            Drawable mNormalDrawable = getResources().getDrawable(R.drawable.ic_apply_normal);
-            mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
+        Drawable mNormalDrawable = getResources().getDrawable(R.drawable.ic_apply_normal);
+        mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
 
-            Drawable mFailDrawable = getResources().getDrawable(R.drawable.ic_apply_fail);
-            mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
+        Drawable mFailDrawable = getResources().getDrawable(R.drawable.ic_apply_fail);
+        mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
 
-            Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed);
-            mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
+        Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed);
+        mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
 
         //刚刚发起
@@ -168,6 +169,10 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             mLeftLine.setEnabled(true);
             mRightLine.setEnabled(true);
             mWithdrawTitleStatus.setText(SUCCESS);
+
+            mAccountTimeHint.setVisibility(View.GONE);
+            mAccountTime.setVisibility(View.VISIBLE);
+            mAccountTime.setText(withDrawRecordInfo.getUpdateTime());
             //提现拒绝
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.WITHDRAW_refuse) {
             mCompleteStatus = true;
@@ -206,7 +211,6 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         createTime = createTime.substring(0, createTime.lastIndexOf(":"));
         mTime.setText(createTime);
 
-        // TODO: 2016/9/22 到账时间无法确定，目前填写的是更新时间 
-        mAccountTime.setText(withDrawRecordInfo.getUpdateTime());
+
     }
 }

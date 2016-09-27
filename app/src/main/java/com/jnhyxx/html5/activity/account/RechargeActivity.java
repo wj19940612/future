@@ -85,29 +85,7 @@ public class RechargeActivity extends BaseActivity implements RechargeAsyncTask.
     };
 
     private void checkBankcardAuth() {
-        // TODO: 2016/9/13 判断银行卡信息，后面可能用到
-//        final BankcardAuth bankcardAuth = (BankcardAuth) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-//        if (bankcardAuth.getStatus() == BankcardAuth.STATUS_NOT_FILLED ||
-//                TextUtils.isEmpty(bankcardAuth.getPhone())) {
-//            SmartDialog.with(getActivity(), R.string.dialog_your_bankcard_info_is_not_complete)
-//                    .setCancelableOnTouchOutside(false)
-//                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                        @Override
-//                        public void onClick(Dialog dialog) {
-//                            Launcher.with(getActivity(), BankcardAuthActivity.class)
-//                                    .putExtra(Launcher.EX_PAYLOAD, bankcardAuth)
-//                                    .executeForResult(REQUEST_CODE);
-//                        }
-//                    })
-//                    .show();
-//        }
     }
-
-//    private RadioButton createRadioButton(int buttonText) {
-//        RadioButton button = new RadioButton(this);
-//        button.setText(buttonText);
-//        return button;
-//    }
 
     @OnClick({R.id.nextStepButton, R.id.bankCardPay, R.id.aliPayPay})
     public void onClick(View view) {

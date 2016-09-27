@@ -81,7 +81,7 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="resend_after_n_seconds">%1$d秒后重发</string>
-    <string name="please_input_phone_num">请输入手机号</string>
+    <string name="please_input_phone_num">请输入手机号码</string>
     <string name="please_input_password">请输入密码</string>
     <string name="forget_password">忘记密码?</string>
     <string name="recharge">充值</string>
@@ -93,7 +93,7 @@
     <string name="new_password">新密码</string>
     <string name="confirm_password">确认密码</string>
     <string name="please_input_new_password">请输入新密码(6到20位数字英文)</string>
-    <string name="please_input_msg_auth_code">请输入短信验证码</string>
+    <string name="please_input_msg_auth_code">请输入验证码</string>
     <string name="optional">没有可不填</string>
     <string name="please_repeat_new_password">请确认新的密码</string>
     <string name="exit">退出</string>

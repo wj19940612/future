@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"/>
 
         <EditText
-            android:textSize="@dimen/mine_editTest_size"
             android:id="@+id/findPasswordPhoneNum"
             style="@style/SignEditText.PhoneNum"
             android:layout_width="match_parent"
@@ -34,7 +33,8 @@
             android:drawableLeft="@drawable/login_icon_phone"
             android:drawablePadding="@dimen/drawable_left_padding"
             android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/grayHint"/>
+            android:textColorHint="@color/grayHint"
+            android:textSize="@dimen/mine_editTest_size"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -69,7 +69,6 @@
                 android:textSize="13sp"/>
 
             <EditText
-                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/findPasswordMessageAuthCode"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="wrap_content"
@@ -78,7 +77,8 @@
                 android:drawableLeft="@drawable/login_icon_code"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint"/>
+                android:textColorHint="@color/grayHint"
+                android:textSize="@dimen/mine_editTest_size"/>
         </RelativeLayout>
 
 
@@ -107,11 +107,11 @@
                     android:visibility="visible"/>
 
                 <EditText
-                    android:layout_marginBottom="10dp"
                     android:id="@+id/inputImageCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
                     android:background="@null"
                     android:drawableLeft="@drawable/ic_login_image_code"
                     android:drawablePadding="@dimen/drawable_left_padding"

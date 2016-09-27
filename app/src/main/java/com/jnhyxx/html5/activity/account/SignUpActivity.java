@@ -139,7 +139,7 @@ public class SignUpActivity extends BaseActivity {
             if (!TextUtils.isEmpty(phoneNum)) {
                 mImagePasswordType.setVisibility(View.VISIBLE);
             } else {
-                mImagePasswordType.setVisibility(View.GONE);
+                mImagePasswordType.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -219,7 +219,6 @@ public class SignUpActivity extends BaseActivity {
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -242,7 +241,6 @@ public class SignUpActivity extends BaseActivity {
     //注册
     @OnClick(R.id.signUpButton)
     void signUp() {
-        // TODO: 2016/9/12 目前还不知道出现图片验证码后该如何调用接口，是否需要上传
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
@@ -256,19 +254,10 @@ public class SignUpActivity extends BaseActivity {
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-                            // TODO: 2016/9/12 原来的代码，目前不知道用途
-//                            SmartDialog.with(getActivity(), resp.getMsg())
-//                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(Dialog dialog) {
-//                                            dialog.dismiss();
-//                                            finish();
-//                                        }
-//                                    }).show();
                             if (mFailWarn.isShown()) {
                                 mFailWarn.setVisibility(View.GONE);
                             }
-                            finish();
+                            onBackPressed();
                         } else {
                             mFailWarn.setCenterTxt(resp.getMsg());
                             mFailWarn.setVisibility(View.VISIBLE);

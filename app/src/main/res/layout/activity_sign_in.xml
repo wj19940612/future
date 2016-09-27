@@ -124,7 +124,7 @@
             android:layout_marginBottom="20dp"
             android:gravity="center_vertical"
             android:text="@string/forget_password"
-            android:textColor="#358CF3"
+            android:textColor="@color/blueAssist"
             android:textSize="12sp"/>
     </LinearLayout>
 </RelativeLayout>

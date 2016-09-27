@@ -29,7 +29,7 @@
             android:layout_below="@+id/dateYear"
             android:paddingTop="7dp"
             android:text="8:18:12"
-            android:textColor="#666666"
+            android:textColor="@color/lucky"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -62,7 +62,7 @@
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/tradeDetailDataType"
         android:text="美原油"
-        android:textColor="#666666"
+        android:textColor="@color/lucky"
         android:textSize="15sp"/>
 
     <TextView

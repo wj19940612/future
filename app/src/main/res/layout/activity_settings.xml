@@ -22,8 +22,8 @@
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/nickname"
-        app:rowTextColor="#A8A8A8"
-        app:subTextColor="#262626"/>
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/editText_color_input"/>
 
     <View
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/real_name_authorize"
-        app:rowTextColor="#A8A8A8"
+        app:rowTextColor="@color/colorDisable"
         app:subTextColor="@color/blueAssist"/>
 
     <View
@@ -52,7 +52,7 @@
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/binding_bank_card"
-        app:rowTextColor="#A8A8A8"
+        app:rowTextColor="@color/colorDisable"
         app:subTextColor="@color/blueAssist"/>
 
     <View
@@ -67,8 +67,8 @@
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/binding_phone"
-        app:rowTextColor="#A8A8A8"
-        app:subTextColor="#262626"/>
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/editText_color_input"/>
 
     <View
         android:layout_width="match_parent"

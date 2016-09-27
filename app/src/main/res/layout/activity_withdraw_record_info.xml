@@ -6,7 +6,7 @@
     android:id="@+id/activity_withdraw_record_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_bg"
+    android:background="@color/splitLine"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.account.WithdrawRecordInfoActivity">
 
@@ -33,7 +33,7 @@
             android:drawableTop="@drawable/ic_apply"
             android:gravity="center"
             android:text="@string/withdraw_record_apply_for"
-            android:textColor="#262626"
+            android:textColor="@color/editText_color_input"
             android:textSize="12sp"/>
 
         <TextView
@@ -54,7 +54,7 @@
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_apply_deal"
             android:text="@string/withdraw_record_detail"
-            android:textColor="#262626"
+            android:textColor="@color/editText_color_input"
             android:textSize="12sp"/>
 
         <TextView
@@ -77,7 +77,7 @@
             android:drawableTop="@drawable/ic_apply_normal"
             android:gravity="center"
             android:text="成功"
-            android:textColor="#262626"
+            android:textColor="@color/editText_color_input"
             android:textSize="12sp"/>
     </LinearLayout>
     <!--    <LinearLayout

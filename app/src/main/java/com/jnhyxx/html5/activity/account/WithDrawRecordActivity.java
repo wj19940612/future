@@ -138,7 +138,7 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
             if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_withdraw_record, null);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.row_withdraw_record, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {

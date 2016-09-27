@@ -52,8 +52,7 @@
                 android:layout_below="@+id/remainTitle"
                 android:layout_marginTop="10dp"
                 android:lines="1"
-                android:text="151651"
-                android:textColor="#FB4B55"
+                android:textColor="@color/redPrimary"
                 android:textSize="35sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -76,7 +75,7 @@
                 android:id="@+id/blockedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/money_Frozen"
+                android:text="@string/money_frozen"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -86,8 +85,7 @@
                 android:layout_below="@+id/blockedTitle"
                 android:layout_marginTop="10dp"
                 android:lines="1"
-                android:text="15651.1"
-                android:textColor="#FB4B55"
+                android:textColor="@color/redPrimary"
                 android:textSize="35sp"
                 android:textStyle="bold" />
         </RelativeLayout>

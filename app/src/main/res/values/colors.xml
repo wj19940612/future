@@ -21,8 +21,8 @@
     <color name="grayHint">#CBCBCB</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
-
-
+    <color name="lucky">#666666</color>
+    
     <!--*************************************公共颜色**************************************************-->
     <!--****分割线的颜色********-->
     <!--未铺满的分割线颜色-->
@@ -39,21 +39,10 @@
 
 
     <!--我的fragment-->
-    <color name="account_center_text">#262626</color>
-    <color name="account_top_blue_text">#358CF3</color>
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
-    <color name="common_bg">#e5e5e5</color>
-
-    <!--注册与找回密码界面不可点击按钮背景-->
-    <color name="regiserBtnBack">#a8a8a8</color>
-    <!--EditText的hint文字颜色-->
-    <color name="editText_hint_color">#CBCBCB</color>
     <color name="editText_color_input">#262626</color>
-
-
-    <!--提现记录详情界面-->
-    <color name="withdraw_detailed">#358cf3</color>
-    <color name="withdraw_detailing">#A8A8A8</color>
-
+    
+    <!--注册 -->
+    <color name="service_protocol">#147AEB</color>
 </resources>

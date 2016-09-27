@@ -26,7 +26,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/accountTradeWarnImageStatus"
             android:text="交易提醒通知"
-            android:textColor="#262626" />
+            android:textColor="@color/editText_color_input" />
 
         <TextView
             android:id="@+id/accountTradeWarnTvTime"
@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:lineSpacingExtra="10dp"
-        android:text="几十分开始放假看会电视看见了丰厚的设计开发和道具收费了深刻的复合接口上的号放假了快速点击返回"
-        android:textColor="#666666"
+        android:textColor="@color/lucky"
         android:textSize="12dp" />
 </LinearLayout>

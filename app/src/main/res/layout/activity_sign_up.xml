@@ -14,7 +14,7 @@
         app:backFeature="true"
         app:rightImage="@drawable/bg_account_register_right_shape"
         app:rightText="@string/sign_in"
-        app:rightTextColor="@color/account_top_blue_text"
+        app:rightTextColor="@color/blueAssist"
         app:rightTextSize="12sp"
         app:rightVisible="true"
         app:titleText="@string/sign_up_free"/>
@@ -188,7 +188,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/service_protocol"
-            android:textColor="#147AEB"
+            android:textColor="@color/service_protocol"
             android:textSize="13sp"/>
     </LinearLayout>
 

@@ -73,7 +73,7 @@ public class TradeDetailActivity extends BaseActivity {
                     case 1:
                         mRemainTitle.setText(R.string.account_trade_detail_integral_remain);
                         mRemainNumber.setText(String.valueOf(mUserFundInfo.getScoreUsable()));
-                        mBlockedTitle.setText(R.string.integral_Frozen);
+                        mBlockedTitle.setText(R.string.integral_frozen);
                         // TODO: 2016/9/19 目前不知冻结积分如何获取
                         mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMarginScore()));
                         break;
@@ -91,7 +91,7 @@ public class TradeDetailActivity extends BaseActivity {
         //资金余额
         mRemainNumber.setText(String.valueOf(mUserFundInfo.getMoneyUsable()));
         //右边头部
-        mBlockedTitle.setText(R.string.money_Frozen);
+        mBlockedTitle.setText(R.string.money_frozen);
         //冻结资金余额
         mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMoneyFrozen()));
     }

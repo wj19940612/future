@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textColor="#262626"/>
+                android:textColor="@color/editText_color_input"/>
 
             <EditText
                 android:id="@+id/name"
@@ -49,7 +49,7 @@
                 android:enabled="false"
                 android:hint="@string/please_input_real_name"
                 android:inputType="textPersonName"
-                android:textColorHint="#CBCBCB"/>
+                android:textColorHint="@color/grayHint"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -87,7 +87,7 @@
                 android:enabled="false"
                 android:hint="@string/please_input_identity_num"
                 android:maxLength="18"
-                android:textColorHint="#CBCBCB"/>
+                android:textColorHint="@color/grayHint"/>
         </LinearLayout>
 
         <View
@@ -101,7 +101,7 @@
             android:lineSpacingExtra="15dp"
             android:paddingTop="15dp"
             android:text="@string/settings_auth_name_hint"
-            android:textColor="#FB4B55"
+            android:textColor="@color/redPrimary"
             android:textSize="12sp"/>
 
         <TextView

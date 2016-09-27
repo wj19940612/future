@@ -46,7 +46,7 @@ public class ExpandableLayout extends RelativeLayout {
         CharSequence bottomTxt = typedArray.getText(R.styleable.ExpandableLayout_elBottomTxt);
         CharSequence leftTxt = typedArray.getText(R.styleable.ExpandableLayout_elLeftTxt);
         mDuration = typedArray.getInt(R.styleable.ExpandableLayout_elDuration, getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
-        View view = View.inflate(context, R.layout.account_view_expandable, this);
+        View view = View.inflate(context, R.layout.view_expandable, this);
         TextView tv_leftTxt = (TextView) view.findViewById(R.id.leftTxtView);
         final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.ivAboutUsRight);
         final TextView tv_bottom = (TextView) view.findViewById(R.id.bottomTxt);

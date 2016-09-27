@@ -34,7 +34,7 @@
                 android:id="@+id/sellDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#666666"
+                android:textColor="@color/lucky"
                 android:textSize="12sp"
                 tools:text="07/28\n10:24"/>
         </LinearLayout>
@@ -72,7 +72,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="25dp"
                 android:layout_toRightOf="@id/tradeType"
-                android:textColor="#666666"
+                android:textColor="@color/lucky"
                 tools:text="市价卖出"/>
 
             <TextView

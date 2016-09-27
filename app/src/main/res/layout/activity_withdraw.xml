@@ -41,7 +41,7 @@
             android:gravity="center"
             android:paddingBottom="25dp"
             android:text="@string/zero"
-            android:textColor="#FB4B55"
+            android:textColor="@color/redPrimary"
             android:textSize="50sp"/>
     </LinearLayout>
 
@@ -65,7 +65,7 @@
             android:gravity="center"
             android:padding="13dp"
             android:text="@string/add_bank_card"
-            android:textColor="#A8A8A8"
+            android:textColor="@color/colorDisable"
             android:textSize="16sp"/>
     </LinearLayout>
 
@@ -99,7 +99,7 @@
             android:gravity="center"
             android:hint="@string/withdraw_least_money_hint"
             android:textColor="#262626"
-            android:textColorHint="#CBCBCB"
+            android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>
 
         <include layout="@layout/split_line_thick"/>
@@ -124,7 +124,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="30dp"
         android:text="@string/warm_hint"
-        android:textColor="#FB4B55"
+        android:textColor="@color/redPrimary"
         android:textSize="12sp"/>
 
     <ScrollView
@@ -138,7 +138,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/prompt_withdraw"
-            android:textColor="#ABABAB"
+            android:textColor="@color/colorDisable"
             android:textSize="12sp"/>
     </ScrollView>
 

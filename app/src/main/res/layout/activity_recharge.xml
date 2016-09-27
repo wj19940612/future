@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="@string/recharge_amount"
-                android:textColor="#262626"/>
+                android:textColor="@color/editText_color_input"/>
 
             <EditText
                 android:id="@+id/rechargeAmount"
@@ -47,7 +47,7 @@
                 android:hint="@string/hint_recharge_amount"
                 android:inputType="numberDecimal"
                 android:textColor="@color/editText_color_input"
-                android:textColorHint="@color/editText_hint_color"/>
+                android:textColorHint="@color/grayHint"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -67,7 +67,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
             android:text="@string/please_choose_payment"
-            android:textColor="#a8a8a8"/>
+            android:textColor="@color/colorDisable"/>
 
         <LinearLayout
             android:id="@+id/payMethodMatherView"
@@ -97,7 +97,7 @@
                     android:layout_toRightOf="@+id/helpIcBankCardPay"
                     android:paddingTop="10dp"
                     android:text="@string/bank_card_pay"
-                    android:textColor="#262626"
+                    android:textColor="@color/editText_color_input"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -107,7 +107,7 @@
                     android:layout_toRightOf="@+id/helpIcBankCardPay"
                     android:paddingTop="8dp"
                     android:text="@string/bank_card_pay_hint"
-                    android:textColor="#a8a8a8"
+                    android:textColor="@color/colorDisable"
                     android:textSize="12sp"/>
 
                 <ImageView
@@ -139,7 +139,7 @@
                     android:layout_toRightOf="@+id/helpIcAliPayPay"
                     android:paddingTop="10dp"
                     android:text="@string/aliPay_pay"
-                    android:textColor="#262626"
+                    android:textColor="@color/editText_color_input"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -149,7 +149,7 @@
                     android:layout_toRightOf="@+id/helpIcAliPayPay"
                     android:paddingTop="8dp"
                     android:text="@string/aliPay_pay_hint"
-                    android:textColor="#a8a8a8"
+                    android:textColor="@color/colorDisable"
                     android:textSize="12sp"/>
 
                 <ImageView
@@ -178,7 +178,7 @@
             android:drawablePadding="5dp"
             android:gravity="center"
             android:text="@string/account_fund_is_covered_by_PA"
-            android:textColor="#FB4B55"
+            android:textColor="@color/redPrimary"
             android:textSize="12sp"/>
     </LinearLayout>
 
@@ -196,6 +196,6 @@
         android:gravity="center"
         android:lineSpacingExtra="10dp"
         android:text="@string/recharge_hint"
-        android:textColor="#A8A8A8"
+        android:textColor="@color/colorDisable"
         android:textSize="12sp"/>
 </LinearLayout>

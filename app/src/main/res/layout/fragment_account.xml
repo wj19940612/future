@@ -71,7 +71,7 @@
                         android:layout_marginLeft="5dp"
                         android:paddingLeft="5dp"
                         android:text="@string/account_mine_integral"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/blueAssist"/>
                 </LinearLayout>
                 <!-- <TextView
                      android:id="@+id/score"
@@ -110,7 +110,7 @@
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
                     android:text="@string/zero"
-                    android:textColor="#FB4B55"
+                    android:textColor="@color/redPrimary"
                     android:textSize="50sp"/>
 
                 <LinearLayout
@@ -146,7 +146,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_up_free"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/blueAssist"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -181,7 +181,7 @@
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/withdraw"
-                        android:textColor="@color/account_top_blue_text"/>
+                        android:textColor="@color/blueAssist"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -211,7 +211,7 @@
         app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_trade_info"
-        app:rowTextColor="@color/account_center_text"/>
+        app:rowTextColor="@color/editText_color_input"/>
 
     <include layout="@layout/split_line"/>
     <!--目前ui上面没有-->
@@ -238,7 +238,7 @@
         app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
-        app:rowTextColor="@color/account_center_text"/>
+        app:rowTextColor="@color/editText_color_input"/>
 
     <include layout="@layout/split_line"/>
 
@@ -250,5 +250,5 @@
         app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/account_aboutUs"
-        app:rowTextColor="@color/account_center_text"/>
+        app:rowTextColor="@color/editText_color_input"/>
 </LinearLayout>

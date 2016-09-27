@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -126,7 +125,7 @@ public class ModifyPwdActivity extends BaseActivity {
                                         }).show();
                                 CustomToast.getInstance().custommakeText(ModifyPwdActivity.this, R.string.modify_passWord_success);
                             } else {
-                                mModifyPasswordWarn.setVisibility(View.VISIBLE);
+                                mModifyPasswordWarn.setVisible(true);
                                 mModifyPasswordWarn.setCenterTxt(resp.getMsg());
                             }
                         }

@@ -36,12 +36,15 @@ public class UserInfo {
    /* public static final int ID_STATUS_STATUS_FILL = 1;
     public static final int ID_STATUS_STATUS_AUTHERIZED = 2;
 
-    *//**
+    */
+    /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      *//*
     public static final int BANKCARD_STATUS_FILL = 1;
     public static final int BANKCARD_STATUS_AUTHERIZED = 2;*/
 
+
+    public static final int RESPONSE_ERROR_CODE = 601;
 
     /**
      * moneyUsable可用资金余额

@@ -108,9 +108,7 @@ public class NameAuthActivity extends BaseActivity {
                                     user.setIdStatus(1);
                                     setResult(RESULT_OK);
                                     Log.d(TAG,"实名认证后的用户信息"+user.toString());
-                                    if(mRlIdentityCardWarn.isShown()){
-                                        mRlIdentityCardWarn.setVisibility(View.GONE);
-                                    }
+
                                     // TODO: 2016/9/13 原来的逻辑
 //                                        SmartDialog.with(getActivity(), resp.getMsg())
 //                                                .setCancelableOnTouchOutside(false)
@@ -125,14 +123,11 @@ public class NameAuthActivity extends BaseActivity {
                                     ToastUtil.curt(R.string.auth_name_write_success);
                                     finish();
                                 } else {
+                                    mRlIdentityCardWarn.setVisible(true);
                                     mRlIdentityCardWarn.setCenterTxt(resp.getMsg());
-                                    mRlIdentityCardWarn.setVisibility(View.VISIBLE);
                                 }
                             }
                         }).fire();
-//            }
-//            mRlIdentityCardWarn.setCenterTxt(R.string.setting_identity_card_fail);
-//            mRlIdentityCardWarn.setVisibility(View.VISIBLE);
         } else {
             ToastUtil.curt(R.string.setting_identity_card_when_login);
         }

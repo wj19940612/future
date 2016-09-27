@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -13,12 +12,12 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
@@ -30,19 +29,15 @@ public class ModifyNickNameActivity extends BaseActivity {
     EditText mEtModifyNickName;
     @BindView(R.id.submitNickName)
     TextView mSubmitNickName;
-    @BindView(R.id.modifyNickNameFailWarnWarn)
-    RelativeLayout mModifyNickNameFailWarnWarn;
     @BindView(R.id.commonFailTvWarn)
-    TextView mCommonFailTvWarn;
+    CommonFailWarn mModifyNickNameFailWarnWarn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_nick_name);
         ButterKnife.bind(this);
-
-
-        mCommonFailTvWarn.setText(R.string.modify_nick_name_submit_warn);
         setOnClickListener();
     }
 
@@ -57,7 +52,7 @@ public class ModifyNickNameActivity extends BaseActivity {
                     return;
                 }
                 if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-                    mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
+                    mModifyNickNameFailWarnWarn.setVisible(true);
                     return;
                 }
                 submitNickName(nickName);
@@ -88,9 +83,6 @@ public class ModifyNickNameActivity extends BaseActivity {
             boolean etModifyNickName = getEtModifyNickName();
             if (etModifyNickName != mSubmitNickName.isEnabled()) {
                 mSubmitNickName.setEnabled(etModifyNickName);
-            }
-            if (!etModifyNickName && mCommonFailTvWarn.isShown()) {
-                mModifyNickNameFailWarnWarn.setVisibility(View.GONE);
             }
         }
     };

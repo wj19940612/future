@@ -1,57 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.account.FindPwdActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".activity.account.FindPwdActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/find_password" />
+        app:titleText="@string/find_password"/>
 
-    <com.jnhyxx.html5.view.CommonFailWarn
-        android:id="@+id/failWarn"
-        style="@style/commonFailWarn" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="60dp">
 
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/failWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/findPasswordPhoneNum"
             style="@style/SignEditText.PhoneNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_view_margin"
+            android:layout_marginRight="@dimen/common_view_margin"
             android:drawableLeft="@drawable/login_icon_phone"
             android:drawablePadding="@dimen/drawable_left_padding"
             android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/grayHint" />
+            android:textColorHint="@color/grayHint"/>
+    </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/common_view_margin"
+        android:paddingRight="@dimen/common_view_margin">
 
-        <include layout="@layout/split_line_thick" />
+        <include
+            layout="@layout/split_line_thick"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal">
 
-
             <TextView
                 android:id="@+id/obtainAuthCode"
                 android:layout_width="85dp"
                 android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_obtain_auth_code"
                 android:clickable="true"
@@ -60,23 +65,22 @@
                 android:minWidth="85dp"
                 android:text="@string/obtain_auth_code"
                 android:textColor="@android:color/white"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <EditText
                 android:id="@+id/findPasswordMessageAuthCode"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/obtainAuthCode"
-                android:layout_alignBottom="@+id/obtainAuthCode"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
                 android:drawableLeft="@drawable/login_icon_code"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint" />
+                android:textColorHint="@color/grayHint"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick" />
+
+        <include layout="@layout/split_line_thick"/>
 
         <LinearLayout
             android:id="@+id/imageCode"
@@ -85,50 +89,37 @@
             android:orientation="vertical"
             android:visibility="gone">
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center_vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/imageCodeLoadHint"
-                    android:layout_width="85dp"
-                    android:layout_height="34dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="下载失败，请点击重新发送"
-                    android:textSize="12sp"
-                    android:visibility="visible" />
+                android:layout_height="60dp">
 
                 <ImageView
                     android:id="@+id/RetrieveImageCode"
                     android:layout_width="85dp"
                     android:layout_height="34dp"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/mine_view_bottom_radius"
+                    android:background="@mipmap/ic_launcher"
                     android:clickable="true"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <EditText
+
                     android:id="@+id/inputImageCode"
+                    style="@style/SignEditText.PhoneNum"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@null"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:drawableLeft="@drawable/ic_login_image_code"
                     android:drawablePadding="@dimen/drawable_left_padding"
                     android:hint="@string/register_code_image_hint"
-                    android:textColorHint="@color/grayHint"
-                    android:textSize="13sp" />
+                    android:textColorHint="@color/grayHint"/>
             </RelativeLayout>
 
-            <include layout="@layout/split_line_thick" />
+            <include layout="@layout/split_line_thick"/>
         </LinearLayout>
-
     </LinearLayout>
 
 
@@ -137,9 +128,9 @@
         style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="@dimen/common_view_margin"
+        android:layout_marginRight="@dimen/common_view_margin"
         android:layout_marginTop="50dp"
-        android:text="@string/next_step" />
+        android:text="@string/next_step"/>
 
 </LinearLayout>

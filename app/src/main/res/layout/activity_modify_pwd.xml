@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/findPasswordTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/modify_password" />
+        app:titleText="@string/modify_password"/>
 
     <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/modifyPasswordWarn"
-        style="@style/commonFailWarn" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +40,7 @@
                 android:drawableLeft="@drawable/login_icon_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint" />
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:id="@+id/findPassword_image_password_type"
@@ -49,10 +50,10 @@
                 android:layout_centerVertical="true"
                 android:clickable="true"
                 android:src="@drawable/login_btn_password_type"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick" />
+        <include layout="@layout/split_line_thick"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,7 +68,7 @@
                 android:drawableLeft="@drawable/login_icon_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_repeat_new_password"
-                android:textColorHint="@color/grayHint" />
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:id="@+id/showPasswordButton"
@@ -77,10 +78,10 @@
                 android:layout_centerVertical="true"
                 android:clickable="true"
                 android:src="@drawable/login_btn_password_type"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick" />
+        <include layout="@layout/split_line_thick"/>
     </LinearLayout>
 
 
@@ -92,5 +93,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
-        android:text="@string/ok" />
+        android:text="@string/ok"/>
 </LinearLayout>

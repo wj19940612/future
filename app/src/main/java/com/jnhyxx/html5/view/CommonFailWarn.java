@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +35,9 @@ public class CommonFailWarn extends RelativeLayout {
     private static final int SHOW_TIME = 2000;
 
     private static final int ANIMATION_TIME = 500;
+
+    private boolean isFirst = false;
+
 
     private CharSequence mCenterTxt;
     private int mCenterSize;
@@ -110,28 +112,33 @@ public class CommonFailWarn extends RelativeLayout {
         setCenterTxtSize(mCenterSize);
         setCenterColor(mCenterTxtColor);
         setDrawLeft(mCenterDrawable);
-        setVisible(mViewVisible);
+        setVisible(mViewVisible, isFirst);
     }
-
     public void setVisible(boolean viewVisible) {
+        this.setVisible(viewVisible,true);
+    }
+    public void setVisible(boolean viewVisible, boolean isFirst) {
         this.mViewVisible = viewVisible;
-        float translationY = getTranslationY();
-        TranslateAnimation translateDownAnimation = new TranslateAnimation(0, 0, 0, translationY);
-        translateDownAnimation.setFillAfter(true);
-        translateDownAnimation.setDuration(ANIMATION_TIME);
-        translateDownAnimation.start();
+        this.isFirst = isFirst;
+//        float translationY = getTranslationY();
+//        TranslateAnimation translateDownAnimation = new TranslateAnimation(0, 0, 0, translationY);
+//        translateDownAnimation.setFillAfter(true);
+//        translateDownAnimation.setDuration(ANIMATION_TIME);
+//        translateDownAnimation.start();
+        this.setVisibility(mViewVisible ? VISIBLE : INVISIBLE);
+        if (isFirst) {
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top);
+            startAnimation(animation);
 
-        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top);
-        startAnimation(animation);
-
-        this.setVisibility(mViewVisible ? VISIBLE : GONE);
-        if (isShown()) {
-            mHandler.sendEmptyMessageDelayed(HIDE_VIEW_TAG, SHOW_TIME);
+            if (isShown()) {
+                mHandler.sendEmptyMessageDelayed(HIDE_VIEW_TAG, SHOW_TIME);
+            }
         }
     }
 
+
     private void handleHide() {
-        setVisible(false);
+        setVisible(false, true);
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_top);
         startAnimation(animation);
         mHandler.removeMessages(HIDE_VIEW_TAG);

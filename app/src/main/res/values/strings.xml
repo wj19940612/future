@@ -11,7 +11,7 @@
     <string name="network_error">网络异常</string>
     <string name="network_time_out">网络超时</string>
     <string name="json_parse_error">数据解析异常</string>
-
+    <string name="network_error_load_image">当前网络不可用，请检查你的网络设置</string>
     <!-- WebView promotion -->
     <string name="save_image">保存图片</string>
     <string name="save_qrcode_to">二维码保存至%1$s</string>
@@ -301,7 +301,7 @@
     <string name="register_code_image_hint">请输入动态验证码</string>
     <string name="register_code_image">图片验证码</string>
     <string name="register_get_image_code">获取图片验证码</string>
-
+    <string name="service_protocol_title">威盘原油宝服务协议</string>
 
     <!--修改密码-->
     <string name="modify_passWord_success">密码修改成功</string>

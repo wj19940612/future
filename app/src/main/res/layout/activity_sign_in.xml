@@ -8,6 +8,7 @@
 
     <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/failWarn"
+        app:visible="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

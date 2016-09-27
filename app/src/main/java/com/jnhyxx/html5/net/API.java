@@ -539,7 +539,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getFundSwitchIntegral(String type, int offset, int pageSize) {
-            return new API("/user/finance/findFlowList.do",
+            return new API(GET, "/user/finance/findFlowList.do",
                     new ApiParams()
                             .put("type", type)
                             .put("offset", offset)

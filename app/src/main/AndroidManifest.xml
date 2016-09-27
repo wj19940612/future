@@ -139,7 +139,7 @@
             android:name=".activity.account.ExpandMakeMoneyActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.tradedetail.TradeDetailActivity"
+            android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.setting.SettingActivity"

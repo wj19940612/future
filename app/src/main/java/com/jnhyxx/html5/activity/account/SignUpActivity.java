@@ -14,16 +14,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
@@ -45,7 +47,16 @@ import butterknife.OnClick;
 import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
+
     private static final String TAG = "SignUpActivity";
+
+    //服务协议的接口
+    public static final String SERVICE_PROTOCOL = APIBase.getHost() + "/xieyi/agreement.html";
+
+
+    public static final String SERVICE_PROTOCOL_INFO_TITLE = "service_protocol_title";
+
+
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.registerAuthCode)
@@ -62,14 +73,12 @@ public class SignUpActivity extends BaseActivity {
     TextView mSignUpButton;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.imageCodeLoadHint)
-    TextView mImageCodeLoadHint;
     @BindView(R.id.failWarn)
     CommonFailWarn mFailWarn;
     //获取图片验证码
     @BindView(R.id.imageCode)
-    LinearLayout mImageCode;
-    @BindView(R.id.registerRetrieveImage)
+    RelativeLayout mImageCode;
+    @BindView(R.id.registerRetrieveIma)
     EditText mRegisterRetrieveImage;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
@@ -103,9 +112,15 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
-                finish();
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -166,7 +181,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.imageCodeLoadHint})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.serviceProtocol})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -178,8 +193,10 @@ public class SignUpActivity extends BaseActivity {
             case R.id.RetrieveImageCode:
                 getRegisterImage();
                 break;
-            case R.id.imageCodeLoadHint:
-                getRegisterImage();
+            case R.id.serviceProtocol:
+                Launcher.with(SignUpActivity.this, WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, SERVICE_PROTOCOL)
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
                 break;
         }
     }
@@ -207,6 +224,7 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                            getRegisterImage();
                         } else if (resp.getCode() == 601) {
                             getRegisterImage();
                             mFailWarn.setVisible(true);
@@ -259,12 +277,14 @@ public class SignUpActivity extends BaseActivity {
 
     private void getRegisterImage() {
         final String userPhone = mPhoneNum.getText().toString().trim();
+        // TODO: 2016/9/26      必须放在子线程中 不然java.lang.IllegalStateException: Method call should not happen from the main thread.
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
                 String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                Log.d(TAG, "注册页面图片验证码地址  " + url);
+                Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);
                 try {
@@ -273,12 +293,11 @@ public class SignUpActivity extends BaseActivity {
                         @Override
                         public void run() {
                             if (bitmap != null) {
+                                mImageCode.setVisibility(View.VISIBLE);
                                 mRetrieveImage.setImageBitmap(bitmap);
-                                mImageCodeLoadHint.setVisibility(View.GONE);
-                                mRetrieveImage.setVisibility(View.VISIBLE);
                             } else {
-                                mImageCodeLoadHint.setVisibility(View.VISIBLE);
-                                mRetrieveImage.setVisibility(View.GONE);
+                                mFailWarn.setVisible(true,true);
+                                mFailWarn.setCenterTxt(R.string.network_error_load_image);
                             }
                         }
                     });

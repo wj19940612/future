@@ -15,13 +15,17 @@
     <dimen name="market_date_row_padding">14dp</dimen>
 
 
-    <dimen name="drawable_left_padding">5dp</dimen>
+    <dimen name="drawable_left_padding">10dp</dimen>
     <!--目前大部分容器距离边界15dp-->
     <dimen name="common_view_margin">15dp</dimen>
+
+    <!--shape的圆角大小-->
+    <dimen name="common_shape_radius">3dp</dimen>
 
     <!-- Order -->
     <dimen name="one_key_close_radius">20dp</dimen>
 
-
+    <!--我的模块的输入框的等距离父容器底部距离-->
+    <dimen name="mine_view_bottom_radius">10dp</dimen>
 </resources>
 

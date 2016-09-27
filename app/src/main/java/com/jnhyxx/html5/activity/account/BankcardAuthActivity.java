@@ -300,6 +300,7 @@ public class BankcardAuthActivity extends BaseActivity implements BankListFragme
                                     userInfo.setCardState(1);
                                     setResult(RESULT_OK);
                                 } else {
+                                    mCommonFailTvWarn.setVisible(true);
                                     mCommonFailTvWarn.setCenterTxt(resp.getMsg());
                                 }
                             }

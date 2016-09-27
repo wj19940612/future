@@ -3,8 +3,6 @@ package com.jnhyxx.html5.activity.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -221,12 +219,6 @@ public class RechargeActivity extends BaseActivity implements RechargeAsyncTask.
 
     @Override
     public void getData(String result) {
-        String escapeHtml = Html.escapeHtml(result);
-        Log.d(TAG, "escapeHtml" + escapeHtml);
-        Spanned spanned = Html.fromHtml(result);
-        Log.d(TAG, "spanned" + spanned.toString());
-        String toHtml = Html.toHtml(spanned);
-        Log.d(TAG, "toHtml" + toHtml);
         String data = null;
         if (!TextUtils.isEmpty(result)) {
             try {

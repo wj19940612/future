@@ -67,7 +67,7 @@ public class WithdrawActivity extends BaseActivity {
     private void updateBankInfoView() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo != null) {
-            if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
+            if (userInfo.getCardState() == UserInfo.BANKCARD_STATUS_UNFILLED) {
                 mBankcardNotFilledArea.setVisibility(View.VISIBLE);
                 mBankcardInfoArea.setVisibility(View.GONE);
             } else {
@@ -118,7 +118,7 @@ public class WithdrawActivity extends BaseActivity {
 
     @OnClick(R.id.addBankcardButton)
     void addBankcard() {
-        Launcher.with(this, BankcardAuthActivity.class)
+        Launcher.with(this, BankcardBindingActivity.class)
                 .executeForResult(REQUEST_CODE);
     }
 

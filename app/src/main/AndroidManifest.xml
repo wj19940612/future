@@ -103,10 +103,10 @@
             android:name=".activity.account.ProfileActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.NameAuthActivity"
+            android:name=".activity.account.NameVerifyActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.BankcardAuthActivity"
+            android:name=".activity.account.BankcardBindingActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.account.RechargeActivity"
@@ -139,7 +139,7 @@
             android:name=".activity.account.ExpandMakeMoneyActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.tradedetail.TradeDetailActivity"
+            android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.setting.SettingsActivity"
@@ -156,7 +156,7 @@
             android:name=".activity.account.RechargeWebViewActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.withdraw.WithdrawRecordInfoActivity"
+            android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
     </application>
 

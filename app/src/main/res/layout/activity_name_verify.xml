@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.account.NameAuthActivity">
+    tools:context=".activity.account.NameVerifyActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"

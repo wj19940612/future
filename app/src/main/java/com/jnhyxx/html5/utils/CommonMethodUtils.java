@@ -190,7 +190,7 @@ public class CommonMethodUtils {
     public static boolean isNameAuth(UserInfo userInfo) {
         if (userInfo == null) {
             return false;
-        } else if (userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_WRITE || userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
+        } else if (userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_FILLED || userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_VERIFIED) {
             return true;
         }
         return false;
@@ -205,7 +205,7 @@ public class CommonMethodUtils {
     public static boolean isBankAuth(UserInfo userInfo) {
         if (userInfo == null) {
             return false;
-        } else if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_WRITE || userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_ATTESTATION) {
+        } else if (userInfo.getCardState() == UserInfo.BANKCARD_STATUS_FILLED || userInfo.getCardState() == UserInfo.BANKCARD_STATUS_BOUND) {
             return true;
         }
         return false;

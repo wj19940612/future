@@ -14,7 +14,7 @@
         app:titleText="@string/find_password" />
 
     <com.jnhyxx.html5.view.CommonFailWarn
-        android:id="@+id/FailWarn"
+        android:id="@+id/failWarn"
         style="@style/commonFailWarn" />
 
     <LinearLayout

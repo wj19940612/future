@@ -10,28 +10,16 @@ public class UserInfo {
     /**
      * 银行卡绑定状态  0未填写，1已填写，2已认证
      */
-    public static final int BANK_CARD_AUTH_STATUS_NOT_WRITE = 0;
-    public static final int BANK_CARD_AUTH_STATUS_WRITE = 1;
-    public static final int BANK_CARD_AUTH_STATUS_ATTESTATION = 2;
+    public static final int BANKCARD_STATUS_UNFILLED = 0;
+    public static final int BANKCARD_STATUS_FILLED = 1;
+    public static final int BANKCARD_STATUS_BOUND = 2;
 
     /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      */
-    public static final int REAL_NAME_AUTH_STATUS_NOT_WRITE = 0;
-    public static final int REAL_NAME_AUTH_STATUS_WRITE = 1;
-    public static final int REAL_NAME_AUTH_STATUS_ATTESTATION = 2;
-
-
-    // TODO: 2016/9/23 冲突的数据，可能没有问题 
-   /* public static final int ID_STATUS_STATUS_FILL = 1;
-    public static final int ID_STATUS_STATUS_AUTHERIZED = 2;
-
-    *//**
-     * idStatus实名状态 0未填写，1已填写，2已认证
-     *//*
-    public static final int BANKCARD_STATUS_FILL = 1;
-    public static final int BANKCARD_STATUS_AUTHERIZED = 2;*/
-
+    public static final int REAL_NAME_STATUS_UNFILLED = 0;
+    public static final int REAL_NAME_STATUS_FILLED = 1;
+    public static final int REAL_NAME_STATUS_VERIFIED = 2;
 
     /**
      * moneyUsable可用资金余额

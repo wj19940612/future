@@ -69,12 +69,12 @@ public class ProfileActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nameAuth:
-                Launcher.with(getActivity(), NameAuthActivity.class)
+                Launcher.with(getActivity(), NameVerifyActivity.class)
                         .putExtra(Launcher.EX_PAYLOAD, mProfileSummary.createNameAuth())
                         .executeForResult(REQUEST_CODE);
                 break;
             case R.id.bankcard:
-                Launcher.with(getActivity(), BankcardAuthActivity.class)
+                Launcher.with(getActivity(), BankcardBindingActivity.class)
                         .putExtra(Launcher.EX_PAYLOAD, mProfileSummary.createBankcardAuth())
                         .executeForResult(REQUEST_CODE);
                 break;

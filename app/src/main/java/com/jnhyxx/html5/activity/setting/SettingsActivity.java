@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.account.BankcardAuthActivity;
-import com.jnhyxx.html5.activity.account.NameAuthActivity;
+import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
+import com.jnhyxx.html5.activity.account.NameVerifyActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -68,11 +68,11 @@ public class SettingsActivity extends BaseActivity {
 
     private int getBindBankcardAuthStatusRes(int authStatus) {
         /**
-         * cardState银行卡状态 0未填写，1未绑定，2已绑定
+         * cardState银行卡状态 0未填写，1已填写，2已绑定
          */
-        if (authStatus == UserInfo.BANK_CARD_AUTH_STATUS_WRITE) {
-            return R.string.unbound;
-        } else if (authStatus == UserInfo.BANK_CARD_AUTH_STATUS_ATTESTATION) {
+        if (authStatus == UserInfo.BANKCARD_STATUS_FILLED) {
+            return R.string.filled;
+        } else if (authStatus == UserInfo.BANKCARD_STATUS_BOUND) {
             return R.string.bound;
         }
         return R.string.unfilled;
@@ -82,9 +82,9 @@ public class SettingsActivity extends BaseActivity {
         /**
          * idStatus实名状态 0未填写，1已填写，2已认证
          */
-        if (authStatus == UserInfo.REAL_NAME_AUTH_STATUS_WRITE) {
+        if (authStatus == UserInfo.REAL_NAME_STATUS_FILLED) {
             return R.string.filled;
-        } else if (authStatus == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
+        } else if (authStatus == UserInfo.REAL_NAME_STATUS_VERIFIED) {
             return R.string.authorized;
         }
         return R.string.unfilled;
@@ -130,10 +130,10 @@ public class SettingsActivity extends BaseActivity {
                 openModifyNicknamePage();
                 break;
             case R.id.realNameAuth:
-                Launcher.with(getActivity(), NameAuthActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
+                Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
                 break;
             case R.id.bandingBankcard:
-                Launcher.with(getActivity(), BankcardAuthActivity.class).executeForResult(REQUEST_CODE_BINDING_BANKCARD);
+                Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQUEST_CODE_BINDING_BANKCARD);
                 break;
             case R.id.logoutButton:
                 logout();

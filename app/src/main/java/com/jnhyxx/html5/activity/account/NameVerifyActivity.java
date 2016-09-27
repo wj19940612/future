@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NameAuthActivity extends BaseActivity {
+public class NameVerifyActivity extends BaseActivity {
 
     @BindView(R.id.name)
     EditText mName;
@@ -40,7 +40,7 @@ public class NameAuthActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_name_auth);
+        setContentView(R.layout.activity_name_verify);
         ButterKnife.bind(this);
 
         mName.addTextChangedListener(mValidationWatcher);
@@ -55,7 +55,7 @@ public class NameAuthActivity extends BaseActivity {
             mName.setText(userInfo.getRealName());
             mIdentityNum.setText(userInfo.getIdCard());
 
-            if (userInfo.getIdStatus() == UserInfo.REAL_NAME_AUTH_STATUS_ATTESTATION) {
+            if (userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_VERIFIED) {
                 mName.setEnabled(false);
                 mIdentityNum.setEnabled(false);
                 mSubmitToAuthButton.setVisibility(View.GONE);
@@ -101,28 +101,16 @@ public class NameAuthActivity extends BaseActivity {
                             @Override
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
-                                    //将是否实名认证状态修改
                                     UserInfo user = LocalUser.getUser().getUserInfo();
                                     user.setRealName(realName);
                                     user.setIdCard(identityNum);
-                                    user.setIdStatus(1);
+                                    user.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+
                                     setResult(RESULT_OK);
                                     Log.d(TAG,"实名认证后的用户信息"+user.toString());
                                     if(mRlIdentityCardWarn.isShown()){
                                         mRlIdentityCardWarn.setVisibility(View.GONE);
                                     }
-                                    // TODO: 2016/9/13 原来的逻辑
-//                                        SmartDialog.with(getActivity(), resp.getMsg())
-//                                                .setCancelableOnTouchOutside(false)
-//                                                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                                                    @Override
-//                                                    public void onClick(Dialog dialog) {
-//                                                        dialog.dismiss();
-//                                                        sendResultForCalling(resp.getData());
-//                                                        finish();
-//                                                    }
-//                                                }).show();
-                                    ToastUtil.curt(R.string.auth_name_write_success);
                                     finish();
                                 } else {
                                     mRlIdentityCardWarn.setCenterTxt(resp.getMsg());
@@ -150,8 +138,8 @@ public class NameAuthActivity extends BaseActivity {
         if (getCallingActivity() == null) return;
         String fromClass = getCallingActivity().getClassName();
 
-        if (fromClass.equals(BankcardAuthActivity.class.getName())) {
-            Intent intent = new Intent().putExtra(BankcardAuthActivity.NAME_AUTH_RESULT, result);
+        if (fromClass.equals(BankcardBindingActivity.class.getName())) {
+            Intent intent = new Intent().putExtra(BankcardBindingActivity.NAME_AUTH_RESULT, result);
             setResult(RESULT_OK, intent);
         }
 

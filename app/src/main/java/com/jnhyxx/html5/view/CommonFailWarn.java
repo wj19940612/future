@@ -5,12 +5,16 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,13 +28,35 @@ public class CommonFailWarn extends RelativeLayout {
 
     private static final String TAG = "CommonFailWarn";
 
+
+    private static final int HIDE_VIEW_TAG = 33;
+
+
+    //显示的时间
+    private static final int SHOW_TIME = 2000;
+
+    private static final int ANIMATION_TIME = 500;
+
     private CharSequence mCenterTxt;
     private int mCenterSize;
+    private int mDrawLeftPadding;
     private ColorStateList mCenterTxtColor;
     private Drawable mCenterDrawable;
-    private int mDrawLeftPadding;
 
     private TextView mCenterView;
+    private boolean mViewVisible;
+
+    final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HIDE_VIEW_TAG:
+                    handleHide();
+                    break;
+            }
+        }
+    };
+
 
     public CommonFailWarn(Context context) {
         super(context);
@@ -40,8 +66,8 @@ public class CommonFailWarn extends RelativeLayout {
         super(context, attrs);
 
         processAttrs(context, attrs);
-
     }
+
 
     public CommonFailWarn(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -58,14 +84,15 @@ public class CommonFailWarn extends RelativeLayout {
         mCenterSize = typedArray.getDimensionPixelOffset(R.styleable.CommonFailWarn_centerTextSize, mDefaultTxtSize);
         mCenterDrawable = typedArray.getDrawable(R.styleable.CommonFailWarn_centerDrawable);
         mDrawLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.CommonFailWarn_centerDrawablePadding, mDefaultTxtDrawLeftPadding);
+        mViewVisible = typedArray.getBoolean(R.styleable.CommonFailWarn_visible, false);
 
-//        View mView = View.inflate(context, R.layout.common_fail_warn, this);
-//        mCenterView = (TextView) mView.findViewById(R.id.commonFailTvWarn);
-//        Drawable drawable = getResources().getDrawable(R.mipmap.ic_launcher);
-//        /// 这一步必须要做,否则不会显示.
-//        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-//        textView.setCompoundDrawables(mCenterDrawable, null, null, null);
+        setBackgroundResource(R.color.common_rise_activity_sum);
+        setGravity(Gravity.CENTER);
 
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
+                getResources().getDisplayMetrics());
+
+        setPadding(padding, padding, padding, padding);
         init();
         typedArray.recycle();
     }
@@ -83,6 +110,31 @@ public class CommonFailWarn extends RelativeLayout {
         setCenterTxtSize(mCenterSize);
         setCenterColor(mCenterTxtColor);
         setDrawLeft(mCenterDrawable);
+        setVisible(mViewVisible);
+    }
+
+    public void setVisible(boolean viewVisible) {
+        this.mViewVisible = viewVisible;
+        float translationY = getTranslationY();
+        TranslateAnimation translateDownAnimation = new TranslateAnimation(0, 0, 0, translationY);
+        translateDownAnimation.setFillAfter(true);
+        translateDownAnimation.setDuration(ANIMATION_TIME);
+        translateDownAnimation.start();
+
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top);
+        startAnimation(animation);
+
+        this.setVisibility(mViewVisible ? VISIBLE : GONE);
+        if (isShown()) {
+            mHandler.sendEmptyMessageDelayed(HIDE_VIEW_TAG, SHOW_TIME);
+        }
+    }
+
+    private void handleHide() {
+        setVisible(false);
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_top);
+        startAnimation(animation);
+        mHandler.removeMessages(HIDE_VIEW_TAG);
     }
 
     private void setDrawLeft(Drawable centerDrawable) {

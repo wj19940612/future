@@ -118,9 +118,7 @@
     <!--Settings-->
     <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>
-    <string name="unauthorized">未认证</string>
     <string name="authorized">已认证</string>
-    <string name="unbound">未绑定</string>
     <string name="bound">已绑定</string>
     <string name="nickname">昵称</string>
     <string name="settings">设置</string>
@@ -152,9 +150,7 @@
     <string name="alipay_payment">支付宝支付</string>
     <string name="wechat_payment">微信支付</string>
     <string name="account_fund_is_covered_by_PA">账户资金安全由平安财险承保</string>
-    <string name="recharge_amount_cannot_be_empty">充值金额不能为空</string>
     <string name="recharge_amount_should_larger_than_50">充值金额应大于50</string>
-    <string name="payments_cannot_be_empty">支付方式不能为空</string>
     <string name="frozen_deposit">冻结保证金</string>
     <string name="profit_loss_detail">收支明细</string>
     <string name="there_is_no_trade_detail">暂无交易明细</string>
@@ -313,6 +309,8 @@
     <string name="common_copy_text">复制</string>
 
 
+    <!--登陆界面-->
+    <string name="login_success">登陆成功</string>
     <!--注册界面-->
     <string name="register_auth_code_fail">验证码错误</string>
     <string name="register_succeed">注册成功</string>
@@ -364,7 +362,7 @@
 
 
     //可能为冲突
- <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
+    <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
     <string name="prompt_dear_user">尊敬的用户:
         \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
     <string name="unsigned">未签署</string>

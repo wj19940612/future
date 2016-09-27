@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.BankcardAuthActivity">
+    tools:context="com.jnhyxx.html5.activity.account.BankcardBindingActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/bandCardTitle"

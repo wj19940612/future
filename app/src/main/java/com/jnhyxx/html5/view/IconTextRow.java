@@ -18,6 +18,7 @@ public class IconTextRow extends LinearLayout {
 
     private Drawable mLeftIcon;
     private Drawable mRightIcon;
+    private Drawable mSubTextViewBg;
     private int mRightIconVisibility;
     private CharSequence mText;
     private int mTextSize;
@@ -25,6 +26,7 @@ public class IconTextRow extends LinearLayout {
     private CharSequence mSubText;
     private int mSubTextSize;
     private ColorStateList mSubTextColor;
+
 
     private TextView mTextView;
     private TextView mSubTextView;
@@ -45,6 +47,7 @@ public class IconTextRow extends LinearLayout {
 
         mLeftIcon = typedArray.getDrawable(R.styleable.IconTextRow_leftIcon);
         mRightIcon = typedArray.getDrawable(R.styleable.IconTextRow_rightIcon);
+        mSubTextViewBg = typedArray.getDrawable(R.styleable.IconTextRow_subTextBackground);
         mRightIconVisibility = typedArray.getInt(R.styleable.IconTextRow_rightIconVisibility, 0);
         mText = typedArray.getText(R.styleable.IconTextRow_rowText);
         mTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowTextSize, defaultFontSize);
@@ -52,7 +55,6 @@ public class IconTextRow extends LinearLayout {
         mSubText = typedArray.getText(R.styleable.IconTextRow_subText);
         mSubTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_subTextSize, defaultFontSize);
         mSubTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_subTextColor);
-
         typedArray.recycle();
     }
 
@@ -64,7 +66,7 @@ public class IconTextRow extends LinearLayout {
 
         LayoutParams params;
         if (mLeftIcon != null) {
-            params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, padding, 0);
             ImageView leftIcon = new ImageView(getContext());
             leftIcon.setImageDrawable(mLeftIcon);
@@ -81,14 +83,16 @@ public class IconTextRow extends LinearLayout {
         mTextView.setTextColor(mTextColor != null ? mTextColor : ColorStateList.valueOf(Color.BLACK));
         addView(mTextView, params);
 
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams(padding, padding);
         params.setMargins(0, 0, padding, 0);
         mSubTextView = new TextView(getContext());
         mSubTextView.setText(mSubText);
-        mSubTextView.setGravity(Gravity.RIGHT);
+        mSubTextView.setGravity(Gravity.CENTER);
         mSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSubTextSize);
-        mSubTextView.setTextColor(mSubTextColor!= null ? mSubTextColor : ColorStateList.valueOf(Color.GRAY));
-         
+        mSubTextView.setTextColor(mSubTextColor != null ? mSubTextColor : ColorStateList.valueOf(Color.GRAY));
+        if (mSubTextViewBg != null) {
+            mSubTextView.setBackground(mSubTextViewBg);
+        }
         addView(mSubTextView, params);
 
         if (mRightIcon != null) {
@@ -98,6 +102,7 @@ public class IconTextRow extends LinearLayout {
             addView(rightImage);
         }
     }
+
 
     public void setText(String text) {
         mTextView.setText(text);

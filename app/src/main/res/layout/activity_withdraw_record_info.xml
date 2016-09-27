@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/common_bg"
     android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.withdraw.WithdrawRecordInfoActivity">
+    tools:context="com.jnhyxx.html5.activity.account.WithdrawRecordInfoActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"

@@ -30,13 +30,17 @@ public class Resp<T> {
         return code == 200;
     }
 
+    public boolean isTokenExpired() {
+        return code == 503;
+    }
+
     public boolean hasData() {
         return data != null;
     }
 
     @Override
     public String toString() {
-        return "Response{" +
+        return "Resp{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

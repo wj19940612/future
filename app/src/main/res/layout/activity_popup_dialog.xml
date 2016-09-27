@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             tools:text="Title" />

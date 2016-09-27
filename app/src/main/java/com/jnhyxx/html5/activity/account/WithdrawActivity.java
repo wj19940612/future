@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -11,16 +12,16 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.BankcardAuth;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,12 +29,10 @@ import butterknife.OnClick;
 
 public class WithdrawActivity extends BaseActivity {
 
-    public static final String RESULT_BANKCARD_AUTH = "bankcardAuthResult";
+    private static final int REQ_CODE_ADD_BANKCARD = 1;
 
     @BindView(R.id.balance)
     TextView mBalance;
-    @BindView(R.id.rechargeAmount)
-    EditText mWithdrawAmount;
     @BindView(R.id.withdrawBankcard)
     TextView mWithdrawBankcard;
     @BindView(R.id.confirmButton)
@@ -46,8 +45,33 @@ public class WithdrawActivity extends BaseActivity {
     LinearLayout mBankcardInfoArea;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.withdrawAmount)
+    EditText mWithdrawAmount;
 
-    private BankcardAuth mBankcardAuth;
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            boolean enable = checkConfirmButtonEnable();
+            if (enable != mConfirmButton.isEnabled()) {
+                mConfirmButton.setEnabled(enable);
+            }
+        }
+    };
+
+    private boolean checkConfirmButtonEnable() {
+        String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
+        if (TextUtils.isEmpty(withdrawAmount)) {
+            return false;
+        }
+
+        double amount = Double.valueOf(withdrawAmount);
+        if (amount < 20) {
+            return false;
+        }
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,40 +85,36 @@ public class WithdrawActivity extends BaseActivity {
                 Launcher.with(WithdrawActivity.this, WithDrawRecordActivity.class).execute();
             }
         });
+        mWithdrawAmount.addTextChangedListener(mValidationWatcher);
+
         updateBankInfoView();
     }
 
     private void updateBankInfoView() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (userInfo != null) {
-            if (userInfo.getCardState() == UserInfo.BANK_CARD_AUTH_STATUS_NOT_WRITE) {
-                mBankcardNotFilledArea.setVisibility(View.VISIBLE);
-                mBankcardInfoArea.setVisibility(View.GONE);
-            } else {
-                mBankcardNotFilledArea.setVisibility(View.GONE);
-                mBankcardInfoArea.setVisibility(View.VISIBLE);
-                String cardNumber = userInfo.getCardNumber();
-                String bankName = userInfo.getIssuingbankName();
-                StringBuffer mStringBuffer = new StringBuffer();
-                mStringBuffer.append(bankName);
-                mStringBuffer.append("  ");
-                if (!TextUtils.isEmpty(bankName)) {
-                    mStringBuffer.append("*");
-                    mStringBuffer.append(cardNumber.substring(cardNumber.length() - 4));
-                }
-                mWithdrawBankcard.setText(mStringBuffer.toString());
+        if (LocalUser.getUser().isBankcardFilled()) {
+            mBankcardNotFilledArea.setVisibility(View.GONE);
+            mBankcardInfoArea.setVisibility(View.VISIBLE);
+
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            String cardNumber = userInfo.getCardNumber();
+            String bankName = userInfo.getIssuingbankName();
+            StringBuffer mStringBuffer = new StringBuffer();
+            mStringBuffer.append(bankName);
+            mStringBuffer.append("  ");
+            if (!TextUtils.isEmpty(bankName)) {
+                mStringBuffer.append("*");
+                mStringBuffer.append(cardNumber.substring(cardNumber.length() - 4));
             }
+            mWithdrawBankcard.setText(mStringBuffer.toString());
+        } else {
+            mBankcardNotFilledArea.setVisibility(View.VISIBLE);
+            mBankcardInfoArea.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.confirmButton)
     void doConfirmButtonClick() {
-        String withdrawAmount = mWithdrawAmount.getText().toString().trim();
-        if (TextUtils.isEmpty(withdrawAmount)) {
-            ToastUtil.show(R.string.please_input_amount);
-            return;
-        }
-
+        String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
         double amount = Double.valueOf(withdrawAmount);
         API.Finance.withdraw(amount)
                 .setCallback(new Callback<Resp>() {
@@ -118,14 +138,23 @@ public class WithdrawActivity extends BaseActivity {
 
     @OnClick(R.id.addBankcardButton)
     void addBankcard() {
-        Launcher.with(this, BankcardAuthActivity.class)
-                .executeForResult(REQUEST_CODE);
+        if (!LocalUser.getUser().isRealNameFilled()) {
+            Launcher.with(getActivity(), NameVerifyActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
+            return;
+        }
+
+        Launcher.with(this, BankcardBindingActivity.class)
+                .executeForResult(REQ_CODE_ADD_BANKCARD);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
+            addBankcard();
+        }
+        if (requestCode == REQ_CODE_ADD_BANKCARD && resultCode == RESULT_OK) {
             updateBankInfoView();
         }
     }

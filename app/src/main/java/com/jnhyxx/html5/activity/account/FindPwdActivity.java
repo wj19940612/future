@@ -145,7 +145,6 @@ public class FindPwdActivity extends BaseActivity {
                         }
                     }
                 }).fire();
-
     }
 
     private void getRetrieveImageCode() {

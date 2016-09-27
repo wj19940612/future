@@ -11,7 +11,7 @@
     <item android:state_enabled="false">
         <shape>
             <corners android:radius="@dimen/common_shape_radius"/>
-            <solid android:color="#a8a8a8"/>
+            <solid android:color="@color/colorDisable"/>
         </shape>
     </item>
     <item android:state_enabled="true">

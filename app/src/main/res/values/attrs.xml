@@ -25,7 +25,7 @@
         </attr>
         <attr name="subText" format="reference|string"/>
         <attr name="subTextSize" format="reference|string"/>
-        <attr name="subTextColor" format="reference|string"/>
+        <attr name="subTextColor" format="color"/>
         <attr name="subTextBackground" format="reference"/>
         <attr name="rowText" format="reference|string"/>
         <attr name="rowTextSize" format="dimension"/>

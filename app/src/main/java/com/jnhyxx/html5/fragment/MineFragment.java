@@ -19,7 +19,7 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
-import com.jnhyxx.html5.activity.setting.SettingActivity;
+import com.jnhyxx.html5.activity.setting.SettingsActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -27,8 +27,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -42,7 +40,12 @@ import butterknife.Unbinder;
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
 public class MineFragment extends BaseFragment {
-
+    //登陆的请求码
+    private static final int REQUEST_CODE_LOGIN = 9670;
+    //设置界面的请求码
+    private static final int REQUEST_CODE_SETTING = 3520;
+    //注册的请求码
+    private static final int REQUEST_CODE_REGISTER = 6260;
 
     private static final String PAID_TO_PROMOTE_PATH = "/mine/extension.html";
 
@@ -58,7 +61,7 @@ public class MineFragment extends BaseFragment {
     //注册
     @BindView(R.id.signUpButton)
     TextView mSignUp;
-    //    //消息中心
+    //消息中心
     @BindView(R.id.messageCenter)
     IconTextRow mMessageCenter;
     //交易明细
@@ -94,20 +97,20 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinder.unbind();
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(getActivity(), SettingActivity.class).execute();
+                Launcher.with(getActivity(), SettingsActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinder.unbind();
     }
 
     @Override
@@ -142,19 +145,17 @@ public class MineFragment extends BaseFragment {
             case R.id.signUpButton:
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
-            //充值
-            case R.id.recharge:
-                startRechargeActivity();
+            case R.id.recharge: //充值
+                Launcher.with(getActivity(), RechargeActivity.class).execute();
                 break;
-            //提现
-            case R.id.withdraw:
-                startWithDrawActivity();
+            case R.id.withdraw: //提现
+                Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
-                openTradeDetailPage(true);
+                openTradeDetailPage();
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
@@ -167,45 +168,24 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void startRechargeActivity() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (CommonMethodUtils.isNameAuth(userInfo)) {
-            if (CommonMethodUtils.isBankAuth(userInfo)) {
-                Launcher.with(getActivity(), RechargeActivity.class).execute();
-            } else {
-                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
-            }
-        } else {
-            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
-        }
-    }
-
-    private void startWithDrawActivity() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        //如果没有实名认证，先实名认证
-        if (!CommonMethodUtils.isNameAuth(userInfo)) {
-            ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
-        } else {
-            Launcher.with(getActivity(), WithdrawActivity.class).execute();
-        }
-    }
-
     /**
      * 打开交易明细界面
      *
      * @param
      */
-    private void openTradeDetailPage(final boolean isCash) {
+    private void openTradeDetailPage() {
         if (LocalUser.getUser().isLogin()) {
-            API.Finance.getFundInfo().setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<UserFundInfo>>() {
-                @Override
-                protected void onRespSuccess(Resp<UserFundInfo> resp) {
-                    UserFundInfo userFundInfo = resp.getData();
-                    Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
-                    Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
-                }
-            }).fire();
-
+            API.Finance.getFundInfo()
+                    .setTag(TAG)
+                    .setIndeterminate(this)
+                    .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                            UserFundInfo userFundInfo = resp.getData();
+                            Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
+                            Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
+                        }
+                    }).fire();
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }

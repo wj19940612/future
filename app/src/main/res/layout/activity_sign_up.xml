@@ -85,7 +85,6 @@
                 android:clickable="true"
                 android:enabled="false"
                 android:gravity="center"
-
                 android:text="@string/obtain_auth_code"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"/>
@@ -108,8 +107,7 @@
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/register_code_image_hint"
                 android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"
-                />
+                android:textSize="@dimen/mine_editTest_size"/>
 
 
             <ImageView

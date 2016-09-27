@@ -109,9 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="@string/sign_up_free"
-            android:textColor="#0E2947"
-            android:textSize="16sp"/>
+            android:text="@string/sign_up_free"/>
 
         <TextView
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -48,8 +49,7 @@ public class FindPwdActivity extends BaseActivity {
     LinearLayout mImageCode;
     @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
-    @BindView(R.id.imageCodeLoadHint)
-    TextView imageCodeLoadHint;
+
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -102,7 +102,7 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     //获取验证码
-    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.imageCodeLoadHint, R.id.RetrieveImageCode})
+    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.RetrieveImageCode})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -110,9 +110,6 @@ public class FindPwdActivity extends BaseActivity {
                 break;
             case R.id.nextStepButton:
                 doNextStepButtonClick();
-                break;
-            case R.id.imageCodeLoadHint:
-                getRetrieveImageCode();
                 break;
             case R.id.RetrieveImageCode:
                 getRetrieveImageCode();
@@ -140,35 +137,22 @@ public class FindPwdActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                        } else if (resp.getCode() == 601) {
+                        } else if (resp.getCode() == UserInfo.RESPONSE_ERROR_CODE) {
                             showFailWarnView(resp);
                             mImageCode.setVisibility(View.VISIBLE);
+                            getRetrieveImageCode();
                         } else {
                             showFailWarnView(resp);
                         }
                     }
                 }).fire();
-        getRetrieveImageCode();
     }
 
     private void getRetrieveImageCode() {
         final String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-         final String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
+        final String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
         Log.d(TAG, "找回密码页面图片验证码地址  " + url);
-//        Picasso.with(FindPwdActivity.this).load(url).into(mRetrieveImageCode, new com.squareup.picasso.Callback() {
-//            @Override
-//            public void onSuccess() {
-//                imageCodeLoadHint.setVisibility(View.GONE);
-//                mRetrieveImageCode.setVisibility(View.VISIBLE);
-//            }
-//
-//            @Override
-//            public void onError() {
-//                // TODO: 2016/9/8  目前先做这样处理
-//                imageCodeLoadHint.setVisibility(View.VISIBLE);
-//            }
-//        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -184,10 +168,9 @@ public class FindPwdActivity extends BaseActivity {
                         public void run() {
                             if (bitmap != null) {
                                 mRetrieveImageCode.setImageBitmap(bitmap);
-                                imageCodeLoadHint.setVisibility(View.GONE);
                                 mRetrieveImageCode.setVisibility(View.VISIBLE);
                             } else {
-                                imageCodeLoadHint.setVisibility(View.VISIBLE);
+
                             }
                         }
                     });
@@ -201,8 +184,9 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void showFailWarnView(Resp resp) {
+        mCommonFailWarn.setVisible(true);
         mCommonFailWarn.setCenterTxt(resp.getMsg());
-        mCommonFailWarn.setVisibility(View.VISIBLE);
+
     }
 
     private void doNextStepButtonClick() {

@@ -1,14 +1,11 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -16,12 +13,10 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,19 +91,14 @@ public class ModifyPwdActivity extends BaseActivity {
         if (TextUtils.isEmpty(confirmPassword) || confirmPassword.length() < 6) {
             return false;
         }
-
-//        if (!confirmPassword.equals(mNewPwd)) {
-//            return false;
-//        }
-
         return true;
     }
 
     @OnClick(R.id.confirmButton)
     public void onClick() {
-        Log.d(TAG, "新密码与提交密码是否相同  " + TextUtils.equals(mNewPwd, confirmPassword));
         if (!TextUtils.equals(mNewPwd, confirmPassword)) {
-            ToastUtil.curt(R.string.newPassword_different_from_confimPassword);
+            mModifyPasswordWarn.setVisible(true);
+            mModifyPasswordWarn.setCenterTxt(R.string.newPassword_different_from_confimPassword);
         } else {
             API.User.modifyPwdWhenFindPwd(mPhone, mNewPwd)
                     .setIndeterminate(this).setTag(TAG)
@@ -116,17 +106,9 @@ public class ModifyPwdActivity extends BaseActivity {
                         @Override
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
-                                SmartDialog.with(getActivity(), resp.getMsg())
-                                        .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                            @Override
-                                            public void onClick(Dialog dialog) {
-                                                dialog.dismiss();
-                                                finish();
-                                            }
-                                        }).show();
                                 CustomToast.getInstance().custommakeText(ModifyPwdActivity.this, R.string.modify_passWord_success);
                             } else {
-                                mModifyPasswordWarn.setVisibility(View.VISIBLE);
+                                mModifyPasswordWarn.setVisible(true);
                                 mModifyPasswordWarn.setCenterTxt(resp.getMsg());
                             }
                         }

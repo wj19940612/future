@@ -1,10 +1,13 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,6 +15,7 @@ import android.webkit.WebViewClient;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.net.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,14 +66,14 @@ public class RechargeWebViewActivity extends BaseActivity {
     /**
      * 同步一下cookie
      */
-//    public void synCookies(Context context, String url) {
-//        String cookies = CookieManger.getInstance().getCookies();
-////        CookieSyncManager.createInstance(context);
-////        CookieManager cookieManager = CookieManager.getInstance();
-////        cookieManager.setAcceptCookie(true);
-////        cookieManager.removeSessionCookie();//移除
-////        cookieManager.setCookie(url, cookies);//cookies是在HttpClient中获得的cookie
-////        CookieSyncManager.getInstance().sync();
+    public void synCookies(Context context, String url) {
+        String cookies = CookieManger.getInstance().getCookies();
+        CookieSyncManager.createInstance(context);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeSessionCookie();//移除
+        cookieManager.setCookie(url, cookies);//cookies是在HttpClient中获得的cookie
+        CookieSyncManager.getInstance().sync();
 //
 //
 //        CookieSyncManager.createInstance(context);
@@ -81,7 +85,7 @@ public class RechargeWebViewActivity extends BaseActivity {
 //
 //        String cookie = cookieManager.getCookie(url);
 //        Log.d(TAG, "本地CookieManger所获取的 " + cookies + "\n通过CookieManager.getCookies(url)获取的cookies" + cookie);
-//    }
+    }
     @Override
     //设置回退
     //覆盖Activity类的onKeyDown(int keyCoder,KeyEvent event)方法

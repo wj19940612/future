@@ -14,13 +14,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -45,7 +46,9 @@ import butterknife.OnClick;
 import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
+
     private static final String TAG = "SignUpActivity";
+
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.registerAuthCode)
@@ -62,14 +65,12 @@ public class SignUpActivity extends BaseActivity {
     TextView mSignUpButton;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.imageCodeLoadHint)
-    TextView mImageCodeLoadHint;
     @BindView(R.id.failWarn)
     CommonFailWarn mFailWarn;
     //获取图片验证码
     @BindView(R.id.imageCode)
-    LinearLayout mImageCode;
-    @BindView(R.id.registerRetrieveImage)
+    RelativeLayout mImageCode;
+    @BindView(R.id.registerRetrieveIma)
     EditText mRegisterRetrieveImage;
     @BindView(R.id.showPasswordButton)
     ImageView mImagePasswordType;
@@ -91,7 +92,9 @@ public class SignUpActivity extends BaseActivity {
         mPassword.addTextChangedListener(mValidationWatcher);
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mAgreeProtocol.setChecked(isChecked);
+                mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
                 activeButtons();
             }
         });
@@ -103,9 +106,15 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
-                finish();
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -122,7 +131,7 @@ public class SignUpActivity extends BaseActivity {
             if (!TextUtils.isEmpty(phoneNum)) {
                 mImagePasswordType.setVisibility(View.VISIBLE);
             } else {
-                mImagePasswordType.setVisibility(View.GONE);
+                mImagePasswordType.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -166,7 +175,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.imageCodeLoadHint})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.RetrieveImageCode, R.id.serviceProtocol})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -178,8 +187,10 @@ public class SignUpActivity extends BaseActivity {
             case R.id.RetrieveImageCode:
                 getRegisterImage();
                 break;
-            case R.id.imageCodeLoadHint:
-                getRegisterImage();
+            case R.id.serviceProtocol:
+                Launcher.with(SignUpActivity.this, WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getRegisterServiceProtocol())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
                 break;
         }
     }
@@ -200,13 +211,13 @@ public class SignUpActivity extends BaseActivity {
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                            getRegisterImage();
                         } else if (resp.getCode() == 601) {
                             getRegisterImage();
                             mFailWarn.setVisible(true);
@@ -222,7 +233,6 @@ public class SignUpActivity extends BaseActivity {
     //注册
     @OnClick(R.id.signUpButton)
     void signUp() {
-        // TODO: 2016/9/12 目前还不知道出现图片验证码后该如何调用接口，是否需要上传
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
@@ -236,19 +246,10 @@ public class SignUpActivity extends BaseActivity {
                             CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-                            // TODO: 2016/9/12 原来的代码，目前不知道用途
-//                            SmartDialog.with(getActivity(), resp.getMsg())
-//                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(Dialog dialog) {
-//                                            dialog.dismiss();
-//                                            finish();
-//                                        }
-//                                    }).show();
                             if (mFailWarn.isShown()) {
                                 mFailWarn.setVisibility(View.GONE);
                             }
-                            finish();
+                            onBackPressed();
                         } else {
                             mFailWarn.setCenterTxt(resp.getMsg());
                             mFailWarn.setVisibility(View.VISIBLE);
@@ -259,12 +260,14 @@ public class SignUpActivity extends BaseActivity {
 
     private void getRegisterImage() {
         final String userPhone = mPhoneNum.getText().toString().trim();
+        // TODO: 2016/9/26      必须放在子线程中 不然java.lang.IllegalStateException: Method call should not happen from the main thread.
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
                 String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                Log.d(TAG, "注册页面图片验证码地址  " + url);
+                Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);
                 try {
@@ -273,12 +276,11 @@ public class SignUpActivity extends BaseActivity {
                         @Override
                         public void run() {
                             if (bitmap != null) {
+                                mImageCode.setVisibility(View.VISIBLE);
                                 mRetrieveImage.setImageBitmap(bitmap);
-                                mImageCodeLoadHint.setVisibility(View.GONE);
-                                mRetrieveImage.setVisibility(View.VISIBLE);
                             } else {
-                                mImageCodeLoadHint.setVisibility(View.VISIBLE);
-                                mRetrieveImage.setVisibility(View.GONE);
+                                mFailWarn.setVisible(true, true);
+                                mFailWarn.setCenterTxt(R.string.network_error_load_image);
                             }
                         }
                     });

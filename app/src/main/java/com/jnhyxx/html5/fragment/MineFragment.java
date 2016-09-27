@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -24,6 +24,7 @@ import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.IconTextRow;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static android.app.Activity.RESULT_OK;
+import static com.jnhyxx.html5.R.id.paidToPromote;
 
 public class MineFragment extends BaseFragment {
     //登陆的请求码
@@ -46,6 +47,7 @@ public class MineFragment extends BaseFragment {
     //注册的请求码
     private static final int REQUEST_CODE_REGISTER = 6260;
 
+    private static final String PAID_TO_PROMOTE_PATH = "/mine/extension.html";
 
     //账户余额
     @BindView(R.id.balance)
@@ -67,7 +69,7 @@ public class MineFragment extends BaseFragment {
     IconTextRow mTradeDetail;
     @BindView(R.id.aboutUs)
     IconTextRow mAboutUs;
-    @BindView(R.id.paidToPromote)
+    @BindView(paidToPromote)
     IconTextRow mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
@@ -138,10 +140,10 @@ public class MineFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
-                Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
+                Launcher.with(getActivity(), SignInActivity.class).execute();
                 break;
             case R.id.signUpButton:
-                Launcher.with(getActivity(), SignUpActivity.class).executeForResult(REQUEST_CODE_REGISTER);
+                Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             case R.id.recharge: //充值
                 Launcher.with(getActivity(), RechargeActivity.class).execute();
@@ -158,7 +160,10 @@ public class MineFragment extends BaseFragment {
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
-            case R.id.paidToPromote:
+            case paidToPromote:
+                String url = APIBase.getHost() + PAID_TO_PROMOTE_PATH;
+                Launcher.with(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EX_URL, url)
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.paid_to_promote)).execute();
                 break;
         }
     }
@@ -181,27 +186,26 @@ public class MineFragment extends BaseFragment {
                             Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
                         }
                     }).fire();
-
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            upDateUserInfoView(userInfo);
-        } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
-            upDateUserInfoView(userInfo);
-        }
-        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
-            mTitleBar.setRightVisible(false);
-            updateAccountInfoView();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+//        Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
+//        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+//            upDateUserInfoView(userInfo);
+//        } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
+//            upDateUserInfoView(userInfo);
+//        }
+//        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
+//            mTitleBar.setRightVisible(false);
+//            updateAccountInfoView();
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     private void upDateUserInfoView(UserInfo userInfo) {
         if (userInfo == null) return;

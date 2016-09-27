@@ -105,20 +105,13 @@ public class NameVerifyActivity extends BaseActivity {
                                     user.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
 
                                     setResult(RESULT_OK);
-                                    Log.d(TAG,"实名认证后的用户信息"+user.toString());
-                                    if(mRlIdentityCardWarn.isShown()){
-                                        mRlIdentityCardWarn.setVisibility(View.GONE);
-                                    }
                                     finish();
                                 } else {
+                                    mRlIdentityCardWarn.setVisible(true);
                                     mRlIdentityCardWarn.setCenterTxt(resp.getMsg());
-                                    mRlIdentityCardWarn.setVisibility(View.VISIBLE);
                                 }
                             }
                         }).fire();
-//            }
-//            mRlIdentityCardWarn.setCenterTxt(R.string.setting_identity_card_fail);
-//            mRlIdentityCardWarn.setVisibility(View.VISIBLE);
         } else {
             ToastUtil.curt(R.string.settings_identity_card_when_login);
         }

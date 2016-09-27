@@ -296,6 +296,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     setResult(RESULT_OK);
                                     finish();
                                 } else {
+                                    mCommonFailTvWarn.setVisible(true);
                                     mCommonFailTvWarn.setCenterTxt(resp.getMsg());
                                 }
                             }

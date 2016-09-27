@@ -93,16 +93,22 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mOffset = 0;
         mSet = new HashSet<>();
         setEmptyText(getString(R.string.there_is_no_info_for_now));
+        getTradeInfoList();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isAdded() && getUserVisibleHint() && !isLoaded) {
-            getTradeInfoList();
+
             isLoaded = true;
         }
     }
@@ -138,7 +144,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 //                        }
 //                    }).fire();
 //        }
-        if (TextUtils.isEmpty(mFragmentType)) return;
+
         API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<List<TradeDetail>>>() {
@@ -196,12 +202,12 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
     @Override
     public void onShow(String tag) {
-        setListShown(false);
+        //setListShown(false);
     }
 
     @Override
     public void onDismiss(String tag) {
-        setListShown(true);
+        //setListShown(true);
     }
 
     public class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {

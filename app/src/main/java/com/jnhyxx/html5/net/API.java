@@ -503,7 +503,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getFundSwitchIntegral(String type, int offset, int pageSize) {
-            return new API("/user/finance/findFlowList.do",
+            return new API(GET, "/user/finance/findFlowList.do",
                     new ApiParams()
                             .put("type", type)
                             .put("offset", offset)
@@ -770,28 +770,12 @@ public class API extends APIBase {
         return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
     }
 
-    public static class Extend {
-        /**
-         * 接口名：根据登录用户获取他推广出来的子用户信息
-         * URL  http://域名/user/qureypagingSonUser.do
-         *
-         * @param page
-         * @param pageSize
-         * @return
-         */
-        public static API getExtendUserManage(int page, int pageSize) {
-            return new API("/user/qureypagingSonUser.do", new ApiParams().put("page", page).put("pageSize", pageSize));
-        }
-
-        /**
-         * 接口名：前端获取：获取渠道等级及广告
-         * URL  http://域名/user/getLevelsForUser.do
-         *
-         * @return
-         */
-        public static API getChannelScoreAndAd() {
-            return new API("/user/getLevelsForUser.do", new ApiParams());
-        }
-
+    /**
+     * 注册界面的服务协议网址
+     *  //服务协议的接口
+     */
+    public static String getRegisterServiceProtocol() {
+        return getHost() + "/xieyi/agreement.html";
     }
+
 }

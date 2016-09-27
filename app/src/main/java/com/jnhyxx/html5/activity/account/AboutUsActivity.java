@@ -80,7 +80,6 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             //公司热线
             case R.id.activityAboutUsRCompanyTelephone:
-                // TODO: 2016/8/24  
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number)));
                 startActivity(intent);
                 break;

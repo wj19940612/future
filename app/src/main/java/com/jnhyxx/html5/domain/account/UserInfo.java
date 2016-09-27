@@ -21,6 +21,9 @@ public class UserInfo {
     public static final int REAL_NAME_STATUS_FILLED = 1;
     public static final int REAL_NAME_STATUS_VERIFIED = 2;
 
+
+    public static final int RESPONSE_ERROR_CODE = 601;
+
     /**
      * moneyUsable可用资金余额
      */

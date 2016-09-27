@@ -26,9 +26,6 @@ import butterknife.OnClick;
 
 public class RechargeActivity extends BaseActivity {
 
-    private static final int REQ_CODE_REAL_NAME_VERIFY = 1;
-    private static final int REQ_CODE_BANKCARD_BINDING = 2;
-
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
     @BindView(R.id.rechargeAmount)
@@ -88,11 +85,15 @@ public class RechargeActivity extends BaseActivity {
 
     private void doBankcardPayment() {
         if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(this, NameVerifyActivity.class).executeForResult(REQ_CODE_REAL_NAME_VERIFY);
+            Launcher.with(this, NameVerifyActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
+            return;
         }
 
         if (!LocalUser.getUser().isBankcardFilled()) {
-            Launcher.with(this, BankcardBindingActivity.class).executeForResult(REQ_CODE_BANKCARD_BINDING);
+            Launcher.with(this, BankcardBindingActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
+            return;
         }
 
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
@@ -141,10 +142,7 @@ public class RechargeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_REAL_NAME_VERIFY && resultCode == RESULT_OK) {
-            doBankcardPayment();
-        }
-        if (requestCode == REQ_CODE_BANKCARD_BINDING && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
             doBankcardPayment();
         }
     }

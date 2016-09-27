@@ -100,9 +100,6 @@
             android:name=".activity.account.WithdrawActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.account.NameVerifyActivity"
             android:screenOrientation="portrait"/>
         <activity

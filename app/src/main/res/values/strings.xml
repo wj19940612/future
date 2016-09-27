@@ -109,7 +109,6 @@
     <string name="zero">0</string>
     <string name="withdraw_log">提现记录</string>
     <string name="withdraw_amount">提现金额</string>
-    <string name="please_input_amount">请输入金额</string>
     <string name="yuan">元</string>
     <string name="withdraw_bankcard">提现银行卡</string>
     <string name="add_bankcard_right_now">马上添加银行卡</string>

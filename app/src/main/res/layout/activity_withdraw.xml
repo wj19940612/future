@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.WithdrawActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.WithdrawActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
@@ -16,7 +16,7 @@
         app:rightTextColor="#FEFEFE"
         app:rightTextSize="14sp"
         app:rightVisible="true"
-        app:titleText="@string/withdraw" />
+        app:titleText="@string/withdraw"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:paddingTop="25dp"
             android:text="@string/account_balance"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/balance"
@@ -42,7 +42,7 @@
             android:paddingBottom="25dp"
             android:text="@string/zero"
             android:textColor="#FB4B55"
-            android:textSize="50sp" />
+            android:textSize="50sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -66,7 +66,7 @@
             android:padding="13dp"
             android:text="@string/add_bank_card"
             android:textColor="#A8A8A8"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </LinearLayout>
 
 
@@ -83,101 +83,37 @@
             android:id="@+id/withdrawBankcard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:paddingLeft="5dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/default_bank_name_card_number" />
+            android:text="@string/default_bank_name_card_number"/>
 
         <EditText
-            android:background="@null"
-            android:gravity="center"
-            android:id="@+id/rechargeAmount"
+            android:id="@+id/withdrawAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
             android:drawableLeft="@drawable/ic_money"
             android:drawablePadding="5dp"
+            android:gravity="center"
             android:hint="@string/withdraw_least_money_hint"
-            android:textSize="16sp"
             android:textColor="#262626"
-            android:textColorHint="#CBCBCB" />
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:textColorHint="#CBCBCB"
+            android:textSize="16sp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/InputTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/withdraw_amount" />
-
-                <EditText
-                    android:id="@+id/rechargeAmount"
-                    style="@style/SignEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/please_input_amount"
-                    android:inputType="numberDecimal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/yuan"
-                    android:textColor="@android:color/black" />
-
-            </LinearLayout>
-
-            <include layout="@layout/split_line_thick" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/InputTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/withdraw_bankcard" />
-
-                <TextView
-                    android:id="@+id/withdrawBankcard"
-                    style="@style/SignEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="numberDecimal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="2dp"
-                    android:text=">" />
-            </LinearLayout>
-        </LinearLayout>-->
-
-        <include layout="@layout/split_line_thick" />
+        <include layout="@layout/split_line_thick"/>
 
         <TextView
-            android:layout_marginTop="15dp"
-            android:gravity="center"
             android:id="@+id/confirmButton"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:background="@drawable/btn_obtain_auth_code"
-            android:enabled="true"
             android:clickable="true"
+            android:enabled="true"
+            android:gravity="center"
             android:padding="13sp"
-            android:text="@string/ok" />
+            android:text="@string/ok"/>
     </LinearLayout>
 
     <TextView
@@ -188,7 +124,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/warm_hint"
         android:textColor="#FB4B55"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -202,7 +138,7 @@
             android:paddingRight="16dp"
             android:text="@string/prompt_withdraw"
             android:textColor="#ABABAB"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
     </ScrollView>
 
 </LinearLayout>

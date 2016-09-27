@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -46,12 +45,6 @@ public class MineFragment extends BaseFragment {
     private static final int REQUEST_CODE_SETTING = 3520;
     //注册的请求码
     private static final int REQUEST_CODE_REGISTER = 6260;
-    //提现的请求码
-    private static final int REQUEST_CODE_WITHDRAW = 6329;
-    //充值的请求码
-    private static final int REQUEST_CODE_RECHARGE = 560;
-    //资金明细与积分明细
-    private static final int REQUEST_CODE_TRADE_DETAIL = 961;
 
 
     //账户余额
@@ -66,7 +59,7 @@ public class MineFragment extends BaseFragment {
     //注册
     @BindView(R.id.signUpButton)
     TextView mSignUp;
-    //    //消息中心
+    //消息中心
     @BindView(R.id.messageCenter)
     IconTextRow mMessageCenter;
     //交易明细
@@ -102,22 +95,26 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinder.unbind();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateAccountInfoView();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), SettingsActivity.class).executeForResult(REQUEST_CODE_SETTING);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinder.unbind();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateAccountInfoView();
     }
 
     private void updateAccountInfoView() {
@@ -146,19 +143,17 @@ public class MineFragment extends BaseFragment {
             case R.id.signUpButton:
                 Launcher.with(getActivity(), SignUpActivity.class).executeForResult(REQUEST_CODE_REGISTER);
                 break;
-            //充值
-            case R.id.recharge:
+            case R.id.recharge: //充值
                 Launcher.with(getActivity(), RechargeActivity.class).execute();
                 break;
-            //提现
-            case R.id.withdraw:
-                startWithDrawActivity();
+            case R.id.withdraw: //提现
+                Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
-                openTradeDetailPage(true);
+                openTradeDetailPage();
                 break;
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
@@ -168,42 +163,24 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void startWithDrawActivity() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        //如果没有实名认证，先实名认证
-        if (!CommonMethodUtils.isNameAuth(userInfo)) {
-            ToastUtil.curt("您没有实名认证，请先实名认证后在提现");
-        } else {
-            Launcher.with(getActivity(), WithdrawActivity.class).executeForResult(REQUEST_CODE_WITHDRAW);
-        }
-    }
-
     /**
      * 打开交易明细界面
      *
      * @param
      */
-    private void openTradeDetailPage(final boolean isCash) {
+    private void openTradeDetailPage() {
         if (LocalUser.getUser().isLogin()) {
-            // TODO: 2016/8/30 原来的界面，资金明细和积分明细在一起的
-//                    API.Finance.getFundInfo(com.jnhyxx.html5.domain.local.User.getUser().getToken()).setTag(TAG)
-//                            .setCallback(new Callback2<Resp<FundInfo>, FundInfo>() {
-//                                @Override
-//                                public void onRespSuccess(FundInfo fundInfo) {
-//                                    Launcher.with(getActivity(), FundDetailActivity.class)
-//                                            .putExtra(Launcher.EX_PAYLOAD, fundInfo)
-//                                            .putExtra(FundDetailActivity.EX_IS_CASH, isCash)
-//                                            .execute();
-//                                }
-//                            }).fire();
-            API.Finance.getFundInfo().setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<UserFundInfo>>() {
-                @Override
-                protected void onRespSuccess(Resp<UserFundInfo> resp) {
-                    UserFundInfo userFundInfo = resp.getData();
-                    Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
-                    Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).executeForResult(REQUEST_CODE_TRADE_DETAIL);
-                }
-            }).fire();
+            API.Finance.getFundInfo()
+                    .setTag(TAG)
+                    .setIndeterminate(this)
+                    .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                            UserFundInfo userFundInfo = resp.getData();
+                            Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
+                            Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
+                        }
+                    }).fire();
 
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();

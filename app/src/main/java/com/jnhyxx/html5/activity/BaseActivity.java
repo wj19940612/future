@@ -28,7 +28,7 @@ import com.umeng.message.PushAgent;
 public class BaseActivity extends AppCompatActivity implements
         ApiIndeterminate, TimerHandler.TimerCallback {
 
-    public static final int REQUEST_CODE = 8;
+    public static final int REQ_CODE_BASE = 8;
 
     public static final String ACTION_TOKEN_EXPIERD = "com.jnhyxx.app.TOKEN_EXPIERD";
 

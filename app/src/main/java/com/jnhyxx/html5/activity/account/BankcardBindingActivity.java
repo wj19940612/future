@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.NameAuth;
 import com.jnhyxx.html5.domain.account.ChannelBankList;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -50,7 +49,6 @@ import butterknife.OnClick;
 
 public class BankcardBindingActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
 
-    public static final String NAME_AUTH_RESULT = "nameAuthResult";
     /**
      * 解除绑定客服电话
      */
@@ -95,8 +93,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
     TitleBar mTitleBar;
     @BindView(R.id.commonFailTvWarn)
     CommonFailWarn mCommonFailTvWarn;
-
-    NameAuth.Result mNameAuthResult;
 
     ChannelBankList mChannelBankList = null;
 

@@ -148,7 +148,7 @@ public class MineFragment extends BaseFragment {
                 break;
             //充值
             case R.id.recharge:
-                startRechargeActivity();
+                Launcher.with(getActivity(), RechargeActivity.class).execute();
                 break;
             //提现
             case R.id.withdraw:
@@ -165,19 +165,6 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.paidToPromote:
                 break;
-        }
-    }
-
-    private void startRechargeActivity() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (CommonMethodUtils.isNameAuth(userInfo)) {
-            if (CommonMethodUtils.isBankAuth(userInfo)) {
-                Launcher.with(getActivity(), RechargeActivity.class).executeForResult(REQUEST_CODE_RECHARGE);
-            } else {
-                ToastUtil.curt("您还没有绑定银行卡，请先绑定银行卡后再提现");
-            }
-        } else {
-            ToastUtil.curt("您没有实名认证，请先实名认证后再提现");
         }
     }
 

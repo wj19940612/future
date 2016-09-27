@@ -131,9 +131,7 @@
     <string name="alipay_payment">支付宝支付</string>
     <string name="wechat_payment">微信支付</string>
     <string name="account_fund_is_covered_by_PA">账户资金安全由平安财险承保</string>
-    <string name="recharge_amount_cannot_be_empty">充值金额不能为空</string>
     <string name="recharge_amount_should_larger_than_50">充值金额应大于50</string>
-    <string name="payments_cannot_be_empty">支付方式不能为空</string>
     <string name="frozen_deposit">冻结保证金</string>
     <string name="profit_loss_detail">收支明细</string>
     <string name="there_is_no_trade_detail">暂无交易明细</string>

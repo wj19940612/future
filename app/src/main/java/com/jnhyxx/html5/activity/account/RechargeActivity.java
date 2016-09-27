@@ -120,8 +120,12 @@ public class RechargeActivity extends BaseActivity {
 
     private boolean checkNextStepButtonEnable() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+        if (TextUtils.isEmpty(rechargeAmount)) {
+            return false;
+        }
+
         double amount = Double.valueOf(rechargeAmount);
-        if (TextUtils.isEmpty(rechargeAmount) || amount < 50) {
+        if (amount < 50) {
             return false;
         }
 

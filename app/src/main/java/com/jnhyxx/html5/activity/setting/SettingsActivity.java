@@ -71,7 +71,7 @@ public class SettingsActivity extends BaseActivity {
          * cardState银行卡状态 0未填写，1已填写，2已绑定
          */
         if (authStatus == UserInfo.BANKCARD_STATUS_FILLED) {
-            return R.string.filled;
+            return  R.string.filled;
         } else if (authStatus == UserInfo.BANKCARD_STATUS_BOUND) {
             return R.string.bound;
         }

@@ -138,7 +138,7 @@ public class API extends APIBase {
          * @param password
          * @param regCode
          */
-        public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
+        public static API register(String phoneNum, String password, String regCode, String promoterCode) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "注册时密码MD5加密" + password);
@@ -151,14 +151,6 @@ public class API extends APIBase {
                             .put("userPass", password)
                             .put("regCode", regCode)
                             .put("promoterCode", promoterCode));
-
-            // TODO: 7/22/16 统计数据 maybe delete
-                    /*.put("deviceModel", "deviceModel")
-                    .put("deviceImei", "deviceImei")
-                    .put("deviceVersion", "deviceVersion")
-                    .put("clientVersion", "clientVersion")
-                    .put("regSource", "regSource")
-                    .put("operator", "operator");*/
         }
 
         /**
@@ -167,38 +159,18 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
-
         public static API login(String phoneNum, String password) {
-//            try {
-////                 TODO: 2016/9/8 会影响MD5加密效果，暂时去掉
-////                if (!BuildConfig.DEBUG)
-////                 TODO: 2016/9/20 使用孙斌的账号，不能Md5加密
-//                password = SecurityUtil.md5Encrypt(password);
-//                Log.d(TAG, "登陆密码MD5加密" + password);
-//            } catch (NoSuchAlgorithmException e) {
-//                e.printStackTrace();
-//            }
-            // TODO: 2016/8/30 原来的网址
-
-       /* public static API signIn(String phoneNum, String password) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "登陆密码MD5加密" + password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-            }*/
+            }
 
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
                             .put("userPass", password));
-
-            // TODO: 7/22/16 统计数据 maybe delete
-            /*      .put("deviceModel", deviceModel)
-                    .put("deviceImei", deviceImei)
-                    .put("deviceVersion", deviceVersion)
-                    .put("clientVersion", clientVersion)
-                    .put("operator", operator);*/
         }
 
         /**

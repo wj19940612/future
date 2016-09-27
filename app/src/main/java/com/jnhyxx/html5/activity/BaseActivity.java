@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -30,17 +29,18 @@ public class BaseActivity extends AppCompatActivity implements
 
     public static final int REQ_CODE_BASE = 8;
 
-    public static final String ACTION_TOKEN_EXPIERD = "com.jnhyxx.app.TOKEN_EXPIERD";
+    public static final String ACTION_TOKEN_EXPIRED = "com.jnhyxx.app.TOKEN_EXPIRED";
+    public static final String EX_TOKEN_EXPIRED_MESSAGE = "com.jnhyxx.app.TOKEN_EXPIRED_MESSAGE";
 
     protected String TAG;
 
-    Toast mToast;
     private TimerHandler mTimerHandler;
     private Progress mProgress;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SmartDialog.with(getActivity(), "Token 过期,重新登入")
+            String expiredMessage = intent.getStringExtra(EX_TOKEN_EXPIRED_MESSAGE);
+            SmartDialog.with(getActivity(), expiredMessage)
                     .setCancelableOnTouchOutside(false)
                     .setNegative(R.string.cancel)
                     .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
@@ -73,7 +73,7 @@ public class BaseActivity extends AppCompatActivity implements
         super.onPostResume();
         Preference.get().setForeground(true);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,
-                new IntentFilter(ACTION_TOKEN_EXPIERD));
+                new IntentFilter(ACTION_TOKEN_EXPIRED));
     }
 
     @Override

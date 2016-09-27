@@ -226,7 +226,7 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString().trim();
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.signUp(phoneNum, password, authCode, null)
+        API.User.register(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

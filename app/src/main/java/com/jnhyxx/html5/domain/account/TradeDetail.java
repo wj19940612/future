@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class TradeDetail implements Serializable {
+    private static final long serialVersionUID = -7454080372304618453L;
     /**
      * 资金明细表
      */
@@ -15,7 +16,25 @@ public class TradeDetail implements Serializable {
      * 代表将要查 积分明细表
      */
     public static final int INTEGRAL_DETAIL_TABLE = 791;
-    private static final long serialVersionUID = -7454080372304618453L;
+
+    //收益增加的tradeDetail标示
+    public static final int LOGO_INCOME_ADD = 2003;
+    //收益减少的tradeDetail标示
+    public static final int LOGO_INCOME_CUT = -2003;
+
+    //保证金冻结
+    public static final int LOGO_MARGIN_FREEZE = -2002;
+    //保证金返回  2002, "返还保证金
+    public static final int LOGO_MARGIN_BACK = 2002;
+
+    /**
+     * -2001, "支付手续费
+     * 2001, "返还手续费"
+     */
+    public static final int LOGO_FEE_APPLY = -2001;
+    public static final int LOGO_FEE_BACK = 2001;
+
+
     /**
      * createTime : 2016-09-18 15:28:03
      * id : 74

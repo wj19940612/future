@@ -265,7 +265,18 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 String data = new RemarkHandleUtil().get(item.getTypeDetail());
                 mDataType.setText(data);
 //                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
-                mTradeDetail.setText(new TradeDetailRemarkUtil().get(item.getTypeDetail()));
+                /**
+                 * 根据得到的key值显示文字，如果value不存在，则不显示;
+                 */
+//                String tradeDepict = new TradeDetailRemarkUtil().get(item.getTypeDetail());
+                String tradeStatus = getTradeStatus(item);
+                if (!TextUtils.isEmpty(tradeStatus)) {
+                    mTradeDetail.setText(tradeStatus);
+                } else {
+                    mTradeDetailAdapter.remove(item);
+                }
+
+
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
                     mStringBuffer.append(String.valueOf(item.getMoney()));
                     mStringBuffer.append("元");
@@ -276,5 +287,47 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }
         }
+    }
+
+    private String getTradeStatus(TradeDetail item) {
+        RemarkHandleUtil mRemarkHandleUtil = new RemarkHandleUtil();
+        String remark = item.getRemark();
+        StringBuffer mStringBuffer = new StringBuffer();
+        //第二栏显示的文字
+        String result = "";
+        //合约字符串
+        String cont = "";
+        if (item.getTypeDetail() == TradeDetail.LOGO_FEE_APPLY ||
+                item.getTypeDetail() == TradeDetail.LOGO_FEE_BACK ||
+                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_BACK ||
+                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
+            result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
+            if (remark.contains(result)) {
+                //获取的合约字符串
+                cont = remark.substring(remark.indexOf(mRemarkHandleUtil.get(item.getTypeDetail()).trim()), remark.length());
+                result = remark.replace(result, "");
+                mStringBuffer.append(result);
+//                mStringBuffer.append("(");
+//                mStringBuffer.append(cont);
+//                mStringBuffer.append(")");
+            }
+
+
+        } else if (item.getTypeDetail() == TradeDetail.LOGO_INCOME_ADD ||
+                item.getTypeDetail() == TradeDetail.LOGO_INCOME_CUT) {
+            result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
+            if (remark.contains(result)) {
+                if (remark.length() > result.length() + 4) {
+                    cont = remark.substring(remark.indexOf(result) +4, remark.length());
+                    mStringBuffer.append("(");
+                    mStringBuffer.append(cont);
+                    mStringBuffer.append(")");
+                }
+            }
+        } else {
+            String tradeDepict = new TradeDetailRemarkUtil().get(item.getTypeDetail());
+            mStringBuffer.append(tradeDepict);
+        }
+        return mStringBuffer.toString().trim();
     }
 }

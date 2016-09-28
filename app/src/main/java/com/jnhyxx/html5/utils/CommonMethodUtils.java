@@ -10,10 +10,7 @@ import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.domain.account.UserInfo;
 
 import java.lang.ref.WeakReference;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by 王杰 on 2016/8/29.
@@ -60,29 +57,6 @@ public class CommonMethodUtils {
         return -1;
     }
 
-    /**
-     * 判断输入数字是否为手机号码
-     *
-     * @param phoneNumber
-     * @return
-     */
-    public static boolean isMobileNum(String phoneNumber) {
-        boolean isValid = false;
-        CharSequence inputStr = phoneNumber;
-        //正则表达式
-
-        String phone = "^1[34578]\\d{9}$";
-
-
-        Pattern pattern = Pattern.compile(phone);
-        Matcher matcher = pattern.matcher(inputStr);
-
-
-        if (matcher.matches()) {
-            isValid = true;
-        }
-        return isValid;
-    }
 
     /**
      * 隐藏手机号码中间四位
@@ -98,19 +72,7 @@ public class CommonMethodUtils {
         return " ";
     }
 
-    /**
-     * 功能：身份证的有效验证
-     *
-     * @param identityCard 身份证号
-     * @return true 有效：false 无效
-     * @throws ParseException
-     */
-    public static boolean IDCardValidate(String identityCard) {
-        String regx = "[0-9]{17}x";
-        String reg1 = "[0-9]{15}";
-        String regex = "[0-9]{18}";
-        return identityCard.matches(regx) || identityCard.matches(reg1) || identityCard.matches(regex);
-    }
+
 
 
     /**
@@ -139,30 +101,7 @@ public class CommonMethodUtils {
         return safeBankNumber;
     }
 
-    /**
-     * 限制昵称只能输入中文、字母和数字
-     *
-     * @param nickName
-     * @return
-     */
-    public static boolean getNicknameStatus(String nickName) {
-//        nickName = nickName.trim();
-//        Pattern number = Pattern.compile("[0-9]*");
-//        Matcher numberMatcher = number.matcher(nickName);
-//        Pattern letter = Pattern.compile("[a-zA-Z]");
-//        Matcher letterMatcher = letter.matcher(nickName);
-//        Pattern chinese = Pattern.compile("[\u4e00-\u9fa5]");
-//        Matcher chineseMatcher = chinese.matcher(nickName);
-//        if (numberMatcher.matches() && letterMatcher.matches() && chineseMatcher.matches()) {
-//            return true;
-//        }
-//
 
-        String all = "^[\\u4E00-\\u9FA5\\uF900-\\uFA2D\\w]{2,16}";//{2,10}表示字符的长度是2-10
-        Pattern pattern = Pattern.compile(all);
-        boolean result = Pattern.matches(all, nickName);
-        return result;
-    }
 
     /**
      * 拼接的获取图片验证码的地址

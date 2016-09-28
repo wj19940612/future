@@ -15,6 +15,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.ViewUtil;
 
@@ -86,6 +87,10 @@ public class NameVerifyActivity extends BaseActivity {
     public void onClick() {
         final String realName = mName.getText().toString().trim();
         final String identityNum = mIdentityNum.getText().toString().trim();
+        if (!ValidityDecideUtil.IDCardValidate(identityNum)) {
+            mRlIdentityCardWarn.show(R.string.settings_identity_card_fail);
+            return;
+        }
         if (LocalUser.getUser().isLogin()) {
             API.User.authUserName(realName, identityNum)
                     .setTag(TAG)

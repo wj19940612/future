@@ -28,6 +28,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
@@ -190,6 +191,10 @@ public class SignUpActivity extends BaseActivity {
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
         String imageCode = "";
+        if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
+            mFailWarn.show(R.string.common_phone_num_fail);
+            return;
+        }
         if (mRegisterRetrieveImage.isShown()) {
             imageCode = mRegisterRetrieveImage.getText().toString().trim();
         }

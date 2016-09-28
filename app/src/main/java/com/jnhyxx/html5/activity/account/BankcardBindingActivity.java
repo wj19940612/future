@@ -33,6 +33,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.WheelView;
@@ -176,7 +177,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         mCardholderName.setText("");
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
-        if(!TextUtils.isEmpty(userInfo.getIssuingbankName())){
+        if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
             mPayingBank.setText(userInfo.getIssuingbankName());
         }
     }
@@ -261,6 +262,10 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
+                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
+                    return;
+                }
                 int bankId = -1;
                 if (mChannelBankList == null) {
                     ToastUtil.curt(R.string.bind_bank_is_empty);

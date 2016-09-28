@@ -23,6 +23,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
@@ -120,6 +121,10 @@ public class SignInActivity extends BaseActivity {
             case R.id.signInButton:
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
                 String password = ViewUtil.getTextTrim(mPassword);
+                boolean mobileNum = ValidityDecideUtil.isMobileNum(phoneNum);
+                if (!mobileNum) {
+                    mCommonFailWarn.show("手机号码不正确");
+                }
                 API.User.login(phoneNum, password).setTag(TAG)
                         .setIndeterminate(this)
                         .setCallback(new Callback<Resp<JsonObject>>() {

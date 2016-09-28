@@ -11,10 +11,10 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.johnz.kutils.ViewUtil;
@@ -43,17 +43,25 @@ public class ModifyNickNameActivity extends BaseActivity {
 
 
     private void submitNickName(final String nickName) {
+        if (!ValidityDecideUtil.getNicknameStatus(nickName)) {
+            mModifyNickNameFailWarnWarn.show(R.string.modify_nick_name_warn);
+            return;
+        }
         API.User.updateNickName(nickName)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback1<Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    protected void onRespSuccess(Resp resp) {
-                        UserInfo user = LocalUser.getUser().getUserInfo();
-                        user.setUserName(nickName);
-                        user.setNickNameModified();
-                        CustomToast.getInstance().custommakeText(ModifyNickNameActivity.this, R.string.modify_nick_name_success);
-                        setResult(RESULT_OK);
+                    public void onReceive(Resp resp) {
+                        if (resp.isSuccess()) {
+                            UserInfo user = LocalUser.getUser().getUserInfo();
+                            user.setUserName(nickName);
+                            user.setNickNameModified();
+                            CustomToast.getInstance().custommakeText(ModifyNickNameActivity.this, R.string.modify_nick_name_success);
+                            setResult(RESULT_OK);
+                        } else {
+                            mModifyNickNameFailWarnWarn.show(resp.getMsg());
+                        }
                     }
                 }).fire();
     }
@@ -80,7 +88,7 @@ public class ModifyNickNameActivity extends BaseActivity {
     @OnClick(R.id.confirmButton)
     public void onClick() {
         String nickName = mEtModifyNickName.getText().toString().trim();
-        if (!CommonMethodUtils.getNicknameStatus(nickName)) {
+        if (LocalUser.getUser().getUserInfo().isNickNameModifiedBefore()) {
             mModifyNickNameFailWarnWarn.show(R.string.modify_nick_name_warn);
             return;
         }

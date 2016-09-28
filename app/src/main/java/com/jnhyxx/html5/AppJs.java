@@ -59,7 +59,7 @@ public class AppJs {
 
     @JavascriptInterface
     public void updateUmengDeviceId(String token) {
-        if (Variant.isApp1() || Variant.isOrigin() || Variant.isTest()) {
+        if (Variant.isOrigin() || Variant.isTest()) {
             API.User.updateUMDeviceId(token).fire();
         }
     }

@@ -19,7 +19,6 @@ import com.umeng.message.UTrack;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
-import com.wo.main.WP_App;
 
 import java.util.Map;
 
@@ -37,14 +36,6 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         sContext = this;
-
-        if (Variant.isApp1()) {
-            try {
-                WP_App.on_AppInit(getApplicationContext());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         API.init(sContext.getCacheDir());
         CookieManger.getInstance().init(sContext.getFilesDir());

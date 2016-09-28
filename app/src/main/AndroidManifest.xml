@@ -155,6 +155,15 @@
         <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
+
+        <!-- Receiver for getui push -->
+        <receiver
+            android:name=".receiver.PushReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

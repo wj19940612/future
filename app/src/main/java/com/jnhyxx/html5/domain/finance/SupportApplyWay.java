@@ -14,6 +14,18 @@ public class SupportApplyWay implements Serializable {
 
     public static final int ALI_PAY_DEPOSIT_ANDROID = 1;
 
+
+
+    //银行卡支付
+    public static final int DEPOSIT_BY_BANK_APPLY_PAY = 0;
+    //支付宝支付
+    public static final int DEPOSIT_BY_ALI_PAY_PAY = 1;
+    //微信支付
+    public static final int DEPOSIT_BY_BANK_WE_CHART_PAY = 2;
+
+
+
+
     /**
      * bank银行卡支付
      */

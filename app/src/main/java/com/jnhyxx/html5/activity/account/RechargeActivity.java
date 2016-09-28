@@ -77,11 +77,11 @@ public class RechargeActivity extends BaseActivity {
             mAliPayPay.setVisibility(View.GONE);
         }
         //微信支付
-//        if (supportApplyWay.isWechat()) {
-//            mWeChartPay.setVisibility(View.VISIBLE);
-//        } else {
-//            mWeChartPay.setVisibility(View.GONE);
-//        }
+        if (supportApplyWay.isWechat()) {
+            mWeChartPay.setVisibility(View.VISIBLE);
+        } else {
+            mWeChartPay.setVisibility(View.GONE);
+        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -113,6 +113,15 @@ public class RechargeActivity extends BaseActivity {
         }
     }
 
+    private int getSelectedView() {
+        for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
+            if (mPayMethodMatherView.getChildAt(i).isSelected()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void doNextStepButtonClick() {
         // TODO: 9/27/16 如果选择银行卡支付,要求完成实名认证和银行卡绑定,其他支付方式有待实现
         if (isBankcardPaymentSelected()) {
@@ -135,9 +144,57 @@ public class RechargeActivity extends BaseActivity {
             return;
         }
 
+        int selectedView = getSelectedView();
+        if (selectedView == -1) return;
+        switch (selectedView) {
+            case SupportApplyWay.DEPOSIT_BY_BANK_APPLY_PAY:
+                depositByBankApply();
+                break;
+            case SupportApplyWay.DEPOSIT_BY_ALI_PAY_PAY:
+                depositByAliPay();
+                break;
+            case SupportApplyWay.DEPOSIT_BY_BANK_WE_CHART_PAY:
+                depositByWeChartApply();
+                break;
+        }
+    }
+
+    private void depositByBankApply() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
         API.Finance.depositByBankApply(amount)
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<String>() {
+                    @Override
+                    public void onReceive(String s) {
+                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
+                        Launcher.with(getActivity(), RechargeWebViewActivity.class)
+                                .putExtra("url", s).execute();
+                    }
+                }).fire();
+    }
+
+    private void depositByAliPay() {
+        String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+        double amount = Double.valueOf(rechargeAmount);
+        API.Finance.depositByAliPay(amount, SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID)
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<String>() {
+                    @Override
+                    public void onReceive(String s) {
+                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
+                        Launcher.with(getActivity(), RechargeWebViewActivity.class)
+                                .putExtra("url", s).execute();
+                    }
+                }).fire();
+    }
+
+    private void depositByWeChartApply() {
+        String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+        double amount = Double.valueOf(rechargeAmount);
+        API.Finance.depositByWeChartApply(amount)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<String>() {

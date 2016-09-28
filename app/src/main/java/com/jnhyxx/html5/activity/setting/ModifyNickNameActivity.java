@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity.setting;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -82,7 +81,7 @@ public class ModifyNickNameActivity extends BaseActivity {
     public void onClick() {
         String nickName = mEtModifyNickName.getText().toString().trim();
         if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-            mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
+            mModifyNickNameFailWarnWarn.show(R.string.modify_nick_name_warn);
             return;
         }
         submitNickName(nickName);

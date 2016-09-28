@@ -85,9 +85,9 @@ public class WithdrawActivity extends BaseActivity {
                 Launcher.with(WithdrawActivity.this, WithDrawRecordActivity.class).execute();
             }
         });
-        mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
         updateBankInfoView();
+        mWithdrawAmount.addTextChangedListener(mValidationWatcher);
     }
 
     private void updateBankInfoView() {
@@ -115,25 +115,28 @@ public class WithdrawActivity extends BaseActivity {
     @OnClick(R.id.confirmButton)
     void doConfirmButtonClick() {
         String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
-        double amount = Double.valueOf(withdrawAmount);
-        API.Finance.withdraw(amount)
-                .setCallback(new Callback<Resp>() {
-                    @Override
-                    public void onReceive(Resp resp) {
-                        if (resp.isSuccess()) {
-                            SmartDialog.with(getActivity(), resp.getMsg())
-                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                            finish();
-                                        }
-                                    }).show();
-                        } else {
-                            SmartDialog.with(getActivity(), resp.getMsg()).show();
+        if(!TextUtils.isEmpty(withdrawAmount)){
+            double amount = Double.valueOf(withdrawAmount);
+            API.Finance.withdraw(amount)
+                    .setCallback(new Callback<Resp>() {
+                        @Override
+                        public void onReceive(Resp resp) {
+                            if (resp.isSuccess()) {
+                                SmartDialog.with(getActivity(), resp.getMsg())
+                                        .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                                            @Override
+                                            public void onClick(Dialog dialog) {
+                                                dialog.dismiss();
+                                                finish();
+                                            }
+                                        }).show();
+                            } else {
+                                SmartDialog.with(getActivity(), resp.getMsg()).show();
+                            }
                         }
-                    }
-                }).setTag(TAG).setIndeterminate(this).fire();
+                    }).setTag(TAG).setIndeterminate(this).fire();
+        }
+
     }
 
     @OnClick(R.id.addBankcardButton)

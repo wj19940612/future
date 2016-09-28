@@ -231,7 +231,7 @@ public class SignUpActivity extends BaseActivity {
                             LocalUser.getUser().setUserInfo(info);
 
                         } else {
-                            mFailWarn.show(View.VISIBLE);
+                            mFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();

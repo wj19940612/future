@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
@@ -100,13 +101,13 @@ public class TradeDetailActivity extends BaseActivity {
         fragmentList = new ArrayList<>();
 
         mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setCurrentItem(0,false);
+        mViewPager.setCurrentItem(0, false);
         mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);
         mViewPager.setAdapter(mTradeDetailFragmentAdapter);
 
 
         mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
+        mSlidingTabLayout.setDividerColors(ContextCompat.getColor(TradeDetailActivity.this, android.R.color.transparent));
         mSlidingTabLayout.setViewPager(mViewPager);
 
     }

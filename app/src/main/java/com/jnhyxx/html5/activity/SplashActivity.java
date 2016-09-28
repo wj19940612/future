@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import com.igexin.sdk.PushManager;
 import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.johnz.kutils.AppInfo;
@@ -19,6 +20,9 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        // init getui push
+        PushManager.getInstance().initialize(this.getApplicationContext());
 
         mVersionName = (TextView) findViewById(R.id.versionName);
         mVersionName.setText(AppInfo.getVersionName(this));

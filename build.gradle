@@ -18,6 +18,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        maven { // for getui push
+            url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/"
+        }
     }
 }
 

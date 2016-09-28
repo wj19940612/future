@@ -230,7 +230,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
 
                     String s = time[0];
-                    
+
 
 //                    String yearDate = time[0];
 //                    if (yearDate.contains("-")) {

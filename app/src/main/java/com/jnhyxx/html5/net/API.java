@@ -7,7 +7,6 @@ import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
-import com.umeng.message.UmengRegistrar;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -53,21 +52,6 @@ public class API extends APIBase {
          */
         public static API getSystemTime() {
             return new API("/user/user/getSystemTime.do", null);
-        }
-
-        /**
-         * 更新友盟设备号 /user/user/updateUmCode
-         *
-         * @param token
-         */
-        public static API updateUMDeviceId(String token) {
-            return new API("/user/user/updateUmCode",
-                    new ApiParams()
-                            .put("token", token)
-                            .put("umCode", UmengRegistrar.getRegistrationId(App.getAppContext()))
-                            .put("platform", "android")
-                            .put("environment", 1) // Release
-                            .put("pkgtype", "androidcainiu"));
         }
 
         /**

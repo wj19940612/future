@@ -18,12 +18,17 @@ android {
 
         multiDexEnabled true
 
-        // todo 加入此行代码，防止出现 Error:Execution failed for task ':app:transformResourcesWithMergeJavaResForMicroilDebug'.
-        // com.android.build.api.transform.TransformException: com.android.builder.packaging.DuplicateFileException: Duplicate files copied in APK META-INF/INDEX.LIST
-        packagingOptions {
-            exclude "META-INF/INDEX.LIST" // will not include INDEX file
-            exclude "META-INF/io.netty.versions.properties" // will not include INDEX file
+        // the ndk and manifest configs are for getui
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
         }
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
+                GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
+                GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
+                PACKAGE_NAME    : applicationId
+        ]
     }
 
     java.util.Properties properties = new Properties();
@@ -55,11 +60,6 @@ android {
         origin {
             versionCode 6
             versionName '1.2.1'
-        }
-        app1 {
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://app1.jnhyxx.com\"')
         }
         microil {
             versionCode 1
@@ -94,19 +94,18 @@ android {
     packagingOptions {
         exclude "META-INF/INDEX.LIST" // will not include INDEX file
         exclude "META-INF/io.netty.versions.properties"
+        // for getui
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
 dependencies {
-    app1Compile files('libs/via_sdk_v1.jar')
-    provided files('libs/via_sdk_v1.jar')
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
-    app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-    compile project(':PushSDK')
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')
@@ -126,4 +125,5 @@ dependencies {
     compile files('libs/netty-common-4.1.5.final.jar')
     compile files('libs/netty-transport-4.1.5.final.jar')
     compile files('libs/netty-resolver-4.1.5.final.jar')
+    compile 'com.getui:sdk:2.9.3.0'
 }

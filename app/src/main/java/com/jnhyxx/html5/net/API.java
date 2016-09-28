@@ -160,12 +160,12 @@ public class API extends APIBase {
          * @param password
          */
         public static API login(String phoneNum, String password) {
-            try {
-                password = SecurityUtil.md5Encrypt(password);
-                Log.d(TAG, "登陆密码MD5加密" + password);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                password = SecurityUtil.md5Encrypt(password);
+//                Log.d(TAG, "登陆密码MD5加密" + password);
+//            } catch (NoSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
 
             return new API("/user/user/login.do",
                     new ApiParams()
@@ -401,19 +401,6 @@ public class API extends APIBase {
     }
 
     public static class Finance {
-        /**
-         * 用户资金账户 /financy/financy/apiFinancyMain
-         *
-         * @param token
-         */
-//        public static API getFundInfo(String token) {
-//            return new API("/financy/financy/apiFinancyMain",
-//                    new ApiParams()
-//                            .put("token", token));
-//        public static API getFundInfo(String token) {
-//            return new API("/users/finance/findFlowList.do",
-//                    new ApiParams().put("token", token));
-//        }
 
         /**
          * 接口名：查询用户资金信息
@@ -428,15 +415,41 @@ public class API extends APIBase {
         }
 
         /**
-         * 接口名：用户充值
+         * 接口名：用户充值(银行卡充值)
          * <p>
          * URL  http://域名/user/finance/deposit.do
          *
          * @param money
          * @return
          */
-        public static API rechargeMoney(double money) {
+        public static API depositByBankApply(double money) {
             return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
+        }
+
+        /**
+         * 接口名：用户充值(微信充值)
+         * URL  http://域名/user/finance/depositByWeChat.do
+         *
+         * @param money
+         * @return
+         */
+        public static API depositByWeChartApply(double money) {
+            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+        }
+
+        /**
+         * 接口名：用户充值(支付宝充值)
+         * URL  http://域名/user/finance/depositByAlipay.do
+         *
+         * @param money
+         * @param platform 客户端平台（0：ios;1安卓
+         * @return
+         */
+        public static API depositByAliPay(double money, int platform) {
+            return new API("/user/finance/depositByAlipay.do",
+                    new ApiParams()
+                            .put("money", money)
+                            .put("platform", platform));
         }
 
         /**

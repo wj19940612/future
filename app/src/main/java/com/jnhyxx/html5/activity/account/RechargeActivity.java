@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
@@ -38,6 +40,8 @@ public class RechargeActivity extends BaseActivity {
     LinearLayout mPayMethodMatherView;
     @BindView(R.id.commonFail)
     CommonFailWarn mCommonFail;
+    @BindView(R.id.weChartPay)
+    RelativeLayout mWeChartPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,38 @@ public class RechargeActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
+
+
+        API.Finance.getSupportApplyWay()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<Resp<SupportApplyWay>>() {
+                    @Override
+                    public void onReceive(Resp<SupportApplyWay> supportApplyWayResp) {
+                        updateView(supportApplyWayResp.getData());
+                    }
+
+                }).fire();
+    }
+
+    private void updateView(SupportApplyWay supportApplyWay) {
+        if (supportApplyWay.isBank()) {
+            mBankCardPay.setVisibility(View.VISIBLE);
+        } else {
+            mBankCardPay.setVisibility(View.GONE);
+        }
+
+        if (supportApplyWay.isAlipay()) {
+            mAliPayPay.setVisibility(View.VISIBLE);
+        } else {
+            mAliPayPay.setVisibility(View.GONE);
+        }
+        //微信支付
+//        if (supportApplyWay.isWechat()) {
+//            mWeChartPay.setVisibility(View.VISIBLE);
+//        } else {
+//            mWeChartPay.setVisibility(View.GONE);
+//        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -59,7 +95,7 @@ public class RechargeActivity extends BaseActivity {
         }
     };
 
-    @OnClick({R.id.nextStepButton, R.id.bankCardPay, R.id.aliPayPay})
+    @OnClick({R.id.nextStepButton, R.id.bankCardPay, R.id.aliPayPay, R.id.weChartPay})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nextStepButton:
@@ -70,6 +106,9 @@ public class RechargeActivity extends BaseActivity {
                 break;
             case R.id.aliPayPay:
                 selectPayMethod(1);
+                break;
+            case R.id.weChartPay:
+                selectPayMethod(2);
                 break;
         }
     }
@@ -98,7 +137,7 @@ public class RechargeActivity extends BaseActivity {
 
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        API.Finance.rechargeMoney(amount)
+        API.Finance.depositByBankApply(amount)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<String>() {
@@ -152,8 +191,7 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void selectPayMethod(int index) {
-        if (index < 0 || index > 2) return;
-
+        if (index < 0 || index > 3) return;
         unselectAll();
 
         mPayMethodMatherView.getChildAt(index).setSelected(true);

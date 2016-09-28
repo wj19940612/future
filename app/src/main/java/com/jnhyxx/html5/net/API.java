@@ -370,7 +370,7 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsList(int type, int offset, int size) {
-            return new API(GET,"/user/news/findNewsList.do", new ApiParams()
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
                     .put("type", type)
                     .put("offset", offset)
                     .put("size", size));
@@ -772,10 +772,14 @@ public class API extends APIBase {
 
     /**
      * 注册界面的服务协议网址
-     *  //服务协议的接口
+     * //服务协议的接口
      */
     public static String getRegisterServiceProtocol() {
         return getHost() + "/xieyi/agreement.html";
+    }
+
+    public static String getFindPassImageCode(String phoneNumber) {
+        return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + phoneNumber;
     }
 
 }

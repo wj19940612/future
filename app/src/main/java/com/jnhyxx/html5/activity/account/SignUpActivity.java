@@ -27,7 +27,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
@@ -245,7 +244,8 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
-                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
+//                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
+                String url = API.getFindPassImageCode(userPhone);
                 Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);

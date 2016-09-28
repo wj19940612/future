@@ -168,12 +168,13 @@
 
             <TextView
                 android:id="@+id/payingBank"
-                style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableRight="@drawable/ic_arrow"
-                android:text="@string/please_choose_bank"/>
+                android:text="@string/please_choose_bank"
+                android:textColor="@color/editText_color_input"
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <include layout="@layout/split_line_thick"/>

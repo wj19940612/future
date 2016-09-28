@@ -348,6 +348,7 @@
     <string name="unBind_dialog_content">您是否要拨打客服电话:\n  %1$s  \n解绑换卡</string>
     <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>
     <string name="bind_bank_is_empty">请选择支付银行</string>
+    <string name="no_bank_can_bind">暂时没有可供选择的银行</string>
 
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>

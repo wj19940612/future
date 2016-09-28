@@ -40,17 +40,6 @@ public class ModifyNickNameActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mEtModifyNickName.addTextChangedListener(mValidationWatcher);
-        mConfirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nickName = mEtModifyNickName.getText().toString().trim();
-                if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-                    mModifyNickNameFailWarnWarn.setVisible(true);
-                    return;
-                }
-                submitNickName(nickName);
-            }
-        });
     }
 
 

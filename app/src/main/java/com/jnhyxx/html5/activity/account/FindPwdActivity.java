@@ -17,7 +17,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
@@ -183,8 +182,7 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void showFailWarnView(Resp resp) {
-        mCommonFailWarn.setVisible(true);
-        mCommonFailWarn.setCenterTxt(resp.getMsg());
+        mCommonFailWarn.show(resp.getMsg());
 
     }
 
@@ -203,7 +201,7 @@ public class FindPwdActivity extends BaseActivity {
                                     .execute();
                             finish();
                         } else {
-                            ToastUtil.show(resp.getMsg());
+                            showFailWarnView(resp);
                         }
                     }
                 }).fire();

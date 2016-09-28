@@ -112,21 +112,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         mBankcardNum.addTextChangedListener(mValidationWatcher);
         mPayingBank.addTextChangedListener(mValidationWatcher);
         mPhoneNum.addTextChangedListener(mValidationWatcher);
-//        updateBankcardView(getIntent());
-
-//        API.User.getUserNameAuth(com.jnhyxx.html5.domain.local.User.getUser().getToken())
-//                .setTag(TAG)
-//                .setCallback(new Callback2<Resp<NameAuth>, NameAuth>() {
-//                    @Override
-//                    public void onRespSuccess(NameAuth nameAuth) {
-//                        if (nameAuth.getStatus() == NameAuth.STATUS_NOT_FILLED) {
-//                            showAuthNameDialog(nameAuth);
-//                        } else {
-//                            mCardholderName.setText(nameAuth.getUserName());
-//                        }
-//                    }
-//                }).fire();
-
         showBankBindStatus();
     }
 
@@ -191,7 +176,9 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         mCardholderName.setText("");
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
-        mPayingBank.setText(userInfo.getIssuingbankName());
+        if(!TextUtils.isEmpty(userInfo.getIssuingbankName())){
+            mPayingBank.setText(userInfo.getIssuingbankName());
+        }
     }
 
     //
@@ -292,12 +279,10 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     userInfo.setCardNumber(bankcardNum);
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-
                                     setResult(RESULT_OK);
                                     finish();
                                 } else {
-                                    mCommonFailTvWarn.setVisible(true);
-                                    mCommonFailTvWarn.setCenterTxt(resp.getMsg());
+                                    mCommonFailTvWarn.show(resp.getMsg());
                                 }
                             }
                         }).fire();
@@ -365,7 +350,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                             builder.show();
 
                         } else {
-                            ToastUtil.curt("暂时没有可供选择的银行");
+                            mCommonFailTvWarn.show(R.string.no_bank_can_bind);
                         }
                     }
                 }).fire();

@@ -170,7 +170,7 @@ public class SignUpActivity extends BaseActivity {
             case R.id.obtainAuthCode:
                 obtainAuthCode();
                 break;
-            case R.id.signInButton:
+            case R.id.signUpButton:
                 signUp();
                 break;
             case R.id.retrieveImageCode:
@@ -206,7 +206,6 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                            getRegisterImage();
                         } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
                             getRegisterImage();
                             mFailWarn.show(resp.getMsg());

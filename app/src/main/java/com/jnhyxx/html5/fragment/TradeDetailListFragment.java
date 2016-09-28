@@ -20,8 +20,8 @@ import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
+import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.net.ApiIndeterminate;
 
 import java.util.ArrayList;
@@ -264,7 +264,8 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 }
                 String data = new RemarkHandleUtil().get(item.getTypeDetail());
                 mDataType.setText(data);
-                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
+//                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
+                mTradeDetail.setText(new TradeDetailRemarkUtil().get(item.getTypeDetail()));
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
                     mStringBuffer.append(String.valueOf(item.getMoney()));
                     mStringBuffer.append("元");

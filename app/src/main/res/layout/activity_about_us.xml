@@ -40,11 +40,6 @@
             android:textColor="#0E2947" />
     </LinearLayout>
 
-
-    <!--<ExpandableListView-->
-    <!--android:id="@+id/activity_about_us_expand_listView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -54,71 +49,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--       <RelativeLayout
-                       android:id="@+id/activity_about_us_rl_company_info"
-                       style="@style/AboutAsEntryRelativeStyle">
-
-                       <TextView
-                           style="@style/AboutAsEntryLeftTextViewStyle"
-                           android:text="@string/account_about_us_company_info" />
-
-                       <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
-                   </RelativeLayout>
-
-                   <TextView
-                       android:id="@+id/activity_about_us_tv_company_info"
-                       style="@style/AboutAsEntryBottomTextViewStyle"
-                       android:text="@string/account_about_us_company_info_child" />
-
-                   <RelativeLayout
-                       android:id="@+id/activity_about_us_rl_manager_team"
-                       style="@style/AboutAsEntryRelativeStyle">
-
-                       <TextView
-                           style="@style/AboutAsEntryLeftTextViewStyle"
-                           android:text="@string/account_about_us_manager_team" />
-
-                       <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
-                   </RelativeLayout>
-
-                   <TextView
-                       android:id="@+id/activity_about_us_tv_manager_team"
-                       style="@style/AboutAsEntryBottomTextViewStyle"
-                       android:text="@string/account_about_us_manager_team_child" />
-
-
-                   <RelativeLayout
-                       android:id="@+id/activity_about_us_rl_company_culture"
-                       style="@style/AboutAsEntryRelativeStyle">
-
-                       <TextView
-                           style="@style/AboutAsEntryLeftTextViewStyle"
-                           android:text="@string/account_about_us_company_culture" />
-
-                       <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
-                   </RelativeLayout>
-
-                   <TextView
-                       android:id="@+id/activity_about_us_tv_company_culture"
-                       style="@style/AboutAsEntryBottomTextViewStyle"
-                       android:text="@string/account_about_us_company_culture_child" />
-
-                   <RelativeLayout
-                       android:id="@+id/activity_about_us_rl_collaborate_case"
-                       style="@style/AboutAsEntryRelativeStyle">
-
-                       <TextView
-                           style="@style/AboutAsEntryLeftTextViewStyle"
-                           android:text="@string/account_about_us_collaborate_case" />
-
-                       <ImageView style="@style/AboutAsEntryRightImageViewStyle" />
-                   </RelativeLayout>
-
-                   <TextView
-                       android:id="@+id/activity_about_us_tv_collaborate_case"
-                       style="@style/AboutAsEntryBottomTextViewStyle"
-                       android:text="@string/account_about_us_collaborate_case_child" />
-       -->
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/activityAboutUsRlCompanyInfo"
                 android:layout_width="match_parent"
@@ -184,6 +114,6 @@
                     android:textColor="#358CF3" />
             </RelativeLayout>
         </LinearLayout>
-    </ScrollView>
 
+    </ScrollView>
 </LinearLayout>

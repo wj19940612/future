@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/viewExpandableHeaderLayout"
+        android:id="@+id/expandableLayoutBody"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="1dp"
@@ -19,21 +17,19 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/leftTxtView"
+            android:id="@+id/leftText"
             style="@style/AboutAsEntryLeftTextViewStyle"
             android:layout_centerVertical="true"
-            android:text="左边的文字" />
+            android:text="左边的文字"/>
 
         <ImageView
-            android:id="@+id/ivAboutUsRight"
+            android:id="@+id/downwardArrow"
             style="@style/AboutAsEntryRightImageViewStyle"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <TextView
-
         android:id="@+id/bottomTxt"
         style="@style/AboutAsEntryBottomTextViewStyle"
-        android:text="底下的文字" />
-
+        android:text="底下的文字"/>
 </LinearLayout>

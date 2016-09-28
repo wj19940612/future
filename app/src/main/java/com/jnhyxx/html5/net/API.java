@@ -160,12 +160,12 @@ public class API extends APIBase {
          * @param password
          */
         public static API login(String phoneNum, String password) {
-            try {
-                password = SecurityUtil.md5Encrypt(password);
-                Log.d(TAG, "登陆密码MD5加密" + password);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                password = SecurityUtil.md5Encrypt(password);
+//                Log.d(TAG, "登陆密码MD5加密" + password);
+//            } catch (NoSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
 
             return new API("/user/user/login.do",
                     new ApiParams()

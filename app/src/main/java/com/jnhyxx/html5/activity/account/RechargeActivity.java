@@ -70,18 +70,18 @@ public class RechargeActivity extends BaseActivity {
         } else {
             mBankCardPay.setVisibility(View.GONE);
         }
-
-        if (supportApplyWay.isAlipay()) {
-            mAliPayPay.setVisibility(View.VISIBLE);
-        } else {
-            mAliPayPay.setVisibility(View.GONE);
-        }
-        //微信支付
-        if (supportApplyWay.isWechat()) {
-            mWeChartPay.setVisibility(View.VISIBLE);
-        } else {
-            mWeChartPay.setVisibility(View.GONE);
-        }
+        // TODO: 2016/9/28  目前支付宝在测试环境不可用，微信返回的是乱码
+//        if (supportApplyWay.isAlipay()) {
+//            mAliPayPay.setVisibility(View.VISIBLE);
+//        } else {
+//            mAliPayPay.setVisibility(View.GONE);
+//        }
+//        //微信支付
+//        if (supportApplyWay.isWechat()) {
+//            mWeChartPay.setVisibility(View.VISIBLE);
+//        } else {
+//            mWeChartPay.setVisibility(View.GONE);
+//        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -124,11 +124,11 @@ public class RechargeActivity extends BaseActivity {
 
     private void doNextStepButtonClick() {
         // TODO: 9/27/16 如果选择银行卡支付,要求完成实名认证和银行卡绑定,其他支付方式有待实现
-        if (isBankcardPaymentSelected()) {
-            doBankcardPayment();
-        } else {
-
-        }
+//        if (isBankcardPaymentSelected()) {
+        doBankcardPayment();
+//        } else {
+//
+//        }
     }
 
     private void doBankcardPayment() {

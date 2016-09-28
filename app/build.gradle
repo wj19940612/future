@@ -98,7 +98,6 @@ dependencies {
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-    compile project(':PushSDK')
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')

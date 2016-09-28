@@ -9,12 +9,9 @@
         android:id="@+id/viewExpandableHeaderLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="1dp"
         android:background="@android:color/white"
         android:clickable="true"
         android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
         android:paddingTop="10dp">
 
         <TextView

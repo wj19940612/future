@@ -227,6 +227,11 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     // TODO: 2016/9/21 未做转换的  返回的是时间格式  2016-09-21 14:11"50   转换成 09/21
                     mTimeYear.setText(time[0]);
                     mTimeHour.setText(time[1]);
+
+
+                    String s = time[0];
+                    
+
 //                    String yearDate = time[0];
 //                    if (yearDate.contains("-")) {
 //                        Log.d(TAG, "时间中含有-");

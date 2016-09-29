@@ -83,7 +83,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
 
     private void requestInfoList() {
         
-        API.User.findNewsList(mType, mPageNo, mPageSize)
+        API.Message.findNewsList(mType, mPageNo, mPageSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {

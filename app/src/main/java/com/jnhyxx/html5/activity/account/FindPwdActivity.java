@@ -135,7 +135,7 @@ public class FindPwdActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                        } else if (resp.getCode() == Resp.CODE_ERROR_REQUEST_OVERRUN) {
+                        } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
                             showFailWarnView(resp);
                             mImageCode.setVisibility(View.VISIBLE);
                             getRetrieveImageCode();

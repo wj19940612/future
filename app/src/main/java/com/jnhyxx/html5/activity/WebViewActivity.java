@@ -60,6 +60,14 @@ public class WebViewActivity extends AppCompatActivity {
     private String mRawCookie;
     private BroadcastReceiver mNetworkChangeReceiver;
 
+    public TitleBar getTitleBar() {
+        return mTitleBar;
+    }
+
+    public String getRawCookie() {
+        return mRawCookie;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +79,8 @@ public class WebViewActivity extends AppCompatActivity {
 
         initData(getIntent());
         initWebView();
+
+        mTitleBar.setRightText(R.string.my_users);
     }
 
     @Override

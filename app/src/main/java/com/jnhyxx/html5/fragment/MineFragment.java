@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -10,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -20,15 +21,18 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.setting.SettingsActivity;
+import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.APIBase;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
@@ -162,14 +166,63 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
             case paidToPromote:
-                String url = APIBase.getHost() + PAID_TO_PROMOTE_PATH;
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_URL, url)
-                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.paid_to_promote))
-                        .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                        .execute();
+                openPaidToPromotePage();
                 break;
         }
+    }
+
+    private void openPaidToPromotePage() {
+        if (LocalUser.getUser().isLogin()) {
+            API.User.getPromoteCode().setTag(TAG).setIndeterminate(this)
+                    .setCallback(new Callback<Resp<JsonObject>>() {
+                        @Override
+                        public void onReceive(Resp<JsonObject> resp) {
+                            if (resp.isSuccess()) {
+                                Launcher.with(getActivity(), PaidToPromoteActivity.class)
+                                        .putExtra(PaidToPromoteActivity.EX_URL, API.getPromtePage())
+                                        .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
+                                        .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                        .execute();
+                            } else if (resp.getCode() == Resp.CODE_GET_PROMOTE_CODE_FAILED) {
+                                showAskApplyPromoterDialog();
+                            } else {
+                                ToastUtil.curt(resp.getMsg());
+                            }
+                        }
+                    }).fire();
+        } else {
+            Launcher.with(getActivity(), SignInActivity.class).execute();
+        }
+    }
+
+    private void showAskApplyPromoterDialog() {
+        SmartDialog.with(getActivity(), R.string.dialog_you_are_not_promoter_yet)
+                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                        applyForPromoter();
+                    }
+                })
+                .setNegative(R.string.cancel)
+                .show();
+    }
+
+    private void applyForPromoter() {
+        API.User.becomePromoter().setTag(TAG)
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        if (resp.isSuccess()) {
+                            ToastUtil.show(resp.getMsg());
+                            Launcher.with(getActivity(), PaidToPromoteActivity.class)
+                                    .putExtra(PaidToPromoteActivity.EX_URL, API.getPromtePage())
+                                    .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
+                                    .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                    .execute();
+                        }
+                    }
+                }).fire();
     }
 
     /**

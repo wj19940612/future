@@ -35,6 +35,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:maxLength="13"
                 android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/phoneNum"
                 style="@style/SignEditText.PhoneNum"

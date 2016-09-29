@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -61,7 +62,37 @@ public class SignInActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mSignUpButton.setEnabled(true);
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mPhoneNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 1) {
+                    int length = s.toString().length();
+                    if (length == 3 || length == 8) {
+                        mPhoneNum.setText(s + " ");
+                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean enable = checkSignInButtonEnable();
+                if (enable != mSignInButton.isEnabled()) {
+                    mSignInButton.setEnabled(enable);
+                }
+
+                boolean visible = checkClearPhoneNumButtonVisible();
+                mClearPhoneNumButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+                visible = checkShowPasswordButtonVisible();
+                mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+            }
+        });
         mPassword.addTextChangedListener(mValidationWatcher);
     }
 
@@ -121,11 +152,12 @@ public class SignInActivity extends BaseActivity {
             case R.id.signInButton:
                 String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
                 String password = ViewUtil.getTextTrim(mPassword);
-                boolean mobileNum = ValidityDecideUtil.isMobileNum(phoneNum);
+                String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
+                boolean mobileNum = ValidityDecideUtil.isMobileNum(mPhoneNum);
                 if (!mobileNum) {
                     mCommonFailWarn.show("手机号码不正确");
                 }
-                API.User.login(phoneNum, password).setTag(TAG)
+                API.User.login(mPhoneNum, password).setTag(TAG)
                         .setIndeterminate(this)
                         .setCallback(new Callback<Resp<JsonObject>>() {
                             @Override

@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -39,6 +41,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
+    public static final String EX_RAW_COOKIE = "rawCookie";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -54,6 +57,7 @@ public class WebViewActivity extends AppCompatActivity {
     private boolean mLoadSuccess;
     private String mPageUrl;
     private String mTitle;
+    private String mRawCookie;
     private BroadcastReceiver mNetworkChangeReceiver;
 
     @Override
@@ -65,8 +69,8 @@ public class WebViewActivity extends AppCompatActivity {
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
 
-        initWebView();
         initData(getIntent());
+        initWebView();
     }
 
     @Override
@@ -81,10 +85,30 @@ public class WebViewActivity extends AppCompatActivity {
     private void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
-        mWebView.loadUrl(mPageUrl);
+        mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
     }
 
+
     private void initWebView() {
+        // init cookies
+        if (!TextUtils.isEmpty(mRawCookie)) {
+            String[] cookies = mRawCookie.split("\n");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeSessionCookies(null);
+            } else {
+                CookieManager.getInstance().removeAllCookie();
+            }
+            CookieManager.getInstance().setAcceptCookie(true);
+            for (String cookie : cookies) {
+                CookieManager.getInstance().setCookie(mPageUrl, cookie);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().flush();
+            } else {
+                CookieSyncManager.getInstance().sync();
+            }
+        }
+
         // init webSettings
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -153,6 +177,8 @@ public class WebViewActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mWebView.loadUrl(mPageUrl);
     }
 
     private class WebViewClient extends android.webkit.WebViewClient {

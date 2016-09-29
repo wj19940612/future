@@ -31,6 +31,7 @@ import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -162,8 +163,11 @@ public class MineFragment extends BaseFragment {
                 break;
             case paidToPromote:
                 String url = APIBase.getHost() + PAID_TO_PROMOTE_PATH;
-                Launcher.with(getActivity(), WebViewActivity.class).putExtra(WebViewActivity.EX_URL, url)
-                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.paid_to_promote)).execute();
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, url)
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.paid_to_promote))
+                        .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .execute();
                 break;
         }
     }

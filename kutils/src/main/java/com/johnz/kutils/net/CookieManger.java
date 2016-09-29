@@ -44,11 +44,15 @@ public class CookieManger {
         }
     }
 
+    public String getRawCookie() {
+        return mRawCookie;
+    }
+
     public String getCookies() {
         StringBuilder builder = new StringBuilder();
 
         if (TextUtils.isEmpty(mRawCookie)) {
-            mRawCookie = getRawCookie();
+            mRawCookie = getRawCookies();
         }
 
         if (!TextUtils.isEmpty(mRawCookie)) {
@@ -82,7 +86,7 @@ public class CookieManger {
         }
     }
 
-    private String getRawCookie() {
+    private String getRawCookies() {
         String result = "";
         File file = new File(mAppDataDir, FILE_NAME);
         if (!file.exists()) return result;
@@ -118,11 +122,5 @@ public class CookieManger {
             }
         }
         return "";
-    }
-
-    private String getTokenContent(String tokenStr) {
-        int firstQuotationMark = tokenStr.indexOf("\"");
-        int secondQuotationMark = tokenStr.indexOf("\"", firstQuotationMark + 1);
-        return tokenStr.substring(firstQuotationMark + 1, secondQuotationMark);
     }
 }

@@ -258,7 +258,7 @@
     <string name="account_aboutUs">关于我们</string>
     <string name="account_not_login">未登陆</string>
     <string name="account_mine_integral">%1$s 分</string>
-    <string name="account_user_balance">余额(元)</string>
+    <string name="account_user_balance">余额    (元)</string>
 
     <!--我的界面/消息中心/消息详情-->
     <string name="account_message_center_info_title">消息详情</string>
@@ -390,12 +390,12 @@
     <string name="withdraw_record_title">提款记录</string>
     <string name="withdraw_status_success">成功</string>
     <string name="withdraw_status_fail">失败</string>
-    <string name="withdraw_status_auditing">处理中</string>
+    <string name="withdraw_status_auditing">待审核</string>
     <string name="withdraw_money">%1$f元</string>
 
     <!--提现记录详情-->
     <string name="withdraw_record_info_title">提现详情</string>
-    <string name="withdraw_record_apply_for">提现申请</string>
+    <string name="withdraw_record_apply_for">申请提现</string>
     <string name="withdraw_record_detail">处理中</string>
     <string name="withdraw_record_success">提现成功</string>
     <string name="withdraw_record_fail">提现失败</string>

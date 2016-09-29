@@ -217,8 +217,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     mSplitBlock.setVisibility(View.GONE);
                 }
                 String createTime = item.getCreateTime().trim();
-
-
                 String format = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
                 String[] time = format.split(" ");
                 if (time.length == 2) {

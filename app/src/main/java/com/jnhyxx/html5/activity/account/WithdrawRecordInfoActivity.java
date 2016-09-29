@@ -14,6 +14,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.DateUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,28 +80,6 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
     TextView mTime;
     @BindView(R.id.accountTime)
     TextView mAccountTime;
-    //    @BindView(R.id.leftLine)
-//    TextView mLeftLine;
-//    @BindView(R.id.rightLine)
-//    TextView mRightLine;
-//    @BindView(R.id.handleResultImg)
-//    ImageView mHandleResultImg;
-//    @BindView(R.id.handleResultTxt)
-//    TextView mHandleResultTxt;
-//    @BindView(R.id.moneyNumber)
-//    TextView mMoneyNumber;
-//    @BindView(R.id.withdrawStatus)
-//    TextView mWithdrawStatus;
-//    @BindView(R.id.realAccount)
-//    TextView mRealAccount;
-//    @BindView(R.id.poundageNumber)
-//    TextView mPoundageNumber;
-//    @BindView(R.id.bankName)
-//    TextView mBankName;
-//    @BindView(R.id.time)
-//    TextView mTime;
-//    @BindView(R.id.accountTime)
-//    TextView mAccountTime;
     @BindView(R.id.activity_withdraw_record_info)
     LinearLayout mActivityWithdrawRecordInfo;
     @BindView(R.id.accountTimeHint)
@@ -208,8 +187,10 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         mBankName.setText(getString(R.string.withdraw_record_bank, bankName, cardNumber));
 
         String createTime = withDrawRecordInfo.getCreateTime();
-        createTime = createTime.substring(0, createTime.lastIndexOf(":"));
-        mTime.setText(createTime);
+//        createTime = createTime.substring(0, createTime.lastIndexOf(":"));
+
+        String withdrawTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+        mTime.setText(withdrawTime);
 
 
     }

@@ -327,44 +327,6 @@ public class API extends APIBase {
                             .put("nickName", nickName));
         }
 
-        /**
-         * 接口名：查询资讯列表
-         * URL  http://域名/user/news/findNewsList.do
-         *
-         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
-         * @param offset 资讯起始点
-         * @param size   资讯显示数量
-         * @return
-         */
-        public static API findNewsList(int type, int offset, int size) {
-            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
-                    .put("type", type)
-                    .put("offset", offset)
-                    .put("size", size));
-        }
-
-        /**
-         * 查询咨询详情
-         * URL  http://域名/user/news/findNews.do
-         *
-         * @param id
-         * @return
-         */
-        public static API findNewsInfo(int id) {
-            return new API("/user/news/findNews.do", new ApiParams()
-                    .put("id", id));
-        }
-
-        /**
-         * 接口名：查询资讯(通过第三方地址)
-         * URL  http://域名/user/news/findNewsByUrl.do
-         *
-         * @param url
-         * @return
-         */
-        public static API findNewsByUrl(String url) {
-            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
-        }
     }
 
     public static class Finance {
@@ -548,6 +510,45 @@ public class API extends APIBase {
                             .put(TOKEN, token)
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 

@@ -66,19 +66,6 @@ public class InfoFragment extends BaseFragment {
             }
             return super.getPageTitle(position);
         }
-
-        //        @Override
-//        public Fragment getItem(int position) {
-//            switch (position) {
-//                case 0:
-//                    return new Fragment();
-//                case 1:
-//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
-//                case 2:
-//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
-//            }
-//            return null;
-//        }//
         @Override
         public Fragment getItem(int position) {
             switch (position) {

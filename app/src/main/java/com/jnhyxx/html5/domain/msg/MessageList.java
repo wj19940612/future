@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.domain.message;
+package com.jnhyxx.html5.domain.msg;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,28 +13,29 @@ import java.util.List;
 
 /**
  * Created by ${wangJie} on 2016/9/20.
- * 资讯详情界面的model
+ * 主界面咨询fragment中的model
  */
 
-public class MessageInfo implements Serializable {
-    private static final long serialVersionUID = -5774162956082162437L;
+public class MessageList implements Serializable {
 
-    public static final String TYPE_HTML = "html";
-    public static final String TYPE_H5="h5";
+    private static final long serialVersionUID = 7585809056510209026L;
+
+    public static final String STYLE_TXT = "";
+    public static final String STYLE_H5 = "h5";
+
 
     /**
-     * channelId : 12
-     * content : <p>1234djvbdbkvfdlbk nfkbkfdkbkdfbdfkdvvvvvvvvvvvvvvvvvvvvvvvvvvvkbkslkfllsnxvndx,vzmvnldzcxnk,kxnvldxfbfnnnfsnfsnsfnafd</p>
-     * cover :
-     * createTime : 2016-09-12 16:10:57
-     * id : 57d663110cf2f0ccd123d47c
-     * operator : admin
+     * channelId : 25
+     * content : 123
+     * cover : http://www.abc.com
+     * createTime : 2016-09-08 10:08:19
+     * id : 1
+     * operator :  admin
      * status : 0
-     * style : html
-     * summary : 1234
-     * title : 1234
-     * type : 2
-     * updateTime : 2016-09-12 16:10:57
+     * style : h5
+     * summary : 123
+     * title : 123
+     * type : 0
      */
 
     private int channelId;
@@ -47,10 +48,12 @@ public class MessageInfo implements Serializable {
      */
     private String cover;
     private String createTime;
-    private String id;
+    private int id;
     private String operator;
+
     private int status;
     /**
+     * /**
      * html为文本资讯,h5为连接资讯
      */
     private String style;
@@ -59,24 +62,22 @@ public class MessageInfo implements Serializable {
      */
     private String summary;
     /**
-     *资讯标题
+     * 资讯标题
      */
     private String title;
     private int type;
-    private String updateTime;
 
+    public static MessageList objectFromData(String str) {
 
-    public static MessageInfo objectFromData(String str) {
-
-        return new Gson().fromJson(str, MessageInfo.class);
+        return new Gson().fromJson(str, MessageList.class);
     }
 
-    public static MessageInfo objectFromData(String str, String key) {
+    public static MessageList objectFromData(String str, String key) {
 
         try {
             JSONObject jsonObject = new JSONObject(str);
 
-            return new Gson().fromJson(jsonObject.getString(str), MessageInfo.class);
+            return new Gson().fromJson(jsonObject.getString(str), MessageList.class);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -84,19 +85,19 @@ public class MessageInfo implements Serializable {
         return null;
     }
 
-    public static List<MessageInfo> arrayMessageInfoFromData(String str) {
+    public static List<MessageList> arrayMessageListFromData(String str) {
 
-        Type listType = new TypeToken<ArrayList<MessageInfo>>() {
+        Type listType = new TypeToken<ArrayList<MessageList>>() {
         }.getType();
 
         return new Gson().fromJson(str, listType);
     }
 
-    public static List<MessageInfo> arrayMessageInfoFromData(String str, String key) {
+    public static List<MessageList> arrayMessageListFromData(String str, String key) {
 
         try {
             JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<MessageInfo>>() {
+            Type listType = new TypeToken<ArrayList<MessageList>>() {
             }.getType();
 
             return new Gson().fromJson(jsonObject.getString(str), listType);
@@ -142,11 +143,11 @@ public class MessageInfo implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -198,11 +199,20 @@ public class MessageInfo implements Serializable {
         this.type = type;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    @Override
+    public String toString() {
+        return "MessageList{" +
+                "channelId=" + channelId +
+                ", content='" + content + '\'' +
+                ", cover='" + cover + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", id=" + id +
+                ", operator='" + operator + '\'' +
+                ", status=" + status +
+                ", style='" + style + '\'' +
+                ", summary='" + summary + '\'' +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

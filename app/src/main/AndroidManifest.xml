@@ -150,9 +150,6 @@
             android:name=".activity.account.WithDrawRecordActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.RechargeWebViewActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
 

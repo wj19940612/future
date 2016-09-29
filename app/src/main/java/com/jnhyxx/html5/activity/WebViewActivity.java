@@ -40,6 +40,9 @@ public class WebViewActivity extends AppCompatActivity {
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
 
+    public static final String LOAD_LOCAL_HTML = "loadLocalHtml";
+
+
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.progress)
@@ -79,8 +82,15 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private void initData(Intent intent) {
+        boolean isLoadLocalHtml = intent.getBooleanExtra(LOAD_LOCAL_HTML, false);
+
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
+
+        if (isLoadLocalHtml) {
+            mWebView.loadData(mPageUrl, "text/html", "utf-8");
+            return;
+        }
         mWebView.loadUrl(mPageUrl);
     }
 

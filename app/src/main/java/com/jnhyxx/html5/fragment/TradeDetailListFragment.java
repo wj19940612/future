@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -22,6 +23,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.net.ApiIndeterminate;
 
 import java.util.ArrayList;
@@ -91,26 +93,12 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
         mSet = new HashSet<>();
         setEmptyText(getString(R.string.there_is_no_info_for_now));
         getTradeInfoList();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isAdded() && getUserVisibleHint() && !isLoaded) {
-
-            isLoaded = true;
-        }
     }
 
     public void getTradeInfoList() {
@@ -173,12 +161,12 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
     @Override
     public void onShow(String tag) {
-        //setListShown(false);
+        setListShown(false);
     }
 
     @Override
     public void onDismiss(String tag) {
-        //setListShown(true);
+        setListShown(true);
     }
 
     public class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {
@@ -200,7 +188,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData(getItem(position), getContext());
+            viewHolder.bindingData(getItem(position), getContext(), position);
             return convertView;
         }
 
@@ -215,41 +203,31 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             TextView mTradeDetail;
             @BindView(R.id.tradeDetailGrade)
             TextView mTradeDetailMarginRemain;
+            @BindView(R.id.splitBlock)
+            View mSplitBlock;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(TradeDetail item, Context context) {
+            public void bindingData(TradeDetail item, Context context, int position) {
+                if (position == 0) {
+                    mSplitBlock.setVisibility(View.VISIBLE);
+                } else {
+                    mSplitBlock.setVisibility(View.GONE);
+                }
                 String createTime = item.getCreateTime().trim();
-                String[] time = createTime.split(" ");
+
+
+                String format = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                String[] time = format.split(" ");
                 if (time.length == 2) {
-                    // TODO: 2016/9/21 未做转换的  返回的是时间格式  2016-09-21 14:11"50   转换成 09/21
                     mTimeYear.setText(time[0]);
                     mTimeHour.setText(time[1]);
-
-
-                    String s = time[0];
-
-
-//                    String yearDate = time[0];
-//                    if (yearDate.contains("-")) {
-//                        Log.d(TAG, "时间中含有-");
-//                        yearDate = yearDate.substring(5, yearDate.length());
-//                        yearDate = yearDate.replace("-", "/");
-//                    }
-//                    mTimeHour.setText(yearDate);
-//
-//                    String hourDate = time[1];
-//                    if (hourDate.contains(":")) {
-//                        hourDate = hourDate.substring(0, hourDate.lastIndexOf(":"));
-//                    }
-//                    mTimeHour.setText(hourDate);
 
                 } else {
                     mTimeHour.setText(createTime);
                 }
-
                 /**
                  * 最右侧数据，如果是资金  最后为元;
                  *            如果是积分  最后是分
@@ -261,11 +239,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 if (item.getType() > 0) {
                     mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
-                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
+//                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
+                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.common_rise_activity_sum));
+
                 } else {
                     mStringBuffer.append("-");
                     mDataType.setBackgroundResource(R.drawable.bg_green_primary);
-                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_drop));
+                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.common_drop));
                 }
                 String data = new RemarkHandleUtil().get(item.getTypeDetail());
                 mDataType.setText(data);
@@ -297,11 +277,8 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     private String getTradeStatus(TradeDetail item) {
         RemarkHandleUtil mRemarkHandleUtil = new RemarkHandleUtil();
         String remark = item.getRemark();
-        StringBuffer mStringBuffer = new StringBuffer();
         //第二栏显示的文字
         String result = "";
-        //合约字符串
-        String cont = "";
         if (item.getTypeDetail() == TradeDetail.LOGO_FEE_APPLY ||
                 item.getTypeDetail() == TradeDetail.LOGO_FEE_BACK ||
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_BACK ||
@@ -309,12 +286,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
                 //获取的合约字符串
-                cont = remark.substring(remark.indexOf(mRemarkHandleUtil.get(item.getTypeDetail()).trim()), remark.length());
-                result = remark.replace(result, "");
-                mStringBuffer.append(result);
+//                cont = remark.substring(remark.indexOf(mRemarkHandleUtil.get(item.getTypeDetail()).trim()), remark.length());
+//                result = remark.replace(result, "");
+//                mStringBuffer.append(result);
 //                mStringBuffer.append("(");
 //                mStringBuffer.append(cont);
 //                mStringBuffer.append(")");
+                result = remark.substring(0, 2) + "(" + remark.substring(6, remark.length()) + ")";
             }
 
 
@@ -322,17 +300,14 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 item.getTypeDetail() == TradeDetail.LOGO_INCOME_CUT) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
-                if (remark.length() > result.length() + 4) {
-                    cont = remark.substring(remark.indexOf(result) +4, remark.length());
-                    mStringBuffer.append("(");
-                    mStringBuffer.append(cont);
-                    mStringBuffer.append(")");
+                if (remark.length() > 4) {
+                    result = "(" + remark.substring(4) + ")";
                 }
             }
         } else {
-            String tradeDepict = new TradeDetailRemarkUtil().get(item.getTypeDetail());
-            mStringBuffer.append(tradeDepict);
+            result = new TradeDetailRemarkUtil().get(item.getTypeDetail());
+
         }
-        return mStringBuffer.toString().trim();
+        return result.trim();
     }
 }

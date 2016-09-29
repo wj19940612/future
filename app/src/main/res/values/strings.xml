@@ -266,7 +266,7 @@
     <string name="account_message_center_info_title">消息详情</string>
 
     <!--我的界面/关于我们-->
-    <string name="account_about_us_app_version">%1$s (%2$s)</string>
+    <string name="account_about_us_app_version">%1$s V%2$s</string>
     <string name="account_about_us_company_info">公司简介</string>
     <string name="account_about_us_manager_team">管理团队</string>
     <string name="account_about_us_company_culture">企业文化</string>

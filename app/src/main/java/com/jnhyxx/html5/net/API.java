@@ -759,6 +759,7 @@ public class API extends APIBase {
         return getHost() + "/xieyi/agreement.html";
     }
 
+    //找回密码的图片验证码
     public static String getFindPassImageCode(String phoneNumber) {
         return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + phoneNumber;
     }

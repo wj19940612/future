@@ -8,9 +8,9 @@
 
     <com.jnhyxx.html5.view.CommonFailWarn
         android:id="@+id/failWarn"
-        app:visible="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:visible="false"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,8 +35,6 @@
             android:orientation="horizontal">
 
             <EditText
-                android:maxLength="13"
-                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/phoneNum"
                 style="@style/SignEditText.PhoneNum"
                 android:layout_width="0dp"
@@ -45,7 +43,9 @@
                 android:drawableLeft="@drawable/login_icon_phone"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/grayHint"/>
+                android:maxLength="13"
+                android:textColorHint="@color/grayHint"
+                android:textSize="@dimen/mine_editTest_size"/>
 
             <ImageView
                 android:id="@+id/clearPhoneNumButton"
@@ -69,7 +69,6 @@
             android:orientation="horizontal">
 
             <EditText
-                android:textSize="@dimen/mine_editTest_size"
                 android:id="@+id/password"
                 style="@style/SignEditText.Password"
                 android:layout_width="0dp"
@@ -78,7 +77,8 @@
                 android:drawableLeft="@drawable/login_icon_lock"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint"/>
+                android:textColorHint="@color/grayHint"
+                android:textSize="@dimen/mine_editTest_size"/>
 
             <ImageView
                 android:id="@+id/showPasswordButton"

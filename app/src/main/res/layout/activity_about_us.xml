@@ -93,6 +93,7 @@
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
+
                     style="@style/AboutAsEntryLeftTextViewStyle"
                     android:layout_centerVertical="true"
                     android:text="@string/account_about_us_company_telephone"/>

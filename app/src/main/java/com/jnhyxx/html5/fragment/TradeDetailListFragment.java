@@ -246,7 +246,11 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.common_drop));
                 }
                 String data = new RemarkHandleUtil().get(item.getTypeDetail());
-                mDataType.setText(data);
+                if (!TextUtils.isEmpty(data)) {
+                    mDataType.setText(data);
+                } else {
+                    mTradeDetailAdapter.remove(item);
+                }
 //                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
                 /**
                  * 根据得到的key值显示文字，如果value不存在，则不显示;
@@ -283,13 +287,6 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
-                //获取的合约字符串
-//                cont = remark.substring(remark.indexOf(mRemarkHandleUtil.get(item.getTypeDetail()).trim()), remark.length());
-//                result = remark.replace(result, "");
-//                mStringBuffer.append(result);
-//                mStringBuffer.append("(");
-//                mStringBuffer.append(cont);
-//                mStringBuffer.append(")");
                 result = remark.substring(0, 2) + "(" + remark.substring(6, remark.length()) + ")";
             }
 
@@ -304,8 +301,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
             }
         } else {
             result = new TradeDetailRemarkUtil().get(item.getTypeDetail());
-
         }
-        return result.trim();
+        return result;
     }
 }

@@ -33,7 +33,7 @@
 
     <style name="SignEditText.PhoneNum">
         <item name="android:inputType">phone</item>
-        <item name="android:maxLength">11</item>
+        <item name="android:maxLength">13</item>
         <item name="textSize">16sp</item>
         <item name="textColor">#262626</item>
     </style>

@@ -388,7 +388,6 @@
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>
-    <string name="withdraw_status_success">成功</string>
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">待审核</string>
     <string name="withdraw_money">%1$f元</string>
@@ -410,8 +409,14 @@
     <string name="withdraw_record_bank">%1$s(尾号 %2$s)</string>
     <string name="withdraw_record_time">提现时间</string>
     <string name="withdraw_record_account_time">到账时间</string>
-
+    <string name="withdraw_start">刚刚发起</string>
+    <string name="withdraw_audit_passing">审核通过</string>
+    <string name="withdraw_fund_transfer">转账中</string>
+    <string name="withdraw_refuse"></string>
+    <string name="transfer_fail">转账失败</string>
+    
     <string name="common_success">成功</string>
+
 
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>

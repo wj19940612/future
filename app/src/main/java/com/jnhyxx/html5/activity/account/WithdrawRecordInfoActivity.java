@@ -2,6 +2,7 @@ package com.jnhyxx.html5.activity.account;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -22,37 +23,6 @@ import butterknife.ButterKnife;
 public class WithdrawRecordInfoActivity extends BaseActivity {
 
     public static final String WITHDRAW_RECORD_INFO_ID = "withdrawInfo";
-
-
-    /**
-     * 表示刚刚发起
-     */
-    private static final String START_TRADE = "刚刚发起";
-    /**
-     * 1表示审批通过
-     */
-    private static final String AUDIT_PASSING = "审批通过";
-    /**
-     * 2表示转账中
-     */
-    private static final String FUND_TRANSFER = "转账中";
-    /**
-     * 3表示充提成功
-     */
-    private static final String RECHARGE_OR_WITHDRAW_SUCCESS = "提现成功";
-    /**
-     * 4表示提现拒绝
-     */
-    private static final String WITHDRAW_refuse = "提现拒绝";
-    /**
-     * 5表示转账失败
-     */
-    private static final String TRANSFER_FAIL = "转账失败";
-
-
-    private static final String SUCCESS = "成功";
-
-    private static final String FAIL = "失败";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -115,39 +85,36 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
 
     private void updateView(WithDrawRecordInfo withDrawRecordInfo) {
         if (withDrawRecordInfo == null) return;
-        Drawable mNormalDrawable = getResources().getDrawable(R.drawable.ic_apply_normal);
+        Drawable mNormalDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_normal);
         mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
 
-        Drawable mFailDrawable = getResources().getDrawable(R.drawable.ic_apply_fail);
+        Drawable mFailDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_fail);
         mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
 
-        Drawable mSuccessDrawable = getResources().getDrawable(R.drawable.ic_apply_succeed);
+        Drawable mSuccessDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_succeed);
         mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
-
 
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(START_TRADE);
+            mWithdrawStatus.setText(R.string.withdraw_start);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(AUDIT_PASSING);
+            mWithdrawStatus.setText(R.string.withdraw_audit_passing);
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(FUND_TRANSFER);
+            mWithdrawStatus.setText(R.string.withdraw_fund_transfer);
 
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(SUCCESS);
+            mWithdrawStatus.setText(R.string.common_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);
-//            mHandleResultImg.setImageResource(R.drawable.ic_apply_succeed);
-//            mHandleResultTxt.setText(RECHARGE_OR_WITHDRAW_SUCCESS);
             mLeftLine.setEnabled(true);
             mRightLine.setEnabled(true);
-            mWithdrawTitleStatus.setText(SUCCESS);
+            mWithdrawTitleStatus.setText(R.string.common_success);
 
             mAccountTimeHint.setVisibility(View.GONE);
             mAccountTime.setVisibility(View.VISIBLE);
@@ -155,18 +122,14 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             //提现拒绝
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.WITHDRAW_refuse) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(WITHDRAW_refuse);
-//            mHandleResultImg.setImageResource(R.drawable.ic_apply_fail);
-//            mHandleResultTxt.setText(FAIL);
-            mWithdrawTitleStatus.setText(FAIL);
+            mWithdrawStatus.setText(R.string.withdraw_refuse);
+            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
             //转账失败
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.TRANSFER_FAIL) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(TRANSFER_FAIL);
-//            mHandleResultImg.setImageResource(R.drawable.ic_apply_fail);
-//            mHandleResultTxt.setText(FAIL);
-            mWithdrawTitleStatus.setText(FAIL);
+            mWithdrawStatus.setText(R.string.transfer_fail);
+            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
         } else {
             mCompleteStatus = false;
@@ -187,8 +150,6 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         mBankName.setText(getString(R.string.withdraw_record_bank, bankName, cardNumber));
 
         String createTime = withDrawRecordInfo.getCreateTime();
-//        createTime = createTime.substring(0, createTime.lastIndexOf(":"));
-
         String withdrawTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
         mTime.setText(withdrawTime);
 

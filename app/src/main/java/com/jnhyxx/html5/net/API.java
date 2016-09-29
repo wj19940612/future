@@ -292,23 +292,6 @@ public class API extends APIBase {
             return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
-        /**
-         * /user/newsArticle/newsList 获取资讯: sectionId: 行情分析-58, 行业资讯-57
-         *
-         * @param token
-         * @param sectionId
-         * @param pageNo
-         * @param pageSize
-         * @return
-         */
-        public static API getInfo(String token, int sectionId, int pageNo, int pageSize) {
-            return new API("/user/newsArticle/newsList",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put("sectionId", sectionId)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
-        }
 
         /**
          * /user/newsNotice/newsImgList 获取首页广告
@@ -348,7 +331,7 @@ public class API extends APIBase {
          * 接口名：查询资讯列表
          * URL  http://域名/user/news/findNewsList.do
          *
-         * @param type   资讯类型   0为首页资讯,1为列表资讯,2为弹窗资讯
+         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
          * @param offset 资讯起始点
          * @param size   资讯显示数量
          * @return

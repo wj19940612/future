@@ -150,29 +150,7 @@ public class SignInActivity extends BaseActivity {
                 changePasswordInputType();
                 break;
             case R.id.signInButton:
-                String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                String password = ViewUtil.getTextTrim(mPassword);
-                String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
-                boolean mobileNum = ValidityDecideUtil.isMobileNum(mPhoneNum);
-                if (!mobileNum) {
-                    mCommonFailWarn.show("手机号码不正确");
-                }
-                API.User.login(mPhoneNum, password).setTag(TAG)
-                        .setIndeterminate(this)
-                        .setCallback(new Callback<Resp<JsonObject>>() {
-                            @Override
-                            public void onReceive(Resp<JsonObject> jsonObjectResp) {
-                                if (jsonObjectResp.isSuccess()) {
-                                    UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
-                                    LocalUser.getUser().setUserInfo(userInfo);
-                                    setResult(RESULT_OK);
-                                    ToastUtil.curt(R.string.login_success);
-                                    finish();
-                                } else {
-                                    mCommonFailWarn.show(jsonObjectResp.getMsg());
-                                }
-                            }
-                        }).fire();
+                registerUser();
                 break;
             case R.id.signUpButton:
                 Launcher.with(this, SignUpActivity.class).execute();
@@ -182,6 +160,32 @@ public class SignInActivity extends BaseActivity {
                 Launcher.with(this, FindPwdActivity.class).execute();
                 break;
         }
+    }
+
+    private void registerUser() {
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        String password = ViewUtil.getTextTrim(mPassword);
+        String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
+        boolean mobileNum = ValidityDecideUtil.isMobileNum(mPhoneNum);
+        if (!mobileNum) {
+            mCommonFailWarn.show("手机号码不正确");
+        }
+        API.User.login(mPhoneNum, password).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<Resp<JsonObject>>() {
+                    @Override
+                    public void onReceive(Resp<JsonObject> jsonObjectResp) {
+                        if (jsonObjectResp.isSuccess()) {
+                            UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
+                            LocalUser.getUser().setUserInfo(userInfo);
+                            setResult(RESULT_OK);
+                            ToastUtil.curt(R.string.login_success);
+                            finish();
+                        } else {
+                            mCommonFailWarn.show(jsonObjectResp.getMsg());
+                        }
+                    }
+                }).fire();
     }
 
     private void changePasswordInputType() {

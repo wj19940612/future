@@ -78,10 +78,10 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
-        if (withdrawRecordList == null) {
+        if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
             mEmpty.setVisibility(View.VISIBLE);
             return;
-        }else{
+        } else {
             mEmpty.setVisibility(View.GONE);
         }
         if (mFooter == null) {
@@ -180,7 +180,7 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
                 mSaleGetMoney.setText(String.valueOf(item.getMoney()) + "元");
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
-                    mSaleStatus.setText(R.string.withdraw_status_success);
+                    mSaleStatus.setText(R.string.common_success);
                     mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_drop));
                     //如果提现失败或者拒绝
                 } else if (item.getStatus() == WithdrawRecord.WITHDRAW_FAIL || item.getStatus() == WithdrawRecord.WITHDRAW_REFUSE) {

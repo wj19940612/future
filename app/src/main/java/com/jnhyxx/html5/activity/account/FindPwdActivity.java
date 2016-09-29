@@ -117,6 +117,7 @@ public class FindPwdActivity extends BaseActivity {
 
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
+        phoneNum = phoneNum.replaceAll(" ", "");
         String regImageCode = null;
         if (mImageCode.isShown()) {
             regImageCode = mInputImageCode.getText().toString().trim();

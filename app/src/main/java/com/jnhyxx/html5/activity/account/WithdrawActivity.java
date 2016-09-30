@@ -88,6 +88,16 @@ public class WithdrawActivity extends BaseActivity {
 
         updateBankInfoView();
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //账户余额
+        double moneyUsable = LocalUser.getUser().getUserInfo().getMoneyUsable();
+        String mMoneyUsable = String.valueOf(moneyUsable);
+        mBalance.setText(mMoneyUsable);
     }
 
     private void updateBankInfoView() {
@@ -115,13 +125,14 @@ public class WithdrawActivity extends BaseActivity {
     @OnClick(R.id.confirmButton)
     void doConfirmButtonClick() {
         String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
-        if(!TextUtils.isEmpty(withdrawAmount)){
-            double amount = Double.valueOf(withdrawAmount);
+        if (!TextUtils.isEmpty(withdrawAmount)) {
+            final double amount = Double.valueOf(withdrawAmount);
             API.Finance.withdraw(amount)
                     .setCallback(new Callback<Resp>() {
                         @Override
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
+                                updateBalance(amount);
                                 SmartDialog.with(getActivity(), resp.getMsg())
                                         .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                             @Override
@@ -137,6 +148,15 @@ public class WithdrawActivity extends BaseActivity {
                     }).setTag(TAG).setIndeterminate(this).fire();
         }
 
+    }
+
+    private void updateBalance(double amount) {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        String balance = mBalance.getText().toString();
+        double balanceNum = Double.valueOf(balance);
+        double balanceMoney = balanceNum - amount;
+        userInfo.setMoneyUsable(balanceMoney);
+        mBalance.setText(String.valueOf(balanceMoney));
     }
 
     @OnClick(R.id.addBankcardButton)

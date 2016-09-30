@@ -73,8 +73,6 @@ public class CommonMethodUtils {
     }
 
 
-
-
     /**
      * 根据传入的银行卡号码隐藏前面部分,只显示最后四位
      *
@@ -100,7 +98,6 @@ public class CommonMethodUtils {
         safeBankNumber = starString + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());*/
         return safeBankNumber;
     }
-
 
 
     /**
@@ -189,5 +186,6 @@ public class CommonMethodUtils {
         }
         return remark;
     }
+
 }
 

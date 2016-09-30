@@ -20,6 +20,7 @@ import com.jnhyxx.html5.domain.account.WithdrawRecord;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 import java.util.HashSet;
@@ -77,9 +78,11 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
-        if (withdrawRecordList == null) {
-            mWithdrawRecordList.setEmptyView(mEmpty);
+        if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
+            mEmpty.setVisibility(View.VISIBLE);
             return;
+        } else {
+            mEmpty.setVisibility(View.GONE);
         }
         if (mFooter == null) {
             mFooter = new TextView(WithDrawRecordActivity.this);
@@ -164,16 +167,20 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
 
             public void bindDataWithView(WithdrawRecord item, Context mContext) {
                 String time = item.getCreateTime().trim();
-                String[] date = time.split(" ");
+                String format = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                String[] date = format.split(" ");
                 if (date.length == 2) {
                     mSaleDateMonth.setText(date[0]);
                     mSaleDateHour.setText(date[1]);
+                } else {
+                    // TODO: 2016/9/29 做预防
+                    mSaleDateMonth.setVisibility(View.GONE);
+                    mSaleDateHour.setText(time.substring(0, time.indexOf(" ")));
                 }
-//                mSaleGetMoney.setText(getString(R.string.withdraw_money, item.getMoney()));
                 mSaleGetMoney.setText(String.valueOf(item.getMoney()) + "元");
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
-                    mSaleStatus.setText(R.string.withdraw_status_success);
+                    mSaleStatus.setText(R.string.common_success);
                     mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_drop));
                     //如果提现失败或者拒绝
                 } else if (item.getStatus() == WithdrawRecord.WITHDRAW_FAIL || item.getStatus() == WithdrawRecord.WITHDRAW_REFUSE) {

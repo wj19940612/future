@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -112,7 +113,31 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         mCardholderName.addTextChangedListener(mValidationWatcher);
         mBankcardNum.addTextChangedListener(mValidationWatcher);
         mPayingBank.addTextChangedListener(mValidationWatcher);
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mPhoneNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 1) {
+                    int length = s.toString().length();
+                    if (length == 3 || length == 8) {
+                        mPhoneNum.setText(s + " ");
+                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean enable = checkSubmitButtonEnable();
+                if (enable != mSubmitToAuthButton.isEnabled()) {
+                    mSubmitToAuthButton.setEnabled(enable);
+                }
+            }
+        });
         showBankBindStatus();
     }
 
@@ -261,9 +286,14 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
             case R.id.submitToAuthButton:
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
-                final String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+                String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+                final String mPhoneNum = phoneNum.replaceAll(" ", "");
                 if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
                     mCommonFailTvWarn.show(R.string.bank_card_is_error);
+                    return;
+                }
+                if (!ValidityDecideUtil.isMobileNum(mPhoneNum)) {
+                    mCommonFailTvWarn.show(R.string.common_phone_num_fail);
                     return;
                 }
                 int bankId = -1;
@@ -273,7 +303,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 }
                 bankId = mChannelBankList.getId();
                 Log.d(TAG, "提交的银行数据" + "\n银行ID" + bankId + "\n银行名" + payingBank + "\n银行卡号" + bankcardNum + "\n手机号" + phoneNum);
-                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
+                API.User.bindBankCard(bankId, payingBank, bankcardNum, mPhoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp>() {
                             @Override
@@ -282,7 +312,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     UserInfo userInfo = LocalUser.getUser().getUserInfo();
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);
-                                    userInfo.setCardPhone(phoneNum);
+                                    userInfo.setCardPhone(mPhoneNum);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
                                     setResult(RESULT_OK);
                                     finish();

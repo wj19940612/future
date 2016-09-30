@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.message.MessageList;
+import com.jnhyxx.html5.domain.msg.MessageList;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -83,7 +83,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
 
     private void requestInfoList() {
         
-        API.User.findNewsList(mType, mPageNo, mPageSize)
+        API.Message.findNewsList(mType, mPageNo, mPageSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {

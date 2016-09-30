@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -84,7 +85,7 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        initPhoneNumberEditTextListener();
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -96,6 +97,37 @@ public class SignUpActivity extends BaseActivity {
             }
         });
         initTitleBar();
+    }
+
+    private void initPhoneNumberEditTextListener() {
+        mPhoneNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 1) {
+                    int length = s.toString().length();
+                    if (length == 3 || length == 8) {
+                        mPhoneNum.setText(s + " ");
+                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                activeButtons();
+                String phoneNum = mPassword.getText().toString().trim();
+                if (!TextUtils.isEmpty(phoneNum)) {
+                    mImagePasswordType.setVisibility(View.VISIBLE);
+                } else {
+                    mImagePasswordType.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     private void initTitleBar() {
@@ -190,16 +222,17 @@ public class SignUpActivity extends BaseActivity {
 
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString();
+        String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
         String imageCode = "";
-        if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
+        if (!ValidityDecideUtil.isMobileNum(mPhoneNum)) {
             mFailWarn.show(R.string.common_phone_num_fail);
             return;
         }
         if (mRegisterRetrieveImage.isShown()) {
             imageCode = mRegisterRetrieveImage.getText().toString().trim();
         }
-        Log.d(TAG, "注册获取图片验证码的手机号码 " + phoneNum + "所输入的图片验证码" + imageCode);
-        API.User.obtainAuthCode(phoneNum, imageCode)
+        Log.d(TAG, "注册获取图片验证码的手机号码 " + mPhoneNum + "所输入的图片验证码" + imageCode);
+        API.User.obtainAuthCode(mPhoneNum, imageCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -210,6 +243,7 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                            getRegisterImage();
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
                             getRegisterImage();
                             mFailWarn.show(resp.getMsg());
@@ -222,6 +256,7 @@ public class SignUpActivity extends BaseActivity {
 
     public void signUp() {
         String phoneNum = mPhoneNum.getText().toString().trim();
+        phoneNum.replaceAll(" ", "");
         String password = mPassword.getText().toString().trim();
         String authCode = mMessageAuthCode.getText().toString().trim();
         API.User.register(phoneNum, password, authCode, null)
@@ -242,7 +277,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void getRegisterImage() {
-        final String userPhone = mPhoneNum.getText().toString().trim();
+        final String userPhone = mPhoneNum.getText().toString().trim().replaceAll(" ", "");
         // TODO: 2016/9/26      必须放在子线程中 不然java.lang.IllegalStateException: Method call should not happen from the main thread.
 
         new Thread(new Runnable() {
@@ -250,7 +285,7 @@ public class SignUpActivity extends BaseActivity {
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
 //                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                String url = API.getFindPassImageCode(userPhone);
+                String url = API.getRegisterImageCode(userPhone);
                 Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);

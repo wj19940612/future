@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -16,8 +17,8 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
@@ -57,7 +58,36 @@ public class FindPwdActivity extends BaseActivity {
         setContentView(R.layout.activity_find_pwd);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mPhoneNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count == 1) {
+                    int length = s.toString().length();
+                    if (length == 3 || length == 8) {
+                        mPhoneNum.setText(s + " ");
+                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean enable = checkObtainAuthCodeEnable();
+                if (enable != mObtainAuthCode.isEnabled()) {
+                    mObtainAuthCode.setEnabled(enable);
+                }
+
+                enable = checkNextStepButtonEnable();
+                if (enable != mNextStepButton.isEnabled()) {
+                    mNextStepButton.setEnabled(enable);
+                }
+            }
+        });
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
     }
 
@@ -117,6 +147,11 @@ public class FindPwdActivity extends BaseActivity {
 
     private void obtainAuthCode() {
         String phoneNum = mPhoneNum.getText().toString().trim();
+        phoneNum = phoneNum.replaceAll(" ", "");
+        if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
+            mCommonFailWarn.show(R.string.common_phone_num_fail);
+            return;
+        }
         String regImageCode = null;
         if (mImageCode.isShown()) {
             regImageCode = mInputImageCode.getText().toString().trim();
@@ -128,7 +163,6 @@ public class FindPwdActivity extends BaseActivity {
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        Log.d(TAG, resp.getMsg() + "\n找回密码返回的 code " + resp.getCode());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -156,7 +190,7 @@ public class FindPwdActivity extends BaseActivity {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
-                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
+                String url = API.getFindPassImageCode(userPhone);
                 Picasso picasso = Picasso.with(FindPwdActivity.this);
                 RequestCreator requestCreator = picasso.load(url);
                 try {
@@ -188,16 +222,21 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-        final String phoneNum = mPhoneNum.getText().toString().trim();
+         String phoneNum = mPhoneNum.getText().toString().trim();
+        final String mPhoneNum = phoneNum.replaceAll(" ", "");
+        if(!ValidityDecideUtil.isMobileNum(mPhoneNum)){
+            mCommonFailWarn.show(R.string.common_phone_num_fail);
+            return;
+        }
         final String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.authCodeWhenFindPassword(phoneNum, authCode)
+        API.User.authCodeWhenFindPassword(mPhoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
-                                    .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
+                                    .putExtra(ModifyPwdActivity.EX_PHONE, mPhoneNum)
                                     .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
                                     .execute();
                             finish();

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.web.LoadLocalDataWebViewActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -21,6 +22,7 @@ import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.johnz.kutils.net.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,12 +73,12 @@ public class RechargeActivity extends BaseActivity {
             mBankCardPay.setVisibility(View.GONE);
         }
         // TODO: 2016/9/28  目前支付宝在测试环境不可用，微信返回的是乱码
-//        if (supportApplyWay.isAlipay()) {
-//            mAliPayPay.setVisibility(View.VISIBLE);
-//        } else {
-//            mAliPayPay.setVisibility(View.GONE);
-//        }
-//        //微信支付
+        if (supportApplyWay.isAlipay()) {
+            mAliPayPay.setVisibility(View.VISIBLE);
+        } else {
+            mAliPayPay.setVisibility(View.GONE);
+        }
+        // TODO: 2016/9/29 微信支付必须在微信环境下，目前没有接入sdk 
 //        if (supportApplyWay.isWechat()) {
 //            mWeChartPay.setVisibility(View.VISIBLE);
 //        } else {
@@ -169,8 +171,11 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), RechargeWebViewActivity.class)
-                                .putExtra("url", s).execute();
+                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                .execute();
                     }
                 }).fire();
     }
@@ -185,8 +190,11 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), RechargeWebViewActivity.class)
-                                .putExtra("url", s).execute();
+                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                .execute();
                     }
                 }).fire();
     }
@@ -201,8 +209,11 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), RechargeWebViewActivity.class)
-                                .putExtra("url", s).execute();
+                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
+                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                .execute();
                     }
                 }).fire();
     }
@@ -249,7 +260,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void selectPayMethod(int index) {
         if (index < 0 || index > 3) return;
-        unselectAll();
+        unSelectAll();
 
         mPayMethodMatherView.getChildAt(index).setSelected(true);
 
@@ -259,7 +270,7 @@ public class RechargeActivity extends BaseActivity {
         }
     }
 
-    private void unselectAll() {
+    private void unSelectAll() {
         for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
             mPayMethodMatherView.getChildAt(i).setSelected(false);
         }

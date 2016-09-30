@@ -3,6 +3,7 @@ package com.jnhyxx.html5.net;
 import android.util.Log;
 
 import com.android.volley.Request;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -133,7 +134,9 @@ public class API extends APIBase {
                             .put("userPhone", phoneNum)
                             .put("userPass", password)
                             .put("regCode", regCode)
-                            .put("promoterCode", promoterCode));
+                            .put("promoterCode", promoterCode)
+                            .put("deviceId", Preference.get().getPushClientId())
+                            .put("platform", 0));
         }
 
         /**
@@ -153,7 +156,9 @@ public class API extends APIBase {
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
-                            .put("userPass", password));
+                            .put("userPass", password)
+                            .put("deviceId", Preference.get().getPushClientId())
+                            .put("platform", 0));
         }
 
         public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
@@ -242,23 +247,6 @@ public class API extends APIBase {
             return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
-        /**
-         * /user/newsArticle/newsList 获取资讯: sectionId: 行情分析-58, 行业资讯-57
-         *
-         * @param token
-         * @param sectionId
-         * @param pageNo
-         * @param pageSize
-         * @return
-         */
-        public static API getInfo(String token, int sectionId, int pageNo, int pageSize) {
-            return new API("/user/newsArticle/newsList",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put("sectionId", sectionId)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
-        }
 
         /**
          * /user/newsNotice/newsImgList 获取首页广告
@@ -534,6 +522,45 @@ public class API extends APIBase {
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
         }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+        }
     }
 
     public static class Market {
@@ -757,8 +784,28 @@ public class API extends APIBase {
         return getHost() + "/xieyi/agreement.html";
     }
 
+    /**
+     * 接口名：获取找回密码图片验证码
+     * （返回状态码为601时调用该接口）
+     * URL  http://域名/user/user/getRetrieveImage.do
+     *
+     * @param phoneNumber
+     * @return
+     */
     public static String getFindPassImageCode(String phoneNumber) {
         return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + phoneNumber;
     }
 
+    /**
+     * 接口名：获取注册图片验证码
+     * （返回状态码为601时调用该接口）
+     * <p>
+     * URL  http://域名/user/user/getRegImage.do
+     *
+     * @param phoneNumber
+     * @return
+     */
+    public static String getRegisterImageCode(String phoneNumber) {
+        return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + phoneNumber;
+    }
 }

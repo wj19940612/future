@@ -42,6 +42,7 @@ public class InfoFragment extends BaseFragment {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
         mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
+       mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
@@ -66,19 +67,6 @@ public class InfoFragment extends BaseFragment {
             }
             return super.getPageTitle(position);
         }
-
-        //        @Override
-//        public Fragment getItem(int position) {
-//            switch (position) {
-//                case 0:
-//                    return new Fragment();
-//                case 1:
-//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MARKET_ANALYSING);
-//                case 2:
-//                    return InfoListFragment.newInstance(InfoListFragment.TYPE_INDUSTRY_NEWS);
-//            }
-//            return null;
-//        }//
         @Override
         public Fragment getItem(int position) {
             switch (position) {

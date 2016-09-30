@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
+import com.jnhyxx.html5.Preference;
 
 public class PushReceiver extends BroadcastReceiver {
 
@@ -53,6 +54,8 @@ public class PushReceiver extends BroadcastReceiver {
                 String cid = bundle.getString("clientid");
 
                 Log.d("GetuiSdkDemo", "clientId: " + cid);
+
+                Preference.get().setPushClientId(cid);
 
                 break;
             case PushConsts.GET_SDKONLINESTATE:

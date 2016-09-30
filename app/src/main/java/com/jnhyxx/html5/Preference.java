@@ -13,6 +13,7 @@ public class Preference {
         String SERVER_TIME = "serverTime";
         String HAD_SHOW_TRADE_AGREEMENT = "hadShowTradeAgreement";
         String IS_TRADE_RULE_CLICKED = "isTradeRuleClicked";
+        String PUSH_CLIENT_ID = "pushClientId";
     }
 
     private static Preference sInstance;
@@ -80,5 +81,13 @@ public class Preference {
 
     public void setTradeRuleClicked(String userPhone, String varietyType) {
         getEditor().putBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, true).commit();
+    }
+
+    public void setPushClientId(String clientId) {
+        getEditor().putString(Key.PUSH_CLIENT_ID, clientId).commit();
+    }
+
+    public String getPushClientId() {
+        return mPrefs.getString(Key.PUSH_CLIENT_ID, "");
     }
 }

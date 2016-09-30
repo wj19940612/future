@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -76,7 +76,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -174,7 +174,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -225,7 +225,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -272,7 +272,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -323,7 +323,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -370,5 +370,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 </LinearLayout>

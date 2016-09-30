@@ -45,7 +45,7 @@
         android:paddingRight="@dimen/common_view_margin">
 
         <include
-            layout="@layout/split_line_thick"/>
+            layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
         </RelativeLayout>
 
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout
             android:id="@+id/imageCode"
@@ -120,7 +120,7 @@
                     android:textSize="@dimen/mine_editTest_size"/>
             </RelativeLayout>
 
-            <include layout="@layout/split_line_thick"/>
+            <include layout="@layout/split_line_blue_primary"/>
         </LinearLayout>
     </LinearLayout>
 

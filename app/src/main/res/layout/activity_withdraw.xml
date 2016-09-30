@@ -102,7 +102,7 @@
             android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <TextView
             android:id="@+id/confirmButton"

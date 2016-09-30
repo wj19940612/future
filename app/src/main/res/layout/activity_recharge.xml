@@ -59,7 +59,7 @@
         android:paddingLeft="@dimen/common_view_margin"
         android:paddingRight="@dimen/common_view_margin">
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <TextView
             android:layout_width="match_parent"

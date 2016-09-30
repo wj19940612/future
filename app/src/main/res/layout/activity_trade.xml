@@ -86,7 +86,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <com.jnhyxx.html5.view.ChartContainer
             android:id="@+id/chartContainer"

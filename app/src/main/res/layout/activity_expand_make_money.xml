@@ -21,7 +21,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/splitLine" />
+        android:background="@color/splitLineGrayLight" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/splitLine">
+        android:background="@color/splitLineGrayLight">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -110,7 +110,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/splitLine">
+        android:background="@color/splitLineGrayLight">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -190,7 +190,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/splitLine"
+        android:background="@color/splitLineGrayLight"
         android:padding="5dp">
 
         <TextView
@@ -221,7 +221,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/splitLine"
+        android:background="@color/splitLineGrayLight"
         android:padding="5dp">
 
         <TextView

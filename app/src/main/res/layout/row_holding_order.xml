@@ -75,7 +75,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
-            android:background="@color/splitLine"/>
+            android:background="@color/splitLineGrayLight"/>
     </LinearLayout>
 
     <RelativeLayout

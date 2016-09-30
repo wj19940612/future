@@ -59,7 +59,7 @@
                 app:elBottomTxt="@string/account_about_us_company_info_child"
                 app:elLeftTxt="@string/account_about_us_company_info"/>
 
-            <include layout="@layout/split_line"/>
+            <include layout="@layout/split_line_gray_light"/>
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/managerTeam"
@@ -68,7 +68,7 @@
                 app:elBottomTxt="@string/account_about_us_manager_team_child"
                 app:elLeftTxt="@string/account_about_us_manager_team"/>
 
-            <include layout="@layout/split_line"/>
+            <include layout="@layout/split_line_gray_light"/>
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/companyCulture"
@@ -77,7 +77,7 @@
                 app:elBottomTxt="@string/account_about_us_company_culture_child"
                 app:elLeftTxt="@string/account_about_us_company_culture"/>
 
-            <include layout="@layout/split_line"/>
+            <include layout="@layout/split_line_gray_light"/>
 
             <com.jnhyxx.html5.view.ExpandableLayout
                 android:id="@+id/collaborateCase"
@@ -86,7 +86,7 @@
                 app:elBottomTxt="@string/account_about_us_collaborate_case_child"
                 app:elLeftTxt="@string/account_about_us_collaborate_case"/>
 
-            <include layout="@layout/split_line"/>
+            <include layout="@layout/split_line_gray_light"/>
 
             <RelativeLayout
                 android:id="@+id/companyTelephone"
@@ -108,7 +108,7 @@
                     android:textColor="@color/blueAssist"/>
             </RelativeLayout>
 
-            <include layout="@layout/split_line"/>
+            <include layout="@layout/split_line_gray_light"/>
 
             <RelativeLayout
                 android:id="@+id/serviceQq"

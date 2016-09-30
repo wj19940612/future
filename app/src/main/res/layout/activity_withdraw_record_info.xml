@@ -105,7 +105,7 @@
                 android:text="@string/withdraw_record_number"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -124,7 +124,7 @@
                 android:text="@string/withdraw_record_status"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                 android:text="@string/withdraw_record_real_account"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                 android:text="@string/withdraw_record_poundage"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -181,7 +181,7 @@
                 android:text="@string/withdraw_record_bank"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -200,7 +200,7 @@
                 android:text="@string/withdraw_record_time"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout
             android:layout_width="match_parent"

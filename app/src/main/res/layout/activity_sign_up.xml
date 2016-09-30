@@ -53,7 +53,7 @@
         android:paddingLeft="@dimen/common_view_margin"
         android:paddingRight="@dimen/common_view_margin">
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -90,13 +90,13 @@
                 android:textSize="13sp"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:id="@+id/imageCode"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/retrieveImageCode"
@@ -111,7 +111,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_height="@dimen/splitLineHeight"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"/>
 
@@ -157,10 +157,9 @@
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"
                 android:textSize="@dimen/mine_editTest_size"/>
-
         </RelativeLayout>
 
-        <include layout="@layout/split_line_thick"/>
+        <include layout="@layout/split_line_blue_primary"/>
     </LinearLayout>
 
     <LinearLayout
@@ -195,7 +194,6 @@
     </LinearLayout>
 
     <TextView
-        android:clickable="true"
         android:id="@+id/signUpButton"
         style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
@@ -203,6 +201,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
+        android:clickable="true"
         android:text="@string/sign_up_free"/>
-
 </LinearLayout>

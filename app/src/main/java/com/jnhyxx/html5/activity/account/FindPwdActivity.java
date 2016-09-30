@@ -163,7 +163,6 @@ public class FindPwdActivity extends BaseActivity {
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        Log.d(TAG, resp.getMsg() + "\n找回密码返回的 code " + resp.getCode());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
@@ -223,16 +222,21 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-        final String phoneNum = mPhoneNum.getText().toString().trim();
+         String phoneNum = mPhoneNum.getText().toString().trim();
+        final String mPhoneNum = phoneNum.replaceAll(" ", "");
+        if(!ValidityDecideUtil.isMobileNum(mPhoneNum)){
+            mCommonFailWarn.show(R.string.common_phone_num_fail);
+            return;
+        }
         final String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.authCodeWhenFindPassword(phoneNum, authCode)
+        API.User.authCodeWhenFindPassword(mPhoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
-                                    .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
+                                    .putExtra(ModifyPwdActivity.EX_PHONE, mPhoneNum)
                                     .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
                                     .execute();
                             finish();

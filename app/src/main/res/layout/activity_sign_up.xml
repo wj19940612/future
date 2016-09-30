@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:rightImage="@drawable/bg_account_register_right_shape"
+        app:rightBackground="@drawable/btn_blue_inverse_login"
         app:rightText="@string/sign_in"
         app:rightTextColor="@color/blueAssist"
         app:rightTextSize="12sp"

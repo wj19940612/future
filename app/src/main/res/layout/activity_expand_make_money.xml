@@ -205,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/bg_account_register_right_shape"
+            android:background="@drawable/btn_blue_inverse"
             android:clickable="true"
             android:padding="10dp"
             android:text="@string/common_copy_text" />
@@ -230,7 +230,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/bg_account_register_right_shape"
+            android:background="@drawable/btn_blue_inverse"
             android:clickable="true"
             android:padding="10dp"
             android:text="@string/common_copy_text" />

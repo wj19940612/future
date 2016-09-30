@@ -30,7 +30,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="25dp"
-            android:text="@string/account_user_balance"
+            android:text="@string/mine_balance"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
 

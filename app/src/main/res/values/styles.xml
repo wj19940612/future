@@ -60,11 +60,14 @@
         <item name="android:textColor">@color/btn_text_primary_inverse</item>
     </style>
 
+    <style name="PrimaryBlueButton">
+
+    </style>
+
     <style name="InputTitle">
         <item name="android:minWidth">80dp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
-
 
     <style name="HomeListHeaderButton">
         <item name="android:drawablePadding">8dp</item>

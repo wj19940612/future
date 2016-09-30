@@ -37,6 +37,7 @@
         <attr name="titleTextSize" format="dimension"/>
         <attr name="titleTextColor" format="color"/>
         <attr name="customView" format="reference"/>
+        <attr name="rightBackground" format="reference"/>
         <attr name="rightText" format="reference|string"/>
         <attr name="rightTextSize" format="dimension"/>
         <attr name="rightTextColor" format="color"/>
@@ -46,12 +47,13 @@
         <attr name="backIcon" format="reference"/>
         <attr name="barBackground" format="reference"/>
     </declare-styleable>
+
     <!--带圆环的imageView-->
     <declare-styleable name="CircularAnnulusImageView">
-
         <attr name="borderWidth" format="dimension"/>
         <attr name="borderColor" format="color"/>
     </declare-styleable>
+
     <!--仿照ExpandableListView，使上面控件点击后，底下控件可以展示-->
     <declare-styleable name="ExpandableLayout">
         <attr name="elLeftTxt" format="reference|string"/>
@@ -75,6 +77,7 @@
         <attr name="centerDrawable" format="reference"/>
         <attr name="centerDrawablePadding" format="reference|dimension"/>
     </declare-styleable>
+
     <declare-styleable name="SetHintTextSizeEditText">
         <attr name="hintTextSize" format="dimension"/>
     </declare-styleable>

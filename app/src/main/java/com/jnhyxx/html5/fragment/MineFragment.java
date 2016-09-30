@@ -40,12 +40,9 @@ import butterknife.Unbinder;
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
 public class MineFragment extends BaseFragment {
-    //登陆的请求码
-    private static final int REQUEST_CODE_LOGIN = 9670;
+
     //设置界面的请求码
     private static final int REQUEST_CODE_SETTING = 3520;
-    //注册的请求码
-    private static final int REQUEST_CODE_REGISTER = 6260;
 
     private static final String PAID_TO_PROMOTE_PATH = "/mine/extension.html";
 

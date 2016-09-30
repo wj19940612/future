@@ -95,18 +95,13 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-    private void initData(Intent intent) {
+    protected void initData(Intent intent) {
         boolean isLoadLocalHtml = intent.getBooleanExtra(LOAD_LOCAL_HTML, false);
 
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
 
-        //如果是加载本地html则使用loadData,如果不是，则直接加载网页
-        if (isLoadLocalHtml) {
-            mWebView.loadData(mPageUrl, "text/html", "utf-8");
-            return;
-        }
         mWebView.loadUrl(mPageUrl);
 
 

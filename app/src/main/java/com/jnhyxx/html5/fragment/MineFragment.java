@@ -188,22 +188,6 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-//        Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
-//        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-//            upDateUserInfoView(userInfo);
-//        } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
-//            upDateUserInfoView(userInfo);
-//        }
-//        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
-//            mTitleBar.setRightVisible(false);
-//            updateAccountInfoView();
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
-
     private void upDateUserInfoView(UserInfo userInfo) {
         if (userInfo == null) return;
         String userName = userInfo.getUserName();

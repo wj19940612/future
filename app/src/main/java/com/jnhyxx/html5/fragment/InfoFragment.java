@@ -42,6 +42,7 @@ public class InfoFragment extends BaseFragment {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
         mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
+       mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 

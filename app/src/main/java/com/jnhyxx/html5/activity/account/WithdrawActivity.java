@@ -89,6 +89,11 @@ public class WithdrawActivity extends BaseActivity {
         updateBankInfoView();
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //账户余额
         double moneyUsable = LocalUser.getUser().getUserInfo().getMoneyUsable();
         String mMoneyUsable = String.valueOf(moneyUsable);

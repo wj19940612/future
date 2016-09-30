@@ -31,5 +31,4 @@ public class PaidToPromoteActivity extends WebViewActivity {
                 .putExtra(WebViewActivity.EX_RAW_COOKIE, getRawCookie())
                 .execute();
     }
-
 }

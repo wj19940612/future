@@ -243,6 +243,7 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                            getRegisterImage();
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
                             getRegisterImage();
                             mFailWarn.show(resp.getMsg());
@@ -276,7 +277,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void getRegisterImage() {
-        final String userPhone = mPhoneNum.getText().toString().trim();
+        final String userPhone = mPhoneNum.getText().toString().trim().replaceAll(" ", "");
         // TODO: 2016/9/26      必须放在子线程中 不然java.lang.IllegalStateException: Method call should not happen from the main thread.
 
         new Thread(new Runnable() {
@@ -284,7 +285,7 @@ public class SignUpActivity extends BaseActivity {
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
 //                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                String url = API.getFindPassImageCode(userPhone);
+                String url = API.getRegisterImageCode(userPhone);
                 Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);

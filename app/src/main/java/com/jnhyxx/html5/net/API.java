@@ -779,9 +779,26 @@ public class API extends APIBase {
         return getHost() + "/xieyi/agreement.html";
     }
 
-    //找回密码的图片验证码
+    /**
+     * 接口名：获取找回密码图片验证码
+     （返回状态码为601时调用该接口）
+     URL  http://域名/user/user/getRetrieveImage.do
+     * @param phoneNumber
+     * @return
+     */
     public static String getFindPassImageCode(String phoneNumber) {
         return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + phoneNumber;
     }
 
+    /**
+     * 接口名：获取注册图片验证码
+     （返回状态码为601时调用该接口）
+
+     URL  http://域名/user/user/getRegImage.do
+     * @param phoneNumber
+     * @return
+     */
+    public static String getRegisterImageCode(String phoneNumber){
+        return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + phoneNumber;
+    }
 }

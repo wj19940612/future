@@ -45,14 +45,6 @@ import butterknife.Unbinder;
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
 public class MineFragment extends BaseFragment {
-    //登陆的请求码
-    private static final int REQUEST_CODE_LOGIN = 9670;
-    //设置界面的请求码
-    private static final int REQUEST_CODE_SETTING = 3520;
-    //注册的请求码
-    private static final int REQUEST_CODE_REGISTER = 6260;
-
-    private static final String PAID_TO_PROMOTE_PATH = "/mine/extension.html";
 
     //账户余额
     @BindView(R.id.balance)
@@ -69,6 +61,7 @@ public class MineFragment extends BaseFragment {
     //消息中心
     @BindView(R.id.messageCenter)
     IconTextRow mMessageCenter;
+
     //交易明细
     @BindView(R.id.tradeDetail)
     IconTextRow mTradeDetail;
@@ -78,6 +71,7 @@ public class MineFragment extends BaseFragment {
     IconTextRow mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
+
     //登陆和注册按钮的父容器
     @BindView(R.id.signArea)
     LinearLayout mSignArea;
@@ -85,6 +79,7 @@ public class MineFragment extends BaseFragment {
     TextView mRecharge;
     @BindView(R.id.withdraw)
     TextView mWithdraw;
+
     //充值和提现按钮的父容器
     @BindView(R.id.fundArea)
     LinearLayout mFundArea;
@@ -107,7 +102,7 @@ public class MineFragment extends BaseFragment {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(getActivity(), SettingsActivity.class).executeForResult(REQUEST_CODE_SETTING);
+                Launcher.with(getActivity(), SettingsActivity.class).execute();
             }
         });
     }
@@ -126,15 +121,24 @@ public class MineFragment extends BaseFragment {
 
     private void updateAccountInfoView() {
         if (LocalUser.getUser().isLogin()) {
+            mSignArea.setVisibility(View.GONE);
+            mFundArea.setVisibility(View.VISIBLE);
+            mTitleBar.setRightVisible(true);
+
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
-            upDateUserInfoView(userInfo);
+            String userName = userInfo.getUserName();
+            double moneyUsable = userInfo.getMoneyUsable();
+            int scoreUsable = userInfo.getScoreUsable();
+            mNickname.setText(getString(R.string.nickname_logged, userName));
+            mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
+            mScore.setText(getString(R.string.account_mine_integral, scoreUsable + ""));
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
+
             mNickname.setText(R.string.nickname_unknown);
             mTitleBar.setRightVisible(false);
-
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.account_mine_integral, getString(R.string.zero)));
         }
@@ -165,7 +169,7 @@ public class MineFragment extends BaseFragment {
             case R.id.aboutUs:
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
-            case paidToPromote:
+            case R.id.paidToPromote:
                 openPaidToPromotePage();
                 break;
         }
@@ -246,34 +250,5 @@ public class MineFragment extends BaseFragment {
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
         }
-    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-//        Log.d(TAG, "我的界面的用户信息" + userInfo.toString());
-//        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-//            upDateUserInfoView(userInfo);
-//        } else if (requestCode == REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
-//            upDateUserInfoView(userInfo);
-//        }
-//        if (requestCode == REQUEST_CODE_SETTING && resultCode == RESULT_OK) {
-//            mTitleBar.setRightVisible(false);
-//            updateAccountInfoView();
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
-
-    private void upDateUserInfoView(UserInfo userInfo) {
-        if (userInfo == null) return;
-        String userName = userInfo.getUserName();
-        double moneyUsable = userInfo.getMoneyUsable();
-        int scoreUsable = userInfo.getScoreUsable();
-        mNickname.setText(getString(R.string.nickname_logged, userName));
-        mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
-        mScore.setText(getString(R.string.account_mine_integral, scoreUsable + ""));
-        mSignArea.setVisibility(View.GONE);
-        mFundArea.setVisibility(View.VISIBLE);
-        mTitleBar.setRightVisible(true);
     }
 }

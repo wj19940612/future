@@ -3,7 +3,6 @@ package com.jnhyxx.html5.net;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -157,30 +156,6 @@ public class API extends APIBase {
                             .put("userPass", password));
         }
 
-        /**
-         * /user/user/findUserInfo.do
-         *
-         * @return
-         */
-        public static API getUserInfo() {
-            return new API("/user/user/findUserInfo.do", null);
-        }
-
-        /**
-         * 接口名：更新通过短信验证码找回的密码
-         * <p/>
-         * URL  http://域名/user/user/retrieveUpdatePass.do
-         *
-         * @param userPhone 用户手机号
-         * @param userPass  用户密码
-         * @return
-         */
-//        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
-//            return new API("/user/user/findLoginPwd",
-//                    new ApiParams()
-//                            .put(TELE, phone)
-//                            .put(AUTH_CODE, authCode)
-//                            .put(PASSWORD, newPwd));
         public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
             try {
                 userPass = SecurityUtil.md5Encrypt(userPass);
@@ -216,31 +191,6 @@ public class API extends APIBase {
          */
         public static API getBankcardInfo(String token) {
             return new API("/user/user/checkBankCard",
-                    new ApiParams()
-                            .put(TOKEN, token));
-        }
-
-
-        /**
-         * 获取简单的个人信息 /user/user/getAcountDetail
-         *
-         * @param token
-         * @return
-         */
-        public static API getProfileSummary(String token) {
-            return new API("/user/user/getAcountDetail",
-                    new ApiParams()
-                            .put(TOKEN, token));
-        }
-
-        /**
-         * /user/user/checkUserName 验证是否实名认证
-         *
-         * @param token
-         * @return
-         */
-        public static API getUserNameAuth(String token) {
-            return new API("/user/user/checkUserName",
                     new ApiParams()
                             .put(TOKEN, token));
         }
@@ -327,6 +277,62 @@ public class API extends APIBase {
                             .put("nickName", nickName));
         }
 
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型   0为首页资讯,1为列表资讯,2为弹窗资讯
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+        }
+
+        /**
+         * /user/user/findPromoterCode.do
+         *
+         * @return
+         */
+        public static API getPromoteCode() {
+            return new API("/user/user/findPromoterCode.do", null);
+        }
+
+        /**
+         * /user/user/toBePromoter.do 成为推广员
+         *
+         * @return
+         */
+        public static API becomePromoter() {
+            return new API("/user/user/toBePromoter.do", null);
+        }
     }
 
     public static class Finance {
@@ -700,7 +706,7 @@ public class API extends APIBase {
          * /order/order/unwind.do 平仓
          *
          * @param showId
-         * @param fundType
+         * @param payType
          * @param unwindPrice
          * @return
          */
@@ -749,6 +755,20 @@ public class API extends APIBase {
      */
     public static String getTradeRule(String varietyType) {
         return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
+    }
+
+    /**
+     * 推广赚钱 url
+     */
+    public static String getPromtePage() {
+        return getHost() + "/mine/extension.html?nohead=1";
+    }
+
+    /**
+     * 推广赚钱 我的用户 url
+     */
+    public static String getPromteMyUsers() {
+        return getHost() + "/mine/users.html?nohead=1";
     }
 
     /**

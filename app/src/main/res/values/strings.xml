@@ -65,6 +65,7 @@
     <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
     <string name="dialog_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
     <string name="dialog_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
+    <string name="dialog_you_are_not_promoter_yet">您还不是我们的推广员,是否要成为我们的推广员</string>
 
 
     <!-- Account -->
@@ -113,6 +114,7 @@
     <string name="withdraw_bankcard">提现银行卡</string>
     <string name="add_bankcard_right_now">马上添加银行卡</string>
     <string name="profile">个人信息</string>
+    <string name="my_users">我的用户</string>
 
     <!--Settings-->
     <string name="unfilled">未填写</string>
@@ -358,21 +360,8 @@
     <string name="modify_nick_name_success">昵称修改成功</string>
     <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
     <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
-
-    //可能为冲突
-    <!--   &lt;!&ndash; Trade page: agree trade protocol &ndash;&gt;
-    <string name="prompt_dear_user">尊敬的用户:
-        \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
-    <string name="unsigned">未签署</string>
-    <string name="trade_cooperation_agreement">《投资人与用户参与相关期货品种交易合作协议》</string>
-    <string name="risk_notices">《风险告知书》</string>
-    <string name="cooperation_agreement_title">合作协议</string>
-    <string name="risk_notices_title">风险告知书</string>
-    <string name="confirm_buy_long">确认买涨</string>
-    <string name="confirm_sell_short">确认买跌</string>
-    <string name="today_position">今持仓</string>
-    <string name="pre_position">昨持仓</string>-->
-
+    
+    
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
@@ -391,6 +380,7 @@
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">待审核</string>
     <string name="withdraw_money">%1$f元</string>
+    
 
     <!--提现记录详情-->
     <string name="withdraw_record_info_title">提现详情</string>
@@ -416,10 +406,7 @@
     <string name="transfer_fail">转账失败</string>
     
     <string name="common_success">成功</string>
-
-
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>
-
 
 </resources>

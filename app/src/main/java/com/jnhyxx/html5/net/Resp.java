@@ -3,8 +3,9 @@ package com.jnhyxx.html5.net;
 
 public class Resp<T> {
 
-    //请求错误次数超限制返回码
-    public static final int CODE_ERROR_REQUEST_OVERRUN = 601;
+    // 注册、登入、找回密码请求验证码次数超过限制
+    public static final int CODE_REQUEST_AUTH_CODE_OVER_LIMIT = 601;
+    public static final int CODE_GET_PROMOTE_CODE_FAILED = 600;
 
     private int code;
     private String msg;

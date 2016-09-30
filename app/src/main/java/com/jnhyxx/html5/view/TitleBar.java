@@ -157,6 +157,11 @@ public class TitleBar extends RelativeLayout {
         mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
     }
 
+    public void setRightText(int resid) {
+        mRightText = getContext().getText(resid);
+        setRightText(mRightText);
+    }
+
     public void setRightText(CharSequence rightText) {
         mRightText = rightText;
         mRightView.setText(rightText);

@@ -137,7 +137,7 @@ public class MineFragment extends BaseFragment {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
 
-            mNickname.setText(R.string.nickname_unknown);
+            mNickname.setText(R.string.no_logged);
             mTitleBar.setRightVisible(false);
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));

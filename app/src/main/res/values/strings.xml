@@ -69,7 +69,6 @@
 
 
     <!-- Account -->
-    <string name="nickname_unknown">您好,请先登录</string>
     <string name="nickname_logged">您好 %1$s</string>
     <string name="account_balance">账户余额(元)</string>
     <string name="account_score">我的积分</string>

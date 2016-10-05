@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@+id/showPasswordButton"
-                android:drawableLeft="@drawable/login_icon_lock"
+                android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/common_margin"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"

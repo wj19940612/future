@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:src="@drawable/login_icon_delete"
+                android:src="@drawable/ic_delete_x"
                 android:visibility="invisible"/>
         </LinearLayout>
 
@@ -71,7 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/login_icon_lock"
+                android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"/>

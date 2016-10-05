@@ -14,7 +14,6 @@
         app:backFeature="true"
         app:titleText="@string/modify_password"/>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -40,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/login_icon_lock"
+                android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"
@@ -78,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/login_icon_lock"
+                android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_repeat_new_password"
                 android:textColorHint="@color/grayHint"
@@ -97,7 +96,6 @@
 
         <include layout="@layout/split_line_blue_primary"/>
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/confirmButton"

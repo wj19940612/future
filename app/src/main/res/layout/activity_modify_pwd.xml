@@ -42,8 +42,7 @@
                 android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -79,8 +78,7 @@
                 android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_repeat_new_password"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:textColorHint="@color/grayHint"/>
 
             <ImageView
                 android:layout_width="wrap_content"

@@ -46,13 +46,26 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends BaseActivity {
 
-    private static final String TAG = "SignUpActivity";
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+
+    @BindView(R.id.failWarn)
+    CommonFailWarn mFailWarn;
+
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
     @BindView(R.id.registerAuthCode)
-    EditText mMessageAuthCode;
+    EditText mRegisterAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
+    @BindView(R.id.authCodeImage)
+    ImageView mAuthCodeImage;
+    @BindView(R.id.imageAuthCode)
+    EditText mImageAuthCode;
+    @BindView(R.id.imageCode)
+    RelativeLayout mImageCode;
+    @BindView(R.id.showPasswordButton)
+    ImageView mShowPasswordButton;
     @BindView(R.id.password)
     EditText mPassword;
     @BindView(R.id.agreeProtocol)
@@ -61,21 +74,7 @@ public class SignUpActivity extends BaseActivity {
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
-    @BindView(R.id.failWarn)
-    CommonFailWarn mFailWarn;
-    //获取图片验证码
-    @BindView(R.id.imageCode)
-    RelativeLayout mImageCode;
-    @BindView(R.id.registerRetrieveIma)
-    EditText mRegisterRetrieveImage;
-    @BindView(R.id.showPasswordButton)
-    ImageView mImagePasswordType;
-    @BindView(R.id.retrieveImageCode)
-    ImageView mRetrieveImage;
 
-    private boolean flag = false;
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
 
@@ -86,8 +85,9 @@ public class SignUpActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initPhoneNumberEditTextListener();
-        mMessageAuthCode.addTextChangedListener(mValidationWatcher);
+        mRegisterAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
+
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -122,9 +122,9 @@ public class SignUpActivity extends BaseActivity {
                 activeButtons();
                 String phoneNum = mPassword.getText().toString().trim();
                 if (!TextUtils.isEmpty(phoneNum)) {
-                    mImagePasswordType.setVisibility(View.VISIBLE);
+                    mShowPasswordButton.setVisibility(View.VISIBLE);
                 } else {
-                    mImagePasswordType.setVisibility(View.INVISIBLE);
+                    mShowPasswordButton.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -134,7 +134,7 @@ public class SignUpActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
+                Launcher.with(getActivity(), SignInActivity.class).execute();
             }
         });
     }
@@ -150,9 +150,9 @@ public class SignUpActivity extends BaseActivity {
             activeButtons();
             String phoneNum = mPassword.getText().toString().trim();
             if (!TextUtils.isEmpty(phoneNum)) {
-                mImagePasswordType.setVisibility(View.VISIBLE);
+                mShowPasswordButton.setVisibility(View.VISIBLE);
             } else {
-                mImagePasswordType.setVisibility(View.INVISIBLE);
+                mShowPasswordButton.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -175,7 +175,7 @@ public class SignUpActivity extends BaseActivity {
             return false;
         }
 
-        String authCode = mMessageAuthCode.getText().toString().trim();
+        String authCode = mRegisterAuthCode.getText().toString().trim();
         if (TextUtils.isEmpty(authCode) || authCode.length() < 4) {
             return false;
         }
@@ -196,7 +196,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.retrieveImageCode, R.id.serviceProtocol, R.id.showPasswordButton})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.authCodeImage, R.id.serviceProtocol, R.id.showPasswordButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -205,7 +205,7 @@ public class SignUpActivity extends BaseActivity {
             case R.id.signUpButton:
                 signUp();
                 break;
-            case R.id.retrieveImageCode:
+            case R.id.authCodeImage:
                 getRegisterImage();
                 break;
             case R.id.serviceProtocol:
@@ -228,8 +228,8 @@ public class SignUpActivity extends BaseActivity {
             mFailWarn.show(R.string.common_phone_num_fail);
             return;
         }
-        if (mRegisterRetrieveImage.isShown()) {
-            imageCode = mRegisterRetrieveImage.getText().toString().trim();
+        if (mImageAuthCode.isShown()) {
+            imageCode = mImageAuthCode.getText().toString().trim();
         }
         Log.d(TAG, "注册获取图片验证码的手机号码 " + mPhoneNum + "所输入的图片验证码" + imageCode);
         API.User.obtainAuthCode(mPhoneNum, imageCode)
@@ -258,7 +258,7 @@ public class SignUpActivity extends BaseActivity {
         String phoneNum = mPhoneNum.getText().toString().trim();
         phoneNum.replaceAll(" ", "");
         String password = mPassword.getText().toString().trim();
-        String authCode = mMessageAuthCode.getText().toString().trim();
+        String authCode = mRegisterAuthCode.getText().toString().trim();
         API.User.register(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
@@ -296,7 +296,7 @@ public class SignUpActivity extends BaseActivity {
                         public void run() {
                             if (bitmap != null) {
                                 mImageCode.setVisibility(View.VISIBLE);
-                                mRetrieveImage.setImageBitmap(bitmap);
+                                mAuthCodeImage.setImageBitmap(bitmap);
                             } else {
                                 // TODO: 2016/9/27 这里产品每明确
 //                                mFailWarn.setVisible(true, true);
@@ -314,14 +314,13 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void changePasswordInputType() {
-        if (!flag) {
-            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            mImagePasswordType.setSelected(true);
-        } else {
-            mImagePasswordType.setSelected(false);
+        if (mShowPasswordButton.isSelected()) {
+            mShowPasswordButton.setSelected(false);
             mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        } else {
+            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mShowPasswordButton.setSelected(true);
         }
-        flag = !flag;
         mPassword.postInvalidate();
         CharSequence text = mPassword.getText();
         if (text instanceof Spannable) {

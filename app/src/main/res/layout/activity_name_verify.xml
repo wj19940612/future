@@ -48,8 +48,7 @@
                 android:layout_weight="1"
                 android:enabled="false"
                 android:hint="@string/please_input_real_name"
-                android:inputType="textPersonName"
-                android:textColorHint="@color/grayHint"/>
+                android:inputType="textPersonName"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -86,8 +85,7 @@
                 android:digits="0123456789Xx"
                 android:enabled="false"
                 android:hint="@string/please_input_identity_num"
-                android:maxLength="18"
-                android:textColorHint="@color/grayHint"/>
+                android:maxLength="18"/>
         </LinearLayout>
 
         <View

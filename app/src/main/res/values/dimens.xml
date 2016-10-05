@@ -24,10 +24,5 @@
 
     <!-- Order -->
     <dimen name="one_key_close_radius">20dp</dimen>
-
-    <!--我的模块的输入框的等距离父容器底部距离-->
-    <dimen name="mine_view_bottom_radius">10dp</dimen>
-
-    <dimen name="mine_editTest_size">16sp</dimen>
 </resources>
 

@@ -46,11 +46,9 @@
                 android:layout_weight="1"
                 android:hint="@string/hint_recharge_amount"
                 android:inputType="numberDecimal"
-                android:textColor="@color/editText_color_input"
-                android:textColorHint="@color/grayHint"/>
+                android:textColor="@color/editText_color_input"/>
         </LinearLayout>
     </RelativeLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"

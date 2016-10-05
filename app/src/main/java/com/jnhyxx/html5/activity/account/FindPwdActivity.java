@@ -38,7 +38,7 @@ public class FindPwdActivity extends BaseActivity {
     TextView mNextStepButton;
     @BindView(R.id.inputImageCode)
     EditText mInputImageCode;
-    @BindView(R.id.retrieveImageCode)
+    @BindView(R.id.authCodeImage)
     ImageView mRetrieveImageCode;
     @BindView(R.id.imageCode)
     LinearLayout mImageCode;
@@ -130,7 +130,7 @@ public class FindPwdActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.retrieveImageCode})
+    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.authCodeImage})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -139,7 +139,7 @@ public class FindPwdActivity extends BaseActivity {
             case R.id.nextStepButton:
                 doNextStepButtonClick();
                 break;
-            case R.id.retrieveImageCode:
+            case R.id.authCodeImage:
                 getRetrieveImageCode();
                 break;
         }

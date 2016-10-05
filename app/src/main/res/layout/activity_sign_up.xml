@@ -39,10 +39,7 @@
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
             android:drawableLeft="@drawable/ic_phone"
-            android:drawablePadding="@dimen/common_margin"
-            android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/grayHint"
-            android:textSize="@dimen/mine_editTest_size"/>
+            android:hint="@string/please_input_phone_num"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -68,10 +65,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/ic_auth_code"
-                android:drawablePadding="@dimen/common_margin"
-                android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:hint="@string/please_input_msg_auth_code"/>
 
             <TextView
                 android:id="@+id/obtainAuthCode"
@@ -96,16 +90,16 @@
             android:id="@+id/imageCode"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/retrieveImageCode"
+                android:id="@+id/authCodeImage"
                 android:layout_width="85dp"
                 android:layout_height="34dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="@dimen/mine_view_bottom_radius"
+                android:layout_marginBottom="5dp"
                 android:src="@mipmap/ic_launcher"
                 android:visibility="visible"/>
 
@@ -116,18 +110,14 @@
                 android:background="@color/colorPrimary"/>
 
             <EditText
-                android:id="@+id/registerRetrieveIma"
+                android:id="@+id/imageAuthCode"
+                style="@style/SignEditText.AuthCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="@dimen/common_margin"
-                android:background="@null"
                 android:drawableLeft="@drawable/ic_login_image_code"
-                android:drawablePadding="@dimen/common_margin"
-                android:hint="@string/register_code_image_hint"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:hint="@string/register_code_image_hint"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -136,8 +126,8 @@
 
             <ImageView
                 android:id="@+id/showPasswordButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="10dp"
@@ -153,10 +143,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@+id/showPasswordButton"
                 android:drawableLeft="@drawable/ic_lock"
-                android:drawablePadding="@dimen/common_margin"
-                android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:hint="@string/please_input_password"/>
         </RelativeLayout>
 
         <include layout="@layout/split_line_blue_primary"/>

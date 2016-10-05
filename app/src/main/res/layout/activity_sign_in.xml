@@ -39,10 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_phone"
-                android:drawablePadding="10dp"
-                android:hint="@string/please_input_phone_num"
-                android:maxLength="13"
-                android:textColorHint="@color/grayHint"/>
+                android:hint="@string/please_input_phone_num"/>
 
             <ImageView
                 android:id="@+id/clearPhoneNumButton"
@@ -72,9 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_lock"
-                android:drawablePadding="10dp"
-                android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint"/>
+                android:hint="@string/please_input_password"/>
 
             <ImageView
                 android:id="@+id/showPasswordButton"

@@ -30,7 +30,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:drawableLeft="@drawable/login_icon_phone"
+            android:drawableLeft="@drawable/ic_phone"
             android:drawablePadding="@dimen/drawable_left_padding"
             android:hint="@string/please_input_phone_num"
             android:textColorHint="@color/grayHint"/>
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:drawableLeft="@drawable/login_icon_code"
+                android:drawableLeft="@drawable/ic_auth_code"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_msg_auth_code"
                 android:textColorHint="@color/grayHint"/>
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -97,9 +97,9 @@
                     android:layout_height="34dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/mine_view_bottom_radius"
+                    android:layout_marginBottom="5dp"
                     android:clickable="true"
-                    android:visibility="visible"/>
+                    android:src="@mipmap/ic_launcher"/>
 
                 <EditText
                     android:id="@+id/inputImageCode"
@@ -117,6 +117,7 @@
 
             <include layout="@layout/split_line_blue_primary"/>
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView

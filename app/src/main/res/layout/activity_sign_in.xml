@@ -38,7 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/login_icon_phone"
+                android:drawableLeft="@drawable/ic_phone"
                 android:drawablePadding="10dp"
                 android:hint="@string/please_input_phone_num"
                 android:maxLength="13"

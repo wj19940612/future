@@ -36,10 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/common_view_margin"
-            android:layout_marginRight="@dimen/common_view_margin"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
             android:drawableLeft="@drawable/login_icon_phone"
-            android:drawablePadding="@dimen/common_view_margin"
+            android:drawablePadding="@dimen/common_margin"
             android:hint="@string/please_input_phone_num"
             android:textColorHint="@color/grayHint"
             android:textSize="@dimen/mine_editTest_size"/>
@@ -50,8 +50,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/common_view_margin"
-        android:paddingRight="@dimen/common_view_margin">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <include layout="@layout/split_line_blue_primary"/>
 
@@ -68,7 +68,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/login_icon_code"
-                android:drawablePadding="@dimen/common_view_margin"
+                android:drawablePadding="@dimen/common_margin"
                 android:hint="@string/please_input_msg_auth_code"
                 android:textColorHint="@color/grayHint"
                 android:textSize="@dimen/mine_editTest_size"/>
@@ -121,10 +121,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="@dimen/common_view_margin"
+                android:layout_marginBottom="@dimen/common_margin"
                 android:background="@null"
                 android:drawableLeft="@drawable/ic_login_image_code"
-                android:drawablePadding="@dimen/common_view_margin"
+                android:drawablePadding="@dimen/common_margin"
                 android:hint="@string/register_code_image_hint"
                 android:textColorHint="@color/grayHint"
                 android:textSize="@dimen/mine_editTest_size"/>
@@ -153,7 +153,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@+id/showPasswordButton"
                 android:drawableLeft="@drawable/login_icon_lock"
-                android:drawablePadding="@dimen/common_view_margin"
+                android:drawablePadding="@dimen/common_margin"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"
                 android:textSize="@dimen/mine_editTest_size"/>
@@ -168,8 +168,8 @@
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/common_view_margin"
-        android:paddingRight="@dimen/common_view_margin">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <CheckBox
             android:id="@+id/agreeProtocol"

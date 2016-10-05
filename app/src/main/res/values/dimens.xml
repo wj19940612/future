@@ -16,11 +16,11 @@
     <dimen name="trade_header_btn_width">85dp</dimen>
     <dimen name="market_status_area_height">77dp</dimen>
     <dimen name="market_date_row_padding">14dp</dimen>
+    <!--目前大部分容器距离边界15dp-->
+    <dimen name="common_margin">16dp</dimen>
 
 
     <dimen name="drawable_left_padding">10dp</dimen>
-    <!--目前大部分容器距离边界15dp-->
-    <dimen name="common_view_margin">15dp</dimen>
 
     <!-- Order -->
     <dimen name="one_key_close_radius">20dp</dimen>

@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/common_view_margin"
-            android:layout_marginRight="@dimen/common_view_margin"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -57,8 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/common_view_margin"
-        android:paddingRight="@dimen/common_view_margin">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <include layout="@layout/split_line_blue_primary"/>
 

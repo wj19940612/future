@@ -27,8 +27,8 @@
             style="@style/settingLinearLayout"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:paddingLeft="@dimen/common_view_margin"
-            android:paddingRight="@dimen/common_view_margin">
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
 
             <TextView
                 style="@style/settingTitleTextView"

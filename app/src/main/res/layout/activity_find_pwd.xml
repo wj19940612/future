@@ -28,24 +28,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/common_view_margin"
-            android:layout_marginRight="@dimen/common_view_margin"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
             android:drawableLeft="@drawable/login_icon_phone"
             android:drawablePadding="@dimen/drawable_left_padding"
             android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/grayHint"
-            android:textSize="@dimen/mine_editTest_size"/>
+            android:textColorHint="@color/grayHint"/>
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/common_view_margin"
-        android:paddingRight="@dimen/common_view_margin">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
-        <include
-            layout="@layout/split_line_blue_primary"/>
+        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -77,10 +75,8 @@
                 android:drawableLeft="@drawable/login_icon_code"
                 android:drawablePadding="@dimen/drawable_left_padding"
                 android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint"
-                android:textSize="@dimen/mine_editTest_size"/>
+                android:textColorHint="@color/grayHint"/>
         </RelativeLayout>
-
 
         <include layout="@layout/split_line_blue_primary"/>
 
@@ -90,7 +86,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -124,15 +119,13 @@
         </LinearLayout>
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/nextStepButton"
         style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/common_view_margin"
-        android:layout_marginRight="@dimen/common_view_margin"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
         android:layout_marginTop="50dp"
         android:text="@string/next_step"/>
-
 </LinearLayout>

@@ -22,7 +22,7 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="SignEditText">
+    <style name="SignEditText" parent="android:TextAppearance.Widget.TextView">
         <item name="android:background">@null</item>
         <item name="android:textSize">13sp</item>
         <item name="android:paddingBottom">12dp</item>
@@ -31,14 +31,14 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="SignEditText.PhoneNum">
+    <style name="SignEditText.PhoneNum" parent="android:TextAppearance.Widget.TextView">
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">13</item>
         <item name="textSize">16sp</item>
         <item name="textColor">#262626</item>
     </style>
 
-    <style name="SignEditText.Password">
+    <style name="SignEditText.Password" parent="android:TextAppearance.Widget.TextView">
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
         <item name="textColor">#262626</item>
@@ -58,10 +58,6 @@
         <item name="android:background">@drawable/btn_primary_inverse</item>
         <item name="android:enabled">true</item>
         <item name="android:textColor">@color/btn_text_primary_inverse</item>
-    </style>
-
-    <style name="PrimaryBlueButton">
-
     </style>
 
     <style name="InputTitle">

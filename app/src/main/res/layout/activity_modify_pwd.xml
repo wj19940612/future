@@ -29,8 +29,8 @@
             android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:paddingLeft="@dimen/common_view_margin"
-            android:paddingRight="@dimen/common_view_margin">
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
 
 
             <EditText
@@ -62,8 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/common_view_margin"
-        android:paddingRight="@dimen/common_view_margin">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <include layout="@layout/split_line_blue_primary"/>
 

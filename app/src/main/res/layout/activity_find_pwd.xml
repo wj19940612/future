@@ -102,7 +102,7 @@
                     android:src="@mipmap/ic_launcher"/>
 
                 <EditText
-                    android:id="@+id/inputImageCode"
+                    android:id="@+id/imageAuthCode"
                     style="@style/SignEditText.AuthCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

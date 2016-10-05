@@ -36,10 +36,10 @@ public class FindPwdActivity extends BaseActivity {
     TextView mObtainAuthCode;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
-    @BindView(R.id.inputImageCode)
-    EditText mInputImageCode;
+    @BindView(R.id.imageAuthCode)
+    EditText mImageAuthCode;
     @BindView(R.id.authCodeImage)
-    ImageView mRetrieveImageCode;
+    ImageView mAuthCodeImage;
     @BindView(R.id.imageCode)
     LinearLayout mImageCode;
     @BindView(R.id.failWarn)
@@ -56,7 +56,7 @@ public class FindPwdActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
-        mInputImageCode.addTextChangedListener(mValidationWatcher);
+        mImageAuthCode.addTextChangedListener(mValidationWatcher);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class FindPwdActivity extends BaseActivity {
         super.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mMessageAuthCode.removeTextChangedListener(mValidationWatcher);
-        mInputImageCode.removeTextChangedListener(mValidationWatcher);
+        mImageAuthCode.removeTextChangedListener(mValidationWatcher);
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -122,8 +122,8 @@ public class FindPwdActivity extends BaseActivity {
             return false;
         }
 
-        String regImageCode = ViewUtil.getTextTrim(mInputImageCode);
-        if (mImageCode.isShown() && TextUtils.isEmpty(regImageCode)) {
+        String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
+        if (mImageCode.isShown() && TextUtils.isEmpty(imageAuthCode)) {
             return false;
         }
 
@@ -147,12 +147,12 @@ public class FindPwdActivity extends BaseActivity {
 
     private void obtainAuthCode() {
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-        String regImageCode = null;
+        String imageAuthCode = null;
         if (mImageCode.isShown()) {
-            regImageCode = ViewUtil.getTextTrim(mInputImageCode);
+            imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
         }
-        Log.d("TAG", "手机号码：" + phoneNum + "\n 图片验证码" + regImageCode);
-        API.User.obtainAuthCodeWhenFindPwd(phoneNum, regImageCode)
+        Log.d("TAG", "手机号码：" + phoneNum + "\n 图片验证码" + imageAuthCode);
+        API.User.obtainAuthCodeWhenFindPwd(phoneNum, imageAuthCode)
                 .setIndeterminate(this)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -177,7 +177,7 @@ public class FindPwdActivity extends BaseActivity {
 
     private void getRetrieveImageCode() {
         mObtainAuthCode.setEnabled(false);
-        mInputImageCode.setText("");
+        mImageAuthCode.setText("");
 
         final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(userPhone)) return;
@@ -185,7 +185,7 @@ public class FindPwdActivity extends BaseActivity {
         final String imageCodeUrl = API.User.getRetrieveImage(userPhone);
         Log.d(TAG, "找回密码页面图片验证码地址  " + imageCodeUrl);
 
-        Picasso.with(getActivity()).load(imageCodeUrl).into(mRetrieveImageCode);
+        Picasso.with(getActivity()).load(imageCodeUrl).into(mAuthCodeImage);
     }
 
     private void doNextStepButtonClick() {

@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -28,12 +27,14 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -84,7 +85,9 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        initPhoneNumberEditTextListener();
+        initTitleBar();
+
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mRegisterAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
 
@@ -93,41 +96,12 @@ public class SignUpActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 mAgreeProtocol.setChecked(isChecked);
                 mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
+                // TODO: 10/5/16 checkbox 无法重写样式?
+
                 activeButtons();
             }
         });
-        initTitleBar();
-    }
 
-    private void initPhoneNumberEditTextListener() {
-        mPhoneNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 1) {
-                    int length = s.toString().length();
-                    if (length == 3 || length == 8) {
-                        mPhoneNum.setText(s + " ");
-                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                activeButtons();
-                String phoneNum = mPassword.getText().toString().trim();
-                if (!TextUtils.isEmpty(phoneNum)) {
-                    mShowPasswordButton.setVisibility(View.VISIBLE);
-                } else {
-                    mShowPasswordButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
     private void initTitleBar() {
@@ -139,23 +113,42 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+
+            formatPhoneNumber();
+        }
+    };
+
+    private void formatPhoneNumber() {
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             activeButtons();
-            String phoneNum = mPassword.getText().toString().trim();
-            if (!TextUtils.isEmpty(phoneNum)) {
-                mShowPasswordButton.setVisibility(View.VISIBLE);
-            } else {
-                mShowPasswordButton.setVisibility(View.INVISIBLE);
-            }
+
+            boolean visible = checkShowPasswordButtonVisible();
+            mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     };
+
+    private boolean checkShowPasswordButtonVisible() {
+        String password = ViewUtil.getTextTrim(mPassword);
+        if (!TextUtils.isEmpty(password)) {
+            return true;
+        }
+        return false;
+    }
 
     private void activeButtons() {
         boolean enable = checkObtainAuthCodeEnable();
@@ -193,6 +186,12 @@ public class SignUpActivity extends BaseActivity {
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
+
+        String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
+        if (mImageCode.isShown() && TextUtils.isEmpty(imageAuthCode)) {
+            return false;
+        }
+
         return true && !mFreezeObtainAuthCode;
     }
 

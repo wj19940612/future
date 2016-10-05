@@ -175,13 +175,13 @@ public class FindPwdActivity extends BaseActivity {
     private void getRetrieveImageCode() {
         final String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-        final String url = API.getFindPassImageCode(userPhone);
+        final String url = API.User.getRetrieveImage(userPhone);
         Log.d(TAG, "找回密码页面图片验证码地址  " + url);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(userPhone)) return;
-                String url = API.getFindPassImageCode(userPhone);
+                String url = API.User.getRetrieveImage(userPhone);
                 Picasso picasso = Picasso.with(FindPwdActivity.this);
                 RequestCreator requestCreator = picasso.load(url);
                 try {

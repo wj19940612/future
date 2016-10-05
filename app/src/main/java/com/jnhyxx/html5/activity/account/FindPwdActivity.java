@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,10 +16,12 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -58,37 +59,34 @@ public class FindPwdActivity extends BaseActivity {
         setContentView(R.layout.activity_find_pwd);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 1) {
-                    int length = s.toString().length();
-                    if (length == 3 || length == 8) {
-                        mPhoneNum.setText(s + " ");
-                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                boolean enable = checkObtainAuthCodeEnable();
-                if (enable != mObtainAuthCode.isEnabled()) {
-                    mObtainAuthCode.setEnabled(enable);
-                }
-
-                enable = checkNextStepButtonEnable();
-                if (enable != mNextStepButton.isEnabled()) {
-                    mNextStepButton.setEnabled(enable);
-                }
-            }
-        });
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mMessageAuthCode.removeTextChangedListener(mValidationWatcher);
+    }
+
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+
+            formatPhoneNumber();
+        }
+    };
+
+    private void formatPhoneNumber() {
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -129,7 +127,6 @@ public class FindPwdActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    //获取验证码
     @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.retrieveImageCode})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -146,17 +143,12 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void obtainAuthCode() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
-        phoneNum = phoneNum.replaceAll(" ", "");
-        if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
-            mCommonFailWarn.show(R.string.common_phone_num_fail);
-            return;
-        }
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String regImageCode = null;
         if (mImageCode.isShown()) {
             regImageCode = mInputImageCode.getText().toString().trim();
         }
-        Log.d(TAG, "手机号码：" + phoneNum + "\n 图片验证码" + regImageCode);
+        Log.d("TAG", "手机号码：" + phoneNum + "\n 图片验证码" + regImageCode);
         API.User.obtainAuthCodeWhenFindPwd(phoneNum, regImageCode)
                 .setIndeterminate(this)
                 .setTag(TAG)
@@ -170,11 +162,11 @@ public class FindPwdActivity extends BaseActivity {
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
-                            showFailWarnView(resp);
+                            mCommonFailWarn.show(resp.getMsg());
                             mImageCode.setVisibility(View.VISIBLE);
                             getRetrieveImageCode();
                         } else {
-                            showFailWarnView(resp);
+                            mCommonFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();
@@ -183,7 +175,6 @@ public class FindPwdActivity extends BaseActivity {
     private void getRetrieveImageCode() {
         final String userPhone = mPhoneNum.getText().toString().trim();
         if (TextUtils.isEmpty(userPhone)) return;
-//        final String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRetrieveImage.do");
         final String url = API.getFindPassImageCode(userPhone);
         Log.d(TAG, "找回密码页面图片验证码地址  " + url);
         new Thread(new Runnable() {
@@ -216,11 +207,6 @@ public class FindPwdActivity extends BaseActivity {
 
     }
 
-    private void showFailWarnView(Resp resp) {
-        mCommonFailWarn.show(resp.getMsg());
-
-    }
-
     private void doNextStepButtonClick() {
          String phoneNum = mPhoneNum.getText().toString().trim();
         final String mPhoneNum = phoneNum.replaceAll(" ", "");
@@ -241,7 +227,7 @@ public class FindPwdActivity extends BaseActivity {
                                     .execute();
                             finish();
                         } else {
-                            showFailWarnView(resp);
+                            mCommonFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();

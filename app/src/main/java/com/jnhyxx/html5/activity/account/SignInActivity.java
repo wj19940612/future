@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
@@ -98,25 +99,11 @@ public class SignInActivity extends BaseActivity {
     private void formatPhoneNumber() {
         String oldPhone = mPhoneNum.getText().toString();
         String phoneNoSpace = oldPhone.replaceAll(" ", "");
-        String newPhone = getFormatPhoneNumber(phoneNoSpace);
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
         if (!newPhone.equalsIgnoreCase(oldPhone)) {
             mPhoneNum.setText(newPhone);
             mPhoneNum.setSelection(newPhone.length());
         }
-    }
-
-    private String getFormatPhoneNumber(String phoneNoSpace) {
-        if (phoneNoSpace.length() <= 3) {
-            return phoneNoSpace;
-        } else if (phoneNoSpace.length() <= 7) {
-            return phoneNoSpace.substring(0, 3)
-                    + " " + phoneNoSpace.substring(3, phoneNoSpace.length());
-        } else if (phoneNoSpace.length() <= 11) {
-            return phoneNoSpace.substring(0, 3)
-                    + " " + phoneNoSpace.substring(3, 7)
-                    + " " + phoneNoSpace.substring(7, phoneNoSpace.length());
-        }
-        return phoneNoSpace;
     }
 
     private boolean checkClearPhoneNumButtonVisible() {

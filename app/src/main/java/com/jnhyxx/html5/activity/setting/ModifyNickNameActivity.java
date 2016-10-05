@@ -57,7 +57,7 @@ public class ModifyNickNameActivity extends BaseActivity {
                             UserInfo user = LocalUser.getUser().getUserInfo();
                             user.setUserName(nickName);
                             user.setNickNameModified();
-                            CustomToast.getInstance().custommakeText(ModifyNickNameActivity.this, R.string.modify_nick_name_success);
+                            CustomToast.getInstance().showText(ModifyNickNameActivity.this, R.string.modify_nick_name_success);
                             setResult(RESULT_OK);
                         } else {
                             mModifyNickNameFailWarnWarn.show(resp.getMsg());

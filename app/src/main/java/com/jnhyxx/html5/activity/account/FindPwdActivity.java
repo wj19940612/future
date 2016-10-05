@@ -190,7 +190,7 @@ public class FindPwdActivity extends BaseActivity {
 
     private void doNextStepButtonClick() {
         final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-        final String authCode = ViewUtil.getTextTrim(mMessageAuthCode);
+        String authCode = ViewUtil.getTextTrim(mMessageAuthCode);
         API.User.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
@@ -198,8 +198,7 @@ public class FindPwdActivity extends BaseActivity {
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
-                                    .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
-                                    .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
+                                    .putExtra(Launcher.EX_PAYLOAD, phoneNum)
                                     .execute();
                             finish();
                         } else {

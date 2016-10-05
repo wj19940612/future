@@ -160,6 +160,13 @@ public class API extends APIBase {
                             .put("platform", 0));
         }
 
+        /**
+         * 找回密码: 修改密码 /user/user/updatePass.do
+         *
+         * @param userPhone
+         * @param userPass
+         * @return
+         */
         public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
             try {
                 userPass = SecurityUtil.md5Encrypt(userPass);

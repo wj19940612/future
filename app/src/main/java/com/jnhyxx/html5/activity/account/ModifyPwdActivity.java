@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,31 +16,31 @@ import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.Launcher;
+import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ModifyPwdActivity extends BaseActivity {
+import static com.jnhyxx.html5.R.id.confirmPassword;
 
-    public static final String EX_PHONE = API.TELE;
-    public static final String EX_AUTH_CODE = API.CODE;
+public class ModifyPwdActivity extends BaseActivity {
 
     @BindView(R.id.newPassword)
     EditText mNewPassword;
-    @BindView(R.id.confirmPassword)
+    @BindView(confirmPassword)
     EditText mConfirmPassword;
     @BindView(R.id.confirmButton)
     TextView mConfirmButton;
-    @BindView(R.id.findPasswordTitleBar)
+
+    @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+
     @BindView(R.id.modifyPasswordWarn)
     CommonFailWarn mModifyPasswordWarn;
-    private String mPhone;
-    private String mAuthCode;
-    private String mNewPwd;
 
-    private String confirmPassword;
+    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +51,11 @@ public class ModifyPwdActivity extends BaseActivity {
         mNewPassword.addTextChangedListener(mValidationWatcher);
         mConfirmPassword.addTextChangedListener(mValidationWatcher);
 
-        processIntent(getIntent());
-
-        initTitleBar();
+        initData(getIntent());
     }
 
-    private void initTitleBar() {
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    private void processIntent(Intent intent) {
-        mPhone = intent.getStringExtra(EX_PHONE);
-        mAuthCode = intent.getStringExtra(EX_AUTH_CODE);
+    private void initData(Intent intent) {
+        mPhone = intent.getStringExtra(Launcher.EX_PAYLOAD);
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -82,30 +69,35 @@ public class ModifyPwdActivity extends BaseActivity {
     };
 
     private boolean checkConfirmPasswordButtonEnable() {
-        mNewPwd = mNewPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(mNewPwd) || mNewPwd.length() < 6) {
+        String newPwd = ViewUtil.getTextTrim(mNewPassword);
+        if (TextUtils.isEmpty(newPwd) || newPwd.length() < 6) {
             return false;
         }
 
-        confirmPassword = mConfirmPassword.getText().toString().trim();
-        if (TextUtils.isEmpty(confirmPassword) || confirmPassword.length() < 6) {
+        String confirmPwd = ViewUtil.getTextTrim(mConfirmPassword);
+        if (TextUtils.isEmpty(confirmPwd) || confirmPwd.length() < 6) {
             return false;
         }
+
         return true;
     }
 
     @OnClick(R.id.confirmButton)
     public void onClick() {
-        if (!TextUtils.equals(mNewPwd, confirmPassword)) {
-            mModifyPasswordWarn.show(R.string.newPassword_different_from_confimPassword);
+        String newPwd = ViewUtil.getTextTrim(mNewPassword);
+        String confirmPwd = ViewUtil.getTextTrim(mConfirmPassword);
+
+        if (!newPwd.equals(confirmPwd)) {
+            mModifyPasswordWarn.show(R.string.the_passwords_are_not_the_same);
         } else {
-            API.User.modifyPwdWhenFindPwd(mPhone, mNewPwd)
+            API.User.modifyPwdWhenFindPwd(mPhone, newPwd)
                     .setIndeterminate(this).setTag(TAG)
                     .setCallback(new Callback<Resp>() {
                         @Override
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
-                                CustomToast.getInstance().custommakeText(ModifyPwdActivity.this, R.string.modify_passWord_success);
+                                CustomToast.getInstance().showText(getActivity(), resp.getMsg());
+                                finish();
                             } else {
                                 mModifyPasswordWarn.show(resp.getMsg());
                             }

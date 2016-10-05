@@ -265,7 +265,7 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
+                            CustomToast.getInstance().showText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
 

@@ -83,7 +83,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:clickable="true"
-                android:src="@drawable/login_btn_password_type"
+                android:src="@drawable/btn_show_password"
                 android:visibility="invisible"/>
         </LinearLayout>
 

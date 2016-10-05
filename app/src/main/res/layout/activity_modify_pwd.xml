@@ -8,7 +8,7 @@
               tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/findPasswordTitleBar"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
@@ -46,13 +46,12 @@
                 android:textSize="@dimen/mine_editTest_size"/>
 
             <ImageView
-                android:id="@+id/findPassword_image_password_type"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:clickable="true"
-                android:src="@drawable/login_btn_password_type"
+                android:src="@drawable/btn_show_password"
                 android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
@@ -84,13 +83,12 @@
                 android:textSize="@dimen/mine_editTest_size"/>
 
             <ImageView
-                android:id="@+id/showPasswordButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:clickable="true"
-                android:src="@drawable/login_btn_password_type"
+                android:src="@drawable/btn_show_password"
                 android:visibility="gone"/>
         </RelativeLayout>
 

@@ -29,7 +29,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
-import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
@@ -63,8 +62,8 @@ public class SignUpActivity extends BaseActivity {
     ImageView mAuthCodeImage;
     @BindView(R.id.imageAuthCode)
     EditText mImageAuthCode;
-    @BindView(R.id.imageCode)
-    RelativeLayout mImageCode;
+    @BindView(R.id.imageCodeArea)
+    RelativeLayout mImageCodeArea;
     @BindView(R.id.showPasswordButton)
     ImageView mShowPasswordButton;
     @BindView(R.id.password)
@@ -188,7 +187,7 @@ public class SignUpActivity extends BaseActivity {
         }
 
         String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
-        if (mImageCode.isShown() && TextUtils.isEmpty(imageAuthCode)) {
+        if (mImageCodeArea.isShown() && TextUtils.isEmpty(imageAuthCode)) {
             return false;
         }
 
@@ -220,18 +219,15 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void obtainAuthCode() {
-        String phoneNum = mPhoneNum.getText().toString();
-        String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
-        String imageCode = "";
-        if (!ValidityDecideUtil.isMobileNum(mPhoneNum)) {
-            mFailWarn.show(R.string.common_phone_num_fail);
-            return;
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String imageAuthCode = null;
+        if (mImageCodeArea.isShown()) {
+            imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
         }
-        if (mImageAuthCode.isShown()) {
-            imageCode = mImageAuthCode.getText().toString().trim();
-        }
-        Log.d(TAG, "注册获取图片验证码的手机号码 " + mPhoneNum + "所输入的图片验证码" + imageCode);
-        API.User.obtainAuthCode(mPhoneNum, imageCode)
+
+        Log.d("TAG", "注册获取图片验证码的手机号码 " + mPhoneNum + "所输入的图片验证码" + imageAuthCode);
+
+        API.User.obtainAuthCode(phoneNum, imageAuthCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
@@ -254,20 +250,18 @@ public class SignUpActivity extends BaseActivity {
     }
 
     public void signUp() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
-        phoneNum.replaceAll(" ", "");
-        String password = mPassword.getText().toString().trim();
-        String authCode = mRegisterAuthCode.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String password = ViewUtil.getTextTrim(mPassword);
+        String authCode = ViewUtil.getTextTrim(mRegisterAuthCode);
         API.User.register(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            CustomToast.getInstance().showText(SignUpActivity.this, R.string.register_succeed);
+                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
-
                         } else {
                             mFailWarn.show(resp.getMsg());
                         }
@@ -276,15 +270,15 @@ public class SignUpActivity extends BaseActivity {
     }
 
     private void getRegisterImage() {
-        final String userPhone = mPhoneNum.getText().toString().trim().replaceAll(" ", "");
-        // TODO: 2016/9/26      必须放在子线程中 不然java.lang.IllegalStateException: Method call should not happen from the main thread.
+        final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        if (TextUtils.isEmpty(userPhone)) return;
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (TextUtils.isEmpty(userPhone)) return;
 //                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                String url = API.getRegisterImageCode(userPhone);
+                String url = API.User.getRegisterAuthCodeImage(userPhone);
                 Log.d(TAG, "register image code Url  " + url);
                 Picasso picasso = Picasso.with(SignUpActivity.this);
                 RequestCreator requestCreator = picasso.load(url);
@@ -294,7 +288,7 @@ public class SignUpActivity extends BaseActivity {
                         @Override
                         public void run() {
                             if (bitmap != null) {
-                                mImageCode.setVisibility(View.VISIBLE);
+                                mImageCodeArea.setVisibility(View.VISIBLE);
                                 mAuthCodeImage.setImageBitmap(bitmap);
                             } else {
                                 // TODO: 2016/9/27 这里产品每明确

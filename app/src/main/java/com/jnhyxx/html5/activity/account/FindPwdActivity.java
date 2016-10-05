@@ -40,8 +40,8 @@ public class FindPwdActivity extends BaseActivity {
     EditText mImageAuthCode;
     @BindView(R.id.authCodeImage)
     ImageView mAuthCodeImage;
-    @BindView(R.id.imageCode)
-    LinearLayout mImageCode;
+    @BindView(R.id.imageCodeArea)
+    LinearLayout mImageCodeArea;
     @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
 
@@ -123,7 +123,7 @@ public class FindPwdActivity extends BaseActivity {
         }
 
         String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
-        if (mImageCode.isShown() && TextUtils.isEmpty(imageAuthCode)) {
+        if (mImageCodeArea.isShown() && TextUtils.isEmpty(imageAuthCode)) {
             return false;
         }
 
@@ -148,7 +148,7 @@ public class FindPwdActivity extends BaseActivity {
     private void obtainAuthCode() {
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String imageAuthCode = null;
-        if (mImageCode.isShown()) {
+        if (mImageCodeArea.isShown()) {
             imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
         }
         Log.d("TAG", "手机号码：" + phoneNum + "\n 图片验证码" + imageAuthCode);
@@ -166,7 +166,7 @@ public class FindPwdActivity extends BaseActivity {
                             startScheduleJob(1 * 1000);
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
                             mCommonFailWarn.show(resp.getMsg());
-                            mImageCode.setVisibility(View.VISIBLE);
+                            mImageCodeArea.setVisibility(View.VISIBLE);
                             getRetrieveImageCode();
                         } else {
                             mCommonFailWarn.show(resp.getMsg());
@@ -182,7 +182,7 @@ public class FindPwdActivity extends BaseActivity {
         final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(userPhone)) return;
 
-        final String imageCodeUrl = API.User.getRetrieveImage(userPhone);
+        final String imageCodeUrl = API.User.getFindPwdAuthCodeImage(userPhone);
         Log.d(TAG, "找回密码页面图片验证码地址  " + imageCodeUrl);
 
         Picasso.with(getActivity()).load(imageCodeUrl).into(mAuthCodeImage);

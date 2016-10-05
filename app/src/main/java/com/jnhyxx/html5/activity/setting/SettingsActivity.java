@@ -92,7 +92,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void logout() {
         if (LocalUser.getUser().isLogin()) {
-            API.User.loginOut().setTag(TAG).setIndeterminate(this)
+            API.User.logout().setTag(TAG).setIndeterminate(this)
                     .setCallback(new Callback1<Resp>() {
                         @Override
                         protected void onRespSuccess(Resp resp) {

@@ -81,7 +81,7 @@
         <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout
-            android:id="@+id/imageCode"
+            android:id="@+id/imageCodeArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

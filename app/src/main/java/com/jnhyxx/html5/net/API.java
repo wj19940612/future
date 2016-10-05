@@ -55,36 +55,15 @@ public class API extends APIBase {
         }
 
         /**
-         * 获取注册短信验证码 /user/sms/getRegCode
+         * 获取注册短信验证码 /user/user/getRegCode.do
          *
          * @param tele
          */
         public static API obtainAuthCode(String tele, String regImageCode) {
-            String sign = null;
-            try {
-                sign = SecurityUtil.md5Encrypt(tele + "luckin");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            // TODO: 2016/8/30 原来的获取验证码接口
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
                             .put("userPhone", tele)
                             .put("regImageCode", regImageCode));
-        }
-
-        /**
-         * 接口名：获取注册图片验证码  user/user/getRegImage.do
-         *
-         * @param userPhone
-         * @return
-         */
-
-        public static API getRegisterImage(String userPhone) {
-
-            return new API("/user/user/getRegImage.do",
-                    new ApiParams()
-                            .put("userPhone", userPhone));
         }
 
         /**
@@ -180,30 +159,6 @@ public class API extends APIBase {
                             .put("userPass", userPass));
         }
 
-
-        /**
-         * 接口名：获取找回密码图片验证码
-         * <p/>
-         * URL  http://域名/user/user/getRetrieveImage.do
-         *
-         * @param userPhone
-         * @return
-         */
-        public static String getRetrieveImage(String userPhone) {
-            return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + userPhone;
-        }
-
-        /**
-         * 验证银行卡是否绑定 /user/user/checkBankCard
-         *
-         * @param token
-         */
-        public static API getBankcardInfo(String token) {
-            return new API("/user/user/checkBankCard",
-                    new ApiParams()
-                            .put(TOKEN, token));
-        }
-
         /**
          * /user/user/authUser 实名认证
          *
@@ -268,7 +223,7 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static API loginOut() {
+        public static API logout() {
             return new API("/user/user/logout.do", new ApiParams());
         }
 
@@ -341,6 +296,28 @@ public class API extends APIBase {
          */
         public static API becomePromoter() {
             return new API("/user/user/toBePromoter.do", null);
+        }
+
+        /**
+         * 接口名：获取找回密码图片验证码
+         * <p/>
+         * URL  http://域名/user/user/getFindPwdAuthCodeImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+        public static String getFindPwdAuthCodeImage(String userPhone) {
+            return getHost() + "/user/user/getFindPwdAuthCodeImage.do" + "?userPhone=" + userPhone;
+        }
+
+        /**
+         * 接口名：获取注册图片验证码  user/user/getRegImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+        public static String getRegisterAuthCodeImage(String userPhone) {
+            return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + userPhone;
         }
     }
 
@@ -786,18 +763,5 @@ public class API extends APIBase {
      */
     public static String getRegisterServiceProtocol() {
         return getHost() + "/xieyi/agreement.html";
-    }
-    
-    /**
-     * 接口名：获取注册图片验证码
-     * （返回状态码为601时调用该接口）
-     * <p>
-     * URL  http://域名/user/user/getRegImage.do
-     *
-     * @param phoneNumber
-     * @return
-     */
-    public static String getRegisterImageCode(String phoneNumber) {
-        return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + phoneNumber;
     }
 }

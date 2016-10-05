@@ -81,7 +81,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/btn_obtain_auth_code"
+                android:background="@drawable/btn_blue"
                 android:clickable="true"
                 android:enabled="false"
                 android:gravity="center"

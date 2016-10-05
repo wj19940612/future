@@ -18,7 +18,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
-import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
@@ -106,7 +105,7 @@ public class FindPwdActivity extends BaseActivity {
     };
 
     private boolean checkNextStepButtonEnable() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
@@ -120,10 +119,16 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private boolean checkObtainAuthCodeEnable() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
+
+        String regImageCode = ViewUtil.getTextTrim(mInputImageCode);
+        if (mImageCode.isShown() && TextUtils.isEmpty(regImageCode)) {
+            return false;
+        }
+
         return true && !mFreezeObtainAuthCode;
     }
 
@@ -146,7 +151,7 @@ public class FindPwdActivity extends BaseActivity {
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String regImageCode = null;
         if (mImageCode.isShown()) {
-            regImageCode = mInputImageCode.getText().toString().trim();
+            regImageCode = ViewUtil.getTextTrim(mInputImageCode);
         }
         Log.d("TAG", "手机号码：" + phoneNum + "\n 图片验证码" + regImageCode);
         API.User.obtainAuthCodeWhenFindPwd(phoneNum, regImageCode)
@@ -173,10 +178,11 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void getRetrieveImageCode() {
-        final String userPhone = mPhoneNum.getText().toString().trim();
+        final String userPhone = ViewUtil.getTextTrim(mPhoneNum);
         if (TextUtils.isEmpty(userPhone)) return;
-        final String url = API.User.getRetrieveImage(userPhone);
-        Log.d(TAG, "找回密码页面图片验证码地址  " + url);
+
+        final String ImageCodeUrl = API.User.getRetrieveImage(userPhone);
+        Log.d(TAG, "找回密码页面图片验证码地址  " + ImageCodeUrl);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -208,21 +214,16 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-         String phoneNum = mPhoneNum.getText().toString().trim();
-        final String mPhoneNum = phoneNum.replaceAll(" ", "");
-        if(!ValidityDecideUtil.isMobileNum(mPhoneNum)){
-            mCommonFailWarn.show(R.string.common_phone_num_fail);
-            return;
-        }
-        final String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.authCodeWhenFindPassword(mPhoneNum, authCode)
+        final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        final String authCode = ViewUtil.getTextTrim(mMessageAuthCode);
+        API.User.authCodeWhenFindPassword(phoneNum, authCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             Launcher.with(getActivity(), ModifyPwdActivity.class)
-                                    .putExtra(ModifyPwdActivity.EX_PHONE, mPhoneNum)
+                                    .putExtra(ModifyPwdActivity.EX_PHONE, phoneNum)
                                     .putExtra(ModifyPwdActivity.EX_AUTH_CODE, authCode)
                                     .execute();
                             finish();

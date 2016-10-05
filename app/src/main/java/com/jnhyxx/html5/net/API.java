@@ -88,30 +88,29 @@ public class API extends APIBase {
         }
 
         /**
-         * 找回密码时候获取短信验证码 /user/sms/findLoginPwdCode
+         * 找回密码时候获取短信验证码 /user/user/retrievePass.do
          *
-         * @param tele
+         * @param userPhone
          */
-        public static API obtainAuthCodeWhenFindPwd(String tele, String regImageCode) {
+        public static API obtainAuthCodeWhenFindPwd(String userPhone, String regImageCode) {
             return new API("/user/user/retrievePass.do",
                     new ApiParams()
-                            .put("userPhone", tele)
+                            .put("userPhone", userPhone)
                             .put("regImageCode", regImageCode));
 
         }
 
         /**
-         * 找回登录密码 - 验证码验证 /user/sms/authLoginPwdCode
+         * 找回登录密码 - 验证码验证 /user/user/checkRetriveMsgCode.do
          *
-         * @param tele
+         * @param userPhone
          * @param code
          * @return
          */
-        public static API authCodeWhenFindPassword(String tele, String code) {
-//            return new API("/user/sms/authLoginPwdCode",
+        public static API authCodeWhenFindPassword(String userPhone, String code) {
             return new API("/user/user/checkRetriveMsgCode.do",
                     new ApiParams()
-                            .put("userPhone", tele)
+                            .put("userPhone", userPhone)
                             .put("msgCode", code));
         }
 

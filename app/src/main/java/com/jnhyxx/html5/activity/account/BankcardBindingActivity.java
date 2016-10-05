@@ -151,7 +151,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         LocalUser localUser = LocalUser.getUser();
         mUserInfo = localUser.getUserInfo();
         if (!localUser.isLogin()) {
-            ToastUtil.curt(R.string.nickname_unknown);
+            ToastUtil.curt(R.string.no_logged);
             finish();
             return;
         }

@@ -3,20 +3,20 @@
 
     <item android:state_pressed="true">
         <shape>
-            <corners android:radius="@dimen/common_shape_radius"/>
+            <corners android:radius="@dimen/button_radius"/>
             <solid android:color="#7f358cf3"/>
         </shape>
     </item>
 
     <item android:state_enabled="false">
         <shape>
-            <corners android:radius="@dimen/common_shape_radius"/>
+            <corners android:radius="@dimen/button_radius"/>
             <solid android:color="@color/colorDisable"/>
         </shape>
     </item>
     <item android:state_enabled="true">
         <shape>
-            <corners android:radius="@dimen/common_shape_radius"/>
+            <corners android:radius="@dimen/button_radius"/>
             <solid android:color="@color/blueAssist"/>
         </shape>
     </item>

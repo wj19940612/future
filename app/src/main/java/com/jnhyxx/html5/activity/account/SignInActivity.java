@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -24,7 +23,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
-import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
@@ -61,42 +59,18 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
 
-        mSignUpButton.setEnabled(true);
-        mPhoneNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 1) {
-                    int length = s.toString().length();
-                    if (length == 3 || length == 8) {
-                        mPhoneNum.setText(s + " ");
-                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                boolean enable = checkSignInButtonEnable();
-                if (enable != mSignInButton.isEnabled()) {
-                    mSignInButton.setEnabled(enable);
-                }
-
-                boolean visible = checkClearPhoneNumButtonVisible();
-                mClearPhoneNumButton.setVisibility(visible ? View.VISIBLE : View.GONE);
-
-                visible = checkShowPasswordButtonVisible();
-                mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.GONE);
-            }
-        });
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
     }
 
-    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
+    }
+
+    private ValidationWatcher mValidationWatcher = new com.jnhyxx.html5.utils.ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSignInButtonEnable();
@@ -112,8 +86,41 @@ public class SignInActivity extends BaseActivity {
         }
     };
 
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+
+            formatPhoneNumber();
+        }
+    };
+
+    private void formatPhoneNumber() {
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
+    }
+
+    private String getFormatPhoneNumber(String phoneNoSpace) {
+        if (phoneNoSpace.length() <= 3) {
+            return phoneNoSpace;
+        } else if (phoneNoSpace.length() <= 7) {
+            return phoneNoSpace.substring(0, 3)
+                    + " " + phoneNoSpace.substring(3, phoneNoSpace.length());
+        } else if (phoneNoSpace.length() <= 11) {
+            return phoneNoSpace.substring(0, 3)
+                    + " " + phoneNoSpace.substring(3, 7)
+                    + " " + phoneNoSpace.substring(7, phoneNoSpace.length());
+        }
+        return phoneNoSpace;
+    }
+
     private boolean checkClearPhoneNumButtonVisible() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
         if (!TextUtils.isEmpty(phoneNum)) {
             return true;
         }
@@ -121,7 +128,7 @@ public class SignInActivity extends BaseActivity {
     }
 
     private boolean checkShowPasswordButtonVisible() {
-        String password = mPassword.getText().toString().trim();
+        String password = ViewUtil.getTextTrim(mPassword);
         if (!TextUtils.isEmpty(password)) {
             return true;
         }
@@ -129,11 +136,11 @@ public class SignInActivity extends BaseActivity {
     }
 
     private boolean checkSignInButtonEnable() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
-        String password = mPassword.getText().toString().trim();
+        String password = ViewUtil.getTextTrim(mPassword);
         if (TextUtils.isEmpty(password) || password.length() < 6) {
             return false;
         }
@@ -163,14 +170,9 @@ public class SignInActivity extends BaseActivity {
     }
 
     private void registerUser() {
-        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
-        String mPhoneNum = phoneNum.trim().replaceAll(" ", "");
-        boolean mobileNum = ValidityDecideUtil.isMobileNum(mPhoneNum);
-        if (!mobileNum) {
-            mCommonFailWarn.show("手机号码不正确");
-        }
-        API.User.login(mPhoneNum, password).setTag(TAG)
+        API.User.login(phoneNum, password).setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

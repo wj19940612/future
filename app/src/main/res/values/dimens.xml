@@ -7,6 +7,7 @@
     <dimen name="radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="splitLineHeight">0.5dp</dimen>
+    <dimen name="button_radius">2dp</dimen>
 
     <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
@@ -20,9 +21,6 @@
     <dimen name="drawable_left_padding">10dp</dimen>
     <!--目前大部分容器距离边界15dp-->
     <dimen name="common_view_margin">15dp</dimen>
-
-    <!--shape的圆角大小-->
-    <dimen name="common_shape_radius">3dp</dimen>
 
     <!-- Order -->
     <dimen name="one_key_close_radius">20dp</dimen>

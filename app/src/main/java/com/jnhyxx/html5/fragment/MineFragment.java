@@ -229,15 +229,9 @@ public class MineFragment extends BaseFragment {
                 }).fire();
     }
 
-    /**
-     * 打开交易明细界面
-     *
-     * @param
-     */
     private void openTradeDetailPage() {
         if (LocalUser.getUser().isLogin()) {
-            API.Finance.getFundInfo()
-                    .setTag(TAG)
+            API.Finance.getFundInfo().setTag(TAG)
                     .setIndeterminate(this)
                     .setCallback(new Callback1<Resp<UserFundInfo>>() {
                         @Override

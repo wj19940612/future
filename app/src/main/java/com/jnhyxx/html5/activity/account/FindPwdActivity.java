@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -22,9 +21,6 @@ import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +56,7 @@ public class FindPwdActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mMessageAuthCode.addTextChangedListener(mValidationWatcher);
+        mInputImageCode.addTextChangedListener(mValidationWatcher);
     }
 
     @Override
@@ -67,6 +64,7 @@ public class FindPwdActivity extends BaseActivity {
         super.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mMessageAuthCode.removeTextChangedListener(mValidationWatcher);
+        mInputImageCode.removeTextChangedListener(mValidationWatcher);
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -178,39 +176,16 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void getRetrieveImageCode() {
-        final String userPhone = ViewUtil.getTextTrim(mPhoneNum);
+        mObtainAuthCode.setEnabled(false);
+        mInputImageCode.setText("");
+
+        final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(userPhone)) return;
 
-        final String ImageCodeUrl = API.User.getRetrieveImage(userPhone);
-        Log.d(TAG, "找回密码页面图片验证码地址  " + ImageCodeUrl);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (TextUtils.isEmpty(userPhone)) return;
-                String url = API.User.getRetrieveImage(userPhone);
-                Picasso picasso = Picasso.with(FindPwdActivity.this);
-                RequestCreator requestCreator = picasso.load(url);
-                try {
-                    final Bitmap bitmap = requestCreator.get();
-                    Log.d(TAG, "下载的图片验证码 " + bitmap);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (bitmap != null) {
-                                mRetrieveImageCode.setImageBitmap(bitmap);
-                                mRetrieveImageCode.setVisibility(View.VISIBLE);
-                            } else {
+        final String imageCodeUrl = API.User.getRetrieveImage(userPhone);
+        Log.d(TAG, "找回密码页面图片验证码地址  " + imageCodeUrl);
 
-                            }
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
+        Picasso.with(getActivity()).load(imageCodeUrl).into(mRetrieveImageCode);
     }
 
     private void doNextStepButtonClick() {

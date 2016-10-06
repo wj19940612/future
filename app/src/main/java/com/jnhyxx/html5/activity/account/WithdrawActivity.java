@@ -28,11 +28,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.balance;
+
 public class WithdrawActivity extends BaseActivity {
 
     private static final int REQ_CODE_ADD_BANKCARD = 1;
 
-    @BindView(R.id.balance)
+    @BindView(balance)
     TextView mBalance;
     @BindView(R.id.withdrawBankcard)
     TextView mWithdrawBankcard;
@@ -83,7 +85,7 @@ public class WithdrawActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Launcher.with(WithdrawActivity.this, WithdrawRecordActivity.class).execute();
+                Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
             }
         });
 
@@ -91,22 +93,12 @@ public class WithdrawActivity extends BaseActivity {
 
         updateBankInfoView();
 
-        updateBalance();
+        updateBalanceView();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //账户余额
-        double moneyUsable = LocalUser.getUser().getUserInfo().getMoneyUsable();
-        String mMoneyUsable = String.valueOf(moneyUsable);
-        mBalance.setText(mMoneyUsable);
-    }
-
-
-    private void updateBalance() {
-        double blance = LocalUser.getUser().getUserInfo().getMoneyUsable();
-        mBalance.setText(FinanceUtil.formatWithScale(blance));
+    private void updateBalanceView() {
+        double balance = LocalUser.getUser().getUserInfo().getMoneyUsable();
+        mBalance.setText(FinanceUtil.formatWithScale(balance));
     }
 
     private void updateBankInfoView() {
@@ -142,7 +134,9 @@ public class WithdrawActivity extends BaseActivity {
                         @Override
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
-                                updateBalance(amount);
+
+                                updateUserInfoBalance(amount);
+
                                 SmartDialog.with(getActivity(), resp.getMsg())
                                         .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                                             @Override
@@ -170,13 +164,11 @@ public class WithdrawActivity extends BaseActivity {
         Launcher.with(this, BankcardBindingActivity.class).executeForResult(REQ_CODE_ADD_BANKCARD);
     }
 
-    private void updateBalance(double withdrawAmount) {
+    private void updateUserInfoBalance(double withdrawAmount) {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        String balance = mBalance.getText().toString();
-        double balanceNum = Double.valueOf(balance);
-        double balanceMoney = balanceNum - withdrawAmount;
-        userInfo.setMoneyUsable(balanceMoney);
-        mBalance.setText(String.valueOf(balanceMoney));
+        double balance = userInfo.getMoneyUsable();
+        userInfo.setMoneyUsable(FinanceUtil.subtraction(balance, withdrawAmount).doubleValue());
+        updateBalanceView();
     }
 
     @Override

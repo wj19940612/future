@@ -31,9 +31,6 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * 提现记录
- */
 public class WithdrawRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.withdrawRecord)

@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.account;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * 提现记录
  */
-public class WithDrawRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class WithdrawRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.withdrawRecord)
     ListView mWithdrawRecordList;
@@ -51,19 +52,20 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_with_draw_record);
+        setContentView(R.layout.activity_withdraw_record);
         ButterKnife.bind(this);
+
         mSize = 15;
         mOffset = 0;
         mSet = new HashSet<>();
+
         getWithdrawRecordList();
         mWithdrawRecordList.setOnItemClickListener(this);
     }
 
     public void getWithdrawRecordList() {
         API.Finance.getWithdrawRecordList(WithdrawRecord.RECORD_TYPE_WITHDRAW, mOffset, mSize)
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<WithdrawRecord>>, List<WithdrawRecord>>() {
 
                     @Override
@@ -85,7 +87,7 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
             mEmpty.setVisibility(View.GONE);
         }
         if (mFooter == null) {
-            mFooter = new TextView(WithDrawRecordActivity.this);
+            mFooter = new TextView(WithdrawRecordActivity.this);
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                     getResources().getDisplayMetrics());
             mFooter.setPadding(padding, padding, padding, padding);
@@ -108,7 +110,7 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
         }
 
         if (mWithdrawRecordAdapter == null) {
-            mWithdrawRecordAdapter = new WithdrawRecordAdapter(WithDrawRecordActivity.this);
+            mWithdrawRecordAdapter = new WithdrawRecordAdapter(WithdrawRecordActivity.this);
             mWithdrawRecordList.setAdapter(mWithdrawRecordAdapter);
         }
 
@@ -124,30 +126,28 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         WithdrawRecord withdrawRecord = (WithdrawRecord) parent.getAdapter().getItem(position);
         int withdrawRecordId = withdrawRecord.getId();
-        Launcher.with(WithDrawRecordActivity.this, WithdrawRecordInfoActivity.class).putExtra(WithdrawRecordInfoActivity.WITHDRAW_RECORD_INFO_ID, withdrawRecordId).execute();
+        Launcher.with(WithdrawRecordActivity.this, WithdrawRecordInfoActivity.class).putExtra(WithdrawRecordInfoActivity.WITHDRAW_RECORD_INFO_ID, withdrawRecordId).execute();
     }
 
-    class WithdrawRecordAdapter extends ArrayAdapter<WithdrawRecord> {
-
-        private Context mContext;
+    static class WithdrawRecordAdapter extends ArrayAdapter<WithdrawRecord> {
 
         public WithdrawRecordAdapter(Context context) {
             super(context, 0);
-            this.mContext = context;
         }
 
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder = null;
+            ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.row_withdraw_record, null);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_withdraw_record, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindDataWithView(getItem(position), mContext);
+
+            viewHolder.bindingData(getItem(position), getContext());
             return convertView;
         }
 
@@ -165,7 +165,7 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(WithdrawRecord item, Context mContext) {
+            public void bindingData(WithdrawRecord item, Context context) {
                 String time = item.getCreateTime().trim();
                 String format = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
                 String[] date = format.split(" ");
@@ -181,16 +181,16 @@ public class WithDrawRecordActivity extends BaseActivity implements AdapterView.
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.common_success);
-                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_drop));
+                    mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.common_drop));
                     //如果提现失败或者拒绝
                 } else if (item.getStatus() == WithdrawRecord.WITHDRAW_FAIL || item.getStatus() == WithdrawRecord.WITHDRAW_REFUSE) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_red_primary);
                     mSaleStatus.setText(R.string.withdraw_status_fail);
-                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
+                    mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.common_rise_activity_sum));
                 } else {
                     mSaleStatus.setBackgroundResource(R.drawable.btn_dialog_left);
                     mSaleStatus.setText(R.string.withdraw_status_auditing);
-                    mSaleGetMoney.setTextColor(getResources().getColor(R.color.splitLineOverspread));
+                    mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.splitLineOverspread));
                 }
             }
         }

@@ -142,7 +142,7 @@
             android:name=".activity.setting.SettingsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.WithDrawRecordActivity"
+            android:name=".activity.account.WithdrawRecordActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"

@@ -29,11 +29,10 @@
             android:text="12:12"
             android:textColor="@color/lucky"
             android:textSize="14sp" />
-
     </LinearLayout>
 
     <View
-        android:layout_width="1px"
+        android:layout_width="0.5dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"

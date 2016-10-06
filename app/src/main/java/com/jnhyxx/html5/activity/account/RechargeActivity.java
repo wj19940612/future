@@ -53,7 +53,6 @@ public class RechargeActivity extends BaseActivity {
 
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
-
         API.Finance.getSupportApplyWay()
                 .setTag(TAG)
                 .setIndeterminate(this)

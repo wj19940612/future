@@ -375,10 +375,11 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询当前渠道所支持的所有支付渠道
+         *
          * http://域名/user/finance/findDepositType.do
          */
         public static API getSupportApplyWay() {
-            return new API("/user/finance/findDepositType.do", new ApiParams());
+            return new API("/user/finance/findDepositType.do", null);
         }
 
         /**

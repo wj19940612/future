@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/activity_with_draw_record"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_with_draw_record"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
               android:background="@android:color/transparent"
-              tools:context="com.jnhyxx.html5.activity.account.WithDrawRecordActivity">
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.WithdrawRecordActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
@@ -22,12 +22,12 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:visibility="gone"
-        android:layout_gravity="center"
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/there_is_no_data_for_now"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:visibility="gone"/>
 </LinearLayout>

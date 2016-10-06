@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxLines="1"
             android:paddingBottom="25dp"
             android:text="@string/zero"
             android:textColor="@color/redPrimary"
@@ -69,7 +70,6 @@
             android:textSize="16sp"/>
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/bankcardInfoArea"
         android:layout_width="match_parent"
@@ -86,10 +86,9 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:paddingLeft="5dp"
-            android:text="@string/default_bank_name_card_number"/>
+            tools:text="@string/default_bank_name_card_number"/>
 
         <EditText
-            android:paddingBottom="5dp"
             android:id="@+id/withdrawAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,6 +97,7 @@
             android:drawablePadding="5dp"
             android:gravity="center"
             android:hint="@string/withdraw_least_money_hint"
+            android:paddingBottom="5dp"
             android:textColor="#262626"
             android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>

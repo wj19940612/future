@@ -20,6 +20,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
@@ -82,13 +83,15 @@ public class WithdrawActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Launcher.with(WithdrawActivity.this, WithDrawRecordActivity.class).execute();
+                Launcher.with(WithdrawActivity.this, WithdrawRecordActivity.class).execute();
             }
         });
 
-        updateBankInfoView();
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
+        updateBankInfoView();
+
+        updateBalance();
     }
 
     @Override
@@ -98,6 +101,12 @@ public class WithdrawActivity extends BaseActivity {
         double moneyUsable = LocalUser.getUser().getUserInfo().getMoneyUsable();
         String mMoneyUsable = String.valueOf(moneyUsable);
         mBalance.setText(mMoneyUsable);
+    }
+
+
+    private void updateBalance() {
+        double blance = LocalUser.getUser().getUserInfo().getMoneyUsable();
+        mBalance.setText(FinanceUtil.formatWithScale(blance));
     }
 
     private void updateBankInfoView() {
@@ -128,6 +137,7 @@ public class WithdrawActivity extends BaseActivity {
         if (!TextUtils.isEmpty(withdrawAmount)) {
             final double amount = Double.valueOf(withdrawAmount);
             API.Finance.withdraw(amount)
+                    .setTag(TAG).setIndeterminate(this)
                     .setCallback(new Callback<Resp>() {
                         @Override
                         public void onReceive(Resp resp) {
@@ -145,30 +155,28 @@ public class WithdrawActivity extends BaseActivity {
                                 SmartDialog.with(getActivity(), resp.getMsg()).show();
                             }
                         }
-                    }).setTag(TAG).setIndeterminate(this).fire();
+                    }).fire();
         }
 
-    }
-
-    private void updateBalance(double amount) {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        String balance = mBalance.getText().toString();
-        double balanceNum = Double.valueOf(balance);
-        double balanceMoney = balanceNum - amount;
-        userInfo.setMoneyUsable(balanceMoney);
-        mBalance.setText(String.valueOf(balanceMoney));
     }
 
     @OnClick(R.id.addBankcardButton)
     void addBankcard() {
         if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(getActivity(), NameVerifyActivity.class)
-                    .executeForResult(REQ_CODE_BASE);
+            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
             return;
         }
 
-        Launcher.with(this, BankcardBindingActivity.class)
-                .executeForResult(REQ_CODE_ADD_BANKCARD);
+        Launcher.with(this, BankcardBindingActivity.class).executeForResult(REQ_CODE_ADD_BANKCARD);
+    }
+
+    private void updateBalance(double withdrawAmount) {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        String balance = mBalance.getText().toString();
+        double balanceNum = Double.valueOf(balance);
+        double balanceMoney = balanceNum - withdrawAmount;
+        userInfo.setMoneyUsable(balanceMoney);
+        mBalance.setText(String.valueOf(balanceMoney));
     }
 
     @Override

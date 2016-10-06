@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:textColor="@color/editText_color_input"
+            android:textColor="@color/blackPrimary"
             android:textSize="17dp"
             android:lineSpacingExtra="25dp"/>
 

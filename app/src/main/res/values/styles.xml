@@ -67,8 +67,8 @@
     </style>
 
     <style name="InputTitle">
-        <item name="android:minWidth">80dp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:minWidth">70dp</item>
+        <item name="android:textColor">@color/tv_input_title</item>
     </style>
 
     <style name="HomeListHeaderButton">

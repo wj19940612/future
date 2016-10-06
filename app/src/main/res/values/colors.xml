@@ -23,6 +23,7 @@
     <color name="grayHint">#CBCBCB</color>
 
     <color name="blackHalfTransparent">#7F000000</color>
+    <color name="blackPrimary">#262626</color>
     <color name="lucky">#666666</color>
     
     <!--*************************************公共颜色**************************************************-->
@@ -43,8 +44,6 @@
     <!--我的fragment-->
     <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
 
-    <color name="editText_color_input">#262626</color>
-    
     <!--注册 -->
     <color name="service_protocol">#147AEB</color>
 </resources>

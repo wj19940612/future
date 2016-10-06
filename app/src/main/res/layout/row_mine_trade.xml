@@ -26,7 +26,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/accountTradeWarnImageStatus"
             android:text="交易提醒通知"
-            android:textColor="@color/editText_color_input" />
+            android:textColor="@color/blackPrimary" />
 
         <TextView
             android:id="@+id/accountTradeWarnTvTime"

@@ -23,7 +23,7 @@
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/nickname"
         app:rowTextColor="@color/colorDisable"
-        app:subTextColor="@color/editText_color_input"/>
+        app:subTextColor="@color/blackPrimary"/>
 
     <View
         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
         app:rightIcon="@drawable/ic_arrow"
         app:rowText="@string/binding_phone"
         app:rowTextColor="@color/colorDisable"
-        app:subTextColor="@color/editText_color_input"/>
+        app:subTextColor="@color/blackPrimary"/>
 
     <View
         android:layout_width="match_parent"

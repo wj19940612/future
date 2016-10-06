@@ -53,10 +53,10 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
 
-        initData();
+        initViews();
     }
 
-    private void initData() {
+    private void initViews() {
         if (LocalUser.getUser().isLogin()) {
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
             mNickname.setSubText(userInfo.getUserName());

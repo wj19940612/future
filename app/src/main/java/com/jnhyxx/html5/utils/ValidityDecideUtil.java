@@ -19,7 +19,6 @@ public class ValidityDecideUtil {
      */
     public static boolean isMobileNum(String phoneNumber) {
         CharSequence inputStr = phoneNumber;
-        //正则表达式
         String phone = "(13\\d|14[57]|15[^4,\\D]|17[678]|18\\d)\\d{8}|170[059]\\d{7}";
         Pattern pattern = Pattern.compile(phone);
         Matcher matcher = pattern.matcher(inputStr);

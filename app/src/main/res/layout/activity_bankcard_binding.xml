@@ -172,7 +172,7 @@
                 android:layout_weight="1"
                 android:drawableRight="@drawable/ic_arrow"
                 android:text="@string/please_choose_bank"
-                android:textColor="@color/editText_color_input"
+                android:textColor="@color/blackPrimary"
                 android:textSize="16sp"/>
         </LinearLayout>
 

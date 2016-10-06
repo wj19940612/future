@@ -195,7 +195,7 @@
         app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/trade_detail"
-        app:rowTextColor="@color/editText_color_input"/>
+        app:rowTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/split_line_overspread"/>
 
@@ -207,7 +207,7 @@
         app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
-        app:rowTextColor="@color/editText_color_input"/>
+        app:rowTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/split_line_overspread"/>
 
@@ -219,7 +219,7 @@
         app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/about_us"
-        app:rowTextColor="@color/editText_color_input"/>
+        app:rowTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/split_line_overspread"/>
 </LinearLayout>

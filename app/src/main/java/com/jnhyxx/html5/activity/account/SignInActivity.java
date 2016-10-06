@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -33,6 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignInActivity extends BaseActivity {
+
+    private static final int REQ_CODE_REGISTER = 1;
 
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
@@ -69,6 +72,15 @@ public class SignInActivity extends BaseActivity {
         super.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mPassword.removeTextChangedListener(mValidationWatcher);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_REGISTER && resultCode == RESULT_OK) {
+            // User register done, then finish
+            finish();
+        }
     }
 
     private ValidationWatcher mValidationWatcher = new com.jnhyxx.html5.utils.ValidationWatcher() {
@@ -144,11 +156,10 @@ public class SignInActivity extends BaseActivity {
                 changePasswordInputType();
                 break;
             case R.id.signInButton:
-                registerUser();
+                signIn();
                 break;
             case R.id.signUpButton:
-                Launcher.with(this, SignUpActivity.class).execute();
-                finish();
+                switchToSignUpPage();
                 break;
             case R.id.forgetPassword:
                 Launcher.with(this, FindPwdActivity.class).execute();
@@ -156,7 +167,16 @@ public class SignInActivity extends BaseActivity {
         }
     }
 
-    private void registerUser() {
+    private void switchToSignUpPage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(SignUpActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(this, SignUpActivity.class).executeForResult(REQ_CODE_REGISTER);
+        }
+    }
+
+    private void signIn() {
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
         API.User.login(phoneNum, password).setTag(TAG)
@@ -167,8 +187,9 @@ public class SignInActivity extends BaseActivity {
                         if (jsonObjectResp.isSuccess()) {
                             UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(userInfo);
-                            setResult(RESULT_OK);
                             ToastUtil.curt(R.string.login_success);
+
+                            setResult(RESULT_OK);
                             finish();
                         } else {
                             mCommonFailWarn.show(jsonObjectResp.getMsg());

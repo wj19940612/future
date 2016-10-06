@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -41,6 +42,8 @@ import butterknife.OnClick;
 
 
 public class SignUpActivity extends BaseActivity {
+
+    private static final int REQ_CODE_LOGIN = 2;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -96,16 +99,41 @@ public class SignUpActivity extends BaseActivity {
                 activeButtons();
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mRegisterAuthCode.removeTextChangedListener(mValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
+            // User login done, then finish
+            finish();
+        }
     }
 
     private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(getActivity(), SignInActivity.class).execute();
+                switchToSignInPage();
             }
         });
+    }
+
+    private void switchToSignInPage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(SignInActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
+        }
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -255,9 +283,12 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(info);
+                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
+
+                            setResult(RESULT_OK);
+                            finish();
                         } else {
                             mFailWarn.show(resp.getMsg());
                         }

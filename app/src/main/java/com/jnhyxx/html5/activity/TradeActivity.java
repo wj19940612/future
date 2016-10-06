@@ -147,7 +147,6 @@ public class TradeActivity extends BaseActivity implements
         setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
 
-
         initData(getIntent());
 
         initSlidingMenu();

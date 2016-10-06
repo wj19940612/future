@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -35,9 +34,6 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -204,7 +200,7 @@ public class SignUpActivity extends BaseActivity {
                 signUp();
                 break;
             case R.id.authCodeImage:
-                getRegisterImage();
+                getImageAuthCode();
                 break;
             case R.id.serviceProtocol:
                 Launcher.with(SignUpActivity.this, WebViewActivity.class)
@@ -238,10 +234,10 @@ public class SignUpActivity extends BaseActivity {
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
-                            getRegisterImage();
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
-                            getRegisterImage();
+                            mImageCodeArea.setVisibility(View.VISIBLE);
                             mFailWarn.show(resp.getMsg());
+                            getImageAuthCode();
                         } else {
                             mFailWarn.show(resp.getMsg());
                         }
@@ -269,41 +265,14 @@ public class SignUpActivity extends BaseActivity {
                 }).fire();
     }
 
-    private void getRegisterImage() {
+    private void getImageAuthCode() {
+        mObtainAuthCode.setEnabled(false);
+        mImageAuthCode.setText("");
+
         final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-        if (TextUtils.isEmpty(userPhone)) return;
+        String imageUrl = API.User.getRegisterAuthCodeImage(userPhone);
 
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                String url = CommonMethodUtils.imageCodeUri(userPhone, "/user/user/getRegImage.do");
-                String url = API.User.getRegisterAuthCodeImage(userPhone);
-                Log.d(TAG, "register image code Url  " + url);
-                Picasso picasso = Picasso.with(SignUpActivity.this);
-                RequestCreator requestCreator = picasso.load(url);
-                try {
-                    final Bitmap bitmap = requestCreator.get();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (bitmap != null) {
-                                mImageCodeArea.setVisibility(View.VISIBLE);
-                                mAuthCodeImage.setImageBitmap(bitmap);
-                            } else {
-                                // TODO: 2016/9/27 这里产品每明确
-//                                mFailWarn.setVisible(true, true);
-//                                mFailWarn.show(R.string.network_error_load_image);
-                            }
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
+        Picasso.with(getActivity()).load(imageUrl).into(mAuthCodeImage);
     }
 
     private void changePasswordInputType() {

@@ -140,7 +140,7 @@ public class FindPwdActivity extends BaseActivity {
                 doNextStepButtonClick();
                 break;
             case R.id.authCodeImage:
-                getRetrieveImageCode();
+                getImageAuthCode();
                 break;
         }
     }
@@ -167,7 +167,7 @@ public class FindPwdActivity extends BaseActivity {
                         } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
                             mCommonFailWarn.show(resp.getMsg());
                             mImageCodeArea.setVisibility(View.VISIBLE);
-                            getRetrieveImageCode();
+                            getImageAuthCode();
                         } else {
                             mCommonFailWarn.show(resp.getMsg());
                         }
@@ -175,17 +175,16 @@ public class FindPwdActivity extends BaseActivity {
                 }).fire();
     }
 
-    private void getRetrieveImageCode() {
+    private void getImageAuthCode() {
         mObtainAuthCode.setEnabled(false);
         mImageAuthCode.setText("");
 
         final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-        if (TextUtils.isEmpty(userPhone)) return;
+        final String imageUrl = API.User.getFindPwdAuthCodeImage(userPhone);
 
-        final String imageCodeUrl = API.User.getFindPwdAuthCodeImage(userPhone);
-        Log.d(TAG, "找回密码页面图片验证码地址  " + imageCodeUrl);
+        Log.d("TAG", "找回密码页面图片验证码地址  " + imageUrl);
 
-        Picasso.with(getActivity()).load(imageCodeUrl).into(mAuthCodeImage);
+        Picasso.with(getActivity()).load(imageUrl).into(mAuthCodeImage);
     }
 
     private void doNextStepButtonClick() {

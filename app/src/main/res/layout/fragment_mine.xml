@@ -185,7 +185,7 @@
         app:subTextBackground="@drawable/account_message_warm"
         app:subTextColor="@android:color/white"/>
 
-    <include layout="@layout/split_line_overspread"/>
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
@@ -197,7 +197,7 @@
         app:rowText="@string/trade_detail"
         app:rowTextColor="@color/blackPrimary"/>
 
-    <include layout="@layout/split_line_overspread"/>
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
@@ -209,7 +209,7 @@
         app:rowText="@string/paid_to_promote"
         app:rowTextColor="@color/blackPrimary"/>
 
-    <include layout="@layout/split_line_overspread"/>
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
@@ -221,5 +221,5 @@
         app:rowText="@string/about_us"
         app:rowTextColor="@color/blackPrimary"/>
 
-    <include layout="@layout/split_line_overspread"/>
+    <include layout="@layout/split_line_gray_dark"/>
 </LinearLayout>

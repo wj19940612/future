@@ -25,25 +25,9 @@
     <color name="blackHalfTransparent">#7F000000</color>
     <color name="blackPrimary">#262626</color>
     <color name="lucky">#666666</color>
-    
-    <!--*************************************公共颜色**************************************************-->
-    <!--****分割线的颜色********-->
-    <!--未铺满的分割线颜色-->
-    <color name="splitLineNotOverspread">#e5e5e5</color>
-    <!--铺满的分割线颜色-->
-    <color name="splitLineOverspread">#cdcdcd</color>
 
+    <!--*************************************公共颜色**************************************************-->
     <color name="common_rise_activity_sum">#fb4b55</color>
     <color name="common_drop">#25d282</color>
-    <color name="common_assist">#358cf3</color>
-
-
     <!--*************************************公共颜色**************************************************-->
-
-
-    <!--我的fragment-->
-    <color name="account_vertical_sqlitLine">#4DE5E5E5</color>
-
-    <!--注册 -->
-    <color name="service_protocol">#147AEB</color>
 </resources>

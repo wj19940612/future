@@ -176,7 +176,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/service_protocol"
-            android:textColor="@color/service_protocol"
+            android:textColor="@color/blueAssist"
             android:textSize="13sp"/>
     </LinearLayout>
 

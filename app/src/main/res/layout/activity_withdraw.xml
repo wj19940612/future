@@ -12,90 +12,76 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:rightText="@string/withdraw_log"
+        app:rightText="@string/withdraw_record_title"
         app:rightTextColor="#FEFEFE"
         app:rightTextSize="14sp"
         app:rightVisible="true"
         app:titleText="@string/withdraw"/>
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bluePrimary"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:paddingTop="25dp"
+        android:text="@string/mine_balance"
+        android:textColor="@color/colorDisable"
+        android:textSize="12sp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="15dp"
-            android:paddingTop="25dp"
-            android:text="@string/mine_balance"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bluePrimary"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingBottom="25dp"
+        android:text="@string/zero"
+        android:textColor="@color/redPrimary"
+        android:textSize="40sp"/>
 
-        <TextView
-            android:id="@+id/balance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="1"
-            android:paddingBottom="25dp"
-            android:text="@string/zero"
-            android:textColor="@color/redPrimary"
-            android:textSize="50sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bankcardNotFilledArea"
+    <TextView
+        android:id="@+id/addBankcardButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/btn_withdraw"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/addBankcardButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_withdraw_addcard"
-            android:drawablePadding="10dp"
-            android:gravity="center"
-            android:padding="13dp"
-            android:text="@string/add_bank_card"
-            android:textColor="@color/colorDisable"
-            android:textSize="16sp"/>
-    </LinearLayout>
+        android:drawableLeft="@drawable/ic_withdraw_addcard"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="13dp"
+        android:text="@string/add_bank_card"
+        android:textColor="@color/colorDisable"
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/bankcardInfoArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
         android:visibility="visible">
 
         <TextView
             android:id="@+id/withdrawBankcard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
-            android:paddingLeft="5dp"
             tools:text="@string/default_bank_name_card_number"/>
 
         <EditText
+            android:paddingTop="20dp"
             android:id="@+id/withdrawAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableLeft="@drawable/ic_money"
             android:drawablePadding="5dp"
-            android:gravity="center"
             android:hint="@string/withdraw_least_money_hint"
             android:paddingBottom="5dp"
             android:textColor="#262626"
@@ -118,10 +104,10 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginTop="30dp"
         android:text="@string/warm_hint"
         android:textColor="@color/redPrimary"
@@ -135,8 +121,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="20dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
             android:text="@string/prompt_withdraw"
             android:textColor="@color/colorDisable"
             android:textSize="12sp"/>

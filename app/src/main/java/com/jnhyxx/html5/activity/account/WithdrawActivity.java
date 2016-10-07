@@ -42,8 +42,8 @@ public class WithdrawActivity extends BaseActivity {
     TextView mConfirmButton;
     @BindView(R.id.addBankcardButton)
     TextView mAddBankcardButton;
-    @BindView(R.id.bankcardNotFilledArea)
-    LinearLayout mBankcardNotFilledArea;
+  /*  @BindView(R.id.bankcardNotFilledArea)
+    LinearLayout mBankcardNotFilledArea;*/
     @BindView(R.id.bankcardInfoArea)
     LinearLayout mBankcardInfoArea;
     @BindView(R.id.titleBar)
@@ -103,7 +103,7 @@ public class WithdrawActivity extends BaseActivity {
 
     private void updateBankInfoView() {
         if (LocalUser.getUser().isBankcardFilled()) {
-            mBankcardNotFilledArea.setVisibility(View.GONE);
+            mAddBankcardButton.setVisibility(View.GONE);
             mBankcardInfoArea.setVisibility(View.VISIBLE);
 
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
@@ -118,7 +118,7 @@ public class WithdrawActivity extends BaseActivity {
             }
             mWithdrawBankcard.setText(mStringBuffer.toString());
         } else {
-            mBankcardNotFilledArea.setVisibility(View.VISIBLE);
+            mAddBankcardButton.setVisibility(View.VISIBLE);
             mBankcardInfoArea.setVisibility(View.GONE);
         }
     }

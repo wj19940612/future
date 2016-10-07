@@ -299,15 +299,13 @@ public class API extends APIBase {
         }
 
         /**
-         * 接口名：获取找回密码图片验证码
-         * <p/>
-         * URL  http://域名/user/user/getFindPwdAuthCodeImage.do
+         * 接口名：获取找回密码图片验证码 /user/user/getRetrieveImage.do
          *
          * @param userPhone
          * @return
          */
         public static String getFindPwdAuthCodeImage(String userPhone) {
-            return getHost() + "/user/user/getFindPwdAuthCodeImage.do" + "?userPhone=" + userPhone;
+            return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + userPhone;
         }
 
         /**

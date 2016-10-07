@@ -43,7 +43,6 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.OrderPresenter;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
@@ -512,8 +511,11 @@ public class TradeActivity extends BaseActivity implements
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
                             hideFragmentOfContainer();
-                            ToastUtil.show(jsonObjectResp.getMsg());
                             OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.ok)
+                                    .show();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.place_an_order_again,

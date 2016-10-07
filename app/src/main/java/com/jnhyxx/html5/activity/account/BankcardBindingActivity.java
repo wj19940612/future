@@ -113,6 +113,13 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         ButterKnife.bind(this);
 
         mCardholderName.addTextChangedListener(mValidationWatcher);
+        formatBankCardNumber();
+        mPayingBank.addTextChangedListener(mValidationWatcher);
+        formatPhoneNumber();
+        showBankBindStatus();
+    }
+
+    private void formatBankCardNumber() {
         mBankcardNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -138,7 +145,9 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 }
             }
         });
-        mPayingBank.addTextChangedListener(mValidationWatcher);
+    }
+
+    private void formatPhoneNumber() {
         mPhoneNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,7 +173,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 }
             }
         });
-        showBankBindStatus();
     }
 
     /**
@@ -203,7 +211,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                         public void onSuccess() {
 
                         }
-
                         @Override
                         public void onError() {
                             Log.d(TAG, "银行图标下载失败");

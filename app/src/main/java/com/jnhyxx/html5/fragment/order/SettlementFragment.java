@@ -150,14 +150,17 @@ public class SettlementFragment extends BaseFragment {
         static class ViewHolder {
             @BindView(R.id.splitBlock)
             View mSplitBlock;
-            @BindView(R.id.sellDate)
-            TextView mSellDate;
+            @BindView(R.id.sellYearMonthDay)
+            TextView mSellYearMonthDay;
+            @BindView(R.id.sellHourMin)
+            TextView mSellHourMin;
             @BindView(R.id.tradeType)
             TextView mTradeType;
             @BindView(R.id.sellType)
             TextView mSellType;
             @BindView(R.id.lossProfit)
             TextView mLossProfit;
+
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -178,7 +181,8 @@ public class SettlementFragment extends BaseFragment {
                 }
                 String[] saleDates = sellTime.split(" ");
                 if (saleDates.length == 2) {
-                    mSellDate.setText(StrUtil.mergeTextWithRatio(saleDates[0], "\n" + saleDates[1], 1.5f));
+                    mSellYearMonthDay.setText(saleDates[0]);
+                    mSellHourMin.setText(saleDates[1]);
                 }
 
                 int tradeType = item.getDirection();
@@ -219,7 +223,7 @@ public class SettlementFragment extends BaseFragment {
                     }
                     String lossProfitInner = "(" + FinanceUtil.formatWithScale(FinanceUtil.multiply(lossProfit, rate).doubleValue()) + ")";
                     mLossProfit.setTextColor(color);
-                    mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, "\n" + lossProfitInner, 0.65f, grayColor));
+                    mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, "\n" + lossProfitInner, 0.7f, grayColor));
 
                 } else {
                     double lossProfit = item.getWinOrLoss();

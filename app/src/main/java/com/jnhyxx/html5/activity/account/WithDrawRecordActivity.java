@@ -164,8 +164,13 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
 
             public void bindingData(WithdrawRecord item, Context context) {
                 String time = item.getCreateTime().trim();
-                String format = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
-                String[] date = format.split(" ");
+                String withdrawTime = "";
+                if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
+                    withdrawTime = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                } else {
+                    withdrawTime = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm");
+                }
+                String[] date = withdrawTime.split(" ");
                 if (date.length == 2) {
                     mSaleDateMonth.setText(date[0]);
                     mSaleDateHour.setText(date[1]);

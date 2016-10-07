@@ -129,7 +129,7 @@ public class HomeFragment extends BaseFragment {
 
                         Launcher.with(getActivity(), TradeActivity.class)
                                 .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)
+                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
                                 .execute();

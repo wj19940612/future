@@ -44,7 +44,7 @@ public class LocalUser {
         mPhone = phone;
         saveToPreference();
     }
-    
+
     public void setUserInfo(UserInfo userInfo) {
         mUserInfo = userInfo;
         saveToPreference();
@@ -99,6 +99,10 @@ public class LocalUser {
         return 0;
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public String getUserPhoneNum() {
         if (mUserInfo != null) {
             return mUserInfo.getUserPhone();

@@ -30,7 +30,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -211,6 +210,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                         public void onSuccess() {
 
                         }
+
                         @Override
                         public void onError() {
                             Log.d(TAG, "银行图标下载失败");
@@ -337,7 +337,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
                                     setResult(RESULT_OK);
-                                    CustomToast.getInstance().showText(BankcardBindingActivity.this,resp.getMsg());
+                                    CustomToast.getInstance().showText(BankcardBindingActivity.this, resp.getMsg());
                                 } else {
                                     mCommonFailTvWarn.show(resp.getMsg());
                                 }
@@ -361,18 +361,24 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         API.User.showChannelBankList()
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback2<Resp<ArrayList<ChannelBankList>>, ArrayList<ChannelBankList>>() {
+                .setCallback(new Callback<Resp<ArrayList<ChannelBankList>>>() {
+
                     @Override
-                    public void onRespSuccess(ArrayList<ChannelBankList> channelBankLists) {
-                        mChannelBankLists = channelBankLists;
-                        if (channelBankLists != null && !channelBankLists.isEmpty()) {
-                            View view = setWheelView(channelBankLists);
+                    public void onReceive(Resp<ArrayList<ChannelBankList>> arrayListResp) {
+                        if (arrayListResp.isSuccess()) {
+                            mChannelBankLists = arrayListResp.getData();
+                            if (arrayListResp.getData() != null && !arrayListResp.getData().isEmpty()) {
+                                View view = setWheelView(arrayListResp.getData());
 
-                            setDialog(view);
+                                setDialog(view);
 
+                            } else {
+                                mCommonFailTvWarn.show(R.string.no_bank_can_bind);
+                            }
                         } else {
-                            mCommonFailTvWarn.show(R.string.no_bank_can_bind);
+                            mCommonFailTvWarn.show(arrayListResp.getMsg());
                         }
+
                     }
                 }).fire();
     }

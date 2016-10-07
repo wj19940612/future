@@ -88,7 +88,7 @@ public class CommonFailWarn extends RelativeLayout {
         mDrawLeftPadding = typedArray.getDimensionPixelOffset(R.styleable.CommonFailWarn_centerDrawablePadding, mDefaultTxtDrawLeftPadding);
         mViewVisible = typedArray.getBoolean(R.styleable.CommonFailWarn_visible, false);
 
-        setBackgroundResource(R.color.common_rise_activity_sum);
+        setBackgroundResource(R.color.redPrimary);
         setGravity(Gravity.CENTER);
 
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,

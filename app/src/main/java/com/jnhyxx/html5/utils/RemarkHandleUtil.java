@@ -57,6 +57,8 @@ public class RemarkHandleUtil extends SparseArray<String> {
         super.put(3004, "充值");
         //内部充值资金
         super.put(3005, "充值");
+        //内部体现资金
+        super.put(-3005, "体现");
         //内部充值积分
         super.put(3006, "金币");
         //支付宝转账

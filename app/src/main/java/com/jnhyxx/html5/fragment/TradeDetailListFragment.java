@@ -217,8 +217,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     mSplitBlock.setVisibility(View.GONE);
                 }
                 String createTime = item.getCreateTime().trim();
-                String format = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
-                String[] time = format.split(" ");
+                String tradeDetailTime;
+                if (DateUtil.isInThisYear(createTime, DateUtil.DEFAULT_FORMAT)) {
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                }else{
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm");
+                }
+                String[] time = tradeDetailTime.split(" ");
                 if (time.length == 2) {
                     mTimeYear.setText(time[0]);
                     mTimeHour.setText(time[1]);
@@ -238,12 +243,12 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
 //                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
-                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.common_rise_activity_sum));
+                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
 
                 } else {
                     mStringBuffer.append("-");
                     mDataType.setBackgroundResource(R.drawable.bg_green_primary);
-                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.common_drop));
+                    mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                 }
                 String data = new RemarkHandleUtil().get(item.getTypeDetail());
                 if (!TextUtils.isEmpty(data)) {

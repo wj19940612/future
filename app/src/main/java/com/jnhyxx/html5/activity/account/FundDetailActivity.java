@@ -125,7 +125,6 @@ public class FundDetailActivity extends BaseActivity {
                 mAdapter.add(item);
             }
         }
-
         mAdapter.notifyDataSetChanged();
     }
 
@@ -182,7 +181,7 @@ public class FundDetailActivity extends BaseActivity {
                 mIntroduce.setText(item.getIntro());
                 String flowAmount;
                 if (item.getType() > 0) {
-                    mFlowAmount.setTextColor(getColor(R.color.common_drop));
+                    mFlowAmount.setTextColor(getColor(R.color.greenPrimary));
                     flowAmount = "+" + item.getCurflowAmt();
                 } else {
                     mFlowAmount.setTextColor(resources.getColor(R.color.greenPrimary));

@@ -98,6 +98,10 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
     CommonFailWarn mCommonFailTvWarn;
 
     ChannelBankList mChannelBankList = null;
+    @BindView(R.id.bindCardHint)
+    ImageView mBindCardHint;
+    @BindView(R.id.llChooseBank)
+    LinearLayout mLlChooseBank;
 
 
     private ArrayList<ChannelBankList> mChannelBankLists;
@@ -295,7 +299,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         return true;
     }
 
-    @OnClick({R.id.payingBank, R.id.submitToAuthButton, R.id.unbindBankcard})
+    @OnClick({R.id.payingBank, R.id.submitToAuthButton, R.id.unbindBankcard, R.id.bindCardHint})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.payingBank:
@@ -347,12 +351,26 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
             case R.id.unbindBankcard:
                 unwrapBindServiceTelephone();
                 break;
+            case R.id.bindCardHint:
+                showCardHolderDialog();
+                break;
         }
+    }
+
+    private void showCardHolderDialog() {
+        SmartDialog.with(getActivity(), R.string.bank_hint)
+                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelableOnTouchOutside(false)
+                .show();
     }
 
     private void showBankDialog() {
         getChannelBnkList();
-
     }
 
 
@@ -369,9 +387,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                             mChannelBankLists = arrayListResp.getData();
                             if (arrayListResp.getData() != null && !arrayListResp.getData().isEmpty()) {
                                 View view = setWheelView(arrayListResp.getData());
-
-                                setDialog(view);
-
+                                setSelectBankDialog(view);
                             } else {
                                 mCommonFailTvWarn.show(R.string.no_bank_can_bind);
                             }
@@ -383,7 +399,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 }).fire();
     }
 
-    private void setDialog(View view) {
+    private void setSelectBankDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(BankcardBindingActivity.this)
                 .setView(view)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -459,6 +475,4 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         mBankcardInputArea.setVisibility(View.VISIBLE);
     }
-
-
 }

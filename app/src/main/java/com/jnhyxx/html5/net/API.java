@@ -761,6 +761,6 @@ public class API extends APIBase {
      * //服务协议的接口
      */
     public static String getRegisterServiceProtocol() {
-        return getHost() + "/xieyi/agreement.html";
+        return getHost() + "/xieyi/agreement.html?nohead=1";
     }
 }

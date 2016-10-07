@@ -323,7 +323,7 @@
     <string name="register_code_image_hint">请输入动态验证码</string>
     <string name="register_code_image">图片验证码</string>
     <string name="register_get_image_code">获取图片验证码</string>
-    <string name="service_protocol_title">微盘原油宝服务协议</string>
+    <string name="service_protocol_title">服务协议</string>
 
     <!--交易明细-->
     <string name="account_trade_detail_integral_remain">剩余积分(分)</string>

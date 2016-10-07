@@ -14,6 +14,7 @@ public class Preference {
         String HAD_SHOW_TRADE_AGREEMENT = "hadShowTradeAgreement";
         String IS_TRADE_RULE_CLICKED = "isTradeRuleClicked";
         String PUSH_CLIENT_ID = "pushClientId";
+        String PHONE_NUMBER = "phone";
     }
 
     private static Preference sInstance;
@@ -41,6 +42,14 @@ public class Preference {
 
     public boolean isForeground() {
         return mPrefs.getBoolean(Key.IS_FOREGROUND, false);
+    }
+
+    public void setPhone(String phone) {
+        getEditor().putString(Key.PHONE_NUMBER, phone).commit();
+    }
+
+    public String getPhone() {
+        return mPrefs.getString(Key.PHONE_NUMBER, null);
     }
 
     public void setUserJson(String userJson) {

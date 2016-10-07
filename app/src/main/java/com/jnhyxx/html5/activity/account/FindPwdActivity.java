@@ -20,6 +20,7 @@ import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -170,6 +171,9 @@ public class FindPwdActivity extends BaseActivity {
                             getImageAuthCode();
                         } else {
                             mCommonFailWarn.show(resp.getMsg());
+                            if (mImageCodeArea.isShown()) {
+                                getImageAuthCode();
+                            }
                         }
                     }
                 }).fire();
@@ -184,7 +188,10 @@ public class FindPwdActivity extends BaseActivity {
 
         Log.d("TAG", "找回密码页面图片验证码地址  " + imageUrl);
 
-        Picasso.with(getActivity()).load(imageUrl).into(mAuthCodeImage);
+        Picasso.with(getActivity())
+                .load(imageUrl)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .into(mAuthCodeImage);
     }
 
     private void doNextStepButtonClick() {

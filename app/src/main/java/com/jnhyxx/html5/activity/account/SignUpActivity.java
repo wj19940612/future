@@ -34,6 +34,7 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -303,7 +304,10 @@ public class SignUpActivity extends BaseActivity {
         final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String imageUrl = API.User.getRegisterAuthCodeImage(userPhone);
 
-        Picasso.with(getActivity()).load(imageUrl).into(mAuthCodeImage);
+        Picasso.with(getActivity())
+                .load(imageUrl)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .into(mAuthCodeImage);
     }
 
     private void changePasswordInputType() {

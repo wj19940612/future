@@ -125,6 +125,7 @@ public class FundDetailActivity extends BaseActivity {
                 mAdapter.add(item);
             }
         }
+
         mAdapter.notifyDataSetChanged();
     }
 

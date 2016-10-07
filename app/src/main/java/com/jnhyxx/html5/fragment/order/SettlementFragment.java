@@ -5,9 +5,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,7 +32,9 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +46,8 @@ public class SettlementFragment extends BaseFragment {
     ListView mList;
     @BindView(android.R.id.empty)
     TextView mEmpty;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Unbinder mBinder;
 
@@ -47,6 +55,10 @@ public class SettlementFragment extends BaseFragment {
     private int mFundType;
     private int mPageNo;
     private int mPageSize;
+    private Set<String> mSet;
+
+    private TextView mFooter;
+    private SettlementAdapter mSettlementAdapter;
 
     public static SettlementFragment newInstance(Product product, int fundType) {
         SettlementFragment fragment = new SettlementFragment();
@@ -80,7 +92,22 @@ public class SettlementFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mPageNo = 1;
         mPageSize = 10;
+        mSet = new HashSet<>();
+
         mList.setEmptyView(mEmpty);
+        mList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int topRowVerticalPosition =
+                        (mList == null || mList.getChildCount() == 0) ? 0 : mList.getChildAt(0).getTop();
+                mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+            }
+        });
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -101,6 +128,19 @@ public class SettlementFragment extends BaseFragment {
             }
         });
 
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPageNo = 1;
+                mSet.clear();
+                requestSettlementOrderList();
+            }
+        });
+
+        requestSettlementOrderList();
+    }
+
+    private void requestSettlementOrderList() {
         API.Order.getSettlementOrderList(mProduct.getVarietyId(), mFundType, mPageNo, mPageSize)
                 .setCallback(new Callback2<Resp<SettledOrderSet>, SettledOrderSet>() {
                     @Override
@@ -113,9 +153,47 @@ public class SettlementFragment extends BaseFragment {
     private void updateSettlementOrderListView(List<SettledOrder> settlementOrderList) {
         if (settlementOrderList == null) return;
 
-        SettlementAdapter adapter = new SettlementAdapter(getContext(), mProduct);
-        adapter.addAll(settlementOrderList);
-        mList.setAdapter(adapter);
+        if (mFooter == null) {
+            mFooter = new TextView(getActivity());
+            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                    getResources().getDisplayMetrics());
+            mFooter.setPadding(padding, padding, padding, padding);
+            mFooter.setGravity(Gravity.CENTER);
+            mFooter.setText(R.string.click_to_load_more);
+            mFooter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mSwipeRefreshLayout.isRefreshing()) return;
+
+                    mPageNo++;
+                    requestSettlementOrderList();
+                }
+            });
+            mList.addFooterView(mFooter);
+        }
+
+        if (settlementOrderList.size() < mPageSize) {
+            // When get number of data is less than mPageSize, means no data anymore
+            // so remove footer
+            mList.removeFooterView(mFooter);
+        }
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSettlementAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+        if (mSettlementAdapter == null) {
+            mSettlementAdapter = new SettlementAdapter(getContext(), mProduct);
+            mList.setAdapter(mSettlementAdapter);
+        }
+        for (SettledOrder item : settlementOrderList) {
+            if (mSet.add(item.getShowId())) {
+                mSettlementAdapter.add(item);
+            }
+        }
+
+        mSettlementAdapter.notifyDataSetChanged();
     }
 
     @Override

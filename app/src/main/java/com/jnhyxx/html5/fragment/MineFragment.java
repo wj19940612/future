@@ -238,7 +238,8 @@ public class MineFragment extends BaseFragment {
                         protected void onRespSuccess(Resp<UserFundInfo> resp) {
                             UserFundInfo userFundInfo = resp.getData();
                             Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
-                            Launcher.with(getActivity(), TradeDetailActivity.class).putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
+                            Launcher.with(getActivity(), TradeDetailActivity.class)
+                                    .putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
                         }
                     }).fire();
         } else {

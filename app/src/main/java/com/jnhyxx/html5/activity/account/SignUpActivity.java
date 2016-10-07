@@ -275,7 +275,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     public void signUp() {
-        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
         String authCode = ViewUtil.getTextTrim(mRegisterAuthCode);
         API.User.register(phoneNum, password, authCode, null)
@@ -285,7 +285,7 @@ public class SignUpActivity extends BaseActivity {
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
-                            LocalUser.getUser().setUserInfo(info);
+                            LocalUser.getUser().setUserInfo(info, phoneNum);
                             CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 
                             setResult(RESULT_OK);

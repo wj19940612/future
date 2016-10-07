@@ -65,6 +65,8 @@ public class SignInActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
+
+        mPhoneNum.setText(LocalUser.getUser().getPhone());
     }
 
     @Override
@@ -177,7 +179,7 @@ public class SignInActivity extends BaseActivity {
     }
 
     private void signIn() {
-        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
         API.User.login(phoneNum, password).setTag(TAG)
                 .setIndeterminate(this)
@@ -186,7 +188,7 @@ public class SignInActivity extends BaseActivity {
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
                             UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
-                            LocalUser.getUser().setUserInfo(userInfo);
+                            LocalUser.getUser().setUserInfo(userInfo, phoneNum);
                             ToastUtil.curt(R.string.login_success);
 
                             setResult(RESULT_OK);

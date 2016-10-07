@@ -10,6 +10,8 @@ public class LocalUser {
 
     private UserInfo mUserInfo;
 
+    private String mPhone;
+
     private static LocalUser sLocalUser;
     private static boolean sReload;
 
@@ -37,6 +39,12 @@ public class LocalUser {
         sReload = true;
     }
 
+    public void setUserInfo(UserInfo userInfo, String phone) {
+        mUserInfo = userInfo;
+        mPhone = phone;
+        saveToPreference();
+    }
+    
     public void setUserInfo(UserInfo userInfo) {
         mUserInfo = userInfo;
         saveToPreference();
@@ -96,6 +104,10 @@ public class LocalUser {
             return mUserInfo.getUserPhone();
         }
         return "";
+    }
+
+    public String getPhone() {
+        return mPhone;
     }
 
     @Override

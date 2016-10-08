@@ -262,7 +262,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
-                tools:text="45.88"/>
+                android:text="—"/>
         </LinearLayout>
 
         <View

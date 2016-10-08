@@ -229,7 +229,7 @@ public class TradeActivity extends BaseActivity implements
                 Launcher.with(getActivity(), WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
                         .execute();
-                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhoneNum(), mProduct.getVarietyType());
+                Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());
             }
         });
         ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
@@ -337,7 +337,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateQuestionMarker() {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        String userPhone = LocalUser.getUser().getPhone();
         if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
             mQuestionMark.stop();
         } else {
@@ -456,7 +456,12 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void placeOrder(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            return;
+        }
+
+        String userPhone = LocalUser.getUser().getPhone();
         if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
             showPlaceOrderFragment(longOrShort);
         } else {
@@ -544,7 +549,7 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         hideFragmentOfContainer();
         placeOrder(longOrShort);

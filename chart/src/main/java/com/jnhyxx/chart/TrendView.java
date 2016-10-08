@@ -32,11 +32,12 @@ public class TrendView extends FrameLayout {
 
     private void init() {
         mChart = new TrendChart(getContext());
-        mTouchView = new TouchView(getContext(), mChart);
         addView(mChart, 0, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        addView(mTouchView, 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+
+//        mTouchView = new TouchView(getContext(), mChart);
+//        addView(mTouchView, 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     public void setSettings(Settings settings) {

@@ -52,7 +52,6 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
         setContentView(R.layout.activity_withdraw_record);
         ButterKnife.bind(this);
 
-        mWithdrawRecordList.setEmptyView(mEmpty);
 
         mSize = 15;
         mOffset = 0;
@@ -80,6 +79,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
         if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
 //            mEmpty.setVisibility(View.VISIBLE);
+            mWithdrawRecordList.setEmptyView(mEmpty);
             return;
         }
         if (mFooter == null) {
@@ -189,7 +189,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleStatus.setText(R.string.withdraw_status_fail);
                     mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                 } else {
-                    mSaleStatus.setBackgroundResource(R.drawable.btn_dialog_left);
+                    mSaleStatus.setBackgroundResource(R.drawable.bg_gray);
                     mSaleStatus.setText(R.string.withdraw_status_auditing);
                     mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.splitLineGrayDark));
                 }

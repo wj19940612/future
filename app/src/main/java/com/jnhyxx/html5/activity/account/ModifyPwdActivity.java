@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -39,6 +40,10 @@ public class ModifyPwdActivity extends BaseActivity {
 
     @BindView(R.id.modifyPasswordWarn)
     CommonFailWarn mModifyPasswordWarn;
+    @BindView(R.id.showFirstPassword)
+    ImageView mShowFirstPassword;
+    @BindView(R.id.showSecondPass)
+    ImageView mShowSecondPass;
 
     private String mPhone;
 
@@ -66,7 +71,24 @@ public class ModifyPwdActivity extends BaseActivity {
                 mConfirmButton.setEnabled(enable);
             }
         }
+
     };
+
+    private boolean getNewPasswordStatus() {
+        String newPass = ViewUtil.getTextTrim(mNewPassword);
+        if (!TextUtils.isEmpty(newPass)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getOldPasswordStatus() {
+        String newPass = ViewUtil.getTextTrim(mConfirmPassword);
+        if (!TextUtils.isEmpty(newPass)) {
+            return true;
+        }
+        return false;
+    }
 
     private boolean checkConfirmPasswordButtonEnable() {
         String newPwd = ViewUtil.getTextTrim(mNewPassword);

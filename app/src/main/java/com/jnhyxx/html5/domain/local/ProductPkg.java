@@ -167,6 +167,6 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         if (getProduct().isDomestic()) {
             return "国内期货";
         }
-        return "国外期货";
+        return "国际期货";
     }
 }

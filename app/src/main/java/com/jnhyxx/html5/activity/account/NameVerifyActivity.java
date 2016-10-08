@@ -124,7 +124,7 @@ public class NameVerifyActivity extends BaseActivity {
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
                             CustomToast.getInstance().showText(getActivity(),resp.getMsg());
-                            
+
                             UserInfo user = LocalUser.getUser().getUserInfo();
                             user.setRealName(realName);
                             user.setIdCard(identityNum);

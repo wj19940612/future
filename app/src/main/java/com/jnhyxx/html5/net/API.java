@@ -631,10 +631,11 @@ public class API extends APIBase {
          *
          * @param varietyId
          */
-        public static API getFuturesFinancing(int varietyId) {
+        public static API getFuturesFinancing(int varietyId, int payType) {
             return new API(GET, "/order/variety/getAssetsByVariety.do",
                     new ApiParams()
-                            .put("varietyId", varietyId));
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
         }
 
         /**

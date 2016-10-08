@@ -77,6 +77,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private int mLongOrShort;
     private Product mProduct;
+    private int mFundType;
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
     private FullMarketData mMarketData;
@@ -85,11 +86,12 @@ public class PlaceOrderFragment extends BaseFragment {
     private BlurEngine mBlurEngine;
     private Callback mCallback;
 
-    public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
+    public static PlaceOrderFragment newInstance(int longOrShort, Product product, int fundType) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, longOrShort);
         args.putSerializable(Product.EX_PRODUCT, product);
+        args.putInt(Product.EX_FUND_TYPE, fundType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,6 +113,7 @@ public class PlaceOrderFragment extends BaseFragment {
         if (getArguments() != null) {
             mLongOrShort = getArguments().getInt(TYPE, 0);
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
+            mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
         }
     }
 
@@ -167,7 +170,7 @@ public class PlaceOrderFragment extends BaseFragment {
             }
         });
 
-        API.Order.getFuturesFinancing(mProduct.getVarietyId()).setTag(TAG)
+        API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                 .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {

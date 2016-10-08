@@ -388,7 +388,7 @@ public class TradeActivity extends BaseActivity implements
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
-        settings1.setBaseLines(9); // TODO: 9/14/16 写实 9 条基线 delete
+        settings1.setBaseLines(mProduct.getBaseline());
         flashView.setSettings(settings1);
         flashView.clearData();
 
@@ -482,7 +482,7 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
+                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
                     .commit();
         }
     }

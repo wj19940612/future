@@ -78,7 +78,7 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
         setEmptyText(getString(R.string.there_is_no_info_for_now));
         getListView().setDivider(null);
 
-        requestInfoList();
+        //requestInfoList();
     }
 
     private void requestInfoList() {

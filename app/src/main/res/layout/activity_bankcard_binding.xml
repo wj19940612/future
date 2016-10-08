@@ -15,45 +15,7 @@
         app:backFeature="true"
         app:titleText="@string/bind_bank_title"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
-            style="@style/settingLinearLayout"
-            android:layout_marginLeft="@dimen/one_key_close_radius"
-            android:layout_marginRight="@dimen/one_key_close_radius"
-            android:background="@drawable/bg_input_enable">
-
-            <TextView
-                style="@style/settingTitleTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cardholder"
-                android:textColor="#262626"/>
-
-            <EditText
-                android:id="@+id/cardholderName"
-                style="@style/settingEditTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/please_input_real_name"/>
-
-            <ImageView
-                android:id="@+id/bindCardHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:src="@drawable/ic_account_bind_bank"/>
-        </LinearLayout>
-
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/commonFailTvWarn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"/>
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/bankcardImageArea"
@@ -139,7 +101,44 @@
         android:paddingLeft="@dimen/one_key_close_radius"
         android:paddingRight="@dimen/one_key_close_radius"
         android:visibility="visible">
+        <RelativeLayout
+            android:background="@drawable/bg_input_enable"
+            android:id="@+id/holderBank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <LinearLayout
+                style="@style/settingLinearLayout">
+
+                <TextView
+                    style="@style/settingTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cardholder"
+                    android:textColor="#262626"/>
+
+                <EditText
+                    android:id="@+id/cardholderName"
+                    style="@style/settingEditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/please_input_real_name"/>
+
+                <ImageView
+                    android:id="@+id/bindCardHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:src="@drawable/ic_account_bind_bank"/>
+            </LinearLayout>
+
+            <com.jnhyxx.html5.view.CommonFailWarn
+                android:id="@+id/commonFailTvWarn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+        </RelativeLayout>
 
         <LinearLayout style="@style/settingLinearLayout">
 

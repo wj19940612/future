@@ -118,7 +118,7 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
 
             mAccountTimeHint.setVisibility(View.GONE);
             mAccountTime.setVisibility(View.VISIBLE);
-            mAccountTime.setText(withDrawRecordInfo.getUpdateTime());
+            mAccountTime.setText(DateUtil.format(withDrawRecordInfo.getUpdateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm"));
             //提现拒绝
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.WITHDRAW_refuse) {
             mCompleteStatus = true;

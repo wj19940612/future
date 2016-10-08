@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,7 +23,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.ChannelBankList;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -47,8 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BankcardBindingActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
-
+public class BankcardBindingActivity extends BaseActivity {
     /**
      * 解除绑定客服电话
      */
@@ -282,7 +279,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
                     return;
                 }
-                final int bankId = LocalUser.getUser().getBankId();
+                int bankId = LocalUser.getUser().getUserInfo().getBankId();
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank)) || bankId == -1) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
@@ -299,7 +296,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     userInfo.setCardNumber(bankcardNum);
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-                                    localUser.setBankId(bankId);
                                     setResult(RESULT_OK);
                                     CustomToast.getInstance().showText(BankcardBindingActivity.this, resp.getMsg());
                                     finish();
@@ -364,8 +360,9 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LocalUser.getUser().setBankId(mChannelBank.getId());
+                        Log.d("wj", "所选择的银行卡信息" + mChannelBank.toString());
                         mPayingBank.setText(mChannelBank.getName());
+                        LocalUser.getUser().getUserInfo().setBankId(mChannelBank.getId());
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -418,13 +415,4 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                 .show();
     }
 
-    @Override
-    public void onBankItemClick(ChannelBankList bank) {
-        Log.d(TAG, "选择的银行信息" + bank.toString());
-        mChannelBank = bank;
-        mPayingBank.setText(bank.getName());
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        mBankcardInputArea.setVisibility(View.VISIBLE);
-    }
 }

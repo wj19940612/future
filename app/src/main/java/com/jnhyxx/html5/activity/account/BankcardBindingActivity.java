@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +31,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.CommonMethodUtils;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.ValidityDecideUtil;
@@ -116,67 +116,46 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         ButterKnife.bind(this);
 
         mCardholderName.addTextChangedListener(mValidationWatcher);
-        formatBankCardNumber();
-        mPayingBank.addTextChangedListener(mValidationWatcher);
-        formatPhoneNumber();
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
+        mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
         showBankBindStatus();
     }
 
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+            formatPhoneNumber();
+        }
+    };
+    private ValidationWatcher mBankCardValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+            formatBankCardNumber();
+        }
+    };
+
     private void formatBankCardNumber() {
-        mBankcardNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 1) {
-                    int length = s.toString().length();
-                    if (length % 4 == 0) {
-                        mBankcardNum.setText(s + " ");
-                        mBankcardNum.setSelection(mBankcardNum.getText().toString().length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                boolean enable = checkSubmitButtonEnable();
-                if (enable != mSubmitToAuthButton.isEnabled()) {
-                    mSubmitToAuthButton.setEnabled(enable);
-                }
-            }
-        });
+        String oldBankCard = mBankcardNum.getText().toString();
+        String bankCardNoSpace = oldBankCard.replaceAll(" ", "");
+        String newBankCard = StrFormatter.getFormatBankCardNumber(bankCardNoSpace);
+        if (!newBankCard.equalsIgnoreCase(oldBankCard)) {
+            mBankcardNum.setText(newBankCard);
+            mBankcardNum.setSelection(newBankCard.length());
+        }
     }
 
     private void formatPhoneNumber() {
-        mPhoneNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count == 1) {
-                    int length = s.toString().length();
-                    if (length == 3 || length == 8) {
-                        mPhoneNum.setText(s + " ");
-                        mPhoneNum.setSelection(mPhoneNum.getText().toString().length());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                boolean enable = checkSubmitButtonEnable();
-                if (enable != mSubmitToAuthButton.isEnabled()) {
-                    mSubmitToAuthButton.setEnabled(enable);
-                }
-            }
-        });
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
     }
+
 
     /**
      * 这是显示银行卡是否绑定的方法，
@@ -232,16 +211,18 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
     private void setOldBindBankInfo(UserInfo userInfo) {
         // TODO: 2016/9/18 目前没有所填写的银行卡的所属用户的信息
         mCardholderName.setText("");
-        String cardNumber = userInfo.getCardNumber();
-        if (!TextUtils.isEmpty(cardNumber)) {
-            cardNumber = cardNumber.substring(0, 4) + " " + cardNumber.substring(4, 8) + " " + cardNumber.substring(8, 12) + " " + cardNumber.substring(12, 16) + " " + cardNumber.substring(16, cardNumber.length());
-            mBankcardNum.setText(cardNumber);
-        }
-        String cardPhone = userInfo.getCardPhone();
-        if (!TextUtils.isEmpty(cardPhone)) {
-            cardPhone = cardPhone.substring(0, 3) + " " + cardPhone.substring(3, 7) + " " + cardPhone.substring(7, cardPhone.length());
-            mPhoneNum.setText(cardPhone);
-        }
+//        String cardNumber = userInfo.getCardNumber();
+//        if (!TextUtils.isEmpty(cardNumber)) {
+//            cardNumber = cardNumber.substring(0, 4) + " " + cardNumber.substring(4, 8) + " " + cardNumber.substring(8, 12) + " " + cardNumber.substring(12, 16) + " " + cardNumber.substring(16, cardNumber.length());
+//            mBankcardNum.setText(cardNumber);
+//        }
+//        String cardPhone = userInfo.getCardPhone();
+//        if (!TextUtils.isEmpty(cardPhone)) {
+//            cardPhone = cardPhone.substring(0, 3) + " " + cardPhone.substring(3, 7) + " " + cardPhone.substring(7, cardPhone.length());
+//            mPhoneNum.setText(cardPhone);
+//        }
+        mBankcardNum.setText(userInfo.getCardNumber());
+        mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
             mPayingBank.setText(userInfo.getIssuingbankName());
         }
@@ -474,5 +455,13 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         mBankcardInputArea.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mCardholderName.removeTextChangedListener(mValidationWatcher);
     }
 }

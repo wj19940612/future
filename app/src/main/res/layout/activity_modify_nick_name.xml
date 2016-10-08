@@ -5,6 +5,7 @@
               android:id="@+id/activity_modify_nick_name"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.setting.ModifyNickNameActivity">
 
@@ -18,17 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/commonFailTvWarn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <LinearLayout
             style="@style/settingLinearLayout"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:paddingLeft="@dimen/common_margin"
-            android:paddingRight="@dimen/common_margin">
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:gravity="bottom">
 
             <TextView
                 style="@style/settingTitleTextView"
@@ -48,6 +45,11 @@
                 android:maxLength="16"
                 android:textSize="18sp"/>
         </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFailTvWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
 

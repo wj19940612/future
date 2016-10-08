@@ -161,6 +161,7 @@
     </style>
 
     <style name="settingLinearLayout">
+        <item name="android:background">@drawable/bg_input_enable</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>

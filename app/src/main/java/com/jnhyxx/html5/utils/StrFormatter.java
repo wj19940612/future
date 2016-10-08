@@ -24,4 +24,29 @@ public class StrFormatter {
         }
         return phoneNoSpace;
     }
+
+    public static String getFormatBankCardNumber(String bankCardNoSpace) {
+        if (bankCardNoSpace.length() <= 4) {
+            return bankCardNoSpace;
+        } else if (bankCardNoSpace.length() <= 8) {
+            return bankCardNoSpace.substring(0, 4)
+                    + " " + bankCardNoSpace.substring(4, bankCardNoSpace.length());
+        } else if (bankCardNoSpace.length() <= 12) {
+            return bankCardNoSpace.substring(0, 4)
+                    + " " + bankCardNoSpace.substring(4, 8)
+                    + " " + bankCardNoSpace.substring(8, bankCardNoSpace.length());
+        } else if (bankCardNoSpace.length() <= 16) {
+            return bankCardNoSpace.substring(0, 4)
+                    + " " + bankCardNoSpace.substring(4, 8)
+                    + " " + bankCardNoSpace.substring(8, 12)
+                    + " " + bankCardNoSpace.substring(12, bankCardNoSpace.length());
+        } else if (bankCardNoSpace.length() < 20) {
+            return bankCardNoSpace.substring(0, 4)
+                    + " " + bankCardNoSpace.substring(4, 8)
+                    + " " + bankCardNoSpace.substring(8, 12)
+                    + " " + bankCardNoSpace.substring(12, 16)
+                    + " " + bankCardNoSpace.substring(16, bankCardNoSpace.length());
+        }
+        return bankCardNoSpace;
+    }
 }

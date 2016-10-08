@@ -4,6 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.account.BankcardBindingActivity">
 
@@ -18,16 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/commonFailTvWarn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"/>
-
         <LinearLayout
             style="@style/settingLinearLayout"
-            android:paddingLeft="@dimen/one_key_close_radius"
-            android:paddingRight="@dimen/one_key_close_radius">
+            android:layout_marginLeft="@dimen/one_key_close_radius"
+            android:layout_marginRight="@dimen/one_key_close_radius"
+            android:background="@drawable/bg_input_enable">
 
             <TextView
                 style="@style/settingTitleTextView"
@@ -51,6 +47,12 @@
                 android:clickable="true"
                 android:src="@drawable/ic_account_bind_bank"/>
         </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFailTvWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -138,7 +140,6 @@
         android:paddingRight="@dimen/one_key_close_radius"
         android:visibility="visible">
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout style="@style/settingLinearLayout">
 
@@ -149,6 +150,7 @@
                 android:text="@string/bankcard_num"/>
 
             <EditText
+                android:maxLength="23"
                 android:id="@+id/bankcardNum"
                 style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
@@ -158,7 +160,6 @@
                 android:inputType="number"/>
         </LinearLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout
             android:id="@+id/llChooseBank"
@@ -182,7 +183,6 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout style="@style/settingLinearLayout">
 
@@ -199,10 +199,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/bank_reserved_phone_num"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:maxLength="13"/>
         </LinearLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <TextView
             android:layout_width="match_parent"

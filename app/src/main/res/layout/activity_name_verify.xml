@@ -18,11 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/errorBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
         <LinearLayout
             android:id="@+id/nameArea"
             android:layout_width="match_parent"
@@ -50,6 +45,11 @@
                 android:hint="@string/please_input_real_name"
                 android:inputType="textPersonName"/>
         </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/errorBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
     <LinearLayout

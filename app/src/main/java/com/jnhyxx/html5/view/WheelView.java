@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.jnhyxx.html5.domain.account.ChannelBankList;
+import com.jnhyxx.html5.domain.account.ChannelBank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,18 +77,18 @@ public class WheelView extends ScrollView {
     }
 
 
-    List<ChannelBankList> mChannelBankLists;
+    List<ChannelBank> mChannelBanks;
 
-    public void setItemObjects(List<ChannelBankList> channelBankListList) {
-        if (mChannelBankLists == null) {
-            mChannelBankLists = new ArrayList<>();
+    public void setItemObjects(List<ChannelBank> channelBankList) {
+        if (mChannelBanks == null) {
+            mChannelBanks = new ArrayList<>();
         }
-        mChannelBankLists.clear();
-        mChannelBankLists.addAll(channelBankListList);
+        mChannelBanks.clear();
+        mChannelBanks.addAll(channelBankList);
 
         for (int i = 0; i < offset; i++) {
-            mChannelBankLists.add(0, new ChannelBankList());
-            mChannelBankLists.add( new ChannelBankList());
+            mChannelBanks.add(0, new ChannelBank());
+            mChannelBanks.add( new ChannelBank());
 
         }
 
@@ -101,9 +101,9 @@ public class WheelView extends ScrollView {
 //        for (String item : items) {
 //            views.addView(createView(item));
 //        }
-        if (mChannelBankLists != null && !mChannelBankLists.isEmpty()) {
-            for (int i = 0; i < mChannelBankLists.size(); i++) {
-                views.addView(createView(mChannelBankLists.get(i).getName()));
+        if (mChannelBanks != null && !mChannelBanks.isEmpty()) {
+            for (int i = 0; i < mChannelBanks.size(); i++) {
+                views.addView(createView(mChannelBanks.get(i).getName()));
             }
             refreshItemView(0);
         }
@@ -392,7 +392,7 @@ public class WheelView extends ScrollView {
      */
     private void onSeletedCallBack() {
         if (null != onWheelViewListener) {
-            onWheelViewListener.onSelected(selectedIndex, mChannelBankLists.get(selectedIndex));
+            onWheelViewListener.onSelected(selectedIndex, mChannelBanks.get(selectedIndex));
         }
 
     }

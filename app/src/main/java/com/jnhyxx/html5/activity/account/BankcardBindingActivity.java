@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.account.ChannelBankList;
+import com.jnhyxx.html5.domain.account.ChannelBank;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -36,13 +36,11 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.android.volley.Request.Method.HEAD;
 
 public class BankcardBindingActivity extends BaseActivity {
 
@@ -88,7 +86,7 @@ public class BankcardBindingActivity extends BaseActivity {
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
 
-    ChannelBankList mChannelBank = null;
+    private ChannelBank mChannelBank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +144,6 @@ public class BankcardBindingActivity extends BaseActivity {
             mBankcardNum.setSelection(newBankCard.length());
         }
     }
-
 
     private void formatPhoneNumber() {
         String oldPhone = mPhoneNum.getText().toString();
@@ -231,12 +228,14 @@ public class BankcardBindingActivity extends BaseActivity {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
                     return;
                 }
-                int bankId = LocalUser.getUser().getUserInfo().getBankId();
 
-                if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank)) || bankId == -1) {
+                if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank))) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
                 }
+
+                final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
+
                 API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
                         .setIndeterminate(this).setTag(TAG)
                         .setCallback(new Callback<Resp>() {
@@ -248,9 +247,12 @@ public class BankcardBindingActivity extends BaseActivity {
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);
                                     userInfo.setCardPhone(phoneNum);
+                                    userInfo.setBankId(bankId);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
+
+                                    CustomToast.getInstance().showText(getActivity(), resp.getMsg());
+
                                     setResult(RESULT_OK);
-                                    CustomToast.getInstance().showText(BankcardBindingActivity.this, resp.getMsg());
                                     finish();
                                 } else {
                                     mCommonFailTvWarn.show(resp.getMsg());
@@ -281,27 +283,36 @@ public class BankcardBindingActivity extends BaseActivity {
         getChannelBankList();
     }
 
-
     private void getChannelBankList() {
         API.User.showChannelBankList()
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback<Resp<ArrayList<ChannelBankList>>>() {
-
+                .setCallback(new Callback<Resp<List<ChannelBank>>>() {
                     @Override
-                    public void onReceive(Resp<ArrayList<ChannelBankList>> arrayListResp) {
-                        if (arrayListResp.isSuccess()) {
-                            if (arrayListResp.getData() != null && !arrayListResp.getData().isEmpty()) {
-                                View view = setWheelView(arrayListResp.getData());
+                    public void onReceive(Resp<List<ChannelBank>> listResp) {
+                        if (listResp.isSuccess()) {
+                            if (listResp.getData() != null && !listResp.getData().isEmpty()) {
+                                View view = setWheelView(listResp.getData());
+                                setChannelBank(listResp.getData());
                                 setSelectBankDialog(view);
                             } else {
                                 mCommonFailTvWarn.show(R.string.no_bank_can_bind);
                             }
                         } else {
-                            mCommonFailTvWarn.show(arrayListResp.getMsg());
+                            mCommonFailTvWarn.show(listResp.getMsg());
                         }
                     }
                 }).fire();
+    }
+
+    private void setChannelBank(List<ChannelBank> data) {
+        int bankId = LocalUser.getUser().getUserInfo().getBankId();
+        for (ChannelBank bank : data) {
+            if (bank.getId() == bankId) {
+                mChannelBank = bank;
+                break;
+            }
+        }
     }
 
     private void setSelectBankDialog(View view) {
@@ -311,9 +322,8 @@ public class BankcardBindingActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d("wj", "所选择的银行卡信息" + mChannelBank.toString());
-                        if(mChannelBank!=null){
+                        if (mChannelBank != null) {
                             mPayingBank.setText(mChannelBank.getName());
-                            LocalUser.getUser().getUserInfo().setBankId(mChannelBank.getId());
                         }
                     }
                 })
@@ -328,18 +338,18 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     @NonNull
-    private View setWheelView(ArrayList<ChannelBankList> channelBankLists) {
+    private View setWheelView(List<ChannelBank> channelBanks) {
         View view = LayoutInflater.from(BankcardBindingActivity.this).inflate(R.layout.dialog_wheel_view, null);
         final WheelView mWheelView = (WheelView) view
                 .findViewById(R.id.wheelView);
         mWheelView.setOffset(1);
         mWheelView.setSeletion(0);// 设置默认被选中的项目
 
-        mWheelView.setItemObjects((channelBankLists));// 实际内容
+        mWheelView.setItemObjects((channelBanks));// 实际内容
         mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, Object item) {
-                mChannelBank = (ChannelBankList) item;
+                mChannelBank = (ChannelBank) item;
             }
         });
         return view;

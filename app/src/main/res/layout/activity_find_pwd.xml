@@ -23,18 +23,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/findPasswordPhoneNum"
-            style="@style/SignEditText.PhoneNum"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:drawableLeft="@drawable/ic_phone"
-            android:drawablePadding="@dimen/drawable_left_padding"
-            android:hint="@string/please_input_phone_num"
-            android:textColorHint="@color/grayHint"/>
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/findPasswordPhoneNum"
+                style="@style/SignEditText.PhoneNum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="@dimen/drawable_left_padding"
+                android:hint="@string/please_input_phone_num"
+                android:textColorHint="@color/grayHint"/>
+
+            <ImageView
+                android:id="@+id/clearPhoneNumButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneNum"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:src="@drawable/ic_delete_x"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
     </RelativeLayout>
 
     <LinearLayout

@@ -45,6 +45,8 @@ public class FindPwdActivity extends BaseActivity {
     RelativeLayout mImageCodeArea;
     @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
+    @BindView(R.id.clearPhoneNumButton)
+    ImageView mClearPhoneNumButton;
 
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
@@ -72,10 +74,19 @@ public class FindPwdActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
-
             formatPhoneNumber();
+            boolean phoneVisible = checkShowPhoneButtonVisible();
+            mClearPhoneNumButton.setVisibility(phoneVisible ? View.VISIBLE : View.INVISIBLE);
         }
     };
+
+    private boolean checkShowPhoneButtonVisible() {
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        if (!TextUtils.isEmpty(phoneNum)) {
+            return true;
+        }
+        return false;
+    }
 
     private void formatPhoneNumber() {
         String oldPhone = mPhoneNum.getText().toString();
@@ -131,7 +142,7 @@ public class FindPwdActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.authCodeImage})
+    @OnClick({R.id.obtainAuthCode, R.id.nextStepButton, R.id.authCodeImage, R.id.clearPhoneNumButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -142,6 +153,9 @@ public class FindPwdActivity extends BaseActivity {
                 break;
             case R.id.authCodeImage:
                 getImageAuthCode();
+                break;
+            case R.id.clearPhoneNumButton:
+                mPhoneNum.setText("");
                 break;
         }
     }

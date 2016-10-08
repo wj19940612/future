@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -24,7 +24,6 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
-import com.johnz.kutils.net.ApiIndeterminate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,12 +31,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2016/8/30.
  */
 
-public class TradeDetailListFragment extends ListFragment implements ApiIndeterminate {
+public class TradeDetailListFragment extends BaseFragment {
     private static final String TAG = "TradeDetailListFragment";
 
     //积分
@@ -54,6 +54,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
      * bundle所传递的fragmentId，代表是哪一个fragment
      */
     private static final String TYPE = "fragmentItem";
+
     /**
      * 代表是哪一个fragment
      */
@@ -69,6 +70,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
     private TradeDetailAdapter mTradeDetailAdapter;
 
     boolean isLoaded;
+    private Unbinder mBinder;
+
+
+    @BindView(android.R.id.list)
+    ListView mList;
+    @BindView(android.R.id.empty)
+    TextView mEmpty;
 
     public static TradeDetailListFragment newInstance(String type) {
         TradeDetailListFragment mTradeDetailListFragment = new TradeDetailListFragment();
@@ -91,13 +99,24 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
         mTradeDetailList = new ArrayList<TradeDetail>();
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_tradeDetailListFragment, container, false);
+        mBinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinder.unbind();
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
         mSet = new HashSet<>();
-        setEmptyText(getString(R.string.there_is_no_info_for_now));
         getTradeInfoList();
     }
 
@@ -120,6 +139,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+            mList.setEmptyView(mEmpty);
             return;
         }
         if (mFooter == null) {
@@ -137,13 +157,13 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                     getTradeInfoList();
                 }
             });
-            getListView().addFooterView(mFooter);
+            mList.addFooterView(mFooter);
         }
 
         if (mTradeDetailLists.size() < mSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
-            getListView().removeFooterView(mFooter);
+            mList.removeFooterView(mFooter);
         }
 
 
@@ -155,18 +175,8 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 mTradeDetailAdapter.add(item);
             }
         }
-        setListAdapter(mTradeDetailAdapter);
+        mList.setAdapter(mTradeDetailAdapter);
         mTradeDetailAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onShow(String tag) {
-        setListShown(false);
-    }
-
-    @Override
-    public void onDismiss(String tag) {
-        setListShown(true);
     }
 
     public class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {
@@ -220,7 +230,7 @@ public class TradeDetailListFragment extends ListFragment implements ApiIndeterm
                 String tradeDetailTime;
                 if (DateUtil.isInThisYear(createTime, DateUtil.DEFAULT_FORMAT)) {
                     tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
-                }else{
+                } else {
                     tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm");
                 }
                 String[] time = tradeDetailTime.split(" ");

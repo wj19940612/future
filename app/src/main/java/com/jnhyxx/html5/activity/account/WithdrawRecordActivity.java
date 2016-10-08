@@ -52,10 +52,11 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
         setContentView(R.layout.activity_withdraw_record);
         ButterKnife.bind(this);
 
+        mWithdrawRecordList.setEmptyView(mEmpty);
+
         mSize = 15;
         mOffset = 0;
         mSet = new HashSet<>();
-
         getWithdrawRecordList();
         mWithdrawRecordList.setOnItemClickListener(this);
     }
@@ -78,10 +79,8 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
         if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
-            mEmpty.setVisibility(View.VISIBLE);
+//            mEmpty.setVisibility(View.VISIBLE);
             return;
-        } else {
-            mEmpty.setVisibility(View.GONE);
         }
         if (mFooter == null) {
             mFooter = new TextView(WithdrawRecordActivity.this);

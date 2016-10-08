@@ -361,8 +361,8 @@
     <string name="modify_nick_name_success">昵称修改成功</string>
     <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
     <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
-    
-    
+
+
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
@@ -381,7 +381,7 @@
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">待审核</string>
     <string name="withdraw_money">%1$f元</string>
-    
+    <string name="withdraw_no_content">暂无提款记录</string>
 
     <!--提现记录详情-->
     <string name="withdraw_record_info_title">提现详情</string>
@@ -405,7 +405,7 @@
     <string name="withdraw_fund_transfer">转账中</string>
     <string name="withdraw_refuse"></string>
     <string name="transfer_fail">转账失败</string>
-    
+
     <string name="common_success">成功</string>
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>

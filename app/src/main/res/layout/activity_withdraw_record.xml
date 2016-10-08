@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/activity_with_draw_record"
-              xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_with_draw_record"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@android:color/transparent"
@@ -19,15 +19,17 @@
     <ListView
         android:id="@+id/withdrawRecord"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:drawableTop="@drawable/image_no_record"
         android:gravity="center"
-        android:text="@string/there_is_no_data_for_now"
-        android:textSize="30sp"
-        android:visibility="gone"/>
+        android:paddingTop="50dp"
+        android:text="@string/withdraw_no_content"
+        android:textColor="#CACACA"
+        android:textSize="20sp"/>
 </LinearLayout>

@@ -9,13 +9,11 @@
               tools:context="com.jnhyxx.html5.activity.account.BankcardBindingActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/bandCardTitle"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
         app:titleText="@string/bind_bank_title"/>
-
-
 
     <LinearLayout
         android:id="@+id/bankcardImageArea"
@@ -32,8 +30,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/bg_bank_bg"
             android:orientation="vertical"
-            android:padding="@dimen/common_margin"
-            android:visibility="visible">
+            android:padding="@dimen/common_margin">
 
             <ImageView
                 android:id="@+id/bankCardIcon"
@@ -101,11 +98,12 @@
         android:paddingLeft="@dimen/one_key_close_radius"
         android:paddingRight="@dimen/one_key_close_radius"
         android:visibility="visible">
+
         <RelativeLayout
-            android:background="@drawable/bg_input_enable"
             android:id="@+id/holderBank"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input_enable">
 
             <LinearLayout
                 style="@style/settingLinearLayout">
@@ -149,19 +147,18 @@
                 android:text="@string/bankcard_num"/>
 
             <EditText
-                android:maxLength="23"
                 android:id="@+id/bankcardNum"
                 style="@style/settingEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/please_input_your_bankcard_num"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:maxLength="23"/>
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/llChooseBank"
             style="@style/settingLinearLayout"
             android:clickable="true">
 
@@ -182,7 +179,6 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
-
         <LinearLayout style="@style/settingLinearLayout">
 
             <TextView
@@ -202,7 +198,6 @@
                 android:maxLength="13"/>
         </LinearLayout>
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -220,9 +215,4 @@
             android:layout_marginTop="50dp"
             android:text="@string/bind_bank_bind"/>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </LinearLayout>

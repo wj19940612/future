@@ -81,7 +81,6 @@
             tools:text="@string/default_bank_name_card_number"/>
 
         <EditText
-            android:paddingTop="20dp"
             android:id="@+id/withdrawAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +88,9 @@
             android:drawableLeft="@drawable/ic_money"
             android:drawablePadding="5dp"
             android:hint="@string/withdraw_least_money_hint"
+            android:inputType="number"
             android:paddingBottom="5dp"
+            android:paddingTop="20dp"
             android:textColor="#262626"
             android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>
@@ -106,7 +107,8 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="13sp"
-            android:text="@string/ok"/>
+            android:text="@string/ok"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <TextView
@@ -126,7 +128,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="20dp"
+            android:lineSpacingExtra="15dp"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin"
             android:text="@string/prompt_withdraw"

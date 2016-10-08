@@ -35,6 +35,8 @@
                 android:orientation="vertical">
 
                 <com.jnhyxx.html5.view.CircularAnnulusImageView
+                    android:clickable="true"
+                    android:id="@+id/headImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

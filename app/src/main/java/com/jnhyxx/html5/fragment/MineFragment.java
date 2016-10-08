@@ -30,6 +30,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -85,6 +86,9 @@ public class MineFragment extends BaseFragment {
     LinearLayout mFundArea;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.headImage)
+    CircularAnnulusImageView mHeadImage;
+
 
     private Unbinder mBinder;
 
@@ -145,7 +149,7 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
@@ -171,6 +175,9 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.paidToPromote:
                 openPaidToPromotePage();
+                break;
+            case R.id.headImage:
+                Launcher.with(getActivity(), SettingsActivity.class).execute();
                 break;
         }
     }

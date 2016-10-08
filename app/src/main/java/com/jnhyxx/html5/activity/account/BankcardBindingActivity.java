@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -280,7 +281,7 @@ public class BankcardBindingActivity extends BaseActivity {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
                     return;
                 }
-                final int bankId = LocalUser.getUser().getBankId();
+                int bankId = LocalUser.getUser().getUserInfo().getBankId();
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank)) || bankId == -1) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
@@ -297,7 +298,6 @@ public class BankcardBindingActivity extends BaseActivity {
                                     userInfo.setCardNumber(bankcardNum);
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-                                    localUser.setBankId(bankId);
                                     setResult(RESULT_OK);
                                     CustomToast.getInstance().showText(BankcardBindingActivity.this, resp.getMsg());
                                     finish();
@@ -362,8 +362,11 @@ public class BankcardBindingActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LocalUser.getUser().setBankId(mChannelBank.getId());
-                        mPayingBank.setText(mChannelBank.getName());
+                        Log.d("wj", "所选择的银行卡信息" + mChannelBank.toString());
+                        if(mChannelBank!=null){
+                            mPayingBank.setText(mChannelBank.getName());
+                            LocalUser.getUser().getUserInfo().setBankId(mChannelBank.getId());
+                        }
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

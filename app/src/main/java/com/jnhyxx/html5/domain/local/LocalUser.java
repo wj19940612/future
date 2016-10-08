@@ -9,7 +9,6 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 public class LocalUser {
 
     private UserInfo mUserInfo;
-    private int bankId = -1;
     private String mPhone;
 
     private static LocalUser sLocalUser;
@@ -50,13 +49,6 @@ public class LocalUser {
         saveToPreference();
     }
 
-    public void setBankId(int bankId) {
-        this.bankId = bankId;
-    }
-
-    public int getBankId() {
-        return bankId;
-    }
 
     public UserInfo getUserInfo() {
         return mUserInfo;

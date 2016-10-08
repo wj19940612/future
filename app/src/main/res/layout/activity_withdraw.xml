@@ -57,7 +57,11 @@
         android:textColor="@color/colorDisable"
         android:textSize="16sp"
         android:visibility="gone"/>
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/zigzag_tooth_line"/>
     <LinearLayout
         android:id="@+id/bankcardInfoArea"
         android:layout_width="match_parent"

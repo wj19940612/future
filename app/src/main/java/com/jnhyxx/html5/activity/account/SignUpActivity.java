@@ -96,7 +96,6 @@ public class SignUpActivity extends BaseActivity {
                 mAgreeProtocol.setChecked(isChecked);
                 mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
                 // TODO: 10/5/16 checkbox 无法重写样式?
-
                 activeButtons();
             }
         });

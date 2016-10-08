@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,7 +22,6 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.ChannelBankList;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.fragment.BankListFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -47,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BankcardBindingActivity extends BaseActivity implements BankListFragment.OnBankItemClickListener {
+public class BankcardBindingActivity extends BaseActivity {
 
     /**
      * 解除绑定客服电话
@@ -130,6 +127,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
             formatPhoneNumber();
         }
     };
+
     private ValidationWatcher mBankCardValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -331,11 +329,11 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
     }
 
     private void showBankDialog() {
-        getChannelBnkList();
+        getChannelBankList();
     }
 
 
-    private void getChannelBnkList() {
+    private void getChannelBankList() {
 
         API.User.showChannelBankList()
                 .setTag(TAG)
@@ -416,15 +414,5 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void onBankItemClick(ChannelBankList bank) {
-        Log.d(TAG, "选择的银行信息" + bank.toString());
-        mChannelBank = bank;
-        mPayingBank.setText(bank.getName());
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BankListFragment.BANK_LIST);
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        mBankcardInputArea.setVisibility(View.VISIBLE);
     }
 }

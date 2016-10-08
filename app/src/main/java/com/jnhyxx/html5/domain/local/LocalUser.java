@@ -82,7 +82,7 @@ public class LocalUser {
     //银行卡是否认证过,也就是是否交易成功过
     public boolean isBankcardApproved() {
         if (mUserInfo != null) {
-            return mUserInfo.getCardState() < UserInfo.REAL_NAME_STATUS_VERIFIED;
+            return mUserInfo.getCardState() < UserInfo.BANKCARD_STATUS_BOUND;
         }
         return false;
     }

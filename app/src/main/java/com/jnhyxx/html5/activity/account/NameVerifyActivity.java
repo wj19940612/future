@@ -18,6 +18,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
+import com.jnhyxx.html5.view.CustomToast;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
@@ -122,6 +123,8 @@ public class NameVerifyActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
+                            CustomToast.getInstance().showText(getActivity(),resp.getMsg());
+                            
                             UserInfo user = LocalUser.getUser().getUserInfo();
                             user.setRealName(realName);
                             user.setIdCard(identityNum);

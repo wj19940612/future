@@ -121,6 +121,14 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         showBankBindStatus();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mCardholderName.removeTextChangedListener(mValidationWatcher);
+    }
+
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -211,16 +219,6 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
     private void setOldBindBankInfo(UserInfo userInfo) {
         // TODO: 2016/9/18 目前没有所填写的银行卡的所属用户的信息
         mCardholderName.setText("");
-//        String cardNumber = userInfo.getCardNumber();
-//        if (!TextUtils.isEmpty(cardNumber)) {
-//            cardNumber = cardNumber.substring(0, 4) + " " + cardNumber.substring(4, 8) + " " + cardNumber.substring(8, 12) + " " + cardNumber.substring(12, 16) + " " + cardNumber.substring(16, cardNumber.length());
-//            mBankcardNum.setText(cardNumber);
-//        }
-//        String cardPhone = userInfo.getCardPhone();
-//        if (!TextUtils.isEmpty(cardPhone)) {
-//            cardPhone = cardPhone.substring(0, 3) + " " + cardPhone.substring(3, 7) + " " + cardPhone.substring(7, cardPhone.length());
-//            mPhoneNum.setText(cardPhone);
-//        }
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
@@ -457,11 +455,5 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
         mBankcardInputArea.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
-        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
-        mCardholderName.removeTextChangedListener(mValidationWatcher);
-    }
+
 }

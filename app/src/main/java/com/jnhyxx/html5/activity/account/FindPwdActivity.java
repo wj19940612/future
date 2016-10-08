@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -42,7 +42,7 @@ public class FindPwdActivity extends BaseActivity {
     @BindView(R.id.authCodeImage)
     ImageView mAuthCodeImage;
     @BindView(R.id.imageCodeArea)
-    LinearLayout mImageCodeArea;
+    RelativeLayout mImageCodeArea;
     @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
 

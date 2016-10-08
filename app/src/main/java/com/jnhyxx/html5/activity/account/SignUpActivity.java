@@ -74,6 +74,8 @@ public class SignUpActivity extends BaseActivity {
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
+    @BindView(R.id.clearPhoneNumButton)
+    ImageView mClearPhoneNumButton;
 
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
@@ -140,8 +142,9 @@ public class SignUpActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
-
             formatPhoneNumber();
+            boolean phoneVisible = checkShowPhoneButtonVisible();
+            mClearPhoneNumButton.setVisibility(phoneVisible ? View.VISIBLE : View.INVISIBLE);
         }
     };
 
@@ -161,7 +164,7 @@ public class SignUpActivity extends BaseActivity {
             activeButtons();
 
             boolean visible = checkShowPasswordButtonVisible();
-            mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+            mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
     };
 
@@ -172,6 +175,15 @@ public class SignUpActivity extends BaseActivity {
         }
         return false;
     }
+
+    private boolean checkShowPhoneButtonVisible() {
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        if (!TextUtils.isEmpty(phoneNum)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private void activeButtons() {
         boolean enable = checkObtainAuthCodeEnable();
@@ -218,7 +230,7 @@ public class SignUpActivity extends BaseActivity {
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.authCodeImage, R.id.serviceProtocol, R.id.showPasswordButton})
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.authCodeImage, R.id.serviceProtocol, R.id.showPasswordButton, R.id.clearPhoneNumButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.obtainAuthCode:
@@ -237,6 +249,9 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.showPasswordButton:
                 changePasswordInputType();
+                break;
+            case R.id.clearPhoneNumButton:
+                mPhoneNum.setText("");
                 break;
 
         }

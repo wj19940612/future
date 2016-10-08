@@ -175,7 +175,7 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
             setOldBindBankInfo(mUserInfo);
 
             // TODO: 2016/9/9 这是没有认证
-            if(localUser.isBankcardApproved()){
+            if (localUser.isBankcardApproved()) {
                 mBankcardInputArea.setVisibility(View.VISIBLE);
                 mBankcardImageArea.setVisibility(View.GONE);
             } else {
@@ -301,8 +301,8 @@ public class BankcardBindingActivity extends BaseActivity implements BankListFra
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
                                     localUser.setBankId(bankId);
                                     setResult(RESULT_OK);
-
                                     CustomToast.getInstance().showText(BankcardBindingActivity.this, resp.getMsg());
+                                    finish();
                                 } else {
                                     mCommonFailTvWarn.show(resp.getMsg());
                                 }

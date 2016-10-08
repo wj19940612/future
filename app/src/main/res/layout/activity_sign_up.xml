@@ -31,16 +31,35 @@
             android:clipChildren="false"
             app:visible="false"/>
 
-        <EditText
-            android:id="@+id/phoneNum"
-            style="@style/SignEditText.PhoneNum"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:drawableLeft="@drawable/ic_phone"
-            android:hint="@string/please_input_phone_num"/>
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/phoneNum"
+                style="@style/SignEditText.PhoneNum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint="@string/please_input_phone_num"/>
+
+            <ImageView
+                android:id="@+id/clearPhoneNumButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneNum"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:src="@drawable/ic_delete_x"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -94,7 +113,7 @@
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
         android:background="@drawable/bg_input_disable"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/authCodeImage"

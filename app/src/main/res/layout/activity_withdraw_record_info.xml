@@ -80,6 +80,7 @@
             android:textColor="@color/blackPrimary"
             android:textSize="12sp"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,6 +92,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -105,11 +107,10 @@
                 android:text="@string/withdraw_record_number"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -124,11 +125,11 @@
                 android:text="@string/withdraw_record_status"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -143,11 +144,11 @@
                 android:text="@string/withdraw_record_real_account"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -162,11 +163,11 @@
                 android:text="@string/withdraw_record_poundage"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -181,11 +182,11 @@
                 android:text="@string/withdraw_record_bank"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/bg_input_disable"
             android:gravity="center_vertical">
 
             <TextView
@@ -200,7 +201,6 @@
                 android:text="@string/withdraw_record_time"/>
         </RelativeLayout>
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <LinearLayout
             android:layout_width="match_parent"

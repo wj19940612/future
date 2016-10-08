@@ -88,7 +88,7 @@
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
         android:background="@drawable/bg_input_enable"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/authCodeImage"

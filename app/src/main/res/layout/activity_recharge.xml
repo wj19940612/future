@@ -4,6 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
 
@@ -17,19 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/commonFail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_input_disable"
             android:gravity="bottom"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/common_margin"
-            android:paddingRight="@dimen/common_margin">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,6 +45,11 @@
                 android:inputType="numberDecimal"
                 android:textColor="@color/blackPrimary"/>
         </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -57,7 +59,6 @@
         android:paddingLeft="@dimen/common_margin"
         android:paddingRight="@dimen/common_margin">
 
-        <include layout="@layout/split_line_blue_primary"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -116,13 +117,13 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="visible"
                 android:id="@+id/aliPayPay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/btn_withdraw"
-                android:clickable="true">
+                android:clickable="true"
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/icAliPayPay"

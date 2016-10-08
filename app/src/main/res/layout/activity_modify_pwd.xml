@@ -4,6 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
 
@@ -18,19 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.jnhyxx.html5.view.CommonFailWarn
-            android:id="@+id/modifyPasswordWarn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:paddingLeft="@dimen/common_margin"
-            android:paddingRight="@dimen/common_margin">
-
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_input_enable">
 
             <EditText
                 android:id="@+id/newPassword"
@@ -53,45 +49,41 @@
                 android:src="@drawable/btn_show_password"
                 android:visibility="gone"/>
         </RelativeLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/modifyPasswordWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin">
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_input_enable">
 
-        <include layout="@layout/split_line_blue_primary"/>
-
-        <RelativeLayout
+        <EditText
+            android:id="@+id/confirmPassword"
+            style="@style/SignEditText.Password"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_lock"
+            android:drawablePadding="@dimen/drawable_left_padding"
+            android:hint="@string/please_repeat_new_password"
+            android:textColorHint="@color/grayHint"/>
 
-            <EditText
-                android:id="@+id/confirmPassword"
-                style="@style/SignEditText.Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/ic_lock"
-                android:drawablePadding="@dimen/drawable_left_padding"
-                android:hint="@string/please_repeat_new_password"
-                android:textColorHint="@color/grayHint"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:src="@drawable/btn_show_password"
-                android:visibility="gone"/>
-        </RelativeLayout>
-
-        <include layout="@layout/split_line_blue_primary"/>
-    </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:src="@drawable/btn_show_password"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/confirmButton"

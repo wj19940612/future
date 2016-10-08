@@ -71,10 +71,10 @@ public class LocalUser {
         }
         return false;
     }
-    //银行卡是否认证过,也就是是否交易成功过
-    public boolean isBankcardApproved() {
+
+    public boolean isBankcardBound() {
         if (mUserInfo != null) {
-            return mUserInfo.getCardState() < UserInfo.BANKCARD_STATUS_BOUND;
+            return mUserInfo.getCardState() == UserInfo.BANKCARD_STATUS_BOUND;
         }
         return false;
     }

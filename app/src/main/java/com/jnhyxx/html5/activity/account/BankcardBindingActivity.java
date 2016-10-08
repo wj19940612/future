@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.ValidityDecideUtil;
@@ -35,7 +33,6 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.WheelView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
-import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
@@ -45,61 +42,53 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class BankcardBindingActivity extends BaseActivity {
 
     /**
      * 解除绑定客服电话
      */
     public static final String UNWRAP_SERVICE_TELEPHONE = "0517-87675063";
-    /**
-     * 实名认证的请求码
-     */
-    private static final int REQUEST_CODE_NAME_AUTH = 5500;
 
+    @BindView(R.id.bankcardInputArea)
+    LinearLayout mBankcardInputArea;
     @BindView(R.id.cardholderName)
     EditText mCardholderName;
     @BindView(R.id.bankcardNum)
     EditText mBankcardNum;
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.submitToAuthButton)
-    TextView mSubmitToAuthButton;
     @BindView(R.id.payingBank)
     TextView mPayingBank;
+    @BindView(R.id.bindCardHint)
+    ImageView mBindCardHint;
+
+    @BindView(R.id.bankcardImageArea)
+    LinearLayout mBankcardImageArea;
     //银行名称
     @BindView(R.id.bankName)
     TextView mBank;
     @BindView(R.id.bankCardNumber)
     TextView mBankCardNumber;
-    @BindView(R.id.bankcardInputArea)
-    LinearLayout mBankcardInputArea;
     //解除绑定
     @BindView(R.id.unbindBankcard)
     TextView mUnbindBankcard;
     //所绑定银行卡的父容器,没有绑定之前不显示
-    @BindView(R.id.bankcardImageArea)
-    LinearLayout mBankcardImageArea;
-    @BindView(R.id.fragmentContainer)
-    FrameLayout mFragmentContainer;
     //银行的图标
     @BindView(R.id.bankCardIcon)
     ImageView mBankCardIcon;
-    /**
-     * 头部信息
-     */
-    @BindView(R.id.bandCardTitle)
+
+    @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+
     @BindView(R.id.commonFailTvWarn)
     CommonFailWarn mCommonFailTvWarn;
 
+    @BindView(R.id.submitToAuthButton)
+    TextView mSubmitToAuthButton;
+
     ChannelBankList mChannelBank = null;
-    @BindView(R.id.bindCardHint)
-    ImageView mBindCardHint;
-    @BindView(R.id.llChooseBank)
-    LinearLayout mLlChooseBank;
-
-
-    private UserInfo mUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +99,8 @@ public class BankcardBindingActivity extends BaseActivity {
         mCardholderName.addTextChangedListener(mValidationWatcher);
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
-        showBankBindStatus();
+
+        showBankcardInfo();
     }
 
     @Override
@@ -137,6 +127,16 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     };
 
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            boolean enable = checkSubmitButtonEnable();
+            if (enable != mSubmitToAuthButton.isEnabled()) {
+                mSubmitToAuthButton.setEnabled(enable);
+            }
+        }
+    };
+
     private void formatBankCardNumber() {
         String oldBankCard = mBankcardNum.getText().toString();
         String bankCardNoSpace = oldBankCard.replaceAll(" ", "");
@@ -146,6 +146,7 @@ public class BankcardBindingActivity extends BaseActivity {
             mBankcardNum.setSelection(newBankCard.length());
         }
     }
+
 
     private void formatPhoneNumber() {
         String oldPhone = mPhoneNum.getText().toString();
@@ -157,95 +158,46 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 这是显示银行卡是否绑定的方法，
      * 如果没有绑定，显示绑定银行卡界面，
      * 若果绑定了，显示银行卡信息
      */
+    private void showBankcardInfo() {
+        if (LocalUser.getUser().isBankcardBound()) {
+            mTitleBar.setTitle(R.string.bankcard);
+            mBankcardInputArea.setVisibility(View.GONE);
+            mBankcardImageArea.setVisibility(View.VISIBLE);
 
-    private void showBankBindStatus() {
-        LocalUser localUser = LocalUser.getUser();
-        mUserInfo = localUser.getUserInfo();
-        if (mUserInfo != null) {
-            if (!localUser.isRealNameFilled()) {
-                showAuthNameDialog();
-            }
-            setOldBindBankInfo(mUserInfo);
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
 
-            // TODO: 2016/9/9 这是没有认证
-            if (localUser.isBankcardApproved()) {
-                mBankcardInputArea.setVisibility(View.VISIBLE);
-                mBankcardImageArea.setVisibility(View.GONE);
-            } else {
-                //这是认证了的界面
-                mBankcardInputArea.setVisibility(View.GONE);
-                mBankcardImageArea.setVisibility(View.VISIBLE);
-                mTitleBar.setTitle(R.string.bankcard);
-                if (!TextUtils.isEmpty(mUserInfo.getIssuingbankName())) {
-                    mBank.setText(mUserInfo.getIssuingbankName());
-                }
-                String bankIconUrl = mUserInfo.getIcon();
-                if (!TextUtils.isEmpty(bankIconUrl)) {
-                    Picasso.with(BankcardBindingActivity.this).load(bankIconUrl).into(mBankCardIcon);
-                }
-                if (!TextUtils.isEmpty(mUserInfo.getCardNumber())) {
-                    String bankNumber = CommonMethodUtils.bankNumber(mUserInfo.getCardNumber());
-                    mBankCardNumber.setText(bankNumber);
-                }
+            if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
+                mBank.setText(userInfo.getIssuingbankName());
             }
+
+            String bankIconUrl = userInfo.getIcon();
+            if (!TextUtils.isEmpty(bankIconUrl)) {
+                Picasso.with(BankcardBindingActivity.this).load(bankIconUrl).into(mBankCardIcon);
+            }
+
+            if (!TextUtils.isEmpty(userInfo.getCardNumber())) {
+                String bankNumber = StrFormatter.getFormatPhoneNumber(userInfo.getCardNumber());
+                mBankCardNumber.setText(bankNumber);
+            }
+        } else {
+            mBankcardInputArea.setVisibility(View.VISIBLE);
+            mBankcardImageArea.setVisibility(View.GONE);
+            setOldBindBankInfo(LocalUser.getUser().getUserInfo());
         }
     }
 
     private void setOldBindBankInfo(UserInfo userInfo) {
-        // TODO: 2016/9/18 目前没有所填写的银行卡的所属用户的信息
-        mCardholderName.setText("");
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
             mPayingBank.setText(userInfo.getIssuingbankName());
         }
     }
-
-    private void showAuthNameDialog() {
-        SmartDialog.with(getActivity(), R.string.dialog_unauthorized_name)
-                .setPositive(R.string.go_and_auth, new SmartDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQUEST_CODE_NAME_AUTH);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        finish();
-                    }
-                })
-                .setCancelableOnTouchOutside(false)
-                .show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_NAME_AUTH && resultCode == RESULT_OK) {
-            UserInfo userInfo = LocalUser.getUser().getUserInfo();
-            if (userInfo == null) return;
-            mCardholderName.setText(userInfo.getRealName());
-            SmartDialog.dismiss(this);
-        }
-    }
-
-    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
-        @Override
-        public void afterTextChanged(Editable editable) {
-            boolean enable = checkSubmitButtonEnable();
-            if (enable != mSubmitToAuthButton.isEnabled()) {
-                mSubmitToAuthButton.setEnabled(enable);
-            }
-        }
-    };
 
     private boolean checkSubmitButtonEnable() {
         String cardholderName = ViewUtil.getTextTrim(mCardholderName);
@@ -263,25 +215,24 @@ public class BankcardBindingActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.payingBank:
-//                mBankcardInputArea.setVisibility(View.GONE);
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragmentContainer, new BankListFragment(), BankListFragment.BANK_LIST).commit();
-//                mTitleBar.setTitle(R.string.bankcard);
                 showBankDialog();
                 break;
             case R.id.submitToAuthButton:
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+
                 if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
                     mCommonFailTvWarn.show(R.string.bank_card_is_error);
                     return;
                 }
+
                 if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
                     return;
                 }
                 int bankId = LocalUser.getUser().getUserInfo().getBankId();
+
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank)) || bankId == -1) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
@@ -308,7 +259,7 @@ public class BankcardBindingActivity extends BaseActivity {
                         }).fire();
                 break;
             case R.id.unbindBankcard:
-                unwrapBindServiceTelephone();
+                unbindServiceTelephone();
                 break;
             case R.id.bindCardHint:
                 showCardHolderDialog();
@@ -323,9 +274,7 @@ public class BankcardBindingActivity extends BaseActivity {
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
                     }
-                })
-                .setCancelableOnTouchOutside(false)
-                .show();
+                }).show();
     }
 
     private void showBankDialog() {
@@ -334,7 +283,6 @@ public class BankcardBindingActivity extends BaseActivity {
 
 
     private void getChannelBankList() {
-
         API.User.showChannelBankList()
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -398,7 +346,7 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
 
-    private void unwrapBindServiceTelephone() {
+    private void unbindServiceTelephone() {
         String dialogContent = getString(R.string.unBind_dialog_content, UNWRAP_SERVICE_TELEPHONE);
         SmartDialog.with(getActivity(), dialogContent)
                 .setCancelableOnTouchOutside(false)

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -74,6 +75,10 @@ public class PlaceOrderFragment extends BaseFragment {
     View mEmptyClickArea;
     @BindView(R.id.bottomSplitLine)
     View mBottomSplitLine;
+    @BindView(R.id.marketCloseText)
+    TextView mMarketCloseText;
+    @BindView(R.id.marketOpenArea)
+    RelativeLayout mMarketOpenArea;
 
     private int mLongOrShort;
     private Product mProduct;
@@ -251,9 +256,16 @@ public class PlaceOrderFragment extends BaseFragment {
                         if (exchangeStatus.isTradeable()) {
                             marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
                                     exchangeStatus.getNextTime());
+
+                            mMarketOpenArea.setVisibility(View.VISIBLE);
+                            mMarketCloseText.setVisibility(View.GONE);
                         } else {
                             marketTimeStr = getString(R.string.prompt_next_trade_time_is,
                                     exchangeStatus.getNextTime());
+
+                            mMarketOpenArea.setVisibility(View.GONE);
+                            mMarketCloseText.setVisibility(View.VISIBLE);
+                            mMarketCloseText.setText(marketTimeStr);
                         }
                         String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
                         if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
@@ -333,6 +345,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
         void onConfirmBtnClick(SubmittedOrder submittedOrder);
+
         void onPlaceOrderFragmentEmptyAreaClick();
     }
 

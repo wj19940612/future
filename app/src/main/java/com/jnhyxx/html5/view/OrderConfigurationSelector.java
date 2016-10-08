@@ -299,7 +299,7 @@ public class OrderConfigurationSelector extends LinearLayout {
     private View createSplitLine() {
         View view = new View(getContext());
         view.setBackgroundResource(android.R.color.white);
-        int splineLineWith = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1,
+        int splineLineWith = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.7f,
                 getResources().getDisplayMetrics());
         LayoutParams params = new LayoutParams(splineLineWith, ViewGroup.LayoutParams.MATCH_PARENT);
         view.setLayoutParams(params);

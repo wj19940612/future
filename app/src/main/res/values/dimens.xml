@@ -19,7 +19,6 @@
     <!--目前大部分容器距离边界15dp-->
     <dimen name="common_margin">16dp</dimen>
 
-
     <dimen name="drawable_left_padding">10dp</dimen>
 
     <!-- Order -->

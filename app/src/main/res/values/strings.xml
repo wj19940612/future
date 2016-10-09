@@ -358,7 +358,6 @@
     <string name="modify_nick_name">昵称</string>
     <string name="modify_nick_name_title">修改昵称</string>
     <string name="modify_nick_name_warn">昵称只能由中文、英文、数字组成,暂只支持修改一次。</string>
-    <string name="modify_nick_name_success">昵称修改成功</string>
     <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
     <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
 

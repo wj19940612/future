@@ -88,6 +88,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:lineSpacingExtra="2dp"
             android:paddingTop="15dp"
             android:text="@string/prompt_about_name_verify"

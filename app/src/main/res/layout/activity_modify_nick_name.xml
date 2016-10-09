@@ -36,14 +36,13 @@
                 android:text="@string/modify_nick_name"/>
 
             <EditText
-                android:id="@+id/etModifyNickName"
+                android:id="@+id/nickname"
                 style="@style/SignEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/modify_nick_name_editText_hint"
-                android:maxLength="16"
-                android:textSize="18sp"/>
+                android:maxLength="16"/>
         </LinearLayout>
 
         <com.jnhyxx.html5.view.CommonFailWarn

@@ -403,7 +403,7 @@
     <string name="withdraw_start">刚刚发起</string>
     <string name="withdraw_audit_passing">审核通过</string>
     <string name="withdraw_fund_transfer">转账中</string>
-    <string name="withdraw_refuse"></string>
+    <string name="withdraw_refuse">提现拒绝</string>
     <string name="transfer_fail">转账失败</string>
 
     <string name="common_success">成功</string>

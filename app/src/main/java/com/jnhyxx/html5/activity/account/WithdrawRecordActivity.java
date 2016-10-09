@@ -179,8 +179,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleDateMonth.setVisibility(View.GONE);
                     mSaleDateHour.setText(time.substring(0, time.indexOf(" ")));
                 }
-                String withdrawNum = FinanceUtil.formatWithScale(item.getMoney()) + "元";
-                mSaleGetMoney.setText(withdrawNum);
+                mSaleGetMoney.setText(context.getString(R.string.withdraw_record_number,FinanceUtil.formatWithScale(item.getMoney())));
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.common_success);
@@ -198,5 +197,4 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
             }
         }
     }
-
 }

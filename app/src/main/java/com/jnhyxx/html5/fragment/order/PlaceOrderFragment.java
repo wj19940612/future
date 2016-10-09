@@ -86,6 +86,7 @@ public class PlaceOrderFragment extends BaseFragment {
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
     private FullMarketData mMarketData;
+    private ExchangeStatus mExchangeStatus;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -191,6 +192,13 @@ public class PlaceOrderFragment extends BaseFragment {
     public void setMarketData(FullMarketData data) {
         mMarketData = data;
         updateMarketDataRelatedView();
+        updateSubmittedOrder();
+    }
+
+    private void updateSubmittedOrder() {
+        if (mSubmittedOrder != null) {
+            // TODO: 10/8/16 确认下最新买入价是什么
+        }
     }
 
     private void updateMarketDataRelatedView() {
@@ -252,6 +260,8 @@ public class PlaceOrderFragment extends BaseFragment {
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mExchangeStatus = exchangeStatus;
+
                         String marketTimeStr;
                         if (exchangeStatus.isTradeable()) {
                             marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,

@@ -89,7 +89,7 @@
     <string name="service_protocol">《服务协议》</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="resend_after_n_seconds">%1$d秒</string>
+    <string name="resend_after_n_seconds">%1$ds</string>
     <string name="please_input_phone_num">请输入手机号码</string>
     <string name="please_input_password">请输入密码</string>
     <string name="forget_password">忘记密码?</string>

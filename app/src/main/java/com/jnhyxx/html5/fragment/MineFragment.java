@@ -135,7 +135,7 @@ public class MineFragment extends BaseFragment {
             int scoreUsable = userInfo.getScoreUsable();
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
-            mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable )));
+            mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);

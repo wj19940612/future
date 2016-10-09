@@ -263,7 +263,7 @@
     <!--我的界面 Mine -->
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
-    <string name="no_logged">未登陆</string>
+    <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s 分</string>
     <string name="mine_balance">余额 (元)</string>
 
@@ -315,8 +315,8 @@
     <string name="common_copy_text">复制</string>
 
 
-    <!--登陆界面-->
-    <string name="login_success">登陆成功</string>
+    <!--登录界面-->
+    <string name="login_success">登录成功</string>
     <!--注册界面-->
     <string name="register_auth_code_fail">验证码错误</string>
     <string name="register_succeed">注册成功</string>

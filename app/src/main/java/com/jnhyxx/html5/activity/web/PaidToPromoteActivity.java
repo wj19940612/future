@@ -27,7 +27,7 @@ public class PaidToPromoteActivity extends WebViewActivity {
     private void openMyUsersPage() {
         Launcher.with(this, WebViewActivity.class)
                 .putExtra(WebViewActivity.EX_TITLE, getString(R.string.my_users))
-                .putExtra(WebViewActivity.EX_URL, API.getPromteMyUsers())
+                .putExtra(WebViewActivity.EX_URL, API.getPromoteMyUsers())
                 .putExtra(WebViewActivity.EX_RAW_COOKIE, getRawCookie())
                 .execute();
     }

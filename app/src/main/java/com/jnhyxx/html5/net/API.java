@@ -746,14 +746,14 @@ public class API extends APIBase {
     /**
      * 推广赚钱 url
      */
-    public static String getPromtePage() {
+    public static String getPromotePage() {
         return getHost() + "/mine/extension.html?nohead=1";
     }
 
     /**
      * 推广赚钱 我的用户 url
      */
-    public static String getPromteMyUsers() {
+    public static String getPromoteMyUsers() {
         return getHost() + "/mine/users.html?nohead=1";
     }
 

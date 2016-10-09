@@ -22,6 +22,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
 import java.util.HashSet;
@@ -178,7 +179,8 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleDateMonth.setVisibility(View.GONE);
                     mSaleDateHour.setText(time.substring(0, time.indexOf(" ")));
                 }
-                mSaleGetMoney.setText(String.valueOf(item.getMoney()) + "元");
+                String withdrawNum = FinanceUtil.formatWithScale(item.getMoney()) + "元";
+                mSaleGetMoney.setText(withdrawNum);
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.common_success);

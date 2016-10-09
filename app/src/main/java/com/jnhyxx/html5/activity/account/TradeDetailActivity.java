@@ -74,10 +74,10 @@ public class TradeDetailActivity extends BaseActivity {
                         break;
                     case 1:
                         mRemainTitle.setText(R.string.account_trade_detail_integral_remain);
-                        mRemainNumber.setText(String.valueOf(mUserFundInfo.getScoreUsable()));
+                        mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getScoreUsable()));
                         mBlockedTitle.setText(R.string.integral_frozen);
                         // TODO: 2016/9/19 目前不知冻结积分如何获取
-                        mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMarginScore()));
+                        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMarginScore()));
                         break;
                 }
             }

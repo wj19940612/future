@@ -284,7 +284,7 @@ public class TradeDetailListFragment extends BaseFragment {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
                     mStringBuffer.append("元");
                 } else {
-                    mStringBuffer.append(String.valueOf(item.getScore()));
+                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
                     mStringBuffer.append("分");
                 }
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());

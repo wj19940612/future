@@ -373,7 +373,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询当前渠道所支持的所有支付渠道
-         *
+         * <p>
          * http://域名/user/finance/findDepositType.do
          */
         public static API getSupportApplyWay() {
@@ -475,39 +475,30 @@ public class API extends APIBase {
     }
 
     public static class Message {
-        /**
-         * /sms/message/systemMessages 系统消息列表
-         *
-         * @param token
-         * @return
-         */
-        public static API getSystemMessageList(String token, int pageNo, int pageSize) {
-            return new API("/sms/message/systemMessages",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
-        }
 
         /**
-         * /sms/message/traderMassages 交易提醒列表
+         * 接口名：查询行情分析和行情咨询
+         * URL  http://域名/user/news/loadNews.do
          *
-         * @param token
+         * @param pushType 0代表是 行情资讯 1 代表行业资讯  2 代表系统消息 3 代表 交易提醒
+         * @param page     页数 从0开始
+         * @param pageSize 当前展示多少数量
+         * @param userId   用户Id
          * @return
          */
-        public static API getTradeMessageList(String token, int pageNo, int pageSize) {
-            return new API("/sms/message/traderMassages",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
+        public static API getMessageInfo(int pushType, int page, int pageSize, int userId) {
+            return new API("http://域名/user/news/loadNews.do", new ApiParams()
+                    .put("pushType", pushType)
+                    .put("page", page)
+                    .put("pageSize", pageSize)
+                    .put("userId", userId));
         }
 
         /**
          * 接口名：查询资讯列表
          * URL  http://域名/user/news/findNewsList.do
          *
-         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
+         * @param type   资讯类型  首页banner0,行情分析2，行业分析3
          * @param offset 资讯起始点
          * @param size   资讯显示数量
          * @return

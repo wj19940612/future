@@ -15,6 +15,7 @@ import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.fragment.TradeDetailListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 
@@ -90,11 +91,11 @@ public class TradeDetailActivity extends BaseActivity {
     private void initData() {
         mRemainTitle.setText(R.string.remain_money);
         //资金余额
-        mRemainNumber.setText(String.valueOf(mUserFundInfo.getMoneyUsable()));
+        mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMoneyUsable()));
         //右边头部
         mBlockedTitle.setText(R.string.money_frozen);
         //冻结资金余额
-        mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMoneyFrozen()));
+        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMoneyFrozen()));
     }
 
     private void initViewPager() {

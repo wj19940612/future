@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -321,7 +320,6 @@ public class BankcardBindingActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d("wj", "所选择的银行卡信息" + mChannelBank.toString());
                         if (mChannelBank != null) {
                             mPayingBank.setText(mChannelBank.getName());
                         }

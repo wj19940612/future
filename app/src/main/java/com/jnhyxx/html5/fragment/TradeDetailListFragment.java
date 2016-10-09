@@ -24,6 +24,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -280,7 +281,7 @@ public class TradeDetailListFragment extends BaseFragment {
 
 
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-                    mStringBuffer.append(String.valueOf(item.getMoney()));
+                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
                     mStringBuffer.append("元");
                 } else {
                     mStringBuffer.append(String.valueOf(item.getScore()));

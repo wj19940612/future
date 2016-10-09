@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -74,22 +75,29 @@ public class PlaceOrderFragment extends BaseFragment {
     View mEmptyClickArea;
     @BindView(R.id.bottomSplitLine)
     View mBottomSplitLine;
+    @BindView(R.id.marketCloseText)
+    TextView mMarketCloseText;
+    @BindView(R.id.marketOpenArea)
+    RelativeLayout mMarketOpenArea;
 
     private int mLongOrShort;
     private Product mProduct;
+    private int mFundType;
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
     private FullMarketData mMarketData;
+    private ExchangeStatus mExchangeStatus;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
     private Callback mCallback;
 
-    public static PlaceOrderFragment newInstance(int longOrShort, Product product) {
+    public static PlaceOrderFragment newInstance(int longOrShort, Product product, int fundType) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, longOrShort);
         args.putSerializable(Product.EX_PRODUCT, product);
+        args.putInt(Product.EX_FUND_TYPE, fundType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,6 +119,7 @@ public class PlaceOrderFragment extends BaseFragment {
         if (getArguments() != null) {
             mLongOrShort = getArguments().getInt(TYPE, 0);
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
+            mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
         }
     }
 
@@ -167,7 +176,7 @@ public class PlaceOrderFragment extends BaseFragment {
             }
         });
 
-        API.Order.getFuturesFinancing(mProduct.getVarietyId()).setTag(TAG)
+        API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                 .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
@@ -183,6 +192,13 @@ public class PlaceOrderFragment extends BaseFragment {
     public void setMarketData(FullMarketData data) {
         mMarketData = data;
         updateMarketDataRelatedView();
+        updateSubmittedOrder();
+    }
+
+    private void updateSubmittedOrder() {
+        if (mSubmittedOrder != null) {
+            // TODO: 10/8/16 确认下最新买入价是什么
+        }
     }
 
     private void updateMarketDataRelatedView() {
@@ -244,13 +260,22 @@ public class PlaceOrderFragment extends BaseFragment {
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mExchangeStatus = exchangeStatus;
+
                         String marketTimeStr;
                         if (exchangeStatus.isTradeable()) {
                             marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
                                     exchangeStatus.getNextTime());
+
+                            mMarketOpenArea.setVisibility(View.VISIBLE);
+                            mMarketCloseText.setVisibility(View.GONE);
                         } else {
                             marketTimeStr = getString(R.string.prompt_next_trade_time_is,
                                     exchangeStatus.getNextTime());
+
+                            mMarketOpenArea.setVisibility(View.GONE);
+                            mMarketCloseText.setVisibility(View.VISIBLE);
+                            mMarketCloseText.setText(marketTimeStr);
                         }
                         String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
                         if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
@@ -330,6 +355,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
         void onConfirmBtnClick(SubmittedOrder submittedOrder);
+
         void onPlaceOrderFragmentEmptyAreaClick();
     }
 

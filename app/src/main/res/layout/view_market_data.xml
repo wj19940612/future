@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_weight="0.4"
                 android:paddingLeft="20dp"
                 android:text="@string/today_position"
-                android:textColor="#A8A8A8"/>
+                android:textColor="@color/colorDisable"/>
 
             <TextView
                 android:id="@+id/todayPosition"
@@ -44,7 +44,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 android:layout_weight="0.4"
                 android:paddingLeft="20dp"
                 android:text="@string/pre_position"
-                android:textColor="#A8A8A8"/>
+                android:textColor="@color/colorDisable"/>
 
             <TextView
                 android:id="@+id/prePosition"
@@ -76,7 +76,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="今"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="结"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -127,7 +127,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="昨"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="结"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -174,7 +174,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -201,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="总"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -209,7 +209,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="手"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -225,7 +225,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="金"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -255,7 +255,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="额"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -272,7 +272,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -299,7 +299,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="涨"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -307,7 +307,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="停"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -323,7 +323,7 @@
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -345,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="跌"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -353,7 +353,7 @@
                     android:layout_alignParentRight="true"
                     android:gravity="center_horizontal"
                     android:text="停"
-                    android:textColor="#A8A8A8"/>
+                    android:textColor="@color/colorDisable"/>
             </RelativeLayout>
 
             <TextView
@@ -370,5 +370,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/splitLineDark"/>
+        android:background="@color/splitLineBlueLight"/>
 </LinearLayout>

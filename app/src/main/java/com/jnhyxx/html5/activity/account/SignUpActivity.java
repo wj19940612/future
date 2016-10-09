@@ -1,6 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -15,66 +16,69 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.ViewUtil;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.showPasswordButton;
 
 public class SignUpActivity extends BaseActivity {
-    private static final String TAG = "SignUpActivity";
-    @BindView(R.id.activityRegisterPhoneNum)
+
+    private static final int REQ_CODE_LOGIN = 2;
+
+    @BindView(R.id.titleBar)
+    TitleBar mTitleBar;
+
+    @BindView(R.id.failWarn)
+    CommonFailWarn mFailWarn;
+
+    @BindView(R.id.phoneNum)
     EditText mPhoneNum;
-    @BindView(R.id.activityRegisterMessageAuthCode)
-    EditText mMessageAuthCode;
+    @BindView(R.id.registerAuthCode)
+    EditText mRegisterAuthCode;
     @BindView(R.id.obtainAuthCode)
     TextView mObtainAuthCode;
+    @BindView(R.id.authCodeImage)
+    ImageView mAuthCodeImage;
+    @BindView(R.id.imageAuthCode)
+    EditText mImageAuthCode;
+    @BindView(R.id.imageCodeArea)
+    RelativeLayout mImageCodeArea;
+    @BindView(R.id.showPasswordButton)
+    ImageView mShowPasswordButton;
     @BindView(R.id.password)
     EditText mPassword;
-    @BindView(R.id.agree_protocol)
+    @BindView(R.id.agreeProtocol)
     CheckBox mAgreeProtocol;
-    @BindView(R.id.service_protocol)
+    @BindView(R.id.serviceProtocol)
     TextView mServiceProtocol;
     @BindView(R.id.signUpButton)
     TextView mSignUpButton;
-    @BindView(R.id.titleBar)
-    TitleBar mTitleBar;
+    @BindView(R.id.clearPhoneNumButton)
+    ImageView mClearPhoneNumButton;
+
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
-
-    @BindView(R.id.rlFailWarn)
-    RelativeLayout mFailWarn;
-    @BindView(R.id.commonFailTvWarn)
-    TextView mFailWarnText;
-    //获取图片验证码
-    @BindView(R.id.tvRegisterRetrieveImage)
-    TextView mTvRegisterRetrieveImage;
-    @BindView(R.id.showPasswordButton)
-    ImageView mImagePasswordType;
-    @BindView(R.id.ivRegisterRetrieveImage)
-    ImageView mIvRegisterRetrieveImage;
-    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,53 +86,104 @@ public class SignUpActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
-        mMessageAuthCode.addTextChangedListener(mValidationWatcher);
+        initTitleBar();
+
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
+        mRegisterAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
+
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                mAgreeProtocol.setChecked(isChecked);
+                mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
+                // TODO: 10/5/16 checkbox 无法重写样式?
                 activeButtons();
-            }
-        });
-        jumpLoginActivity();
-        mFailWarnText.setText(R.string.register_auth_code_fail);
-
-        mTvRegisterRetrieveImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getRegisterImage();
-            }
-        });
-    }
-
-    private void jumpLoginActivity() {
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(SignUpActivity.this, SignInActivity.class).execute();
             }
         });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mRegisterAuthCode.removeTextChangedListener(mValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
+            // User login done, then finish
+            finish();
+        }
+    }
+
+    private void initTitleBar() {
+        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToSignInPage();
+            }
+        });
+    }
+
+    private void switchToSignInPage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(SignInActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
+        }
+    }
+
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+            formatPhoneNumber();
+            boolean phoneVisible = checkShowPhoneButtonVisible();
+            mClearPhoneNumButton.setVisibility(phoneVisible ? View.VISIBLE : View.INVISIBLE);
+        }
+    };
+
+    private void formatPhoneNumber() {
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
+    }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             activeButtons();
-            String phoneNum = mPassword.getText().toString().trim();
-            if (!TextUtils.isEmpty(phoneNum)) {
-                mImagePasswordType.setVisibility(View.VISIBLE);
-            } else {
-                mImagePasswordType.setVisibility(View.GONE);
-            }
+
+            boolean visible = checkShowPasswordButtonVisible();
+            mShowPasswordButton.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
     };
+
+    private boolean checkShowPasswordButtonVisible() {
+        String password = ViewUtil.getTextTrim(mPassword);
+        if (!TextUtils.isEmpty(password)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkShowPhoneButtonVisible() {
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        if (!TextUtils.isEmpty(phoneNum)) {
+            return true;
+        }
+        return false;
+    }
+
 
     private void activeButtons() {
         boolean enable = checkObtainAuthCodeEnable();
@@ -148,7 +203,7 @@ public class SignUpActivity extends BaseActivity {
             return false;
         }
 
-        String authCode = mMessageAuthCode.getText().toString().trim();
+        String authCode = mRegisterAuthCode.getText().toString().trim();
         if (TextUtils.isEmpty(authCode) || authCode.length() < 4) {
             return false;
         }
@@ -166,127 +221,123 @@ public class SignUpActivity extends BaseActivity {
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
+
+        String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
+        if (mImageCodeArea.isShown() && TextUtils.isEmpty(imageAuthCode)) {
+            return false;
+        }
+
         return true && !mFreezeObtainAuthCode;
     }
 
-    @OnClick(R.id.obtainAuthCode)
-    void obtainAuthCode() {
-        String userPhone = mPhoneNum.getText().toString();
-        if (!CommonMethodUtils.isMobileNum(userPhone)) {
-            ToastUtil.curt(R.string.common_phone_num_fail);
-            return;
+    @OnClick({R.id.obtainAuthCode, R.id.signUpButton, R.id.authCodeImage, R.id.serviceProtocol, R.id.showPasswordButton, R.id.clearPhoneNumButton})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.obtainAuthCode:
+                obtainAuthCode();
+                break;
+            case R.id.signUpButton:
+                signUp();
+                break;
+            case R.id.authCodeImage:
+                getImageAuthCode();
+                break;
+            case R.id.serviceProtocol:
+                Launcher.with(SignUpActivity.this, WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getRegisterServiceProtocol())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.service_protocol_title)).execute();
+                break;
+            case R.id.showPasswordButton:
+                changePasswordInputType();
+                break;
+            case R.id.clearPhoneNumButton:
+                mPhoneNum.setText("");
+                break;
+
         }
-        String phoneNum = mPhoneNum.getText().toString();
-        API.User.obtainAuthCode(phoneNum)
+    }
+
+    private void obtainAuthCode() {
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String imageAuthCode = null;
+        if (mImageCodeArea.isShown()) {
+            imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
+        }
+
+        Log.d("TAG", "注册获取图片验证码的手机号码 " + mPhoneNum + "所输入的图片验证码" + imageAuthCode);
+
+        API.User.obtainAuthCode(phoneNum, imageAuthCode)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
-                        ToastUtil.show(resp.getMsg());
                         if (resp.isSuccess()) {
                             mCounter = 60;
                             mFreezeObtainAuthCode = true;
                             mObtainAuthCode.setEnabled(false);
                             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));
                             startScheduleJob(1 * 1000);
+                            if (mImageCodeArea.isShown()) {
+                                getImageAuthCode();
+                            }
+                        } else if (resp.getCode() == Resp.CODE_REQUEST_AUTH_CODE_OVER_LIMIT) {
+                            mImageCodeArea.setVisibility(View.VISIBLE);
+                            mFailWarn.show(resp.getMsg());
+                            getImageAuthCode();
+                        } else {
+                            mFailWarn.show(resp.getMsg());
+                            if (mImageCodeArea.isShown()) {
+                                getImageAuthCode();
+                            }
                         }
                     }
                 }).fire();
     }
 
-    //注册
-    @OnClick(R.id.signUpButton)
-    void signUp() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
-        String authCode = mMessageAuthCode.getText().toString().trim();
-        API.User.signUp(phoneNum, password, authCode, null)
+    public void signUp() {
+        final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String password = ViewUtil.getTextTrim(mPassword);
+        String authCode = ViewUtil.getTextTrim(mRegisterAuthCode);
+        API.User.register(phoneNum, password, authCode, null)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> resp) {
                         if (resp.isSuccess()) {
-                            // TODO: 2016/8/29 注册成功后弹出 注册成功的Toast 
-                            CustomToast.getInstance().makeText(SignUpActivity.this, R.string.register_succeed);
                             UserInfo info = new Gson().fromJson(resp.getData(), UserInfo.class);
-                            LocalUser.getUser().setUserInfo(info);
+                            LocalUser.getUser().setUserInfo(info, phoneNum);
+                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 
-                            SmartDialog.with(getActivity(), resp.getMsg())
-                                    .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                        @Override
-                                        public void onClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                            finish();
-                                        }
-                                    }).show();
-                        } else if (resp.getCode() == 600) {
-                            mFailWarn.setVisibility(View.VISIBLE);
+                            setResult(RESULT_OK);
+                            finish();
                         } else {
-                            if (mFailWarn.isShown()) {
-                                mFailWarn.setVisibility(View.GONE);
-                            }
-                            ToastUtil.show(resp.getMsg());
+                            mFailWarn.show(resp.getMsg());
                         }
                     }
                 }).fire();
-
     }
 
-    //获取动态验证码
-    @OnClick(R.id.tvRegisterRetrieveImage)
-    void getRegisterRetrieveImage() {
-        getRegisterImage();
+    private void getImageAuthCode() {
+        mObtainAuthCode.setEnabled(false);
+        mImageAuthCode.setText("");
+
+        final String userPhone = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String imageUrl = API.User.getRegisterAuthCodeImage(userPhone);
+
+        Picasso.with(getActivity())
+                .load(imageUrl)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .into(mAuthCodeImage);
     }
 
-    private void getRegisterImage() {
-        ToastUtil.curt("获取注册验证码");
-        String userPhone = mPhoneNum.getText().toString().trim();
-        if (TextUtils.isEmpty(userPhone)) {
-            mTvRegisterRetrieveImage.setEnabled(false);
-        } else {
-            mTvRegisterRetrieveImage.setEnabled(true);
-//            API.User.getRegisterImage(userPhone)
-//                    .setIndeterminate(this).setTag(TAG)
-//                    .setCallback(new Callback<Resp>() {
-//                        @Override
-//                        public void onReceive(Resp resp) {
-//                           Log.d(TAG,"msg"+resp.getMsg()+" \ncode "+resp.getCode()+"\n data"+resp.getData().toString()+" \n 错误信息"+resp.getErrparam()+"\n 类型"+resp.getMsgType());
-//                        }
-//                    }).fire();
-            Toast.makeText(getApplicationContext(), "开始下载图片", Toast.LENGTH_SHORT).show();
-            String mHost = BuildConfig.API_HOST;
-            String mUri = "/user/user/getRegImage.do";
-            String user = "?userPhone=";
-            String url = new StringBuilder(mHost).append(mUri).append(user).append(userPhone).toString();
-            ToastUtil.curt(url);
-            mIvRegisterRetrieveImage.setVisibility(View.VISIBLE);
-            Picasso.with(SignUpActivity.this).load(url).into(mIvRegisterRetrieveImage, new com.squareup.picasso.Callback() {
-                @Override
-                public void onSuccess() {
-                    mTvRegisterRetrieveImage.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onError() {
-                    // TODO: 2016/9/8  目前先做这样处理
-                    mTvRegisterRetrieveImage.setText("获取失败，点击重新下载");
-                }
-            });
-
-        }
-    }
-
-    //点击后改变文本输入框的输入类型，使密码可见或隐藏
-    @OnClick(showPasswordButton)
-    void changeEdittextPasswordInputtYPE() {
-        if (!flag) {
-            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            mImagePasswordType.setSelected(true);
-        } else {
-            mImagePasswordType.setSelected(false);
+    private void changePasswordInputType() {
+        if (mShowPasswordButton.isSelected()) {
+            mShowPasswordButton.setSelected(false);
             mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        } else {
+            mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mShowPasswordButton.setSelected(true);
         }
-        flag = !flag;
         mPassword.postInvalidate();
         CharSequence text = mPassword.getText();
         if (text instanceof Spannable) {

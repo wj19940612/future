@@ -22,23 +22,32 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="SignEditText">
+    <style name="SignEditText" parent="@android:style/TextAppearance">
         <item name="android:background">@null</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColorHint">@color/grayHint</item>
+        <item name="textColor">#262626</item>
     </style>
 
     <style name="SignEditText.PhoneNum">
         <item name="android:inputType">phone</item>
-        <item name="android:maxLength">11</item>
+        <item name="android:maxLength">20</item>
+        <item name="android:drawablePadding">10dp</item>
     </style>
 
     <style name="SignEditText.Password">
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
+        <item name="android:drawablePadding">10dp</item>
+    </style>
+
+    <style name="SignEditText.AuthCode">
+        <item name="android:maxLength">20</item>
+        <item name="android:drawablePadding">10dp</item>
     </style>
 
     <style name="PrimaryBigButton">
@@ -58,10 +67,9 @@
     </style>
 
     <style name="InputTitle">
-        <item name="android:minWidth">80dp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:minWidth">70dp</item>
+        <item name="android:textColor">@color/tv_input_title</item>
     </style>
-
 
     <style name="HomeListHeaderButton">
         <item name="android:drawablePadding">8dp</item>
@@ -88,25 +96,25 @@
         <item name="android:paddingLeft">30dp</item>
         <item name="android:textColor">#262626</item>
     </style>
+
     <!--关于我们界面的列表容器-->
     <style name="AboutAsEntryRelativeStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:layout_marginBottom">1dp</item>
         <item name="android:background">@android:color/white</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingRight">20dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:clickable">true</item>
     </style>
+
     <!--关于我们界面的列表左边的文字-->
     <style name="AboutAsEntryLeftTextViewStyle">
         <item name="android:textColor">#262626</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <!--关于我们界面的列表左边的图片-->
     <style name="AboutAsEntryRightImageViewStyle">
         <item name="android:src">@drawable/ic_about_us_arrow_down</item>
@@ -114,13 +122,12 @@
         <item name="android:layout_height">15dp</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
+
     <!--关于我们界面的列表点击后出现的详细信息-->
     <style name="AboutAsEntryBottomTextViewStyle">
         <item name="android:visibility">gone</item>
         <item name="android:background">@android:color/white</item>
         <item name="android:paddingBottom">20dp</item>
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingRight">20dp</item>
         <item name="android:paddingTop">20dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -128,8 +135,8 @@
         <item name="android:lineSpacingExtra">20dp</item>
         <item name="android:textSize">12sp</item>
     </style>
-    <!--推广赚钱-->
 
+    <!--推广赚钱-->
     <style name="expandMakeMoneyTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -139,8 +146,9 @@
     <style name="settingTitleTextView">
         <item name="android:textColor">#262626</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:minWidth">80dp</item>
+        <item name="android:minWidth">70dp</item>
     </style>
+
     <!--设置界面的文本输入框样式-->
     <style name="settingEditTextStyle">
         <item name="android:textSize">16sp</item>
@@ -153,11 +161,28 @@
     </style>
 
     <style name="settingLinearLayout">
+        <item name="android:background">@drawable/bg_input_enable</item>
+        <item name="android:paddingTop">10dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingRight">15dp</item>
         <item name="android:orientation">horizontal</item>
     </style>
+
+    <!--提现记录详情界面的右边的文字样式-->
+    <style name="withDrawInfoRightText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#358cf3</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--提现记录详情界面的左边文字的样式-->
+    <style name="withDrawInfoLeftText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#358cf3</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

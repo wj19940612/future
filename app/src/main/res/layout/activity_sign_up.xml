@@ -1,306 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.SignUpActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.SignUpActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         app:backFeature="true"
-        app:rightImage="@drawable/bg_account_register_right_shape"
+        app:rightBackground="@drawable/btn_blue_inverse_login"
         app:rightText="@string/sign_in"
-        app:rightTextColor="@color/account_top_blue_text"
+        app:rightTextColor="@color/blueAssist"
         app:rightTextSize="12sp"
         app:rightVisible="true"
-        app:titleText="@string/sign_up_free" />
+        app:titleText="@string/sign_up_free"/>
 
-    <include
-        android:id="@+id/rlFailWarn"
-        layout="@layout/common_fail_warn"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:visibility="gone" />
+        android:layout_height="60dp">
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/failWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            app:visible="false"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/phoneNum"
+                style="@style/SignEditText.PhoneNum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint="@string/please_input_phone_num"/>
+
+            <ImageView
+                android:id="@+id/clearPhoneNumButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneNum"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:src="@drawable/ic_delete_x"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_input_disable"/>
 
-        <RelativeLayout
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_input_disable"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/registerAuthCode"
+            style="@style/SignEditText.PhoneNum"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_auth_code"
+            android:hint="@string/please_input_msg_auth_code"/>
 
-            <!--   <TextView
-                   style="@style/InputTitle"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="@string/phone_number"/>
+        <TextView
+            android:id="@+id/obtainAuthCode"
+            android:layout_width="85dp"
+            android:layout_height="34dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/btn_blue"
+            android:clickable="true"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/obtain_auth_code"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"/>
+    </RelativeLayout>
 
-               <EditText
-                   android:id="@+id/phoneNum"
-                   style="@style/SignEditText"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:hint="@string/please_input_phone_num"/>-->
-            <ImageView
-                android:id="@+id/helpPhoneNumImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_phone" />
 
-            <EditText
-                android:id="@+id/activityRegisterPhoneNum"
-                style="@style/SignEditText.PhoneNum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/helpPhoneNumImage"
-                android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/grayHint" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/imageCodeArea"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_input_disable"
+        android:visibility="gone">
 
-        <include layout="@layout/split_line_thick" />
+        <ImageView
+            android:id="@+id/authCodeImage"
+            android:layout_width="85dp"
+            android:layout_height="34dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible"/>
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/imageAuthCode"
+            style="@style/SignEditText.AuthCode"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_login_image_code"
+            android:hint="@string/register_code_image_hint"/>
+    </RelativeLayout>
 
-            <!--<TextView-->
-            <!--style="@style/InputTitle"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/message_auth_code"/>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_input_disable">
 
-            <!--<EditText-->
-            <!--android:id="@+id/messageAuthCode"-->
-            <!--style="@style/SignEditText"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:hint="@string/please_input_msg_auth_code"-->
-            <!--android:inputType="phone"-->
-            <!--android:maxLength="4"/>-->
-            <ImageView
-                android:id="@+id/help_messageAuthCode"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_code" />
+        <ImageView
+            android:id="@+id/showPasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:src="@drawable/btn_show_password"
+            android:visibility="gone"/>
 
-            <EditText
-                android:id="@+id/activityRegisterMessageAuthCode"
-                style="@style/SignEditText.PhoneNum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/help_messageAuthCode"
-                android:hint="@string/please_input_msg_auth_code"
-                android:textColorHint="@color/grayHint" />
-
-            <TextView
-                android:id="@+id/obtainAuthCode"
-                android:layout_width="85dp"
-                android:layout_height="34dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/btn_obtain_auth_code"
-                android:clickable="true"
-                android:enabled="false"
-                android:gravity="center"
-
-                android:text="@string/obtain_auth_code"
-                android:textColor="@android:color/white"
-                android:textSize="13sp" />
-        </RelativeLayout>
-
-        <include layout="@layout/split_line_thick" />
-
-        <RelativeLayout
+        <EditText
+            android:id="@+id/password"
+            style="@style/SignEditText.Password"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/showPasswordButton"
+            android:drawableLeft="@drawable/ic_lock"
+            android:hint="@string/please_input_password"/>
+    </RelativeLayout>
 
-            <!--<TextView-->
-            <!--style="@style/InputTitle"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/message_auth_code"/>-->
-
-            <!--<EditText-->
-            <!--android:id="@+id/messageAuthCode"-->
-            <!--style="@style/SignEditText"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:hint="@string/please_input_msg_auth_code"-->
-            <!--android:inputType="phone"-->
-            <!--android:maxLength="4"/>-->
-            <ImageView
-                android:id="@+id/help_RetrieveImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_login_image_code" />
-
-            <EditText
-                android:id="@+id/etRegisterRetrieveImage"
-                style="@style/SignEditText.PhoneNum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/help_RetrieveImage"
-                android:hint="@string/register_code_image_hint"
-                android:textColorHint="@color/grayHint" />
-
-            <TextView
-                android:id="@+id/tvRegisterRetrieveImage"
-                android:layout_width="85dp"
-                android:layout_height="34dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/etRegisterRetrieveImage"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/register_code_image"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
-
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/ivRegisterRetrieveImage"
-                android:layout_width="85dp"
-                android:layout_height="34dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/etRegisterRetrieveImage"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/register_code_image"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
-        </RelativeLayout>
-
-        <include layout="@layout/split_line_thick" />
-        <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/InputTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/password"/>
-
-                    <EditText
-                        android:id="@+id/password"
-                        style="@style/SignEditText.Password"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/please_input_password"/>
-                </LinearLayout>-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp">
-
-            <ImageView
-                android:id="@+id/helpPasswordImage"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/login_icon_lock" />
-
-
-            <EditText
-                android:id="@+id/password"
-                style="@style/SignEditText.Password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/helpPasswordImage"
-                android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint" />
-
-            <ImageView
-                android:id="@+id/showPasswordButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:src="@drawable/login_btn_password_type"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <!--  <include layout="@layout/split_line_thick"/>-->
-
-        <!--      <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
-
-                  <TextView
-                      style="@style/InputTitle"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="@string/promote_code"/>
-
-                  <EditText
-                      android:id="@+id/promoteCode"
-                      style="@style/SignEditText"
-                      android:layout_width="0dp"
-                      android:layout_height="wrap_content"
-                      android:layout_weight="1"
-                      android:ems="10"
-                      android:hint="@string/optional"
-                      android:inputType="phone"/>
-              </LinearLayout>-->
-
-    </LinearLayout>
-
-    <include layout="@layout/split_line_thick" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <CheckBox
-            android:id="@+id/agree_protocol"
+            android:id="@+id/agreeProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:button="@drawable/checkbox_register"
+
             android:gravity="center"
+            android:paddingStart="5dp"
             android:text="@string/read_and_agreed"
             android:textColor="#666666"
-            android:textSize="13sp" />
+            android:textSize="12sp"/>
 
         <TextView
-            android:id="@+id/service_protocol"
+            android:id="@+id/serviceProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/service_protocol"
-            android:textColor="#147AEB"
-            android:textSize="13sp" />
+            android:textColor="@color/blueAssist"
+            android:textSize="13sp"/>
     </LinearLayout>
 
     <TextView
@@ -311,10 +206,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
-        android:text="@string/sign_up_free" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
-
+        android:clickable="true"
+        android:text="@string/sign_up_free"/>
 </LinearLayout>

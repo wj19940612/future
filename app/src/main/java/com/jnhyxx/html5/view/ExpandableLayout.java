@@ -15,13 +15,17 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 
+import static com.android.volley.Request.Method.HEAD;
+
 
 /**
  * Created by Administrator on 2016/8/25.
  */
 
 public class ExpandableLayout extends RelativeLayout {
+
     private static final String TAG = "ExpandableLayout";
+
     private Integer mDuration;
     private Animation mAnimation;
     private Boolean mIsAnimationRunning = false;
@@ -41,21 +45,18 @@ public class ExpandableLayout extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableLayout);
         CharSequence bottomTxt = typedArray.getText(R.styleable.ExpandableLayout_elBottomTxt);
         CharSequence leftTxt = typedArray.getText(R.styleable.ExpandableLayout_elLeftTxt);
         mDuration = typedArray.getInt(R.styleable.ExpandableLayout_elDuration, getContext().getResources().getInteger(android.R.integer.config_shortAnimTime));
-        View view = View.inflate(context, R.layout.account_view_expandable, this);
-        TextView tv_leftTxt = (TextView) view.findViewById(R.id.leftTxtView);
-        final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.ivAboutUsRight);
+
+        View view = View.inflate(context, R.layout.view_expandable_layout, this);
+        TextView tv_leftTxt = (TextView) view.findViewById(R.id.leftText);
+        final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.downwardArrow);
+
         final TextView tv_bottom = (TextView) view.findViewById(R.id.bottomTxt);
-        RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.viewExpandableHeaderLayout);
-//        if (!TextUtils.isEmpty(leftTxt)) {
-//            tv_leftTxt.setText(leftTxt);
-//        } else {
-//            throw new NullPointerException(" left Txt is Empty");
-//        }
+        RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.expandableLayoutBody);
+
         tv_leftTxt.setText(leftTxt);
         tv_bottom.setText(bottomTxt);
         Log.d(TAG, "左边文字 " + leftTxt + "\n右边文字 " + bottomTxt);

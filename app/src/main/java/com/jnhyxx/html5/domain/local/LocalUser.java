@@ -9,6 +9,7 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 public class LocalUser {
 
     private UserInfo mUserInfo;
+    private String mPhone;
 
     private static LocalUser sLocalUser;
     private static boolean sReload;
@@ -37,10 +38,17 @@ public class LocalUser {
         sReload = true;
     }
 
+    public void setUserInfo(UserInfo userInfo, String phone) {
+        mUserInfo = userInfo;
+        mPhone = phone;
+        saveToPreference();
+    }
+
     public void setUserInfo(UserInfo userInfo) {
         mUserInfo = userInfo;
         saveToPreference();
     }
+
 
     public UserInfo getUserInfo() {
         return mUserInfo;
@@ -50,14 +58,35 @@ public class LocalUser {
         return mUserInfo != null;
     }
 
+    public boolean isRealNameFilled() {
+        if (mUserInfo != null) {
+            return mUserInfo.getIdStatus() > UserInfo.REAL_NAME_STATUS_UNFILLED;
+        }
+        return false;
+    }
+
+    public boolean isBankcardFilled() {
+        if (mUserInfo != null) {
+            return mUserInfo.getCardState() > UserInfo.BANKCARD_STATUS_UNFILLED;
+        }
+        return false;
+    }
+
+    public boolean isBankcardBound() {
+        if (mUserInfo != null) {
+            return mUserInfo.getCardState() == UserInfo.BANKCARD_STATUS_BOUND;
+        }
+        return false;
+    }
+
     public void logout() {
         mUserInfo = null;
         saveToPreference();
     }
 
     /**
-     * @deprecated
      * @return
+     * @deprecated
      */
     public String getToken() {
         return "";
@@ -77,11 +106,19 @@ public class LocalUser {
         return 0;
     }
 
+    /**
+     * @return
+     * @deprecated
+     */
     public String getUserPhoneNum() {
         if (mUserInfo != null) {
             return mUserInfo.getUserPhone();
         }
         return "";
+    }
+
+    public String getPhone() {
+        return mPhone;
     }
 
     @Override

@@ -3,9 +3,7 @@ package com.jnhyxx.html5.activity.setting;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -14,26 +12,25 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
+import com.jnhyxx.html5.view.CommonFailWarn;
+import com.jnhyxx.html5.view.CustomToast;
 import com.johnz.kutils.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ModifyNickNameActivity extends BaseActivity {
 
     @BindView(R.id.etModifyNickName)
     EditText mEtModifyNickName;
-    @BindView(R.id.submitNickName)
-    TextView mSubmitNickName;
-    @BindView(R.id.modifyNickNameFailWarnWarn)
-    RelativeLayout mModifyNickNameFailWarnWarn;
     @BindView(R.id.commonFailTvWarn)
-    TextView mCommonFailTvWarn;
+    CommonFailWarn mModifyNickNameFailWarnWarn;
+    @BindView(R.id.confirmButton)
+    TextView mConfirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,65 +38,60 @@ public class ModifyNickNameActivity extends BaseActivity {
         setContentView(R.layout.activity_modify_nick_name);
         ButterKnife.bind(this);
 
-
-        mCommonFailTvWarn.setText(R.string.modify_nick_name_submit_warn);
-        setOnClickListener();
-    }
-
-    private void setOnClickListener() {
         mEtModifyNickName.addTextChangedListener(mValidationWatcher);
-        mSubmitNickName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nickName = mEtModifyNickName.getText().toString().trim();
-                if (nickName.length() < 2) {
-                    ToastUtil.curt(R.string.common_txt_length_fail);
-                    return;
-                }
-                if (!CommonMethodUtils.getNicknameStatus(nickName)) {
-                    mModifyNickNameFailWarnWarn.setVisibility(View.VISIBLE);
-                    return;
-                }
-                submitNickName(nickName);
-            }
-        });
     }
+
 
     private void submitNickName(final String nickName) {
+        if (!ValidityDecideUtil.getNicknameStatus(nickName)) {
+            mModifyNickNameFailWarnWarn.show(R.string.modify_nick_name_warn);
+            return;
+        }
         API.User.updateNickName(nickName)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback1<Resp>() {
+                .setCallback(new Callback<Resp>() {
                     @Override
-                    protected void onRespSuccess(Resp resp) {
-                        UserInfo user = LocalUser.getUser().getUserInfo();
-                        user.setUserName(nickName);
-                        setResult(RESULT_OK);
-                        ToastUtil.curt(R.string.modify_nick_name_success);
+                    public void onReceive(Resp resp) {
+                        if (resp.isSuccess()) {
+                            UserInfo user = LocalUser.getUser().getUserInfo();
+                            user.setUserName(nickName);
+                            user.setNickNameModified();
+                            CustomToast.getInstance().showText(ModifyNickNameActivity.this, R.string.modify_nick_name_success);
+                            setResult(RESULT_OK);
+                        } else {
+                            mModifyNickNameFailWarnWarn.show(resp.getMsg());
+                        }
                     }
-                })
-                .fire();
+                }).fire();
     }
 
     ValidationWatcher mValidationWatcher = new ValidationWatcher() {
 
         @Override
         public void afterTextChanged(Editable s) {
-            boolean etModifyNickName = getEtModifyNickName();
-            if (etModifyNickName != mSubmitNickName.isEnabled()) {
-                mSubmitNickName.setEnabled(etModifyNickName);
-            }
-            if (!etModifyNickName && mCommonFailTvWarn.isShown()) {
-                mModifyNickNameFailWarnWarn.setVisibility(View.GONE);
+            boolean enable = checkConfirmButtonEnable();
+            if (enable != mConfirmButton.isEnabled()) {
+                mConfirmButton.setEnabled(enable);
             }
         }
     };
 
-    private boolean getEtModifyNickName() {
-        String modifyNickNmae = ViewUtil.getTextTrim(mEtModifyNickName);
-        if (TextUtils.isEmpty(modifyNickNmae)) {
+    private boolean checkConfirmButtonEnable() {
+        String modifyNickName = ViewUtil.getTextTrim(mEtModifyNickName);
+        if (TextUtils.isEmpty(modifyNickName)) {
             return false;
         }
         return true;
+    }
+
+    @OnClick(R.id.confirmButton)
+    public void onClick() {
+        String nickName = mEtModifyNickName.getText().toString().trim();
+        if (LocalUser.getUser().getUserInfo().isNickNameModifiedBefore()) {
+            mModifyNickNameFailWarnWarn.show(R.string.modify_nick_name_warn);
+            return;
+        }
+        submitNickName(nickName);
     }
 }

@@ -4,22 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.domain.account.UserInfo;
 
 import java.lang.ref.WeakReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by 王杰 on 2016/8/29.
@@ -66,29 +57,6 @@ public class CommonMethodUtils {
         return -1;
     }
 
-    /**
-     * 判断输入数字是否为手机号码
-     *
-     * @param phoneNumber
-     * @return
-     */
-    public static boolean isMobileNum(String phoneNumber) {
-        boolean isValid = false;
-        CharSequence inputStr = phoneNumber;
-        //正则表达式
-
-        String phone = "^1[34578]\\d{9}$";
-
-
-        Pattern pattern = Pattern.compile(phone);
-        Matcher matcher = pattern.matcher(inputStr);
-
-
-        if (matcher.matches()) {
-            isValid = true;
-        }
-        return isValid;
-    }
 
     /**
      * 隐藏手机号码中间四位
@@ -104,161 +72,6 @@ public class CommonMethodUtils {
         return " ";
     }
 
-    /**
-     * 功能：身份证的有效验证
-     *
-     * @param IDStr 身份证号
-     * @return true 有效：false 无效
-     * @throws ParseException
-     */
-    public static boolean IDCardValidate(String IDStr) throws ParseException {
-        String[] ValCodeArr = {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
-        String[] Wi = {"7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7", "9", "10", "5", "8", "4", "2"};
-        String Ai = "";
-        // ================ 号码的长度18位 ================
-        if (IDStr.length() != 18) {
-            return false;
-        }
-        // ================ 数字 除最后以为都为数字 ================
-        if (IDStr.length() == 18) {
-            Ai = IDStr.substring(0, 17);
-        }
-        if (isNumeric(Ai) == false) {
-            //errorInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。";
-            return false;
-        }
-        // ================ 出生年月是否有效 ================
-        String strYear = Ai.substring(6, 10);// 年份
-        String strMonth = Ai.substring(10, 12);// 月份
-        String strDay = Ai.substring(12, 14);// 日
-        if (isDate(strYear + "-" + strMonth + "-" + strDay) == false) {
-//          errorInfo = "身份证生日无效。";
-            return false;
-        }
-        GregorianCalendar gc = new GregorianCalendar();
-        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if ((gc.get(Calendar.YEAR) - Integer.parseInt(strYear)) > 150 || (gc.getTime().getTime() - s.parse(strYear + "-" + strMonth + "-" + strDay).getTime()) < 0) {
-                //errorInfo = "身份证生日不在有效范围。";
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-        if (Integer.parseInt(strMonth) > 12 || Integer.parseInt(strMonth) == 0) {
-            //errorInfo = "身份证月份无效";
-            return false;
-        }
-        if (Integer.parseInt(strDay) > 31 || Integer.parseInt(strDay) == 0) {
-            //errorInfo = "身份证日期无效";
-            return false;
-        }
-        // ================ 地区码时候有效 ================
-        Hashtable h = GetAreaCode();
-        if (h.get(Ai.substring(0, 2)) == null) {
-            //errorInfo = "身份证地区编码错误。";
-            return false;
-        }
-        // ================ 判断最后一位的值 ================
-        int TotalmulAiWi = 0;
-        for (int i = 0; i < 17; i++) {
-            TotalmulAiWi = TotalmulAiWi + Integer.parseInt(String.valueOf(Ai.charAt(i))) * Integer.parseInt(Wi[i]);
-        }
-        int modValue = TotalmulAiWi % 11;
-        String strVerifyCode = ValCodeArr[modValue];
-        Ai = Ai + strVerifyCode;
-
-        if (IDStr.length() == 18) {
-            if (Ai.equals(IDStr) == false) {
-                //errorInfo = "身份证无效，不是合法的身份证号码";
-                return false;
-            }
-        } else {
-            return true;
-        }
-        return true;
-    }
-
-    /**
-     * 功能：设置地区编码
-     *
-     * @return Hashtable 对象
-     */
-    @SuppressWarnings("unchecked")
-    private static Hashtable GetAreaCode() {
-        Hashtable hashtable = new Hashtable();
-        hashtable.put("11", "北京");
-        hashtable.put("12", "天津");
-        hashtable.put("13", "河北");
-        hashtable.put("14", "山西");
-        hashtable.put("15", "内蒙古");
-        hashtable.put("21", "辽宁");
-        hashtable.put("22", "吉林");
-        hashtable.put("23", "黑龙江");
-        hashtable.put("31", "上海");
-        hashtable.put("32", "江苏");
-        hashtable.put("33", "浙江");
-        hashtable.put("34", "安徽");
-        hashtable.put("35", "福建");
-        hashtable.put("36", "江西");
-        hashtable.put("37", "山东");
-        hashtable.put("41", "河南");
-        hashtable.put("42", "湖北");
-        hashtable.put("43", "湖南");
-        hashtable.put("44", "广东");
-        hashtable.put("45", "广西");
-        hashtable.put("46", "海南");
-        hashtable.put("50", "重庆");
-        hashtable.put("51", "四川");
-        hashtable.put("52", "贵州");
-        hashtable.put("53", "云南");
-        hashtable.put("54", "西藏");
-        hashtable.put("61", "陕西");
-        hashtable.put("62", "甘肃");
-        hashtable.put("63", "青海");
-        hashtable.put("64", "宁夏");
-        hashtable.put("65", "新疆");
-//      hashtable.put("71", "台湾");
-//      hashtable.put("81", "香港");
-//      hashtable.put("82", "澳门");
-//      hashtable.put("91", "国外");
-        return hashtable;
-    }
-
-    /**
-     * 功能：判断字符串是否为数字
-     *
-     * @param str
-     * @return
-     */
-    private static boolean isNumeric(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        if (isNum.matches()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 功能：判断字符串是否为日期格式
-     *
-     * @param strDate
-     * @return
-     */
-    public static boolean isDate(String strDate) {
-        Pattern pattern = Pattern
-                .compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1-2][0-3]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
-        Matcher m = pattern.matcher(strDate);
-        if (m.matches()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * 根据传入的银行卡号码隐藏前面部分,只显示最后四位
@@ -270,9 +83,7 @@ public class CommonMethodUtils {
         bankNumber = bankNumber.trim();
         String safeBankNumber = "";
         //不管多少长度，只显示16位 ，最后四位显示。
-        if (bankNumber.length() == 16) {
-            safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
-        }
+        safeBankNumber = "****  ****  ****  " + bankNumber.substring(bankNumber.length() - 4, bankNumber.length());
         //根据长度生成*
         /*StringBuilder mStringBuilder = new StringBuilder();
         for (int i = 1; i < bankNumber.length() - 3; i++) {
@@ -288,29 +99,92 @@ public class CommonMethodUtils {
         return safeBankNumber;
     }
 
+
     /**
-     * 限制昵称只能输入中文、字母和数字
+     * 拼接的获取图片验证码的地址
      *
-     * @param nickName
+     * @param userPhone
      * @return
      */
-    public static boolean getNicknameStatus(String nickName) {
-//        nickName = nickName.trim();
-//        Pattern number = Pattern.compile("[0-9]*");
-//        Matcher numberMatcher = number.matcher(nickName);
-//        Pattern letter = Pattern.compile("[a-zA-Z]");
-//        Matcher letterMatcher = letter.matcher(nickName);
-//        Pattern chinese = Pattern.compile("[\u4e00-\u9fa5]");
-//        Matcher chineseMatcher = chinese.matcher(nickName);
-//        if (numberMatcher.matches() && letterMatcher.matches() && chineseMatcher.matches()) {
-//            return true;
-//        }
-//
+    public static String imageCodeUri(String userPhone, String imageUrl) {
+        String url = "";
+        if (!TextUtils.isEmpty(userPhone)) {
+            String mHost = BuildConfig.API_HOST;
+//            String mUri = "/user/user/getRegImage.do";
+            String user = "?userPhone=";
+            url = new StringBuilder(mHost).append(imageUrl).append(user).append(userPhone).toString();
+        }
+        return url;
+    }
 
-        String all = "^[\\u4E00-\\u9FA5\\uF900-\\uFA2D\\w]{2,16}";//{2,10}表示字符的长度是2-10
-        Pattern pattern = Pattern.compile(all);
-        boolean result = Pattern.matches(all, nickName);
-        return result;
+    /**
+     * 判断用户是否实名认证
+     *
+     * @param userInfo
+     * @return
+     */
+    public static boolean isNameAuth(UserInfo userInfo) {
+        if (userInfo == null) {
+            return false;
+        } else if (userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_FILLED || userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_VERIFIED) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断银行卡是否绑定
+     *
+     * @param userInfo
+     * @return
+     */
+    public static boolean isBankAuth(UserInfo userInfo) {
+        if (userInfo == null) {
+            return false;
+        } else if (userInfo.getCardState() == UserInfo.BANKCARD_STATUS_FILLED || userInfo.getCardState() == UserInfo.BANKCARD_STATUS_BOUND) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取年、月、日
+     *
+     * @param dateTime
+     * @return
+     */
+    public static String getYear(String dateTime) {
+        String monthTime = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy--MM--DD");
+        monthTime = simpleDateFormat.format(dateTime);
+        return monthTime;
+    }
+
+    public static String getHour(String hourTime) {
+        hourTime = hourTime.trim();
+        String hourDate = "";
+        String[] time = hourTime.split(" ");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        if (time.length == 2) {
+            hourTime = time[1];
+        }
+        hourDate = simpleDateFormat.format(hourTime);
+        return hourDate;
+    }
+
+    /**
+     * 用来处理交易名义界面的remark的具体描述
+     *
+     * @param typeDetail
+     * @param remark
+     * @return
+     */
+    public static String getRemarkInfo(String typeDetail, String remark) {
+        if (TextUtils.isEmpty(remark)) return "";
+        if (remark.contains(typeDetail)) {
+            remark = remark.replace(typeDetail, "");
+        }
+        return remark;
     }
 
 }

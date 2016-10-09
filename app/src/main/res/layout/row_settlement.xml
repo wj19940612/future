@@ -21,28 +21,37 @@
         android:paddingRight="16dp"
         android:paddingTop="5dp">
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingTop="8dp">
 
             <TextView
-                android:id="@+id/sellDate"
+                android:id="@+id/sellYearMonthDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#666666"
-                android:textSize="12sp"
-                tools:text="07/28\n10:24"/>
+                android:textColor="@color/lucky"
+                android:textSize="10sp"
+                tools:text="07/28"/>
+
+            <TextView
+                android:id="@+id/sellHourMin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/lucky"
+                tools:text="10:24"/>
         </LinearLayout>
 
         <View
             android:layout_width="0.7dp"
             android:layout_height="match_parent"
-            android:background="@color/splitLine"/>
+            android:background="@color/splitLineGrayLight"/>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -72,7 +81,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="25dp"
                 android:layout_toRightOf="@id/tradeType"
-                android:textColor="#666666"
+                android:textColor="@color/lucky"
                 tools:text="市价卖出"/>
 
             <TextView
@@ -82,7 +91,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:gravity="right"
-                tools:text="+20美元"/>
+                android:lineSpacingExtra="3dp"
+                tools:text="+20美元\n(0.00)"/>
         </RelativeLayout>
 
     </LinearLayout>

@@ -13,6 +13,8 @@ public class Preference {
         String SERVER_TIME = "serverTime";
         String HAD_SHOW_TRADE_AGREEMENT = "hadShowTradeAgreement";
         String IS_TRADE_RULE_CLICKED = "isTradeRuleClicked";
+        String PUSH_CLIENT_ID = "pushClientId";
+        String PHONE_NUMBER = "phone";
     }
 
     private static Preference sInstance;
@@ -40,6 +42,14 @@ public class Preference {
 
     public boolean isForeground() {
         return mPrefs.getBoolean(Key.IS_FOREGROUND, false);
+    }
+
+    public void setPhone(String phone) {
+        getEditor().putString(Key.PHONE_NUMBER, phone).commit();
+    }
+
+    public String getPhone() {
+        return mPrefs.getString(Key.PHONE_NUMBER, null);
     }
 
     public void setUserJson(String userJson) {
@@ -80,5 +90,13 @@ public class Preference {
 
     public void setTradeRuleClicked(String userPhone, String varietyType) {
         getEditor().putBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, true).commit();
+    }
+
+    public void setPushClientId(String clientId) {
+        getEditor().putString(Key.PUSH_CLIENT_ID, clientId).commit();
+    }
+
+    public String getPushClientId() {
+        return mPrefs.getString(Key.PUSH_CLIENT_ID, "");
     }
 }

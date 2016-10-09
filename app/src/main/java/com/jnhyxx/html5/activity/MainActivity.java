@@ -8,23 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.webkit.WebView;
 
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
-import com.jnhyxx.html5.net.APIBase;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
 
 import java.net.URISyntaxException;
 
@@ -52,7 +47,6 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         checkVersion();
-        initPush();
 
         initView();
 
@@ -122,19 +116,6 @@ public class MainActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         processIntent(intent);
-    }
-
-    private void initPush() {
-        PushAgent pushAgent = PushAgent.getInstance(this);
-        pushAgent.setDebugMode(BuildConfig.DEBUG);
-        pushAgent.setMessageChannel(APIBase.getHost());
-        pushAgent.setResourcePackageName("com.jnhyxx.html5");
-        pushAgent.enable(new IUmengRegisterCallback() {
-            @Override
-            public void onRegistered(String s) {
-                Log.d(TAG, "onRegistered: " + s);
-            }
-        });
     }
 
     private void checkVersion() {

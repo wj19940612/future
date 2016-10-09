@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
+        classpath 'com.android.tools.build:gradle:2.2.0'
 
         // buffer knife
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -18,6 +18,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        maven { // for getui push
+            url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/"
+        }
     }
 }
 

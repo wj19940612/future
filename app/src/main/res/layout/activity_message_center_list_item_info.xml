@@ -30,8 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="20dp"
-            android:text="信息详情的头部"
-            android:textColor="#262626"
+            android:textColor="@color/blackPrimary"
             android:textSize="17dp"
             android:lineSpacingExtra="25dp"/>
 
@@ -42,8 +41,7 @@
             android:gravity="center"
             android:paddingBottom="35dp"
             android:paddingTop="15dp"
-            android:text="2016-8-23 14:22:33"
-            android:textColor="#A8A8A8"
+            android:textColor="@color/colorDisable"
             android:textSize="11dp" />
         <ScrollView
             android:scrollbars="none"
@@ -55,7 +53,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="10dp"
-                android:text="75757231213213211111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
                 android:textColor="#666666"
                 android:paddingBottom="30dp"/>
         </ScrollView>

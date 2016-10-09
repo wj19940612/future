@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -10,7 +11,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -22,7 +22,10 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.StrFormatter;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
@@ -31,6 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignInActivity extends BaseActivity {
+
+    private static final int REQ_CODE_REGISTER = 1;
 
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
@@ -49,10 +54,8 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.signInButton)
     TextView mSignInButton;
 
-    @BindView(R.id.rlFailWarn)
-    RelativeLayout rlFailWarn;
-    @BindView(R.id.commonFailTvWarn)
-    TextView mFailWarnTv;
+    @BindView(R.id.failWarn)
+    CommonFailWarn mCommonFailWarn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +63,29 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
 
-        mSignUpButton.setEnabled(true);
-        mPhoneNum.addTextChangedListener(mValidationWatcher);
+        mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
-        mFailWarnTv.setText("");
+
+        mPhoneNum.setText(LocalUser.getUser().getPhone());
     }
 
-    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mPassword.removeTextChangedListener(mValidationWatcher);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_REGISTER && resultCode == RESULT_OK) {
+            // User register done, then finish
+            finish();
+        }
+    }
+
+    private ValidationWatcher mValidationWatcher = new com.jnhyxx.html5.utils.ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSignInButtonEnable();
@@ -82,8 +101,27 @@ public class SignInActivity extends BaseActivity {
         }
     };
 
+    private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+
+            formatPhoneNumber();
+        }
+    };
+
+    private void formatPhoneNumber() {
+        String oldPhone = mPhoneNum.getText().toString();
+        String phoneNoSpace = oldPhone.replaceAll(" ", "");
+        String newPhone = StrFormatter.getFormatPhoneNumber(phoneNoSpace);
+        if (!newPhone.equalsIgnoreCase(oldPhone)) {
+            mPhoneNum.setText(newPhone);
+            mPhoneNum.setSelection(newPhone.length());
+        }
+    }
+
     private boolean checkClearPhoneNumButtonVisible() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
         if (!TextUtils.isEmpty(phoneNum)) {
             return true;
         }
@@ -91,7 +129,7 @@ public class SignInActivity extends BaseActivity {
     }
 
     private boolean checkShowPasswordButtonVisible() {
-        String password = mPassword.getText().toString().trim();
+        String password = ViewUtil.getTextTrim(mPassword);
         if (!TextUtils.isEmpty(password)) {
             return true;
         }
@@ -99,11 +137,11 @@ public class SignInActivity extends BaseActivity {
     }
 
     private boolean checkSignInButtonEnable() {
-        String phoneNum = mPhoneNum.getText().toString().trim();
+        String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
             return false;
         }
-        String password = mPassword.getText().toString().trim();
+        String password = ViewUtil.getTextTrim(mPassword);
         if (TextUtils.isEmpty(password) || password.length() < 6) {
             return false;
         }
@@ -111,7 +149,7 @@ public class SignInActivity extends BaseActivity {
     }
 
     @OnClick({R.id.clearPhoneNumButton, R.id.showPasswordButton, R.id.signInButton, R.id.signUpButton, R.id.forgetPassword})
-    public void onClick(View view) {
+    public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.clearPhoneNumButton:
                 mPhoneNum.setText("");
@@ -120,31 +158,46 @@ public class SignInActivity extends BaseActivity {
                 changePasswordInputType();
                 break;
             case R.id.signInButton:
-                String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-                String password = ViewUtil.getTextTrim(mPassword);
-                API.User.signIn(phoneNum, password).setTag(TAG)
-                        .setIndeterminate(this)
-                        .setCallback(new Callback<Resp<JsonObject>>() {
-                            @Override
-                            public void onReceive(Resp<JsonObject> jsonObjectResp) {
-                                if (jsonObjectResp.isSuccess()) {
-                                    UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
-                                    LocalUser.getUser().setUserInfo(userInfo );
-                                    setResult(RESULT_OK);
-                                    finish();
-                                } else {
-                                    // TODO: 9/10/16 登入错误处理
-                                }
-                            }
-                        }).fire();
+                signIn();
                 break;
             case R.id.signUpButton:
-                Launcher.with(this, SignUpActivity.class).execute();
+                switchToSignUpPage();
                 break;
             case R.id.forgetPassword:
                 Launcher.with(this, FindPwdActivity.class).execute();
                 break;
         }
+    }
+
+    private void switchToSignUpPage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(SignUpActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(this, SignUpActivity.class).executeForResult(REQ_CODE_REGISTER);
+        }
+    }
+
+    private void signIn() {
+        final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+        String password = ViewUtil.getTextTrim(mPassword);
+        API.User.login(phoneNum, password).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback<Resp<JsonObject>>() {
+                    @Override
+                    public void onReceive(Resp<JsonObject> jsonObjectResp) {
+                        if (jsonObjectResp.isSuccess()) {
+                            UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
+                            LocalUser.getUser().setUserInfo(userInfo, phoneNum);
+                            ToastUtil.curt(R.string.login_success);
+
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            mCommonFailWarn.show(jsonObjectResp.getMsg());
+                        }
+                    }
+                }).fire();
     }
 
     private void changePasswordInputType() {

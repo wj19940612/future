@@ -66,6 +66,11 @@ public class Launcher {
         return this;
     }
 
+    public Launcher addFlags(int flag) {
+        mIntent.addFlags(flag);
+        return this;
+    }
+
     public void execute() {
         mContext.startActivity(mIntent);
     }

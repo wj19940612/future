@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -39,6 +41,11 @@ public class WebViewActivity extends AppCompatActivity {
 
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
+    public static final String EX_RAW_COOKIE = "rawCookie";
+
+    public static final String LOAD_LOCAL_HTML = "loadLocalHtml";
+
+    public boolean IS_LOAD_LOCAL_HTML = false;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -52,9 +59,22 @@ public class WebViewActivity extends AppCompatActivity {
     LinearLayout mErrorPage;
 
     private boolean mLoadSuccess;
-    private String mPageUrl;
-    private String mTitle;
+    protected String mPageUrl;
+    protected String mTitle;
+    protected String mRawCookie;
     private BroadcastReceiver mNetworkChangeReceiver;
+
+    public TitleBar getTitleBar() {
+        return mTitleBar;
+    }
+
+    public String getRawCookie() {
+        return mRawCookie;
+    }
+
+    public WebView getWebView() {
+        return mWebView;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,9 +84,11 @@ public class WebViewActivity extends AppCompatActivity {
 
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
-
+        Intent intent = getIntent();
+        initData(intent);
         initWebView();
-        initData(getIntent());
+
+        mTitleBar.setRightText(R.string.my_users);
     }
 
     @Override
@@ -78,13 +100,36 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-    private void initData(Intent intent) {
+    protected void initData(Intent intent) {
+        boolean isLoadLocalHtml = intent.getBooleanExtra(LOAD_LOCAL_HTML, false);
+
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
+        mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
         mWebView.loadUrl(mPageUrl);
     }
 
-    private void initWebView() {
+
+    protected void initWebView() {
+        // init cookies
+        if (!TextUtils.isEmpty(mRawCookie)) {
+            String[] cookies = mRawCookie.split("\n");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeSessionCookies(null);
+            } else {
+                CookieManager.getInstance().removeAllCookie();
+            }
+            CookieManager.getInstance().setAcceptCookie(true);
+            for (String cookie : cookies) {
+                CookieManager.getInstance().setCookie(mPageUrl, cookie);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().flush();
+            } else {
+                CookieSyncManager.getInstance().sync();
+            }
+        }
+
         // init webSettings
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -153,6 +198,8 @@ public class WebViewActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mWebView.loadUrl(mPageUrl);
     }
 
     private class WebViewClient extends android.webkit.WebViewClient {

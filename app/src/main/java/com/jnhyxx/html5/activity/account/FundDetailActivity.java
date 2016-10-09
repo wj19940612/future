@@ -144,7 +144,7 @@ public class FundDetailActivity extends BaseActivity {
                 frozen, FinanceUtil.UNIT_SCORE, 0.5f, Color.GRAY));
     }
 
-    static class FundFlowListAdapter extends ArrayAdapter<FundFlowItem> {
+     class FundFlowListAdapter extends ArrayAdapter<FundFlowItem> {
 
         public FundFlowListAdapter(Context context) {
             super(context, 0);
@@ -164,7 +164,7 @@ public class FundDetailActivity extends BaseActivity {
             return convertView;
         }
 
-        static class ViewHolder {
+         class ViewHolder {
             @BindView(R.id.date)
             TextView mDate;
             @BindView(R.id.introduce)
@@ -181,7 +181,7 @@ public class FundDetailActivity extends BaseActivity {
                 mIntroduce.setText(item.getIntro());
                 String flowAmount;
                 if (item.getType() > 0) {
-                    mFlowAmount.setTextColor(resources.getColor(R.color.redPrimary));
+                    mFlowAmount.setTextColor(getColor(R.color.greenPrimary));
                     flowAmount = "+" + item.getCurflowAmt();
                 } else {
                     mFlowAmount.setTextColor(resources.getColor(R.color.greenPrimary));

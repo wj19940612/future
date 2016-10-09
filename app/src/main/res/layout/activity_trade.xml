@@ -50,7 +50,7 @@
                 android:maxLines="1"
                 android:textColor="#A8A8A8"
                 android:textSize="11sp"
-                tools:text="今开 45.6511"/>
+                android:text="今开   —"/>
 
             <TextView
                 android:id="@+id/preClosePrice"
@@ -60,7 +60,7 @@
                 android:maxLines="1"
                 android:textColor="#A8A8A8"
                 android:textSize="11sp"
-                tools:text="昨收 45.6511"/>
+                android:text="昨收   —"/>
 
             <TextView
                 android:id="@+id/highestPrice"
@@ -70,7 +70,7 @@
                 android:maxLines="1"
                 android:textColor="#A8A8A8"
                 android:textSize="11sp"
-                tools:text="最高 45.6511"/>
+                android:text="最高   —"/>
 
             <TextView
                 android:id="@+id/lowestPrice"
@@ -80,13 +80,13 @@
                 android:maxLines="1"
                 android:textColor="#A8A8A8"
                 android:textSize="11sp"
-                tools:text="最低 45.6511"/>
+                android:text="最低   —"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <com.jnhyxx.html5.view.ChartContainer
             android:id="@+id/chartContainer"

@@ -8,7 +8,7 @@
                 android:bottomRightRadius="@dimen/radius"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="#7FDA3333"/>
+            <solid android:color="#7FFB4B55"/>
         </shape>
     </item>
 
@@ -19,7 +19,7 @@
                 android:bottomRightRadius="@dimen/radius"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@android:color/darker_gray"/>
+            <solid android:color="@color/colorDisable"/>
         </shape>
     </item>
 
@@ -30,7 +30,7 @@
                 android:bottomRightRadius="@dimen/radius"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@color/colorPrimary"/>
+            <solid android:color="@color/redPrimary"/>
         </shape>
     </item>
 

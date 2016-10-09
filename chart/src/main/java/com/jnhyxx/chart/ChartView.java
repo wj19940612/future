@@ -207,18 +207,16 @@ public abstract class ChartView extends View {
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
-//        if (mTouchIndex >= 0) {
-//            drawTopTouchLines(mTouchIndex, left, top, width, topPartHeight, canvas);
-//
-//            if (mSettings.isIndexesEnable()) {
-//                drawBottomTouchLines(mTouchIndex, left, top + topPartHeight + mCenterPartHeight,
-//                        width, getBottomPartHeight(), canvas);
-//            }
-//
-//            onTouchLinesAppear(mTouchIndex);
-//        } else {
-//            onTouchLinesDisappear();
-//        }
+        if (mTouchIndex >= 0) {
+            drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
+                    left, top, width, topPartHeight,
+                    left, top2, width, getBottomPartHeight(),
+                    canvas);
+
+            onTouchLinesAppear(mTouchIndex);
+        } else {
+            onTouchLinesDisappear();
+        }
     }
 
     @Override
@@ -231,40 +229,47 @@ public abstract class ChartView extends View {
         return super.dispatchTouchEvent(event);
     }
 
-//
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_MOVE:
-//                if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
-//                        || Math.abs(mDownY - event.getY()) < CLICK_PIXELS) {
-//                    return false;
-//                }
-//
-//                mHandler.removeMessages(WHAT_LONG_PRESS);
-//                if (mAction == Action.LONG_PRESS) {
-//                    int newTouchIndex = calculateTouchIndex(event);
-//                    if (newTouchIndex != mTouchIndex) {
-//                        if (hasThisTouchIndex(newTouchIndex)) {
-//                            mTouchIndex = newTouchIndex;
-//                            redraw();
-//                            return true;
-//                        }
-//                    }
-//                }
-//
-//                return false;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_CANCEL:
-//                mHandler.removeMessages(WHAT_LONG_PRESS);
-//                mAction = Action.NONE;
-//                mTouchIndex = -1;
-//                redraw();
-//                return true;
-//        }
-//
-//        return super.onTouchEvent(event);
-//    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
+                mHandler.sendMessageDelayed(message, DELAY);
+
+                mDownX = event.getX();
+                mDownY = event.getY();
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
+                        || Math.abs(mDownY - event.getY()) < CLICK_PIXELS) {
+                    return false;
+                }
+
+                mHandler.removeMessages(WHAT_LONG_PRESS);
+                if (mAction == Action.LONG_PRESS) {
+                    int newTouchIndex = calculateTouchIndex(event);
+                    if (newTouchIndex != mTouchIndex) {
+                        if (hasThisTouchIndex(newTouchIndex)) {
+                            mTouchIndex = newTouchIndex;
+                            redraw();
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mHandler.removeMessages(WHAT_LONG_PRESS);
+                mAction = Action.NONE;
+                mTouchIndex = -1;
+                redraw();
+                return true;
+        }
+
+        return super.onTouchEvent(event);
+    }
 
     protected boolean hasThisTouchIndex(int touchIndex) {
         return false;
@@ -275,31 +280,24 @@ public abstract class ChartView extends View {
     }
 
     /**
-     * draw top touch lines, total area of top without middle
+     * draw touch lines, total area of top without middle
      *
+     * @param indexesEnable
      * @param touchIndex
      * @param left
      * @param top
      * @param width
      * @param height
+     * @param left2
+     * @param top2
+     * @param width2
+     * @param height2
      * @param canvas
      */
-    protected void drawTopTouchLines(int touchIndex, int left, int top, int width, int height,
-                                     Canvas canvas) {
-    }
-
-    /**
-     * draw top touch lines, total area of bottom without middle
-     *
-     * @param touchIndex
-     * @param left
-     * @param top
-     * @param width
-     * @param height
-     * @param canvas
-     */
-    protected void drawBottomTouchLines(int touchIndex, int left, int top, int width, int height,
-                                        Canvas canvas) {
+    protected void drawTouchLines(boolean indexesEnable, int touchIndex,
+                                  int left, int top, int width, int height,
+                                  int left2, int top2, int width2, int height2,
+                                  Canvas canvas) {
     }
 
     protected void onTouchLinesAppear(int touchIndex) {
@@ -346,6 +344,20 @@ public abstract class ChartView extends View {
             float[] indexesBaseLines, int left2, int top2, int width2, int height2,
             Canvas canvas);
 
+    /**
+     * draw real time data
+     *
+     * @param indexesEnable
+     * @param left
+     * @param top
+     * @param width
+     * @param height
+     * @param left2
+     * @param top2
+     * @param width2
+     * @param height2
+     * @param canvas
+     */
     protected abstract void drawRealTimeData(boolean indexesEnable,
                                              int left, int top, int width, int height,
                                              int left2, int top2, int width2, int height2,

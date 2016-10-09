@@ -25,7 +25,8 @@
         </attr>
         <attr name="subText" format="reference|string"/>
         <attr name="subTextSize" format="reference|string"/>
-        <attr name="subTextColor" format="reference|string"/>
+        <attr name="subTextColor" format="color"/>
+        <attr name="subTextBackground" format="reference"/>
         <attr name="rowText" format="reference|string"/>
         <attr name="rowTextSize" format="dimension"/>
         <attr name="rowTextColor" format="color"/>
@@ -36,6 +37,7 @@
         <attr name="titleTextSize" format="dimension"/>
         <attr name="titleTextColor" format="color"/>
         <attr name="customView" format="reference"/>
+        <attr name="rightBackground" format="reference"/>
         <attr name="rightText" format="reference|string"/>
         <attr name="rightTextSize" format="dimension"/>
         <attr name="rightTextColor" format="color"/>
@@ -45,17 +47,18 @@
         <attr name="backIcon" format="reference"/>
         <attr name="barBackground" format="reference"/>
     </declare-styleable>
+
     <!--带圆环的imageView-->
     <declare-styleable name="CircularAnnulusImageView">
-
-        <attr name="borderWidth" format="dimension" />
-        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension"/>
+        <attr name="borderColor" format="color"/>
     </declare-styleable>
+
     <!--仿照ExpandableListView，使上面控件点击后，底下控件可以展示-->
     <declare-styleable name="ExpandableLayout">
-        <attr name="elLeftTxt" format="reference|string" />
-        <attr name="elDuration" format="integer" />
-        <attr name="elBottomTxt" format="reference|string" />
+        <attr name="elLeftTxt" format="reference|string"/>
+        <attr name="elDuration" format="integer"/>
+        <attr name="elBottomTxt" format="reference|string"/>
         <attr name="elBorderWidth" format="dimension"/>
         <attr name="elBorderColor" format="color"/>
     </declare-styleable>
@@ -63,5 +66,19 @@
     <declare-styleable name="OrderConfigurationSelector">
         <attr name="maximum" format="integer"/>
         <attr name="android:textSize"/>
+    </declare-styleable>
+
+    <!--公共的中间有文字，旁边有图片的警告-->
+    <declare-styleable name="CommonFailWarn">
+        <attr name="visible" format="boolean"/>
+        <attr name="centerText" format="reference|string"/>
+        <attr name="centerTextSize" format="dimension"/>
+        <attr name="centerTextColor" format="color"/>
+        <attr name="centerDrawable" format="reference"/>
+        <attr name="centerDrawablePadding" format="reference|dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="SetHintTextSizeEditText">
+        <attr name="hintTextSize" format="dimension"/>
     </declare-styleable>
 </resources>

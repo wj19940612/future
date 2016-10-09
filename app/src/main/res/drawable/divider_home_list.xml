@@ -4,7 +4,7 @@
     <item
         android:left="10dp"
         android:right="10dp"
-        android:drawable="@color/splitLine">
+        android:drawable="@color/splitLineGrayLight">
     </item>
 
 </layer-list>

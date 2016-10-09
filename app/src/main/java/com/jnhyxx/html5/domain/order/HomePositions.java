@@ -59,6 +59,7 @@ public class HomePositions {
         public int getHandsNum() {
             return handsNum;
         }
+
     }
 
     public static class IntegralOpSBean implements Position {

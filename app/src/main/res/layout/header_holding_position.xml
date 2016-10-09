@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:background="@drawable/btn_blue_trade_page"
+            android:background="@drawable/btn_blue"
             android:gravity="center"
             android:minWidth="@dimen/trade_header_btn_width"
             android:paddingBottom="8dp"

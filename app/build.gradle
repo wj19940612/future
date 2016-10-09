@@ -17,6 +17,18 @@ android {
         renderscriptSupportModeEnabled true
 
         multiDexEnabled true
+
+        // the ndk and manifest configs are for getui
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
+        }
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
+                GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
+                GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
+                PACKAGE_NAME    : applicationId
+        ]
     }
 
     java.util.Properties properties = new Properties();
@@ -32,7 +44,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
             signingConfig signingConfigs.release
         }
@@ -49,16 +61,10 @@ android {
             versionCode 6
             versionName '1.2.1'
         }
-        app1 {
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://app1.jnhyxx.com\"')
-        }
         microil {
             versionCode 1
-            versionName '1.0.0'
+            versionName '2.0.0'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion 21
         }
         tst {
             applicationId 'com.jnhyxx.test'
@@ -66,7 +72,6 @@ android {
             versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://139.129.205.244\"')
         }
-
         ryt {
             applicationIdSuffix '.ryt'
             versionCode 1
@@ -88,23 +93,19 @@ android {
     packagingOptions {
         exclude "META-INF/INDEX.LIST" // will not include INDEX file
         exclude "META-INF/io.netty.versions.properties"
+        // for getui
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
 dependencies {
-    app1Compile files('libs/via_sdk_v1.jar')
-    provided files('libs/via_sdk_v1.jar')
     microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
-    app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
     compile project(':SlidingMenu')
-    compile project(':PushSDK')
-    compile project(':kutils')
-    compile project(':chart')
-    compile project(':PushSDK')
     compile project(':kutils')
     compile project(':chart')
     compile 'com.android.support:appcompat-v7:24.2.0'
@@ -123,4 +124,5 @@ dependencies {
     compile files('libs/netty-common-4.1.5.final.jar')
     compile files('libs/netty-transport-4.1.5.final.jar')
     compile files('libs/netty-resolver-4.1.5.final.jar')
+    compile 'com.getui:sdk:2.9.3.0'
 }

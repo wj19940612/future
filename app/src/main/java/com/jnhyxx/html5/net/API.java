@@ -3,11 +3,10 @@ package com.jnhyxx.html5.net;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.jnhyxx.html5.App;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
-import com.umeng.message.UmengRegistrar;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -56,88 +55,41 @@ public class API extends APIBase {
         }
 
         /**
-         * 更新友盟设备号 /user/user/updateUmCode
-         *
-         * @param token
-         */
-        public static API updateUMDeviceId(String token) {
-            return new API("/user/user/updateUmCode",
-                    new ApiParams()
-                            .put("token", token)
-                            .put("umCode", UmengRegistrar.getRegistrationId(App.getAppContext()))
-                            .put("platform", "android")
-                            .put("environment", 1) // Release
-                            .put("pkgtype", "androidcainiu"));
-        }
-
-        /**
-         * 获取注册短信验证码 /user/sms/getRegCode
+         * 获取注册短信验证码 /user/user/getRegCode.do
          *
          * @param tele
          */
-        public static API obtainAuthCode(String tele) {
-            String sign = null;
-            try {
-                sign = SecurityUtil.md5Encrypt(tele + "luckin");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            // TODO: 2016/8/30 原来的获取验证码接口
-//            return new API("/user/sms/getRegCode",
-//                    new ApiParams()
-//                            .put(TELE, tele)
-//                            .put(SIGN, sign));
+        public static API obtainAuthCode(String tele, String regImageCode) {
             return new API("/user/user/getRegCode.do",
                     new ApiParams()
-                            .put("userPhone", tele));
-//                            .put(SIGN, sign)
+                            .put("userPhone", tele)
+                            .put("regImageCode", regImageCode));
         }
 
         /**
-         * 接口名：获取注册图片验证码  user/user/getRegImage.do
+         * 找回密码时候获取短信验证码 /user/user/retrievePass.do
          *
          * @param userPhone
-         * @return
          */
-
-        public static API getRegisterImage(String userPhone) {
-
-            return new API("/user/user/getRegImage.do",
-                    new ApiParams()
-                            .put("userPhone", userPhone));
-        }
-
-        /**
-         * 找回密码时候获取短信验证码 /user/sms/findLoginPwdCode
-         *
-         * @param tele
-         */
-        public static API obtainAuthCodeWhenFindPwd(String tele) {
-            String sign = null;
-            try {
-                sign = SecurityUtil.md5Encrypt(tele + "luckin");
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-
+        public static API obtainAuthCodeWhenFindPwd(String userPhone, String regImageCode) {
             return new API("/user/user/retrievePass.do",
                     new ApiParams()
-                            .put("userPhone", tele));
-//                            .put(SIGN, sign));
+                            .put("userPhone", userPhone)
+                            .put("regImageCode", regImageCode));
+
         }
 
         /**
-         * 找回登录密码 - 验证码验证 /user/sms/authLoginPwdCode
+         * 找回登录密码 - 验证码验证 /user/user/checkRetriveMsgCode.do
          *
-         * @param tele
+         * @param userPhone
          * @param code
          * @return
          */
-        public static API authCodeWhenFindPassword(String tele, String code) {
-//            return new API("/user/sms/authLoginPwdCode",
+        public static API authCodeWhenFindPassword(String userPhone, String code) {
             return new API("/user/user/checkRetriveMsgCode.do",
                     new ApiParams()
-                            .put("userPhone", tele)
+                            .put("userPhone", userPhone)
                             .put("msgCode", code));
         }
 
@@ -148,7 +100,7 @@ public class API extends APIBase {
          * @param password
          * @param regCode
          */
-        public static API signUp(String phoneNum, String password, String regCode, String promoterCode) {
+        public static API register(String phoneNum, String password, String regCode, String promoterCode) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "注册时密码MD5加密" + password);
@@ -160,15 +112,9 @@ public class API extends APIBase {
                             .put("userPhone", phoneNum)
                             .put("userPass", password)
                             .put("regCode", regCode)
-                            .put("promoterCode", promoterCode));
-
-            // TODO: 7/22/16 统计数据 maybe delete
-                    /*.put("deviceModel", "deviceModel")
-                    .put("deviceImei", "deviceImei")
-                    .put("deviceVersion", "deviceVersion")
-                    .put("clientVersion", "clientVersion")
-                    .put("regSource", "regSource")
-                    .put("operator", "operator");*/
+                            .put("promoterCode", promoterCode)
+                            .put("deviceId", Preference.get().getPushClientId())
+                            .put("platform", 0));
         }
 
         /**
@@ -177,56 +123,30 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
-        public static API signIn(String phoneNum, String password) {
+        public static API login(String phoneNum, String password) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "登陆密码MD5加密" + password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
+
             return new API("/user/user/login.do",
                     new ApiParams()
                             .put("userPhone", phoneNum)
-                            .put("userPass", password));
-
-            // TODO: 7/22/16 统计数据 maybe delete
-            /*      .put("deviceModel", deviceModel)
-                    .put("deviceImei", deviceImei)
-                    .put("deviceVersion", deviceVersion)
-                    .put("clientVersion", clientVersion)
-                    .put("operator", operator);*/
+                            .put("userPass", password)
+                            .put("deviceId", Preference.get().getPushClientId())
+                            .put("platform", 0));
         }
 
         /**
-         * /user/user/findUserInfo.do
+         * 找回密码: 修改密码 /user/user/updatePass.do
          *
+         * @param userPhone
+         * @param userPass
          * @return
          */
-        public static API getUserInfo() {
-            return new API("/user/user/findUserInfo.do", null);
-        }
-
-        /**
-         * 接口名：更新通过短信验证码找回的密码
-         * <p/>
-         * URL  http://域名/user/user/retrieveUpdatePass.do
-         *
-         * @param userPhone 用户手机号
-         * @param userPass  用户密码
-         * @return
-         */
-//        public static API modifyPwdWhenFindPwd(String phone, String authCode, String newPwd) {
-//            return new API("/user/user/findLoginPwd",
-//                    new ApiParams()
-//                            .put(TELE, phone)
-//                            .put(AUTH_CODE, authCode)
-//                            .put(PASSWORD, newPwd));
         public static API modifyPwdWhenFindPwd(String userPhone, String userPass) {
-//            return new API("/user/user/retrieveUpdatePass.do",
-//                    new ApiParams()
-//                            .put("userPhone", userPhone)
-//                            .put("regCode", regCode)
-//                            .put("userPass", userPass));
             try {
                 userPass = SecurityUtil.md5Encrypt(userPass);
                 Log.d(TAG, "找回密码密码MD5加密" + userPass);
@@ -237,57 +157,6 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("userPhone", userPhone)
                             .put("userPass", userPass));
-        }
-
-
-        /**
-         * 接口名：获取找回密码图片验证码
-         * <p/>
-         * URL  http://域名/user/user/getRetrieveImage.do
-         *
-         * @param userPhone
-         * @return
-         */
-        public static API getRetrieveImage(String userPhone) {
-            return new API("/user/user/getRetrieveImage.do",
-                    new ApiParams()
-                            .put(TELE, userPhone));
-        }
-
-        /**
-         * 验证银行卡是否绑定 /user/user/checkBankCard
-         *
-         * @param token
-         */
-        public static API getBankcardInfo(String token) {
-            return new API("/user/user/checkBankCard",
-                    new ApiParams()
-                            .put(TOKEN, token));
-        }
-
-
-        /**
-         * 获取简单的个人信息 /user/user/getAcountDetail
-         *
-         * @param token
-         * @return
-         */
-        public static API getProfileSummary(String token) {
-            return new API("/user/user/getAcountDetail",
-                    new ApiParams()
-                            .put(TOKEN, token));
-        }
-
-        /**
-         * /user/user/checkUserName 验证是否实名认证
-         *
-         * @param token
-         * @return
-         */
-        public static API getUserNameAuth(String token) {
-            return new API("/user/user/checkUserName",
-                    new ApiParams()
-                            .put(TOKEN, token));
         }
 
         /**
@@ -302,23 +171,6 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("realName", realName)
                             .put("idCard", identityNum));
-        }
-
-        /**
-         * /user/user/updatebank 认证银行卡
-         *
-         * @param token
-         * @param bankcardNum
-         * @param bankName
-         * @param phoneNum
-         * @return
-         */
-        public static API updateBankcard(String token, String bankcardNum, String bankName, String phoneNum) {
-            return new API("/user/user/updatebank",
-                    new ApiParams()
-                            .put(TOKEN, token).put("bankNum", bankcardNum)
-                            .put("bankName", bankName)
-                            .put("phone", phoneNum));
         }
 
         /**
@@ -354,23 +206,6 @@ public class API extends APIBase {
             return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
-        /**
-         * /user/newsArticle/newsList 获取资讯: sectionId: 行情分析-58, 行业资讯-57
-         *
-         * @param token
-         * @param sectionId
-         * @param pageNo
-         * @param pageSize
-         * @return
-         */
-        public static API getInfo(String token, int sectionId, int pageNo, int pageSize) {
-            return new API("/user/newsArticle/newsList",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put("sectionId", sectionId)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
-        }
 
         /**
          * /user/newsNotice/newsImgList 获取首页广告
@@ -383,16 +218,13 @@ public class API extends APIBase {
                             .put(TYPE, 2));
         }
 
-        public static API loginOut() {
-            return new API("/user/user/logout.do", new ApiParams());
-        }
-
         /**
-         * 接口名：获取用户是否修改过昵称信息
-         * URL  http://域名/user/user/findIsUpdateNickName.do
+         * 退出
+         *
+         * @return
          */
-        public static API findIsUpdateNickName() {
-            return new API("/user/user/findIsUpdateNickName.do", new ApiParams());
+        public static API logout() {
+            return new API("/user/user/logout.do", new ApiParams());
         }
 
         /**
@@ -408,22 +240,86 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("nickName", nickName));
         }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型   0为首页资讯,1为列表资讯,2为弹窗资讯
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+        }
+
+        /**
+         * /user/user/findPromoterCode.do
+         *
+         * @return
+         */
+        public static API getPromoteCode() {
+            return new API("/user/user/findPromoterCode.do", null);
+        }
+
+        /**
+         * /user/user/toBePromoter.do 成为推广员
+         *
+         * @return
+         */
+        public static API becomePromoter() {
+            return new API("/user/user/toBePromoter.do", null);
+        }
+
+        /**
+         * 接口名：获取找回密码图片验证码 /user/user/getRetrieveImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+        public static String getFindPwdAuthCodeImage(String userPhone) {
+            return getHost() + "/user/user/getRetrieveImage.do" + "?userPhone=" + userPhone;
+        }
+
+        /**
+         * 接口名：获取注册图片验证码  user/user/getRegImage.do
+         *
+         * @param userPhone
+         * @return
+         */
+        public static String getRegisterAuthCodeImage(String userPhone) {
+            return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + userPhone;
+        }
     }
 
     public static class Finance {
-        /**
-         * 用户资金账户 /financy/financy/apiFinancyMain
-         *
-         * @param token
-         */
-//        public static API getFundInfo(String token) {
-//            return new API("/financy/financy/apiFinancyMain",
-//                    new ApiParams()
-//                            .put("token", token));
-//        public static API getFundInfo(String token) {
-//            return new API("/users/finance/findFlowList.do",
-//                    new ApiParams().put("token", token));
-//        }
 
         /**
          * 接口名：查询用户资金信息
@@ -437,18 +333,64 @@ public class API extends APIBase {
                     new ApiParams());
         }
 
+        /**
+         * 接口名：用户充值(银行卡充值)
+         * <p>
+         * URL  http://域名/user/finance/deposit.do
+         *
+         * @param money
+         * @return
+         */
+        public static API depositByBankApply(double money) {
+            return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
+        }
 
         /**
-         * 用户提现申请 /financy/financy/apiWithdraw
+         * 接口名：用户充值(微信充值)
+         * URL  http://域名/user/finance/depositByWeChat.do
          *
-         * @param token
-         * @param amount
+         * @param money
+         * @return
          */
-        public static API withdraw(String token, double amount) {
-            return new API("/financy/financy/apiWithdraw",
+        public static API depositByWeChartApply(double money) {
+            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+        }
+
+        /**
+         * 接口名：用户充值(支付宝充值)
+         * URL  http://域名/user/finance/depositByAlipay.do
+         *
+         * @param money
+         * @param platform 客户端平台（0：ios;1安卓
+         * @return
+         */
+        public static API depositByAliPay(double money, int platform) {
+            return new API("/user/finance/depositByAlipay.do",
                     new ApiParams()
-                            .put(TOKEN, token)
-                            .put("inoutAmt", amount));
+                            .put("money", money)
+                            .put("platform", platform));
+        }
+
+        /**
+         * 接口名：查询当前渠道所支持的所有支付渠道
+         *
+         * http://域名/user/finance/findDepositType.do
+         */
+        public static API getSupportApplyWay() {
+            return new API("/user/finance/findDepositType.do", null);
+        }
+
+        /**
+         * 接口名：用户提现
+         * <p>
+         * URL  http://域名/user/finance/draw.do
+         *
+         * @param money
+         */
+        public static API withdraw(double money) {
+            return new API("/user/finance/draw.do",
+                    new ApiParams()
+                            .put("money", money));
         }
 
         /**
@@ -484,17 +426,51 @@ public class API extends APIBase {
         }
 
         /**
+         * 接口名：资金或积分明细
+         * <p>
+         * URL  http://域名/user/finance/findFlowList.do
+         *
          * @param type     type=money为资金明细，type=score为积分明细
          * @param offset   流水起点
          * @param pageSize 流水显示条数
          * @return
          */
         public static API getFundSwitchIntegral(String type, int offset, int pageSize) {
-            return new API("/users/finance/findFlowList.do",
+            return new API(GET, "/user/finance/findFlowList.do",
                     new ApiParams()
-                            .put(TYPE, type)
-                            .put(PAGE_NO, offset)
-                            .put(PAGE_SIZE, pageSize));
+                            .put("type", type)
+                            .put("offset", offset)
+                            .put("size", pageSize));
+        }
+
+        /**
+         * 接口名：查询用户单笔提现记录详细信息
+         * URL  http://域名/user/finance/findIOInfo.do
+         *
+         * @param type type=-1提现记录 提现记录id号
+         * @param id
+         * @return
+         */
+        public static API getWithdrawRecordInfo(int type, int id) {
+            return new API("/user/finance/findIOInfo.do", new ApiParams()
+                    .put("type", type)
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询用户提现记录
+         * URL  http://域名/user/finance/findIOList.do
+         *
+         * @param type   type=-1提现记录
+         * @param offset 提现记录起始点
+         * @param size   每次提现记录显示条数
+         * @return
+         */
+        public static API getWithdrawRecordList(int type, int offset, int size) {
+            return new API("/user/finance/findIOList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
         }
     }
 
@@ -525,6 +501,45 @@ public class API extends APIBase {
                             .put(TOKEN, token)
                             .put(PAGE_NO, pageNo)
                             .put(PAGE_SIZE, pageSize));
+        }
+
+        /**
+         * 接口名：查询资讯列表
+         * URL  http://域名/user/news/findNewsList.do
+         *
+         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
+         * @param offset 资讯起始点
+         * @param size   资讯显示数量
+         * @return
+         */
+        public static API findNewsList(int type, int offset, int size) {
+            return new API(GET, "/user/news/findNewsList.do", new ApiParams()
+                    .put("type", type)
+                    .put("offset", offset)
+                    .put("size", size));
+        }
+
+        /**
+         * 查询咨询详情
+         * URL  http://域名/user/news/findNews.do
+         *
+         * @param id
+         * @return
+         */
+        public static API findNewsInfo(int id) {
+            return new API("/user/news/findNews.do", new ApiParams()
+                    .put("id", id));
+        }
+
+        /**
+         * 接口名：查询资讯(通过第三方地址)
+         * URL  http://域名/user/news/findNewsByUrl.do
+         *
+         * @param url
+         * @return
+         */
+        public static API findNewsByUrl(String url) {
+            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 
@@ -616,10 +631,11 @@ public class API extends APIBase {
          *
          * @param varietyId
          */
-        public static API getFuturesFinancing(int varietyId) {
+        public static API getFuturesFinancing(int varietyId, int payType) {
             return new API(GET, "/order/variety/getAssetsByVariety.do",
                     new ApiParams()
-                            .put("varietyId", varietyId));
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
         }
 
         /**
@@ -676,7 +692,7 @@ public class API extends APIBase {
          * /order/order/unwind.do 平仓
          *
          * @param showId
-         * @param fundType
+         * @param payType
          * @param unwindPrice
          * @return
          */
@@ -725,5 +741,27 @@ public class API extends APIBase {
      */
     public static String getTradeRule(String varietyType) {
         return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
+    }
+
+    /**
+     * 推广赚钱 url
+     */
+    public static String getPromtePage() {
+        return getHost() + "/mine/extension.html?nohead=1";
+    }
+
+    /**
+     * 推广赚钱 我的用户 url
+     */
+    public static String getPromteMyUsers() {
+        return getHost() + "/mine/users.html?nohead=1";
+    }
+
+    /**
+     * 注册界面的服务协议网址
+     * //服务协议的接口
+     */
+    public static String getRegisterServiceProtocol() {
+        return getHost() + "/xieyi/agreement.html?nohead=1";
     }
 }

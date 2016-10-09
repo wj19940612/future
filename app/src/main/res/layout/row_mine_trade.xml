@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><!--我的界面的消息中心界面的交易提醒的item样式-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/accountTradeWarnImageStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/account_trade_warn_list_icon_bad" />
+
+        <TextView
+            android:id="@+id/accountTradeWarnTvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/accountTradeWarnImageStatus"
+            android:text="交易提醒通知"
+            android:textColor="@color/blackPrimary" />
+
+        <TextView
+            android:id="@+id/accountTradeWarnTvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/accountTradeWarnTvTitle"
+            android:layout_alignParentRight="true"
+            android:text="2016-12-12 12:12:12"
+            android:textColor="#ABABAB"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:paddingBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="10dp"
+        android:textColor="@color/lucky"
+        android:textSize="12dp" />
+</LinearLayout>

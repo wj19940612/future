@@ -53,9 +53,37 @@
 ## Attributes
 -keepattributes SourceFile,LineNumberTable,Signature,InnerClasses
 
-# Jar: via sdk v1
--keep class com.wo.**{*;}
--keep public class org.eclipse.paho.**{*;}
-
 # Picasso
 -dontwarn com.squareup.okhttp.**
+
+# Netty
+# ignore netty lib warning
+-dontwarn io.netty.**
+
+# netty 4.0
+-keep class io.netty.** {
+    *;
+}
+-keep interface io.netty.** {
+    *;
+}
+
+# Slf4j for android
+-keep class org.slf4j.** {
+    *;
+}
+-keep interface org.slf4j.** {
+    *;
+}
+
+# Jzlib
+-keep class com.jcraft.jzlib.** {
+    *;
+}
+-keep interface com.jcraft.jzlib.** {
+    *;
+}
+
+# SlidingMenu
+-dontwarn com.jeremyfeinstein.slidingmenu.lib.**
+-keep class com.jeremyfeinstein.slidingmenu.lib.** { *; }

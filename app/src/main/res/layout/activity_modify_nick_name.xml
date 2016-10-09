@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_modify_nick_name"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.setting.ModifyNickNameActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_modify_nick_name"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.setting.ModifyNickNameActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/modify_nick_name_title" />
+        app:titleText="@string/modify_nick_name_title"/>
 
-    <include layout="@layout/common_fail_warn"
-        android:id="@+id/modifyNickNameFailWarnWarn"
-        android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <LinearLayout style="@style/settingLinearLayout">
 
-        <TextView
-            style="@style/settingTitleTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            style="@style/settingLinearLayout"
             android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:text="@string/modify_nick_name"
-            android:textColor="#262626" />
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:gravity="bottom">
 
-        <EditText
-            android:id="@+id/etModifyNickName"
-            style="@style/settingEditTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/modify_nick_name_editText_hint"
-            android:maxLength="16"
-            android:textSize="18sp" />
-    </LinearLayout>
+            <TextView
+                style="@style/settingTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="50dp"
+                android:text="@string/modify_nick_name"
+                android:textColor="#262626"/>
+
+            <EditText
+                android:id="@+id/etModifyNickName"
+                style="@style/settingEditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/modify_nick_name_editText_hint"
+                android:maxLength="16"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFailTvWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@android:color/black" />
+        android:background="@android:color/black"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,10 +69,10 @@
         android:paddingTop="15dp"
         android:text="@string/modify_nick_name_warn"
         android:textColor="#FB4B55"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
     <TextView
-        android:id="@+id/submitNickName"
+        android:id="@+id/confirmButton"
         style="@style/PrimaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,5 +80,5 @@
         android:layout_marginRight="16dp"
         android:text="@string/ok"
         android:textColor="@android:color/white"
-        android:textSize="17sp" />
+        android:textSize="17sp"/>
 </LinearLayout>

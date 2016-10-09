@@ -1,17 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDF0F5"
-    android:orientation="vertical"
-    tools:context=".fragment.MineFragment">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context=".fragment.MineFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/account_mine_header_bg">
+        android:background="@drawable/bg_account_mine_header">
 
         <com.jnhyxx.html5.view.TitleBar
             android:id="@+id/titleBar"
@@ -19,78 +18,70 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             app:barBackground="@android:color/transparent"
-            app:rightImage="@drawable/ic_account_nav_setting"
-            app:rightVisible="true" />
+            app:rightImage="@drawable/ic_account_nav_setting"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/titleBar"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <com.jnhyxx.html5.view.CircularAnnulusImageView
+                    android:id="@+id/headImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/account_main_pic_user"
-                    app:borderColor="@android:color/holo_red_light"
-                    app:borderWidth="3dp" />
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:src="@drawable/ic_avatar_default"
+                    app:borderColor="#4D358CF3"
+                    app:borderWidth="3dp"/>
 
                 <TextView
                     android:id="@+id/nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:gravity="center_horizontal"
-                    android:padding="6dp"
-                    android:text="@string/account_not_login"
-                    android:textColor="@android:color/white" />
+                    android:text="@string/no_logged"
+                    android:textColor="@android:color/white"/>
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:src="@drawable/account_main_icon_integration" />
-
-                    <TextView
-                        android:id="@+id/score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:paddingLeft="5dp"
-                        android:text="@string/account_mine_integral"
-                        android:textColor="@color/account_top_blue_text" />
-                </LinearLayout>
+                    android:layout_marginTop="12dp"
+                    android:drawableLeft="@drawable/ic_account_score"
+                    android:drawablePadding="6dp"
+                    android:text="@string/mine_score"
+                    android:textColor="@color/blueAssist"
+                    tools:text="0分"/>
             </LinearLayout>
-
             <View
-                android:layout_width="1px"
+                android:layout_width="0.5dp"
                 android:layout_height="match_parent"
-                android:background="@color/splitLine" />
-
+                android:background="@color/grayHint"/>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:orientation="vertical"
                 android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/account_user_balance"
-                    android:textColor="@android:color/white" />
+                    android:layout_marginTop="10dp"
+                    android:text="@string/mine_balance"
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     android:id="@+id/balance"
@@ -98,16 +89,16 @@
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
                     android:text="@string/zero"
-                    android:textColor="#FB4B55"
-                    android:textSize="50sp" />
+                    android:textColor="@color/redPrimary"
+                    android:textSize="40sp"/>
 
                 <LinearLayout
                     android:id="@+id/signArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="30dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:paddingTop="20dp"
                     android:visibility="visible">
 
                     <TextView
@@ -116,12 +107,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_account_login_or_left_shape"
+                        android:background="@drawable/btn_blue"
                         android:clickable="true"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_in"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"/>
 
                     <TextView
                         android:id="@+id/signUpButton"
@@ -129,12 +120,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_account_register_right_shape"
+                        android:background="@drawable/btn_blue_inverse"
                         android:clickable="true"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/sign_up_free"
-                        android:textColor="@color/account_top_blue_text" />
+                        android:textColor="@color/blueAssist"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -142,8 +133,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="30dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:paddingTop="20dp"
                     android:visibility="gone">
 
                     <TextView
@@ -152,12 +143,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_account_login_or_left_shape"
+                        android:background="@drawable/btn_blue"
                         android:clickable="true"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/recharge"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"/>
 
                     <TextView
                         android:id="@+id/withdraw"
@@ -165,71 +156,75 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_account_register_right_shape"
+                        android:background="@drawable/btn_blue_inverse"
                         android:clickable="true"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/withdraw"
-                        android:textColor="@color/account_top_blue_text" />
+                        android:textColor="@color/blueAssist"/>
                 </LinearLayout>
             </LinearLayout>
 
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/splitLineGrayLight"/>
         </LinearLayout>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#EDF0F5"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_news"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/message_center"
         app:rowTextColor="@android:color/black"
-        app:subText="数字" />
+        app:subText="99"
+        app:subTextBackground="@drawable/account_message_warm"
+        app:subTextColor="@android:color/white"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2" />
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/tradeDetail"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_detail"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-        app:rowText="@string/account_trade_info"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowText="@string/trade_detail"
+        app:rowTextColor="@color/blackPrimary"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2" />
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/paidToPromote"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_brand"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/paid_to_promote"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowTextColor="@color/blackPrimary"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splitLine2" />
+    <include layout="@layout/split_line_gray_dark"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/aboutUs"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="60dp"
         android:background="@android:color/white"
         app:leftIcon="@drawable/ic_account_list_about_us"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-        app:rowText="@string/account_aboutUs"
-        app:rowTextColor="@color/account_center_text" />
+        app:rowText="@string/about_us"
+        app:rowTextColor="@color/blackPrimary"/>
+
+    <include layout="@layout/split_line_gray_dark"/>
 </LinearLayout>

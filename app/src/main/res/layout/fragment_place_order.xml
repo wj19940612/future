@@ -13,14 +13,24 @@
         android:layout_height="@dimen/trade_header_height"
         android:background="@android:color/transparent"/>
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/marketCloseText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:background="@color/bluePrimary"
-        android:paddingBottom="16dp"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:textSize="15sp"
+        tools:text="@string/prompt_next_trade_time_is"/>
+
+    <RelativeLayout
+        android:id="@+id/marketOpenArea"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@color/bluePrimary"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/lastPrice"
@@ -62,7 +72,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +101,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -124,7 +134,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/splitLineDark"/>
+            android:background="@color/splitLineBlueLight"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -252,7 +262,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
-                tools:text="45.88"/>
+                android:text="—"/>
         </LinearLayout>
 
         <View

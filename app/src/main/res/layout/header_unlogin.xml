@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/btn_blue_trade_page"
+        android:background="@drawable/btn_blue"
         android:gravity="center"
         android:minWidth="@dimen/trade_header_btn_width"
         android:paddingBottom="8dp"

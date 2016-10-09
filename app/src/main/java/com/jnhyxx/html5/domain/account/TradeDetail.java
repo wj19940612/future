@@ -1,21 +1,13 @@
 package com.jnhyxx.html5.domain.account;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/8/30.
  */
 
 public class TradeDetail implements Serializable {
+    private static final long serialVersionUID = -7454080372304618453L;
     /**
      * 资金明细表
      */
@@ -24,78 +16,104 @@ public class TradeDetail implements Serializable {
      * 代表将要查 积分明细表
      */
     public static final int INTEGRAL_DETAIL_TABLE = 791;
-    private static final long serialVersionUID = -7454080372304618453L;
+
+    //收益增加的tradeDetail标示
+    public static final int LOGO_INCOME_ADD = 2003;
+    //收益减少的tradeDetail标示
+    public static final int LOGO_INCOME_CUT = -2003;
+
+    //保证金冻结
+    public static final int LOGO_MARGIN_FREEZE = -2002;
+    //保证金返回  2002, "返还保证金
+    public static final int LOGO_MARGIN_BACK = 2002;
+
     /**
-     * id         流水id
-     * type       流水类型，,
-     * typeDetail 流水具体类型,
-     * remark     流水描述,
-     * money      本次流水现金发生金额,
-     * moneyLeft  本次流水后现金剩余,
-     * score      本次流水积分发生金额,
-     * scoreLeft  本次流水后积分剩余,
-     * createTime 流水创建时间
+     * -2001, "支付手续费
+     * 2001, "返还手续费"
+     */
+    public static final int LOGO_FEE_APPLY = -2001;
+    public static final int LOGO_FEE_BACK = 2001;
+
+
+    /**
+     * createTime : 2016-09-18 15:28:03
+     * id : 74
+     * remark : 赠送积分
+     * score : 100000
+     * scoreLeft : -1603300
+     * type : 3
+     * typeDetail : 3002
+     * userId : 37
+     * money : 2.2
      */
 
-    private long createTime;
+    private String createTime;
     private int id;
+    /**
+     * 流水描述
+     */
     private String remark;
-    private int score;
-    private int scoreLeft;
+    /**
+     * '本次流水积分发生金额',
+     */
+    private double score;
+    /**
+     * '本次流水后积分剩余',
+     */
+    private double scoreLeft;
+    /**
+     * 流水类型
+     */
     private int type;
+    /**
+     * 流水具体类型
+     */
     private int typeDetail;
     private int userId;
+    /**
+     * 本次流水现金发生金额'
+     */
     private double money;
+    /**
+     * '本次流水后现金剩余',
+     */
+    private double moneyLeft;
 
-    public static TradeDetail objectFromData(String str) {
-
-        return new Gson().fromJson(str, TradeDetail.class);
+    public int getIoOrderId() {
+        return ioOrderId;
     }
 
-    public static TradeDetail objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), TradeDetail.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public void setIoOrderId(int ioOrderId) {
+        this.ioOrderId = ioOrderId;
     }
 
-    public static List<TradeDetail> arrayTradeDetailFromData(String str) {
+    /**
+     *
+     */
+    private int ioOrderId;
 
-        Type listType = new TypeToken<ArrayList<TradeDetail>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
+    public double getMoneyLeft() {
+        return moneyLeft;
     }
 
-    public static List<TradeDetail> arrayTradeDetailFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<TradeDetail>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
+    public void setMoneyLeft(double moneyLeft) {
+        this.moneyLeft = moneyLeft;
     }
 
-    public long getCreateTime() {
+    public void setScoreLeft(double scoreLeft) {
+        this.scoreLeft = scoreLeft;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -115,20 +133,13 @@ public class TradeDetail implements Serializable {
         this.remark = remark;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 
-    public int getScoreLeft() {
+    public double getScoreLeft() {
         return scoreLeft;
-    }
-
-    public void setScoreLeft(int scoreLeft) {
-        this.scoreLeft = scoreLeft;
     }
 
     public int getType() {
@@ -162,17 +173,12 @@ public class TradeDetail implements Serializable {
     public void setMoney(double money) {
         this.money = money;
     }
-//    public String getFormattedCreateDate() {
-//        String[] createDate = getCreateTime().trim().split(" ");
-//        if (createDate.length == 2) {
-//            return createDate[0] + "\n" + createDate[1];
-//        }
-//        return getCreateDate();
-//    }
+
+
     @Override
     public String toString() {
         return "TradeDetail{" +
-                "createTime=" + createTime +
+                "createTime='" + createTime + '\'' +
                 ", id=" + id +
                 ", remark='" + remark + '\'' +
                 ", score=" + score +
@@ -181,6 +187,7 @@ public class TradeDetail implements Serializable {
                 ", typeDetail=" + typeDetail +
                 ", userId=" + userId +
                 ", money=" + money +
+                ", moneyLeft=" + moneyLeft +
                 '}';
     }
 }

@@ -157,7 +157,7 @@
                 android:layout_height="1px"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/splitLine"/>
+                android:background="@color/splitLineGrayLight"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -43,7 +43,6 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.OrderPresenter;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
@@ -147,7 +146,6 @@ public class TradeActivity extends BaseActivity implements
         setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
 
-
         initData(getIntent());
 
         initSlidingMenu();
@@ -231,7 +229,7 @@ public class TradeActivity extends BaseActivity implements
                 Launcher.with(getActivity(), WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
                         .execute();
-                Preference.get().setTradeRuleClicked(LocalUser.getUser().getUserPhoneNum(), mProduct.getVarietyType());
+                Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());
             }
         });
         ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
@@ -339,7 +337,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateQuestionMarker() {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        String userPhone = LocalUser.getUser().getPhone();
         if (Preference.get().isTradeRuleClicked(userPhone, mProduct.getVarietyType())) {
             mQuestionMark.stop();
         } else {
@@ -390,7 +388,7 @@ public class TradeActivity extends BaseActivity implements
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
-        settings1.setBaseLines(9); // TODO: 9/14/16 写实 9 条基线 delete
+        settings1.setBaseLines(mProduct.getBaseline());
         flashView.setSettings(settings1);
         flashView.clearData();
 
@@ -458,7 +456,12 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void placeOrder(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            return;
+        }
+
+        String userPhone = LocalUser.getUser().getPhone();
         if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
             showPlaceOrderFragment(longOrShort);
         } else {
@@ -479,7 +482,7 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct))
+                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
                     .commit();
         }
     }
@@ -513,8 +516,11 @@ public class TradeActivity extends BaseActivity implements
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
                             hideFragmentOfContainer();
-                            ToastUtil.show(jsonObjectResp.getMsg());
                             OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.ok)
+                                    .show();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.place_an_order_again,
@@ -543,7 +549,7 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
-        String userPhone = LocalUser.getUser().getUserPhoneNum();
+        String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         hideFragmentOfContainer();
         placeOrder(longOrShort);

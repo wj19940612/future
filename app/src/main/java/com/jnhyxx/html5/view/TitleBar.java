@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class TitleBar extends RelativeLayout {
     private int mRightTextSize;
     private ColorStateList mRightTextColor;
     private Drawable mRightImage;
+    private Drawable mRightBackground;
     private boolean mRightVisible;
     private boolean mBackFeature;
     private Drawable mBackIcon;
@@ -59,6 +61,7 @@ public class TitleBar extends RelativeLayout {
         mRightTextSize = typedArray.getDimensionPixelOffset(R.styleable.TitleBar_rightTextSize, defaultFontSize);
         mRightTextColor = typedArray.getColorStateList(R.styleable.TitleBar_rightTextColor);
         mRightImage = typedArray.getDrawable(R.styleable.TitleBar_rightImage);
+        mRightBackground = typedArray.getDrawable(R.styleable.TitleBar_rightBackground);
         mRightVisible = typedArray.getBoolean(R.styleable.TitleBar_rightVisible, false);
         mBackFeature = typedArray.getBoolean(R.styleable.TitleBar_backFeature, false);
         mBackIcon = typedArray.getDrawable(R.styleable.TitleBar_backIcon);
@@ -89,7 +92,7 @@ public class TitleBar extends RelativeLayout {
         // left view
         int paddingHorizontal = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                 getResources().getDisplayMetrics());
-        params =  new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         mLeftView = new TextView(getContext());
         mLeftView.setGravity(Gravity.CENTER);
@@ -97,12 +100,15 @@ public class TitleBar extends RelativeLayout {
         addView(mLeftView, params);
 
         // right view
+        LinearLayout rightViewParent = new LinearLayout(getContext());
+        rightViewParent.setGravity(Gravity.CENTER);
+        rightViewParent.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
         mRightView = new TextView(getContext());
-        mRightView.setGravity(Gravity.CENTER);
-        mRightView.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rightViewParent.addView(mRightView, params);
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        addView(mRightView, params);
+        addView(rightViewParent, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);
             mLeftView.setOnClickListener(new OnClickListener() {
@@ -112,6 +118,7 @@ public class TitleBar extends RelativeLayout {
                 }
             });
         }
+
         setTitle(mTitle);
         setTitleSize(mTitleSize);
         setTitleColor(mTitleColor);
@@ -119,6 +126,7 @@ public class TitleBar extends RelativeLayout {
         setRightTextSize(mRightTextSize);
         setRightTextColor(mRightTextColor);
         setRightImage(mRightImage);
+        setRightBackground(mRightBackground);
         setRightVisible(mRightVisible);
     }
 
@@ -157,6 +165,11 @@ public class TitleBar extends RelativeLayout {
         mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
     }
 
+    public void setRightText(int resid) {
+        mRightText = getContext().getText(resid);
+        setRightText(mRightText);
+    }
+
     public void setRightText(CharSequence rightText) {
         mRightText = rightText;
         mRightView.setText(rightText);
@@ -167,13 +180,19 @@ public class TitleBar extends RelativeLayout {
         mRightView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
     }
 
+    private void setRightBackground(Drawable background) {
+        mRightBackground = background;
+        mRightView.setBackground(mRightBackground);
+    }
+
     public void setRightImage(Drawable rightImage) {
         mRightImage = rightImage;
         mRightView.setCompoundDrawablesWithIntrinsicBounds(mRightImage, null, null, null);
     }
 
     public void setRightVisible(boolean rightVisible) {
-        mRightView.setVisibility(rightVisible ? VISIBLE: INVISIBLE);
+        mRightVisible = rightVisible;
+        mRightView.setVisibility(mRightVisible ? VISIBLE : INVISIBLE);
     }
 
     public void setOnRightViewClickListener(View.OnClickListener listener) {

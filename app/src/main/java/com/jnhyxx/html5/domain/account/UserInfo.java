@@ -8,16 +8,37 @@ package com.jnhyxx.html5.domain.account;
 public class UserInfo {
 
     /**
+    "issuingbankName": "中国工商银行",
+    "idCard": "3301**********1314",
+    "userPhone": "137****4454",
+    "icon": "https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1473647614249030116.png",
+    "userName": "新昵称1",
+    "moneyUsable": 105466.16,
+    "idStatus": 2,
+    "realName": "*斌",
+    "bIsSetNickName": true,
+    "scoreUsable": -1603300,
+    "bankId": 1,
+    "cardPhone": "13777804454",
+    "cardState": 2,
+    "id": 8,
+    "cardNumber": "6666*********6666"
+     */
+
+    /**
      * 银行卡绑定状态  0未填写，1已填写，2已认证
      */
-    public static final int ID_STATUS_STATUS_FILL = 1;
-    public static final int ID_STATUS_STATUS_AUTHERIZED = 2;
+    public static final int BANKCARD_STATUS_UNFILLED = 0;
+    public static final int BANKCARD_STATUS_FILLED = 1;
+    public static final int BANKCARD_STATUS_BOUND = 2;
 
     /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      */
-    public static final int BANKCARD_STATUS_FILL = 1;
-    public static final int BANKCARD_STATUS_AUTHERIZED = 2;
+    public static final int REAL_NAME_STATUS_UNFILLED = 0;
+    public static final int REAL_NAME_STATUS_FILLED = 1;
+    public static final int REAL_NAME_STATUS_VERIFIED = 2;
+
 
     /**
      * moneyUsable可用资金余额
@@ -59,11 +80,22 @@ public class UserInfo {
      * cardState银行卡状态 0未填写，1已填写，2已认证
      */
     private int cardState;
+
     private int id;
     /**
      * cardNumber银行卡号
      */
     private String cardNumber;
+    /**
+     * icon银行图标
+     */
+    private String icon;
+    /**
+     * bIsSetNickName是否修改过昵称 false未修改true已修改
+     */
+    private boolean bIsSetNickName;
+
+    private int bankId;
 
     public double getMoneyUsable() {
         return moneyUsable;
@@ -161,6 +193,30 @@ public class UserInfo {
         this.cardNumber = cardNumber;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public boolean isNickNameModifiedBefore() {
+        return bIsSetNickName;
+    }
+
+    public void setNickNameModified() {
+        this.bIsSetNickName = true;
+    }
+
+    public int getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(int bankId) {
+        this.bankId = bankId;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -176,6 +232,9 @@ public class UserInfo {
                 ", cardState=" + cardState +
                 ", id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
+                ", icon='" + icon + '\'' +
+                ", bIsSetNickName=" + bIsSetNickName +
+                ", bankId=" + bankId +
                 '}';
     }
 }

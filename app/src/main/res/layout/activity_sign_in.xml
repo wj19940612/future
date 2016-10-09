@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
 
-    <include
-        android:id="@+id/rlFailWarn"
-        layout="@layout/common_fail_warn"
+    <com.jnhyxx.html5.view.CommonFailWarn
+        android:id="@+id/failWarn"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,23 +38,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/login_icon_phone"
-                android:drawablePadding="10dp"
-                android:hint="@string/please_input_phone_num"
-                android:textColorHint="@color/grayHint"/>
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint="@string/please_input_phone_num"/>
 
             <ImageView
                 android:id="@+id/clearPhoneNumButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:src="@drawable/login_icon_delete"
+                android:src="@drawable/ic_delete_x"
                 android:visibility="invisible"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="@dimen/splitLineHeight"
             android:background="@color/colorPrimary"/>
 
         <LinearLayout
@@ -73,10 +68,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/login_icon_lock"
-                android:drawablePadding="10dp"
-                android:hint="@string/please_input_password"
-                android:textColorHint="@color/grayHint"/>
+                android:drawableLeft="@drawable/ic_lock"
+                android:hint="@string/please_input_password"/>
 
             <ImageView
                 android:id="@+id/showPasswordButton"
@@ -85,13 +78,13 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:clickable="true"
-                android:src="@drawable/login_btn_password_type"
+                android:src="@drawable/btn_show_password"
                 android:visibility="invisible"/>
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="@dimen/splitLineHeight"
             android:background="@color/colorPrimary"/>
 
         <TextView
@@ -111,15 +104,19 @@
             android:text="@string/sign_up_free"/>
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
             android:id="@+id/forgetPassword"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="center|bottom"
-            android:paddingBottom="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_vertical"
             android:text="@string/forget_password"
-            android:textColor="#358CF3"
+            android:textColor="@color/blueAssist"
             android:textSize="12sp"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

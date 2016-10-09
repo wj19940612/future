@@ -1,26 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_trade_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.tradedetail.TradeDetailActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_trade_detail"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/splitBlockLight"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.TradeDetailActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/tradeDetailTitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/account_trade_info" />
+        app:backFeature="true"
+        app:titleText="@string/trade_detail"/>
 
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/tradeDetailSlidingTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tradeDetailViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/remainTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_trade_detail_margin_remain"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/remainNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/remainTitle"
+                android:layout_marginTop="10dp"
+                android:lines="1"
+                android:textColor="@color/redPrimary"
+                android:textSize="35sp"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/splitLineGrayLight"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:id="@+id/blockedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_frozen"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/blockedNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/blockedTitle"
+                android:layout_marginTop="10dp"
+                android:lines="1"
+                android:textColor="@color/redPrimary"
+                android:textSize="35sp"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+    </LinearLayout>
+
 </LinearLayout>

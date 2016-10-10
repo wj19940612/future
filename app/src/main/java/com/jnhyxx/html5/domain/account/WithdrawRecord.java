@@ -57,7 +57,7 @@ public class WithdrawRecord implements Serializable {
     /**
      * '根据各平台计算得出本次手续费',
      */
-    private int commission;
+    private double commission;
     /**
      * 流水id
      */
@@ -134,11 +134,11 @@ public class WithdrawRecord implements Serializable {
 
     }
 
-    public int getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(int commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 

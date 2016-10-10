@@ -47,7 +47,7 @@ public class UserInfo {
     /**
      * scoreUsable可用积分余额
      */
-    private int scoreUsable;
+    private double scoreUsable;
     /**
      * userName用户昵称
      */
@@ -105,11 +105,11 @@ public class UserInfo {
         this.moneyUsable = moneyUsable;
     }
 
-    public int getScoreUsable() {
+    public double getScoreUsable() {
         return scoreUsable;
     }
 
-    public void setScoreUsable(int scoreUsable) {
+    public void setScoreUsable(double scoreUsable) {
         this.scoreUsable = scoreUsable;
     }
 

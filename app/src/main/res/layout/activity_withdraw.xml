@@ -89,7 +89,7 @@
             android:drawableLeft="@drawable/ic_money"
             android:drawablePadding="5dp"
             android:hint="@string/withdraw_least_money_hint"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:paddingBottom="5dp"
             android:paddingTop="20dp"
             android:textColor="#262626"

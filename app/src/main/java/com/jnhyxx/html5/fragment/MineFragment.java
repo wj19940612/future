@@ -130,9 +130,11 @@ public class MineFragment extends BaseFragment {
             mTitleBar.setRightVisible(true);
 
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            getUserFundInfo(userInfo);
+
             String userName = userInfo.getUserName();
             double moneyUsable = userInfo.getMoneyUsable();
-            int scoreUsable = userInfo.getScoreUsable();
+            double scoreUsable = userInfo.getScoreUsable();
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
@@ -146,6 +148,19 @@ public class MineFragment extends BaseFragment {
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
         }
+    }
+
+    private void getUserFundInfo(final UserInfo userInfo) {
+        API.Finance.getFundInfo().setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                        UserFundInfo userFundInfo = resp.getData();
+                        userInfo.setMoneyUsable(userFundInfo.getMoneyUsable());
+                        userInfo.setScoreUsable(userFundInfo.getScoreUsable());
+                    }
+                }).fire();
     }
 
 

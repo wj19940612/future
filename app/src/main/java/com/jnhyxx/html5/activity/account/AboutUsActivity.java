@@ -60,7 +60,8 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             //公司热线
             case R.id.companyTelephone:
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number)));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number).replaceAll("-", "")));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.serviceQq:

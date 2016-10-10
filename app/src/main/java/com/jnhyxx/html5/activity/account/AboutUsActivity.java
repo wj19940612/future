@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.net.API;
 import com.johnz.kutils.AppInfo;
 
 import butterknife.BindView;
@@ -65,7 +66,7 @@ public class AboutUsActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.serviceQq:
-                String serviceQQUrl = "mqqwpa://im/chat?chat_type=wpa&uin=" + SERVICE_QQ + "&version=1";
+                String serviceQQUrl = API.getServiceQQ(SERVICE_QQ);
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
                 break;
 

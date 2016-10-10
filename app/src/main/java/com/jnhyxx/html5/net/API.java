@@ -753,4 +753,8 @@ public class API extends APIBase {
     public static String getRegisterServiceProtocol() {
         return getHost() + "/xieyi/agreement.html?nohead=1";
     }
+
+    public static String getServiceQQ(String serviceQQ) {
+        return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
+    }
 }

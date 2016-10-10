@@ -84,11 +84,14 @@
                     android:text="@string/mine_balance"
                     android:textColor="@android:color/white"/>
 
-                <TextView
+                <com.jnhyxx.html5.view.AutoAdaptSizeTextView
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
                     android:text="@string/zero"
                     android:textColor="@color/redPrimary"
                     android:textSize="40sp"/>

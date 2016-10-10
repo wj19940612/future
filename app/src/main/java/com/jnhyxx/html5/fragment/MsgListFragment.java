@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 
@@ -69,6 +70,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
                     + " must implement OnMsgItemClickListener");
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,13 +111,22 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void requestMessageList() {
+//        API.Message.getMessageInfo(mType, mPageNo, mPageSize)
+//                .setIndeterminate(this)
+//                .setTag(TAG)
+//                .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+//                    @Override
+//                    public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
+//                        updateMessageList(sysTradeMessages);
+//                    }
+//                }).fire();
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)
-                .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+                .setCallback(new Callback<Resp<Object>>() {
                     @Override
-                    public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                        updateMessageList(sysTradeMessages);
+                    public void onReceive(Resp<Object> objectResp) {
+                        Log.d(TAG, "" + objectResp.getData().toString());
                     }
                 }).fire();
     }

@@ -303,7 +303,7 @@ public class TradeDetailListFragment extends BaseFragment {
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
-                result = remark.substring(0, 2) + "(" + remark.substring(6, remark.length()) + ")";
+                result = remark.substring(0, 2) + "(" + remark.substring(5, remark.length()) + ")";
             }
 
 
@@ -312,7 +312,7 @@ public class TradeDetailListFragment extends BaseFragment {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
                 if (remark.length() > 4) {
-                    result = "(" + remark.substring(4) + ")";
+                    result = "(" + remark.substring(4, remark.length()) + ")";
                 }
             }
         } else {

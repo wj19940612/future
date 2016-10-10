@@ -27,7 +27,8 @@
         android:paddingTop="25dp"
         android:text="@string/mine_balance"
         android:textColor="@color/colorDisable"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        android:id="@+id/textView"/>
 
     <TextView
         android:id="@+id/balance"

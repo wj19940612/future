@@ -486,7 +486,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getMessageInfo(int pushType, int page, int pageSize) {
-            return new API(GET, "/user/news/loadNews.do", new ApiParams()
+            return new API("/user/news/loadNews.do", new ApiParams()
                     .put("pushType", pushType)
                     .put("page", page)
                     .put("pageSize", pageSize));

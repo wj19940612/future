@@ -3,6 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/white"
                 tools:context="com.jnhyxx.html5.activity.account.SignInActivity">
 
     <com.jnhyxx.html5.view.CommonFailWarn
@@ -29,6 +30,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_input_enable"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -50,15 +52,11 @@
                 android:visibility="invisible"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/splitLineHeight"
-            android:background="@color/colorPrimary"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bg_input_enable"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -81,11 +79,6 @@
                 android:src="@drawable/btn_show_password"
                 android:visibility="invisible"/>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/splitLineHeight"
-            android:background="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/signInButton"

@@ -199,11 +199,11 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
             }
 
             public void bindingData(SysTradeMessage item, int position) {
-//                if (position == 0) {
-//                    mSplitBlock.setVisibility(View.VISIBLE);
-//                } else {
-//                    mSplitBlock.setVisibility(View.GONE);
-//                }
+                if (position == 0) {
+                    mSplitBlock.setVisibility(View.VISIBLE);
+                } else {
+                    mSplitBlock.setVisibility(View.GONE);
+                }
 
                 String systemTime = item.getCreateTime();
                 if (DateUtil.isInThisYear(systemTime, DateUtil.DEFAULT_FORMAT)) {

@@ -89,35 +89,36 @@
             android:textColor="@color/colorDisable"/>
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/bankcardInputArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/one_key_close_radius"
-        android:paddingRight="@dimen/one_key_close_radius"
         android:visibility="visible">
 
         <RelativeLayout
-            android:id="@+id/holderBank"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_input_enable">
+            android:layout_height="60dp">
 
             <LinearLayout
-                style="@style/settingLinearLayout">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/common_margin"
+                android:layout_marginRight="@dimen/common_margin"
+                android:background="@drawable/bg_input_enable"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    style="@style/settingTitleTextView"
+                    style="@style/InputTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cardholder"
-                    android:textColor="#262626"/>
+                    android:text="@string/cardholder"/>
 
                 <EditText
                     android:id="@+id/cardholderName"
-                    style="@style/settingEditTextStyle"
+                    style="@style/SignEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -138,17 +139,24 @@
                 android:visibility="visible"/>
         </RelativeLayout>
 
-        <LinearLayout style="@style/settingLinearLayout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_input_enable"
+            android:gravity="center_vertical|bottom"
+            android:orientation="horizontal">
 
             <TextView
-                style="@style/settingTitleTextView"
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bankcard_num"/>
 
             <EditText
                 android:id="@+id/bankcardNum"
-                style="@style/settingEditTextStyle"
+                style="@style/SignEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -157,51 +165,63 @@
                 android:maxLength="23"/>
         </LinearLayout>
 
-
         <LinearLayout
-            style="@style/settingLinearLayout"
-            android:clickable="true">
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_input_enable"
+            android:clickable="true"
+            android:gravity="center_vertical|bottom"
+            android:orientation="horizontal">
 
             <TextView
-                style="@style/settingTitleTextView"
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/paying_bank"/>
 
             <TextView
                 android:id="@+id/payingBank"
+                style="@style/SignEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableRight="@drawable/ic_arrow"
-                android:text="@string/please_choose_bank"
-                android:textColor="@color/blackPrimary"
-                android:textSize="16sp"/>
+                android:text="@string/please_choose_bank"/>
         </LinearLayout>
 
-        <LinearLayout style="@style/settingLinearLayout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_input_enable"
+            android:clickable="true"
+            android:gravity="center_vertical|bottom"
+            android:orientation="horizontal">
 
             <TextView
-                style="@style/settingTitleTextView"
+                style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/phone_number2"/>
 
             <EditText
                 android:id="@+id/phoneNum"
-                style="@style/settingEditTextStyle"
+                style="@style/SignEditText.PhoneNum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/bank_reserved_phone_num"
-                android:inputType="phone"
-                android:maxLength="13"/>
+                android:hint="@string/bank_reserved_phone_num"/>
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="15sp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:lineSpacingExtra="2dp"
             android:paddingTop="15dp"
             android:text="@string/bind_bank_warn"
             android:textColor="@color/redPrimary"
@@ -212,6 +232,8 @@
             style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
             android:layout_marginTop="50dp"
             android:text="@string/bind_bank_bind"/>
     </LinearLayout>

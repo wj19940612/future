@@ -190,7 +190,7 @@ public class MineFragment extends BaseFragment {
                         public void onReceive(Resp<JsonObject> resp) {
                             if (resp.isSuccess()) {
                                 Launcher.with(getActivity(), PaidToPromoteActivity.class)
-                                        .putExtra(PaidToPromoteActivity.EX_URL, API.getPromtePage())
+                                        .putExtra(PaidToPromoteActivity.EX_URL, API.getPromotePage())
                                         .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
                                         .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                         .execute();
@@ -227,7 +227,7 @@ public class MineFragment extends BaseFragment {
                         if (resp.isSuccess()) {
                             ToastUtil.show(resp.getMsg());
                             Launcher.with(getActivity(), PaidToPromoteActivity.class)
-                                    .putExtra(PaidToPromoteActivity.EX_URL, API.getPromtePage())
+                                    .putExtra(PaidToPromoteActivity.EX_URL, API.getPromotePage())
                                     .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
                                     .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                     .execute();

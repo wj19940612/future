@@ -230,9 +230,9 @@ public class TradeDetailListFragment extends BaseFragment {
                 String createTime = item.getCreateTime().trim();
                 String tradeDetailTime;
                 if (DateUtil.isInThisYear(createTime, DateUtil.DEFAULT_FORMAT)) {
-                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
                 } else {
-                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm");
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 }
                 String[] time = tradeDetailTime.split(" ");
                 if (time.length == 2) {
@@ -250,7 +250,7 @@ public class TradeDetailListFragment extends BaseFragment {
                  */
                 StringBuffer mStringBuffer = new StringBuffer();
 
-                if (item.getType() > 0) {
+                if (item.getTypeDetail() > 0) {
                     mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
 //                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));

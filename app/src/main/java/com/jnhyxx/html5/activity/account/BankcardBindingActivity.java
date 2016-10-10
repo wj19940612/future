@@ -188,6 +188,8 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     private void setOldBindBankInfo(UserInfo userInfo) {
+        String cardHolderName = LocalUser.getUser().getCardHolderName();
+        mCardholderName.setText(cardHolderName);
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
@@ -214,10 +216,11 @@ public class BankcardBindingActivity extends BaseActivity {
                 showBankDialog();
                 break;
             case R.id.submitToAuthButton:
+                final String cardHolderName = ViewUtil.getTextTrim(mCardholderName);
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-                // TODO: 2016/10/10 暂时去掉银行卡校验 
+                // TODO: 2016/10/10 暂时去掉银行卡校验
 //                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
 //                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
 //                    return;
@@ -242,6 +245,7 @@ public class BankcardBindingActivity extends BaseActivity {
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
                                     LocalUser localUser = LocalUser.getUser();
+                                    localUser.setCardHolderName(cardHolderName);
                                     UserInfo userInfo = localUser.getUserInfo();
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);

@@ -365,7 +365,7 @@ public class API extends APIBase {
          * @return
          */
         public static API depositByAliPay(double money, int platform) {
-            return new API("/user/finance/depositByAlipay.do",
+            return new API(GET, "/user/finance/depositByAlipay.do",
                     new ApiParams()
                             .put("money", money)
                             .put("platform", platform));

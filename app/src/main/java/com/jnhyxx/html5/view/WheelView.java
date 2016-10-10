@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.domain.account.ChannelBank;
+import com.jnhyxx.html5.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class WheelView extends ScrollView {
 
         for (int i = 0; i < offset; i++) {
             mChannelBanks.add(0, new ChannelBank());
-            mChannelBanks.add( new ChannelBank());
+            mChannelBanks.add(new ChannelBank());
 
         }
 
@@ -124,7 +125,6 @@ public class WheelView extends ScrollView {
     int displayItemCount; // 每页显示的数量
 
     int selectedIndex = 1;
-
 
     private void init(Context context) {
         this.context = context;
@@ -404,6 +404,7 @@ public class WheelView extends ScrollView {
             @Override
             public void run() {
                 WheelView.this.smoothScrollTo(0, p * itemHeight);
+                onSeletedCallBack();
             }
         });
 

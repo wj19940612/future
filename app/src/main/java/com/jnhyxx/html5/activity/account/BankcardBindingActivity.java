@@ -217,11 +217,11 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-
-                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
-                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
-                    return;
-                }
+                // TODO: 2016/10/10 暂时去掉银行卡校验 
+//                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
+//                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
+//                    return;
+//                }
 
                 if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);

@@ -483,15 +483,13 @@ public class API extends APIBase {
          * @param pushType 0代表是 行情资讯 1 代表行业资讯  2 代表系统消息 3 代表 交易提醒
          * @param page     页数 从0开始
          * @param pageSize 当前展示多少数量
-         * @param userId   用户Id
          * @return
          */
-        public static API getMessageInfo(int pushType, int page, int pageSize, int userId) {
-            return new API("http://域名/user/news/loadNews.do", new ApiParams()
+        public static API getMessageInfo(int pushType, int page, int pageSize) {
+            return new API(GET, "/user/news/loadNews.do", new ApiParams()
                     .put("pushType", pushType)
                     .put("page", page)
-                    .put("pageSize", pageSize)
-                    .put("userId", userId));
+                    .put("pageSize", pageSize));
         }
 
         /**

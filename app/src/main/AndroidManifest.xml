@@ -148,7 +148,6 @@
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
 
-
         <!-- WebView activity -->
         <activity
             android:name=".activity.WebViewActivity"
@@ -168,6 +167,7 @@
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

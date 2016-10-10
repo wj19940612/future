@@ -150,6 +150,4 @@ public class TradeDetailActivity extends BaseActivity {
             return 2;
         }
     }
-
-
 }

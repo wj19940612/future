@@ -3,23 +3,22 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.johnz.kutils.net.ApiIndeterminate;
+import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,20 +26,26 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class MsgListFragment extends ListFragment implements ApiIndeterminate {
-
-    private static final String TAG = "MsgListFragment";
+public class MsgListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private static final String TYPE = "fragmentType";
-    public static final int TYPE_SYSTEM = 0;
-    public static final int TYPE_TRADE = 1;
+    public static final int TYPE_SYSTEM = 2;
+    public static final int TYPE_TRADE = 3;
+
 
     private OnMsgItemClickListener mListener;
-    private int mType;
 
+    private int mType;
     private int mPageNo;
     private int mPageSize;
+
+    @BindView(R.id.listView)
+    ListView mListView;
+    @BindView(R.id.empty)
+    TextView mEmpty;
+    private Unbinder mBinder;
 
     private MessageListAdapter mMessageListAdapter;
     private Set<Integer> mSet;
@@ -64,7 +69,6 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                     + " must implement OnMsgItemClickListener");
         }
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,39 +78,50 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.listview_emptyview, container, false);
+        mBinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPageNo = 1;
+        mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
-        setEmptyText(getString(R.string.there_is_no_message_for_now));
-
+        mListView.setOnItemClickListener(this);
+        mListView.setEmptyView(mEmpty);
         requestMessageList();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinder.unbind();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+        API.cancel(TAG);
+    }
+
     private void requestMessageList() {
-        if (mType == TYPE_SYSTEM) {
-            API.Message.getSystemMessageList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
-                        @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                            updateMessageList(sysTradeMessages);
-                        }
-                    }).setTag(TAG).setIndeterminate(this).fire();
-        } else {
-            API.Message.getTradeMessageList(LocalUser.getUser().getToken(), mPageNo, mPageSize)
-                    .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
-                        @Override
-                        public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                            updateMessageList(sysTradeMessages);
-                        }
-                    }).setTag(TAG).setIndeterminate(this).fire();
-        }
+        API.Message.getMessageInfo(mType, mPageNo, mPageSize)
+                .setIndeterminate(this)
+                .setTag(TAG)
+                .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
+                    @Override
+                    public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
+                        updateMessageList(sysTradeMessages);
+                    }
+                }).fire();
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
         if (sysTradeMessages == null || isDetached()) return;
-
         if (mFooter == null) {
             mFooter = new TextView(getContext());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
@@ -121,18 +136,18 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
                     requestMessageList();
                 }
             });
-            getListView().addFooterView(mFooter);
+            mListView.addFooterView(mFooter);
         }
 
         if (sysTradeMessages.size() < mPageSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
-            getListView().removeFooterView(mFooter);
+            mListView.removeFooterView(mFooter);
         }
 
         if (mMessageListAdapter == null) {
             mMessageListAdapter = new MessageListAdapter(getContext());
-            setListAdapter(mMessageListAdapter);
+            mListView.setAdapter(mMessageListAdapter);
         }
 
         for (SysTradeMessage item : sysTradeMessages) {
@@ -144,21 +159,11 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        SysTradeMessage message = (SysTradeMessage) l.getItemAtPosition(position);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        SysTradeMessage message = (SysTradeMessage) parent.getAdapter().getItem(position);
         if (mListener != null) {
             mListener.onMsgItemClick(message);
         }
-    }
-
-    @Override
-    public void onShow(String tag) {
-        setListShown(false);
-    }
-
-    @Override
-    public void onDismiss(String tag) {
-        setListShown(true);
     }
 
     static class MessageListAdapter extends ArrayAdapter<SysTradeMessage> {
@@ -177,36 +182,41 @@ public class MsgListFragment extends ListFragment implements ApiIndeterminate {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.bindingData(getItem(position));
+            holder.bindingData(getItem(position), position);
             return convertView;
         }
 
-        static class ViewHolder {
+        class ViewHolder {
+            @BindView(R.id.splitBlock)
+            View mSplitBlock;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.updateDate)
             TextView mUpdateDate;
-            @BindView(R.id.content)
-            TextView mContent;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(SysTradeMessage item) {
-                mTitle.setText(item.getTitle());
-                mUpdateDate.setText(item.getUpdateDate());
-                mContent.setText(item.getContent());
+            public void bindingData(SysTradeMessage item, int position) {
+//                if (position == 0) {
+//                    mSplitBlock.setVisibility(View.VISIBLE);
+//                } else {
+//                    mSplitBlock.setVisibility(View.GONE);
+//                }
+
+                String systemTime = item.getCreateTime();
+                if (DateUtil.isInThisYear(systemTime, DateUtil.DEFAULT_FORMAT)) {
+                    systemTime = DateUtil.format(systemTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
+                } else {
+                    systemTime = DateUtil.format(systemTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+                }
+                mUpdateDate.setText(systemTime);
+                mTitle.setText(item.getPushContent());
             }
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-        API.cancel(TAG);
-    }
 
     public interface OnMsgItemClickListener {
         void onMsgItemClick(SysTradeMessage sysTradeMessage);

@@ -32,8 +32,8 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         SysTradeMessage mSysTradeMessage = (SysTradeMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-        mTvMessageTitle.setText(mSysTradeMessage.getTitle());
-        mTvMessageTime.setText(mSysTradeMessage.getUpdateDate());
-        mTvMessageContent.setText(mSysTradeMessage.getContent());
+//        mTvMessageTitle.setText(mSysTradeMessage.getTitle());
+//        mTvMessageTime.setText(mSysTradeMessage.getUpdateDate());
+//        mTvMessageContent.setText(mSysTradeMessage.getContent());
     }
 }

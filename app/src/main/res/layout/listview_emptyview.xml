@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -16,11 +15,12 @@
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="1"
         android:drawablePadding="16dp"
+        android:gravity="center_horizontal"
         android:drawableTop="@drawable/image_no_record"
-        android:gravity="center"
-        android:paddingTop="50dp"
+        android:paddingTop="100dp"
         android:text="@string/there_is_no_data_for_now"
         android:textColor="#CACACA"
         android:textSize="20sp"

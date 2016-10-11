@@ -86,7 +86,7 @@ public class HoldingFragment extends BaseFragment
                 double ratio = holdingOrder.getRatio();
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_SHORT) {
                     lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                     diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
@@ -347,7 +347,7 @@ public class HoldingFragment extends BaseFragment
                     double ratio = item.getRatio();
                     BigDecimal eachPointMoney = new BigDecimal(item.getEachPointMoney());
                     BigDecimal diff;
-                    if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                    if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                         diff = FinanceUtil.subtraction(data.getBidPrice(), item.getRealAvgPrice());
                     } else {

@@ -252,6 +252,7 @@ public class BankcardBindingActivity extends BaseActivity {
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setBankId(bankId);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
+                                    localUser.setUserInfo(userInfo);
 
                                     CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 

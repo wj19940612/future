@@ -123,12 +123,13 @@ public class NameVerifyActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
-                            CustomToast.getInstance().showText(getActivity(),resp.getMsg());
-
-                            UserInfo user = LocalUser.getUser().getUserInfo();
+                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
+                            LocalUser localUser = LocalUser.getUser();
+                            UserInfo user = localUser.getUserInfo();
                             user.setRealName(realName);
                             user.setIdCard(identityNum);
                             user.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+                            localUser.setUserInfo(user);
 
                             setResult(RESULT_OK);
                             finish();

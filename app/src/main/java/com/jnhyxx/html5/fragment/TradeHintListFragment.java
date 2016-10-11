@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -242,6 +243,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
             private void setTradeTime(SysTradeMessage item) {
                 String tradeTime = item.getCreateTime();
+                if (TextUtils.isEmpty(tradeTime)) return;
                 if (DateUtil.isInThisYear(tradeTime, DateUtil.DEFAULT_FORMAT)) {
                     tradeTime = DateUtil.format(tradeTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
                 } else {

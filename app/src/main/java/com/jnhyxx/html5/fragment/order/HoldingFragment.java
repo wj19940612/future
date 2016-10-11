@@ -334,7 +334,7 @@ public class HoldingFragment extends BaseFragment
                         }
                     }
                 });
-                if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
                     mBuyOrSell.setText(R.string.bullish);
                 } else {
                     mBuyOrSell.setText(R.string.bearish);

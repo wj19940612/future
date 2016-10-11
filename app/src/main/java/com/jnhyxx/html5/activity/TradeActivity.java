@@ -509,7 +509,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
-        Log.d("TEST", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
+        Log.d("submitOrder", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

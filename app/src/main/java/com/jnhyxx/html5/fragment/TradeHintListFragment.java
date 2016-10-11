@@ -225,8 +225,10 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
             private void setSuccessImage() {
                 int successImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getContext().getResources().getDisplayMetrics());
-                mTradeStatusHint.setMaxWidth(successImageSize);
-                mTradeStatusHint.setMinimumHeight(successImageSize);
+                ViewGroup.LayoutParams layoutParams = mTradeStatusHint.getLayoutParams();
+                layoutParams.width = successImageSize;
+                layoutParams.height = successImageSize;
+                mTradeStatusHint.setLayoutParams(layoutParams);
                 mTradeStatusHint.setImageResource(R.drawable.ic_common_toast_succeed);
             }
 

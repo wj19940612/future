@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.utils.presenter;
 
 import android.os.Handler;
+import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -34,7 +35,6 @@ public class OrderPresenter {
     }
 
     private List<IHoldingOrderView> mIHoldingOrderViewList;
-
     private List<HoldingOrder> mHoldingOrderList;
 
     private int mVarietyId;
@@ -76,19 +76,60 @@ public class OrderPresenter {
     }
 
     public void closeAllHoldingPositions(int fundType) {
-        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
+//        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
+//
+//            double unwindPrice = 0;
+//            if (mMarketData != null) {
+//                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+//                    unwindPrice = mMarketData.getBidPrice();
+//                } else {
+//                    unwindPrice = mMarketData.getAskPrice();
+//                }
+//            }
+//
+//            requestCloseHoldingOrder(fundType, holdingOrder, unwindPrice);
+//        }
 
-            double unwindPrice = 0;
-            if (mMarketData != null) {
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    unwindPrice = mMarketData.getBidPrice();
-                } else {
-                    unwindPrice = mMarketData.getAskPrice();
+
+        StringBuffer showIds = new StringBuffer();
+        StringBuffer unwindPrices = new StringBuffer();
+        for (int i = 0; i < mHoldingOrderList.size(); i++) {
+            HoldingOrder holdingOrder = mHoldingOrderList.get(i);
+            if (holdingOrder != null) {
+                double orderUnwindPrice = getOneKeyHoldingOrderUnwindPrice(holdingOrder);
+                unwindPrices.append(orderUnwindPrice + ",");
+                showIds.append(holdingOrder.getShowId() + ",");
+            }
+        }
+        if (!TextUtils.isEmpty(showIds.toString()) && !TextUtils.isEmpty(unwindPrices.toString())) {
+            requestAllHoldingOrder(showIds.toString(), fundType, unwindPrices.toString());
+        }
+    }
+
+    private double getOneKeyHoldingOrderUnwindPrice(HoldingOrder holdingOrder) {
+        double unwindPrice = 0;
+        if (mMarketData != null) {
+            if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                unwindPrice = mMarketData.getBidPrice();
+            } else {
+                unwindPrice = mMarketData.getAskPrice();
+            }
+        }
+        return unwindPrice;
+    }
+
+    //一键平仓
+    public void requestAllHoldingOrder(String showIds, int payType, String unwindPrices) {
+        API.Order.aKeyHoldingOrder(showIds, payType, unwindPrices).setCallback(new Callback1<Resp<JsonObject>>() {
+
+            @Override
+            protected void onRespSuccess(Resp<JsonObject> resp) {
+                for (int i = 0; i < mHoldingOrderList.size(); i++) {
+                    HoldingOrder holdingOrder = mHoldingOrderList.get(i);
+                    holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                 }
             }
-
-            requestCloseHoldingOrder(fundType, holdingOrder, unwindPrice);
-        }
+        }).fire();
     }
 
     private void requestCloseHoldingOrder(int fundType, final HoldingOrder holdingOrder, double unwindPrice) {

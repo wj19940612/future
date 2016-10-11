@@ -63,6 +63,8 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         super.put(-3005, "成功");
         //内部充值积分
         super.put(3006, "充值");
+        //内部充值积分
+        super.put(-3006, "提现");
 //        //支付宝转账
 //        super.put(-4001, "充值");
 //        //佣金存入

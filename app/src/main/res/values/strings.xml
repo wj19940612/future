@@ -220,7 +220,7 @@
     <!-- Trade page -->
     <string name="play_rule">玩法规则</string>
     <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
-    <string name="one_key_close_position">一建平仓</string>
+    <string name="one_key_close_position">一键平仓</string>
     <string name="available_balance_and_unit">可用资金 (%1$s)</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
     <string name="trend_chart">分时图</string>
@@ -246,8 +246,8 @@
     <string name="place_an_order_again">再次下单</string>
     <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
     <string name="currency_converter">汇率换算: %1$s</string>
-    <string name="confirm_buy_long">确认买涨</string>
-    <string name="confirm_sell_short">确认买跌</string>
+    <string name="confirm_buy_long">确定买涨</string>
+    <string name="confirm_sell_short">确定买跌</string>
     <string name="today_position">今持仓</string>
     <string name="pre_position">昨持仓</string>
 

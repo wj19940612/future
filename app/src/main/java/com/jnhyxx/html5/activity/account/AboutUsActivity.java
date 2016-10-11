@@ -20,7 +20,7 @@ public class AboutUsActivity extends BaseActivity {
     private static final String TAG = "AboutUsActivity";
     private static final String SERVICE_QQ = "3088152027";
     @BindView(R.id.versionName)
-    TextView mTVVersionName;
+    TextView mVersionName;
     //公司热线
     @BindView(R.id.companyTelephone)
     RelativeLayout mRlCompanyTelephone;
@@ -35,9 +35,10 @@ public class AboutUsActivity extends BaseActivity {
         initData();
     }
 
+
     private void initData() {
         String versionName = AppInfo.getVersionName(getApplicationContext());
-        mTVVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
+        mVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
     }
 
     @OnClick({R.id.companyInfo, R.id.managerTeam, R.id.companyCulture, R.id.collaborateCase, R.id.companyTelephone, R.id.serviceQq})

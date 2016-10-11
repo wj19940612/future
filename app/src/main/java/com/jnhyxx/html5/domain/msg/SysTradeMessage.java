@@ -16,10 +16,15 @@ public class SysTradeMessage implements Serializable {
     public static final int PUSH_STATUS_WAIT_SEND = 2;
 
     /**
-     * 0代表 体现信息提示 1 代表订单 平仓 和 止赢止损
+     * 0代表 提现信息提示 1 代表订单 平仓 和 止赢止损
      */
     public static final int WITHDRAW_INFO_HINT = 0;
     public static final int TRADE_STATUS = 1;
+    /**
+     * 2 代表系统消息 3 代表 交易提醒
+     */
+    public static final int PUSH_TYPE_SYSTEM = 2;
+    public static final int PUSH_TYPE_TRADE_HINT = 3;
 
 
     /**
@@ -87,7 +92,7 @@ public class SysTradeMessage implements Serializable {
      */
     private boolean text;
     /**
-     * 0代表 体现信息提示 1 代表订单 平仓 和 止赢止损
+     * 0代表 提现信息提示 1 代表订单 平仓 和 止赢止损
      */
     private int taskType;
     /**
@@ -235,5 +240,16 @@ public class SysTradeMessage implements Serializable {
                 ", taskType=" + taskType +
                 ", success=" + success +
                 '}';
+    }
+
+    /**
+     * 是否是提现信息提示
+     * @return
+     */
+    public boolean isTradeStatus() {
+        if (getTaskType() == WITHDRAW_INFO_HINT) {
+            return true;
+        }
+        return false;
     }
 }

@@ -7,17 +7,18 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MessageCenterListItemInfoActivity extends BaseActivity {
-    @BindView(R.id.messageCenterInfoTitle)
+    @BindView(R.id.messageTitle)
     TextView mTvMessageTitle;
-    @BindView(R.id.messageCenterInfoTime)
+    @BindView(R.id.time)
     TextView mTvMessageTime;
-    @BindView(R.id.message_center_info_content)
+    @BindView(R.id.messageContent)
     TextView mTvMessageContent;
 
     @Override
@@ -32,8 +33,8 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         SysTradeMessage mSysTradeMessage = (SysTradeMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-//        mTvMessageTitle.setText(mSysTradeMessage.getTitle());
-//        mTvMessageTime.setText(mSysTradeMessage.getUpdateDate());
-//        mTvMessageContent.setText(mSysTradeMessage.getContent());
+        mTvMessageTitle.setText(mSysTradeMessage.getPushTopic());
+        mTvMessageTime.setText(DateUtil.format(mSysTradeMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/DD HH:mm"));
+        mTvMessageContent.setText(mSysTradeMessage.getPushContent());
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--我的界面的消息中心界面的交易提醒的item样式-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_input_disable"
+              android:orientation="vertical"
+              android:paddingBottom="20dp"
+              android:paddingLeft="@dimen/common_margin"
+              android:paddingRight="@dimen/common_margin"
+              android:paddingTop="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/tradeStatusHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_trade_warn_list_icon_bad"/>
+
+        <TextView
+            android:id="@+id/tradeStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tradeStatusHint"
+            android:text="@string/trade_status"
+            android:textColor="@color/blackPrimary"/>
+
+        <TextView
+            android:id="@+id/tradeTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tradeStatus"
+            android:layout_alignParentRight="true"
+            android:text="@string/time"
+            android:textColor="@color/colorDisable"
+            android:textSize="12sp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tradeHintContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        android:lineSpacingExtra="10dp"
+        android:paddingBottom="20dp"
+        android:text="您的交易审核未被通过,可能是您的账户存在异常,请联系客服进行处理.【操盘手】"
+        android:textColor="@color/lucky"
+        android:textSize="12sp"/>
+</LinearLayout>

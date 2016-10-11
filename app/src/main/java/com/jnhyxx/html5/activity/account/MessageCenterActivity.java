@@ -12,6 +12,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
+import com.jnhyxx.html5.fragment.TradeHintListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.johnz.kutils.Launcher;
 
@@ -70,7 +71,7 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
                 case 0:
                     return MsgListFragment.newInstance(MsgListFragment.TYPE_SYSTEM);
                 case 1:
-                    return MsgListFragment.newInstance(MsgListFragment.TYPE_TRADE);
+                    return TradeHintListFragment.newInstance(TradeHintListFragment.TYPE_TRADE);
             }
             return null;
         }

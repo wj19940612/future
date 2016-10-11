@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -28,14 +30,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MsgListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+/**
+ * Created by ${wangJie} on 2016/10/10.
+ */
 
+public class TradeHintListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private static final String TYPE = "fragmentType";
     public static final int TYPE_SYSTEM = 2;
     public static final int TYPE_TRADE = 3;
 
-
-    private OnMsgItemClickListener mListener;
 
     private int mType;
     private int mPageNo;
@@ -47,7 +50,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     TextView mEmpty;
     private Unbinder mBinder;
 
-    private MessageListAdapter mMessageListAdapter;
+    private MsgListFragment.MessageListAdapter mMessageListAdapter;
     private Set<Integer> mSet;
     private TextView mFooter;
 
@@ -59,16 +62,6 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnMsgItemClickListener) {
-            mListener = (OnMsgItemClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnMsgItemClickListener");
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +97,6 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
         API.cancel(TAG);
     }
 
@@ -149,7 +141,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         }
 
         if (mMessageListAdapter == null) {
-            mMessageListAdapter = new MessageListAdapter(getContext());
+            mMessageListAdapter = new MsgListFragment.MessageListAdapter(getContext());
             mListView.setAdapter(mMessageListAdapter);
         }
 
@@ -164,9 +156,6 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SysTradeMessage message = (SysTradeMessage) parent.getAdapter().getItem(position);
-        if (mListener != null) {
-            mListener.onMsgItemClick(message);
-        }
     }
 
     static class MessageListAdapter extends ArrayAdapter<SysTradeMessage> {
@@ -177,53 +166,76 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            TradeViewHolder mTradeViewHolder = null;
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_message, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_trade_hint, null);
+                mTradeViewHolder = new TradeViewHolder(convertView);
+                convertView.setTag(mTradeViewHolder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                mTradeViewHolder = (TradeViewHolder) convertView.getTag();
             }
-            holder.bindingData(getItem(position), position);
+            mTradeViewHolder.bindingData(getItem(position), position);
             return convertView;
         }
 
-        class ViewHolder {
-            @BindView(R.id.splitBlock)
-            View mSplitBlock;
-            @BindView(R.id.title)
-            TextView mTitle;
-            @BindView(R.id.updateDate)
-            TextView mUpdateDate;
+        class TradeViewHolder {
+            @BindView(R.id.tradeStatusHint)
+            ImageView mTradeStatusHint;
+            @BindView(R.id.tradeStatus)
+            TextView mTradeStatus;
+            @BindView(R.id.tradeTime)
+            TextView mTradeTime;
+            @BindView(R.id.tradeHintContent)
+            TextView mTradeHintContent;
 
-            ViewHolder(View view) {
+            TradeViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
             public void bindingData(SysTradeMessage item, int position) {
                 if (item == null) return;
-                if (position == 0) {
-                    mSplitBlock.setVisibility(View.VISIBLE);
-                } else {
-                    mSplitBlock.setVisibility(View.GONE);
-                }
+                setTradeTime(item);
 
-                if (item.getCreateTime().isEmpty()) return;
+                setTradeStatus(item);
+                mTradeHintContent.setText(getContext().getString(R.string.trade_content, item.getPushContent(), LocalUser.getUser().getUserInfo().getUserName()));
+            }
 
-                String systemTime = item.getCreateTime();
-                if (DateUtil.isInThisYear(systemTime, DateUtil.DEFAULT_FORMAT)) {
-                    systemTime = DateUtil.format(systemTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
+            private void setTradeStatus(SysTradeMessage item) {
+                if (item.isTradeStatus()) {
+                    // TODO: 2016/10/10 是提现信息的显示
+                    mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_fail);
+
+                    // TODO: 2016/10/10 和公共提示公用一张图,图片太大
+                    setSuccessImage();
                 } else {
-                    systemTime = DateUtil.format(systemTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+                    setOrderStatus(item);
                 }
-                mUpdateDate.setText(systemTime);
-                mTitle.setText(item.getPushTopic());
+            }
+
+            private void setSuccessImage() {
+                int successImageSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getContext().getResources().getDisplayMetrics());
+                mTradeStatusHint.setMaxWidth(successImageSize);
+                mTradeStatusHint.setMinimumHeight(successImageSize);
+                mTradeStatusHint.setImageResource(R.drawable.ic_common_toast_succeed);
+            }
+
+            private void setOrderStatus(SysTradeMessage item) {
+                if (item.isSuccess()) {
+                    mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_good);
+                } else {
+                    mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_bad);
+                }
+            }
+
+            private void setTradeTime(SysTradeMessage item) {
+                String tradeTime = item.getCreateTime();
+                if (DateUtil.isInThisYear(tradeTime, DateUtil.DEFAULT_FORMAT)) {
+                    tradeTime = DateUtil.format(tradeTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
+                } else {
+                    tradeTime = DateUtil.format(tradeTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+                }
+                mTradeTime.setText(tradeTime);
             }
         }
-    }
-
-    public interface OnMsgItemClickListener {
-        void onMsgItemClick(SysTradeMessage sysTradeMessage);
     }
 }

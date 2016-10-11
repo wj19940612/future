@@ -50,12 +50,14 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     TextView mEmpty;
     private Unbinder mBinder;
 
-    private MsgListFragment.MessageListAdapter mMessageListAdapter;
+    private TradeListAdapter mTradeListAdapter;
     private Set<Integer> mSet;
     private TextView mFooter;
 
-    public static MsgListFragment newInstance(int type) {
-        MsgListFragment fragment = new MsgListFragment();
+    private boolean isLoad = false;
+
+    public static TradeHintListFragment newInstance(int type) {
+        TradeHintListFragment fragment = new TradeHintListFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         fragment.setArguments(args);
@@ -100,6 +102,15 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.cancel(TAG);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser && isAdded() && !isLoad) {
+            requestMessageList();
+            isLoad = true;
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     private void requestMessageList() {
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
@@ -140,17 +151,17 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             mListView.removeFooterView(mFooter);
         }
 
-        if (mMessageListAdapter == null) {
-            mMessageListAdapter = new MsgListFragment.MessageListAdapter(getContext());
-            mListView.setAdapter(mMessageListAdapter);
+        if (mTradeListAdapter == null) {
+            mTradeListAdapter = new TradeListAdapter(getContext());
+            mListView.setAdapter(mTradeListAdapter);
         }
 
         for (SysTradeMessage item : sysTradeMessages) {
             if (mSet.add(item.getId())) {
-                mMessageListAdapter.add(item);
+                mTradeListAdapter.add(item);
             }
         }
-        mMessageListAdapter.notifyDataSetChanged();
+        mTradeListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -158,9 +169,9 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         SysTradeMessage message = (SysTradeMessage) parent.getAdapter().getItem(position);
     }
 
-    static class MessageListAdapter extends ArrayAdapter<SysTradeMessage> {
+    static class TradeListAdapter extends ArrayAdapter<SysTradeMessage> {
 
-        public MessageListAdapter(Context context) {
+        public TradeListAdapter(Context context) {
             super(context, 0);
         }
 

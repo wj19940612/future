@@ -189,8 +189,8 @@
     <string name="settlement">结算</string>
     <string name="there_is_no_holding_position_records">暂无持仓记录</string>
     <string name="there_is_no_settlements_records">暂无结算记录</string>
-    <string name="bullish">看涨</string>
-    <string name="bearish">看跌</string>
+    <string name="bullish">买涨</string>
+    <string name="bearish">买跌</string>
     <string name="time_up_sale">到时中止</string>
     <string name="stop_profit_sale">止盈卖出</string>
     <string name="stop_loss_sale">止损卖出</string>

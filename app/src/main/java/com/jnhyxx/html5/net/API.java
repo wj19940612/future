@@ -692,6 +692,22 @@ public class API extends APIBase {
                             .put("payType", payType)
                             .put("unwindPrice", unwindPrice));
         }
+
+        /**
+         * 一键平仓：
+         * URL  ：http://域名/order/order/aKeyUnwind.do
+         *
+         * @param showIds     订单id   平仓的所有订单id,用“,”逗号隔开
+         * @param payType     支付类型  0：积分  1：现金
+         * @param unwindPrice 平仓价格   平仓价格，用","逗号隔开,跟订单id对应
+         * @return
+         */
+        public static API aKeyHoldingOrder(String showIds, int payType, String unwindPrice) {
+            return new API("/order/order/aKeyUnwind.do", new ApiParams()
+                    .put("showIds", showIds)
+                    .put("payType", payType)
+                    .put("unwindPrice", unwindPrice));
+        }
     }
 
     /**

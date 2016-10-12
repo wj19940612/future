@@ -197,6 +197,9 @@
     <string name="market_price_sale">市价卖出</string>
     <string name="market_price_buy">市价买入</string>
     <string name="close_positions">平仓</string>
+    <string name="stop_loss">止损</string>
+    <string name="stop_profit">止盈</string>
+    <string name="last_price">最新价</string>
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -406,7 +409,5 @@
     <string name="transfer_fail">转账失败</string>
 
     <string name="common_success">成功</string>
-    <string name="stop_profit">止盈</string>
-    <string name="last_price">最新价</string>
 
 </resources>

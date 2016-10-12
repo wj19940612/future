@@ -174,7 +174,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stop_profit"
+                    android:text="@string/stop_loss"
                     android:textSize="11sp"/>
 
                 <TextView

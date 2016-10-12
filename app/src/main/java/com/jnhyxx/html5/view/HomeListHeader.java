@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.jnhyxx.html5.BuildConfig;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.HomeAdvertisement;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
@@ -133,29 +133,40 @@ public class HomeListHeader extends FrameLayout {
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
     }
 
-    public void setHomeAdvertisement(HomeAdvertisement homeAdvertisement) {
-        mPageIndicator.setCount(homeAdvertisement.getNews_notice_img_list().size());
+    public void setHomeAdvertisement(List<Information> informationList) {
+        filterEmptyInformation(informationList);
+
+        mPageIndicator.setCount(informationList.size());
         if (mAdapter == null) {
-            mAdapter = new AdvertisementAdapter(getContext(), homeAdvertisement.getNews_notice_img_list());
+            mAdapter = new AdvertisementAdapter(getContext(), informationList);
             mViewPager.addOnPageChangeListener(mOnPageChangeListener);
             mViewPager.setAdapter(mAdapter);
         } else {
-            mAdapter.setNewAdvertisements(homeAdvertisement.getNews_notice_img_list());
+            mAdapter.setNewAdvertisements(informationList);
+        }
+    }
+
+    private void filterEmptyInformation(List<Information> informationList) {
+        for (int i = 0; i < informationList.size(); i++) {
+            Information information = informationList.get(i);
+            if (TextUtils.isEmpty(information.getCover())) {
+                informationList.remove(i);
+            }
         }
     }
 
     private static class AdvertisementAdapter extends PagerAdapter {
 
-        private List<HomeAdvertisement.NewsNoticeImgListBean> mList;
+        private List<Information> mList;
         private Context mContext;
 
-        public AdvertisementAdapter(Context context, List<HomeAdvertisement.NewsNoticeImgListBean> imgListBeen) {
+        public AdvertisementAdapter(Context context, List<Information> informationList) {
             mContext = context;
-            mList = imgListBeen;
+            mList = informationList;
         }
 
-        public void setNewAdvertisements(List<HomeAdvertisement.NewsNoticeImgListBean> imgListBeen) {
-            mList = imgListBeen;
+        public void setNewAdvertisements(List<Information> informationList) {
+            mList = informationList;
             notifyDataSetChanged();
         }
 
@@ -174,12 +185,19 @@ public class HomeListHeader extends FrameLayout {
             int pos = position;
             ImageView imageView = new ImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            HomeAdvertisement.NewsNoticeImgListBean bean = mList.get(pos);
+            final Information information = mList.get(pos);
             container.addView(imageView, 0);
-            // TODO: 2016/8/23 正式平台的地址
-            Picasso.with(mContext).load(BuildConfig.API_HOST + bean.getMiddleBanner()).into(imageView);
-            // TODO: 2016/8/23 测试平台
-//            Picasso.with(mContext).load(APIBase.TEST_HOST + bean.getMiddleBanner()).into(imageView);
+            Picasso.with(mContext).load(information.getCover()).into(imageView);
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (information.isH5Style()) {
+
+                    } else {
+
+                    }
+                }
+            });
             return imageView;
         }
 

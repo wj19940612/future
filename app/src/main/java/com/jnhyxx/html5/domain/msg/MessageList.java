@@ -1,15 +1,6 @@
 package com.jnhyxx.html5.domain.msg;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ${wangJie} on 2016/9/20.
@@ -66,50 +57,6 @@ public class MessageList implements Serializable {
      */
     private String title;
     private int type;
-
-    public static MessageList objectFromData(String str) {
-
-        return new Gson().fromJson(str, MessageList.class);
-    }
-
-    public static MessageList objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), MessageList.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static List<MessageList> arrayMessageListFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<MessageList>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
-
-    public static List<MessageList> arrayMessageListFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<MessageList>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
-    }
 
     public int getChannelId() {
         return channelId;

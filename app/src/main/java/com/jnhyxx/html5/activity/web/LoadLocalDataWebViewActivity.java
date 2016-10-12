@@ -14,19 +14,17 @@ import com.jnhyxx.html5.activity.WebViewActivity;
 
 public class LoadLocalDataWebViewActivity extends WebViewActivity {
 
+    public static final String EX_LOCAL_HTML = "LocalHtml";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        initData(getIntent());
     }
 
+    @Override
     protected void initData(Intent intent) {
-        mTitle = intent.getStringExtra(EX_TITLE);
-        mPageUrl = intent.getStringExtra(EX_URL);
-        mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
+        super.initData(intent);
+
         getWebView().loadData(mPageUrl, "text/html", "utf-8");
     }
-
 }

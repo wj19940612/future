@@ -43,10 +43,6 @@ public class WebViewActivity extends AppCompatActivity {
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
 
-    public static final String LOAD_LOCAL_HTML = "loadLocalHtml";
-
-    public boolean IS_LOAD_LOCAL_HTML = false;
-
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.progress)
@@ -84,11 +80,10 @@ public class WebViewActivity extends AppCompatActivity {
 
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
-        Intent intent = getIntent();
-        initData(intent);
-        initWebView();
 
-        mTitleBar.setRightText(R.string.my_users);
+        initData(getIntent());
+
+        initWebView();
     }
 
     @Override
@@ -101,12 +96,9 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     protected void initData(Intent intent) {
-        boolean isLoadLocalHtml = intent.getBooleanExtra(LOAD_LOCAL_HTML, false);
-
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
-        mWebView.loadUrl(mPageUrl);
     }
 
 

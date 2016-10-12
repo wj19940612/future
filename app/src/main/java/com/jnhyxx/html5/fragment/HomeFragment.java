@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.domain.HomeAdvertisement;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
@@ -91,7 +91,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        //requestHomeAdvertisement();
+        requestHomeInformation();
         //requestOrderReport();
         requestProductList();
         requestProductMarketList();
@@ -171,12 +171,12 @@ public class HomeFragment extends BaseFragment {
         stopScheduleJob();
     }
 
-    private void requestHomeAdvertisement() {
-        API.User.getHomeAdvertisements()
-                .setCallback(new Callback2<Resp<HomeAdvertisement>, HomeAdvertisement>() {
+    private void requestHomeInformation() {
+        API.User.getNewsList(Information.TYPE_BANNER, 0, 10)
+                .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
                     @Override
-                    public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
-                        mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
+                    public void onRespSuccess(List<Information> informationList) {
+                        mHomeListHeader.setHomeAdvertisement(informationList);
                     }
                 }).setTag(TAG).fire();
     }

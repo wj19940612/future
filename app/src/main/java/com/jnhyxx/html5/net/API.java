@@ -250,7 +250,7 @@ public class API extends APIBase {
          * @param size   资讯显示数量
          * @return
          */
-        public static API findNewsList(int type, int offset, int size) {
+        public static API getNewsList(int type, int offset, int size) {
             return new API(GET, "/user/news/findNewsList.do", new ApiParams()
                     .put("type", type)
                     .put("offset", offset)

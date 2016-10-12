@@ -71,20 +71,23 @@ public class TrendChart extends ChartView {
         paint.setAlpha(51);
     }
 
-//    private void setTouchLinePaint(Paint paint) {
-//        paint.setColor(Color.parseColor("#7F7F7F"));
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(dp2Px(1));
-//        paint.setPathEffect(null);
-//    }
-//    protected void setYellowBgPaint(Paint paint) {
-//        paint.setColor(Color.parseColor(ChartView.ChartColor.YELLOW.get()));
-//        paint.setStyle(Paint.Style.FILL);
-//    }
-//
-//    protected void setBlackTextPaint(Paint paint) {
-//        paint.setColor(Color.BLACK);
-//    }
+    private void setTouchLineTextPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartView.ChartColor.WHITE.get()));
+        paint.setTextSize(mBigFontSize);
+        paint.setPathEffect(null);
+    }
+
+    private void setRedRectBgPaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartView.ChartColor.RED.get()));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setPathEffect(null);
+    }
+
+    private void setRedTouchLinePaint(Paint paint) {
+        paint.setColor(Color.parseColor(ChartView.ChartColor.RED.get()));
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setPathEffect(null);
+    }
 
     public void setDataList(List<TrendViewData> dataList) {
         mDataList = dataList;
@@ -267,7 +270,7 @@ public class TrendChart extends ChartView {
                 float priceWidth = sPaint.measureText(unstablePrice);
                 float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
                 float priceX = left + width - priceMargin - priceWidth;
-                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterText, priceWidth);
+                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterBigText, priceWidth);
                 //// the center of rect is connected to dashLine
                 //// add offset and let the bottom of rect connect to dashLine
                 float rectHeight = blueRect.height();
@@ -275,7 +278,7 @@ public class TrendChart extends ChartView {
                 blueRect.bottom -= rectHeight / 2;
                 setUnstablePriceBgPaint(sPaint);
                 canvas.drawRoundRect(blueRect, 2, 2, sPaint);
-                float priceY = chartY - rectHeight / 2 + mOffset4CenterText;
+                float priceY = chartY - rectHeight / 2 + mOffset4CenterBigText;
                 setUnstablePricePaint(sPaint);
                 canvas.drawText(unstablePrice, priceX, priceY, sPaint);
             }
@@ -356,69 +359,54 @@ public class TrendChart extends ChartView {
 
             Log.d("TAG", "drawTouchLines: " + touchIndex);
 
-//            TrendViewData model = mVisibleList.get(touchIndex);
-//            float touchX = getChartX(touchIndex);
-//            float touchY = getChartY(model.getLastPrice());
-//
-//            // draw model.date connected to vertical line
-//            String date = model.getDate();
-//            date = date.substring(8, 10) + ":" + date.substring(10, 12);
-//            float dateY = top + mFontHeight / 2 + mOffset4CenterText;
-//            float textWidth = sPaint.measureText(date);
-//            float dateX = touchX - textWidth / 2;
-//
-//            // when date string touches the borders, add offset
-//            dateX = dateX < 0 ? 0 + mXRectPadding : dateX;
-//            dateX = dateX > width - textWidth ? width - textWidth - mXRectPadding : dateX;
-//
-//            // draw rectangle yellow background for date
-//            RectF rectF = getBigFontBgRectF(dateX, dateY, textWidth);
-//            setYellowBgPaint(sPaint);
-//            canvas.drawRoundRect(rectF, 5, 5, sPaint);
-//            setBlackTextPaint(sPaint);
-//            canvas.drawText(date, dateX, dateY, sPaint);
-//
-//            // draw vertical line
-//            setTouchLinePaint(sPaint);
-//            float topY = top + rectF.height(); // connected to rect
-//            float bottomY = height - mTextMargin - mFontHeight;
-//            Path verticalPath = getPath();
-//            verticalPath.moveTo(touchX, topY);
-//            verticalPath.lineTo(touchX, bottomY);
-//            canvas.drawPath(verticalPath, sPaint);
-//
-//            // draw model.lastPrice connected to horizontal line
-//            String price = formatNumber(model.getLastPrice());
-//            textWidth = sPaint.measureText(price);
-//            float priceX = left + width - textWidth - mXRectPadding;
-//            float priceY = touchY + mOffset4CenterText;
-//
-//            // when touchX is larger than half of width, move price to left
-//            if (touchX > width / 2) {
-//                priceX = left + mXRectPadding;
-//            }
-//
-//            rectF = getBigFontBgRectF(priceX, priceY, textWidth);
-//            setYellowBgPaint(sPaint);
-//            canvas.drawRoundRect(rectF, 5, 5, sPaint);
-//            setBlackTextPaint(sPaint);
-//            canvas.drawText(price, priceX, priceY, sPaint);
-//
-//            // draw horizontal line
-//            setTouchLinePaint(sPaint);
-//            float leftX = left;
-//            float rightX = leftX + width - rectF.width(); // connected to rect
-//
-//            // when touchX is larger than half of width, add offset for line.x
-//            if (touchX > width / 2) {
-//                leftX = leftX + rectF.width();
-//                rightX = left + width;
-//            }
-//
-//            Path horizontalPath = getPath();
-//            horizontalPath.moveTo(leftX, touchY);
-//            horizontalPath.lineTo(rightX, touchY);
-//            canvas.drawPath(horizontalPath, sPaint);
+            TrendViewData data = mVisibleList.get(touchIndex);
+            float touchX = getChartX(touchIndex);
+            float touchY = getChartY(data.getLastPrice());
+
+            // draw cross line: vertical line and horizontal line
+            setRedTouchLinePaint(sPaint);
+            Path path = getPath();
+            path.moveTo(touchX, top);
+            path.lineTo(touchX, top + height);
+            canvas.drawPath(path, sPaint);
+            path = getPath();
+            path.moveTo(left, touchY);
+            path.lineTo(left + width - mPriceAreaWidth, touchY);
+            canvas.drawPath(path, sPaint);
+
+            // draw date connect to vertical line
+            String date = data.getHHmm();
+            setTouchLineTextPaint(sPaint);
+            float dateWidth = sPaint.measureText(date);
+            float dateX = touchX - dateWidth / 2;
+            if (dateX < 0) { // rect will touch left border
+                dateX = 0;
+            }
+            RectF redRect = getBigFontBgRectF(dateX, top + height + mOffset4CenterBigText, dateWidth);
+            float rectHeight = redRect.height();
+            redRect.top += rectHeight / 2;
+            redRect.bottom += rectHeight / 2;
+            setRedRectBgPaint(sPaint);
+            canvas.drawRoundRect(redRect, 2, 2, sPaint);
+            float dateY = top + height + rectHeight / 2 + mOffset4CenterBigText;
+            setTouchLineTextPaint(sPaint);
+            canvas.drawText(date, dateX, dateY, sPaint);
+
+            // draw price connect to horizontal line
+            String price = formatNumber(data.getLastPrice());
+            setTouchLineTextPaint(sPaint);
+            float priceWidth = sPaint.measureText(price);
+            float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
+            float priceX = left + width - priceMargin - priceWidth;
+            redRect = getBigFontBgRectF(priceX, touchY + mOffset4CenterBigText, priceWidth);
+            rectHeight = redRect.height();
+            redRect.top -= rectHeight / 2;
+            redRect.bottom -= rectHeight / 2;
+            setRedRectBgPaint(sPaint);
+            canvas.drawRoundRect(redRect, 2, 2, sPaint);
+            float priceY = touchY - rectHeight / 2 + mOffset4CenterBigText;
+            setTouchLineTextPaint(sPaint);
+            canvas.drawText(price, priceX, priceY, sPaint);
         }
     }
 }

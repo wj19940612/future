@@ -65,7 +65,6 @@ android {
             versionCode 1
             versionName '2.0.0'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion 21
         }
         tst {
             applicationId 'com.jnhyxx.test'

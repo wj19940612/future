@@ -100,23 +100,6 @@ public class SysTradeMessage implements Serializable {
      */
     private boolean success;
 
-    public int getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(int taskType) {
-        this.taskType = taskType;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-
     public int getChannelId() {
         return channelId;
     }
@@ -219,6 +202,22 @@ public class SysTradeMessage implements Serializable {
 
     public void setText(boolean text) {
         this.text = text;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     @Override

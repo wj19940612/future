@@ -17,6 +17,13 @@
         android:layout_height="match_parent"
         android:layout_below="@id/titleBar"/>
 
+    <View
+        android:clickable="true"
+        android:id="@+id/finishView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/progress"
         style="@android:style/Widget.ProgressBar.Horizontal"

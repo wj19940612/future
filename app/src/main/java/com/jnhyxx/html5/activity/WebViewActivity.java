@@ -57,7 +57,8 @@ public class WebViewActivity extends AppCompatActivity {
     Button mRefreshButton;
     @BindView(R.id.errorPage)
     LinearLayout mErrorPage;
-
+    @BindView(R.id.finishView)
+    View mView;
     private boolean mLoadSuccess;
     protected String mPageUrl;
     protected String mTitle;
@@ -74,6 +75,10 @@ public class WebViewActivity extends AppCompatActivity {
 
     public WebView getWebView() {
         return mWebView;
+    }
+
+    protected View getFinishView() {
+        return mView;
     }
 
     @Override
@@ -202,7 +207,7 @@ public class WebViewActivity extends AppCompatActivity {
         mWebView.loadUrl(mPageUrl);
     }
 
-    private class WebViewClient extends android.webkit.WebViewClient {
+    protected class WebViewClient extends android.webkit.WebViewClient {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {

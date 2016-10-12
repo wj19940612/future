@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\assets"/><source path="D:\code\hengyun\umenglibrary\build\generated\assets\shaders\microil\release"/></dataSet><dataSet config="microil"><source path="D:\code\hengyun\umenglibrary\src\microil\assets"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\assets"/></dataSet><dataSet config="microilRelease"><source path="D:\code\hengyun\umenglibrary\src\microilRelease\assets"/></dataSet></merger>

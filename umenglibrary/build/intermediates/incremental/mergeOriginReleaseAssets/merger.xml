@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\assets"/><source path="D:\code\hengyun\umenglibrary\build\generated\assets\shaders\origin\release"/></dataSet><dataSet config="origin"><source path="D:\code\hengyun\umenglibrary\src\origin\assets"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\assets"/></dataSet><dataSet config="originRelease"><source path="D:\code\hengyun\umenglibrary\src\originRelease\assets"/></dataSet></merger>

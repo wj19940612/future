@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\assets"/><source path="D:\code\hengyun\umenglibrary\build\generated\assets\shaders\ycp\release"/></dataSet><dataSet config="ycp"><source path="D:\code\hengyun\umenglibrary\src\ycp\assets"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\assets"/></dataSet><dataSet config="ycpRelease"><source path="D:\code\hengyun\umenglibrary\src\ycpRelease\assets"/></dataSet></merger>

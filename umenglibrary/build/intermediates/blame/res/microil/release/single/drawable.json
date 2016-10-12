@@ -1,0 +1,406 @@
+[
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_share_pic.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_share_pic.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_share_to_button.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_share_to_button.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_at_button.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_at_button.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_wechat_gray.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_wechat_gray.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_red_blue.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_red_blue.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_oauth_check.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_oauth_check.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_action_back_selected.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_action_back_selected.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_back_bt_selected.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_back_bt_selected.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_right_bt.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_right_bt.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_cab_background_top_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_qzone_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_qzone_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_qzone_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_qzone_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_edit_text_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_button_right.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_button_right.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_right_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_right_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_white.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_white.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_login_pressed.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_login_pressed.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_qq_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_qq_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_bind_bg.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_bind_bg.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_item_background_holo_light.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_search_api_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_location_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_location_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_alipay.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_alipay.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_share_video.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_share_video.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_window_shadow_pad.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_window_shadow_pad.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_qq_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_qq_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_left_pressed.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_left_pressed.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_search_icon.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_search_icon.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_wxcircle.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_wxcircle.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_text_cursor_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_follow_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_follow_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_login.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_login.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_back_bt_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_back_bt_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_left_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_left_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_button_left.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_button_left.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_seekbar_track_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_default_avatar.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_default_avatar.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_oauth_check_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_oauth_check_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_light_bar_bg.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_light_bar_bg.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_textfield_search_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_tab_right_pressed.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_tab_right_pressed.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_right_bt_selected.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_right_bt_selected.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_follow_check.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_follow_check.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_btn_colored_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_action_back_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_action_back_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_location_ic.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_location_ic.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_blue.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_blue.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_grey_blue.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_grey_blue.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_share_transparent_corner.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_share_transparent_corner.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_shape_solid_grey.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_shape_solid_grey.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_sina_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_sina_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_nav_bar_bg.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_nav_bar_bg.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ic_clear_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_ratingbar_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_sidebar_normal.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_sidebar_normal.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_btn_radio_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_white_blue.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_white_blue.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_login_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_login_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_shareboard_item_background.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_shareboard_item_background.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_share_music.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_share_music.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\sina_web_default.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\sina_web_default.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_refersh.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_refersh.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_red.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_red.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_at_selected.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_at_selected.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_btn_check_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_sina_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_sina_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_back_bt.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_back_bt.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_at_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_at_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_sidebar_selector.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_sidebar_selector.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_wechat.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_wechat.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_action_back.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_action_back.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_tab_indicator_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_oauth_check_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_oauth_check_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_title_right_bt_normal.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_title_right_bt_normal.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_btn_borderless_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_wxcircle_gray.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_wxcircle_gray.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_location_on.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_location_on.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_follow_off.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_follow_off.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_switch_thumb_material.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_shape_solid_black.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_shape_solid_black.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_button_grey.9.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_button_grey.9.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_x_button.png",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_x_button.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\umeng_socialize_sidebar_selected.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\src\\main\\res\\drawable\\umeng_socialize_sidebar_selected.xml"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\res\\merged\\microil\\release\\drawable\\abc_dialog_material_background.xml",
+        "source": "D:\\code\\hengyun\\umenglibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\drawable\\abc_dialog_material_background.xml"
+    }
+]

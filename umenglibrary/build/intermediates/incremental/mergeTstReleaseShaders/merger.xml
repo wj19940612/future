@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\shaders"/></dataSet><dataSet config="tst"><source path="D:\code\hengyun\umenglibrary\src\tst\shaders"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\shaders"/></dataSet><dataSet config="tstRelease"><source path="D:\code\hengyun\umenglibrary\src\tstRelease\shaders"/></dataSet></merger>

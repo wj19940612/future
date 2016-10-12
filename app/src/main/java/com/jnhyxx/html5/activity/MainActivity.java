@@ -1,111 +1,164 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
-import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.net.Api;
+import com.jnhyxx.html5.domain.account.UserFundInfo;
+import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.fragment.HomeFragment;
+import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.MineFragment;
+import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UpgradeUtil;
+import com.jnhyxx.html5.view.BottomTabs;
 
 import java.net.URISyntaxException;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private static final String TAG = "Web";
+import static android.content.ContentValues.TAG;
+import static com.jnhyxx.html5.R.styleable.BottomTabs;
+import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
+import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
-    private ProgressBar mProgressBar;
-    private WebView mWebView;
+public class MainActivity extends BaseActivity {
 
-    private Handler mHandler;
+    @BindView(R.id.bottomTabs)
+    BottomTabs mBottomTabs;
+    @BindView(R.id.viewPager)
+    ViewPager mViewPager;
+
+    private MainFragmentsAdapter mMainFragmentsAdapter;
+
+    private BroadcastReceiver mNetworkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        checkVersion();
+
         initView();
-        mHandler = new Handler();
+
+        processIntent(getIntent());
+
+        mNetworkChangeReceiver = new NetworkReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewPager.clearOnPageChangeListeners();
     }
 
     private void initView() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        mProgressBar.setIndeterminateDrawable(new ColorDrawable(Color.BLACK));
-        mProgressBar.setMax(100);
-
-        mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.loadUrl(Api.getMainUrl());
-
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-
-        //mWebView.getSettings().setAppCacheEnabled(true);
-        mWebView.getSettings().setAppCachePath(getExternalCacheDir().getPath());
-        mWebView.getSettings().setDomStorageEnabled(true);
-        mWebView.getSettings().setAllowFileAccess(true);
-        mWebView.clearHistory();
-        mWebView.clearCache(true);
-        mWebView.clearFormData();
-        mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
-
-        mWebView.setWebViewClient(new WebViewClient() {
-
+        mMainFragmentsAdapter = new MainFragmentsAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mMainFragmentsAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                //Log.i("onPageStarted", " url = " + url);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                //Log.i("onPageFinished", " url = " + url);
+            public void onPageSelected(int position) {
+                mBottomTabs.selectTab(position);
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                //Log.i(TAG, " url = " + url);
-                if (url.contains("qr.alipay.com")) {
-                    openAlipay(view, url);
-                    return true;
-                }
-
-                if (url.startsWith("mqqwpa:")) {
-                    openQQChat(view, url);
-                    return true;
-                }
-                return super.shouldOverrideUrlLoading(view, url);
+            public void onPageScrollStateChanged(int state) {
             }
         });
-
-        mWebView.setWebChromeClient(new WebChromeClient() {
-
+        mViewPager.setCurrentItem(0);
+        mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
-                    mProgressBar.setVisibility(View.GONE);
-                } else {
-                    if (mProgressBar.getVisibility() == View.GONE) {
-                        mProgressBar.setVisibility(View.VISIBLE);
+            public void onTabClick(int position) {
+                mBottomTabs.selectTab(position);
+                mViewPager.setCurrentItem(position, false);
+            }
+        });
+    }
+
+    private void processIntent(Intent intent) {
+        final String messageId = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_ID);
+//        if (!TextUtils.isEmpty(messageId)) {
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mWebView.loadUrl(APIBase.getMessageDetail(messageId));
+//                }
+//            });
+//            return;
+//        }
+//
+//        final String messageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
+//        if (!TextUtils.isEmpty(messageType)) {
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mWebView.loadUrl(APIBase.getMessageList(messageType));
+//                }
+//            });
+//        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        processIntent(intent);
+    }
+
+    private void checkVersion() {
+        UpgradeUtil.log(this);
+        if (UpgradeUtil.hasNewVersion(this)) {
+            boolean forceUpgrade = UpgradeUtil.isForceUpgrade(this);
+            DialogFragment dialogFragment = UpgradeDialog.newInstance(forceUpgrade);
+            dialogFragment.show(getSupportFragmentManager(), "upgrade");
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
+
+        final LocalUser localUser = LocalUser.getUser();
+        final UserInfo userInfo = localUser.getUserInfo();
+        API.Finance.getFundInfo().setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                        UserFundInfo userFundInfo = resp.getData();
+                        userInfo.setMoneyUsable(userFundInfo.getMoneyUsable());
+                        userInfo.setScoreUsable(userFundInfo.getScoreUsable());
+                        localUser.setUserInfo(userInfo);
                     }
-                    mProgressBar.setProgress(newProgress);
-                }
-            }
-        });
+                }).fire();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
     }
 
     private void openQQChat(WebView webView, String url) {
@@ -123,13 +176,6 @@ public class MainActivity extends AppCompatActivity {
         while (webView.canGoBack()) {
             webView.goBack();
         }
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl(Api.getMainUrl());
-            }
-        }, 200);
     }
 
     private void openAlipay(WebView webView, String url) {
@@ -141,41 +187,40 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
 
-        while (webView.canGoBack()) {
-            webView.goBack();
-        }
+    private class NetworkReceiver extends Network.NetworkChangeReceiver {
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl(Api.getMime());
+        @Override
+        protected void onNetworkChanged(int availableNetworkType) {
+            if (availableNetworkType > Network.NET_NONE) {
+
             }
-        }, 200);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
-        } else {
-            super.onBackPressed();
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (mWebView != null) {
-            mWebView.destroy();
-            mWebView = null;
-        }
-        cleanCookie();
-        super.onDestroy();
-    }
+    private class MainFragmentsAdapter extends FragmentPagerAdapter {
 
-    private void cleanCookie() {
-        CookieSyncManager.createInstance(this.getApplicationContext());
-        CookieManager.getInstance().removeAllCookie();
-        CookieSyncManager.getInstance().sync();
+        public MainFragmentsAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new HomeFragment();
+                case 1:
+                    return new InfoFragment();
+                case 2:
+                    return new MineFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
     }
 }

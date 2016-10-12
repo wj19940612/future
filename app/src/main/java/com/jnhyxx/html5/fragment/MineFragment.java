@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -178,7 +179,21 @@ public class MineFragment extends BaseFragment {
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:
-                Launcher.with(getActivity(), SettingsActivity.class).execute();
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), SettingsActivity.class).execute();
+                } else {
+                    SmartDialog.with(getActivity(), BaseActivity.mExpiredMessage)
+                            .setCancelableOnTouchOutside(false)
+                            .setNegative(R.string.cancel)
+                            .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), SignInActivity.class)
+                                            .execute();
+                                }
+                            }).show();
+                }
                 break;
         }
     }

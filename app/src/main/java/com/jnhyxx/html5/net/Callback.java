@@ -14,6 +14,7 @@ import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.net.ApiCallback;
 import com.johnz.kutils.net.NullResponseError;
@@ -50,6 +51,8 @@ public abstract class Callback<T> extends ApiCallback<T> {
         Intent intent = new Intent(BaseActivity.ACTION_TOKEN_EXPIRED);
         intent.putExtra(BaseActivity.EX_TOKEN_EXPIRED_MESSAGE, msg);
         LocalBroadcastManager.getInstance(App.getAppContext()).sendBroadcast(intent);
+        //如果是未登录状态，将缓存清理掉.
+        LocalUser.getUser().logout();
     }
 
     @Override

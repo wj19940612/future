@@ -29,6 +29,7 @@ public class NettyClient {
 
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
+    private Channel mChannel;
 
     private String mHost;
     private Integer mPort;
@@ -172,9 +173,9 @@ public class NettyClient {
             @Override
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()) {
-                    Channel channel = channelFuture.sync().channel();
+                    mChannel = channelFuture.sync().channel();
                     if (!TextUtils.isEmpty(mContractCode)) {
-                        channel.writeAndFlush(NettyLoginFactory.getOpenSecret(mContractCode));
+                        mChannel.writeAndFlush(NettyLoginFactory.getOpenSecret(mContractCode));
                     }
                 } else {
                     Throwable throwable = channelFuture.cause();
@@ -190,6 +191,10 @@ public class NettyClient {
         mContractCode = null;
         if (mWorkerGroup != null) {
             mWorkerGroup.shutdownGracefully();
+        }
+        if (mChannel != null) {
+            ChannelFuture future = mChannel.close();
+            Log.d(TAG, "stop: " + future.toString());
         }
     }
 

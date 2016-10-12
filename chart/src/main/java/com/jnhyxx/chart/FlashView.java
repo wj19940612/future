@@ -48,7 +48,7 @@ public class FlashView extends ChartView {
     public void addData(FlashViewData point) {
         if (point != null && mPointList != null) {
             if (mMaxPoints > 0 && mPointList.size() >= mMaxPoints) {
-                mPointList.remove(0);
+                mPointList = mPointList.subList(mPointList.size() - mMaxPoints + 1, mPointList.size());
             }
 
             mPointList.add(point);

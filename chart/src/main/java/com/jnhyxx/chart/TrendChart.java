@@ -333,10 +333,10 @@ public class TrendChart extends ChartView {
         int index = 0;
         for (int i = 0; i < size; i += 2) {
             if (TrendView.Util.isBetweenTimesClose(timeLines[i], timeLines[i + 1], hhmm)) {
-                index = TrendView.Util.getDiffMinutes(timeLines[i], hhmm, "hh:mm");
+                index = TrendView.Util.getDiffMinutes(timeLines[i], hhmm);
                 for (int j = 0; j < i; j += 2) {
                     // the total points of this period
-                    index += TrendView.Util.getDiffMinutes(timeLines[j], timeLines[j + 1], "hh:mm");
+                    index += TrendView.Util.getDiffMinutes(timeLines[j], timeLines[j + 1]);
                 }
             }
         }

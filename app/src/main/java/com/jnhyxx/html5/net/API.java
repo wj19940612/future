@@ -373,7 +373,7 @@ public class API extends APIBase {
 
         /**
          * 接口名：查询当前渠道所支持的所有支付渠道
-         *
+         * <p>
          * http://域名/user/finance/findDepositType.do
          */
         public static API getSupportApplyWay() {
@@ -702,6 +702,22 @@ public class API extends APIBase {
                             .put("showId", showId)
                             .put("payType", payType)
                             .put("unwindPrice", unwindPrice));
+        }
+
+        /**
+         * /order/order/aKeyUnwind.do 一键平仓
+         *
+         * @param showIds
+         * @param payType
+         * @param unwindPrices
+         * @return
+         */
+        public static API closeAllHoldingOrders(String showIds, int payType, String unwindPrices) {
+            return new API("/order/order/aKeyUnwind.do",
+                    new ApiParams()
+                            .put("showIds", showIds)
+                            .put("payType", payType)
+                            .put("unwindPrice", unwindPrices));
         }
     }
 

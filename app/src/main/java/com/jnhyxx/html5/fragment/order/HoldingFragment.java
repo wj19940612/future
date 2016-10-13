@@ -291,7 +291,9 @@ public class HoldingFragment extends BaseFragment
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData, mContext, mCallback);
+            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData,
+                    mContext, mCallback);
+
             return convertView;
         }
 

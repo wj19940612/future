@@ -54,9 +54,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/remainTitle"
                 android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="@string/zero"
+                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
                 android:textStyle="bold"/>
@@ -90,9 +90,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/blockedTitle"
                 android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="@string/zero"
+                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
                 android:textStyle="bold"/>

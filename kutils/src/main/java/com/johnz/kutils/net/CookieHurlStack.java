@@ -1,7 +1,5 @@
 package com.johnz.kutils.net;
 
-import android.text.TextUtils;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.HttpStack;
@@ -47,8 +45,6 @@ public class CookieHurlStack implements HttpStack {
     private final UrlRewriter mUrlRewriter;
     private final SSLSocketFactory mSslSocketFactory;
 
-    RedirectUrlManager mRedirectUrlManager;
-
     public CookieHurlStack() {
         this(null);
     }
@@ -72,13 +68,7 @@ public class CookieHurlStack implements HttpStack {
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
             throws IOException, AuthFailureError {
-        String url = "";
-        if (mRedirectUrlManager != null && !TextUtils.isEmpty(mRedirectUrlManager.getRedirectUrl())) {
-            url = mRedirectUrlManager.getRedirectUrl();
-        } else {
-            url = request.getUrl();
-        }
-
+        String url = request.getUrl();
         HashMap<String, String> map = new HashMap<String, String>();
         map.putAll(request.getHeaders());
         map.putAll(additionalHeaders);
@@ -110,20 +100,7 @@ public class CookieHurlStack implements HttpStack {
             // -1 is returned by getResponseCode() if the response code could not be retrieved.
             // Signal to the caller that something was wrong with the connection.
             throw new IOException("Could not retrieve response code from HttpUrlConnection.");
-        } else if (responseCode == HttpURLConnection.HTTP_MOVED_PERM ||
-                responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
-            String redirectUrl = connection.getHeaderField("Location");
-            connection.setInstanceFollowRedirects(false);
-            mRedirectUrlManager = new RedirectUrlManager();
-            mRedirectUrlManager.setRedirectUrl(redirectUrl);
-            this.performRequest(request, map);
-        } else if (responseCode == HttpURLConnection.HTTP_OK) {
-//            if (mRedirectUrlManager != null) {
-//                mRedirectUrlManager = null;
-//            }
         }
-
-
         StatusLine responseStatus = new BasicStatusLine(protocolVersion,
                 connection.getResponseCode(), connection.getResponseMessage());
         BasicHttpResponse response = new BasicHttpResponse(responseStatus);

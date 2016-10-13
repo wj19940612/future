@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -345,15 +346,19 @@ public class API extends APIBase {
             return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
         }
 
-        /**
-         * 接口名：用户充值(微信充值)
-         * URL  http://域名/user/finance/depositByWeChat.do
-         *
-         * @param money
-         * @return
-         */
-        public static API depositByWeChartApply(double money) {
-            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+//        /**
+//         * 接口名：用户充值(微信充值)
+//         * URL  http://域名/user/finance/depositByWeChat.do
+//         *
+//         * @param money
+//         * @return
+//         */
+//        public static API depositByWeChartApply(double money) {
+//            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+//        }
+
+        public static String depositByWeChartApply(double money) {
+            return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;
         }
 
         /**
@@ -369,6 +374,10 @@ public class API extends APIBase {
                     new ApiParams()
                             .put("money", money)
                             .put("platform", platform));
+        }
+
+        public static String depositByAliPay(double money) {
+            return getHost() + "/user/finance/depositByAlipay.do?" + "platform=" + SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID + "&money=" + money;
         }
 
         /**

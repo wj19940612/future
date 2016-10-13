@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.web.LoadLocalDataWebViewActivity;
+import com.jnhyxx.html5.activity.web.PaymentWebActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -170,10 +170,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), PaymentWebActivity.class)
+                                .putExtra(PaymentWebActivity.EX_HTML, s)
+                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();
@@ -189,10 +189,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), PaymentWebActivity.class)
+                                .putExtra(PaymentWebActivity.EX_HTML, s)
+                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();
@@ -208,10 +208,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), LoadLocalDataWebViewActivity.class)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_URL, s)
-                                .putExtra(LoadLocalDataWebViewActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(LoadLocalDataWebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), PaymentWebActivity.class)
+                                .putExtra(PaymentWebActivity.EX_HTML, s)
+                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();

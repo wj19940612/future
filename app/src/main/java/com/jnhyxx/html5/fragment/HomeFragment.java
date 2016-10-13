@@ -77,6 +77,16 @@ public class HomeFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
         mHomeListHeader = new HomeListHeader(getContext());
+        mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
+            @Override
+            public void onBannerClick(Information information) {
+                if (information.isH5Style()) {
+                    
+                } else {
+
+                }
+            }
+        });
         mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);

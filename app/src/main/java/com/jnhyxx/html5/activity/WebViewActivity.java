@@ -42,6 +42,7 @@ public class WebViewActivity extends AppCompatActivity {
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
+    public static final String EX_HTML = "html";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -58,6 +59,8 @@ public class WebViewActivity extends AppCompatActivity {
     protected String mPageUrl;
     protected String mTitle;
     protected String mRawCookie;
+    protected String mPureHtml;
+
     private BroadcastReceiver mNetworkChangeReceiver;
 
     public TitleBar getTitleBar() {
@@ -99,8 +102,8 @@ public class WebViewActivity extends AppCompatActivity {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
+        mPureHtml = intent.getStringExtra(EX_HTML);
     }
-
 
     protected void initWebView() {
         // init cookies
@@ -191,7 +194,15 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        mWebView.loadUrl(mPageUrl);
+        loadPage();
+    }
+
+    protected void loadPage() {
+        if (!TextUtils.isEmpty(mPageUrl)) {
+            mWebView.loadUrl(mPageUrl);
+        } else if (!TextUtils.isEmpty(mPureHtml)) {
+            mWebView.loadData(mPageUrl, "text/html", "utf-8");
+        }
     }
 
     private class WebViewClient extends android.webkit.WebViewClient {

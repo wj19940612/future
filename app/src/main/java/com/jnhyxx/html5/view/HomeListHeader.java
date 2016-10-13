@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 public class HomeListHeader extends FrameLayout {
 
     public interface OnViewClickListener {
-
+        void onBannerClick(Information information);
     }
 
     private OnViewClickListener mListener;
@@ -113,6 +113,10 @@ public class HomeListHeader extends FrameLayout {
         nextOrderReport();
     }
 
+    public void setOnViewClickListener(OnViewClickListener onViewClickListener) {
+        mListener = onViewClickListener;
+    }
+
     public void nextOrderReport() {
         if (mOrderReport == null) return;
         TextView orderReportView = (TextView) mViewSwitcher.getNextView();
@@ -128,7 +132,6 @@ public class HomeListHeader extends FrameLayout {
         }
     }
 
-
     public void nextAdvertisement() {
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
     }
@@ -138,7 +141,7 @@ public class HomeListHeader extends FrameLayout {
 
         mPageIndicator.setCount(informationList.size());
         if (mAdapter == null) {
-            mAdapter = new AdvertisementAdapter(getContext(), informationList);
+            mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
             mViewPager.addOnPageChangeListener(mOnPageChangeListener);
             mViewPager.setAdapter(mAdapter);
         } else {
@@ -159,10 +162,12 @@ public class HomeListHeader extends FrameLayout {
 
         private List<Information> mList;
         private Context mContext;
+        private OnViewClickListener mListener;
 
-        public AdvertisementAdapter(Context context, List<Information> informationList) {
+        public AdvertisementAdapter(Context context, List<Information> informationList, OnViewClickListener listener) {
             mContext = context;
             mList = informationList;
+            mListener = listener;
         }
 
         public void setNewAdvertisements(List<Information> informationList) {
@@ -191,10 +196,8 @@ public class HomeListHeader extends FrameLayout {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (information.isH5Style()) {
-
-                    } else {
-
+                    if (mListener != null) {
+                        mListener.onBannerClick(information);
                     }
                 }
             });

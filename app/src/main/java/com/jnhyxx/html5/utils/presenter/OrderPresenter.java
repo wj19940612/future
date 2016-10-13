@@ -98,7 +98,7 @@ public class OrderPresenter {
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                     }
-                }).fire();
+                }).fireSync();
     }
 
     public void closePosition(int fundType, HoldingOrder order) {

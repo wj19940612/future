@@ -319,7 +319,9 @@ public class HoldingFragment extends BaseFragment
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(final HoldingOrder item, Product product, FullMarketData data, Context context, final Callback callback) {
+            public void bindingData(final HoldingOrder item, Product product, FullMarketData data,
+                                    Context context, final Callback callback) {
+
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
                 mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
                         + product.getCurrencyUnit());

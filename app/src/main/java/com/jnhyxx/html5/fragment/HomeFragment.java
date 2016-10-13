@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
@@ -36,6 +37,7 @@ import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +83,17 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onBannerClick(Information information) {
                 if (information.isH5Style()) {
-                    
+                    Launcher.with(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EX_URL, information.getContent())
+                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
+                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                            .execute();
                 } else {
-
+                    Launcher.with(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EX_HTML, information.getContent())
+                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
+                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                            .execute();
                 }
             }
         });

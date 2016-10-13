@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -88,6 +89,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         mPageSize = 10;
         mSet = new HashSet<>();
         mListView.setOnItemClickListener(this);
+        mListView.setDivider(null);
         requestMessageList();
     }
 
@@ -120,12 +122,15 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                     @Override
                     public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
                         updateMessageList(sysTradeMessages);
+                        for (int i = 0; i < sysTradeMessages.size(); i++) {
+                            Log.d(TAG, "交易提醒数据" + sysTradeMessages.get(i) + "\n");
+                        }
                     }
                 }).fire();
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || isDetached()) {
+        if (sysTradeMessages == null || !isDetached()) {
             mListView.setEmptyView(mEmpty);
             return;
         }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--我的界面的消息中心界面的交易提醒的item样式-->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -44,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin"
+        android:background="@drawable/bg_input_disable"
         android:lineSpacingExtra="10dp"
         android:paddingBottom="20dp"
         android:text="您的交易审核未被通过,可能是您的账户存在异常,请联系客服进行处理.【操盘手】"

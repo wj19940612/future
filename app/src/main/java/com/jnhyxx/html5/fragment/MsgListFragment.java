@@ -92,6 +92,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         mPageSize = 10;
         mSet = new HashSet<>();
         mListView.setOnItemClickListener(this);
+        mListView.setDivider(null);
         requestMessageList();
     }
 
@@ -121,7 +122,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || isDetached()) {
+        if (sysTradeMessages == null || !isDetached()) {
             mListView.setEmptyView(mEmpty);
             return;
         }

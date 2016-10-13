@@ -103,6 +103,14 @@ public class WebViewActivity extends AppCompatActivity {
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
         mPureHtml = intent.getStringExtra(EX_HTML);
+        
+        tryToFixPageUrl();
+    }
+
+    private void tryToFixPageUrl() {
+        if (!mPageUrl.startsWith("http")) { // http or https
+            mPageUrl = "http://" + mPageUrl;
+        }
     }
 
     protected void initWebView() {

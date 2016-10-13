@@ -387,8 +387,9 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static API getRechargeSuccess() {
-            return new API("/user/finance/page.do", new ApiParams());
+        public static String getRechargeSuccess() {
+//            return new API("/user/finance/page.do", new ApiParams());
+            return getHost() + ("/user/finance/page.do");
         }
 
         /**
@@ -397,8 +398,9 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static API getRechargeFail() {
-            return new API("/user/finance/back.do", new ApiParams());
+        public static String getRechargeFail() {
+//            return new API("/user/finance/back.do", new ApiParams());
+            return getHost() + ("/user/finance/back.do");
         }
 
         /**

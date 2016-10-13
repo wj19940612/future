@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.web.PaymentWebActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -170,10 +171,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EX_HTML, s)
+                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();
@@ -188,11 +189,12 @@ public class RechargeActivity extends BaseActivity {
                 .setCallback(new Callback<String>() {
                     @Override
                     public void onReceive(String s) {
+                        Log.d(TAG, "支付宝返回数据" + s);
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EX_HTML, s)
+                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();
@@ -208,10 +210,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EX_HTML, s)
+                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();

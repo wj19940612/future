@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -25,6 +26,7 @@ import android.widget.ProgressBar;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
+import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -38,7 +40,7 @@ import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class WebViewActivity extends AppCompatActivity {
-
+    private static final String TAG = "WebViewActivity";
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
@@ -270,6 +272,25 @@ public class WebViewActivity extends AppCompatActivity {
                 mLoadSuccess = false;
             }
         }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (!TextUtils.isEmpty(url)) {
+                Log.d(TAG, "充值返回地址" + url);
+                if (TextUtils.equals(url, API.Finance.getRechargeSuccess())) {
+                    finish();
+                    return true;
+                } else if (TextUtils.equals(url, API.Finance.getRechargeFail())) {
+                    finish();
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    protected boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        return shouldOverrideUrlLoading(view, request);
     }
 
     @Override

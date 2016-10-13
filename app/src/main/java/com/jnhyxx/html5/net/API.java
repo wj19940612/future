@@ -250,7 +250,7 @@ public class API extends APIBase {
          * @param size   资讯显示数量
          * @return
          */
-        public static API findNewsList(int type, int offset, int size) {
+        public static API getNewsList(int type, int offset, int size) {
             return new API(GET, "/user/news/findNewsList.do", new ApiParams()
                     .put("type", type)
                     .put("offset", offset)
@@ -365,7 +365,7 @@ public class API extends APIBase {
          * @return
          */
         public static API depositByAliPay(double money, int platform) {
-            return new API(GET, "/user/finance/depositByAlipay.do",
+            return new API("/user/finance/depositByAlipay.do",
                     new ApiParams()
                             .put("money", money)
                             .put("platform", platform));
@@ -377,7 +377,28 @@ public class API extends APIBase {
          * http://域名/user/finance/findDepositType.do
          */
         public static API getSupportApplyWay() {
-            return new API("/user/finance/findDepositType.do", null);
+            return new API("/user/finance/findDepositType.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：支付成功页面通知地址
+         * <p>
+         * URL  http://域名/user/finance/page.do
+         *
+         * @return
+         */
+        public static API getRechargeSuccess() {
+            return new API("/user/finance/page.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：支付出现异常时返回的商户页面
+         * URL  http://域名/user/finance/back.do
+         *
+         * @return
+         */
+        public static API getRechargeFail() {
+            return new API("/user/finance/back.do", new ApiParams());
         }
 
         /**

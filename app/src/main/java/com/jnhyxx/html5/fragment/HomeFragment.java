@@ -19,7 +19,8 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.domain.HomeAdvertisement;
+import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
@@ -37,6 +38,7 @@ import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +80,24 @@ public class HomeFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
         mHomeListHeader = new HomeListHeader(getContext());
+        mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
+            @Override
+            public void onBannerClick(Information information) {
+                if (information.isH5Style()) {
+                    Launcher.with(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EX_URL, information.getContent())
+                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
+                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                            .execute();
+                } else {
+                    Launcher.with(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EX_HTML, information.getContent())
+                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
+                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                            .execute();
+                }
+            }
+        });
         mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
@@ -92,7 +112,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        //requestHomeAdvertisement();
+        requestHomeInformation();
         //requestOrderReport();
         requestProductList();
         requestProductMarketList();
@@ -172,12 +192,12 @@ public class HomeFragment extends BaseFragment {
         stopScheduleJob();
     }
 
-    private void requestHomeAdvertisement() {
-        API.User.getHomeAdvertisements()
-                .setCallback(new Callback2<Resp<HomeAdvertisement>, HomeAdvertisement>() {
+    private void requestHomeInformation() {
+        API.User.getNewsList(Information.TYPE_BANNER, 0, 10)
+                .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
                     @Override
-                    public void onRespSuccess(HomeAdvertisement homeAdvertisement) {
-                        mHomeListHeader.setHomeAdvertisement(homeAdvertisement);
+                    public void onRespSuccess(List<Information> informationList) {
+                        mHomeListHeader.setHomeAdvertisement(informationList);
                     }
                 }).setTag(TAG).fire();
     }

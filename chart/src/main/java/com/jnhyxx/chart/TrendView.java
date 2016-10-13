@@ -61,6 +61,7 @@ public class TrendView extends FrameLayout {
     }
 
     public static class Util {
+
         /**
          * get diff minutes bewteen endDate and startDate. endDate - startDate
          *
@@ -68,10 +69,10 @@ public class TrendView extends FrameLayout {
          * @param endDate
          * @return
          */
-        public static int getDiffMinutes(String startDate, String endDate, String format) {
+        public static int getDiffMinutes(String startDate, String endDate) {
             long diff = 0;
             try {
-                SimpleDateFormat parser = new SimpleDateFormat(format);
+                SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
                 long start = parser.parse(startDate).getTime();
                 long end = parser.parse(endDate).getTime();
 
@@ -247,7 +248,7 @@ public class TrendView extends FrameLayout {
                             openMarketTime.length : openMarketTime.length - 1;
                     int xAxis = 0;
                     for (int i = 0; i < size; i += 2) {
-                        xAxis += Util.getDiffMinutes(openMarketTime[i], openMarketTime[i + 1], "hh:mm");
+                        xAxis += Util.getDiffMinutes(openMarketTime[i], openMarketTime[i + 1]);
                     }
                     setXAxis(xAxis - 1);
                     mXAxisRefresh = false;

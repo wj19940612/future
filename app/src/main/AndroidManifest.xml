@@ -156,7 +156,7 @@
             android:name=".activity.web.PaidToPromoteActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.web.LoadLocalDataWebViewActivity"
+            android:name=".activity.web.PaymentWebActivity"
             android:screenOrientation="portrait"/>
 
         <!-- Receiver for getui push -->

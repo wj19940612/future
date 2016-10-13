@@ -2,89 +2,44 @@ package com.jnhyxx.html5.domain;
 
 public class Information {
 
-    public static final int SECTION_MARKET_ANALYSING = 58;
-    public static final int SECTION_INDUSTRY_NEWS = 57;
+    public static final int TYPE_BANNER = 0;
+    public static final int TYPE_MARKET_ANALYSIS = 2;
+    public static final int TYPE_INDUSTRY_ANALYSIS = 3;
 
     /**
-     * summary : 美原油专家建议：今日美盘操作上建议逢高做空，41美元左右做空，39.50美元附近做多。(以上建议仅供参考，风险自担)
-     * outSourceName : 中油财经
-     * bannerUrl :
-     * section : 58
-     * title : 美原油操作策略
-     * content :
-     * outSourceUrl : null
-     * newsPlateIdList :
-     * sectionName : 行情分析
-     * plateName :
-     * subTitle :
-     * sourceType : 0
-     * permitComment : 1
-     * id : 336
-     * keyword : null
-     * createDate : 2016-08-02 20:43:32
-     * cmtCount : 0
-     * readCount : 775
-     * targetType : 0
+     * channelId : 12
+     * content : <p>333</p>
+     * cover :
+     * createTime : 2016-09-29 10:27:45
+     * id : 57ec7c210cf2ea574a418053
+     * operator : admin
+     * status : 0
+     * style : html
+     * summary : 222
+     * title : 111
+     * type : 0
+     * updateTime : 2016-09-29 10:27:45
      */
 
-    private String summary;
-    private String outSourceName;
-    private String bannerUrl;
-    private int section;
-    private String title;
+    private int channelId;
     private String content;
-    private Object outSourceUrl;
-    private String newsPlateIdList;
-    private String sectionName;
-    private String plateName;
-    private String subTitle;
-    private int sourceType;
-    private int permitComment;
-    private int id;
-    private Object keyword;
-    private String createDate;
-    private int cmtCount;
-    private int readCount;
-    private int targetType;
+    private String cover;
+    private String createTime;
+    private String id;
+    private String operator;
+    private int status;
+    private String style; // h5 or html
+    private String summary;
+    private String title;
+    private int type;
+    private String updateTime;
 
-    public String getSummary() {
-        return summary;
+    public int getChannelId() {
+        return channelId;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getOutSourceName() {
-        return outSourceName;
-    }
-
-    public void setOutSourceName(String outSourceName) {
-        this.outSourceName = outSourceName;
-    }
-
-    public String getBannerUrl() {
-        return bannerUrl;
-    }
-
-    public void setBannerUrl(String bannerUrl) {
-        this.bannerUrl = bannerUrl;
-    }
-
-    public int getSection() {
-        return section;
-    }
-
-    public void setSection(int section) {
-        this.section = section;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
     }
 
     public String getContent() {
@@ -95,107 +50,87 @@ public class Information {
         this.content = content;
     }
 
-    public Object getOutSourceUrl() {
-        return outSourceUrl;
+    public String getCover() {
+        return cover;
     }
 
-    public void setOutSourceUrl(Object outSourceUrl) {
-        this.outSourceUrl = outSourceUrl;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
-    public String getNewsPlateIdList() {
-        return newsPlateIdList;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setNewsPlateIdList(String newsPlateIdList) {
-        this.newsPlateIdList = newsPlateIdList;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    public String getSectionName() {
-        return sectionName;
-    }
-
-    public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
-    }
-
-    public String getPlateName() {
-        return plateName;
-    }
-
-    public void setPlateName(String plateName) {
-        this.plateName = plateName;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public int getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(int sourceType) {
-        this.sourceType = sourceType;
-    }
-
-    public int getPermitComment() {
-        return permitComment;
-    }
-
-    public void setPermitComment(int permitComment) {
-        this.permitComment = permitComment;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Object getKeyword() {
-        return keyword;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setKeyword(Object keyword) {
-        this.keyword = keyword;
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
-    public String getCreateDate() {
-        return createDate;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public int getCmtCount() {
-        return cmtCount;
+    public String getStyle() {
+        return style;
     }
 
-    public void setCmtCount(int cmtCount) {
-        this.cmtCount = cmtCount;
+    public void setStyle(String style) {
+        this.style = style;
     }
 
-    public int getReadCount() {
-        return readCount;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setReadCount(int readCount) {
-        this.readCount = readCount;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
-    public int getTargetType() {
-        return targetType;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTargetType(int targetType) {
-        this.targetType = targetType;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public boolean isH5Style() {
+        return this.style.equalsIgnoreCase("h5");
     }
 }

@@ -29,6 +29,7 @@ public class NettyClient {
 
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
+    private Channel mChannel;
 
     private String mHost;
     private Integer mPort;
@@ -163,18 +164,16 @@ public class NettyClient {
     private void connect() {
         if (mClosed && mBootstrap != null) return;
 
-        if (mQuotaDataFilter == null) {
-            mQuotaDataFilter = new DefaultQuotaDataFilter(mContractCode);
-        }
+        mQuotaDataFilter = new DefaultQuotaDataFilter(mContractCode);
 
         ChannelFuture channelFuture = mBootstrap.connect(mHost, mPort);
         channelFuture.addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()) {
-                    Channel channel = channelFuture.sync().channel();
+                    mChannel = channelFuture.sync().channel();
                     if (!TextUtils.isEmpty(mContractCode)) {
-                        channel.writeAndFlush(NettyLoginFactory.getOpenSecret(mContractCode));
+                        mChannel.writeAndFlush(NettyLoginFactory.getOpenSecret(mContractCode));
                     }
                 } else {
                     Throwable throwable = channelFuture.cause();
@@ -188,9 +187,15 @@ public class NettyClient {
     public void stop() {
         mClosed = true;
         mContractCode = null;
+
         if (mWorkerGroup != null) {
             mWorkerGroup.shutdownGracefully();
         }
+        if (mChannel != null) {
+            ChannelFuture future = mChannel.close();
+            Log.d(TAG, "stop: " + future.toString());
+        }
+
     }
 
     private static class DefaultQuotaDataFilter implements QuotaDataFilter {

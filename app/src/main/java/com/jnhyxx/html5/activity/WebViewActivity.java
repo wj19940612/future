@@ -42,10 +42,7 @@ public class WebViewActivity extends AppCompatActivity {
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
-
-    public static final String LOAD_LOCAL_HTML = "loadLocalHtml";
-
-    public boolean IS_LOAD_LOCAL_HTML = false;
+    public static final String EX_HTML = "html";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -63,6 +60,8 @@ public class WebViewActivity extends AppCompatActivity {
     protected String mPageUrl;
     protected String mTitle;
     protected String mRawCookie;
+    protected String mPureHtml;
+
     private BroadcastReceiver mNetworkChangeReceiver;
 
     public TitleBar getTitleBar() {
@@ -89,11 +88,10 @@ public class WebViewActivity extends AppCompatActivity {
 
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
-        Intent intent = getIntent();
-        initData(intent);
-        initWebView();
 
-        mTitleBar.setRightText(R.string.my_users);
+        initData(getIntent());
+
+        initWebView();
     }
 
     @Override
@@ -106,18 +104,25 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     protected void initData(Intent intent) {
-        boolean isLoadLocalHtml = intent.getBooleanExtra(LOAD_LOCAL_HTML, false);
-
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
-        mWebView.loadUrl(mPageUrl);
+        mPureHtml = intent.getStringExtra(EX_HTML);
+
+        tryToFixPageUrl();
     }
 
+    private void tryToFixPageUrl() {
+        if (!TextUtils.isEmpty(mPageUrl)) {
+            if (!mPageUrl.startsWith("http")) { // http or https
+                mPageUrl = "http://" + mPageUrl;
+            }
+        }
+    }
 
     protected void initWebView() {
         // init cookies
-        if (!TextUtils.isEmpty(mRawCookie)) {
+        if (!TextUtils.isEmpty(mRawCookie) && !TextUtils.isEmpty(mPageUrl)) {
             String[] cookies = mRawCookie.split("\n");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 CookieManager.getInstance().removeSessionCookies(null);
@@ -204,7 +209,15 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        mWebView.loadUrl(mPageUrl);
+        loadPage();
+    }
+
+    protected void loadPage() {
+        if (!TextUtils.isEmpty(mPageUrl)) {
+            mWebView.loadUrl(mPageUrl);
+        } else if (!TextUtils.isEmpty(mPureHtml)) {
+            mWebView.loadData(mPureHtml, "text/html", "utf-8");
+        }
     }
 
     protected class WebViewClient extends android.webkit.WebViewClient {

@@ -25,6 +25,7 @@ import com.jnhyxx.html5.domain.order.SettledOrder;
 import com.jnhyxx.html5.domain.order.SettledOrderSet;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
@@ -142,10 +143,17 @@ public class SettlementFragment extends BaseFragment {
 
     private void requestSettlementOrderList() {
         API.Order.getSettlementOrderList(mProduct.getVarietyId(), mFundType, mPageNo, mPageSize)
-                .setCallback(new Callback2<Resp<SettledOrderSet>, SettledOrderSet>() {
+                .setCallback(new Callback<Resp<SettledOrderSet>>() {
                     @Override
-                    public void onRespSuccess(SettledOrderSet settledOrderSet) {
-                        updateSettlementOrderListView(settledOrderSet.getData());
+                    public void onReceive(Resp<SettledOrderSet> settledOrderSetResp) {
+                        if (settledOrderSetResp.isSuccess()) {
+                            SettledOrderSet settledOrderSet = settledOrderSetResp.getData();
+                            updateSettlementOrderListView(settledOrderSet.getData());
+                        } else {
+                            if (mSwipeRefreshLayout.isRefreshing()) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
                     }
                 }).setTag(TAG).fire();
     }

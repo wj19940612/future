@@ -30,7 +30,7 @@ public class CustomToast {
         TextView toastText = (TextView) view.findViewById(R.id.toastText);
         toastText.setText(content);
         mToast.setGravity(Gravity.CENTER, 0, 0);
-        mToast.setDuration(Toast.LENGTH_LONG);
+        mToast.setDuration(Toast.LENGTH_SHORT);
         mToast.setView(view);
         mToast.show();
     }

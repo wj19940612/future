@@ -11,8 +11,6 @@ import android.util.SparseArray;
 
 public class TradeDetailRemarkUtil extends SparseArray<String> {
     public TradeDetailRemarkUtil() {
-        //银联充值
-        super.put(1001, "成功");
         //支付宝充值
         super.put(1002, "成功");
         //微信充值
@@ -22,54 +20,42 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         //现在充值
         super.put(1005, "成功");
         //用户提现
-        super.put(-1001, "申请");
+        super.put(-1201, "申请");
         //拒绝提现
-        super.put(-1002, "拒绝");
-        //提现成功
-        super.put(-1003, "成功");
-//        //转账失败
-//        super.put(-1004, "转账");
+        super.put(1201, "拒绝");
         //支付手续费
-        super.put(-2001, "支付");
+        super.put(-2101, "支付");
         //返还手续费
-        super.put(2001, "返还");
+        super.put(2301, "返还");
         //冻结保证金
-        super.put(-2002, "冻结");
+        super.put(-2102, "冻结");
         //返还保证金
-        super.put(2002, "返还");
+        super.put(2201, "返还");
 
         //收益填合约
         //收益增加
-        super.put(2003, "");
+        super.put(2202, "");
         //收益减少
-        super.put(-2003, "");
-//        //充值红包
-//        super.put(3001, "红包");
-//        //抹除红包
-//        super.put(-3001, "红包");
-        //充值积分
-        super.put(3002, "购买");
-        //抹除积分
-        super.put(-3002, "兑换");
-        //充值资金
-        super.put(3003, "资金");
-        //抹除资金
-        super.put(-3003, "资金");
+        super.put(-2202, "");
         //系统补单
         super.put(3004, "成功");
+        //返还手续费
+        super.put(2301, "返还");
+        //返还保证金
+        super.put(2302, "返还");
         //内部充值资金
-        super.put(3005, "成功");
-        //内部体现资金
-        super.put(-3005, "成功");
+        super.put(3101, "成功");
+        //内部取出资金
+        super.put(-3101, "提现");
         //内部充值积分
-        super.put(3006, "充值");
-//        //支付宝转账
-//        super.put(-4001, "充值");
-//        //佣金存入
-//        super.put(5001, "佣金");
-//        //佣金转出
-//        super.put(-5001, "佣金");
+        super.put(3201, "成功");
+        //内部取出积分
+        super.put(-3202, "提现");
+        //系统补单
+        super.put(4101, "成功");
+        //注册赠送
+        super.put(4201, "成功");
         //佣金转余额
-        super.put(5002, "存入");
+        super.put(6001, "存入");
     }
 }

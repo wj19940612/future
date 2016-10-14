@@ -25,16 +25,18 @@
         android:id="@+id/tradeDetailViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="4"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:padding="5dp">
 
         <RelativeLayout
+            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -44,17 +46,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/account_trade_detail_margin_remain"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/colorDisable"/>
 
-            <TextView
+            <com.jnhyxx.html5.view.AutoAdaptSizeTextView
                 android:id="@+id/remainNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/remainTitle"
                 android:layout_marginTop="10dp"
-                android:lines="1"
+                android:maxLines="1"
+                android:text="@string/zero"
+                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
-                android:textSize="35sp"
+                android:textSize="40sp"
                 android:textStyle="bold"/>
         </RelativeLayout>
 
@@ -63,31 +67,34 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@color/splitLineGrayLight"/>
+            android:background="@color/colorDisable"/>
 
         <RelativeLayout
+            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:paddingLeft="15dp">
+            android:paddingLeft="@dimen/common_margin">
 
             <TextView
                 android:id="@+id/blockedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/money_frozen"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/colorDisable"/>
 
-            <TextView
+            <com.jnhyxx.html5.view.AutoAdaptSizeTextView
                 android:id="@+id/blockedNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/blockedTitle"
                 android:layout_marginTop="10dp"
-                android:lines="1"
+                android:maxLines="1"
+                android:text="@string/zero"
+                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
-                android:textSize="35sp"
+                android:textSize="40sp"
                 android:textStyle="bold"/>
         </RelativeLayout>
     </LinearLayout>

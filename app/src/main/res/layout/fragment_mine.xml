@@ -68,7 +68,7 @@
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
-                android:background="@color/grayHint"/>
+                android:background="@color/colorDisable"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -84,11 +84,14 @@
                     android:text="@string/mine_balance"
                     android:textColor="@android:color/white"/>
 
-                <TextView
+                <com.jnhyxx.html5.view.AutoAdaptSizeTextView
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
                     android:text="@string/zero"
                     android:textColor="@color/redPrimary"
                     android:textSize="40sp"/>
@@ -187,8 +190,6 @@
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/message_center"
         app:rowTextColor="@android:color/black"
-        app:subText="99"
-        app:subTextBackground="@drawable/account_message_warm"
         app:subTextColor="@android:color/white"/>
 
     <include layout="@layout/split_line_gray_dark"/>

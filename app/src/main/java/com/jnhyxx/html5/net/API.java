@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
@@ -345,15 +346,19 @@ public class API extends APIBase {
             return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
         }
 
-        /**
-         * 接口名：用户充值(微信充值)
-         * URL  http://域名/user/finance/depositByWeChat.do
-         *
-         * @param money
-         * @return
-         */
-        public static API depositByWeChartApply(double money) {
-            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+//        /**
+//         * 接口名：用户充值(微信充值)
+//         * URL  http://域名/user/finance/depositByWeChat.do
+//         *
+//         * @param money
+//         * @return
+//         */
+//        public static API depositByWeChartApply(double money) {
+//            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
+//        }
+
+        public static String depositByWeChartApply(double money) {
+            return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;
         }
 
         /**
@@ -371,13 +376,40 @@ public class API extends APIBase {
                             .put("platform", platform));
         }
 
+        public static String depositByAliPay(double money) {
+            return getHost() + "/user/finance/depositByAlipay.do?" + "platform=" + SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID + "&money=" + money;
+        }
+
         /**
          * 接口名：查询当前渠道所支持的所有支付渠道
          * <p>
          * http://域名/user/finance/findDepositType.do
          */
         public static API getSupportApplyWay() {
-            return new API("/user/finance/findDepositType.do", null);
+            return new API("/user/finance/findDepositType.do", new ApiParams());
+        }
+
+        /**
+         * 接口名：支付成功页面通知地址
+         * <p>
+         * URL  http://域名/user/finance/page.do
+         *
+         * @return
+         */
+        public static String getRechargeSuccess() {
+//            return new API("/user/finance/page.do", new ApiParams());
+            return getHost() + ("/user/finance/page.do");
+        }
+
+        /**
+         * 接口名：支付出现异常时返回的商户页面
+         * URL  http://域名/user/finance/back.do
+         *
+         * @return
+         */
+        public static String getRechargeFail() {
+//            return new API("/user/finance/back.do", new ApiParams());
+            return getHost() + ("/user/finance/back.do");
         }
 
         /**
@@ -475,39 +507,28 @@ public class API extends APIBase {
     }
 
     public static class Message {
-        /**
-         * /sms/message/systemMessages 系统消息列表
-         *
-         * @param token
-         * @return
-         */
-        public static API getSystemMessageList(String token, int pageNo, int pageSize) {
-            return new API("/sms/message/systemMessages",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
-        }
 
         /**
-         * /sms/message/traderMassages 交易提醒列表
+         * 接口名：查询行情分析和行情咨询
+         * URL  http://域名/user/news/loadNews.do
          *
-         * @param token
+         * @param pushType 0代表是 行情资讯 1 代表行业资讯  2 代表系统消息 3 代表 交易提醒
+         * @param page     页数 从0开始
+         * @param pageSize 当前展示多少数量
          * @return
          */
-        public static API getTradeMessageList(String token, int pageNo, int pageSize) {
-            return new API("/sms/message/traderMassages",
-                    new ApiParams()
-                            .put(TOKEN, token)
-                            .put(PAGE_NO, pageNo)
-                            .put(PAGE_SIZE, pageSize));
+        public static API getMessageInfo(int pushType, int page, int pageSize) {
+            return new API("/user/news/loadNews.do", new ApiParams()
+                    .put("pushType", pushType)
+                    .put("page", page)
+                    .put("pageSize", pageSize));
         }
 
         /**
          * 接口名：查询资讯列表
          * URL  http://域名/user/news/findNewsList.do
          *
-         * @param type   资讯类型  首页banner0,咨询直播1，行情分析2，行业分析3
+         * @param type   资讯类型  首页banner0,行情分析2，行业分析3
          * @param offset 资讯起始点
          * @param size   资讯显示数量
          * @return
@@ -779,5 +800,9 @@ public class API extends APIBase {
      */
     public static String getRegisterServiceProtocol() {
         return getHost() + "/xieyi/agreement.html?nohead=1";
+    }
+
+    public static String getServiceQQ(String serviceQQ) {
+        return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
     }
 }

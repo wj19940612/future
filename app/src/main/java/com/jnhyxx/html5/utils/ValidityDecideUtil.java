@@ -46,13 +46,6 @@ public class ValidityDecideUtil {
      * @return
      */
     public static boolean getNicknameStatus(String nickName) {
-
-//        nickName = nickName.trim();
-//        Pattern numberLetter = Pattern.compile("^[A-Za-z0-9]+$");
-//        Matcher numberMatcher = numberLetter.matcher(nickName);
-//        Pattern chinese = Pattern.compile("^[\u4e00-\u9fa5]+$");
-//        Matcher chineseMatcher = chinese.matcher(nickName);
-//        return numberMatcher.matches() || chineseMatcher.matches();
         nickName = nickName.trim();
         Pattern letter = Pattern.compile("^[A-Za-z0-9\u4e00-\u9fa5]+$");
         Matcher letterMatcher = letter.matcher(nickName);

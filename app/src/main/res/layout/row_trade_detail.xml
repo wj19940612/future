@@ -93,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
                 android:text="1251分"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="14sp"/>

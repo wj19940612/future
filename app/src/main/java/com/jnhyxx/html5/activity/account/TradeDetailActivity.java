@@ -15,6 +15,7 @@ import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.fragment.TradeDetailListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 
@@ -73,10 +74,10 @@ public class TradeDetailActivity extends BaseActivity {
                         break;
                     case 1:
                         mRemainTitle.setText(R.string.account_trade_detail_integral_remain);
-                        mRemainNumber.setText(String.valueOf(mUserFundInfo.getScoreUsable()));
+                        mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getScoreUsable()));
                         mBlockedTitle.setText(R.string.integral_frozen);
                         // TODO: 2016/9/19 目前不知冻结积分如何获取
-                        mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMarginScore()));
+                        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMarginScore()));
                         break;
                 }
             }
@@ -90,11 +91,11 @@ public class TradeDetailActivity extends BaseActivity {
     private void initData() {
         mRemainTitle.setText(R.string.remain_money);
         //资金余额
-        mRemainNumber.setText(String.valueOf(mUserFundInfo.getMoneyUsable()));
+        mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMoneyUsable()));
         //右边头部
         mBlockedTitle.setText(R.string.money_frozen);
         //冻结资金余额
-        mBlockedNumber.setText(String.valueOf(mUserFundInfo.getMoneyFrozen()));
+        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMoneyFrozen()));
     }
 
     private void initViewPager() {
@@ -149,6 +150,4 @@ public class TradeDetailActivity extends BaseActivity {
             return 2;
         }
     }
-
-
 }

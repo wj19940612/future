@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activityMessageCenterListItemInfo"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDF0F5"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activityMessageCenterListItemInfo"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/transparent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity">
 
     <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/accountMessageInfoTitleBar"
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText="@string/account_message_center_info_title" />
+        app:titleText="@string/message_center_info_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,36 +25,36 @@
         android:paddingRight="15dp">
 
         <TextView
-            android:id="@+id/messageCenterInfoTitle"
+            android:id="@+id/messageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="20dp"
+            android:lineSpacingExtra="25sp"
+            android:paddingTop="30dp"
             android:textColor="@color/blackPrimary"
-            android:textSize="17dp"
-            android:lineSpacingExtra="25dp"/>
+            android:textSize="17sp"/>
 
         <TextView
-            android:id="@+id/messageCenterInfoTime"
+            android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="35dp"
             android:paddingTop="15dp"
             android:textColor="@color/colorDisable"
-            android:textSize="11dp" />
+            android:textSize="12sp"/>
+
         <ScrollView
-            android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
-                android:lineSpacingMultiplier="1.2"
-                android:id="@+id/message_center_info_content"
+                android:id="@+id/messageContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="10dp"
-                android:textColor="#666666"
-                android:paddingBottom="30dp"/>
+                android:paddingBottom="30dp"
+                android:textColor="@color/lucky"/>
         </ScrollView>
     </LinearLayout>
 </LinearLayout>

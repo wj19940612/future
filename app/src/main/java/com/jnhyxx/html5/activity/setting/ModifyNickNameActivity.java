@@ -83,7 +83,6 @@ public class ModifyNickNameActivity extends BaseActivity {
     @OnClick(R.id.confirmButton)
     public void onClick() {
         String nickName = ViewUtil.getTextTrim(mNickname);
-        // TODO: 10/9/16 特殊字符过滤 '昵称不得包含特殊符号'
         submitNickName(nickName);
     }
 }

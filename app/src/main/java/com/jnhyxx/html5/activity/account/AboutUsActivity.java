@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.net.API;
 import com.johnz.kutils.AppInfo;
 
 import butterknife.BindView;
@@ -19,7 +20,7 @@ public class AboutUsActivity extends BaseActivity {
     private static final String TAG = "AboutUsActivity";
     private static final String SERVICE_QQ = "3088152027";
     @BindView(R.id.versionName)
-    TextView mTVVersionName;
+    TextView mVersionName;
     //公司热线
     @BindView(R.id.companyTelephone)
     RelativeLayout mRlCompanyTelephone;
@@ -34,9 +35,10 @@ public class AboutUsActivity extends BaseActivity {
         initData();
     }
 
+
     private void initData() {
         String versionName = AppInfo.getVersionName(getApplicationContext());
-        mTVVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
+        mVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
     }
 
     @OnClick({R.id.companyInfo, R.id.managerTeam, R.id.companyCulture, R.id.collaborateCase, R.id.companyTelephone, R.id.serviceQq})
@@ -60,11 +62,12 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             //公司热线
             case R.id.companyTelephone:
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number)));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number).replaceAll("-", "")));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.serviceQq:
-                String serviceQQUrl = "mqqwpa://im/chat?chat_type=wpa&uin=" + SERVICE_QQ + "&version=1";
+                String serviceQQUrl = API.getServiceQQ(SERVICE_QQ);
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
                 break;
 

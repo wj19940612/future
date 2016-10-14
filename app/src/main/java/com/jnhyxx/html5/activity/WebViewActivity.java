@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -25,6 +26,7 @@ import android.widget.ProgressBar;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
+import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -38,7 +40,7 @@ import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class WebViewActivity extends AppCompatActivity {
-
+    private static final String TAG = "WebViewActivity";
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
@@ -54,7 +56,8 @@ public class WebViewActivity extends AppCompatActivity {
     Button mRefreshButton;
     @BindView(R.id.errorPage)
     LinearLayout mErrorPage;
-
+    @BindView(R.id.finishView)
+    View mView;
     private boolean mLoadSuccess;
     protected String mPageUrl;
     protected String mTitle;
@@ -73,6 +76,10 @@ public class WebViewActivity extends AppCompatActivity {
 
     public WebView getWebView() {
         return mWebView;
+    }
+
+    protected View getFinishView() {
+        return mView;
     }
 
     @Override
@@ -103,19 +110,21 @@ public class WebViewActivity extends AppCompatActivity {
         mPageUrl = intent.getStringExtra(EX_URL);
         mRawCookie = intent.getStringExtra(EX_RAW_COOKIE);
         mPureHtml = intent.getStringExtra(EX_HTML);
-        
+
         tryToFixPageUrl();
     }
 
     private void tryToFixPageUrl() {
-        if (!mPageUrl.startsWith("http")) { // http or https
-            mPageUrl = "http://" + mPageUrl;
+        if (!TextUtils.isEmpty(mPageUrl)) {
+            if (!mPageUrl.startsWith("http")) { // http or https
+                mPageUrl = "http://" + mPageUrl;
+            }
         }
     }
 
     protected void initWebView() {
         // init cookies
-        if (!TextUtils.isEmpty(mRawCookie)) {
+        if (!TextUtils.isEmpty(mRawCookie) && !TextUtils.isEmpty(mPageUrl)) {
             String[] cookies = mRawCookie.split("\n");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 CookieManager.getInstance().removeSessionCookies(null);
@@ -209,11 +218,11 @@ public class WebViewActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(mPageUrl)) {
             mWebView.loadUrl(mPageUrl);
         } else if (!TextUtils.isEmpty(mPureHtml)) {
-            mWebView.loadData(mPageUrl, "text/html", "utf-8");
+            mWebView.loadData(mPureHtml, "text/html", "utf-8");
         }
     }
 
-    private class WebViewClient extends android.webkit.WebViewClient {
+    protected class WebViewClient extends android.webkit.WebViewClient {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -263,6 +272,25 @@ public class WebViewActivity extends AppCompatActivity {
                 mLoadSuccess = false;
             }
         }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (!TextUtils.isEmpty(url)) {
+                Log.d(TAG, "充值返回地址" + url);
+                if (TextUtils.equals(url, API.Finance.getRechargeSuccess())) {
+                    finish();
+                    return true;
+                } else if (TextUtils.equals(url, API.Finance.getRechargeFail())) {
+                    finish();
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    protected boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        return shouldOverrideUrlLoading(view, request);
     }
 
     @Override

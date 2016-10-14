@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.web.PaymentWebActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -71,7 +71,6 @@ public class RechargeActivity extends BaseActivity {
         } else {
             mBankCardPay.setVisibility(View.GONE);
         }
-        // TODO: 2016/9/28  目前支付宝在测试环境不可用，微信返回的是乱码
         if (supportApplyWay.isAlipay()) {
             mAliPayPay.setVisibility(View.VISIBLE);
         } else {
@@ -170,10 +169,10 @@ public class RechargeActivity extends BaseActivity {
                     @Override
                     public void onReceive(String s) {
                         s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        Launcher.with(getActivity(), WebViewActivity.class)
+                                .putExtra(WebViewActivity.EX_HTML, s)
+                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                 .execute();
                     }
                 }).fire();
@@ -182,39 +181,36 @@ public class RechargeActivity extends BaseActivity {
     private void depositByAliPay() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        API.Finance.depositByAliPay(amount, SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID)
-                .setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback<String>() {
-                    @Override
-                    public void onReceive(String s) {
-                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                                .execute();
-                    }
-                }).fire();
+        Launcher.with(getActivity(), WebViewActivity.class)
+                .putExtra(WebViewActivity.EX_URL, API.Finance.depositByAliPay(amount))
+                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                .execute();
     }
 
     private void depositByWeChartApply() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        API.Finance.depositByWeChartApply(amount)
-                .setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback<String>() {
-                    @Override
-                    public void onReceive(String s) {
-                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), PaymentWebActivity.class)
-                                .putExtra(PaymentWebActivity.EX_HTML, s)
-                                .putExtra(PaymentWebActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(PaymentWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                                .execute();
-                    }
-                }).fire();
+//        API.Finance.depositByWeChartApply(amount)
+//                .setTag(TAG)
+//                .setIndeterminate(this)
+//                .setCallback(new Callback<String>() {
+//                    @Override
+//                    public void onReceive(String s) {
+//                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
+//                        Launcher.with(getActivity(), WebViewActivity.class)
+//                                .putExtra(WebViewActivity.EX_HTML, s)
+//                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+//                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+//                                .execute();
+//                    }
+//                }).fire();
+
+        Launcher.with(getActivity(), WebViewActivity.class)
+                .putExtra(WebViewActivity.EX_URL, API.Finance.depositByWeChartApply(amount))
+                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
+                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                .execute();
     }
 
     private boolean isBankcardPaymentSelected() {

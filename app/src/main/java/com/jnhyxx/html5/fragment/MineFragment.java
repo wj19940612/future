@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -130,12 +131,13 @@ public class MineFragment extends BaseFragment {
             mTitleBar.setRightVisible(true);
 
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
             String userName = userInfo.getUserName();
             double moneyUsable = userInfo.getMoneyUsable();
-            int scoreUsable = userInfo.getScoreUsable();
+            double scoreUsable = userInfo.getScoreUsable();
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
-            mScore.setText(getString(R.string.mine_score, scoreUsable + ""));
+            mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
 
         } else {
             mSignArea.setVisibility(View.VISIBLE);
@@ -165,7 +167,11 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
-                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), MessageCenterActivity.class).execute();
+                } else {
+                    Launcher.with(getActivity(), SignInActivity.class).execute();
+                }
                 break;
             case R.id.tradeDetail:
                 openTradeDetailPage();
@@ -177,7 +183,21 @@ public class MineFragment extends BaseFragment {
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:
-                Launcher.with(getActivity(), SettingsActivity.class).execute();
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), SettingsActivity.class).execute();
+                } else {
+                    SmartDialog.with(getActivity(), BaseActivity.mExpiredMessage)
+                            .setCancelableOnTouchOutside(false)
+                            .setNegative(R.string.cancel)
+                            .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), SignInActivity.class)
+                                            .execute();
+                                }
+                            }).show();
+                }
                 break;
         }
     }

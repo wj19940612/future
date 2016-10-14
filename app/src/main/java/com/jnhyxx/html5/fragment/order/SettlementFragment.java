@@ -272,7 +272,7 @@ public class SettlementFragment extends BaseFragment {
                 }
 
                 int tradeType = item.getDirection();
-                if (tradeType == SettledOrder.DIRECTION_LONG) {
+                if (tradeType == SettledOrder.DIRECTION_SHORT) {
                     mTradeType.setText(R.string.bullish);
                     mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
                 } else {

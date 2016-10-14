@@ -1,15 +1,6 @@
 package com.jnhyxx.html5.domain.account;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ${wangJie} on 2016/9/13.
@@ -57,7 +48,7 @@ public class WithdrawRecord implements Serializable {
     /**
      * '根据各平台计算得出本次手续费',
      */
-    private int commission;
+    private double commission;
     /**
      * 流水id
      */
@@ -88,57 +79,12 @@ public class WithdrawRecord implements Serializable {
     private int typeDetail;
     private String updateTime;
     private String createTime;
-    private int userId;
 
-    public static WithdrawRecord objectFromData(String str) {
-
-        return new Gson().fromJson(str, WithdrawRecord.class);
-    }
-
-    public static WithdrawRecord objectFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-
-            return new Gson().fromJson(jsonObject.getString(str), WithdrawRecord.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static List<WithdrawRecord> arrayWithdrawRecordFromData(String str) {
-
-        Type listType = new TypeToken<ArrayList<WithdrawRecord>>() {
-        }.getType();
-
-        return new Gson().fromJson(str, listType);
-    }
-
-    public static List<WithdrawRecord> arrayWithdrawRecordFromData(String str, String key) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            Type listType = new TypeToken<ArrayList<WithdrawRecord>>() {
-            }.getType();
-
-            return new Gson().fromJson(jsonObject.getString(str), listType);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList();
-
-
-    }
-
-    public int getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(int commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 
@@ -214,14 +160,6 @@ public class WithdrawRecord implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     @Override
     public String toString() {
         return "WithdrawRecord{" +
@@ -235,7 +173,6 @@ public class WithdrawRecord implements Serializable {
                 ", typeDetail=" + typeDetail +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
-                ", userId=" + userId +
                 '}';
     }
 }

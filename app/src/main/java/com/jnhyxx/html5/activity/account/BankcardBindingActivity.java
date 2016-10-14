@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -189,6 +188,8 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     private void setOldBindBankInfo(UserInfo userInfo) {
+        String cardHolderName = LocalUser.getUser().getCardHolderName();
+        mCardholderName.setText(cardHolderName);
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
@@ -215,14 +216,15 @@ public class BankcardBindingActivity extends BaseActivity {
                 showBankDialog();
                 break;
             case R.id.submitToAuthButton:
+                final String cardHolderName = ViewUtil.getTextTrim(mCardholderName);
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
-
-                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
-                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
-                    return;
-                }
+                // TODO: 2016/10/10 暂时去掉银行卡校验
+//                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
+//                    mCommonFailTvWarn.show(R.string.bank_card_is_error);
+//                    return;
+//                }
 
                 if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
@@ -243,12 +245,14 @@ public class BankcardBindingActivity extends BaseActivity {
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
                                     LocalUser localUser = LocalUser.getUser();
+                                    localUser.setCardHolderName(cardHolderName);
                                     UserInfo userInfo = localUser.getUserInfo();
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);
                                     userInfo.setCardPhone(phoneNum);
                                     userInfo.setBankId(bankId);
                                     userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
+                                    localUser.setUserInfo(userInfo);
 
                                     CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 
@@ -321,7 +325,6 @@ public class BankcardBindingActivity extends BaseActivity {
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d("wj", "所选择的银行卡信息" + mChannelBank.toString());
                         if (mChannelBank != null) {
                             mPayingBank.setText(mChannelBank.getName());
                         }

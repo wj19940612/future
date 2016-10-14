@@ -2,17 +2,6 @@ package com.jnhyxx.html5.domain.account;
 
 import java.io.Serializable;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Administrator on 2016/8/31.
  * 用户资金信息
@@ -68,7 +57,6 @@ public class UserFundInfo implements Serializable {
      */
     private double scoreUsable;
     private String updateTime;
-    private int userId;
 
     public String getCreateTime() {
         return createTime;
@@ -142,13 +130,6 @@ public class UserFundInfo implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     @Override
     public String toString() {
@@ -162,7 +143,6 @@ public class UserFundInfo implements Serializable {
                 ", redbagUsable=" + redbagUsable +
                 ", scoreUsable=" + scoreUsable +
                 ", updateTime='" + updateTime + '\'' +
-                ", userId=" + userId +
                 '}';
     }
 }

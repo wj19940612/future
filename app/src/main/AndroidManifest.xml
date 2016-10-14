@@ -148,16 +148,12 @@
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
 
-
         <!-- WebView activity -->
         <activity
             android:name=".activity.WebViewActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.web.PaidToPromoteActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.web.PaymentWebActivity"
             android:screenOrientation="portrait"/>
 
         <!-- Receiver for getui push -->
@@ -168,6 +164,7 @@
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

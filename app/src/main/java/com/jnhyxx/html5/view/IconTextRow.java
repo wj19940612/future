@@ -103,6 +103,9 @@ public class IconTextRow extends LinearLayout {
         }
     }
 
+    public void setSubTextViewBg(int resId) {
+        mSubTextView.setBackgroundResource(resId);
+    }
 
     public void setText(String text) {
         mTextView.setText(text);

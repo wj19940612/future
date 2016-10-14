@@ -11,10 +11,16 @@ import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.account.UserFundInfo;
+import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -131,6 +137,20 @@ public class MainActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
+
+        final LocalUser localUser = LocalUser.getUser();
+        final UserInfo userInfo = localUser.getUserInfo();
+        API.Finance.getFundInfo().setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                        UserFundInfo userFundInfo = resp.getData();
+                        userInfo.setMoneyUsable(userFundInfo.getMoneyUsable());
+                        userInfo.setScoreUsable(userFundInfo.getScoreUsable());
+                        localUser.setUserInfo(userInfo);
+                    }
+                }).fire();
     }
 
     @Override

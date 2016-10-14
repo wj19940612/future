@@ -3,6 +3,9 @@ package com.jnhyxx.html5.domain.order;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * 用户查看持仓接口model
+ */
 public class HoldingOrder extends AbsOrder implements Parcelable {
 
     /**
@@ -22,10 +25,17 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
      */
 
     private long buyTime;
+
     private String currencyUnit;
+    /**
+     * 方向：1： 买涨 0： 买跌
+     */
     private int direction;
     private int eachPointMoney;
     private int handsNum;
+    /**
+     * 订单状态 0:待支付，1：已支付，待持仓 2：持仓中 3 ：平仓处理中
+     */
     private int orderStatus;
     private long orderTime;
     private double ratio;
@@ -34,6 +44,11 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
     private String showId;
     private double stopLossPrice;
     private double stopWinPrice;
+
+    /**
+     * 平仓价      （人民币）
+     */
+    private double unwindAvgPrice;
 
     public long getBuyTime() {
         return buyTime;
@@ -139,6 +154,14 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.stopWinPrice = stopWin;
     }
 
+    public double getUnwindAvgPrice() {
+        return unwindAvgPrice;
+    }
+
+    public void setUnwindAvgPrice(double unwindAvgPrice) {
+        this.unwindAvgPrice = unwindAvgPrice;
+    }
+
     @Override
     public String toString() {
         return "HoldingOrder{" +
@@ -155,6 +178,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
                 ", showId='" + showId + '\'' +
                 ", stopLossPrice=" + stopLossPrice +
                 ", stopWinPrice=" + stopWinPrice +
+                ", unwindAvgPrice=" + unwindAvgPrice +
                 '}';
     }
 
@@ -178,6 +202,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         dest.writeString(this.showId);
         dest.writeDouble(this.stopLossPrice);
         dest.writeDouble(this.stopWinPrice);
+        dest.writeDouble(this.unwindAvgPrice);
     }
 
     public HoldingOrder() {
@@ -197,6 +222,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.showId = in.readString();
         this.stopLossPrice = in.readDouble();
         this.stopWinPrice = in.readDouble();
+        this.unwindAvgPrice = in.readDouble();
     }
 
     public static final Parcelable.Creator<HoldingOrder> CREATOR = new Parcelable.Creator<HoldingOrder>() {

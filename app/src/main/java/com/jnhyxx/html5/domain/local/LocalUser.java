@@ -10,7 +10,7 @@ public class LocalUser {
 
     private UserInfo mUserInfo;
     private String mPhone;
-
+    private String mCardHolderName;
     private static LocalUser sLocalUser;
     private static boolean sReload;
 
@@ -30,6 +30,14 @@ public class LocalUser {
         }
 
         return new LocalUser();
+    }
+
+    public String getCardHolderName() {
+        return mCardHolderName;
+    }
+
+    public void setCardHolderName(String cardHolderName) {
+        this.mCardHolderName = cardHolderName;
     }
 
     private void saveToPreference() {

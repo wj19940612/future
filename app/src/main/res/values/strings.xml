@@ -89,7 +89,7 @@
     <string name="service_protocol">《服务协议》</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="resend_after_n_seconds">%1$d秒</string>
+    <string name="resend_after_n_seconds">%1$ds</string>
     <string name="please_input_phone_num">请输入手机号码</string>
     <string name="please_input_password">请输入密码</string>
     <string name="forget_password">忘记密码?</string>
@@ -226,7 +226,7 @@
     <!-- Trade page -->
     <string name="play_rule">玩法规则</string>
     <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
-    <string name="one_key_close_position">一建平仓</string>
+    <string name="one_key_close_position">一键平仓</string>
     <string name="available_balance_and_unit">可用资金 (%1$s)</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
     <string name="trend_chart">分时图</string>
@@ -252,8 +252,8 @@
     <string name="place_an_order_again">再次下单</string>
     <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
     <string name="currency_converter">汇率换算: %1$s</string>
-    <string name="confirm_buy_long">确认买涨</string>
-    <string name="confirm_sell_short">确认买跌</string>
+    <string name="confirm_buy_long">确定买涨</string>
+    <string name="confirm_sell_short">确定买跌</string>
     <string name="today_position">今持仓</string>
     <string name="pre_position">昨持仓</string>
 
@@ -274,7 +274,10 @@
     <string name="mine_balance">余额 (元)</string>
 
     <!-- 消息中心 Message center-->
-    <string name="account_message_center_info_title">消息详情</string>
+    <string name="message_center_info_title">消息详情</string>
+    <string name="trade_status">审核已经通过</string>
+    <string name="time">2016/12/12 12:12:06</string>
+    <string name="trade_content">%1$s 【%2$s】</string>
 
     <!--我的界面/关于我们-->
     <string name="account_about_us_app_version">%1$s V%2$s</string>
@@ -365,20 +368,20 @@
     <string name="modify_nick_name_title">修改昵称</string>
     <string name="modify_nick_name_warn">昵称只能由中文、英文、数字组成,暂只支持修改一次。</string>
     <string name="modify_nick_name_editText_hint">请输入新的昵称</string>
-    <string name="modify_nick_name_submit_warn">昵称只能由中文、字母、数字组成</string>
+    <string name="modify_nick_name_submit_warn">昵称不得包含特殊符号</string>
 
 
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
     <string name="default_bank_name_card_number">工商银行 *4545</string>
-    <string name="withdraw_least_money_hint">金额>=20元</string>
-    <string name="recharge_least_money">充值金额>=50</string>
+    <string name="withdraw_least_money_hint">金额≥20元</string>
+    <string name="recharge_least_money">充值金额≥50</string>
     <string name="bank_card_pay">银行卡支付</string>
     <string name="bank_card_pay_hint">无需开通网银</string>
     <string name="aliPay_pay">支付宝支付</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
-    <string name="recharge_hint">资金冲提采用银联、支付宝两种方式\n双管监督,让您的资金更安全</string>
+    <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
 
 
     <!--提款记录-->
@@ -408,7 +411,7 @@
     <string name="withdraw_start">刚刚发起</string>
     <string name="withdraw_audit_passing">审核通过</string>
     <string name="withdraw_fund_transfer">转账中</string>
-    <string name="withdraw_refuse"></string>
+    <string name="withdraw_refuse">提现拒绝</string>
     <string name="transfer_fail">转账失败</string>
 
     <string name="common_success">成功</string>

@@ -16,6 +16,7 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.FinanceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,12 +137,12 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             Log.d(TAG, "withdraw record info status is has not konwn status");
         }
 
-        mMoneyNumber.setText(getString(R.string.withdraw_record_number, String.valueOf(withDrawRecordInfo.getMoney())));
+        mMoneyNumber.setText(getString(R.string.withdraw_record_number, FinanceUtil.formatWithScale(withDrawRecordInfo.getMoney())));
 
         //实际到账
-        mRealAccount.setText(getString(R.string.withdraw_record_real_account, String.valueOf(withDrawRecordInfo.getMoney() - withDrawRecordInfo.getCommission())));
+        mRealAccount.setText(getString(R.string.withdraw_record_real_account, FinanceUtil.formatWithScale(withDrawRecordInfo.getMoney() - withDrawRecordInfo.getCommission())));
         //手续费
-        mPoundageNumber.setText(getString(R.string.withdraw_record_poundage, String.valueOf(withDrawRecordInfo.getCommission())));
+        mPoundageNumber.setText(getString(R.string.withdraw_record_poundage, FinanceUtil.formatWithScale(withDrawRecordInfo.getCommission())));
 
 
         String cardNumber = withDrawRecordInfo.getCardNumber();

@@ -69,7 +69,6 @@ public class TradeDetail implements Serializable {
      * 流水具体类型
      */
     private int typeDetail;
-    private int userId;
     /**
      * 本次流水现金发生金额'
      */
@@ -158,14 +157,6 @@ public class TradeDetail implements Serializable {
         this.typeDetail = typeDetail;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public double getMoney() {
         return money;
     }
@@ -173,7 +164,6 @@ public class TradeDetail implements Serializable {
     public void setMoney(double money) {
         this.money = money;
     }
-
 
     @Override
     public String toString() {
@@ -185,9 +175,9 @@ public class TradeDetail implements Serializable {
                 ", scoreLeft=" + scoreLeft +
                 ", type=" + type +
                 ", typeDetail=" + typeDetail +
-                ", userId=" + userId +
                 ", money=" + money +
                 ", moneyLeft=" + moneyLeft +
+                ", ioOrderId=" + ioOrderId +
                 '}';
     }
 }

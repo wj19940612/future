@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
+import com.jnhyxx.html5.fragment.TradeHintListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.johnz.kutils.Launcher;
 
@@ -23,6 +25,7 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
+    private MessagePagesAdapter mMessagePagesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,19 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
         setContentView(R.layout.activity_message_center);
         ButterKnife.bind(this);
 
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setCurrentItem(0, false);
+        mMessagePagesAdapter = new MessagePagesAdapter(getSupportFragmentManager(), MessageCenterActivity.this);
+        mViewPager.setAdapter(mMessagePagesAdapter);
+
+
         mSlidingTabLayout.setDistributeEvenly(true);
-        mViewPager.setAdapter(new MessagePagesAdapter(getSupportFragmentManager(), getActivity()));
+        mSlidingTabLayout.setDividerColors(ContextCompat.getColor(MessageCenterActivity.this, android.R.color.transparent));
         mSlidingTabLayout.setViewPager(mViewPager);
+
     }
 
-    static class MessagePagesAdapter extends FragmentPagerAdapter {
+    class MessagePagesAdapter extends FragmentPagerAdapter {
 
         private Context mContext;
 
@@ -61,7 +71,7 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
                 case 0:
                     return MsgListFragment.newInstance(MsgListFragment.TYPE_SYSTEM);
                 case 1:
-                    return MsgListFragment.newInstance(MsgListFragment.TYPE_TRADE);
+                    return TradeHintListFragment.newInstance(TradeHintListFragment.TYPE_TRADE);
             }
             return null;
         }
@@ -74,6 +84,6 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
 
     @Override
     public void onMsgItemClick(SysTradeMessage sysTradeMessage) {
-        Launcher.with(MessageCenterActivity.this,MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD,sysTradeMessage).execute();
+        Launcher.with(MessageCenterActivity.this, MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD, sysTradeMessage).execute();
     }
 }

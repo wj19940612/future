@@ -24,6 +24,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -101,7 +102,7 @@ public class TradeDetailListFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trade_detail_list, container, false);
+        View view = inflater.inflate(R.layout.listview_emptyview, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -229,9 +230,9 @@ public class TradeDetailListFragment extends BaseFragment {
                 String createTime = item.getCreateTime().trim();
                 String tradeDetailTime;
                 if (DateUtil.isInThisYear(createTime, DateUtil.DEFAULT_FORMAT)) {
-                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd hh:mm");
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
                 } else {
-                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd hh:mm");
+                    tradeDetailTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 }
                 String[] time = tradeDetailTime.split(" ");
                 if (time.length == 2) {
@@ -249,7 +250,7 @@ public class TradeDetailListFragment extends BaseFragment {
                  */
                 StringBuffer mStringBuffer = new StringBuffer();
 
-                if (item.getType() > 0) {
+                if (item.getTypeDetail() > 0) {
                     mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);
 //                    mTradeDetailMarginRemain.setTextColor(getResources().getColor(R.color.common_rise_activity_sum));
@@ -280,10 +281,10 @@ public class TradeDetailListFragment extends BaseFragment {
 
 
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-                    mStringBuffer.append(String.valueOf(item.getMoney()));
+                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
                     mStringBuffer.append("元");
                 } else {
-                    mStringBuffer.append(String.valueOf(item.getScore()));
+                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
                     mStringBuffer.append("分");
                 }
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
@@ -302,7 +303,7 @@ public class TradeDetailListFragment extends BaseFragment {
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
-                result = remark.substring(0, 2) + "(" + remark.substring(6, remark.length()) + ")";
+                result = remark.substring(0, 2) + "(" + remark.substring(5, remark.length()) + ")";
             }
 
 
@@ -311,7 +312,7 @@ public class TradeDetailListFragment extends BaseFragment {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
                 if (remark.length() > 4) {
-                    result = "(" + remark.substring(4) + ")";
+                    result = "(" + remark.substring(4, remark.length()) + ")";
                 }
             }
         } else {

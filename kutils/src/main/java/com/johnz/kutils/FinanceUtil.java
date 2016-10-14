@@ -11,12 +11,8 @@ public class FinanceUtil {
     public static final String UNIT_WANG = "万";
     public static final String UNIT_YI = "亿";
     public static final String UNIT_SCORE = "积分";
-    public static final String UNIT_DOLLAR = "美元";
-    public static final String UNIT_HK_DOLLAR = "港币";
 
     public static final String UNIT_SIGN_CNY = "￥";
-    public static final String UNIT_SIGN_USD = "$";
-    public static final String UNIT_SIGN_HKD = "HK$";
 
     private static final int DEFAULT_SCALE = 2;
     private static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;

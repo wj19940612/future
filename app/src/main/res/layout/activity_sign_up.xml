@@ -172,7 +172,7 @@
             android:gravity="center"
             android:paddingLeft="5dp"
             android:text="@string/read_and_agreed"
-            android:textColor="#666666"
+            android:textColor="@color/lucky"
             android:textSize="12sp"/>
 
         <TextView

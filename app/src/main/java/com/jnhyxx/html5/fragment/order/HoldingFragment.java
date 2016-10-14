@@ -84,7 +84,7 @@ public class HoldingFragment extends BaseFragment
                 double ratio = holdingOrder.getRatio();
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
                     lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                     diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
@@ -338,10 +338,10 @@ public class HoldingFragment extends BaseFragment
                         }
                     }
                 });
-                if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
-                    mBuyOrSell.setText(R.string.bullish);
+                if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                    mBuyOrSell.setText(R.string.buy_long);
                 } else {
-                    mBuyOrSell.setText(R.string.bearish);
+                    mBuyOrSell.setText(R.string.sell_short);
                 }
                 if (item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                     mClosePositionButton.setVisibility(View.VISIBLE);
@@ -363,7 +363,7 @@ public class HoldingFragment extends BaseFragment
                     double ratio = item.getRatio();
                     BigDecimal eachPointMoney = new BigDecimal(item.getEachPointMoney());
                     BigDecimal diff;
-                    if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                    if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                         diff = FinanceUtil.subtraction(data.getBidPrice(), item.getRealAvgPrice());
                     } else {

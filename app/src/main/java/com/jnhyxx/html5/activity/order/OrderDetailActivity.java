@@ -70,7 +70,7 @@ public class OrderDetailActivity extends BaseActivity {
         mLossProfitUnit.setText(getString(R.string.settlement_loss_profit_unit, mProduct.getCurrencyUnit()));
 
         int tradeType = mSettledOrder.getDirection();
-        if (tradeType == SettledOrder.DIRECTION_SHORT) {
+        if (tradeType == SettledOrder.DIRECTION_LONG) {
             mTradeType.setText(R.string.buy_long);
             mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
         } else {

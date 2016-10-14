@@ -147,7 +147,7 @@ public class OrderPresenter {
 
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
                     diff = FinanceUtil.subtraction(marketData.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
                     diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), marketData.getAskPrice());

@@ -8,8 +8,8 @@ public class AbsOrder {
     public static final int ORDER_STATUS_CLOSING = 3; // 平仓处理中
     public static final int ORDER_STATUS_SETTLED = 4; // 已结算
 
-    public static final int DIRECTION_LONG = 0;
-    public static final int DIRECTION_SHORT = 1;
+    public static final int DIRECTION_LONG = 1;
+    public static final int DIRECTION_SHORT = 0;
 
     public static final int SELL_OUT_MAKERT_PRICE = 0;
     public static final int SELL_OUT_STOP_PROFIT = 1;

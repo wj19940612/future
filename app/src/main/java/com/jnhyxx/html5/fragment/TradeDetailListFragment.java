@@ -122,8 +122,6 @@ public class TradeDetailListFragment extends BaseFragment {
     }
 
     public void getTradeInfoList() {
-        Log.d(TAG, "所选的fragment " + mFragmentType);
-
         API.Finance.getFundSwitchIntegral(mFragmentType, mOffset, mSize)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<List<TradeDetail>>>() {

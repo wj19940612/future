@@ -3,22 +3,27 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.msg.MessageList;
+import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.johnz.kutils.net.ApiIndeterminate;
+import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.Launcher;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,32 +31,39 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class InfoListFragment extends ListFragment implements ApiIndeterminate {
+public class InfoListFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String TAG = "InfoListFragment";
 
     private static final String TYPE = "fragmentType";
-    public static final int TYPE_MARKET_ANALYSING = 0;
-    public static final int TYPE_INDUSTRY_NEWS = 1;
-
 
     //首页资讯
     public static final int TYPE_MESSAGE_HOME_PAGE = 0;
+    // TODO: 2016/10/13 目前h5写的是type是1和2
     //列表资讯
     public static final int TYPE_MESSAGE_lIST = 1;
     //弹窗资讯
     public static final int TYPE_MESSAGE_POPUP = 2;
 
-    private OnNewItemClickListener mListener;
-    private int mType;
 
+    @BindView(R.id.listView)
+    ListView mListView;
+    @BindView(R.id.emptyView)
+    TextView mEmptyView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+
+    private int mType;
     private int mPageNo;
     private int mPageSize;
 
     private NewsListAdapter mNewsListAdapter;
-    private Set<Integer> mSet;
+    private Set<String> mSet;
     private TextView mFooter;
+    private Unbinder mBind;
 
     public static InfoListFragment newInstance(int type) {
         InfoListFragment fragment = new InfoListFragment();
@@ -69,37 +81,66 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
         }
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_info_list, container, false);
+        mBind = ButterKnife.bind(this, view);
+        return view;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPageNo = 1;
-        mPageSize = 10;
+        mPageNo = 0;
+        mPageSize = 15;
         mSet = new HashSet<>();
-        setEmptyText(getString(R.string.there_is_no_info_for_now));
-        getListView().setDivider(null);
+        mListView.setDivider(null);
+        mListView.setOnItemClickListener(this);
+        mListView.setOnScrollListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPageNo = 0;
+                mSet.clear();
+                requestInfoList();
+            }
+        });
+        requestInfoList();
+    }
 
-        //requestInfoList();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBind.unbind();
     }
 
     private void requestInfoList() {
-        
         API.Message.findNewsList(mType, mPageNo, mPageSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<MessageList>>, List<MessageList>>() {
-            @Override
-            public void onRespSuccess(List<MessageList> messageLists) {
-                for (int i = 0; i < messageLists.size(); i++) {
-                    Log.d(TAG, "type是 " + mType + "\n 获取的数据 " + messageLists.get(i) + "\n");
-                }
-                updateInfoList(messageLists);
-
-            }
-        }).fire();
+                .setCallback(new Callback<Resp<List<Information>>>() {
+                    @Override
+                    public void onReceive(Resp<List<Information>> listResp) {
+                        if (listResp.isSuccess()) {
+                            for (int i = 0; i < listResp.getData().size(); i++) {
+                                Log.d(TAG, "type是 " + mType + "   资讯获取的数据 " + listResp.getData().get(i) + "\n");
+                            }
+                            updateInfoList(listResp.getData());
+                        } else {
+                            if (mSwipeRefreshLayout.isRefreshing()) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
+                    }
+                }).fire();
     }
 
-    private void updateInfoList(List<MessageList> messageLists) {
-        if (messageLists == null || isDetached()) return;
+    private void updateInfoList(List<Information> messageLists) {
+        if (messageLists == null) {
+            mListView.setEmptyView(mEmptyView);
+            return;
+        }
         if (mFooter == null) {
             mFooter = new TextView(getContext());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
@@ -110,47 +151,56 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mSwipeRefreshLayout.isRefreshing()) return;
                     mPageNo++;
                     requestInfoList();
                 }
             });
-            getListView().addFooterView(mFooter);
+            mListView.addFooterView(mFooter);
         }
 
         if (messageLists.size() < mPageSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
-            getListView().removeFooterView(mFooter);
+            mListView.removeFooterView(mFooter);
         }
+
 
         if (mNewsListAdapter == null) {
-            mNewsListAdapter = new NewsListAdapter(getContext());
-            setListAdapter(mNewsListAdapter);
+            mNewsListAdapter = new NewsListAdapter(getActivity());
         }
-
-        for (MessageList item : messageLists) {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mNewsListAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        for (Information item : messageLists) {
             if (mSet.add(item.getId())) {
                 mNewsListAdapter.add(item);
             }
         }
+        mListView.setAdapter(mNewsListAdapter);
         mNewsListAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onShow(String tag) {
-        setListShown(false);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Information information = (Information) parent.getAdapter().getItem(position);
+        Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD_1, information).execute();
     }
 
     @Override
-    public void onDismiss(String tag) {
-        setListShown(true);
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
     }
 
-    private interface OnNewItemClickListener {
-        void onNewItemClick(MessageList messageList);
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
-    static class NewsListAdapter extends ArrayAdapter<MessageList> {
+    class NewsListAdapter extends ArrayAdapter<Information> {
 
         public NewsListAdapter(Context context) {
             super(context, 0);
@@ -170,36 +220,31 @@ public class InfoListFragment extends ListFragment implements ApiIndeterminate {
             return convertView;
         }
 
-        static class ViewHolder {
+        class ViewHolder {
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.summary)
             TextView mSummary;
             @BindView(R.id.createDate)
             TextView mCreateDate;
-            @BindView(R.id.cmtAndReadCount)
-            TextView mCmtAndReadCount;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(MessageList item, Context context) {
-//                if (item.getSection() == Information.SECTION_MARKET_ANALYSING) {
-//                    mTitle.setVisibility(View.GONE);
-//                    mSummary.setText(item.getSummary());
-//                    mCreateDate.setText(item.getCreateDate());
-//                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
-//                            item.getCmtCount(), item.getReadCount()));
-//                } else {
-//                    mTitle.setVisibility(View.VISIBLE);
-//                    mTitle.setText(item.getTitle());
-//                    mSummary.setText(item.getSummary());
-//                    mCreateDate.setText(item.getCreateDate());
-//                    mCmtAndReadCount.setText(context.getString(R.string.comment_read_count,
-//                            item.getCmtCount(), item.getReadCount()));
-//                }
+            public void bindingData(Information item, Context context) {
+                String time = item.getCreateTime();
+                if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
+                    time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm:ss");
+                } else {
+                    time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss");
+                }
+                mCreateDate.setText(time);
+
+                mTitle.setText(item.getTitle());
+                mSummary.setText(item.getSummary());
             }
         }
     }
+
 }

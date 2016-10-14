@@ -1,6 +1,11 @@
 package com.jnhyxx.html5.domain;
 
-public class Information {
+import java.io.Serializable;
+
+public class Information implements Serializable{
+
+    private static final long serialVersionUID = -7266947195942724446L;
+
 
     public static final int TYPE_BANNER = 0;
     public static final int TYPE_MARKET_ANALYSIS = 2;
@@ -132,5 +137,23 @@ public class Information {
 
     public boolean isH5Style() {
         return this.style.equalsIgnoreCase("h5");
+    }
+
+    @Override
+    public String toString() {
+        return "Information{" +
+                "channelId=" + channelId +
+                ", content='" + content + '\'' +
+                ", cover='" + cover + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", id='" + id + '\'' +
+                ", operator='" + operator + '\'' +
+                ", status=" + status +
+                ", style='" + style + '\'' +
+                ", summary='" + summary + '\'' +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", updateTime='" + updateTime + '\'' +
+                '}';
     }
 }

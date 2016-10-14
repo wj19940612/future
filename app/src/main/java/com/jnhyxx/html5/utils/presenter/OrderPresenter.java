@@ -214,9 +214,9 @@ public class OrderPresenter {
     /**
      * 刷新策略:
      * <p/>
-     * 2s 间隔, 刷新5次
-     * 4s 间隔, 刷新10次
-     * 8s 间隔, 刷新20次
+     * 500ms 间隔, 刷新5次
+     * 2s 间隔, 刷新10次
+     * 4s 间隔, 刷新20次
      */
     private void startQueryJob() {
         boolean refresh = false;
@@ -245,21 +245,21 @@ public class OrderPresenter {
                 public void run() {
                     loadHoldingOrderList(mVarietyId, mFundType);
                 }
-            }, mCounter == 0 ? 0 : 2 * 1000); // 第一次不延时
+            }, mCounter == 0 ? 0 : 5 * 100); // 第一次不延时
         } else if (mCounter < 10) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     loadHoldingOrderList(mVarietyId, mFundType);
                 }
-            }, 4 * 1000);
+            }, 2 * 1000);
         } else if (mCounter < 20) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     loadHoldingOrderList(mVarietyId, mFundType);
                 }
-            }, 8 * 1000);
+            }, 4 * 1000);
         }
         mCounter++;
     }

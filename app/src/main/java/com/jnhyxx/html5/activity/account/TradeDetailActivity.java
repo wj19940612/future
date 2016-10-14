@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TradeDetailActivity extends BaseActivity {
+
     @BindView(R.id.tradeDetailSlidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.tradeDetailViewPager)

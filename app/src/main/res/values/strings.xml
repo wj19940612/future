@@ -191,15 +191,13 @@
     <string name="there_is_no_settlements_records">暂无结算记录</string>
     <string name="bullish">看涨</string>
     <string name="bearish">看跌</string>
-    <string name="time_up_sale">到时中止</string>
-    <string name="stop_profit_sale">止盈卖出</string>
-    <string name="stop_loss_sale">止损卖出</string>
-    <string name="market_price_sale">市价卖出</string>
-    <string name="market_price_buy">市价买入</string>
     <string name="close_positions">平仓</string>
     <string name="stop_loss">止损</string>
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>
+    <string name="buying">买处理中</string>
+    <string name="selling">卖处理中</string>
+
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -218,6 +216,11 @@
     <string name="sell_type">卖出类型</string>
     <string name="sell_time">卖出时间</string>
     <string name="order_id">订单号</string>
+    <string name="time_up_sale">到时中止</string>
+    <string name="stop_profit_sale">止盈卖出</string>
+    <string name="stop_loss_sale">止损卖出</string>
+    <string name="market_price_sale">市价卖出</string>
+    <string name="market_price_buy">市价买入</string>
 
 
     <!-- Trade page -->

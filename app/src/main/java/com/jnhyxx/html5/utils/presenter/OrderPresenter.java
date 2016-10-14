@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.utils.presenter;
 
 import android.os.Handler;
+import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -40,6 +41,7 @@ public class OrderPresenter {
     private int mFundType;
     private FullMarketData mMarketData;
 
+    private boolean mLoading;
     private int mCounter;
 
     private Handler mHandler;
@@ -64,33 +66,48 @@ public class OrderPresenter {
     }
 
     public void closeAllHoldingPositions(int fundType) {
-//        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
-//
-//            double unwindPrice = 0;
-//            if (mMarketData != null) {
-//                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-//                    unwindPrice = mMarketData.getBidPrice();
-//                } else {
-//                    unwindPrice = mMarketData.getAskPrice();
-//                }
-//            }
-//
-//            requestCloseHoldingOrder(fundType, holdingOrder, unwindPrice);
-//        }
-    }
-
-    private void requestCloseHoldingOrder(int fundType, final HoldingOrder holdingOrder, double unwindPrice) {
-        API.Order.closeHoldingOrder(holdingOrder.getShowId(), fundType, unwindPrice)
-                .setCallback(new Callback1<Resp<JsonObject>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<JsonObject> resp) {
-                        holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        startQueryJob();
+        StringBuilder showIds = new StringBuilder();
+        StringBuilder unwindPrices = new StringBuilder();
+        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
+            if (holdingOrder.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                double unwindPrice = 0;
+                if (mMarketData != null) {
+                    if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                        unwindPrice = mMarketData.getBidPrice();
+                    } else {
+                        unwindPrice = mMarketData.getAskPrice();
                     }
-                }).fireSync();
+                }
+                showIds.append(holdingOrder.getShowId()).append(",");
+                unwindPrices.append(unwindPrice).append(",");
+            }
+        }
+
+        if (showIds.length() > 0) {
+            showIds.deleteCharAt(showIds.length() - 1);
+            unwindPrices.deleteCharAt(unwindPrices.length() - 1);
+        }
+
+        if (!TextUtils.isEmpty(showIds.toString())) {
+            API.Order.closeAllHoldingOrders(showIds.toString(), fundType, unwindPrices.toString())
+                    .setCallback(new Callback1<Resp<JsonObject>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<JsonObject> resp) {
+                            setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                            onViewShowHoldingOrderList(mHoldingOrderList);
+                            startQueryJob();
+                        }
+                    }).fire();
+        }
     }
 
-    public void closePosition(int fundType, HoldingOrder order) {
+    private void setOrderListStatus(int orderStatus) {
+        for (HoldingOrder holdingOrder : mHoldingOrderList) {
+            holdingOrder.setOrderStatus(orderStatus);
+        }
+    }
+
+    public void closePosition(int fundType, final HoldingOrder order) {
         double unwindPrice = 0;
         if (mMarketData != null) {
             if (order.getDirection() == HoldingOrder.DIRECTION_LONG) {
@@ -99,7 +116,16 @@ public class OrderPresenter {
                 unwindPrice = mMarketData.getAskPrice();
             }
         }
-        requestCloseHoldingOrder(fundType, order, unwindPrice);
+
+        API.Order.closeHoldingOrder(order.getShowId(), fundType, unwindPrice)
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                        onViewShowHoldingOrderList(mHoldingOrderList);
+                        startQueryJob();
+                    }
+                }).fireSync();
     }
 
     public void setFullMarketData(FullMarketData marketData) {
@@ -167,13 +193,17 @@ public class OrderPresenter {
     public void loadHoldingOrderList(int varietyId, int fundType) {
         if (!LocalUser.getUser().isLogin()) return;
 
+        if (mLoading) return;
+
         mVarietyId = varietyId;
         mFundType = fundType;
 
+        mLoading = true;
         API.Order.getHoldingOrderList(varietyId, fundType)
                 .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                     @Override
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
+                        mLoading = false;
                         mHoldingOrderList = holdingOrderList;
                         onViewShowHoldingOrderList(holdingOrderList);
                         startQueryJob();
@@ -233,5 +263,4 @@ public class OrderPresenter {
         }
         mCounter++;
     }
-
 }

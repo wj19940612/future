@@ -119,7 +119,6 @@ public class TradeActivity extends BaseActivity implements
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            Log.d("TEST", "onReceiveData: " + data); // TODO: 9/20/16 delete
             updateFourMainPrices(data);
             updateLastPriceView(data);
             mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());

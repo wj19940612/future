@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,6 @@ public class HoldingFragment extends BaseFragment
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            Log.d("TEST", "onReceiveData: " + data); // TODO: 9/20/16 delete
             OrderPresenter.getInstance().setFullMarketData(data);
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
@@ -316,6 +314,8 @@ public class HoldingFragment extends BaseFragment
             TextView mStopLoss;
             @BindView(R.id.closePositionButton)
             TextView mClosePositionButton;
+            @BindView(R.id.orderStatus)
+            TextView mOrderStatus;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -342,6 +342,18 @@ public class HoldingFragment extends BaseFragment
                     mBuyOrSell.setText(R.string.bullish);
                 } else {
                     mBuyOrSell.setText(R.string.bearish);
+                }
+                if (item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                    mClosePositionButton.setVisibility(View.VISIBLE);
+                    mOrderStatus.setVisibility(View.GONE);
+                } else {
+                    mClosePositionButton.setVisibility(View.GONE);
+                    mOrderStatus.setVisibility(View.VISIBLE);
+                    if (item.getOrderStatus() < HoldingOrder.ORDER_STATUS_HOLDING) {
+                        mOrderStatus.setText(R.string.buying);
+                    } else if (item.getOrderStatus() > HoldingOrder.ORDER_STATUS_HOLDING) {
+                        mOrderStatus.setText(R.string.selling);
+                    }
                 }
 
                 // views will change

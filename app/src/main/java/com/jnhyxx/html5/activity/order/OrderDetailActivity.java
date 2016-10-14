@@ -71,10 +71,10 @@ public class OrderDetailActivity extends BaseActivity {
 
         int tradeType = mSettledOrder.getDirection();
         if (tradeType == SettledOrder.DIRECTION_SHORT) {
-            mTradeType.setText(R.string.bullish);
+            mTradeType.setText(R.string.buy_long);
             mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
         } else {
-            mTradeType.setText(R.string.bearish);
+            mTradeType.setText(R.string.sell_short);
             mTradeType.setBackgroundResource(R.drawable.bg_green_primary);
         }
 

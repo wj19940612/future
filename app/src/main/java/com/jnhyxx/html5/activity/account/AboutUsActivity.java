@@ -17,8 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AboutUsActivity extends BaseActivity {
-    private static final String TAG = "AboutUsActivity";
     private static final String SERVICE_QQ = "3088152027";
+
     @BindView(R.id.versionName)
     TextView mVersionName;
     //公司热线

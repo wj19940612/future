@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/activity_trade_detail"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_trade_detail"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/splitBlockLight"
@@ -36,10 +36,10 @@
         android:padding="5dp">
 
         <RelativeLayout
-            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/remainTitle"
@@ -54,27 +54,27 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/remainTitle"
                 android:layout_marginTop="10dp"
+                android:gravity="bottom"
                 android:maxLines="1"
                 android:text="@string/zero"
-                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
                 android:textStyle="bold"/>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="1px"
+        <View
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@color/colorDisable"/>
+            android:background="#3E546C"/>
 
         <RelativeLayout
-            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
+            android:padding="10dp"
             android:paddingLeft="@dimen/common_margin">
 
             <TextView
@@ -90,9 +90,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/blockedTitle"
                 android:layout_marginTop="10dp"
+                android:gravity="bottom"
                 android:maxLines="1"
                 android:text="@string/zero"
-                android:gravity="bottom"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
                 android:textStyle="bold"/>

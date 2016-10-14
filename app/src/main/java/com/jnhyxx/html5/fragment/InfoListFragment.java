@@ -221,27 +221,21 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
         }
 
         class ViewHolder {
-            @BindView(R.id.title)
-            TextView mTitle;
             @BindView(R.id.summary)
             TextView mSummary;
             @BindView(R.id.createDate)
             TextView mCreateDate;
+            @BindView(R.id.redNumber)
+            TextView mRedNumber;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
             public void bindingData(Information item, Context context) {
-                String time = item.getCreateTime();
-                if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
-                    time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm:ss");
-                } else {
-                    time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss");
-                }
+                String time = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 mCreateDate.setText(time);
 
-                mTitle.setText(item.getTitle());
                 mSummary.setText(item.getSummary());
             }
         }

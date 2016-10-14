@@ -36,7 +36,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/ic_lock"
-                android:drawablePadding="@dimen/drawable_left_padding"
+                android:drawablePadding="@dimen/padding_ten"
                 android:hint="@string/please_input_password"
                 android:textColorHint="@color/grayHint"/>
 
@@ -72,7 +72,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:drawableLeft="@drawable/ic_lock"
-            android:drawablePadding="@dimen/drawable_left_padding"
+            android:drawablePadding="@dimen/padding_ten"
             android:hint="@string/please_repeat_new_password"
             android:textColorHint="@color/grayHint"/>
 

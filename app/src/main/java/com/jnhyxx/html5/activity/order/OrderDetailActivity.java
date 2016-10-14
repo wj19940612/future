@@ -70,11 +70,11 @@ public class OrderDetailActivity extends BaseActivity {
         mLossProfitUnit.setText(getString(R.string.settlement_loss_profit_unit, mProduct.getCurrencyUnit()));
 
         int tradeType = mSettledOrder.getDirection();
-        if (tradeType == SettledOrder.DIRECTION_SHORT) {
-            mTradeType.setText(R.string.bullish);
+        if (tradeType == SettledOrder.DIRECTION_LONG) {
+            mTradeType.setText(R.string.buy_long);
             mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
         } else {
-            mTradeType.setText(R.string.bearish);
+            mTradeType.setText(R.string.sell_short);
             mTradeType.setBackgroundResource(R.drawable.bg_green_primary);
         }
 

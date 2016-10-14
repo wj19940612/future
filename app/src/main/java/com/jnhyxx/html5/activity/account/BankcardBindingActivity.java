@@ -244,7 +244,6 @@ public class BankcardBindingActivity extends BaseActivity {
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
                                     LocalUser localUser = LocalUser.getUser();
-                                    localUser.setCardHolderName(cardHolderName);
                                     UserInfo userInfo = localUser.getUserInfo();
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);

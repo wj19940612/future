@@ -86,56 +86,71 @@ public class APIBase extends RequestManager {
 
     public void fire() {
         synchronized (sCurrentUrls) {
-            String url = new StringBuilder(getHost()).append(mUri).toString();
-            if (mMethod == Request.Method.GET && mApiParams != null) {
-                url = url + mApiParams.toString();
-                mApiParams = null;
-            }
-
-            ApiHeaders headers = new ApiHeaders();
-            String cookies = CookieManger.getInstance().getCookies();
-            if (!TextUtils.isEmpty(cookies)) {
-                headers.put("Cookie", cookies);
-            }
+            String url = createUrl();
 
             if (sCurrentUrls.add(url)) {
-                Type type;
-                if (mCallback != null) {
-                    mCallback.setUrl(url);
-                    mCallback.setOnFinishedListener(new RequestFinishedListener());
-                    mCallback.setTag(mTag);
-                    mCallback.setIndeterminate(mIndeterminate);
-                    mCallback.onStart();
-                    type = mCallback.getGenericType();
-
-                } else { // create a default callback for handle request finish event
-                    mCallback = new ApiCallback<Object>() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            Log.d(TAG, "onReceive: result(default): " + o);
-                        }
-
-                        @Override
-                        public void onFailure(VolleyError volleyError) {
-                            Log.d(TAG, "onFailure: error(default): " +
-                                    volleyError == null ? null : volleyError.toString());
-                        }
-                    };
-                    mCallback.setUrl(url);
-                    mCallback.setOnFinishedListener(new RequestFinishedListener());
-                    type = mCallback.getGenericType();
-                }
-
-                GsonRequest request = new GsonRequest(mMethod, url, headers, mApiParams, type, mCallback);
-                request.setTag(mTag);
-
-                if (mRetryPolicy != null) {
-                    request.setRetryPolicy(mRetryPolicy);
-                }
-
-                enqueue(request);
+                createThenEnqueue(url);
             }
         }
+    }
+
+    public void fireSync() {
+        String url = createUrl();
+
+        createThenEnqueue(url);
+    }
+
+    private String createUrl() {
+        String url = new StringBuilder(getHost()).append(mUri).toString();
+        if (mMethod == Request.Method.GET && mApiParams != null) {
+            url = url + mApiParams.toString();
+            mApiParams = null;
+        }
+        return url;
+    }
+
+    private void createThenEnqueue(String url) {
+        ApiHeaders headers = new ApiHeaders();
+        String cookies = CookieManger.getInstance().getCookies();
+        if (!TextUtils.isEmpty(cookies)) {
+            headers.put("Cookie", cookies);
+        }
+
+        Type type;
+        if (mCallback != null) {
+            mCallback.setUrl(url);
+            mCallback.setOnFinishedListener(new RequestFinishedListener());
+            mCallback.setTag(mTag);
+            mCallback.setIndeterminate(mIndeterminate);
+            mCallback.onStart();
+            type = mCallback.getGenericType();
+
+        } else { // create a default callback for handle request finish event
+            mCallback = new ApiCallback<Object>() {
+                @Override
+                public void onSuccess(Object o) {
+                    Log.d(TAG, "onReceive: result(default): " + o);
+                }
+
+                @Override
+                public void onFailure(VolleyError volleyError) {
+                    Log.d(TAG, "onFailure: error(default): " +
+                            volleyError == null ? null : volleyError.toString());
+                }
+            };
+            mCallback.setUrl(url);
+            mCallback.setOnFinishedListener(new RequestFinishedListener());
+            type = mCallback.getGenericType();
+        }
+
+        GsonRequest request = new GsonRequest(mMethod, url, headers, mApiParams, type, mCallback);
+        request.setTag(mTag);
+
+        if (mRetryPolicy != null) {
+            request.setRetryPolicy(mRetryPolicy);
+        }
+
+        enqueue(request);
     }
 
     private static class RequestFinishedListener implements ApiCallback.onFinishedListener {

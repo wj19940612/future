@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,12 @@ import android.support.v4.view.ViewPager;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
 import com.jnhyxx.html5.fragment.TradeHintListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -43,6 +46,36 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(MessageCenterActivity.this, android.R.color.transparent));
         mSlidingTabLayout.setViewPager(mViewPager);
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    if (!LocalUser.getUser().isLogin()) {
+                        SmartDialog.with(getActivity(), getString(R.string.no_login))
+                                .setCancelableOnTouchOutside(false)
+                                .setNegative(R.string.cancel)
+                                .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
+                                    @Override
+                                    public void onClick(Dialog dialog) {
+                                        dialog.dismiss();
+                                        Launcher.with(getActivity(), SignInActivity.class)
+                                                .execute();
+                                    }
+                                }).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     class MessagePagesAdapter extends FragmentPagerAdapter {

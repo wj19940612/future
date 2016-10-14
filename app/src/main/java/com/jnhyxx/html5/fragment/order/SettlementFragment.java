@@ -261,9 +261,9 @@ public class SettlementFragment extends BaseFragment {
 
                 String sellTime;
                 if (DateUtil.isInThisYear(item.getSellTime())) {
-                    sellTime = DateUtil.format(item.getSellTime(), "MM/dd hh:mm");
+                    sellTime = DateUtil.format(item.getSellTime(), "MM/dd HH:mm");
                 } else {
-                    sellTime = DateUtil.format(item.getSellTime(), "yyyy/MM/dd hh:mm:ss");
+                    sellTime = DateUtil.format(item.getSellTime(), "yyyy/MM/dd HH:mm");
                 }
                 String[] saleDates = sellTime.split(" ");
                 if (saleDates.length == 2) {
@@ -272,11 +272,11 @@ public class SettlementFragment extends BaseFragment {
                 }
 
                 int tradeType = item.getDirection();
-                if (tradeType == SettledOrder.DIRECTION_SHORT) {
-                    mTradeType.setText(R.string.bullish);
+                if (tradeType == SettledOrder.DIRECTION_LONG) {
+                    mTradeType.setText(R.string.buy_long);
                     mTradeType.setBackgroundResource(R.drawable.bg_red_primary);
                 } else {
-                    mTradeType.setText(R.string.bearish);
+                    mTradeType.setText(R.string.sell_short);
                     mTradeType.setBackgroundResource(R.drawable.bg_green_primary);
                 }
 

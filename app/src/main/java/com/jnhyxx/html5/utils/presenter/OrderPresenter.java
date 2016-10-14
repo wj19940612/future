@@ -23,7 +23,6 @@ public class OrderPresenter {
 
     public OrderPresenter() {
         mHandler = new Handler();
-        mScheduleJob = new ScheduleJob();
         mIHoldingOrderViewList = new ArrayList<>();
     }
 
@@ -41,20 +40,10 @@ public class OrderPresenter {
     private int mFundType;
     private FullMarketData mMarketData;
 
-    /**
-     * 刷新策略:
-     * <p/>
-     * 2s 间隔, 刷新5次
-     * 4s 间隔, 刷新10次
-     * 8s 间隔, 刷新20次
-     */
-    private class ScheduleJob {
-        public boolean performing;
-        public int count;
-    }
+    private boolean mLoading;
+    private int mCounter;
 
     private Handler mHandler;
-    private ScheduleJob mScheduleJob;
 
     public interface IHoldingOrderView {
 
@@ -76,73 +65,48 @@ public class OrderPresenter {
     }
 
     public void closeAllHoldingPositions(int fundType) {
-//        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
-//
-//            double unwindPrice = 0;
-//            if (mMarketData != null) {
-//                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-//                    unwindPrice = mMarketData.getBidPrice();
-//                } else {
-//                    unwindPrice = mMarketData.getAskPrice();
-//                }
-//            }
-//
-//            requestCloseHoldingOrder(fundType, holdingOrder, unwindPrice);
-//        }
-
-
-        StringBuffer showIds = new StringBuffer();
-        StringBuffer unwindPrices = new StringBuffer();
-        for (int i = 0; i < mHoldingOrderList.size(); i++) {
-            HoldingOrder holdingOrder = mHoldingOrderList.get(i);
-            if (holdingOrder != null) {
-                double orderUnwindPrice = getOneKeyHoldingOrderUnwindPrice(holdingOrder);
-                unwindPrices.append(orderUnwindPrice + ",");
-                showIds.append(holdingOrder.getShowId() + ",");
-            }
-        }
-        if (!TextUtils.isEmpty(showIds.toString()) && !TextUtils.isEmpty(unwindPrices.toString())) {
-            requestAllHoldingOrder(showIds.toString(), fundType, unwindPrices.toString());
-        }
-    }
-
-    private double getOneKeyHoldingOrderUnwindPrice(HoldingOrder holdingOrder) {
-        double unwindPrice = 0;
-        if (mMarketData != null) {
-            if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                unwindPrice = mMarketData.getBidPrice();
-            } else {
-                unwindPrice = mMarketData.getAskPrice();
-            }
-        }
-        return unwindPrice;
-    }
-
-    //一键平仓
-    public void requestAllHoldingOrder(String showIds, int payType, String unwindPrices) {
-        API.Order.aKeyHoldingOrder(showIds, payType, unwindPrices).setCallback(new Callback1<Resp<JsonObject>>() {
-
-            @Override
-            protected void onRespSuccess(Resp<JsonObject> resp) {
-                for (int i = 0; i < mHoldingOrderList.size(); i++) {
-                    HoldingOrder holdingOrder = mHoldingOrderList.get(i);
-                    holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                }
-            }
-        }).fire();
-    }
-
-    private void requestCloseHoldingOrder(int fundType, final HoldingOrder holdingOrder, double unwindPrice) {
-        API.Order.closeHoldingOrder(holdingOrder.getShowId(), fundType, unwindPrice)
-                .setCallback(new Callback1<Resp<JsonObject>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<JsonObject> resp) {
-                        holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+        StringBuilder showIds = new StringBuilder();
+        StringBuilder unwindPrices = new StringBuilder();
+        for (final HoldingOrder holdingOrder : mHoldingOrderList) {
+            if (holdingOrder.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                double unwindPrice = 0;
+                if (mMarketData != null) {
+                    if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                        unwindPrice = mMarketData.getBidPrice();
+                    } else {
+                        unwindPrice = mMarketData.getAskPrice();
                     }
-                }).fire();
+                }
+                showIds.append(holdingOrder.getShowId()).append(",");
+                unwindPrices.append(unwindPrice).append(",");
+            }
+        }
+
+        if (showIds.length() > 0) {
+            showIds.deleteCharAt(showIds.length() - 1);
+            unwindPrices.deleteCharAt(unwindPrices.length() - 1);
+        }
+
+        if (!TextUtils.isEmpty(showIds.toString())) {
+            API.Order.closeAllHoldingOrders(showIds.toString(), fundType, unwindPrices.toString())
+                    .setCallback(new Callback1<Resp<JsonObject>>() {
+                        @Override
+                        protected void onRespSuccess(Resp<JsonObject> resp) {
+                            setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                            onViewShowHoldingOrderList(mHoldingOrderList);
+                            startQueryJob();
+                        }
+                    }).fire();
+        }
     }
 
-    public void closePosition(int fundType, HoldingOrder order) {
+    private void setOrderListStatus(int orderStatus) {
+        for (HoldingOrder holdingOrder : mHoldingOrderList) {
+            holdingOrder.setOrderStatus(orderStatus);
+        }
+    }
+
+    public void closePosition(int fundType, final HoldingOrder order) {
         double unwindPrice = 0;
         if (mMarketData != null) {
             if (order.getDirection() == HoldingOrder.DIRECTION_LONG) {
@@ -151,7 +115,16 @@ public class OrderPresenter {
                 unwindPrice = mMarketData.getAskPrice();
             }
         }
-        requestCloseHoldingOrder(fundType, order, unwindPrice);
+
+        API.Order.closeHoldingOrder(order.getShowId(), fundType, unwindPrice)
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                        onViewShowHoldingOrderList(mHoldingOrderList);
+                        startQueryJob();
+                    }
+                }).fireSync();
     }
 
     public void setFullMarketData(FullMarketData marketData) {
@@ -163,7 +136,6 @@ public class OrderPresenter {
         BigDecimal totalProfit = new BigDecimal(0);
         boolean hasHoldingOrders = false;
         double ratio = 0;
-        boolean refreshSchedule = false;
         boolean refresh = false;
 
         for (HoldingOrder holdingOrder : mHoldingOrderList) {
@@ -175,7 +147,7 @@ public class OrderPresenter {
 
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
                     diff = FinanceUtil.subtraction(marketData.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
                     diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), marketData.getAskPrice());
@@ -192,23 +164,12 @@ public class OrderPresenter {
                 totalProfit = totalProfit.add(diff);
             }
 
-            // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
-            if (orderStatus == HoldingOrder.ORDER_STATUS_PAID_UNHOLDING
-                    || orderStatus == HoldingOrder.ORDER_STATUS_CLOSING) {
-                refreshSchedule = true;
-            }
         }
 
         onViewShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
 
         if (refresh) { // 触及风控刷新
             loadHoldingOrderList(mVarietyId, mFundType);
-        }
-
-        if (refreshSchedule && mHandler != null) {
-            startScheduleJob();
-        } else {
-            mScheduleJob.count = 0;
         }
     }
 
@@ -228,60 +189,77 @@ public class OrderPresenter {
         }
     }
 
-    private void startScheduleJob() {
-        if (mScheduleJob.performing) return;
-
-        mScheduleJob.performing = true;
-        if (mScheduleJob.count < 5) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshHoldingOrderList();
-                }
-            }, mScheduleJob.count == 0 ? 0 : 2 * 1000); // 第一次不延时
-        } else if (mScheduleJob.count < 10) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshHoldingOrderList();
-                }
-            }, 4 * 1000);
-        } else if (mScheduleJob.count < 20) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshHoldingOrderList();
-                }
-            }, 8 * 1000);
-        }
-        mScheduleJob.count++;
-    }
-
-    private void refreshHoldingOrderList() {
-        API.Order.getHoldingOrderList(mVarietyId, mFundType)
-                .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
-                    @Override
-                    public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
-                        mScheduleJob.performing = false;
-                        mHoldingOrderList = holdingOrderList;
-                        onViewShowHoldingOrderList(mHoldingOrderList);
-                    }
-                }).fire();
-    }
-
     public void loadHoldingOrderList(int varietyId, int fundType) {
         if (!LocalUser.getUser().isLogin()) return;
+
+        if (mLoading) return;
 
         mVarietyId = varietyId;
         mFundType = fundType;
 
+        mLoading = true;
         API.Order.getHoldingOrderList(varietyId, fundType)
                 .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                     @Override
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
+                        mLoading = false;
                         mHoldingOrderList = holdingOrderList;
                         onViewShowHoldingOrderList(holdingOrderList);
+                        startQueryJob();
                     }
                 }).fire();
+    }
+
+    /**
+     * 刷新策略:
+     * <p/>
+     * 500ms 间隔, 刷新5次
+     * 2s 间隔, 刷新10次
+     * 4s 间隔, 刷新20次
+     */
+    private void startQueryJob() {
+        boolean refresh = false;
+        for (HoldingOrder holdingOrder : mHoldingOrderList) {
+            int orderStatus = holdingOrder.getOrderStatus();
+
+            // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
+            if (orderStatus == HoldingOrder.ORDER_STATUS_PAID_UNHOLDING
+                    || orderStatus == HoldingOrder.ORDER_STATUS_CLOSING) {
+                refresh = true;
+                break;
+            }
+        }
+
+        if (refresh) {
+            doDelayRefreshJob();
+        } else {
+            mCounter = 0;
+        }
+    }
+
+    private void doDelayRefreshJob() {
+        if (mCounter < 5) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadHoldingOrderList(mVarietyId, mFundType);
+                }
+            }, mCounter == 0 ? 0 : 5 * 100); // 第一次不延时
+        } else if (mCounter < 10) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadHoldingOrderList(mVarietyId, mFundType);
+                }
+            }, 2 * 1000);
+        } else if (mCounter < 20) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadHoldingOrderList(mVarietyId, mFundType);
+                }
+            }, 4 * 1000);
+        }
+        mCounter++;
     }
 }

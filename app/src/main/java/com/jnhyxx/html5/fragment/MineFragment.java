@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -167,11 +166,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), MessageCenterActivity.class).execute();
-                } else {
-                    Launcher.with(getActivity(), SignInActivity.class).execute();
-                }
+                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
                 openTradeDetailPage();
@@ -186,17 +181,7 @@ public class MineFragment extends BaseFragment {
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), SettingsActivity.class).execute();
                 } else {
-                    SmartDialog.with(getActivity(), BaseActivity.mExpiredMessage)
-                            .setCancelableOnTouchOutside(false)
-                            .setNegative(R.string.cancel)
-                            .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
-                                @Override
-                                public void onClick(Dialog dialog) {
-                                    dialog.dismiss();
-                                    Launcher.with(getActivity(), SignInActivity.class)
-                                            .execute();
-                                }
-                            }).show();
+                    Launcher.with(getActivity(), SignInActivity.class).execute();
                 }
                 break;
         }

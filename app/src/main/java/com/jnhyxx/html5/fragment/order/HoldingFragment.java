@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,6 @@ public class HoldingFragment extends BaseFragment
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            Log.d("TEST", "onReceiveData: " + data); // TODO: 9/20/16 delete
             OrderPresenter.getInstance().setFullMarketData(data);
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
@@ -86,7 +84,7 @@ public class HoldingFragment extends BaseFragment
                 double ratio = holdingOrder.getRatio();
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
                     lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                     diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
@@ -291,7 +289,9 @@ public class HoldingFragment extends BaseFragment
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData, mContext, mCallback);
+            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData,
+                    mContext, mCallback);
+
             return convertView;
         }
 
@@ -314,12 +314,16 @@ public class HoldingFragment extends BaseFragment
             TextView mStopLoss;
             @BindView(R.id.closePositionButton)
             TextView mClosePositionButton;
+            @BindView(R.id.orderStatus)
+            TextView mOrderStatus;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(final HoldingOrder item, Product product, FullMarketData data, Context context, final Callback callback) {
+            public void bindingData(final HoldingOrder item, Product product, FullMarketData data,
+                                    Context context, final Callback callback) {
+
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
                 mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
                         + product.getCurrencyUnit());
@@ -334,10 +338,22 @@ public class HoldingFragment extends BaseFragment
                         }
                     }
                 });
-                if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
-                    mBuyOrSell.setText(R.string.bullish);
+                if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                    mBuyOrSell.setText(R.string.buy_long);
                 } else {
-                    mBuyOrSell.setText(R.string.bearish);
+                    mBuyOrSell.setText(R.string.sell_short);
+                }
+                if (item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                    mClosePositionButton.setVisibility(View.VISIBLE);
+                    mOrderStatus.setVisibility(View.GONE);
+                } else {
+                    mClosePositionButton.setVisibility(View.GONE);
+                    mOrderStatus.setVisibility(View.VISIBLE);
+                    if (item.getOrderStatus() < HoldingOrder.ORDER_STATUS_HOLDING) {
+                        mOrderStatus.setText(R.string.buying);
+                    } else if (item.getOrderStatus() > HoldingOrder.ORDER_STATUS_HOLDING) {
+                        mOrderStatus.setText(R.string.selling);
+                    }
                 }
 
                 // views will change
@@ -347,7 +363,7 @@ public class HoldingFragment extends BaseFragment
                     double ratio = item.getRatio();
                     BigDecimal eachPointMoney = new BigDecimal(item.getEachPointMoney());
                     BigDecimal diff;
-                    if (item.getDirection() == HoldingOrder.DIRECTION_SHORT) {
+                    if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
                         mLastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
                         diff = FinanceUtil.subtraction(data.getBidPrice(), item.getRealAvgPrice());
                     } else {

@@ -236,7 +236,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:lineSpacingExtra="10dp"
+        android:lineSpacingExtra="2dp"
         android:text="@string/recharge_hint"
         android:textColor="@color/colorDisable"
         android:textSize="12sp"/>

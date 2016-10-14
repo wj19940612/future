@@ -168,7 +168,7 @@
     <string name="industry_news">行业资讯</string>
     <string name="there_is_no_info_for_now">暂无任何资讯</string>
     <string name="comment_read_count">(%1$d)</string>
-
+    <string name="trade_hint">(以上建议仅供参考,风险自担)</string>
 
     <!-- Home page -->
     <string name="market_close">休市</string>

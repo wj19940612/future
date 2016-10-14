@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_information_details"
     android:layout_width="match_parent"
@@ -8,4 +9,83 @@
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_info_tetail">
+
+        <com.jnhyxx.html5.view.TitleBar
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backFeature="true"
+            app:barBackground="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleBar"
+            android:layout_centerInParent="true"
+            android:drawableBottom="@color/redPrimary"
+            android:drawablePadding="@dimen/padding_ten"
+            android:drawableTop="@color/redPrimary"
+            android:padding="@dimen/padding_ten"
+            android:text="美原油操作建议 "
+            android:textColor="@android:color/white"
+            android:textSize="22sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/messageFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="来源：和讯期货"
+                android:textColor="@color/blueAssist"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="@string/time"
+                android:textColor="@color/colorDisable"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+      <TextView
+          android:lineSpacingExtra="5dp"
+          android:id="@+id/message"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@android:color/white"
+          android:paddingBottom="@dimen/one_key_close_radius"
+          android:paddingLeft="@dimen/common_margin"
+          android:paddingRight="@dimen/common_margin"
+          android:paddingTop="@dimen/one_key_close_radius"
+          android:text="@string/prompt_dear_user"
+          android:textColor="@color/blackPrimary"
+          android:textSize="17sp"/>
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/one_key_close_radius"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:text="@string/trade_hint"
+        android:textColor="@color/colorDisable"/>
 </LinearLayout>

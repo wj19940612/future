@@ -194,7 +194,11 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
 
                         @Override
                         protected void onRespSuccess(Resp<Information> resp) {
-                            Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, resp.getData()).execute();
+                            if (resp.getData() != null) {
+
+                                Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, resp.getData()).execute();
+                                Log.d(TAG, "详情信息" + resp.getData());
+                            }
                         }
                     })
                     .fire();

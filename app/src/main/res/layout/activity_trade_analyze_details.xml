@@ -6,6 +6,7 @@
     android:id="@+id/activity_information_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity">
 
@@ -59,33 +60,36 @@
         </LinearLayout>
     </RelativeLayout>
 
-      <TextView
-          android:lineSpacingExtra="5dp"
-          android:id="@+id/message"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@android:color/white"
-          android:paddingBottom="@dimen/one_key_close_radius"
-          android:paddingLeft="@dimen/common_margin"
-          android:paddingRight="@dimen/common_margin"
-          android:paddingTop="@dimen/one_key_close_radius"
-          android:text="@string/prompt_dear_user"
-          android:textColor="@color/blackPrimary"
-          android:textSize="17sp"/>
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:lineSpacingExtra="5dp"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:paddingTop="@dimen/one_key_close_radius"
+        android:text="@string/prompt_dear_user"
+        android:textColor="@color/blackPrimary"
+        android:textSize="17sp"
+        android:visibility="gone"/>
+
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_ten"
+        android:layout_marginRight="@dimen/padding_ten"
+        android:layout_marginTop="@dimen/one_key_close_radius"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:paddingBottom="@dimen/one_key_close_radius"
         android:paddingLeft="@dimen/common_margin"
         android:paddingRight="@dimen/common_margin"
+        android:paddingTop="@dimen/one_key_close_radius"
         android:text="@string/trade_hint"
         android:textColor="@color/colorDisable"/>
 </LinearLayout>

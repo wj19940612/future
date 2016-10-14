@@ -3,9 +3,11 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginBottom="@dimen/padding_ten"
-              android:layout_marginTop="@dimen/padding_ten"
               android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/padding_ten"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,5 +56,4 @@
                 android:text="@string/comment_read_count"/>
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>

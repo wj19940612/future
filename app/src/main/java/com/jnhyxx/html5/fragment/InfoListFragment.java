@@ -17,10 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
+import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
@@ -185,7 +186,19 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Information information = (Information) parent.getAdapter().getItem(position);
-        Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD_1, information).execute();
+        if (information != null) {
+            API.Message.findNewsInfo(information.getId())
+                    .setTag(TAG)
+                    .setIndeterminate(this)
+                    .setCallback(new Callback1<Resp<Information>>() {
+
+                        @Override
+                        protected void onRespSuccess(Resp<Information> resp) {
+                            Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, resp.getData()).execute();
+                        }
+                    })
+                    .fire();
+        }
     }
 
     @Override
@@ -235,7 +248,6 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
             public void bindingData(Information item, Context context) {
                 String time = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 mCreateDate.setText(time);
-
                 mSummary.setText(item.getSummary());
             }
         }

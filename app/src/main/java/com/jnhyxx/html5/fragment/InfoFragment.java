@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
@@ -73,9 +74,9 @@ public class InfoFragment extends BaseFragment {
                 case 0:
                     return new Fragment();
                 case 1:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_lIST);
+                    return InfoListFragment.newInstance(Information.TYPE_MARKET_ANALYSIS);
                 case 2:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_POPUP);
+                    return InfoListFragment.newInstance(Information.TYPE_INDUSTRY_ANALYSIS);
             }
             return null;
         }

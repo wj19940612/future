@@ -11,6 +11,7 @@
     tools:context="com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity">
 
     <RelativeLayout
+        android:id="@+id/tradeAnalyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_info_tetail">
@@ -48,7 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="来源：和讯期货"
-                android:textColor="@color/blueAssist"/>
+                android:textColor="@color/blueAssist"
+                android:textSize="@dimen/min_text_size"/>
 
             <TextView
                 android:id="@+id/time"
@@ -56,9 +58,65 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:text="@string/time"
-                android:textColor="@color/colorDisable"/>
+                android:textColor="@color/colorDisable"
+                android:textSize="@dimen/min_text_size"/>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/tradeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.jnhyxx.html5.view.TitleBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backFeature="true"
+            app:titleText="@string/message_details"/>
+
+        <TextView
+            android:id="@+id/tradeInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="25dp"
+            android:text="美原油操作建议 "
+            android:textColor="@color/blackPrimary"
+            android:textSize="22sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input_disable"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="@dimen/dimen_20">
+
+            <TextView
+                android:id="@+id/tradeInfoMessageFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
+                android:text="来源：和讯期货"
+                android:textColor="@color/blueAssist"
+                android:textSize="@dimen/min_text_size"/>
+
+            <TextView
+                android:id="@+id/tradeInfoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="@string/time"
+                android:textColor="@color/colorDisable"
+                android:textSize="@dimen/min_text_size"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/message"
@@ -74,16 +132,23 @@
         android:textSize="17sp"
         android:visibility="gone"/>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:progressDrawable="@drawable/progress_horizontal"/>
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/padding_ten"
-        android:layout_marginRight="@dimen/padding_ten"
-        android:layout_marginTop="@dimen/one_key_close_radius"/>
+        android:layout_marginTop="@dimen/one_key_close_radius"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"/>
 
     <TextView
+        android:id="@+id/hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/one_key_close_radius"
@@ -92,4 +157,5 @@
         android:paddingTop="@dimen/one_key_close_radius"
         android:text="@string/trade_hint"
         android:textColor="@color/colorDisable"/>
+
 </LinearLayout>

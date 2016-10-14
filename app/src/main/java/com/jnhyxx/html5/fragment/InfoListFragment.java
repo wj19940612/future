@@ -40,14 +40,6 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
 
     private static final String TYPE = "fragmentType";
 
-    //首页资讯
-    public static final int TYPE_MESSAGE_HOME_PAGE = 0;
-    // TODO: 2016/10/13 目前h5写的是type是1和2
-    //列表资讯
-    public static final int TYPE_MESSAGE_lIST = 1;
-    //弹窗资讯
-    public static final int TYPE_MESSAGE_POPUP = 2;
-
 
     @BindView(R.id.listView)
     ListView mListView;

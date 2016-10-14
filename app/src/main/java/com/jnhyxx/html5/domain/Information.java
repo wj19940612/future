@@ -7,9 +7,10 @@ public class Information implements Serializable{
     private static final long serialVersionUID = -7266947195942724446L;
 
 
+    // TODO: 2016/10/13 目前h5写的是type是1和2
     public static final int TYPE_BANNER = 0;
-    public static final int TYPE_MARKET_ANALYSIS = 2;
-    public static final int TYPE_INDUSTRY_ANALYSIS = 3;
+    public static final int TYPE_MARKET_ANALYSIS = 1;
+    public static final int TYPE_INDUSTRY_ANALYSIS = 2;
 
     /**
      * channelId : 12

@@ -25,5 +25,7 @@
     <dimen name="one_key_close_radius">20dp</dimen>
 
     <dimen name="min_text_size">12sp</dimen>
+
+    <dimen name="dimen_20">20dp</dimen>
 </resources>
 

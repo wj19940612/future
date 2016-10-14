@@ -326,6 +326,7 @@ public class SignUpActivity extends BaseActivity {
 
         Picasso.with(getActivity())
                 .load(imageUrl)
+                .placeholder(R.drawable.btn_reload_image)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .into(mAuthCodeImage);
     }

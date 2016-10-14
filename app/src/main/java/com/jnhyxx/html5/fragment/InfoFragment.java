@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
@@ -25,7 +26,6 @@ public class InfoFragment extends BaseFragment {
     ViewPager mViewPager;
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
-
     private Unbinder mBinder;
 
     @Override
@@ -42,7 +42,7 @@ public class InfoFragment extends BaseFragment {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
         mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
-       mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
@@ -67,15 +67,16 @@ public class InfoFragment extends BaseFragment {
             }
             return super.getPageTitle(position);
         }
+
         @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_HOME_PAGE);
+                    return new Fragment();
                 case 1:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_lIST);
+                    return InfoListFragment.newInstance(Information.TYPE_MARKET_ANALYSIS);
                 case 2:
-                    return InfoListFragment.newInstance(InfoListFragment.TYPE_MESSAGE_POPUP);
+                    return InfoListFragment.newInstance(Information.TYPE_INDUSTRY_ANALYSIS);
             }
             return null;
         }

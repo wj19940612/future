@@ -166,11 +166,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), MessageCenterActivity.class).execute();
-                } else {
-                    Launcher.with(getActivity(), SignInActivity.class).execute();
-                }
+                Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
                 openTradeDetailPage();

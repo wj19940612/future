@@ -7,15 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.TradeActivity">
 
-    <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backFeature="true"
-        app:customView="@layout/tb_product_rule"
-        app:rightImage="@drawable/ic_product_menu"
-        app:rightVisible="true"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -216,4 +207,15 @@
         android:layout_height="match_parent"
         android:layout_below="@id/titleBar"
         android:orientation="vertical"/>
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:customView="@layout/tb_product_rule"
+        app:rightImage="@drawable/ic_product_menu"
+        app:rightVisible="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
 </RelativeLayout>

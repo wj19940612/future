@@ -547,7 +547,7 @@ public class API extends APIBase {
          * @param id
          * @return
          */
-        public static API findNewsInfo(int id) {
+        public static API findNewsInfo(String id) {
             return new API("/user/news/findNews.do", new ApiParams()
                     .put("id", id));
         }

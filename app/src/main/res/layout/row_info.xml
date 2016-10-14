@@ -3,47 +3,57 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/bg_information"
-              android:orientation="vertical"
-              android:padding="28dp">
+              android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        tools:text="原油上演过山车行情 API利好助油价反攻?"/>
-
-    <TextView
-        android:id="@+id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="3"
-        android:text="摘要原油连续从四小时走势图来看，布林带整体依旧向下运行，上、中、下三轨一致下行，K线价格自中轨处承压下行，并跌穿下轨(40美元大关)，但随后受下轨支撑强势反弹，目前价格在..."/>
+        android:layout_height="@dimen/padding_ten"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_ten">
 
         <TextView
-            android:id="@+id/createDate"
-            android:layout_width="wrap_content"
+            android:id="@+id/summary"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="2016-08-03 08:58:47"/>
+            android:background="@drawable/bg_input_disable"
+            android:ellipsize="end"
+            android:lineSpacingExtra="15dp"
+            android:maxLines="3"
+            android:paddingBottom="@dimen/one_key_close_radius"
+            android:text="摘要原油连续从四小时走势图来看，布林带整体依旧向下运行，上、中、下三轨一致下行，K线价格自中轨处承压下行，并跌穿下轨(40美元大关)，但随后受下轨支撑强势反弹，目前价格在..."
+            android:textColor="@color/blackPrimary"/>
 
-        <TextView
-            android:id="@+id/cmtAndReadCount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textSize="12sp"
-            tools:text="评论（0）阅读（735）"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_ten">
+
+            <TextView
+                android:id="@+id/createDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorDisable"
+                android:textSize="@dimen/min_text_size"
+                tools:text="@string/time"/>
+
+            <TextView
+                android:id="@+id/redNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_news_eye"
+                android:drawablePadding="5dp"
+                android:text="@string/comment_read_count"/>
+        </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>

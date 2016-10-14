@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_phone"
-                android:drawablePadding="@dimen/drawable_left_padding"
+                android:drawablePadding="@dimen/padding_ten"
                 android:hint="@string/please_input_phone_num"
                 android:textColorHint="@color/grayHint"/>
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:drawableLeft="@drawable/ic_auth_code"
-            android:drawablePadding="@dimen/drawable_left_padding"
+            android:drawablePadding="@dimen/padding_ten"
             android:hint="@string/please_input_msg_auth_code"
             android:textColorHint="@color/grayHint"/>
     </RelativeLayout>

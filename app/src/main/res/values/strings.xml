@@ -167,8 +167,10 @@
     <string name="market_analysing">行情分析</string>
     <string name="industry_news">行业资讯</string>
     <string name="there_is_no_info_for_now">暂无任何资讯</string>
-    <string name="comment_read_count">评论（%1$d）阅读（%2$d）</string>
-
+    <string name="comment_read_count">(%1$d)</string>
+    <string name="trade_hint">(以上建议仅供参考,风险自担)</string>
+    <string name="message_from">来源: %1$s</string>
+    <string name="message_details">资讯详情</string>
 
     <!-- Home page -->
     <string name="market_close">休市</string>
@@ -270,6 +272,7 @@
     <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s 分</string>
     <string name="mine_balance">余额 (元)</string>
+    <string name="no_login">您尚未登录，请先登录</string>
 
     <!-- 消息中心 Message center-->
     <string name="message_center_info_title">消息详情</string>

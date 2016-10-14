@@ -36,5 +36,6 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         mTvMessageTitle.setText(mSysTradeMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysTradeMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/DD HH:mm"));
         mTvMessageContent.setText(mSysTradeMessage.getPushContent());
+
     }
 }

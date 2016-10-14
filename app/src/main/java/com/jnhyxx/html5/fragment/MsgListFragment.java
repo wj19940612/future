@@ -122,7 +122,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || !isDetached()) {
+        if (sysTradeMessages == null) {
             mListView.setEmptyView(mEmpty);
             return;
         }

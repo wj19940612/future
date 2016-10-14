@@ -222,7 +222,7 @@
 
             <TextView
                 android:id="@+id/accountTimeHint"
-                android:layout_width="@dimen/drawable_left_padding"
+                android:layout_width="@dimen/padding_ten"
                 android:layout_height="1dp"
                 android:background="@color/blueAssist"/>
         </LinearLayout>

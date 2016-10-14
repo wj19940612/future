@@ -165,6 +165,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".activity.web.TradeAnalyzeDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

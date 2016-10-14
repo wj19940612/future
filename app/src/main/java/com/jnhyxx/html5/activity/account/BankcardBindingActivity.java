@@ -188,8 +188,7 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     private void setOldBindBankInfo(UserInfo userInfo) {
-        String cardHolderName = LocalUser.getUser().getCardHolderName();
-        mCardholderName.setText(cardHolderName);
+        mCardholderName.setText(userInfo.getRealName());
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
@@ -245,7 +244,6 @@ public class BankcardBindingActivity extends BaseActivity {
                             public void onReceive(Resp resp) {
                                 if (resp.isSuccess()) {
                                     LocalUser localUser = LocalUser.getUser();
-                                    localUser.setCardHolderName(cardHolderName);
                                     UserInfo userInfo = localUser.getUserInfo();
                                     userInfo.setIssuingbankName(payingBank);
                                     userInfo.setCardNumber(bankcardNum);

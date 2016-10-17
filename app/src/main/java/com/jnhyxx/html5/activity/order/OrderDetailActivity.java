@@ -118,10 +118,10 @@ public class OrderDetailActivity extends BaseActivity {
         mMargin.setText(mOrderDetail.getMarginMoney() + mProduct.getCurrencyUnit());
         mBuyPrice.setText(FinanceUtil.formatWithScale(mOrderDetail.getRealAvgPrice(), mProduct.getPriceDecimalScale()));
         mBuyType.setText(getString(R.string.market_price_buy));
-        mBuyTime.setText(DateUtil.format(mOrderDetail.getBuyTime(), "yyyy/MM/dd hh:mm:ss"));
+        mBuyTime.setText(DateUtil.format(mOrderDetail.getBuyTime(), "yyyy/MM/dd HH:mm:ss"));
         mSellPrice.setText(FinanceUtil.formatWithScale(mOrderDetail.getUnwindAvgPrice(), mProduct.getPriceDecimalScale()));
         mSellType.setText(getSellTypeText(mOrderDetail.getUnwindType()));
-        mSellTime.setText(DateUtil.format(mOrderDetail.getSellTime(), "yyyy/MM/dd hh:mm:ss"));
+        mSellTime.setText(DateUtil.format(mOrderDetail.getSellTime(), "yyyy/MM/dd HH:mm:ss"));
         mOrderId.setText(mOrderDetail.getShowId());
     }
 

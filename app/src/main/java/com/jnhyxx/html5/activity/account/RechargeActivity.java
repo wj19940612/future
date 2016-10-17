@@ -123,11 +123,10 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-        // TODO: 9/27/16 如果选择银行卡支付,要求完成实名认证和银行卡绑定,其他支付方式有待实现
 //        if (isBankcardPaymentSelected()) {
-        doPayment();
+            doPayment();
 //        } else {
-//
+
 //        }
     }
 
@@ -190,21 +189,6 @@ public class RechargeActivity extends BaseActivity {
     private void depositByWeChartApply() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-//        API.Finance.depositByWeChartApply(amount)
-//                .setTag(TAG)
-//                .setIndeterminate(this)
-//                .setCallback(new Callback<String>() {
-//                    @Override
-//                    public void onReceive(String s) {
-//                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-//                        Launcher.with(getActivity(), WebViewActivity.class)
-//                                .putExtra(WebViewActivity.EX_HTML, s)
-//                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
-//                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-//                                .execute();
-//                    }
-//                }).fire();
-
         Launcher.with(getActivity(), WebViewActivity.class)
                 .putExtra(WebViewActivity.EX_URL, API.Finance.depositByWeChartApply(amount))
                 .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))

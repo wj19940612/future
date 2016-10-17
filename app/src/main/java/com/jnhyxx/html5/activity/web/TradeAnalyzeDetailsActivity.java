@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -76,6 +78,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
 
     private BroadcastReceiver mNetworkChangeReceiver;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +94,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         Intent intent = getIntent();
         Information information = (Information) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         Log.d(TAG, "资讯界面的数据" + information.toString());
+
         //行情分析
         if (information.getType() == Information.TYPE_MARKET_ANALYSIS) {
             initMarketAnalyzeData(information);
@@ -102,11 +107,38 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
             mTradeInfoMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
             mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
             if (!information.isH5Style()) {
+
+                setWebViewMargin();
                 mWebView.loadData(information.getContent(), "text/html", "utf-8");
             } else {
                 mWebView.loadUrl(information.getContent());
             }
 
+        }
+    }
+
+    private void setWebViewMargin() {
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(defaultFontSize, 0, 0, defaultFontSize);
+        mWebView.setLayoutParams(layoutParams);
+    }
+
+    private void initMarketAnalyzeData(Information information) {
+        mTradeAnalyze.setVisibility(View.VISIBLE);
+        mTradeInfo.setVisibility(View.GONE);
+        mHint.setVisibility(View.GONE);
+
+
+        mTitle.setText(information.getTitle());
+        mMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
+        mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
+        if (!information.isH5Style()) {
+            setWebViewMargin();
+            mWebView.loadData(information.getContent(), "text/html", "utf-8");
+        } else {
+            mWebView.loadUrl(information.getContent());
         }
     }
 
@@ -192,17 +224,6 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         }
     }
 
-    private void initMarketAnalyzeData(Information information) {
-        mTitle.setText(information.getTitle());
-        mMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
-        mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
-        if (!information.isH5Style()) {
-            mWebView.loadData(information.getContent(), "text/html", "utf-8");
-        } else {
-            mWebView.loadUrl(information.getContent());
-            mWebView.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     protected void onPostResume() {

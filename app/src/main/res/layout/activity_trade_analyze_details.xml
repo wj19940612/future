@@ -6,7 +6,7 @@
     android:id="@+id/activity_information_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/appBackground"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity">
 
@@ -14,7 +14,8 @@
         android:id="@+id/tradeAnalyze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_info_tetail">
+        android:background="@drawable/bg_info_tetail"
+        android:visibility="visible">
 
         <com.jnhyxx.html5.view.TitleBar
             android:id="@+id/titleBar"
@@ -35,7 +36,7 @@
                 android:layout_height="1dp"
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
-                android:background="@drawable/bg_line"/>
+                android:background="@drawable/bg_info_line"/>
 
             <TextView
                 android:id="@+id/title"
@@ -55,7 +56,7 @@
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
                 android:layout_below="@+id/title"
-                android:background="@drawable/bg_line"/>
+                android:background="@drawable/bg_info_line"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -113,7 +114,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_input_disable"
+            android:background="@drawable/line_division_fill"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin"
@@ -145,28 +146,39 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:progressDrawable="@drawable/progress_horizontal"
-        android:visibility="gone"/>
-
-
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin"/>
-
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/one_key_close_radius"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin"
-        android:paddingTop="@dimen/one_key_close_radius"
-        android:text="@string/trade_hint"
-        android:textColor="@color/colorDisable"
         android:visibility="visible"/>
+    <!--
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dimen_20">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingBottom="@dimen/one_key_close_radius"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:paddingTop="@dimen/one_key_close_radius"
+            android:text="@string/trade_hint"
+            android:textColor="@color/colorDisable"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <!--   </ScrollView>-->
 
     <LinearLayout
         android:id="@+id/errorPage"

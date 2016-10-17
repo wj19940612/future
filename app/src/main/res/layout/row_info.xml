@@ -20,7 +20,7 @@
             android:id="@+id/summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/line_division_center"
             android:ellipsize="end"
             android:lineSpacingExtra="15dp"
             android:maxLines="3"

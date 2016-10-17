@@ -34,7 +34,7 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         SysTradeMessage mSysTradeMessage = (SysTradeMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mTvMessageTitle.setText(mSysTradeMessage.getPushTopic());
-        mTvMessageTime.setText(DateUtil.format(mSysTradeMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/DD HH:mm"));
+        mTvMessageTime.setText(DateUtil.format(mSysTradeMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         mTvMessageContent.setText(mSysTradeMessage.getPushContent());
 
     }

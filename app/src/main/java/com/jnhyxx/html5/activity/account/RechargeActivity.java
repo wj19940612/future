@@ -125,25 +125,13 @@ public class RechargeActivity extends BaseActivity {
     private void doNextStepButtonClick() {
         // TODO: 9/27/16 如果选择银行卡支付,要求完成实名认证和银行卡绑定,其他支付方式有待实现
 //        if (isBankcardPaymentSelected()) {
-        doBankcardPayment();
+        doPayment();
 //        } else {
 //
 //        }
     }
 
-    private void doBankcardPayment() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(this, NameVerifyActivity.class)
-                    .executeForResult(REQ_CODE_BASE);
-            return;
-        }
-
-        if (!LocalUser.getUser().isBankcardFilled()) {
-            Launcher.with(this, BankcardBindingActivity.class)
-                    .executeForResult(REQ_CODE_BASE);
-            return;
-        }
-
+    private void doPayment() {
         int selectedView = getSelectedView();
         if (selectedView == -1) return;
         switch (selectedView) {
@@ -151,6 +139,17 @@ public class RechargeActivity extends BaseActivity {
                 depositByBankApply();
                 break;
             case SupportApplyWay.DEPOSIT_BY_ALI_PAY_PAY:
+                if (!LocalUser.getUser().isRealNameFilled()) {
+                    Launcher.with(this, NameVerifyActivity.class)
+                            .executeForResult(REQ_CODE_BASE);
+                    return;
+                }
+
+                if (!LocalUser.getUser().isBankcardFilled()) {
+                    Launcher.with(this, BankcardBindingActivity.class)
+                            .executeForResult(REQ_CODE_BASE);
+                    return;
+                }
                 depositByAliPay();
                 break;
             case SupportApplyWay.DEPOSIT_BY_BANK_WE_CHART_PAY:
@@ -249,7 +248,7 @@ public class RechargeActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
-            doBankcardPayment();
+            doPayment();
         }
     }
 

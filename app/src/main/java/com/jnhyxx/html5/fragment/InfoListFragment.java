@@ -21,7 +21,6 @@ import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
@@ -179,21 +178,8 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Information information = (Information) parent.getAdapter().getItem(position);
         if (information != null) {
-            API.Message.findNewsInfo(information.getId())
-                    .setTag(TAG)
-                    .setIndeterminate(this)
-                    .setCallback(new Callback1<Resp<Information>>() {
-
-                        @Override
-                        protected void onRespSuccess(Resp<Information> resp) {
-                            if (resp.getData() != null) {
-
-                                Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, resp.getData()).execute();
-                                Log.d(TAG, "详情信息" + resp.getData());
-                            }
-                        }
-                    })
-                    .fire();
+            Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, information).execute();
+            Log.d(TAG, "详情信息" + information.toString());
         }
     }
 

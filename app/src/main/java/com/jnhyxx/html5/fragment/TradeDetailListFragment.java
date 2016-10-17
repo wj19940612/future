@@ -298,7 +298,8 @@ public class TradeDetailListFragment extends BaseFragment {
         if (item.getTypeDetail() == TradeDetail.LOGO_FEE_APPLY ||
                 item.getTypeDetail() == TradeDetail.LOGO_FEE_BACK ||
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_BACK ||
-                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
+                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE ||
+                item.getTypeDetail() == TradeDetail.DEPOSIT_BACK) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
                 result = remark.substring(0, 2) + "(" + remark.substring(5, remark.length()) + ")";

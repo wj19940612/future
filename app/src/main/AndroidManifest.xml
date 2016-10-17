@@ -156,6 +156,9 @@
             android:name=".activity.web.PaidToPromoteActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.web.TradeAnalyzeDetailsActivity"
+                  android:screenOrientation="portrait"/>
+
         <!-- Receiver for getui push -->
         <receiver
             android:name=".receiver.PushReceiver"
@@ -165,8 +168,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.web.TradeAnalyzeDetailsActivity">
-        </activity>
     </application>
 
 </manifest>

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -65,6 +64,7 @@ public class WebViewActivity extends AppCompatActivity {
     protected String mPureHtml;
 
     private BroadcastReceiver mNetworkChangeReceiver;
+    private WebViewClient mWebViewClient;
 
     public TitleBar getTitleBar() {
         return mTitleBar;
@@ -171,7 +171,8 @@ public class WebViewActivity extends AppCompatActivity {
             mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebViewClient = new WebViewClient();
+        mWebView.setWebViewClient(mWebViewClient);
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -276,7 +277,6 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (!TextUtils.isEmpty(url)) {
-                Log.d(TAG, "充值返回地址" + url);
                 if (TextUtils.equals(url, API.Finance.getRechargeSuccess())) {
                     finish();
                     return true;
@@ -289,8 +289,8 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-    protected boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        return shouldOverrideUrlLoading(view, request);
+    protected boolean mShouldOverrideUrlLoading(WebView view, String url) {
+        return mWebViewClient.shouldOverrideUrlLoading(view, url);
     }
 
     @Override

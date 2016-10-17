@@ -4,10 +4,10 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +33,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
@@ -124,15 +123,13 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onRespSuccess(List<MarketServer> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
-                            MarketServer marketServer = marketServers.get(0);
-                            NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
-                            requestProductExchangeStatus(pkg.getProduct());
+                            requestProductExchangeStatus(pkg.getProduct(), marketServers);
                         }
                     }
                 }).fire();
     }
 
-    private void requestProductExchangeStatus(final Product product) {
+    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
 //        Launcher.with(getActivity(), TradeActivity.class)
 //                .putExtra(Product.EX_PRODUCT, product)
 //                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)
@@ -153,6 +150,7 @@ public class HomeFragment extends BaseFragment {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
+                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
                                 .execute();
                     }
                 }).fire();
@@ -245,7 +243,7 @@ public class HomeFragment extends BaseFragment {
                             }
                         }
                     }).fire();
-        } else { // clear all product position
+        } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
         }
     }

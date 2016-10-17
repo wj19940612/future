@@ -9,8 +9,8 @@ public class Information implements Serializable{
 
     // TODO: 2016/10/13 目前h5写的是type是1和2
     public static final int TYPE_BANNER = 0;
-    public static final int TYPE_MARKET_ANALYSIS = 1;
-    public static final int TYPE_INDUSTRY_ANALYSIS = 2;
+    public static final int TYPE_MARKET_ANALYSIS = 2;
+    public static final int TYPE_INDUSTRY_ANALYSIS = 3;
 
     /**
      * channelId : 12

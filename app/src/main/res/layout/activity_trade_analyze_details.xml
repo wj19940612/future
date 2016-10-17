@@ -23,25 +23,47 @@
             app:backFeature="true"
             app:barBackground="@android:color/transparent"/>
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/helpView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/titleBar"
-            android:layout_centerInParent="true"
-            android:drawableBottom="@color/redPrimary"
-            android:drawablePadding="@dimen/padding_ten"
-            android:drawableTop="@color/redPrimary"
-            android:padding="@dimen/padding_ten"
-            android:text="美原油操作建议 "
-            android:textColor="@android:color/white"
-            android:textSize="22sp"/>
+            android:layout_below="@+id/titleBar">
+
+            <View
+                android:id="@+id/helpLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/title"
+                android:layout_alignRight="@+id/title"
+                android:background="@drawable/bg_line"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="@dimen/padding_ten"
+                android:text="美原油交易提醒"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/title"
+                android:layout_alignRight="@+id/title"
+                android:layout_below="@+id/title"
+                android:background="@drawable/bg_line"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
+            android:layout_below="@+id/helpView"
             android:layout_centerInParent="true"
+            android:layout_marginTop="25dp"
             android:orientation="horizontal">
 
             <TextView
@@ -67,7 +89,6 @@
         android:id="@+id/tradeInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
         android:background="@android:color/white"
         android:orientation="vertical"
         android:visibility="gone">
@@ -118,32 +139,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:lineSpacingExtra="5dp"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin"
-        android:paddingTop="@dimen/one_key_close_radius"
-        android:text="@string/prompt_dear_user"
-        android:textColor="@color/blackPrimary"
-        android:textSize="17sp"
-        android:visibility="gone"/>
-
     <ProgressBar
         android:id="@+id/progress"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:progressDrawable="@drawable/progress_horizontal"/>
+        android:layout_height="1dp"
+        android:progressDrawable="@drawable/progress_horizontal"
+        android:visibility="gone"/>
+
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/one_key_close_radius"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingLeft="@dimen/common_margin"
         android:paddingRight="@dimen/common_margin"/>
 
@@ -156,6 +165,32 @@
         android:paddingRight="@dimen/common_margin"
         android:paddingTop="@dimen/one_key_close_radius"
         android:text="@string/trade_hint"
-        android:textColor="@color/colorDisable"/>
+        android:textColor="@color/colorDisable"
+        android:visibility="visible"/>
 
+    <LinearLayout
+        android:id="@+id/errorPage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/titleBar"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/network_error_please_reload"/>
+
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/btn_refresh"
+            android:text="@string/refresh"
+            android:textSize="16sp"/>
+    </LinearLayout>
 </LinearLayout>

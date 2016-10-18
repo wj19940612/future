@@ -443,15 +443,27 @@ public class TradeActivity extends BaseActivity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
-                    NettyClient.getInstance().stop();
-                    mProduct = product;
-                    mMenu.toggle();
-                    updateProductRelatedViews();
-                    NettyClient.getInstance().start(mProduct.getContractsCode());
-                    hideFragmentOfContainer();
+                    switchToNewProduct(product);
                 }
             }
         });
+    }
+
+    private void switchToNewProduct(Product product) {
+        if (product.getVarietyId() == mProduct.getVarietyId()) {
+            mMenu.toggle();
+        } else {
+            hideFragmentOfContainer();
+            mMenu.toggle();
+
+            mProduct = product;
+            updateProductRelatedViews();
+            OrderPresenter.getInstance().clearHoldingOrderList();
+            OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+            NettyClient.getInstance().stop();
+            NettyClient.getInstance().start(mProduct.getContractsCode());
+        }
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})

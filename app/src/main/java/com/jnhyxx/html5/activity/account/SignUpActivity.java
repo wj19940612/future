@@ -96,8 +96,6 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 mAgreeProtocol.setChecked(isChecked);
-                mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
-                // TODO: 10/5/16 checkbox 无法重写样式?
                 activeButtons();
             }
         });

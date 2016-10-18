@@ -61,8 +61,7 @@
                     android:drawableLeft="@drawable/ic_account_score"
                     android:drawablePadding="6dp"
                     android:text="@string/mine_score"
-                    android:textColor="@color/blueAssist"
-                    tools:text="0分"/>
+                    android:textColor="@color/blueAssist"/>
             </LinearLayout>
 
             <View
@@ -90,8 +89,8 @@
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:maxLines="1"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:text="@string/zero"
                     android:textColor="@color/redPrimary"
                     android:textSize="40sp"/>

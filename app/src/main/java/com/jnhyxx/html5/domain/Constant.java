@@ -11,7 +11,7 @@ public class Constant {
      * 标示单位
      */
     public static final String YUAN = "元";
-    public static final String INTEGRAL = "积分";
+    public static final String INTEGRAL = "分";
     public static final String GOLD = "金币";
 
     /**

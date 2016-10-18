@@ -147,38 +147,29 @@
         android:layout_height="1dp"
         android:progressDrawable="@drawable/progress_horizontal"
         android:visibility="visible"/>
-    <!--
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">-->
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/appBackground"/>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/dimen_20">
-
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:paddingBottom="@dimen/one_key_close_radius"
-            android:paddingLeft="@dimen/common_margin"
-            android:paddingRight="@dimen/common_margin"
-            android:paddingTop="@dimen/one_key_close_radius"
-            android:text="@string/trade_hint"
-            android:textColor="@color/colorDisable"
-            android:visibility="gone"/>
-    </LinearLayout>
-    <!--   </ScrollView>-->
+        android:paddingBottom="@dimen/one_key_close_radius"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:paddingTop="@dimen/one_key_close_radius"
+        android:text="@string/trade_hint"
+        android:textColor="@color/colorDisable"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/errorPage"

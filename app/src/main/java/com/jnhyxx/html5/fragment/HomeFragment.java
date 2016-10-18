@@ -96,7 +96,23 @@ public class HomeFragment extends BaseFragment {
                             .execute();
                 }
             }
+
+            @Override
+            public void onSimulationClick() {
+                
+            }
+
+            @Override
+            public void onNewerGuideClick() {
+
+            }
+
+            @Override
+            public void onContactService() {
+
+            }
         });
+
         mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);

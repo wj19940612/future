@@ -64,7 +64,7 @@ public class Product implements Serializable, Parcelable {
     private String currency;
     private int marketPoint;
     private String varietyName;
-    private int eachPointMoney;
+    private double eachPointMoney;
     private String currencyUnit;
     private double ratio;
 
@@ -194,11 +194,11 @@ public class Product implements Serializable, Parcelable {
         this.varietyName = varietyName;
     }
 
-    public int getEachPointMoney() {
+    public double getEachPointMoney() {
         return eachPointMoney;
     }
 
-    public void setEachPointMoney(int eachPointMoney) {
+    public void setEachPointMoney(double eachPointMoney) {
         this.eachPointMoney = eachPointMoney;
     }
 
@@ -256,7 +256,7 @@ public class Product implements Serializable, Parcelable {
         dest.writeString(this.currency);
         dest.writeInt(this.marketPoint);
         dest.writeString(this.varietyName);
-        dest.writeInt(this.eachPointMoney);
+        dest.writeDouble(this.eachPointMoney);
         dest.writeString(this.currencyUnit);
         dest.writeDouble(this.ratio);
     }

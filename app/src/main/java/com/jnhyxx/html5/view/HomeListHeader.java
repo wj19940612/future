@@ -25,11 +25,36 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class HomeListHeader extends FrameLayout {
 
+    @OnClick({R.id.simulation, R.id.newerGuide, R.id.contactService})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.simulation:
+                if (mListener != null) {
+                    mListener.onSimulationClick();
+                }
+                break;
+            case R.id.newerGuide:
+                if (mListener != null) {
+                    mListener.onNewerGuideClick();
+                }
+                break;
+            case R.id.contactService:
+                if (mListener != null) {
+                    mListener.onContactService();
+                }
+                break;
+        }
+    }
+
     public interface OnViewClickListener {
         void onBannerClick(Information information);
+        void onSimulationClick();
+        void onNewerGuideClick();
+        void onContactService();
     }
 
     private OnViewClickListener mListener;

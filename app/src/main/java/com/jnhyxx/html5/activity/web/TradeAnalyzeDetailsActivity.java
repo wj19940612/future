@@ -6,9 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -108,7 +106,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
             if (!information.isH5Style()) {
                 
                 setWebViewMargin();
-                mWebView.loadData(information.getContent(), "text/html", "utf-8");
+                mWebView.loadData(information.getContent(), "text/html", "UTF-8");
             } else {
                 mWebView.loadUrl(information.getContent());
             }
@@ -117,12 +115,12 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     }
 
     private void setWebViewMargin() {
-        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
-                getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(defaultFontSize, 0, defaultFontSize,0 );
-        mWebView.setLayoutParams(layoutParams);
-        mWebView.setPadding(defaultFontSize, 0, defaultFontSize, 0);
+//        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+//                getResources().getDisplayMetrics());
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(defaultFontSize, 0, defaultFontSize,0 );
+//        mWebView.setLayoutParams(layoutParams);
+//        mWebView.setPadding(defaultFontSize, 0, defaultFontSize, 0);
     }
 
     private void initMarketAnalyzeData(Information information) {
@@ -136,7 +134,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            mWebView.loadData(information.getContent(), "text/html", "utf-8");
+            mWebView.loadData(information.getContent(), "text/html", "UTF-8");
         } else {
             mWebView.loadUrl(information.getContent());
         }

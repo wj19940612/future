@@ -147,23 +147,19 @@
         android:progressDrawable="@drawable/progress_horizontal"
         android:visibility="visible"/>
 
+    <View
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@android:color/white"
+        android:visibility="gone"/>
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:paddingBottom="@dimen/one_key_close_radius"
-        android:paddingLeft="@dimen/common_margin"
-        android:paddingRight="@dimen/common_margin"
-        android:paddingTop="@dimen/one_key_close_radius"
-        android:text="@string/trade_hint"
-        android:textColor="@color/colorDisable"
-        android:visibility="gone"/>
+        android:scrollbarSize="0dp"
+        android:scrollbars="none"/>
 
     <LinearLayout
         android:id="@+id/errorPage"

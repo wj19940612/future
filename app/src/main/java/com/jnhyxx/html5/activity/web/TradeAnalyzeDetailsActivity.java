@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.Constant;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
@@ -60,9 +61,6 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     @BindView(R.id.tradeInfoTime)
     TextView mTradeInfoTime;
 
-
-    @BindView(R.id.hint)
-    TextView mHint;
     @BindView(R.id.progress)
     ProgressBar mProgress;
 
@@ -71,6 +69,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     @BindView(R.id.errorPage)
     LinearLayout mErrorPage;
 
+    @BindView(R.id.emptyView)
+    View mView;
 
     private boolean mLoadSuccess;
 
@@ -83,8 +83,6 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_trade_analyze_details);
         ButterKnife.bind(this);
 
-        initWebView();
-
         mNetworkChangeReceiver = new NetworkReceiver();
         mLoadSuccess = true;
 
@@ -92,25 +90,27 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         Information information = (Information) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         Log.d(TAG, "资讯界面的数据" + information.toString());
 
+        initWebView();
+
         //行情分析
         if (information.getType() == Information.TYPE_MARKET_ANALYSIS) {
             initMarketAnalyzeData(information);
         } else {
             mTradeAnalyze.setVisibility(View.GONE);
             mTradeInfo.setVisibility(View.VISIBLE);
-            mHint.setVisibility(View.GONE);
 
             mTradeInfoTitle.setText(information.getTitle());
-            mTradeInfoMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
+            mTradeInfoMessageFrom.setText(getString(R.string.message_from, information.getSource()));
             mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
             if (!information.isH5Style()) {
-                
+
                 setWebViewMargin();
-                mWebView.loadData(information.getContent(), "text/html", "UTF-8");
+                mView.setVisibility(View.VISIBLE);
+                String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+                mWebView.loadDataWithBaseURL(null, information.getContent(), "text/html", "utf-8", null);
             } else {
                 mWebView.loadUrl(information.getContent());
             }
-
         }
     }
 
@@ -126,15 +126,16 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     private void initMarketAnalyzeData(Information information) {
         mTradeAnalyze.setVisibility(View.VISIBLE);
         mTradeInfo.setVisibility(View.GONE);
-        mHint.setVisibility(View.GONE);
 
 
         mTitle.setText(information.getTitle());
-        mMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
+        mMessageFrom.setText(getString(R.string.message_from, information.getSource()));
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            mWebView.loadData(information.getContent(), "text/html", "UTF-8");
+            mView.setVisibility(View.VISIBLE);
+            String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+            mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
             mWebView.loadUrl(information.getContent());
         }
@@ -157,13 +158,31 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         webSettings.setDomStorageEnabled(true);
         webSettings.setUseWideViewPort(true);
 
+        /**
+         *  设置网页布局类型：
+         *  1、LayoutAlgorithm.NARROW_COLUMNS ： 适应内容大小
+         *  2、LayoutAlgorithm.SINGLE_COLUMN: 适应屏幕，内容将自动缩放
+         *
+         */
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSettings.setDefaultTextEncodingName("utf-8"); //设置文本编码
+
+        //设置可以支持缩放
+//        webSettings.setSupportZoom(true);
+//        //设置默认缩放方式尺寸是far
+//        webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+//        //设置出现缩放工具
+//        webSettings.setBuiltInZoomControls(true);
+
         mWebView.clearHistory();
         mWebView.clearCache(true);
         mWebView.clearFormData();
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
-        mWebView.setVerticalScrollBarEnabled(false);
-        mWebView.setHorizontalScrollBarEnabled(false);
+//        mWebView.setVerticalScrollBarEnabled(false);
+//        mWebView.setHorizontalScrollBarEnabled(false);
+
+        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         if (Build.VERSION.SDK_INT >= 19) {
             mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -213,11 +232,9 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
             if (mLoadSuccess) {
                 mWebView.setVisibility(View.VISIBLE);
                 mErrorPage.setVisibility(View.GONE);
-                mHint.setVisibility(View.VISIBLE);
             } else {
                 mWebView.setVisibility(View.GONE);
                 mErrorPage.setVisibility(View.VISIBLE);
-                mHint.setVisibility(View.GONE);
             }
         }
     }

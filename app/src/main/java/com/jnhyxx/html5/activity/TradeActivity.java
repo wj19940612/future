@@ -388,6 +388,7 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+        trendView.setDataList(null);
 
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView == null) {
@@ -442,11 +443,12 @@ public class TradeActivity extends BaseActivity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
-                    mProduct = product;
-                    updateProductRelatedViews();
                     NettyClient.getInstance().stop();
-                    NettyClient.getInstance().start(mProduct.getContractsCode());
+                    mProduct = product;
                     mMenu.toggle();
+                    updateProductRelatedViews();
+                    NettyClient.getInstance().start(mProduct.getContractsCode());
+                    hideFragmentOfContainer();
                 }
             }
         });

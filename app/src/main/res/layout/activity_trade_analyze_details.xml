@@ -27,7 +27,8 @@
             android:id="@+id/helpView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/titleBar">
+            android:layout_below="@+id/titleBar"
+            android:layout_centerInParent="true">
 
             <View
                 android:id="@+id/helpLine"
@@ -35,7 +36,7 @@
                 android:layout_height="1dp"
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
-                android:background="@drawable/bg_info_line"/>
+                android:background="@color/colorDisable"/>
 
             <TextView
                 android:id="@+id/title"
@@ -55,15 +56,15 @@
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
                 android:layout_below="@+id/title"
-                android:background="@drawable/bg_info_line"/>
+                android:background="@color/colorDisable"/>
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/helpView"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
             android:orientation="horizontal">
 
             <TextView

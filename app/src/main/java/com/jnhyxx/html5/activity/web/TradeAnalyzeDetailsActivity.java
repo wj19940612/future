@@ -79,7 +79,6 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     private BroadcastReceiver mNetworkChangeReceiver;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +106,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
             mTradeInfoMessageFrom.setText(getString(R.string.message_from, information.getOperator()));
             mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
             if (!information.isH5Style()) {
-
+                
                 setWebViewMargin();
                 mWebView.loadData(information.getContent(), "text/html", "utf-8");
             } else {
@@ -121,8 +120,9 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
                 getResources().getDisplayMetrics());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(defaultFontSize, 0, 0, defaultFontSize);
+        layoutParams.setMargins(defaultFontSize, 0, defaultFontSize,0 );
         mWebView.setLayoutParams(layoutParams);
+        mWebView.setPadding(defaultFontSize, 0, defaultFontSize, 0);
     }
 
     private void initMarketAnalyzeData(Information information) {

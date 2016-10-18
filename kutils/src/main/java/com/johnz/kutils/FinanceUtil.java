@@ -7,16 +7,11 @@ import java.text.NumberFormat;
 
 public class FinanceUtil {
 
-    public static final String UNIT_YUAN = "元";
     public static final String UNIT_WANG = "万";
     public static final String UNIT_YI = "亿";
-    public static final String UNIT_SCORE = "积分";
-
-    public static final String UNIT_SIGN_CNY = "￥";
 
     private static final int DEFAULT_SCALE = 2;
     private static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;
-
 
     /**
      * 格式化 double 数据, 并使用‘银行家算法’精确（保留）到小数点后两位

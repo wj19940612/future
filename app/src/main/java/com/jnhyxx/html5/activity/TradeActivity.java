@@ -29,6 +29,7 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
@@ -275,7 +276,7 @@ public class TradeActivity extends BaseActivity implements
         MarketServer marketServer = marketServers.get(0);
         NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
 
-        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE;
+        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.SCORE;
     }
 
     private void updateChartView(FullMarketData data) {

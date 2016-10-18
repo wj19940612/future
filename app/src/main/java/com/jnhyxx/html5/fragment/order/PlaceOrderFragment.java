@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
@@ -252,7 +253,7 @@ public class PlaceOrderFragment extends BaseFragment {
     private void updateRateAndMarketTimeView() {
         if (mProduct.isForeign()) {
             mRateAndMarketTime.setText(getString(R.string.currency_converter,
-                    "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + FinanceUtil.UNIT_YUAN));
+                    "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + Unit.YUAN));
         }
 
         API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
@@ -296,17 +297,17 @@ public class PlaceOrderFragment extends BaseFragment {
 
         if (mProduct.isForeign() && mFuturesFinancing != null) {
             double ratio = mFuturesFinancing.getRatio();
-            String marginRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
+            String marginRmb = "  ( " + Unit.SIGN_CNY +
                     FinanceUtil.formatWithScale(tradeQuantity.getMargin() * ratio) + " )";
             mMargin.setText(
                     StrUtil.mergeTextWithColor(marginWithSign, marginRmb, Color.parseColor("#666666"))
             );
-            String tradeFeeRmb = "  ( " + FinanceUtil.UNIT_SIGN_CNY +
+            String tradeFeeRmb = "  ( " + Unit.SIGN_CNY +
                     FinanceUtil.formatWithScale(tradeQuantity.getFee() * ratio) + " )";
             mTradeFee.setText(
                     StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
             );
-            String totalRmb = FinanceUtil.UNIT_SIGN_CNY
+            String totalRmb = Unit.SIGN_CNY
                     + FinanceUtil.formatWithScale((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
             String totalForeign = "  ( " + totalWithSign + " )";
             mTotalTobePaid.setText(

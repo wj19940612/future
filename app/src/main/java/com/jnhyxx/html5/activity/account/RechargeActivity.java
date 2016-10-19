@@ -135,9 +135,6 @@ public class RechargeActivity extends BaseActivity {
         if (selectedView == -1) return;
         switch (selectedView) {
             case SupportApplyWay.DEPOSIT_BY_BANK_APPLY_PAY:
-                depositByBankApply();
-                break;
-            case SupportApplyWay.DEPOSIT_BY_ALI_PAY_PAY:
                 if (!LocalUser.getUser().isRealNameFilled()) {
                     Launcher.with(this, NameVerifyActivity.class)
                             .executeForResult(REQ_CODE_BASE);
@@ -149,6 +146,9 @@ public class RechargeActivity extends BaseActivity {
                             .executeForResult(REQ_CODE_BASE);
                     return;
                 }
+                depositByBankApply();
+                break;
+            case SupportApplyWay.DEPOSIT_BY_ALI_PAY_PAY:
                 depositByAliPay();
                 break;
             case SupportApplyWay.DEPOSIT_BY_BANK_WE_CHART_PAY:

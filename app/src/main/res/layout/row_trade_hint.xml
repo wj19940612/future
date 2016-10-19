@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/line_division_center"
+            android:background="@drawable/bg_line_division_center"
             android:lineSpacingExtra="10dp"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"

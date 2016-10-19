@@ -47,6 +47,8 @@ public class RemarkHandleUtil extends SparseArray<String> {
         super.put(3201, "金币");
         //内部取出积分
         super.put(-3202, "金币");
+        //内部取出积分
+        super.put(-3201, "金币");
         //系统补单
         super.put(4101, "充值");
         //注册赠送

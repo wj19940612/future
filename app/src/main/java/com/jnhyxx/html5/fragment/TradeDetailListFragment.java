@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.Constant;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -280,10 +281,11 @@ public class TradeDetailListFragment extends BaseFragment {
 
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
-                    mStringBuffer.append("元");
+                    mStringBuffer.append(Constant.YUAN);
                 } else {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
-                    mStringBuffer.append("分");
+
+//                    mStringBuffer.append(Constant.INTEGRAL);
                 }
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }
@@ -298,7 +300,8 @@ public class TradeDetailListFragment extends BaseFragment {
         if (item.getTypeDetail() == TradeDetail.LOGO_FEE_APPLY ||
                 item.getTypeDetail() == TradeDetail.LOGO_FEE_BACK ||
                 item.getTypeDetail() == TradeDetail.LOGO_MARGIN_BACK ||
-                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE) {
+                item.getTypeDetail() == TradeDetail.LOGO_MARGIN_FREEZE ||
+                item.getTypeDetail() == TradeDetail.DEPOSIT_BACK) {
             result = mRemarkHandleUtil.get(item.getTypeDetail()).trim();
             if (remark.contains(result)) {
                 result = remark.substring(0, 2) + "(" + remark.substring(5, remark.length()) + ")";

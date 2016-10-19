@@ -85,6 +85,7 @@
     <string name="password">密码</string>
     <string name="promote_code">推广码</string>
     <string name="obtain_auth_code">获取验证码</string>
+    <string name="obtain_auth_code_continue">重新获取</string>
     <string name="read_and_agreed">  我已阅读并同意</string>
     <string name="service_protocol">《服务协议》</string>
     <string name="ok">确定</string>

@@ -62,7 +62,7 @@
                     android:drawablePadding="6dp"
                     android:text="@string/mine_score"
                     android:textColor="@color/blueAssist"
-                    tools:text="0分"/>
+                    tools:text="0"/>
             </LinearLayout>
 
             <View
@@ -90,8 +90,8 @@
                     android:layout_height="63dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:maxLines="1"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:text="@string/zero"
                     android:textColor="@color/redPrimary"
                     android:textSize="40sp"/>

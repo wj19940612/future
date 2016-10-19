@@ -351,7 +351,7 @@ public class SignUpActivity extends BaseActivity {
         if (mCounter <= 0) {
             mFreezeObtainAuthCode = false;
             mObtainAuthCode.setEnabled(true);
-            mObtainAuthCode.setText(R.string.obtain_auth_code);
+            mObtainAuthCode.setText(R.string.obtain_auth_code_continue);
             stopScheduleJob();
         } else {
             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));

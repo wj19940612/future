@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -215,7 +216,7 @@ public class HoldingFragment extends BaseFragment
             }
             mTotalProfit.setText(totalProfitStr);
             if (mProduct.isForeign()) {
-                mTotalProfitRmb.setText("(" + totalProfitRmbStr + FinanceUtil.UNIT_YUAN + ")");
+                mTotalProfitRmb.setText("(" + totalProfitRmbStr + Unit.YUAN + ")");
             }
 
         } else {

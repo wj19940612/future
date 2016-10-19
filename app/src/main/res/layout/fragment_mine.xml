@@ -84,14 +84,14 @@
                     android:text="@string/mine_balance"
                     android:textColor="@android:color/white"/>
 
-                <com.jnhyxx.html5.view.AutoAdaptSizeTextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
-                    android:layout_height="63dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:maxLines="1"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:text="@string/zero"
                     android:textColor="@color/redPrimary"
                     android:textSize="40sp"/>

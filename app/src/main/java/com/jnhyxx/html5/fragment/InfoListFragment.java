@@ -220,8 +220,6 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
             TextView mSummary;
             @BindView(R.id.createDate)
             TextView mCreateDate;
-            @BindView(R.id.redNumber)
-            TextView mRedNumber;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);

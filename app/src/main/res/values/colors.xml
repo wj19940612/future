@@ -10,7 +10,7 @@
     <color name="splitLineBlueLight">#3B4856</color>
     <color name="splitLineBlueDark">#233142</color>
 
-    <color name="splitBlock">#0C233C</color>
+    <color name="splitBlockDark">#0C233C</color>
     <color name="splitBlockLight">#F4F4F2</color>
 
     <color name="colorDisable">#A8A8A8</color>

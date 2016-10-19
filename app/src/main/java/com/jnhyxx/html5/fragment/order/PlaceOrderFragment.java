@@ -86,7 +86,6 @@ public class PlaceOrderFragment extends BaseFragment {
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
     private FullMarketData mMarketData;
-    private ExchangeStatus mExchangeStatus;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -260,8 +259,6 @@ public class PlaceOrderFragment extends BaseFragment {
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        mExchangeStatus = exchangeStatus;
-
                         String marketTimeStr;
                         if (exchangeStatus.isTradeable()) {
                             marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,

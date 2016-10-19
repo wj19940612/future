@@ -31,8 +31,6 @@ public class BaseActivity extends AppCompatActivity implements
     public static final String ACTION_TOKEN_EXPIRED = "com.jnhyxx.app.TOKEN_EXPIRED";
     public static final String EX_TOKEN_EXPIRED_MESSAGE = "com.jnhyxx.app.TOKEN_EXPIRED_MESSAGE";
 
-    public static String mExpiredMessage;
-
     protected String TAG;
 
     private TimerHandler mTimerHandler;
@@ -40,25 +38,20 @@ public class BaseActivity extends AppCompatActivity implements
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mExpiredMessage = intent.getStringExtra(EX_TOKEN_EXPIRED_MESSAGE);
-            showLoginHintDialog(mExpiredMessage);
+            String expiredMessage = intent.getStringExtra(EX_TOKEN_EXPIRED_MESSAGE);
+            SmartDialog.with(getActivity(), expiredMessage)
+                    .setCancelableOnTouchOutside(false)
+                    .setNegative(R.string.cancel)
+                    .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            Launcher.with(getActivity(), SignInActivity.class)
+                                    .execute();
+                        }
+                    }).show();
         }
     };
-
-
-    protected void showLoginHintDialog(String expiredMessage) {
-        SmartDialog.with(getActivity(), expiredMessage)
-                .setCancelableOnTouchOutside(false)
-                .setNegative(R.string.cancel)
-                .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        dialog.dismiss();
-                        Launcher.with(getActivity(), SignInActivity.class)
-                                .execute();
-                    }
-                }).show();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

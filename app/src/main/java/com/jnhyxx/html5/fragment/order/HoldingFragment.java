@@ -31,6 +31,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.buyOrSell;
+import static com.jnhyxx.html5.R.id.hands;
+
 public class HoldingFragment extends BaseFragment
         implements OrderPresenter.IHoldingOrderView {
 
@@ -73,8 +76,6 @@ public class HoldingFragment extends BaseFragment
             for (int i = first; i <= last; i++) {
                 HoldingOrder holdingOrder = (HoldingOrder) mHoldingOrderAdapter.getItem(i);
                 View itemView = mList.getChildAt(i - mList.getFirstVisiblePosition());
-                TextView buyOrSell = ButterKnife.findById(itemView, R.id.buyOrSell);
-                TextView hands = ButterKnife.findById(itemView, R.id.hands);
                 TextView lastPrice = ButterKnife.findById(itemView, R.id.lastPrice);
                 TextView lossProfit = ButterKnife.findById(itemView, R.id.lossProfit);
                 TextView lossProfitRmb = ButterKnife.findById(itemView, R.id.lossProfitRmb);
@@ -98,14 +99,10 @@ public class HoldingFragment extends BaseFragment
                 double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
                 if (diff.doubleValue() >= 0) {
                     lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    buyOrSell.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    hands.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
                     lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
                     lossProfitRmbStr = "(+" + FinanceUtil.formatWithScale(diffRmb) + ")";
                 } else {
                     lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
-                    buyOrSell.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
-                    hands.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
                     lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
                     lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(diffRmb) + ")";
                 }
@@ -296,9 +293,9 @@ public class HoldingFragment extends BaseFragment
         }
 
         static class ViewHolder {
-            @BindView(R.id.buyOrSell)
+            @BindView(buyOrSell)
             TextView mBuyOrSell;
-            @BindView(R.id.hands)
+            @BindView(hands)
             TextView mHands;
             @BindView(R.id.lossProfit)
             TextView mLossProfit;
@@ -340,8 +337,12 @@ public class HoldingFragment extends BaseFragment
                 });
                 if (item.getDirection() == HoldingOrder.DIRECTION_LONG) {
                     mBuyOrSell.setText(R.string.buy_long);
+                    mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                    mHands.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                 } else {
                     mBuyOrSell.setText(R.string.sell_short);
+                    mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                    mHands.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                 }
                 if (item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                     mClosePositionButton.setVisibility(View.VISIBLE);
@@ -377,14 +378,10 @@ public class HoldingFragment extends BaseFragment
                     double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
                     if (diff.doubleValue() >= 0) {
                         mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mHands.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
                         lossProfitRmbStr = "(+" + FinanceUtil.formatWithScale(diffRmb) + ")";
                     } else {
                         mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mBuyOrSell.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mHands.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
                         lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(diffRmb) + ")";
                     }

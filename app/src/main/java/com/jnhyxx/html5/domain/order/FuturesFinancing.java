@@ -29,7 +29,7 @@ public class FuturesFinancing {
     private int marketPoint;
     private int feesPoint;
     private String varietyName;
-    private int eachPointMoney;
+    private double eachPointMoney;
     private String currencyUnit;
     private double ratio;
     /**
@@ -95,11 +95,11 @@ public class FuturesFinancing {
         this.varietyName = varietyName;
     }
 
-    public int getEachPointMoney() {
+    public double getEachPointMoney() {
         return eachPointMoney;
     }
 
-    public void setEachPointMoney(int eachPointMoney) {
+    public void setEachPointMoney(double eachPointMoney) {
         this.eachPointMoney = eachPointMoney;
     }
 

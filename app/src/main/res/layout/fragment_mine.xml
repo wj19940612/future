@@ -179,7 +179,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="#EDF0F5"/>
+        android:background="@color/splitLineGrayLight"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"

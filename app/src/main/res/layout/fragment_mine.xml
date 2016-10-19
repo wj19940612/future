@@ -62,7 +62,7 @@
                     android:drawablePadding="6dp"
                     android:text="@string/mine_score"
                     android:textColor="@color/blueAssist"
-                    tools:text="0分"/>
+                    tools:text="0"/>
             </LinearLayout>
 
             <View

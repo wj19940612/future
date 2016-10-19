@@ -71,12 +71,11 @@
     <!-- Account -->
     <string name="nickname_logged">您好 %1$s</string>
     <string name="account_balance">账户余额(元)</string>
-    <string name="account_score">我的积分</string>
     <string name="sign_in">登录</string>
     <string name="sign_up_free">注册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
-    <string name="score_detail">积分明细</string>
+    <string name="score_detail">金币明细</string>
     <string name="personal_info">个人信息</string>
     <string name="paid_to_promote">推广赚钱</string>
     <string name="phone_number">手机号</string>
@@ -271,7 +270,7 @@
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
     <string name="no_logged">未登录</string>
-    <string name="mine_score">%1$s 分</string>
+    <string name="mine_score">%1$s </string>
     <string name="mine_balance">余额 (元)</string>
     <string name="no_login">您尚未登录，请先登录</string>
 
@@ -337,9 +336,9 @@
     <string name="service_protocol_title">服务协议</string>
 
     <!--交易明细-->
-    <string name="account_trade_detail_integral_remain">剩余积分(分)</string>
-    <string name="account_trade_detail_margin_remain">剩余保证金(分)</string>
-    <string name="integral_frozen">冻结积分(分)</string>
+    <string name="account_trade_detail_integral_remain">剩余金币</string>
+    <string name="account_trade_detail_margin_remain">剩余保证金(元)</string>
+    <string name="integral_frozen">冻结金币</string>
     <string name="money_frozen">冻结资金(元)</string>
     <string name="remain_money">剩余资金(元)</string>
     <string name="remain_money_number">%1$f</string>

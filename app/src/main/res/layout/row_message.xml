@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/bg_input_disable"
+            android:background="@drawable/line_division_center"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

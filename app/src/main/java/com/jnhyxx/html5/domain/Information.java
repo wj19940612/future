@@ -2,15 +2,15 @@ package com.jnhyxx.html5.domain;
 
 import java.io.Serializable;
 
-public class Information implements Serializable{
+public class Information implements Serializable {
 
     private static final long serialVersionUID = -7266947195942724446L;
 
 
     // TODO: 2016/10/13 目前h5写的是type是1和2
     public static final int TYPE_BANNER = 0;
-    public static final int TYPE_MARKET_ANALYSIS = 1;
-    public static final int TYPE_INDUSTRY_ANALYSIS = 2;
+    public static final int TYPE_MARKET_ANALYSIS = 2;
+    public static final int TYPE_INDUSTRY_ANALYSIS = 3;
 
     /**
      * channelId : 12
@@ -39,6 +39,7 @@ public class Information implements Serializable{
     private String title;
     private int type;
     private String updateTime;
+    private String source;
 
     public int getChannelId() {
         return channelId;
@@ -140,6 +141,14 @@ public class Information implements Serializable{
         return this.style.equalsIgnoreCase("h5");
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     @Override
     public String toString() {
         return "Information{" +
@@ -155,6 +164,7 @@ public class Information implements Serializable{
                 ", title='" + title + '\'' +
                 ", type=" + type +
                 ", updateTime='" + updateTime + '\'' +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

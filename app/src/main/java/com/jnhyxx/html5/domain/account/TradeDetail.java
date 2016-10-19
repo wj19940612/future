@@ -18,21 +18,23 @@ public class TradeDetail implements Serializable {
     public static final int INTEGRAL_DETAIL_TABLE = 791;
 
     //收益增加的tradeDetail标示
-    public static final int LOGO_INCOME_ADD = 2003;
+    public static final int LOGO_INCOME_ADD = 2202;
     //收益减少的tradeDetail标示
-    public static final int LOGO_INCOME_CUT = -2003;
+    public static final int LOGO_INCOME_CUT = -2202;
 
     //保证金冻结
-    public static final int LOGO_MARGIN_FREEZE = -2002;
-    //保证金返回  2002, "返还保证金
-    public static final int LOGO_MARGIN_BACK = 2002;
+    public static final int LOGO_MARGIN_FREEZE = -2102;
+    //保证金返回  2201, "返还保证金
+    public static final int LOGO_MARGIN_BACK = 2201;
+    //返还保证金  2302
+    public static final int DEPOSIT_BACK = 2302;
 
     /**
-     * -2001, "支付手续费
-     * 2001, "返还手续费"
+     * -2101, "支付手续费
+     * 2301, "返还手续费"
      */
-    public static final int LOGO_FEE_APPLY = -2001;
-    public static final int LOGO_FEE_BACK = 2001;
+    public static final int LOGO_FEE_APPLY = -2101;
+    public static final int LOGO_FEE_BACK = 2301;
 
 
     /**

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/splitBlockLight"
     android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.ScoreActivity">
+    tools:context="com.jnhyxx.html5.activity.SimulationActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/goldStoreButton"
             android:orientation="horizontal">
 
             <TextView
@@ -36,17 +37,18 @@
                 android:textColor="@color/colorDisable"
                 android:textSize="12sp"/>
 
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/availableGold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
+                android:gravity="bottom"
+                android:maxLines="1"
+                android:text="0.0000000"
                 android:textColor="@color/redPrimary"
-                android:textSize="30sp"
-                tools:text="50742"/>
+                android:textSize="30sp"/>
         </LinearLayout>
-
 
         <TextView
             android:id="@+id/goldStoreButton"
@@ -63,10 +65,14 @@
             android:textColor="@color/blueAssist"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <GridView
+        android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@android:color/white"/>
+        android:background="@color/splitBlockLight"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"/>
 </LinearLayout>

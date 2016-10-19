@@ -3,7 +3,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:background="@drawable/bg_product_row"
+              android:background="@drawable/bg_white_pressable"
               android:gravity="center"
               android:orientation="vertical"
               android:paddingBottom="12dp"
@@ -28,7 +28,7 @@
             android:id="@+id/hotIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:src="@drawable/ic_hot"
             android:visibility="gone"/>
 
@@ -36,7 +36,7 @@
             android:id="@+id/marketCloseText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:background="@drawable/bg_market_close"
             android:paddingBottom="2dp"
             android:paddingLeft="10dp"
@@ -50,7 +50,7 @@
             android:id="@+id/holdingPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:background="@drawable/bg_holding_position"
             android:paddingBottom="2dp"
             android:paddingLeft="5dp"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textColor="@color/colorDisable"
-        android:textSize="10sp"
+        android:textSize="8sp"
         android:visibility="gone"
         tools:text="最热品种，980元做一手"/>
 
@@ -79,6 +79,6 @@
         android:drawableLeft="@drawable/ic_market_clock_gold"
         android:drawablePadding="5dp"
         android:textColor="@color/colorDisable"
-        android:textSize="10sp"
+        android:textSize="8sp"
         tools:text="上午6:00~凌晨5:00"/>
 </LinearLayout>

@@ -281,7 +281,7 @@ public class Product implements Serializable, Parcelable {
         this.currency = in.readString();
         this.marketPoint = in.readInt();
         this.varietyName = in.readString();
-        this.eachPointMoney = in.readInt();
+        this.eachPointMoney = in.readDouble();
         this.currencyUnit = in.readString();
         this.ratio = in.readDouble();
     }

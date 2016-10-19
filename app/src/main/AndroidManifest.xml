@@ -167,7 +167,7 @@
 
         <activity android:name=".activity.web.TradeAnalyzeDetailsActivity">
         </activity>
-        <activity android:name=".activity.ScoreActivity">
+        <activity android:name=".activity.SimulationActivity">
         </activity>
     </application>
 

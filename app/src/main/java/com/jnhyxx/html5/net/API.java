@@ -560,7 +560,7 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+            return new API(GET,"/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 

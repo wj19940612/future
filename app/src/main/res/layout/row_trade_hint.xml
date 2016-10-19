@@ -2,16 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/bg_input_disable"
-              android:orientation="vertical"
-              android:paddingBottom="20dp"
-              android:paddingLeft="@dimen/common_margin"
-              android:paddingRight="@dimen/common_margin"
-              android:paddingTop="20dp">
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <View
+        android:id="@+id/splitBlock"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:paddingTop="20dp">
 
         <ImageView
             android:id="@+id/tradeStatusHint"
@@ -43,10 +50,12 @@
         android:id="@+id/tradeHintContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin"
-        android:background="@drawable/bg_input_disable"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/line_division_center"
         android:lineSpacingExtra="10dp"
         android:paddingBottom="20dp"
+        android:paddingTop="20dp"
         android:text="您的交易审核未被通过,可能是您的账户存在异常,请联系客服进行处理.【操盘手】"
         android:textColor="@color/lucky"
         android:textSize="12sp"/>

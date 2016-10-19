@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -20,7 +22,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 
@@ -36,20 +38,23 @@ import butterknife.Unbinder;
  * Created by ${wangJie} on 2016/10/10.
  */
 
-public class TradeHintListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class TradeHintListFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     private static final String TYPE = "fragmentType";
     public static final int TYPE_SYSTEM = 2;
     public static final int TYPE_TRADE = 3;
-
-
     private int mType;
+
+
     private int mPageNo;
     private int mPageSize;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.listView)
     ListView mListView;
     @BindView(R.id.empty)
     TextView mEmpty;
+
     private Unbinder mBinder;
 
     private TradeListAdapter mTradeListAdapter;
@@ -89,7 +94,16 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         mPageSize = 10;
         mSet = new HashSet<>();
         mListView.setOnItemClickListener(this);
+        mListView.setOnScrollListener(this);
         mListView.setDivider(null);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPageNo = 0;
+                mSet.clear();
+                requestMessageList();
+            }
+        });
         requestMessageList();
     }
 
@@ -118,19 +132,26 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)
-                .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
-                    @Override
-                    public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                        updateMessageList(sysTradeMessages);
-                        for (int i = 0; i < sysTradeMessages.size(); i++) {
-                            Log.d(TAG, "交易提醒数据" + sysTradeMessages.get(i) + "\n");
-                        }
-                    }
-                }).fire();
+                .setCallback(new Callback<Resp<List<SysTradeMessage>>>() {
+                                 @Override
+                                 public void onReceive(Resp<List<SysTradeMessage>> listResp) {
+                                     if (listResp.isSuccess()) {
+                                         updateMessageList(listResp.getData());
+                                         for (int i = 0; i < listResp.getData().size(); i++) {
+                                             Log.d(TAG, "交易提醒数据" + listResp.getData().get(i) + "\n");
+                                         }
+                                     } else {
+                                         if (mSwipeRefreshLayout.isRefreshing()) {
+                                             mSwipeRefreshLayout.setRefreshing(false);
+                                         }
+                                     }
+                                 }
+                             }
+                ).fire();
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || !isDetached()) {
+        if (sysTradeMessages == null) {
             mListView.setEmptyView(mEmpty);
             return;
         }
@@ -144,6 +165,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mSwipeRefreshLayout.isRefreshing()) return;
                     mPageNo++;
                     requestMessageList();
                 }
@@ -161,7 +183,10 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             mTradeListAdapter = new TradeListAdapter(getContext());
             mListView.setAdapter(mTradeListAdapter);
         }
-
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mTradeListAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
         for (SysTradeMessage item : sysTradeMessages) {
             if (mSet.add(item.getId())) {
                 mTradeListAdapter.add(item);
@@ -173,6 +198,18 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SysTradeMessage message = (SysTradeMessage) parent.getAdapter().getItem(position);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
     static class TradeListAdapter extends ArrayAdapter<SysTradeMessage> {
@@ -204,6 +241,8 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             TextView mTradeTime;
             @BindView(R.id.tradeHintContent)
             TextView mTradeHintContent;
+            @BindView(R.id.splitBlock)
+            View mView;
 
             TradeViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -211,6 +250,11 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
             public void bindingData(SysTradeMessage item, int position) {
                 if (item == null) return;
+                if (position == 0) {
+                    mView.setVisibility(View.VISIBLE);
+                } else {
+                    mView.setVisibility(View.GONE);
+                }
                 setTradeTime(item);
 
                 setTradeStatus(item);

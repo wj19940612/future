@@ -41,7 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/modify_nick_name_editText_hint"
+                android:hint="@string/modify_nick_name_hint"
                 android:maxLength="10"/>
         </LinearLayout>
 

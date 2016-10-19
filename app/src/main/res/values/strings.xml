@@ -371,7 +371,7 @@
     <string name="modify_nick_name_title">修改昵称</string>
     <string name="modify_nick_name_warn">昵称只能由中文、英文、数字组成,暂只支持修改一次。</string>
     <string name="modify_nick_name_error_warn">昵称只能由中文、英文、数字组成</string>
-    <string name="modify_nick_name_editText_hint">支持1~10个字符串</string>
+    <string name="modify_nick_name_hint">支持1~10个字符</string>
     <string name="modify_nick_name_submit_warn">昵称不得包含特殊符号</string>
 
 

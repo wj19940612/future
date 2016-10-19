@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -27,6 +29,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 
@@ -276,6 +279,8 @@ public class WebViewActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            ToastUtil.curt("点击返回商铺按钮");
+            Log.d(TAG, "点击返回商铺按钮" + url);
             if (!TextUtils.isEmpty(url)) {
                 if (TextUtils.equals(url, API.Finance.getRechargeSuccess())) {
                     finish();
@@ -286,6 +291,18 @@ public class WebViewActivity extends AppCompatActivity {
                 }
             }
             return false;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            ToastUtil.curt("点击返回商铺按钮");
+            Log.d(TAG, "新  点击返回商铺按钮 " + request.toString());
+            return super.shouldOverrideUrlLoading(view, request);
+        }
+
+        @Override
+        public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+            return super.shouldOverrideKeyEvent(view, event);
         }
     }
 

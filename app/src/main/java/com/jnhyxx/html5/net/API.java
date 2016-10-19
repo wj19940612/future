@@ -811,6 +811,6 @@ public class API extends APIBase {
      * @return
      */
     public static String getInfoLiveUrl(){
-        return "http%3A%2F%2Fm.jin10.com%2Fflash%3FmaxId%3D0";
+        return "http://m.jin10.com/flash?maxId=0";
     }
 }

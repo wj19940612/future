@@ -15,17 +15,18 @@
             android:id="@+id/infoLive"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/splitBlockLight"
             android:listSelector="@android:color/transparent"
             android:visibility="visible"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/emptyView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

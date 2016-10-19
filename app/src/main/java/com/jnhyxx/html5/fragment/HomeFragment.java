@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.Information;
@@ -100,15 +99,15 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSimulationClick() {
-                API.Market.getProductList().setTag(TAG)
-                        .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
-                            @Override
-                            public void onRespSuccess(List<Product> products) {
-                                Launcher.with(getActivity(), SimulationActivity.class)
-                                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(products))
-                                        .execute();
-                            }
-                        }).fire();
+//                API.Market.getProductList().setTag(TAG)
+//                        .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
+//                            @Override
+//                            public void onRespSuccess(List<Product> products) {
+//                                Launcher.with(getActivity(), SimulationActivity.class)
+//                                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(products))
+//                                        .execute();
+//                            }
+//                        }).fire();
             }
 
             @Override

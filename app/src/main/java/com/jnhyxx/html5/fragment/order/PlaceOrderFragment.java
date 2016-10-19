@@ -87,6 +87,8 @@ public class PlaceOrderFragment extends BaseFragment {
     private FuturesFinancing mFuturesFinancing;
     private SubmittedOrder mSubmittedOrder;
     private FullMarketData mMarketData;
+    private ExchangeStatus mExchangeStatus;
+    private boolean mIsShowing;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -181,16 +183,29 @@ public class PlaceOrderFragment extends BaseFragment {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
+                        if (mIsShowing) return;
                         updatePlaceOrderViews();
                     }
                 }).fire();
 
-        updateRateAndMarketTimeView();
+
+        API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
+                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                    @Override
+                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mExchangeStatus = exchangeStatus;
+                        if (mIsShowing) return;
+                        updateRateAndMarketTimeView();
+                    }
+                }).fire();
+
         updateBuyAskPriceBgAndConfirmBtn();
     }
 
     public void setMarketData(FullMarketData data) {
         mMarketData = data;
+
+        if (mIsShowing || !isAdded()) return;
         updateMarketDataRelatedView();
         updateSubmittedOrder();
     }
@@ -202,8 +217,6 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     private void updateMarketDataRelatedView() {
-        if (!isAdded() || mMarketData == null) return;
-
         mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
         updateLastPriceView(mMarketData);
         mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
@@ -256,34 +269,28 @@ public class PlaceOrderFragment extends BaseFragment {
                     "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + Unit.YUAN));
         }
 
-        API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
-                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                    @Override
-                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        String marketTimeStr;
-                        if (exchangeStatus.isTradeable()) {
-                            marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
-                                    exchangeStatus.getNextTime());
+        String marketTimeStr;
+        if (mExchangeStatus.isTradeable()) {
+            marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
+                    mExchangeStatus.getNextTime());
 
-                            mMarketOpenArea.setVisibility(View.VISIBLE);
-                            mMarketCloseText.setVisibility(View.GONE);
-                        } else {
-                            marketTimeStr = getString(R.string.prompt_next_trade_time_is,
-                                    exchangeStatus.getNextTime());
+            mMarketOpenArea.setVisibility(View.VISIBLE);
+            mMarketCloseText.setVisibility(View.GONE);
+        } else {
+            marketTimeStr = getString(R.string.prompt_next_trade_time_is,
+                    mExchangeStatus.getNextTime());
 
-                            mMarketOpenArea.setVisibility(View.GONE);
-                            mMarketCloseText.setVisibility(View.VISIBLE);
-                            mMarketCloseText.setText(marketTimeStr);
-                        }
-                        String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
-                        if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
-                            rateAndMarketTimeStr = marketTimeStr;
-                        } else {
-                            rateAndMarketTimeStr += "  " + marketTimeStr;
-                        }
-                        mRateAndMarketTime.setText(rateAndMarketTimeStr);
-                    }
-                }).fire();
+            mMarketOpenArea.setVisibility(View.GONE);
+            mMarketCloseText.setVisibility(View.VISIBLE);
+            mMarketCloseText.setText(marketTimeStr);
+        }
+        String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
+        if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
+            rateAndMarketTimeStr = marketTimeStr;
+        } else {
+            rateAndMarketTimeStr += "  " + marketTimeStr;
+        }
+        mRateAndMarketTime.setText(rateAndMarketTimeStr);
     }
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
@@ -317,7 +324,6 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     private void updatePlaceOrderViews() {
-        if (isRemoving() || !isAdded()) return;
         // 设置止损
         mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }
@@ -363,10 +369,40 @@ public class PlaceOrderFragment extends BaseFragment {
 
         if (enter) {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_bottom);
+            animation.setAnimationListener(new EnterAnimListener());
         } else {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_bottom);
         }
 
         return animation;
     }
+
+    private class EnterAnimListener implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            mIsShowing = true;
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            mIsShowing = false;
+
+            if (mMarketData != null) {
+                setMarketData(mMarketData);
+            }
+            if (mFuturesFinancing != null) {
+                updatePlaceOrderViews();
+            }
+            if (mExchangeStatus != null) {
+                updateRateAndMarketTimeView();
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    }
+
+
 }

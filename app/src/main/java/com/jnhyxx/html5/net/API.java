@@ -805,4 +805,12 @@ public class API extends APIBase {
     public static String getServiceQQ(String serviceQQ) {
         return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
     }
+
+    /**
+     * findNewsByUrl  中所需要的参数
+     * @return
+     */
+    public static String getInfoLiveUrl(){
+        return "http%3A%2F%2Fm.jin10.com%2Fflash%3FmaxId%3D0";
+    }
 }

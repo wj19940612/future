@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.account;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,7 +53,27 @@ public class NameVerifyActivity extends BaseActivity {
         setContentView(R.layout.activity_name_verify);
         ButterKnife.bind(this);
 
-        mName.addTextChangedListener(mValidationWatcher);
+        mName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newData = s.toString();
+                if (newData.contains(" ")) {
+                    newData = newData.replaceAll(" ", "");
+                    mName.setText(newData);
+                    mName.setSelection(mName.getText().toString().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mValidationWatcher.afterTextChanged(s);
+            }
+        });
         mIdentityNum.addTextChangedListener(mValidationWatcher);
 
         updateNameAuthView();

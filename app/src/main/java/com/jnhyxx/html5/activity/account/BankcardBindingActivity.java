@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -93,7 +94,27 @@ public class BankcardBindingActivity extends BaseActivity {
         setContentView(R.layout.activity_bankcard_binding);
         ButterKnife.bind(this);
 
-        mCardholderName.addTextChangedListener(mValidationWatcher);
+        mCardholderName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newData = s.toString();
+                if (newData.contains(" ")) {
+                    newData = newData.replaceAll(" ", "");
+                    mCardholderName.setText(newData);
+                    mCardholderName.setSelection(mCardholderName.getText().toString().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mValidationWatcher.afterTextChanged(s);
+            }
+        });
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
 

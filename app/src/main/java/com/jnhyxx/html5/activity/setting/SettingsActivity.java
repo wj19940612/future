@@ -69,7 +69,7 @@ public class SettingsActivity extends BaseActivity {
         } else if (authStatus == UserInfo.BANKCARD_STATUS_BOUND) {
             return R.string.bound;
         }
-        return R.string.unfilled;
+        return R.string.unbound;
     }
 
     private int getRealNameAuthStatusRes(int authStatus) {
@@ -81,7 +81,7 @@ public class SettingsActivity extends BaseActivity {
         } else if (authStatus == UserInfo.REAL_NAME_STATUS_VERIFIED) {
             return R.string.authorized;
         }
-        return R.string.unfilled;
+        return R.string.un_authorized;
     }
 
     private void logout() {

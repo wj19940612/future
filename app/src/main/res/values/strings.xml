@@ -119,7 +119,9 @@
     <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>
     <string name="authorized">已认证</string>
+    <string name="un_authorized">未认证</string>
     <string name="bound">已绑定</string>
+    <string name="unbound">未绑定</string>
     <string name="nickname">昵称</string>
     <string name="settings">设置</string>
     <string name="binding_bank_card">绑定银行卡</string>

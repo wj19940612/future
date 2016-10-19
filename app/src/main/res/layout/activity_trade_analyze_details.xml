@@ -6,6 +6,7 @@
     android:id="@+id/activity_information_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity">
 
@@ -147,14 +148,6 @@
         android:layout_height="1dp"
         android:progressDrawable="@drawable/progress_horizontal"
         android:visibility="visible"/>
-
-    <View
-        android:id="@+id/emptyView"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@android:color/white"
-        android:visibility="gone"/>
-
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"

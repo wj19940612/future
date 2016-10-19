@@ -50,8 +50,8 @@ public class OrderPresenter {
         void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList);
 
         void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio);
-    }
 
+    }
     public void register(IHoldingOrderView iHoldingOrderView) {
         mIHoldingOrderViewList.add(iHoldingOrderView);
     }
@@ -208,6 +208,12 @@ public class OrderPresenter {
                         startQueryJob();
                     }
                 }).fire();
+    }
+
+    public void clearHoldingOrderList() {
+        mHoldingOrderList = null;
+        mVarietyId = 0;
+        mFundType = 0;
     }
 
     /**

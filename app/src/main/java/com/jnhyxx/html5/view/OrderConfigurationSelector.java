@@ -26,7 +26,7 @@ public class OrderConfigurationSelector extends LinearLayout {
 
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final int DEFAULT_ITEMS = 5;
-    private static final int DEFAULT_PADDING_DP = 5;
+    private static final int DEFAULT_ITEM_HEIGHT = 24;
     private static final int KEY_POSITION = -1;
 
     private int mMaximum;
@@ -146,9 +146,11 @@ public class OrderConfigurationSelector extends LinearLayout {
             }
         } else {
             for (int i = 0; i < mMaximum - 1; i++) {
+                showFixedItem(i);
                 TextView item = getFixedItem(i);
                 item.setText(mOrderConfigurationList.get(i).getValue());
             }
+            showFixedItem(mMaximum - 1);
             TextView item = getFixedItem(mMaximum - 1);
             item.setText("...");
             List<? extends OrderConfiguration> hiddenList = mOrderConfigurationList.subList(
@@ -268,29 +270,29 @@ public class OrderConfigurationSelector extends LinearLayout {
     }
 
     private TextView createHideItem(int position) {
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_PADDING_DP,
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ITEM_HEIGHT,
                 getResources().getDisplayMetrics());
         TextView textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setOnClickListener(mHideItemClickListener);
         textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);
-        textView.setPadding(0, padding, 0, padding);
         textView.setTag(KEY_POSITION, position);
+        textView.setHeight(height);
         return textView;
     }
 
     private TextView createVisibleItem(int position) {
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_PADDING_DP,
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ITEM_HEIGHT,
                 getResources().getDisplayMetrics());
         TextView textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
         textView.setOnClickListener(mListener);
         textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);
-        textView.setPadding(0, padding, 0, padding);
         textView.setTag(KEY_POSITION, position);
-        LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(0, height);
         params.weight = 1;
         textView.setLayoutParams(params);
         return textView;

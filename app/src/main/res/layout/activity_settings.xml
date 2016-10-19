@@ -27,7 +27,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/splitLineHeight"
+        android:layout_height="@dimen/split_line_height"
         android:background="@color/splitLineGrayLight"/>
 
     <com.jnhyxx.html5.view.IconTextRow
@@ -42,7 +42,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/splitLineHeight"
+        android:layout_height="@dimen/split_line_height"
         android:background="@color/splitLineGrayLight"/>
 
     <com.jnhyxx.html5.view.IconTextRow
@@ -57,7 +57,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/splitLineHeight"
+        android:layout_height="@dimen/split_line_height"
         android:background="@color/splitLineGrayLight"/>
 
     <com.jnhyxx.html5.view.IconTextRow

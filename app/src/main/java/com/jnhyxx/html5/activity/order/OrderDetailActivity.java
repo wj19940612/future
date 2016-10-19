@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderDetail;
 import com.jnhyxx.html5.domain.order.SettledOrder;
@@ -91,7 +92,7 @@ public class OrderDetailActivity extends BaseActivity {
                 color = ContextCompat.getColor(this, R.color.redPrimary);
                 lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
             }
-            String lossProfitRmb = "   (" + FinanceUtil.formatWithScale(lossProfit * rate) + FinanceUtil.UNIT_YUAN + ")";
+            String lossProfitRmb = "   (" + FinanceUtil.formatWithScale(lossProfit * rate) + Unit.YUAN + ")";
             mLossProfit.setTextColor(color);
             mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, lossProfitRmb, 0.35f, grayColor));
 

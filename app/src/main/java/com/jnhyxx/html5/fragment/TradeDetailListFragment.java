@@ -284,7 +284,8 @@ public class TradeDetailListFragment extends BaseFragment {
                     mStringBuffer.append(Constant.YUAN);
                 } else {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
-                    mStringBuffer.append(Constant.INTEGRAL);
+
+//                    mStringBuffer.append(Constant.INTEGRAL);
                 }
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }

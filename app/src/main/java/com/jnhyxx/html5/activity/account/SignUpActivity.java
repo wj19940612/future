@@ -96,8 +96,6 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 mAgreeProtocol.setChecked(isChecked);
-                mAgreeProtocol.setButtonDrawable(isChecked ? R.drawable.checkbox_register_selected : R.drawable.checkbox_register_nor);
-                // TODO: 10/5/16 checkbox 无法重写样式?
                 activeButtons();
             }
         });
@@ -353,7 +351,7 @@ public class SignUpActivity extends BaseActivity {
         if (mCounter <= 0) {
             mFreezeObtainAuthCode = false;
             mObtainAuthCode.setEnabled(true);
-            mObtainAuthCode.setText(R.string.obtain_auth_code);
+            mObtainAuthCode.setText(R.string.obtain_auth_code_continue);
             stopScheduleJob();
         } else {
             mObtainAuthCode.setText(getString(R.string.resend_after_n_seconds, mCounter));

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.finance.FundFlowItem;
 import com.jnhyxx.html5.domain.finance.FundInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -141,7 +142,7 @@ public class FundDetailActivity extends BaseActivity {
             frozen = FinanceUtil.formatWithScale(fundInfo.getCurCashFund());
         }
         mFrozenDeposit.setText(StrUtil.mergeTextWithRatioColor(
-                frozen, FinanceUtil.UNIT_SCORE, 0.5f, Color.GRAY));
+                frozen, Unit.SCORE, 0.5f, Color.GRAY));
     }
 
      class FundFlowListAdapter extends ArrayAdapter<FundFlowItem> {

@@ -14,6 +14,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.johnz.kutils.ViewUtil;
@@ -41,6 +42,10 @@ public class ModifyNickNameActivity extends BaseActivity {
     }
 
     private void submitNickName(final String nickname) {
+        if (!ValidityDecideUtil.getNicknameStatus(nickname)) {
+            mModifyNickNameFailWarnWarn.show(getString(R.string.modify_nick_name_error_warn));
+            return;
+        }
         API.User.updateNickName(nickname)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp>() {

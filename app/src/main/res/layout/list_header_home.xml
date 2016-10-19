@@ -51,7 +51,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:orientation="horizontal">
 
         <TextView
@@ -60,6 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/bg_white_pressable"
             android:drawableTop="@drawable/ic_simulate"
             android:text="@string/simulation"/>
 
@@ -69,6 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/bg_white_pressable"
             android:drawableTop="@drawable/ic_newer_guide"
             android:text="@string/newer_guide"/>
 
@@ -78,6 +79,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/bg_white_pressable"
             android:drawableTop="@drawable/ic_contact_service"
             android:text="@string/contact_service"/>
     </LinearLayout>

@@ -3,11 +3,14 @@ package com.jnhyxx.html5.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -16,7 +19,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.DateUtil;
 
@@ -28,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MsgListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class MsgListFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String TYPE = "fragmentType";
     public static final int TYPE_SYSTEM = 2;
@@ -41,6 +44,8 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     private int mPageNo;
     private int mPageSize;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.listView)
     ListView mListView;
     @BindView(R.id.empty)
@@ -92,7 +97,16 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         mPageSize = 10;
         mSet = new HashSet<>();
         mListView.setOnItemClickListener(this);
+        mListView.setOnScrollListener(this);
         mListView.setDivider(null);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSet.clear();
+                mPageNo = 0;
+                requestMessageList();
+            }
+        });
         requestMessageList();
     }
 
@@ -113,12 +127,23 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)
-                .setCallback(new Callback2<Resp<List<SysTradeMessage>>, List<SysTradeMessage>>() {
-                    @Override
-                    public void onRespSuccess(List<SysTradeMessage> sysTradeMessages) {
-                        updateMessageList(sysTradeMessages);
-                    }
-                }).fire();
+                .setCallback(new Callback<Resp<List<SysTradeMessage>>>() {
+                                 @Override
+                                 public void onReceive(Resp<List<SysTradeMessage>> listResp) {
+                                     if (listResp.isSuccess()) {
+                                         updateMessageList(listResp.getData());
+                                         for (int i = 0; i < listResp.getData().size(); i++) {
+                                             Log.d(TAG, "系统消息中心数据" + listResp.getData().get(i).toString());
+                                         }
+                                     } else {
+                                         if (mSwipeRefreshLayout.isRefreshing()) {
+                                             mSwipeRefreshLayout.setRefreshing(false);
+                                         }
+                                     }
+                                 }
+                             }
+
+                ).fire();
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
@@ -136,6 +161,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mSwipeRefreshLayout.isRefreshing()) return;
                     mPageNo++;
                     requestMessageList();
                 }
@@ -153,6 +179,10 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
             mMessageListAdapter = new MessageListAdapter(getContext());
             mListView.setAdapter(mMessageListAdapter);
         }
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mMessageListAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
 
         for (SysTradeMessage item : sysTradeMessages) {
             if (mSet.add(item.getId())) {
@@ -168,6 +198,18 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
         if (mListener != null) {
             mListener.onMsgItemClick(message);
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
     static class MessageListAdapter extends ArrayAdapter<SysTradeMessage> {

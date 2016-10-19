@@ -6,13 +6,13 @@
     <!-- Common -->
     <dimen name="radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="splitLineHeight">0.5dp</dimen>
+    <dimen name="split_line_height">0.5dp</dimen>
     <dimen name="button_radius">2dp</dimen>
 
     <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
     <dimen name="sliding_shadow_width">15dp</dimen>
-    <dimen name="trade_header_height">88dp</dimen>
+    <dimen name="trade_header_height">75dp</dimen>
     <dimen name="trade_header_btn_width">85dp</dimen>
     <dimen name="market_status_area_height">77dp</dimen>
     <dimen name="market_date_row_padding">14dp</dimen>

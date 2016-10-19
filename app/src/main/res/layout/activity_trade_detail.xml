@@ -5,7 +5,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/appBackground"
+              android:background="@color/splitBlockLight"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.account.TradeDetailActivity">
 
@@ -48,7 +48,7 @@
                 android:text="@string/account_trade_detail_margin_remain"
                 android:textColor="@color/colorDisable"/>
 
-            <com.jnhyxx.html5.view.AutoAdaptSizeTextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/remainNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                 android:text="@string/money_frozen"
                 android:textColor="@color/colorDisable"/>
 
-            <com.jnhyxx.html5.view.AutoAdaptSizeTextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/blockedNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

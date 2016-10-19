@@ -72,9 +72,6 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
     @BindView(R.id.errorPage)
     LinearLayout mErrorPage;
 
-    @BindView(R.id.emptyView)
-    View mView;
-
     private boolean mLoadSuccess;
 
     private BroadcastReceiver mNetworkChangeReceiver;
@@ -113,11 +110,9 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            mView.setVisibility(View.VISIBLE);
             String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, information.getContent(), "text/html", "utf-8", null);
         } else {
-            mView.setVisibility(View.GONE);
             mWebView.loadUrl(information.getContent());
         }
     }
@@ -126,7 +121,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20,
                 getResources().getDisplayMetrics());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, defaultFontSize);
+        layoutParams.setMargins(defaultFontSize, defaultFontSize, defaultFontSize, 0);
         mWebView.setLayoutParams(layoutParams);
     }
 
@@ -140,11 +135,9 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            mView.setVisibility(View.VISIBLE);
             String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
-            mView.setVisibility(View.GONE);
             mWebView.loadUrl(information.getContent());
         }
     }

@@ -29,9 +29,11 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
+import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -185,9 +187,10 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         updateSignTradePagerHeader();
         updateProductRelatedViews();
-        OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
+
+        OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
     private void updateProductRelatedViews() {
@@ -268,7 +271,12 @@ public class TradeActivity extends BaseActivity implements
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
-        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? FinanceUtil.UNIT_YUAN : FinanceUtil.UNIT_SCORE;
+
+        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
+        MarketServer marketServer = marketServers.get(0);
+        NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+
+        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.SCORE;
     }
 
     private void updateChartView(FullMarketData data) {
@@ -286,10 +294,12 @@ public class TradeActivity extends BaseActivity implements
                 }
             }
         }
+
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView != null) {
             flashView.addData(new FlashViewData((float) data.getLastPrice()));
         }
+
         MarketDataView marketDataView = mChartContainer.getMarketDataView();
         if (marketDataView != null) {
             marketDataView.setMarketData(data, mProduct);
@@ -355,6 +365,7 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        OrderPresenter.getInstance().clearHoldingOrderList();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
@@ -378,6 +389,7 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+        trendView.setDataList(null);
 
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView == null) {
@@ -432,14 +444,27 @@ public class TradeActivity extends BaseActivity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
-                    mProduct = product;
-                    updateProductRelatedViews();
-                    NettyClient.getInstance().stop();
-                    NettyClient.getInstance().start(mProduct.getContractsCode());
-                    mMenu.toggle();
+                    switchToNewProduct(product);
                 }
             }
         });
+    }
+
+    private void switchToNewProduct(Product product) {
+        if (product.getVarietyId() == mProduct.getVarietyId()) {
+            mMenu.toggle();
+        } else {
+            hideFragmentOfContainer();
+            mMenu.toggle();
+
+            mProduct = product;
+            updateProductRelatedViews();
+            OrderPresenter.getInstance().clearHoldingOrderList();
+            OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+            NettyClient.getInstance().stop();
+            NettyClient.getInstance().start(mProduct.getContractsCode());
+        }
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})
@@ -508,7 +533,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
-        Log.d("TEST", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
+        Log.d("TAG", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

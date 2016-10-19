@@ -9,7 +9,7 @@
 
     <item android:top="1px">
         <shape>
-            <solid android:color="@color/splitBlock"/>
+            <solid android:color="@color/splitBlockDark"/>
         </shape>
     </item>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/splitBlockLight"
                 android:paddingLeft="@dimen/common_margin"
                 android:paddingRight="@dimen/common_margin">
@@ -18,13 +18,13 @@
         <View
             android:layout_width="0.5dp"
             android:layout_height="36dp"
-            android:background="@color/lucky"/>
+            android:background="@color/splitLineGrayLight"/>
 
         <View
             android:layout_width="0.5dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/lucky"/>
+            android:background="@color/splitLineGrayLight"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_width="0.5dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/lucky"/>
+            android:background="@color/splitLineGrayLight"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -71,7 +71,7 @@
 
             <TextView
                 android:id="@+id/content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/time"
                 android:layout_toRightOf="@+id/arrow"
@@ -80,7 +80,7 @@
                 android:paddingLeft="@dimen/padding_ten"
                 android:paddingRight="@dimen/padding_ten"
                 android:paddingTop="12dp"
-                android:text="dsakjdljsalkdjkasdjlaskdjalskdjlsakjdslkajdlkajdlkajdlkajdlkjakldjsalkjdslkajdlksajldkjalkdjlakjdlkadjsdjklsajdkljadkljkdsajlkdjaslk"
+                android:text="打快点进卡就发了思考几分阿里sfjkahkfjjhsakfhkasfhksjafhkjl睡觉爱疯了快速减肥了快速减肥了看见爱上了分开就算了卡积分发发看见爱上了开房间爱离开房间龙卡及福利卡收费就离开房间挨了福克斯就是浪费空间分开了撒减肥了凯撒减肥了卡斯就疯了卡机发送旅客撒酒疯卢卡斯放假了咖啡洒就看了撒娇疯了快睡觉离开福建爱上福利卡就是法拉克就发了会计法拉克将法拉克减肥了卡斯就疯了开发撒酒疯了卡斯就疯了凯撒解放路口"
                 android:textColor="@color/blackPrimary"/>
         </LinearLayout>
 

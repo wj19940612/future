@@ -198,7 +198,7 @@ public class BankcardBindingActivity extends BaseActivity {
             }
 
             if (!TextUtils.isEmpty(userInfo.getCardNumber())) {
-                String bankNumber = StrFormatter.getFormatPhoneNumber(userInfo.getCardNumber());
+                String bankNumber = StrFormatter.getHintFormatBankCardNumber(userInfo.getCardNumber());
                 mBankCardNumber.setText(bankNumber);
             }
         } else {

@@ -25,6 +25,12 @@ public class StrFormatter {
         return phoneNoSpace;
     }
 
+    /**
+     * 格式化银行卡 4444 4444 4444 4444 444
+     *
+     * @param bankCardNoSpace
+     * @return
+     */
     public static String getFormatBankCardNumber(String bankCardNoSpace) {
         if (bankCardNoSpace.length() <= 4) {
             return bankCardNoSpace;
@@ -46,6 +52,21 @@ public class StrFormatter {
                     + " " + bankCardNoSpace.substring(8, 12)
                     + " " + bankCardNoSpace.substring(12, 16)
                     + " " + bankCardNoSpace.substring(16, bankCardNoSpace.length());
+        }
+        return bankCardNoSpace;
+    }
+
+    /**
+     * 隐藏的银行卡格式   *** **** **** **** ****
+     *
+     * @param bankCardNoSpace
+     * @return
+     */
+    public static String getHintFormatBankCardNumber(String bankCardNoSpace) {
+        if (bankCardNoSpace.length() == 16) {
+            return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
+        } else if (bankCardNoSpace.length() == 19) {
+            return "*** **** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
         }
         return bankCardNoSpace;
     }

@@ -12,7 +12,7 @@ public class Product implements Serializable, Parcelable {
     public static final String EX_PRODUCT_LIST = "productList";
 
     public static final int FUND_TYPE_CASH = 1;
-    public static final int FUND_TYPE_SCORE = 0;
+    public static final int FUND_TYPE_SIMULATION = 0;
 
     public static final String CURRENCY_RMB = "CNY";
 

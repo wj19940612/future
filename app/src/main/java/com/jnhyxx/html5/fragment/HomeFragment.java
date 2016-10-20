@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.Information;
@@ -99,15 +100,15 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSimulationClick() {
-//                API.Market.getProductList().setTag(TAG)
-//                        .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
-//                            @Override
-//                            public void onRespSuccess(List<Product> products) {
-//                                Launcher.with(getActivity(), SimulationActivity.class)
-//                                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(products))
-//                                        .execute();
-//                            }
-//                        }).fire();
+                API.Market.getProductList().setTag(TAG)
+                        .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
+                            @Override
+                            public void onRespSuccess(List<Product> products) {
+                                Launcher.with(getActivity(), SimulationActivity.class)
+                                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(products))
+                                        .execute();
+                            }
+                        }).fire();
             }
 
             @Override
@@ -156,7 +157,7 @@ public class HomeFragment extends BaseFragment {
     private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
 //        Launcher.with(getActivity(), TradeActivity.class)
 //                .putExtra(Product.EX_PRODUCT, product)
-//                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SCORE)
+//                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
 //                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
 //                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, new ExchangeStatus())
 //                .execute();

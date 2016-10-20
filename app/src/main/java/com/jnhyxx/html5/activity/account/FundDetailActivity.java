@@ -142,7 +142,7 @@ public class FundDetailActivity extends BaseActivity {
             frozen = FinanceUtil.formatWithScale(fundInfo.getCurCashFund());
         }
         mFrozenDeposit.setText(StrUtil.mergeTextWithRatioColor(
-                frozen, Unit.SCORE, 0.5f, Color.GRAY));
+                frozen, Unit.GOLD, 0.5f, Color.GRAY));
     }
 
      class FundFlowListAdapter extends ArrayAdapter<FundFlowItem> {

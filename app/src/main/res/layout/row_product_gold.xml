@@ -66,9 +66,10 @@
         android:id="@+id/advertisement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/colorDisable"
-        android:textSize="8sp"
+        android:textSize="9sp"
         android:visibility="gone"
         tools:text="最热品种，980元做一手"/>
 
@@ -77,8 +78,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_market_clock_gold"
-        android:drawablePadding="5dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/colorDisable"
-        android:textSize="8sp"
+        android:textSize="9sp"
         tools:text="上午6:00~凌晨5:00"/>
 </LinearLayout>

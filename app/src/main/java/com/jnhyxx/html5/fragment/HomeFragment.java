@@ -240,7 +240,7 @@ public class HomeFragment extends BaseFragment {
 
     private void requestProductMarketList() {
         API.Market.getProductMarketList().setTag(TAG)
-                .setCallback(new Callback<Resp<List<MarketData>>>() {
+                .setCallback(new Callback<Resp<List<MarketData>>>(false) {
                     @Override
                     public void onReceive(Resp<List<MarketData>> listResp) {
                         if (listResp.isSuccess()) {

@@ -45,7 +45,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="bottom"
                 android:maxLines="1"
-                android:text="0.0000000"
+                android:text="0.00"
                 android:textColor="@color/redPrimary"
                 android:textSize="30sp"/>
         </LinearLayout>

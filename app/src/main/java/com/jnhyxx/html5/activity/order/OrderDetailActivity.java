@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.activity.order;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
@@ -15,7 +14,6 @@ import com.jnhyxx.html5.domain.order.SettledOrder;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.StrUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +26,8 @@ public class OrderDetailActivity extends BaseActivity {
     TextView mTradeType;
     @BindView(R.id.lossProfit)
     TextView mLossProfit;
+    @BindView(R.id.lossProfitRmb)
+    TextView mLossProfitRmb;
 
     @BindView(R.id.tradeVariety)
     TextView mTradeVariety;
@@ -52,9 +52,11 @@ public class OrderDetailActivity extends BaseActivity {
     @BindView(R.id.orderId)
     TextView mOrderId;
 
-    private Product mProduct;
     private SettledOrder mSettledOrder;
     private OrderDetail mOrderDetail;
+    private Product mProduct;
+    private int mFundType;
+    private String mFundUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,37 +81,22 @@ public class OrderDetailActivity extends BaseActivity {
             mTradeType.setBackgroundResource(R.drawable.bg_green_primary);
         }
 
-        if (mProduct.isForeign()) {
-            double lossProfit = mSettledOrder.getWinOrLoss();
-            double rate = mSettledOrder.getRatio();
-            int grayColor = Color.parseColor("#CCCCCC"); //gray
-            int color;
-            String lossProfitForeign;
-            if (lossProfit < 0) {
-                color = ContextCompat.getColor(this, R.color.greenPrimary);
-                lossProfitForeign = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
-            } else {
-                color = ContextCompat.getColor(this, R.color.redPrimary);
-                lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
-            }
-            String lossProfitRmb = "   (" + FinanceUtil.formatWithScale(lossProfit * rate) + Unit.YUAN + ")";
-            mLossProfit.setTextColor(color);
-            mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, lossProfitRmb, 0.35f, grayColor));
-
+        double lossProfit = mSettledOrder.getWinOrLoss();
+        double rate = mSettledOrder.getRatio();
+        int color;
+        String lossProfitStr;
+        if (lossProfit < 0) {
+            color = ContextCompat.getColor(this, R.color.greenPrimary);
+            lossProfitStr = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
         } else {
-            double lossProfit = mSettledOrder.getWinOrLoss();
-            int color;
-            String lossProfitRmb;
-            if (lossProfit < 0) {
-                color = ContextCompat.getColor(this, R.color.greenPrimary);
-                lossProfitRmb = FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
-
-            } else {
-                color = ContextCompat.getColor(this, R.color.redPrimary);
-                lossProfitRmb = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
-            }
-            mLossProfit.setTextColor(color);
-            mLossProfit.setText(lossProfitRmb);
+            color = ContextCompat.getColor(this, R.color.redPrimary);
+            lossProfitStr = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
+        }
+        mLossProfit.setTextColor(color);
+        mLossProfit.setText(lossProfitStr);
+        if (mProduct.isForeign()) {
+            String lossProfitRmb = "(" + FinanceUtil.formatWithScale(Math.abs(lossProfit * rate)) + mFundUnit + ")";
+            mLossProfitRmb.setText(lossProfitRmb);
         }
 
         // above is header, next is contract and order info
@@ -142,5 +129,7 @@ public class OrderDetailActivity extends BaseActivity {
         mSettledOrder = (SettledOrder) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mOrderDetail = (OrderDetail) intent.getSerializableExtra(Launcher.EX_PAYLOAD_1);
         mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
+        mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }
 }

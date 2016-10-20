@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.Constant;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -281,7 +281,7 @@ public class TradeDetailListFragment extends BaseFragment {
 
                 if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
-                    mStringBuffer.append(Constant.YUAN);
+                    mStringBuffer.append(Unit.YUAN);
                 } else {
                     mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
 

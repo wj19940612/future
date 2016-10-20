@@ -55,6 +55,7 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.StrUtil;
 
 import java.util.List;
 
@@ -224,7 +225,9 @@ public class TradeActivity extends BaseActivity implements
         View view = mTitleBar.getCustomView();
         TextView productName = (TextView) view.findViewById(R.id.productName);
         View productRule = view.findViewById(R.id.productRule);
-        productName.setText(mProduct.getVarietyName() + " " + mProduct.getContractsCode());
+        String productTitle = mFundType == Product.FUND_TYPE_CASH ? mProduct.getVarietyName() + " "
+                : getString(R.string.gold) + " - " + mProduct.getVarietyName() + " ";
+        productName.setText(StrUtil.mergeTextWithRatio(productTitle, mProduct.getContractsCode(), 0.75f));
         productRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,7 +279,7 @@ public class TradeActivity extends BaseActivity implements
         MarketServer marketServer = marketServers.get(0);
         NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
 
-        mFundUnit = mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.SCORE;
+        mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }
 
     private void updateChartView(FullMarketData data) {

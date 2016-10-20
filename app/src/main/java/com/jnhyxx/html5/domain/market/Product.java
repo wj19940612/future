@@ -65,7 +65,6 @@ public class Product implements Serializable, Parcelable {
     private double eachPointMoney;
     private String currencyUnit;
     private double ratio;
-
     private String advertisement;
 
     public String getDisplayMarketTimes() {
@@ -231,6 +230,15 @@ public class Product implements Serializable, Parcelable {
         return 0;
     }
 
+    public String getAdvertisement() {
+        return advertisement;
+    }
+
+    public void setAdvertisement(String advertisement) {
+        this.advertisement = advertisement;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -257,6 +265,7 @@ public class Product implements Serializable, Parcelable {
         dest.writeDouble(this.eachPointMoney);
         dest.writeString(this.currencyUnit);
         dest.writeDouble(this.ratio);
+        dest.writeString(this.advertisement);
     }
 
     public Product() {
@@ -282,6 +291,7 @@ public class Product implements Serializable, Parcelable {
         this.eachPointMoney = in.readDouble();
         this.currencyUnit = in.readString();
         this.ratio = in.readDouble();
+        this.advertisement = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -295,12 +305,4 @@ public class Product implements Serializable, Parcelable {
             return new Product[size];
         }
     };
-
-    public String getAdvertisement() {
-        return advertisement;
-    }
-
-    public void setAdvertisement(String advertisement) {
-        this.advertisement = advertisement;
-    }
 }

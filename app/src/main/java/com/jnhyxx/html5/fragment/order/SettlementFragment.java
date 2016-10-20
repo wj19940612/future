@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderDetailActivity;
+import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderDetail;
 import com.jnhyxx.html5.domain.order.SettledOrder;
@@ -54,6 +55,7 @@ public class SettlementFragment extends BaseFragment {
 
     private Product mProduct;
     private int mFundType;
+    private String mFundUnit;
     private int mPageNo;
     private int mPageSize;
     private Set<String> mSet;
@@ -76,6 +78,7 @@ public class SettlementFragment extends BaseFragment {
         if (getArguments() != null) {
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
+            mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
         }
     }
 
@@ -122,6 +125,7 @@ public class SettlementFragment extends BaseFragment {
                                             .putExtra(Launcher.EX_PAYLOAD, settledOrder)
                                             .putExtra(Launcher.EX_PAYLOAD_1, orderDetail)
                                             .putExtra(Product.EX_PRODUCT, mProduct)
+                                            .putExtra(Product.EX_FUND_TYPE, mFundType)
                                             .execute();
                                 }
                             }).fire();
@@ -192,7 +196,7 @@ public class SettlementFragment extends BaseFragment {
         }
 
         if (mSettlementAdapter == null) {
-            mSettlementAdapter = new SettlementAdapter(getContext(), mProduct);
+            mSettlementAdapter = new SettlementAdapter(getContext(), mProduct, mFundUnit);
             mList.setAdapter(mSettlementAdapter);
         }
         for (SettledOrder item : settlementOrderList) {
@@ -213,10 +217,12 @@ public class SettlementFragment extends BaseFragment {
     static class SettlementAdapter extends ArrayAdapter<SettledOrder> {
 
         private Product mProduct;
+        private String mFundUnit;
 
-        public SettlementAdapter(Context context, Product product) {
+        public SettlementAdapter(Context context, Product product, String fundUnit) {
             super(context, 0);
             mProduct = product;
+            mFundUnit = fundUnit;
         }
 
         @Override
@@ -229,7 +235,8 @@ public class SettlementFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData(getItem(position), getContext(), mProduct, position);
+            viewHolder.bindingData(getItem(position), getContext(),
+                    mProduct, mFundUnit, position);
             return convertView;
         }
 
@@ -252,7 +259,8 @@ public class SettlementFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(SettledOrder item, Context context, Product product, int position) {
+            public void bindingData(SettledOrder item, Context context,
+                                    Product product, String fundUnit, int position) {
                 if (position == 0) {
                     mSplitBlock.setVisibility(View.VISIBLE);
                 } else {
@@ -307,26 +315,26 @@ public class SettlementFragment extends BaseFragment {
                         lossProfitForeign = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
                     }
-                    String lossProfitInner = "(" + FinanceUtil.formatWithScale(FinanceUtil.multiply(lossProfit, rate).doubleValue()) + ")";
+                    String lossProfitRmb = "(" + FinanceUtil.formatWithScale(Math.abs(FinanceUtil.multiply(lossProfit, rate).doubleValue()))
+                            + fundUnit +  ")";
                     mLossProfit.setTextColor(color);
-                    mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, "\n" + lossProfitInner, 0.7f, grayColor));
-
+                    mLossProfit.setText(StrUtil.mergeTextWithRatioColor(lossProfitForeign, "\n" + lossProfitRmb, 0.7f, grayColor));
                 } else {
                     double lossProfit = item.getWinOrLoss();
                     int color;
-                    String lossProfitInner;
+                    String lossProfitRmb;
                     if (lossProfit < 0) {
                         color = ContextCompat.getColor(context, R.color.greenPrimary);
-                        lossProfitInner = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
+                        lossProfitRmb = FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
 
                     } else {
                         color = ContextCompat.getColor(context, R.color.redPrimary);
-                        lossProfitInner = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
+                        lossProfitRmb = "+" + FinanceUtil.formatWithScale(lossProfit, product.getLossProfitScale())
                                 + product.getCurrencyUnit();
                     }
                     mLossProfit.setTextColor(color);
-                    mLossProfit.setText(lossProfitInner);
+                    mLossProfit.setText(lossProfitRmb);
                 }
             }
         }

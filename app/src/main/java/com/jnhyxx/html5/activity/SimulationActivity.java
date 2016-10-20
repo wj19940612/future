@@ -26,6 +26,7 @@ import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SimulationActivity extends BaseActivity {
 
@@ -57,6 +59,13 @@ public class SimulationActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initData(getIntent());
+
+        if (LocalUser.getUser().isLogin()) {
+            mAvailableGold.setText(FinanceUtil.formatWithScale(LocalUser.getUser().getAvailableScore()));
+        } else {
+            mAvailableGold.setText(FinanceUtil.formatWithScale(0));
+        }
+
         updateProductGridView();
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,6 +163,11 @@ public class SimulationActivity extends BaseActivity {
         } else {
             mProductAdapter.setProductPkgList(mProductPkgList);
         }
+    }
+
+    @OnClick(R.id.goldStoreButton)
+    public void onClick() {
+
     }
 
     static class ProductAdapter extends BaseAdapter {

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.domain.Constant;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
@@ -40,6 +39,8 @@ import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
  * 行情分析详情
  */
 public class TradeAnalyzeDetailsActivity extends BaseActivity {
+
+    public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
     @BindView(R.id.tradeAnalyze)
     RelativeLayout mTradeAnalyze;
@@ -110,8 +111,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
-            mWebView.loadDataWithBaseURL(null, information.getContent(), "text/html", "utf-8", null);
+            String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+            mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
             mWebView.loadUrl(information.getContent());
         }
@@ -135,7 +136,7 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
-            String s = Constant.INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+            String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
             mWebView.loadUrl(information.getContent());

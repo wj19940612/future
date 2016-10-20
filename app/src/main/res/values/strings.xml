@@ -245,6 +245,7 @@
     <string name="pre_close">昨收 %1$s</string>
     <string name="highest">最高 %1$s</string>
     <string name="lowest">最低 %1$s</string>
+    <string name="gold">金币</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>

@@ -58,6 +58,7 @@ public class HoldingFragment extends BaseFragment
     private Product mProduct;
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
+    private String mFundUnit;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
@@ -101,14 +102,15 @@ public class HoldingFragment extends BaseFragment
                 if (diff.doubleValue() >= 0) {
                     lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
                     lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                    lossProfitRmbStr = "(+" + FinanceUtil.formatWithScale(diffRmb) + ")";
                 } else {
                     lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
                     lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                    lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(diffRmb) + ")";
                 }
                 lossProfit.setText(lossProfitStr);
-                lossProfitRmb.setText(lossProfitRmbStr);
+                if (mProduct.isForeign()) {
+                    lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + mFundUnit + ")";
+                    lossProfitRmb.setText(lossProfitRmbStr);
+                }
             }
         }
     }
@@ -128,6 +130,7 @@ public class HoldingFragment extends BaseFragment
         if (getArguments() != null) {
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
+            mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
         }
     }
 
@@ -179,7 +182,7 @@ public class HoldingFragment extends BaseFragment
     public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
         if (holdingOrderList != null) {
             if (mHoldingOrderAdapter == null) {
-                mHoldingOrderAdapter = new HoldingOrderAdapter(getContext(), mProduct, holdingOrderList);
+                mHoldingOrderAdapter = new HoldingOrderAdapter(getContext(), mProduct, mFundUnit, holdingOrderList);
                 mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
@@ -207,18 +210,16 @@ public class HoldingFragment extends BaseFragment
                 mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
                 mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_red_one_key_close);
                 totalProfitStr = "+" + FinanceUtil.formatWithScale(totalProfit, scale);
-                totalProfitRmbStr = "+" + FinanceUtil.formatWithScale(totalProfit * ratio);
             } else {
                 mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
                 mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_green_one_key_close);
                 totalProfitStr = FinanceUtil.formatWithScale(totalProfit, scale);
-                totalProfitRmbStr = FinanceUtil.formatWithScale(totalProfit * ratio);
             }
             mTotalProfit.setText(totalProfitStr);
             if (mProduct.isForeign()) {
-                mTotalProfitRmb.setText("(" + totalProfitRmbStr + Unit.YUAN + ")");
+                totalProfitRmbStr = FinanceUtil.formatWithScale(Math.abs(totalProfit * ratio));
+                mTotalProfitRmb.setText("(" + totalProfitRmbStr + mFundUnit + ")");
             }
-
         } else {
             if (mLossProfitArea.getVisibility() == View.VISIBLE) {
                 mLossProfitArea.setVisibility(View.GONE);
@@ -239,13 +240,16 @@ public class HoldingFragment extends BaseFragment
 
         private Context mContext;
         private Product mProduct;
+        private String mFundUnit;
+
         private List<HoldingOrder> mHoldingOrderList;
         private FullMarketData mFullMarketData;
         private Callback mCallback;
 
-        public HoldingOrderAdapter(Context context, Product product, List<HoldingOrder> holdingOrderList) {
+        public HoldingOrderAdapter(Context context, Product product, String fundUnit, List<HoldingOrder> holdingOrderList) {
             mContext = context;
             mProduct = product;
+            mFundUnit = fundUnit;
             mHoldingOrderList = holdingOrderList;
         }
 
@@ -287,8 +291,8 @@ public class HoldingFragment extends BaseFragment
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position), mProduct, mFullMarketData,
-                    mContext, mCallback);
+            viewHolder.bindingData((HoldingOrder) getItem(position),
+                    mContext, mProduct, mFundUnit, mFullMarketData, mCallback);
 
             return convertView;
         }
@@ -319,8 +323,9 @@ public class HoldingFragment extends BaseFragment
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(final HoldingOrder item, Product product, FullMarketData data,
-                                    Context context, final Callback callback) {
+            public void bindingData(final HoldingOrder item, Context context,
+                                    Product product, String fundUnit,
+                                    FullMarketData data, final Callback callback) {
 
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
                 mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
@@ -380,14 +385,17 @@ public class HoldingFragment extends BaseFragment
                     if (diff.doubleValue() >= 0) {
                         mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                        lossProfitRmbStr = "(+" + FinanceUtil.formatWithScale(diffRmb) + ")";
                     } else {
                         mLossProfit.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(diffRmb) + ")";
                     }
                     mLossProfit.setText(lossProfitStr);
-                    mLossProfitRmb.setText(lossProfitRmbStr);
+                    if (product.isForeign()) {
+                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + fundUnit +  ")";
+                        mLossProfitRmb.setText(lossProfitRmbStr);
+                    } else {
+                        mLossProfitRmb.setText("");
+                    }
                 } else {
                     mLastPrice.setText("");
                     mLossProfit.setText("");

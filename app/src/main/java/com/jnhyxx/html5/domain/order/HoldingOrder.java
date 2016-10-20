@@ -31,7 +31,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
      * 方向：1： 买涨 0： 买跌
      */
     private int direction;
-    private int eachPointMoney;
+    private double eachPointMoney;
     private int handsNum;
     /**
      * 订单状态 0:待支付，1：已支付，待持仓 2：持仓中 3 ：平仓处理中
@@ -74,11 +74,11 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.direction = direction;
     }
 
-    public int getEachPointMoney() {
+    public double getEachPointMoney() {
         return eachPointMoney;
     }
 
-    public void setEachPointMoney(int eachPointMoney) {
+    public void setEachPointMoney(double eachPointMoney) {
         this.eachPointMoney = eachPointMoney;
     }
 
@@ -192,7 +192,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         dest.writeLong(this.buyTime);
         dest.writeString(this.currencyUnit);
         dest.writeInt(this.direction);
-        dest.writeInt(this.eachPointMoney);
+        dest.writeDouble(this.eachPointMoney);
         dest.writeInt(this.handsNum);
         dest.writeInt(this.orderStatus);
         dest.writeLong(this.orderTime);
@@ -212,7 +212,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.buyTime = in.readLong();
         this.currencyUnit = in.readString();
         this.direction = in.readInt();
-        this.eachPointMoney = in.readInt();
+        this.eachPointMoney = in.readDouble();
         this.handsNum = in.readInt();
         this.orderStatus = in.readInt();
         this.orderTime = in.readLong();

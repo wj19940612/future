@@ -71,8 +71,9 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         mWithDrawId = getIntent().getIntExtra(WITHDRAW_RECORD_INFO_ID, -1);
 
 
-        API.Finance.getWithdrawRecordInfo(-1, mWithDrawId).setTag(TAG).setIndeterminate(this).setCallback(new Callback1<Resp<WithDrawRecordInfo>>() {
-
+        API.Finance.getWithdrawRecordInfo(-1, mWithDrawId)
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback1<Resp<WithDrawRecordInfo>>() {
             @Override
             protected void onRespSuccess(Resp<WithDrawRecordInfo> resp) {
                 mWithDrawRecordInfo = resp.getData();

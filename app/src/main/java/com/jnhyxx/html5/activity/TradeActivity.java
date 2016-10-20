@@ -552,6 +552,7 @@ public class TradeActivity extends BaseActivity implements
                                                 @Override
                                                 public void onClick(Dialog dialog) {
                                                     submitOrder(submittedOrder);
+                                                    dialog.dismiss();
                                                 }
                                             }).setNegative(R.string.cancel)
                                     .show();

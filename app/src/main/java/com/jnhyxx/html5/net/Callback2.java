@@ -16,7 +16,9 @@ public abstract class Callback2<T, D> extends Callback<T> {
     }
 
     private void onErrorMessageShow(String msg) {
-        ToastUtil.show(msg);
+        if (getErrorVisible()) {
+            ToastUtil.show(msg);
+        }
     }
 
     public abstract void onRespSuccess(D d);

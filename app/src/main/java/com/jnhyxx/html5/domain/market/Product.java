@@ -14,8 +14,6 @@ public class Product implements Serializable, Parcelable {
     public static final int FUND_TYPE_CASH = 1;
     public static final int FUND_TYPE_SIMULATION = 0;
 
-    public static final String CURRENCY_RMB = "CNY";
-
     public static final int MARKET_STATUS_CLOSE = 0;
     public static final int MARKET_STATUS_OPEN = 1;
 

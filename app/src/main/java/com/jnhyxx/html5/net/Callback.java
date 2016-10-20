@@ -20,6 +20,16 @@ import com.johnz.kutils.net.NullResponseError;
 
 public abstract class Callback<T> extends ApiCallback<T> {
 
+    private boolean mErrorVisible;
+
+    public Callback(boolean errorVisible) {
+        mErrorVisible = errorVisible;
+    }
+
+    public Callback() {
+        mErrorVisible = true;
+    }
+
     @Override
     public void onSuccess(T t) {
         Log.d("VolleyHttp", getUrl() + " onSuccess: " + t.toString());
@@ -67,8 +77,14 @@ public abstract class Callback<T> extends ApiCallback<T> {
         } else if (volleyError instanceof ServerError) {
             toastResId = R.string.api_error_server;
         }
-        ToastUtil.show(toastResId);
+        if (mErrorVisible) {
+            ToastUtil.show(toastResId);
+        }
     }
 
     public abstract void onReceive(T t);
+
+    public boolean getErrorVisible() {
+        return mErrorVisible;
+    }
 }

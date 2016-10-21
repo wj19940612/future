@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -120,6 +122,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                                      Log.d(TAG, "分割开的数据" + split[j].toString());
                                                      strings.add(split[j]);
                                                  }
+
                                                  InfoLiveMessage infoLiveMessage = new InfoLiveMessage(strings.get(0), strings.get(1), null, false);
                                                  infoLiveMessageList.add(infoLiveMessage);
                                              }
@@ -198,29 +201,32 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
             StringBuffer stringBuffer = null;
             if (infoLiveMessage != null) {
-                mViewHolder.mTime.setText(infoLiveMessage.getTime());
 
                 String content = infoLiveMessage.getContent();
                 if (content.contains("<b>") || content.contains("</b>")) {
                     content = content.replace("<b>", "").replaceAll("</b>", "");
-                } else if (content.contains("<br />") ) {
+                } else if (content.contains("<br />")) {
                     mSplit = content.split("<br />");
                     stringBuffer = new StringBuffer();
                     Log.d(TAG, "含有换行符" + content);
                     for (String s : mSplit) {
                         stringBuffer.append(s + "\n");
                     }
-                    content = stringBuffer.toString().replaceAll("<br />","");
-                }else if(content.contains("</br>")){
+                    content = stringBuffer.toString().replaceAll("<br />", "");
+                } else if (content.contains("</br>")) {
                     mSplit = content.split("</br>");
                     stringBuffer = new StringBuffer();
                     Log.d(TAG, "含有换行符" + content);
                     for (String s : mSplit) {
                         stringBuffer.append(s + "\n");
                     }
-                    content = stringBuffer.toString().replaceAll("</br>","");
+                    content = stringBuffer.toString().replaceAll("</br>", "");
                 }
+//                else if (content.contains("<a")) {
+//                    mInfoLiveMessageAdapter.remove(getItem(position));
+//                }
 
+                mViewHolder.mTime.setText(infoLiveMessage.getTime());
                 mViewHolder.mContent.setText(content);
             }
             return convertView;
@@ -233,10 +239,21 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             @BindView(R.id.content)
             TextView mContent;
 
+
+            @BindView(R.id.beforeData)
+            TextView mBeforeData;
+            @BindView(R.id.expectData)
+            TextView mExpectData;
+            @BindView(R.id.realData)
+            TextView mRealData;
+            @BindView(R.id.dataLayout)
+            LinearLayout mDataLayout;
+            @BindView(R.id.imageHint)
+            ImageView mImageHint;
+
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
-
         }
     }
 }

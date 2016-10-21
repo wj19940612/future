@@ -342,7 +342,7 @@
     <string name="account_trade_detail_integral_remain">剩余金币</string>
     <string name="account_trade_detail_margin_remain">剩余保证金(元)</string>
     <string name="integral_frozen">冻结金币</string>
-    <string name="money_frozen">冻结资金(元)</string>
+    <string name="money_frozen">冻结保证金(元)</string>
     <string name="remain_money">剩余资金(元)</string>
     <string name="remain_money_number">%1$f</string>
     <string name="remain_money_number_drop">%1$f元</string>

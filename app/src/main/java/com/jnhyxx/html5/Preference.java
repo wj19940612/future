@@ -15,6 +15,8 @@ public class Preference {
         String IS_TRADE_RULE_CLICKED = "isTradeRuleClicked";
         String PUSH_CLIENT_ID = "pushClientId";
         String PHONE_NUMBER = "phone";
+        String SERVICE_PHONE = "servicePhone";
+        String SERVICE_QQ = "serviceQQ";
     }
 
     private static Preference sInstance;
@@ -98,5 +100,21 @@ public class Preference {
 
     public String getPushClientId() {
         return mPrefs.getString(Key.PUSH_CLIENT_ID, "");
+    }
+
+    public void setServicePhone(String servicePhone) {
+        getEditor().putString(Key.SERVICE_PHONE, servicePhone).apply();
+    }
+
+    public String getServicePhone() {
+        return mPrefs.getString(Key.SERVICE_PHONE, null);
+    }
+
+    public void setServiceQQ(String serviceQQ) {
+        getEditor().putString(Key.SERVICE_QQ, serviceQQ).apply();
+    }
+
+    public String getServiceQQ() {
+        return mPrefs.getString(Key.SERVICE_QQ, null);
     }
 }

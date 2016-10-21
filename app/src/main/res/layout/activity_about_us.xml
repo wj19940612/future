@@ -44,9 +44,9 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:background="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/white"
             android:orientation="vertical"
             android:paddingLeft="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_vertical_margin">
@@ -93,13 +93,12 @@
                 style="@style/AboutAsEntryRelativeStyle">
 
                 <TextView
-
                     style="@style/AboutAsEntryLeftTextViewStyle"
                     android:layout_centerVertical="true"
                     android:text="@string/account_about_us_company_telephone"/>
 
                 <TextView
-                    android:id="@+id/companyTelephoneNumber"
+                    android:id="@+id/servicePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -120,6 +119,7 @@
                     android:text="@string/account_about_us_service_qq"/>
 
                 <TextView
+                    android:id="@+id/serViceQQ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

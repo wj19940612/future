@@ -5,7 +5,7 @@ package com.jnhyxx.html5.domain;
  * 客服电话和qq
  */
 
-public class ServiceInfo {
+public class ChannelServiceInfo {
 
 
     /**
@@ -154,7 +154,7 @@ public class ServiceInfo {
 
     @Override
     public String toString() {
-        return "ServiceInfo{" +
+        return "ChannelServiceInfo{" +
                 "backstageDomain='" + backstageDomain + '\'' +
                 ", channelQrCode='" + channelQrCode + '\'' +
                 ", description='" + description + '\'' +

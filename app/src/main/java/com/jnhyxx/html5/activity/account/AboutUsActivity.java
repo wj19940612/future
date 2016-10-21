@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
@@ -24,6 +25,10 @@ public class AboutUsActivity extends BaseActivity {
     //公司热线
     @BindView(R.id.companyTelephone)
     RelativeLayout mRlCompanyTelephone;
+    @BindView(R.id.serViceQQ)
+    TextView mSerViceQQ;
+    @BindView(R.id.servicePhone)
+    TextView mServicePhone;
     //记录被点击的item;
     private int selectPosition = -1;
 
@@ -33,6 +38,11 @@ public class AboutUsActivity extends BaseActivity {
         setContentView(R.layout.activity_about_us);
         ButterKnife.bind(this);
         initData();
+
+        String servicePhone = Preference.get().getServicePhone();
+        servicePhone = servicePhone.substring(0, 3) + "-" + servicePhone.substring(3, 7) + "-" + servicePhone.substring(7, servicePhone.length());
+        mServicePhone.setText(servicePhone);
+        mSerViceQQ.setText(Preference.get().getServiceQQ());
     }
 
 
@@ -62,12 +72,13 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             //公司热线
             case R.id.companyTelephone:
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + getString(R.string.account_about_us_company_telephone_number).replaceAll("-", "")));
+                String servicePhone = Preference.get().getServicePhone().replaceAll("-", "");
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + servicePhone));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.serviceQq:
-                String serviceQQUrl = API.getServiceQQ(SERVICE_QQ);
+                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
                 break;
 

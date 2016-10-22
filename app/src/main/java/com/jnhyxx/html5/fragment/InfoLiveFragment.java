@@ -37,7 +37,7 @@ import butterknife.Unbinder;
  * Created by ${wangJie} on 2016/10/18.
  */
 
-public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScrollListener {
+public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -51,6 +51,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     private boolean isLoad;
     private InfoLiveMessageAdapter mInfoLiveMessageAdapter;
 
+    private int mAutoRefreshTime;
 
     public static InfoLiveFragment newInstance() {
         InfoLiveFragment mInfoLiveFragment = new InfoLiveFragment();
@@ -70,12 +71,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         super.onActivityCreated(savedInstanceState);
         mListView.setDivider(null);
         mListView.setOnScrollListener(this);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getInfoLiveData();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -88,8 +84,37 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser && isAdded() && !getActivity().isFinishing() && !isLoad) {
             getInfoLiveData();
+            isLoad = true;
         }
         super.setUserVisibleHint(isVisibleToUser);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAutoRefreshTime = 30;
+        startScheduleJob(1000);
+    }
+
+    @Override
+    public void onTimeUp(int count) {
+        mAutoRefreshTime--;
+        if (mAutoRefreshTime == 0) {
+            stopScheduleJob();
+            onRefresh();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        getInfoLiveData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopScheduleJob();
     }
 
     private void getInfoLiveData() {
@@ -100,7 +125,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                  @Override
                                  public void onReceive(Resp resp) {
                                      if (resp.isSuccess()) {
-
+                                         mAutoRefreshTime = 30;
 //                                         Log.d(TAG, "直播资讯" + resp.getData().toString());
                                          ArrayList<ArrayList<String>> infoLiveMessageList = new ArrayList<>();
                                          String timeHint = "0#1#";
@@ -173,6 +198,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
+
     class InfoLiveMessageAdapter extends ArrayAdapter<ArrayList<String>> {
 
         Context mContext;
@@ -203,73 +229,100 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             StringBuffer stringBuffer = null;
             if (infoLiveMessage != null) {
                 for (int i = 0; i < infoLiveMessage.size(); i++) {
-                    String content = infoLiveMessage.get(1);
-                    if (content.contains("<b>") || content.contains("</b>")) {
-                        content = content.replace("<b>", "").replaceAll("</b>", "");
-                    } else if (content.contains("<br />")) {
-                        mSplit = content.split("<br />");
-                        stringBuffer = new StringBuffer();
-//                        Log.d(TAG, "含有换行符" + content);
-                        for (String s : mSplit) {
-                            stringBuffer.append(s + "\n");
-                        }
-                        content = stringBuffer.toString().replaceAll("<br />", "");
-                    } else if (content.contains("</br>")) {
-                        mSplit = content.split("</br>");
-                        stringBuffer = new StringBuffer();
-//                        Log.d(TAG, "含有换行符" + content);
-                        for (String s : mSplit) {
-                            stringBuffer.append(s + "\n");
-                        }
-                        content = stringBuffer.toString().replaceAll("</br>", "");
-                    }
-                    if (content.contains("【") && content.contains("】")) {
-                        content = content.substring(content.indexOf("【"));
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    } else {
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
-                    }
+                    String content = getContent(mViewHolder, infoLiveMessage);
 
                     mViewHolder.mTime.setText(infoLiveMessage.get(0));
                     mViewHolder.mContent.setText(content);
 
                     String messageData = infoLiveMessage.toString();
-                    if (messageData.contains(".png") || messageData.contains(".jpg") || messageData.contains(".jpeg")) {
-                        int imageUrlPosition = 0;
-                        for (int j = 0; j < infoLiveMessage.size(); j++) {
-                            String s = infoLiveMessage.get(j);
-                            if (s.contains(".png") || s.contains(".jpg") || s.contains(".jpeg")) {
-                                imageUrlPosition = j;
-                                break;
-                            }
-                        }
-                        mViewHolder.mImageHint.setVisibility(View.VISIBLE);
-                        String imageUrl = "https://res.6006.com/jin10/" + infoLiveMessage.get(imageUrlPosition);
-                        Log.d(TAG, "图片地址" + imageUrl);
-                        Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
-                    } else {
-                        mViewHolder.mImageHint.setVisibility(View.GONE);
-                    }
+                    handleImage(mViewHolder, infoLiveMessage, messageData);
                 }
 
-                if (infoLiveMessage.size() == 10) {
+                if (infoLiveMessage.size() >= 9) {
                     Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
+                    mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
                     if (!TextUtils.isEmpty(infoLiveMessage.get(2))) {
-                        mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
                         if (!TextUtils.isEmpty(infoLiveMessage.get(2))) {
-                            mViewHolder.mBeforeData.setText(getString(R.string.expect_data, infoLiveMessage.get(2)));
+                            mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(2)));
                         }
                         if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
                             mViewHolder.mExpectData.setText(getString(R.string.expect_data, infoLiveMessage.get(3)));
                         }
                         if (!TextUtils.isEmpty(infoLiveMessage.get(4))) {
-                            mViewHolder.mRealData.setText(getString(R.string.expect_data, infoLiveMessage.get(4)));
+                            mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(4)));
                         }
                     }
+                } else {
+                    mViewHolder.mDataLayout.setVisibility(View.GONE);
+
                 }
             }
 
             return convertView;
+        }
+
+        private void handleImage(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage, String messageData) {
+            if (messageData.contains(".png") || messageData.contains(".jpg") || messageData.contains(".jpeg")) {
+                int imageUrlPosition = 0;
+                for (int j = 0; j < infoLiveMessage.size(); j++) {
+                    String s = infoLiveMessage.get(j);
+                    if (s.contains(".png") || s.contains(".jpg") || s.contains(".jpeg")) {
+                        imageUrlPosition = j;
+                        break;
+                    }
+                }
+                mViewHolder.mImageHint.setVisibility(View.VISIBLE);
+                String imageUrl = "https://res.6006.com/jin10/" + infoLiveMessage.get(imageUrlPosition);
+                Log.d(TAG, "图片地址" + imageUrl);
+                Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
+            } else {
+                mViewHolder.mImageHint.setVisibility(View.GONE);
+            }
+        }
+
+        private String getContent(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
+            String[] mSplit;
+            StringBuffer stringBuffer;
+            String content = infoLiveMessage.get(1);
+            if (content.contains("<b>") || content.contains("</b>")) {
+                content = content.replace("<b>", "").replaceAll("</b>", "");
+            } else if (content.contains("<br/>")) {
+                mSplit = content.split("<br/>");
+                stringBuffer = new StringBuffer();
+//                        Log.d(TAG, "含有换行符" + content);
+                for (String s : mSplit) {
+                    stringBuffer.append(s + "\n");
+                }
+                content = stringBuffer.toString().replaceAll("<br/>", "");
+            } else if (content.contains("</br>")) {
+                mSplit = content.split("</br>");
+                stringBuffer = new StringBuffer();
+//                        Log.d(TAG, "含有换行符" + content);
+                for (String s : mSplit) {
+                    stringBuffer.append(s + "\n");
+                }
+                content = stringBuffer.toString().replaceAll("</br>", "");
+            }
+            if (content.contains("【") && content.contains("】")) {
+                content = content.substring(content.indexOf("【"));
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+            } else {
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
+            }
+
+
+            if (content.contains("<font ")) {
+                content = content.substring(content.indexOf(">")+1);
+            } else if (content.contains("</br>")) {
+                content = content.replaceAll("</br>", "");
+            } else if (content.contains("</b>")) {
+                content = content.replaceAll("</b>", "");
+            } else if (content.contains("</font>")) {
+                content = content.replace("/font>", "");
+            } else if (content.contains("<br/>")) {
+                content = content.replace("<br/>", "");
+            }
+            return content;
         }
 
 

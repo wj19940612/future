@@ -358,7 +358,7 @@
 
     <!--绑定银行卡-->
     <string name="bind_bank_title">绑定银行卡</string>
-    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与体现操作</string>
+    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与提现操作</string>
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">您是否要拨打客服电话:\n 解绑换卡</string>
@@ -387,7 +387,7 @@
     <string name="aliPay_pay">支付宝支付</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
-
+    <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>

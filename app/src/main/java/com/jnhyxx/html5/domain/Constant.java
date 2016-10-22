@@ -19,4 +19,5 @@ public class Constant {
      */
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
+    public static final int APPLY_LIMIT = 10000;
 }

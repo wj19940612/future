@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.domain.Constant;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -88,6 +89,17 @@ public class RechargeActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            if (isApplyPaymentSelected()) {
+                String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+                if (TextUtils.isEmpty(rechargeAmount)) return;
+                double amount = Double.valueOf(rechargeAmount);
+                if (amount > Constant.APPLY_LIMIT) {
+                    mCommonFail.show(R.string.recharge_apply_limit);
+                    mNextStepButton.setEnabled(false);
+                    return;
+                }
+            }
             boolean enable = checkNextStepButtonEnable();
             if (enable != mNextStepButton.isEnabled()) {
                 mNextStepButton.setEnabled(enable);
@@ -124,7 +136,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void doNextStepButtonClick() {
 //        if (isBankcardPaymentSelected()) {
-            doPayment();
+        doPayment();
 //        } else {
 
 //        }
@@ -160,6 +172,7 @@ public class RechargeActivity extends BaseActivity {
     private void depositByBankApply() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
+
         API.Finance.depositByBankApply(amount)
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -198,6 +211,13 @@ public class RechargeActivity extends BaseActivity {
 
     private boolean isBankcardPaymentSelected() {
         if (mPayMethodMatherView.getChildAt(0).isSelected()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isApplyPaymentSelected() {
+        if (mPayMethodMatherView.getChildAt(1).isSelected()) {
             return true;
         }
         return false;

@@ -284,25 +284,12 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             String[] mSplit;
             StringBuffer stringBuffer;
             String content = infoLiveMessage.get(1);
-            if (content.contains("<b>") || content.contains("</b>")) {
-                content = content.replace("<b>", "").replaceAll("</b>", "");
-            } else if (content.contains("<br/>")) {
-                mSplit = content.split("<br/>");
-                stringBuffer = new StringBuffer();
-//                        Log.d(TAG, "含有换行符" + content);
-                for (String s : mSplit) {
-                    stringBuffer.append(s + "\n");
-                }
-                content = stringBuffer.toString().replaceAll("<br/>", "");
-            } else if (content.contains("</br>")) {
-                mSplit = content.split("</br>");
-                stringBuffer = new StringBuffer();
-//                        Log.d(TAG, "含有换行符" + content);
-                for (String s : mSplit) {
-                    stringBuffer.append(s + "\n");
-                }
-                content = stringBuffer.toString().replaceAll("</br>", "");
+
+            if (content.contains("<font ")) {
+                content = content.substring(content.indexOf(">"));
             }
+            content = content.replaceAll("<br\\s*/?>", "\r\n");
+            content = content.replaceAll("<b>|</b>|</font>|>|<br/>", "");
             if (content.contains("【") && content.contains("】")) {
                 content = content.substring(content.indexOf("【"));
                 mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
@@ -310,18 +297,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
             }
 
-
-            if (content.contains("<font ")) {
-                content = content.substring(content.indexOf(">")+1);
-            } else if (content.contains("</br>")) {
-                content = content.replaceAll("</br>", "");
-            } else if (content.contains("</b>")) {
-                content = content.replaceAll("</b>", "");
-            } else if (content.contains("</font>")) {
-                content = content.replace("/font>", "");
-            } else if (content.contains("<br/>")) {
-                content = content.replace("<br/>", "");
-            }
             return content;
         }
 

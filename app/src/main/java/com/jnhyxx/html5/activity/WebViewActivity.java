@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -18,6 +17,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -27,9 +27,7 @@ import android.widget.ProgressBar;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
-import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 
@@ -42,7 +40,6 @@ import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class WebViewActivity extends AppCompatActivity {
-    private static final String TAG = "WebViewActivity";
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static final String EX_RAW_COOKIE = "rawCookie";
@@ -279,35 +276,21 @@ public class WebViewActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            ToastUtil.curt("点击返回商铺按钮");
-            Log.d(TAG, "点击返回商铺按钮" + url);
-            if (!TextUtils.isEmpty(url)) {
-                if (TextUtils.equals(url, API.Finance.getRechargeSuccess())) {
-                    finish();
-                    return true;
-                } else if (TextUtils.equals(url, API.Finance.getRechargeFail())) {
-                    finish();
-                    return true;
-                }
+            if (onShouldOverrideUrlLoading(view, url)) {
+                return true;
             }
-            return false;
+            return super.shouldOverrideUrlLoading(view, url);
         }
 
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            ToastUtil.curt("点击返回商铺按钮");
-            Log.d(TAG, "新  点击返回商铺按钮 " + request.toString());
-            return super.shouldOverrideUrlLoading(view, request);
-        }
-
-        @Override
-        public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
-            return super.shouldOverrideKeyEvent(view, event);
+        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+            Log.d("TAG", "shouldInterceptRequest: " + url);
+            return super.shouldInterceptRequest(view, url);
         }
     }
 
-    protected boolean mShouldOverrideUrlLoading(WebView view, String url) {
-        return mWebViewClient.shouldOverrideUrlLoading(view, url);
+    protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
+        return false;
     }
 
     @Override

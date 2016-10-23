@@ -7,6 +7,9 @@ public class Resp<T> {
     public static final int CODE_REQUEST_AUTH_CODE_OVER_LIMIT = 601;
     public static final int CODE_GET_PROMOTE_CODE_FAILED = 600;
 
+    // 资金不足
+    public static final int CODE_FUND_NOT_ENOUGH = 702;
+
     private int code;
     private String msg;
     private T data;

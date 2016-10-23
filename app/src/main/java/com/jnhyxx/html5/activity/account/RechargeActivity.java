@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.activity.web.PaymentActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -123,29 +123,10 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-//        if (isBankcardPaymentSelected()) {
-            doPayment();
-//        } else {
-
-//        }
-    }
-
-    private void doPayment() {
         int selectedView = getSelectedView();
         if (selectedView == -1) return;
         switch (selectedView) {
             case SupportApplyWay.DEPOSIT_BY_BANK_APPLY_PAY:
-                if (!LocalUser.getUser().isRealNameFilled()) {
-                    Launcher.with(this, NameVerifyActivity.class)
-                            .executeForResult(REQ_CODE_BASE);
-                    return;
-                }
-
-                if (!LocalUser.getUser().isBankcardFilled()) {
-                    Launcher.with(this, BankcardBindingActivity.class)
-                            .executeForResult(REQ_CODE_BASE);
-                    return;
-                }
                 depositByBankApply();
                 break;
             case SupportApplyWay.DEPOSIT_BY_ALI_PAY_PAY:
@@ -158,49 +139,60 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void depositByBankApply() {
+        if (!LocalUser.getUser().isRealNameFilled()) {
+            Launcher.with(this, NameVerifyActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
+            return;
+        }
+
+        if (!LocalUser.getUser().isBankcardFilled()) {
+            Launcher.with(this, BankcardBindingActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
+            return;
+        }
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        API.Finance.depositByBankApply(amount)
-                .setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback<String>() {
-                    @Override
-                    public void onReceive(String s) {
-                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-                        Launcher.with(getActivity(), WebViewActivity.class)
-                                .putExtra(WebViewActivity.EX_HTML, s)
-                                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
-                                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                                .execute();
-                    }
-                }).fire();
+
+        Launcher.with(getActivity(), PaymentActivity.class)
+                .putExtra(PaymentActivity.EX_URL, "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount)
+                .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
+                .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                .execute();
+
+//        API.Finance.depositByBankApply(amount)
+//                .setTag(TAG)
+//                .setIndeterminate(this)
+//                .setCallback(new Callback<String>() {
+//                    @Override
+//                    public void onReceive(String s) {
+//                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
+//                        Launcher.with(getActivity(), PaymentActivity.class)
+//                                .putExtra(PaymentActivity.EX_HTML, s)
+//                                .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
+//                                .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+//                                .execute();
+//                    }
+//                }).fire();
     }
 
     private void depositByAliPay() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        Launcher.with(getActivity(), WebViewActivity.class)
-                .putExtra(WebViewActivity.EX_URL, API.Finance.depositByAliPay(amount))
-                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
-                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+        Launcher.with(getActivity(), PaymentActivity.class)
+                .putExtra(PaymentActivity.EX_URL, API.Finance.depositByAliPay(amount))
+                .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
+                .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .execute();
     }
 
     private void depositByWeChartApply() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
-        Launcher.with(getActivity(), WebViewActivity.class)
-                .putExtra(WebViewActivity.EX_URL, API.Finance.depositByWeChartApply(amount))
-                .putExtra(WebViewActivity.EX_TITLE, getString(R.string.recharge))
-                .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+        Launcher.with(getActivity(), PaymentActivity.class)
+                .putExtra(PaymentActivity.EX_URL, API.Finance.depositByWeChartApply(amount))
+                .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
+                .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .execute();
-    }
-
-    private boolean isBankcardPaymentSelected() {
-        if (mPayMethodMatherView.getChildAt(0).isSelected()) {
-            return true;
-        }
-        return false;
     }
 
     private boolean checkNextStepButtonEnable() {
@@ -232,7 +224,7 @@ public class RechargeActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
-            doPayment();
+            depositByBankApply();
         }
     }
 

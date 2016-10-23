@@ -27,6 +27,7 @@ import com.jnhyxx.chart.domain.FlashViewData;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.constans.Unit;
@@ -544,21 +545,23 @@ public class TradeActivity extends BaseActivity implements
                         if (jsonObjectResp.isSuccess()) {
                             hideFragmentOfContainer();
                             OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
                                     .show();
-                        } else {
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-                                    .setPositive(R.string.place_an_order_again,
+                                    .setPositive(R.string.go_to_recharge,
                                             new SmartDialog.OnClickListener() {
                                                 @Override
                                                 public void onClick(Dialog dialog) {
-                                                    submitOrder(submittedOrder);
                                                     dialog.dismiss();
+                                                    Launcher.with(getActivity(), RechargeActivity.class)
+                                                            .execute();
                                                 }
                                             }).setNegative(R.string.cancel)
                                     .show();
+                        } else {
+
                         }
                     }
                 }).fire();

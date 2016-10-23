@@ -43,6 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SimulationActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Share related -->
         <!-- sina weibo callback -->
@@ -155,16 +158,13 @@
         <activity
             android:name=".activity.web.PaidToPromoteActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.web.TradeAnalyzeDetailsActivity"
             android:screenOrientation="portrait"/>
-
         <activity
-            android:name=".activity.SimulationActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        
+            android:name=".activity.web.PaymentActivity"
+            android:screenOrientation="portrait" />
+
         <!-- Receiver for getui push -->
         <receiver
             android:name=".receiver.PushReceiver"

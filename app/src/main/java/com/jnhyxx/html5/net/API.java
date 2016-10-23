@@ -396,8 +396,7 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static String getRechargeSuccess() {
-//            return new API("/user/finance/page.do", new ApiParams());
+        public static String getRechargeSuccessUrl() {
             return getHost() + ("/user/finance/page.do");
         }
 
@@ -407,8 +406,7 @@ public class API extends APIBase {
          *
          * @return
          */
-        public static String getRechargeFail() {
-//            return new API("/user/finance/back.do", new ApiParams());
+        public static String getRechargeFailUrl() {
             return getHost() + ("/user/finance/back.do");
         }
 
@@ -784,7 +782,7 @@ public class API extends APIBase {
      * 推广赚钱 url
      */
     public static String getPromotePage() {
-        return getHost() + "/mine/extension.html?nohead=1";
+        return getHost() + "/mine/extension.html"; // /mine/extension.html?nohead=1 副总改好后替换成这个
     }
 
     /**

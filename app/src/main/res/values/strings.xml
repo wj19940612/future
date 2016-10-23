@@ -252,6 +252,7 @@
     <string name="touch_stop_profit">触发止盈</string>
     <string name="total_to_be_paid">合计支付</string>
     <string name="last_bid_ask_price">最新买入价</string>
+    <string name="go_to_recharge">去充值</string>
     <string name="place_an_order_again">再次下单</string>
     <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
     <string name="currency_converter">汇率换算: %1$s</string>

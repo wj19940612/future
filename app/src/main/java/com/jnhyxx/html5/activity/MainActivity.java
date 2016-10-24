@@ -10,11 +10,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -53,6 +58,22 @@ public class MainActivity extends BaseActivity {
         processIntent(getIntent());
 
         mNetworkChangeReceiver = new NetworkReceiver();
+
+        getServiceInfo();
+    }
+
+    private void getServiceInfo() {
+        API.User.getChannelByDomain()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<ChannelServiceInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<ChannelServiceInfo> resp) {
+                        Preference preference = Preference.get();
+                        preference.setServiceQQ(resp.getData().getQq());
+                        preference.setServicePhone(resp.getData().getPhone());
+                    }
+                }).fire();
     }
 
     @Override

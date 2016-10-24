@@ -75,6 +75,16 @@ public class ModifyNickNameActivity extends BaseActivity {
                 mConfirmButton.setEnabled(enable);
             }
         }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            String string = charSequence.toString();
+            if (string.contains(" ")) {
+                String newData = string.replaceAll(" ", "");
+                mNickname.setText(newData);
+                mNickname.setSelection(mNickname.getText().toString().length());
+            }
+        }
     };
 
     private boolean checkConfirmButtonEnable() {

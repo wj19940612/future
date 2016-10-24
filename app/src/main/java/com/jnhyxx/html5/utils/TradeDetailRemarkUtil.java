@@ -31,7 +31,6 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         super.put(-2102, "冻结");
         //返还保证金
         super.put(2201, "返还");
-
         //收益填合约
         //收益增加
         super.put(2202, "");
@@ -59,5 +58,13 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         super.put(4201, "成功");
         //佣金转余额
         super.put(6001, "存入");
+        //兑换积分-7101
+        super.put(-7101, "兑换");
+        //资金兑换
+        super.put(7201, "充值");
+        //-7201兑换商品
+        super.put(-7201, "兑换");
+        //拒绝兑换
+        super.put(7202, "返还");
     }
 }

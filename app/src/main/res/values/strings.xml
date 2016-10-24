@@ -55,7 +55,7 @@
 
     <!-- Local Prompt -->
     <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；
-        \n2、为防止套现和洗钱，单笔充值无消费者提现时需提供身份证和银行卡给风控进行核实。如信息核实无误，恒运将会在7-15个工作日内处理，银行收取2%的手续费自理，最低2元；
+        \n2、为防止套现和洗钱，单笔充值无消费者提现时需提供身份证和银行卡给风控进行核实。如信息核实无误，平台将会在7-15个工作日内处理，银行收取2%的手续费自理，最低2元；
         \n3、周一至周五09:00-17:00的提款申请当天处理，17:00以后的提款申请延至第二天处理。周五17:00后提款，延至下个工作日处理。提现到账时间最快2小时，最晚1个工作日，如遇节假日顺延。
         \n4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</string>
     <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
@@ -92,6 +92,7 @@
     <string name="resend_after_n_seconds">%1$ds</string>
     <string name="please_input_phone_num">请输入手机号码</string>
     <string name="please_input_password">请输入密码</string>
+    <string name="hine_please_input_new_password">请输入新的密码</string>
     <string name="forget_password">忘记密码?</string>
     <string name="recharge">充值</string>
     <string name="withdraw">提现</string>
@@ -343,7 +344,7 @@
     <string name="account_trade_detail_integral_remain">剩余金币</string>
     <string name="account_trade_detail_margin_remain">剩余保证金(元)</string>
     <string name="integral_frozen">冻结金币</string>
-    <string name="money_frozen">冻结资金(元)</string>
+    <string name="money_frozen">冻结保证金(元)</string>
     <string name="remain_money">剩余资金(元)</string>
     <string name="remain_money_number">%1$f</string>
     <string name="remain_money_number_drop">%1$f元</string>
@@ -359,10 +360,10 @@
 
     <!--绑定银行卡-->
     <string name="bind_bank_title">绑定银行卡</string>
-    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与体现操作</string>
+    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与提现操作</string>
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
-    <string name="unBind_dialog_content">您是否要拨打客服电话:\n  %1$s  \n解绑换卡</string>
+    <string name="unBind_dialog_content">您是否要拨打客服电话:\n 解绑换卡</string>
     <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>
     <string name="bind_bank_is_empty">请选择支付银行</string>
     <string name="no_bank_can_bind">暂时没有可供选择的银行</string>
@@ -388,7 +389,7 @@
     <string name="aliPay_pay">支付宝支付</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
-
+    <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>

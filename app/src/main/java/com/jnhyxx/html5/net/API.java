@@ -318,6 +318,14 @@ public class API extends APIBase {
         public static String getRegisterAuthCodeImage(String userPhone) {
             return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + userPhone;
         }
+
+        /**
+         * http://newtest.jnhyxx.com/user/user/getChannelByDomain.do
+         * @return  获取渠道客服的qq和电话
+         */
+        public static API getChannelByDomain() {
+            return new API("/user/user/getChannelByDomain.do", new ApiParams());
+        }
     }
 
     public static class Finance {

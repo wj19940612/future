@@ -45,6 +45,11 @@ public class RechargeActivity extends BaseActivity {
     @BindView(R.id.weChartPay)
     RelativeLayout mWeChartPay;
 
+
+    private final int APPLY_LIMIT = 10000;
+
+    private Editable mEditable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +93,19 @@ public class RechargeActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            mEditable = s;
+
+            if (isApplyPaymentSelected()) {
+                String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+                if (TextUtils.isEmpty(rechargeAmount)) return;
+                double amount = Double.valueOf(rechargeAmount);
+                if (amount > APPLY_LIMIT) {
+                    mCommonFail.show(R.string.recharge_apply_limit);
+                    mNextStepButton.setEnabled(false);
+                    return;
+                }
+            }
             boolean enable = checkNextStepButtonEnable();
             if (enable != mNextStepButton.isEnabled()) {
                 mNextStepButton.setEnabled(enable);
@@ -123,6 +141,14 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
+//        if (isBankcardPaymentSelected()) {
+        doPayment();
+//        } else {
+
+//        }
+    }
+
+    private void doPayment() {
         int selectedView = getSelectedView();
         if (selectedView == -1) return;
         switch (selectedView) {
@@ -195,6 +221,20 @@ public class RechargeActivity extends BaseActivity {
                 .execute();
     }
 
+    private boolean isBankcardPaymentSelected() {
+        if (mPayMethodMatherView.getChildAt(0).isSelected()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isApplyPaymentSelected() {
+        if (mPayMethodMatherView.getChildAt(1).isSelected()) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean checkNextStepButtonEnable() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         if (TextUtils.isEmpty(rechargeAmount)) {
@@ -234,10 +274,11 @@ public class RechargeActivity extends BaseActivity {
 
         mPayMethodMatherView.getChildAt(index).setSelected(true);
 
-        boolean enable = checkNextStepButtonEnable();
-        if (enable != mNextStepButton.isEnabled()) {
-            mNextStepButton.setEnabled(enable);
-        }
+//        boolean enable = checkNextStepButtonEnable();
+//        if (enable != mNextStepButton.isEnabled()) {
+//            mNextStepButton.setEnabled(enable);
+//        }
+        mValidationWatcher.afterTextChanged(mEditable);
     }
 
     private void unSelectAll() {

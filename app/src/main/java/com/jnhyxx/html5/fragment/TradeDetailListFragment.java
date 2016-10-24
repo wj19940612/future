@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,8 +41,7 @@ import butterknife.Unbinder;
  * Created by Administrator on 2016/8/30.
  */
 
-public class TradeDetailListFragment extends BaseFragment {
-    private static final String TAG = "TradeDetailListFragment";
+public class TradeDetailListFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     //积分
     public static final String TYPE_INTEGRAL = "score";
@@ -62,6 +63,12 @@ public class TradeDetailListFragment extends BaseFragment {
      */
     private String mFragmentType;
 
+    @BindView(R.id.listView)
+    ListView mList;
+    @BindView(R.id.empty)
+    TextView mEmpty;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ArrayList<TradeDetail> mTradeDetailList;
     private HashSet<Integer> mSet;
@@ -73,12 +80,6 @@ public class TradeDetailListFragment extends BaseFragment {
 
     boolean isLoaded;
     private Unbinder mBinder;
-
-
-    @BindView(R.id.listView)
-    ListView mList;
-    @BindView(R.id.empty)
-    TextView mEmpty;
 
     public static TradeDetailListFragment newInstance(String type) {
         TradeDetailListFragment mTradeDetailListFragment = new TradeDetailListFragment();
@@ -119,6 +120,15 @@ public class TradeDetailListFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
         mSet = new HashSet<>();
+        mList.setOnScrollListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mOffset = 0;
+                mSet.clear();
+                getTradeInfoList();
+            }
+        });
         getTradeInfoList();
     }
 
@@ -128,11 +138,17 @@ public class TradeDetailListFragment extends BaseFragment {
                 .setCallback(new Callback<Resp<List<TradeDetail>>>() {
                     @Override
                     public void onReceive(Resp<List<TradeDetail>> listResp) {
-                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                        for (int i = 0; i < mTradeDetailList.size(); i++) {
-                            Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
+                        if (listResp.isSuccess()) {
+                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+                            for (int i = 0; i < mTradeDetailList.size(); i++) {
+                                Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
+                            }
+                            setAdapter(mTradeDetailList);
+                        } else {
+                            if (mSwipeRefreshLayout.isRefreshing()) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
                         }
-                        setAdapter(mTradeDetailList);
                     }
                 }).fire();
     }
@@ -152,6 +168,7 @@ public class TradeDetailListFragment extends BaseFragment {
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mSwipeRefreshLayout.isRefreshing()) return;
 //                    mOffset++;
                     mOffset = mOffset + 10;
                     getTradeInfoList();
@@ -170,6 +187,11 @@ public class TradeDetailListFragment extends BaseFragment {
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
         }
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mTradeDetailAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
         for (TradeDetail item : mTradeDetailLists) {
             if (mSet.add(item.getId())) {
                 mTradeDetailAdapter.add(item);
@@ -177,6 +199,18 @@ public class TradeDetailListFragment extends BaseFragment {
         }
         mList.setAdapter(mTradeDetailAdapter);
         mTradeDetailAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mList == null || mList.getChildCount() == 0) ? 0 : mList.getChildAt(0).getTop();
+        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
     public class TradeDetailAdapter extends ArrayAdapter<TradeDetail> {

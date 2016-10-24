@@ -121,7 +121,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     private void getInfoLiveData() {
         API.Message.findNewsByUrl(API.getInfoLiveUrl())
                 .setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback<Resp>() {
                                  @Override
                                  public void onReceive(Resp resp) {
@@ -140,7 +139,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                                  String[] split = data.split(well);
                                                  ArrayList<String> strings = new ArrayList<>();
                                                  for (int j = 0; j < split.length; j++) {
-                                                     if (split[j] == null ||TextUtils.isEmpty(split[j])) {
+                                                     if (split[j] == null || TextUtils.isEmpty(split[j])) {
                                                          continue;
                                                      }
 //                                                     Log.d(TAG, "分割开的数据" + split[j].toString());
@@ -233,9 +232,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     String content = getContent(mViewHolder, infoLiveMessage);
 
                     mViewHolder.mTime.setText(infoLiveMessage.get(2));
-                    if(infoLiveMessage.get(1).equalsIgnoreCase("0")){
+                    if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
                         mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    } else if(infoLiveMessage.get(1).equalsIgnoreCase("1")){
+                    } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
                         mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
                     }
                     mViewHolder.mContent.setText(content);
@@ -245,29 +244,33 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     handleImage(mViewHolder, infoLiveMessage, messageData);
                 }
 
-                if (infoLiveMessage.size() >= 11) {
-                    Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
-                    mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
-                    if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
-                            mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(3)));
-                        }
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(4))) {
-                            mViewHolder.mExpectData.setText(getString(R.string.expect_data, infoLiveMessage.get(4)));
-                        }
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(5))) {
-                            mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
-                        }
-                    }
-                    mViewHolder.mContent.setText(infoLiveMessage.get(2));
-                    mViewHolder.mTime.setText(infoLiveMessage.get(1));
-                } else {
-                    mViewHolder.mDataLayout.setVisibility(View.GONE);
-                }
+                setSpecialContent(mViewHolder, infoLiveMessage);
 
             }
-
             return convertView;
+        }
+
+        //特殊的显示,比如含有预期值,实际值等数据的特殊数据
+        private void setSpecialContent(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
+            if (infoLiveMessage.size() >= 11) {
+                Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
+                mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
+                    if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
+                        mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(3)));
+                    }
+                    if (!TextUtils.isEmpty(infoLiveMessage.get(4))) {
+                        mViewHolder.mExpectData.setText(getString(R.string.expect_data, infoLiveMessage.get(4)));
+                    }
+                    if (!TextUtils.isEmpty(infoLiveMessage.get(5))) {
+                        mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
+                    }
+                }
+                mViewHolder.mContent.setText(infoLiveMessage.get(2));
+                mViewHolder.mTime.setText(infoLiveMessage.get(1));
+            } else {
+                mViewHolder.mDataLayout.setVisibility(View.GONE);
+            }
         }
 
         private void handleImage(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage, String messageData) {

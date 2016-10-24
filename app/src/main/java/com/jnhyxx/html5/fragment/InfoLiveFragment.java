@@ -229,6 +229,21 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
             StringBuffer stringBuffer = null;
             if (infoLiveMessage != null) {
+                for (int i = 0; i < infoLiveMessage.size(); i++) {
+                    String content = getContent(mViewHolder, infoLiveMessage);
+
+                    mViewHolder.mTime.setText(infoLiveMessage.get(2));
+                    if(infoLiveMessage.get(1).equalsIgnoreCase("0")){
+                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+                    } else if(infoLiveMessage.get(1).equalsIgnoreCase("1")){
+                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
+                    }
+                    mViewHolder.mContent.setText(content);
+
+
+                    String messageData = infoLiveMessage.toString();
+                    handleImage(mViewHolder, infoLiveMessage, messageData);
+                }
 
                 if (infoLiveMessage.size() >= 11) {
                     Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
@@ -244,25 +259,10 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                             mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
                         }
                     }
-
+                    mViewHolder.mContent.setText(infoLiveMessage.get(2));
                     mViewHolder.mTime.setText(infoLiveMessage.get(1));
                 } else {
                     mViewHolder.mDataLayout.setVisibility(View.GONE);
-                }
-                for (int i = 0; i < infoLiveMessage.size(); i++) {
-                    String content = getContent(mViewHolder, infoLiveMessage);
-
-                    mViewHolder.mTime.setText(infoLiveMessage.get(2));
-                    if(infoLiveMessage.get(1).equalsIgnoreCase("0")){
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    } else if(infoLiveMessage.get(1).equalsIgnoreCase("1")){
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
-                    }
-                    mViewHolder.mContent.setText(content);
-
-
-                    String messageData = infoLiveMessage.toString();
-                    handleImage(mViewHolder, infoLiveMessage, messageData);
                 }
 
             }

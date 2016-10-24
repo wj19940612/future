@@ -283,7 +283,6 @@
     <string name="message_center_info_title">消息详情</string>
     <string name="trade_status">审核已经通过</string>
     <string name="time">2016/12/12 12:12:06</string>
-    <string name="trade_content">%1$s 【%2$s】</string>
 
     <!--我的界面/关于我们-->
     <string name="account_about_us_app_version">%1$s V%2$s</string>

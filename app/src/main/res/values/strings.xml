@@ -223,7 +223,7 @@
     <string name="sell_type">卖出类型</string>
     <string name="sell_time">卖出时间</string>
     <string name="order_id">订单号</string>
-    <string name="time_up_sale">到时中止</string>
+    <string name="time_up_sale">清仓卖出</string>
     <string name="stop_profit_sale">止盈卖出</string>
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>

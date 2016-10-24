@@ -62,10 +62,9 @@ android {
             versionName '1.2.1'
         }
         microil {
-            versionCode 5
-            versionName '2.0.4'
+            versionCode 6
+            versionName '2.0.5'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion 21
         }
         tst {
             applicationId 'com.jnhyxx.test'

@@ -52,6 +52,8 @@ public class MarketDataView extends FrameLayout {
     }
 
     public void setMarketData(FullMarketData marketData, Product product) {
+        if (getVisibility() != VISIBLE) return;
+
         if (product.isForeign()) {
             mTodayPosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume()));
             mPrePosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume()));

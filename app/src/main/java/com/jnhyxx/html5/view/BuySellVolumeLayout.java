@@ -18,13 +18,13 @@ public class BuySellVolumeLayout extends LinearLayout {
     private static final float MARGIN_TOP_LINE_DP = 4;
     private static final float MARGIN_TOP_RECT_DP = 10;
     private static final float RECT_HEIGHT_DP = 6;
-    private static final float RECT_MAX_WIDTH_DP = 100;
     private static final int MAX_VOLUME = 30;
 
     private TextView mBuyVolumeNum;
     private TextView mSellVolumeNum;
     private View mBuyVolumeView;
     private View mSellVolumeView;
+    private int mMaxWidth;
 
     public BuySellVolumeLayout(Context context) {
         super(context);
@@ -36,6 +36,12 @@ public class BuySellVolumeLayout extends LinearLayout {
         init();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mMaxWidth = (int) (getMeasuredWidth() * 0.4);
+    }
+
     private void init() {
         setOrientation(HORIZONTAL);
         setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -44,23 +50,24 @@ public class BuySellVolumeLayout extends LinearLayout {
         int heightPx = dp2px(RECT_HEIGHT_DP);
         int topMarginLinePx = dp2px(MARGIN_TOP_LINE_DP);
         int topMarginRectPx = dp2px(MARGIN_TOP_RECT_DP);
-        int maxRectWidthPx = dp2px(RECT_MAX_WIDTH_DP);
 
         setPadding(paddingPx, 0, 0, 0);
 
         // 2 part: 1 is rectangles, 2 is volume and text
         // part 1
         LinearLayout part = new LinearLayout(getContext());
-        addView(part);
+        LinearLayout.LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.weight = 1;
+        addView(part, params);
         part.setOrientation(VERTICAL);
         part.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         mBuyVolumeView = new View(getContext());
         mBuyVolumeView.setBackgroundResource(R.drawable.bg_buy_volume);
-        LinearLayout.LayoutParams params = new LayoutParams(maxRectWidthPx, heightPx);
+        params = new LayoutParams(0, heightPx);
         part.addView(mBuyVolumeView, params);
         mSellVolumeView = new View(getContext());
         mSellVolumeView.setBackgroundResource(R.drawable.bg_sell_volume);
-        params = new LayoutParams(maxRectWidthPx, heightPx);
+        params = new LayoutParams(0, heightPx);
         params.setMargins(0, topMarginRectPx, 0, 0);
         part.addView(mSellVolumeView, params);
 
@@ -114,27 +121,28 @@ public class BuySellVolumeLayout extends LinearLayout {
         textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         textView.setPadding(paddingPx, 0, 0, 0);
+        textView.setMaxLines(1);
         return textView;
     }
 
-    public void setVolumes(int buyVolume, int sellVolume) {
+    public void setVolumes(int sellVolume, int buyVolume) {
         mBuyVolumeNum.setText(String.valueOf(buyVolume));
         mSellVolumeNum.setText(String.valueOf(sellVolume));
-        float buyVolumeRectWidthDp = buyVolume * RECT_MAX_WIDTH_DP / MAX_VOLUME;
-        float sellVolumeRectWidthDp = sellVolume * RECT_MAX_WIDTH_DP / MAX_VOLUME;
-        if (buyVolumeRectWidthDp > RECT_MAX_WIDTH_DP) {
-            buyVolumeRectWidthDp = RECT_MAX_WIDTH_DP;
-            sellVolumeRectWidthDp = RECT_MAX_WIDTH_DP * sellVolume / buyVolume;
+        float sellVolumeRectWidth = sellVolume * mMaxWidth / MAX_VOLUME;
+        float buyVolumeRectWidth = buyVolume * mMaxWidth / MAX_VOLUME;
+        if (buyVolumeRectWidth > mMaxWidth) {
+            buyVolumeRectWidth = mMaxWidth;
+            sellVolumeRectWidth = mMaxWidth * sellVolume / buyVolume;
         }
-        if (sellVolumeRectWidthDp > RECT_MAX_WIDTH_DP) {
-            sellVolumeRectWidthDp = RECT_MAX_WIDTH_DP;
-            buyVolumeRectWidthDp = RECT_MAX_WIDTH_DP * buyVolume / sellVolume;
+        if (sellVolumeRectWidth > mMaxWidth) {
+            sellVolumeRectWidth = mMaxWidth;
+            buyVolumeRectWidth = mMaxWidth * buyVolume / sellVolume;
         }
         LayoutParams params = (LayoutParams) mBuyVolumeView.getLayoutParams();
-        params.width = dp2px(buyVolumeRectWidthDp);
+        params.width = (int) buyVolumeRectWidth;
         mBuyVolumeView.setLayoutParams(params);
         params = (LayoutParams) mSellVolumeView.getLayoutParams();
-        params.width = dp2px(sellVolumeRectWidthDp);
+        params.width = (int) sellVolumeRectWidth;
         mSellVolumeView.setLayoutParams(params);
     }
 

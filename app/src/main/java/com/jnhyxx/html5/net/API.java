@@ -790,7 +790,7 @@ public class API extends APIBase {
      * 推广赚钱 url
      */
     public static String getPromotePage() {
-        return getHost() + "/mine/extension.html"; // /mine/extension.html?nohead=1 副总改好后替换成这个
+        return getHost() + "/mine/extension.html?nohead=1";
     }
 
     /**

@@ -40,7 +40,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
     private long orderTime;
     private double ratio;
     private double realAvgPrice;
-    private int realMarketVal;
+    private double realMarketVal;
     private String showId;
     private double stopLossPrice;
     private double stopWinPrice;
@@ -122,11 +122,11 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.realAvgPrice = realAvgPrice;
     }
 
-    public int getRealMarketVal() {
+    public double getRealMarketVal() {
         return realMarketVal;
     }
 
-    public void setRealMarketVal(int realMarketVal) {
+    public void setRealMarketVal(double realMarketVal) {
         this.realMarketVal = realMarketVal;
     }
 
@@ -198,7 +198,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         dest.writeLong(this.orderTime);
         dest.writeDouble(this.ratio);
         dest.writeDouble(this.realAvgPrice);
-        dest.writeInt(this.realMarketVal);
+        dest.writeDouble(this.realMarketVal);
         dest.writeString(this.showId);
         dest.writeDouble(this.stopLossPrice);
         dest.writeDouble(this.stopWinPrice);
@@ -218,7 +218,7 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.orderTime = in.readLong();
         this.ratio = in.readDouble();
         this.realAvgPrice = in.readDouble();
-        this.realMarketVal = in.readInt();
+        this.realMarketVal = in.readDouble();
         this.showId = in.readString();
         this.stopLossPrice = in.readDouble();
         this.stopWinPrice = in.readDouble();

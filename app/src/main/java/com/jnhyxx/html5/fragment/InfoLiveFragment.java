@@ -72,6 +72,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         mListView.setDivider(null);
         mListView.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        getInfoLiveData();
     }
 
     @Override
@@ -139,7 +140,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                                  String[] split = data.split(well);
                                                  ArrayList<String> strings = new ArrayList<>();
                                                  for (int j = 0; j < split.length; j++) {
-                                                     if (split[j] == null || split[j].length() == 1 || TextUtils.isEmpty(split[j])) {
+                                                     if (split[j] == null ||TextUtils.isEmpty(split[j])) {
                                                          continue;
                                                      }
 //                                                     Log.d(TAG, "分割开的数据" + split[j].toString());
@@ -228,34 +229,42 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
             StringBuffer stringBuffer = null;
             if (infoLiveMessage != null) {
+
+                if (infoLiveMessage.size() >= 11) {
+                    Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
+                    mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
+                    if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
+                        if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
+                            mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(3)));
+                        }
+                        if (!TextUtils.isEmpty(infoLiveMessage.get(4))) {
+                            mViewHolder.mExpectData.setText(getString(R.string.expect_data, infoLiveMessage.get(4)));
+                        }
+                        if (!TextUtils.isEmpty(infoLiveMessage.get(5))) {
+                            mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
+                        }
+                    }
+
+                    mViewHolder.mTime.setText(infoLiveMessage.get(1));
+                } else {
+                    mViewHolder.mDataLayout.setVisibility(View.GONE);
+                }
                 for (int i = 0; i < infoLiveMessage.size(); i++) {
                     String content = getContent(mViewHolder, infoLiveMessage);
 
-                    mViewHolder.mTime.setText(infoLiveMessage.get(0));
+                    mViewHolder.mTime.setText(infoLiveMessage.get(2));
+                    if(infoLiveMessage.get(1).equalsIgnoreCase("0")){
+                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+                    } else if(infoLiveMessage.get(1).equalsIgnoreCase("1")){
+                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
+                    }
                     mViewHolder.mContent.setText(content);
+
 
                     String messageData = infoLiveMessage.toString();
                     handleImage(mViewHolder, infoLiveMessage, messageData);
                 }
 
-                if (infoLiveMessage.size() >= 9) {
-                    Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
-                    mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
-                    if (!TextUtils.isEmpty(infoLiveMessage.get(2))) {
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(2))) {
-                            mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(2)));
-                        }
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
-                            mViewHolder.mExpectData.setText(getString(R.string.expect_data, infoLiveMessage.get(3)));
-                        }
-                        if (!TextUtils.isEmpty(infoLiveMessage.get(4))) {
-                            mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(4)));
-                        }
-                    }
-                } else {
-                    mViewHolder.mDataLayout.setVisibility(View.GONE);
-
-                }
             }
 
             return convertView;
@@ -283,18 +292,15 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         private String getContent(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
             String[] mSplit;
             StringBuffer stringBuffer;
-            String content = infoLiveMessage.get(1);
+            String content = infoLiveMessage.get(3);
 
             if (content.contains("<font ")) {
                 content = content.substring(content.indexOf(">"));
             }
             content = content.replaceAll("<br\\s*/?>", "\r\n");
-            content = content.replaceAll("<b>|</b>|</font>|>|<br/>", "");
+            content = content.replaceAll("<b>|</b>|</font>|>|<br/>|</br", "");
             if (content.contains("【") && content.contains("】")) {
                 content = content.substring(content.indexOf("【"));
-                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-            } else {
-                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
             }
 
             return content;

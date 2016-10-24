@@ -55,6 +55,15 @@ public class RemarkHandleUtil extends SparseArray<String> {
         super.put(4201, "赠送");
         //佣金转余额
         super.put(6001, "佣金");
+        //兑换积分-7101
+        super.put(-7101, "金币");
+        //资金兑换
+        super.put(7201, "金币");
+        //-7201兑换商品
+        super.put(-7201, "商品");
+        //拒绝兑换
+        super.put(7202, "金币");
+
     }
 
     @Override

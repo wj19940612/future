@@ -96,7 +96,7 @@ public class TradeDetailActivity extends BaseActivity {
         //右边头部
         mBlockedTitle.setText(R.string.money_frozen);
         //冻结资金余额
-        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMoneyFrozen()));
+        mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMargin()));
     }
 
     private void initViewPager() {

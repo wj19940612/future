@@ -6,20 +6,18 @@ import android.webkit.WebView;
 
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.utils.ToastUtil;
 
 public class PaymentActivity extends WebViewActivity {
 
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
-        ToastUtil.curt(url);
         Log.d("TAG", "onShouldOverrideUrlLoading: " + url);
         if (!TextUtils.isEmpty(url)) {
             if (TextUtils.equals(url, API.Finance.getRechargeSuccessUrl())) {
-                //finish();
+                finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
-                //finish();
+                finish();
                 return true;
             }
         }

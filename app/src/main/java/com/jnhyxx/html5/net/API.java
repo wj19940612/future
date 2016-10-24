@@ -318,6 +318,14 @@ public class API extends APIBase {
         public static String getRegisterAuthCodeImage(String userPhone) {
             return getHost() + "/user/user/getRegImage.do" + "?userPhone=" + userPhone;
         }
+
+        /**
+         * http://newtest.jnhyxx.com/user/user/getChannelByDomain.do
+         * @return  获取渠道客服的qq和电话
+         */
+        public static API getChannelByDomain() {
+            return new API("/user/user/getChannelByDomain.do", new ApiParams());
+        }
     }
 
     public static class Finance {
@@ -558,7 +566,7 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API("/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+            return new API(GET,"/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 
@@ -802,5 +810,13 @@ public class API extends APIBase {
 
     public static String getServiceQQ(String serviceQQ) {
         return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
+    }
+
+    /**
+     * findNewsByUrl  中所需要的参数
+     * @return
+     */
+    public static String getInfoLiveUrl(){
+        return "http://m.jin10.com/flash?maxId=0";
     }
 }

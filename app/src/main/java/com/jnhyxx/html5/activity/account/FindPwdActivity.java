@@ -130,7 +130,7 @@ public class FindPwdActivity extends BaseActivity {
 
     private boolean checkObtainAuthCodeEnable() {
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
-        if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 11) {
+        if (TextUtils.isEmpty(phoneNum) || phoneNum.length() < 13) {
             return false;
         }
 

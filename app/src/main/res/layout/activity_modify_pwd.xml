@@ -22,11 +22,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable">
+            android:background="@drawable/bg_line_division_center">
 
             <EditText
                 android:id="@+id/newPassword"
@@ -37,7 +37,7 @@
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/ic_lock"
                 android:drawablePadding="@dimen/padding_ten"
-                android:hint="@string/please_input_password"
+                android:hint="@string/hine_please_input_new_password"
                 android:textColorHint="@color/grayHint"/>
 
             <ImageView
@@ -62,7 +62,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:background="@drawable/bg_input_enable">
+        android:background="@drawable/bg_line_division_center">
 
         <EditText
             android:id="@+id/confirmPassword"

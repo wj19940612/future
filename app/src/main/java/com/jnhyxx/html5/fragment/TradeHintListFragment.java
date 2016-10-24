@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -256,18 +255,19 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                     mView.setVisibility(View.GONE);
                 }
                 setTradeTime(item);
-
+                mTradeStatus.setText(item.getPushTopic());
                 setTradeStatus(item);
-                mTradeHintContent.setText(getContext().getString(R.string.trade_content, item.getPushContent(), LocalUser.getUser().getUserInfo().getUserName()));
+                mTradeHintContent.setText(item.getPushContent());
             }
 
             private void setTradeStatus(SysTradeMessage item) {
                 if (item.isTradeStatus()) {
                     // TODO: 2016/10/10 是提现信息的显示
-                    mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_fail);
-
-                    // TODO: 2016/10/10 和公共提示公用一张图,图片太大
-                    setSuccessImage();
+                    if (item.isSuccess()) {
+                        setSuccessImage();
+                    } else {
+                        mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_fail);
+                    }
                 } else {
                     setOrderStatus(item);
                 }

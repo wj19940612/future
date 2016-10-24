@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -31,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.android.volley.Request.Method.HEAD;
 import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
@@ -107,7 +109,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeInfo.setVisibility(View.VISIBLE);
 
         mTradeInfoTitle.setText(information.getTitle());
-        mTradeInfoMessageFrom.setText(getString(R.string.message_from, information.getSource()));
+        String source = !TextUtils.isEmpty(information.getSource()) ? information.getSource() : "未知";
+        mTradeInfoMessageFrom.setText(getString(R.string.message_from, source));
         mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();
@@ -132,7 +135,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
 
 
         mTitle.setText(information.getTitle());
-        mMessageFrom.setText(getString(R.string.message_from, information.getSource()));
+        String source = !TextUtils.isEmpty(information.getSource()) ? information.getSource() : "未知";
+        mMessageFrom.setText(getString(R.string.message_from, source));
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
             setWebViewMargin();

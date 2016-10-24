@@ -72,7 +72,7 @@ public class InfoFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new Fragment();
+                    return InfoLiveFragment.newInstance();
                 case 1:
                     return InfoListFragment.newInstance(Information.TYPE_MARKET_ANALYSIS);
                 case 2:

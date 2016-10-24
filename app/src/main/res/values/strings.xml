@@ -175,6 +175,10 @@
     <string name="message_from">来源: %1$s</string>
     <string name="message_details">资讯详情</string>
 
+    <string name="before_data">前值: %1$s</string>
+    <string name="expect_data">预期: %1$s</string>
+    <string name="real_data">实际: %1$s</string>
+
     <!-- Home page -->
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>

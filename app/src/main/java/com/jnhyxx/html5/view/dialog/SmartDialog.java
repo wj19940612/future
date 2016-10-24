@@ -37,7 +37,7 @@ public class SmartDialog {
 
     private String mMessageText;
 
-    private String mTitleText = "";
+    private String mTitleText;
 
     private boolean mCancelableOnTouchOutside;
 
@@ -228,7 +228,6 @@ public class SmartDialog {
         mPosition = (TextView) view.findViewById(R.id.position);
         mSingleButton = (TextView) view.findViewById(R.id.singleButton);
 
-//        mTitle.setVisibility(View.INVISIBLE);
         mMessage.setText(mMessageText);
         if (TextUtils.isEmpty(mTitleText)) {
             mTitle.setVisibility(View.GONE);

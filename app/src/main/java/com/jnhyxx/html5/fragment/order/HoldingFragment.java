@@ -21,7 +21,7 @@ import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.presenter.OrderPresenter;
+import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.johnz.kutils.FinanceUtil;
 
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
 
 public class HoldingFragment extends BaseFragment
-        implements OrderPresenter.IHoldingOrderView {
+        implements HoldingOrderPresenter.IHoldingOrderView {
 
     @BindView(android.R.id.list)
     ListView mList;
@@ -59,11 +59,12 @@ public class HoldingFragment extends BaseFragment
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
+    private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            OrderPresenter.getInstance().setFullMarketData(data);
+            mHoldingOrderPresenter.setFullMarketData(data);
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
             }
@@ -131,6 +132,7 @@ public class HoldingFragment extends BaseFragment
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+            mHoldingOrderPresenter = new HoldingOrderPresenter(this);
         }
     }
 
@@ -147,6 +149,7 @@ public class HoldingFragment extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
+        mHoldingOrderPresenter.destroy();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
@@ -154,14 +157,12 @@ public class HoldingFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        OrderPresenter.getInstance().register(this);
         NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        OrderPresenter.getInstance().unregister(this);
         NettyClient.getInstance().stop();
     }
 
@@ -171,9 +172,7 @@ public class HoldingFragment extends BaseFragment
         mList.setEmptyView(mEmpty);
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
-
-        onShowHoldingOrderList(OrderPresenter.getInstance().getHoldingOrderList());
-        OrderPresenter.getInstance().loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+        mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
@@ -186,7 +185,7 @@ public class HoldingFragment extends BaseFragment
                 mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
-                        OrderPresenter.getInstance().closePosition(mFundType, order);
+                        mHoldingOrderPresenter.closePosition(mFundType, order);
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
@@ -229,7 +228,7 @@ public class HoldingFragment extends BaseFragment
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
-        OrderPresenter.getInstance().closeAllHoldingPositions(mFundType);
+        mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

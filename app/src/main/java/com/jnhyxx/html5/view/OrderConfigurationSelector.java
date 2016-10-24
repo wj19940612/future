@@ -273,7 +273,7 @@ public class OrderConfigurationSelector extends LinearLayout {
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ITEM_HEIGHT,
                 getResources().getDisplayMetrics());
         TextView textView = new TextView(getContext());
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setGravity(Gravity.CENTER);
         textView.setOnClickListener(mHideItemClickListener);
         textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);

@@ -11,12 +11,17 @@ public class PaymentActivity extends WebViewActivity {
 
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("TAG", "onShouldOverrideUrlLoading: " + url);
+        Log.d("recharge", "onShouldOverrideUrlLoading: " + url);
         if (!TextUtils.isEmpty(url)) {
-            if (TextUtils.equals(url, API.Finance.getRechargeSuccessUrl())) {
+            if (url.contains(API.Finance.getRechargeSuccessUrl())) {
+                setResult(RESULT_OK);
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
+                finish();
+                return true;
+            } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {
+                setResult(RESULT_OK);
                 finish();
                 return true;
             }

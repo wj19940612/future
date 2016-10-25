@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.web.PaymentActivity;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -49,6 +50,9 @@ public class RechargeActivity extends BaseActivity {
     private final int APPLY_LIMIT = 10000;
 
     private Editable mEditable;
+
+    private static final int REQUEST_CODE_BANK_PAY = 10000;
+    private static final int REQUEST_CODE_APPLY_PAY = 6210;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,24 +187,9 @@ public class RechargeActivity extends BaseActivity {
                 .putExtra(PaymentActivity.EX_URL, "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount)
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                .execute();
+                .executeForResult(REQUEST_CODE_BANK_PAY);
 
-//        API.Finance.depositByBankApply(amount)
-//                .setTag(TAG)
-//                .setIndeterminate(this)
-//                .setCallback(new Callback<String>() {
-//                    @Override
-//                    public void onReceive(String s) {
-//                        s = s.substring(1, s.length() - 1).replace("\\\"", "\"");
-//                        Launcher.with(getActivity(), PaymentActivity.class)
-//                                .putExtra(PaymentActivity.EX_HTML, s)
-//                                .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
-//                                .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-//                                .execute();
-//                    }
-//                }).fire();
     }
-
     private void depositByAliPay() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
@@ -208,7 +197,7 @@ public class RechargeActivity extends BaseActivity {
                 .putExtra(PaymentActivity.EX_URL, API.Finance.depositByAliPay(amount))
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                .execute();
+                .executeForResult(REQUEST_CODE_APPLY_PAY);
     }
 
     private void depositByWeChartApply() {
@@ -265,6 +254,16 @@ public class RechargeActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
             depositByBankApply();
+        }
+        if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
+            LocalUser user = LocalUser.getUser();
+            UserInfo userInfo = user.getUserInfo();
+            double moneyUsable = userInfo.getMoneyUsable();
+            String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+            double amount = Double.valueOf(rechargeAmount);
+            double newMoneyUsable = moneyUsable + amount;
+            userInfo.setMoneyUsable(newMoneyUsable);
+            user.setUserInfo(userInfo);
         }
     }
 

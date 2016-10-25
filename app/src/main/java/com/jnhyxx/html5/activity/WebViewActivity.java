@@ -284,7 +284,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            Log.d("TAG", "shouldInterceptRequest: " + url);
+            Log.d("recharge", "shouldInterceptRequest: " + url);
             return super.shouldInterceptRequest(view, url);
         }
     }

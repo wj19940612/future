@@ -74,11 +74,7 @@ public class ModifyNickNameActivity extends BaseActivity {
             if (enable != mConfirmButton.isEnabled()) {
                 mConfirmButton.setEnabled(enable);
             }
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            String string = charSequence.toString();
+            String string = s.toString();
             if (string.contains(" ")) {
                 String newData = string.replaceAll(" ", "");
                 mNickname.setText(newData);

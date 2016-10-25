@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -90,27 +89,8 @@ public class BankcardBindingActivity extends BaseActivity {
         setContentView(R.layout.activity_bankcard_binding);
         ButterKnife.bind(this);
 
-        mCardholderName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String newData = s.toString();
-                if (newData.contains(" ")) {
-                    newData = newData.replaceAll(" ", "");
-                    mCardholderName.setText(newData);
-                    mCardholderName.setSelection(mCardholderName.getText().toString().length());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                mValidationWatcher.afterTextChanged(s);
-            }
-        });
+        mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
 
@@ -122,9 +102,8 @@ public class BankcardBindingActivity extends BaseActivity {
         super.onDestroy();
         mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
-        mCardholderName.removeTextChangedListener(mValidationWatcher);
+        mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
     }
-
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -141,6 +120,19 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     };
 
+    private ValidationWatcher mCardHolderValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+            String newData = s.toString();
+            if (newData.contains(" ")) {
+                newData = newData.replaceAll(" ", "");
+                mCardholderName.setText(newData);
+                mCardholderName.setSelection(mCardholderName.getText().toString().length());
+            }
+        }
+    };
+
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -150,6 +142,7 @@ public class BankcardBindingActivity extends BaseActivity {
             }
         }
     };
+
 
     private void formatBankCardNumber() {
         String oldBankCard = mBankcardNum.getText().toString();

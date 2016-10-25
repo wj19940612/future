@@ -138,7 +138,6 @@ public class HomeFragment extends BaseFragment {
 
         requestHomeInformation();
         //requestOrderReport();
-        requestProductList();
         requestProductMarketList();
     }
 
@@ -205,6 +204,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        requestProductList();
         requestHomePositions();
         startScheduleJob(5 * 1000);
     }
@@ -259,13 +259,8 @@ public class HomeFragment extends BaseFragment {
                         @Override
                         public void onRespSuccess(HomePositions homePositions) {
                             mCashPositionList = homePositions.getCashOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
-                            if (updateProductList) {
-                                requestProductList();
-                            } else {
-                                updateProductListView();
-                            }
+                            ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
+                            updateProductListView();
                         }
                     }).fire();
         } else { // clearHoldingOrderList all product position

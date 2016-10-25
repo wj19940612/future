@@ -93,7 +93,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mBottomTabs.selectTab(position);
+                if (position >= 1) {
+                    mBottomTabs.selectTab(position + 1);
+                } else {
+                    mBottomTabs.selectTab(position);
+                }
             }
 
             @Override
@@ -105,7 +109,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabClick(int position) {
                 mBottomTabs.selectTab(position);
-                mViewPager.setCurrentItem(position, false);
+                if (position == 1) {
+                    ToastUtil.curt("直播界面");
+                } else if (position >= 1) {
+                    mViewPager.setCurrentItem(position - 1, false);
+                } else {
+                    mViewPager.setCurrentItem(position, false);
+                }
+
             }
         });
     }

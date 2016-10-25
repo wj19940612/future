@@ -55,6 +55,19 @@ public class SmartDialog {
 
     private static Map<String, List<SmartDialog>> mListMap = new HashMap<>();
 
+    public static SmartDialog single(Activity activity, String msg) {
+        String key = activity.getClass().getSimpleName();
+        List<SmartDialog> dialogList = mListMap.get(key);
+        SmartDialog dialog;
+        if (dialogList != null && dialogList.size() > 0) {
+            dialog = dialogList.get(0);
+        } else {
+            dialog = with(activity, msg);
+        }
+        dialog.setMessage(msg);
+        return dialog;
+    }
+
     public static SmartDialog with(Activity activity, int resid) {
         SmartDialog dialog = new SmartDialog(activity);
         addMap(activity, dialog);
@@ -187,7 +200,11 @@ public class SmartDialog {
     }
 
     public void show() {
-        create();
+        if (mDialog != null) { // single dialog
+            mMessage.setText(mMessageText);
+        } else {
+            create();
+        }
 
         if (!mActivity.isFinishing()) {
             mDialog.show();

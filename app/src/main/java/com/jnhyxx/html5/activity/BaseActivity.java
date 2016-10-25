@@ -32,6 +32,7 @@ public class BaseActivity extends AppCompatActivity implements
         ApiIndeterminate, TimerHandler.TimerCallback {
 
     public static final int REQ_CODE_BASE = 8;
+    public static final int REQ_CODE_TOKEN_EXPIRED_LOGIN = 800;
 
     public static final String ACTION_TOKEN_EXPIRED = "com.jnhyxx.app.TOKEN_EXPIRED";
     public static final String EX_TOKEN_EXPIRED_MESSAGE = "com.jnhyxx.app.TOKEN_EXPIRED_MESSAGE";
@@ -43,21 +44,48 @@ public class BaseActivity extends AppCompatActivity implements
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            LocalUser.getUser().logout();
             String expiredMessage = intent.getStringExtra(EX_TOKEN_EXPIRED_MESSAGE);
-            SmartDialog.with(getActivity(), expiredMessage)
+            SmartDialog.single(getActivity(), expiredMessage)
                     .setCancelableOnTouchOutside(false)
-                    .setNegative(R.string.cancel)
+                    .setCancelListener(new SmartDialog.OnCancelListener() {
+                        @Override
+                        public void onCancel(Dialog dialog) {
+                            dialog.dismiss();
+                            onTokenExpiredCancel();
+                        }
+                    })
+                    .setNegative(R.string.cancel, new SmartDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            onTokenExpiredCancel();
+                        }
+                    })
                     .setPositive(R.string.sign_in, new SmartDialog.OnClickListener() {
                         @Override
                         public void onClick(Dialog dialog) {
                             dialog.dismiss();
                             Launcher.with(getActivity(), SignInActivity.class)
-                                    .execute();
+                                    .executeForResult(REQ_CODE_TOKEN_EXPIRED_LOGIN);
                         }
                     }).show();
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_TOKEN_EXPIRED_LOGIN && resultCode != RESULT_OK) {
+            onTokenExpiredCancel();
+        }
+    }
+
+    private void onTokenExpiredCancel() {
+        LocalUser.getUser().logout();
+        Launcher.with(this, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .execute();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

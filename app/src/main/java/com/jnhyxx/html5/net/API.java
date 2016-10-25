@@ -327,6 +327,15 @@ public class API extends APIBase {
         public static API getChannelByDomain() {
             return new API("/user/user/getChannelByDomain.do", new ApiParams());
         }
+
+        /**
+         * /user/user/findUserInfo.do 获取用户非完整数据
+         *
+         * @return
+         */
+        public static API getUserShortInfo() {
+            return new API("/user/user/findUserInfo.do", null);
+        }
     }
 
     public static class Finance {
@@ -341,18 +350,6 @@ public class API extends APIBase {
         public static API getFundInfo() {
             return new API("/user/finance/findMain.do",
                     new ApiParams());
-        }
-
-        /**
-         * 接口名：用户充值(银行卡充值)
-         * <p>
-         * URL  http://域名/user/finance/deposit.do
-         *
-         * @param money
-         * @return
-         */
-        public static API depositByBankApply(double money) {
-            return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
         }
 
 //        /**

@@ -11,13 +11,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.TimerHandler;
 import com.jnhyxx.html5.view.dialog.Progress;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -134,5 +138,24 @@ public class BaseActivity extends AppCompatActivity implements
     @Override
     public void onTimeUp(int count) {
 
+    }
+
+    protected void updateUsableMoneyScore(final LocalUser.Callback callback) {
+        if (LocalUser.getUser().isLogin()) {
+            API.User.getUserShortInfo().setTag(TAG)
+                    .setCallback(new Callback<Resp<UserInfo>>(false) {
+                        @Override
+                        public void onSuccess(Resp<UserInfo> userInfoResp) {
+                            Log.d("VolleyHttp", getUrl() + " onSuccess: " + userInfoResp.toString());
+                            if (userInfoResp.isSuccess()) {
+                                LocalUser.getUser().setUsableMoneyScore(userInfoResp.getData());
+                                callback.onUpdateCompleted();
+                            }
+                        }
+                        @Override
+                        public void onReceive(Resp<UserInfo> userInfoResp) {
+                        }
+                    }).fire();
+        }
     }
 }

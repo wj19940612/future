@@ -609,6 +609,12 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
+        updateUsableMoneyScore(new LocalUser.Callback() {
+            @Override
+            public void onUpdateCompleted() {
+                Log.d("TAG", "onUpdateCompleted: ");
+            }
+        });
     }
 
     @Override

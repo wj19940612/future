@@ -366,7 +366,7 @@
     <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与提现操作</string>
     <string name="bind_bank_bind">绑定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
-    <string name="unBind_dialog_content">您是否要拨打客服电话:\n 解绑换卡</string>
+    <string name="unBind_dialog_content">为了您账户的安全，解绑银行卡需本人拨打客服电话</string>
     <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>
     <string name="bind_bank_is_empty">请选择支付银行</string>
     <string name="no_bank_can_bind">暂时没有可供选择的银行</string>
@@ -397,7 +397,7 @@
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>
     <string name="withdraw_status_fail">失败</string>
-    <string name="withdraw_status_auditing">待审核</string>
+    <string name="withdraw_status_auditing">处理中</string>
     <string name="withdraw_money">%1$f元</string>
     <string name="withdraw_no_content">暂无提款记录</string>
 
@@ -418,7 +418,7 @@
     <string name="withdraw_record_bank">%1$s(尾号 %2$s)</string>
     <string name="withdraw_record_time">提现时间</string>
     <string name="withdraw_record_account_time">到账时间</string>
-    <string name="withdraw_start">刚刚发起</string>
+    <string name="withdraw_start">处理中</string>
     <string name="withdraw_audit_passing">审核通过</string>
     <string name="withdraw_fund_transfer">转账中</string>
     <string name="withdraw_refuse">提现拒绝</string>

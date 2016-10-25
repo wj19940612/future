@@ -321,7 +321,8 @@ public class API extends APIBase {
 
         /**
          * http://newtest.jnhyxx.com/user/user/getChannelByDomain.do
-         * @return  获取渠道客服的qq和电话
+         *
+         * @return 获取渠道客服的qq和电话
          */
         public static API getChannelByDomain() {
             return new API("/user/user/getChannelByDomain.do", new ApiParams());
@@ -418,6 +419,12 @@ public class API extends APIBase {
             return getHost() + ("/user/finance/back.do");
         }
 
+        /**
+         * 宝付充值成功返回的地址
+         */
+        public static String getMineWebPageUrl() {
+            return getHost()+("/mine.html");
+        }
         /**
          * 接口名：用户提现
          * <p>
@@ -566,7 +573,7 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET,"/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+            return new API(GET, "/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
     }
 
@@ -814,9 +821,10 @@ public class API extends APIBase {
 
     /**
      * findNewsByUrl  中所需要的参数
+     *
      * @return
      */
-    public static String getInfoLiveUrl(){
+    public static String getInfoLiveUrl() {
         return "http://m.jin10.com/flash?maxId=0";
     }
 }

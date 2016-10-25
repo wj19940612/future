@@ -91,6 +91,7 @@ public class SignUpActivity extends BaseActivity {
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mRegisterAuthCode.addTextChangedListener(mValidationWatcher);
         mPassword.addTextChangedListener(mValidationWatcher);
+        mImageAuthCode.addTextChangedListener(mValidationWatcher);
 
         mAgreeProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -221,10 +222,9 @@ public class SignUpActivity extends BaseActivity {
         }
 
         String imageAuthCode = ViewUtil.getTextTrim(mImageAuthCode);
-        if (mImageCodeArea.isShown() && TextUtils.isEmpty(imageAuthCode)) {
+        if (mImageCodeArea.isShown() && imageAuthCode.length() < 4) {
             return false;
         }
-
         return true && !mFreezeObtainAuthCode;
     }
 

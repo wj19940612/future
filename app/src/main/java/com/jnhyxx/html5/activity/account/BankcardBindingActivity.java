@@ -89,7 +89,8 @@ public class BankcardBindingActivity extends BaseActivity {
         setContentView(R.layout.activity_bankcard_binding);
         ButterKnife.bind(this);
 
-        mCardholderName.addTextChangedListener(mmCardholderValidationWatcher);
+
+        mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
 
@@ -101,21 +102,8 @@ public class BankcardBindingActivity extends BaseActivity {
         super.onDestroy();
         mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
-        mCardholderName.removeTextChangedListener(mValidationWatcher);
+        mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
     }
-
-    private ValidationWatcher mmCardholderValidationWatcher = new ValidationWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            mValidationWatcher.afterTextChanged(s);
-            String newData = s.toString();
-            if (newData.contains(" ")) {
-                newData = newData.replaceAll(" ", "");
-                mCardholderName.setText(newData);
-                mCardholderName.setSelection(mCardholderName.getText().toString().length());
-            }
-        }
-    };
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -129,6 +117,19 @@ public class BankcardBindingActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
             formatBankCardNumber();
+        }
+    };
+
+    private ValidationWatcher mCardHolderValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
+            String newData = s.toString();
+            if (newData.contains(" ")) {
+                newData = newData.replaceAll(" ", "");
+                mCardholderName.setText(newData);
+                mCardholderName.setSelection(mCardholderName.getText().toString().length());
+            }
         }
     };
 

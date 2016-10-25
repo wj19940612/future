@@ -14,12 +14,14 @@ public class PaymentActivity extends WebViewActivity {
         Log.d("recharge", "onShouldOverrideUrlLoading: " + url);
         if (!TextUtils.isEmpty(url)) {
             if (url.contains(API.Finance.getRechargeSuccessUrl())) {
+                setResult(RESULT_OK);
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
                 finish();
                 return true;
-            } else if (TextUtils.equals(url, API.Finance.getBaoFuSuccess())) {
+            } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {
+                setResult(RESULT_OK);
                 finish();
                 return true;
             }

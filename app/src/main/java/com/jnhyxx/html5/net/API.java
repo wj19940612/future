@@ -422,7 +422,7 @@ public class API extends APIBase {
         /**
          * 宝付充值成功返回的地址
          */
-        public static String getBaoFuSuccess() {
+        public static String getMineWebPageUrl() {
             return getHost()+("/mine.html");
         }
         /**

@@ -352,6 +352,19 @@ public class API extends APIBase {
                     new ApiParams());
         }
 
+        /**
+         * 接口名：用户充值(银行卡充值)
+         * <p>
+         * URL  http://域名/user/finance/deposit.do
+         *
+         * @param money
+         * @return
+         */
+        public static String depositByBankApply(double money) {
+            return getHost() + "/user/finance/deposit.do?" + "&money=" + money;
+        }
+
+
 //        /**
 //         * 接口名：用户充值(微信充值)
 //         * URL  http://域名/user/finance/depositByWeChat.do
@@ -362,6 +375,7 @@ public class API extends APIBase {
 //        public static API depositByWeChartApply(double money) {
 //            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
 //        }
+
 
         public static String depositByWeChartApply(double money) {
             return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;
@@ -420,8 +434,9 @@ public class API extends APIBase {
          * 宝付充值成功返回的地址
          */
         public static String getMineWebPageUrl() {
-            return getHost()+("/mine.html");
+            return getHost() + ("/mine.html");
         }
+
         /**
          * 接口名：用户提现
          * <p>
@@ -513,6 +528,27 @@ public class API extends APIBase {
                     .put("type", type)
                     .put("offset", offset)
                     .put("size", size));
+        }
+    }
+
+    //直播的接口
+    public static class Live {
+
+        /**
+         * http://newtest.jnhyxx.com:8080/user/live/getActivity.do
+         *
+         * @return
+         */
+        public static API getLiveRoomId() {
+            return new API("/user/live/getActivity.do", new ApiParams());
+        }
+
+        /**
+         * @param liveRoomId
+         * @return
+         */
+        public static String getH5LiveHtmlUrl(String liveRoomId) {
+            return getHost() + "/zhibo/live.html?activityId=" + liveRoomId+"&nohead=1";
         }
     }
 

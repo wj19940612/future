@@ -8,16 +8,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.web.LiveActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
+import com.jnhyxx.html5.domain.live.LiveRoomInfo;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
@@ -25,6 +29,8 @@ import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
+import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 
 import java.net.URISyntaxException;
 
@@ -44,6 +50,10 @@ public class MainActivity extends BaseActivity {
     private MainFragmentsAdapter mMainFragmentsAdapter;
 
     private BroadcastReceiver mNetworkChangeReceiver;
+
+    private int mTabPosition;
+
+    private static final int REQUEST_CODE_LIVE = 770;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +103,13 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mBottomTabs.selectTab(position);
+                if (position >= 1) {
+                    mTabPosition = position + 1;
+                    mBottomTabs.selectTab(mTabPosition);
+                } else {
+                    mTabPosition = position;
+                    mBottomTabs.selectTab(mTabPosition);
+                }
             }
 
             @Override
@@ -105,9 +121,31 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabClick(int position) {
                 mBottomTabs.selectTab(position);
-                mViewPager.setCurrentItem(position, false);
+                if (position == 1) {
+                    openLivePage();
+
+                } else if (position >= 1) {
+                    mViewPager.setCurrentItem(position - 1, false);
+                } else {
+                    mViewPager.setCurrentItem(position, false);
+                }
+
             }
         });
+    }
+
+    private void openLivePage() {
+        API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
+            @Override
+            public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
+                Log.d(TAG, "直播间数据" + liveRoomInfoResp.getData().toString());
+                Launcher.with(getActivity(), LiveActivity.class)
+                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveRoomInfoResp.getData().getActivityId()))
+                        .putExtra(LiveActivity.EX_TITLE, getString(R.string.live))
+                        .putExtra(LiveActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .executeForResult(REQUEST_CODE_LIVE);
+            }
+        }).fire();
     }
 
     private void processIntent(Intent intent) {
@@ -172,6 +210,14 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LIVE && resultCode == RESULT_OK) {
+            mBottomTabs.selectTab(mTabPosition);
+        }
     }
 
     private void openQQChat(WebView webView, String url) {

@@ -42,7 +42,7 @@ import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 public class WebViewActivity extends AppCompatActivity {
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
-    public static final String EX_RAW_COOKIE = "rawCookie";
+    public static String EX_RAW_COOKIE = "rawCookie";
     public static final String EX_HTML = "html";
 
     @BindView(R.id.titleBar)
@@ -124,23 +124,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     protected void initWebView() {
         // init cookies
-        if (!TextUtils.isEmpty(mRawCookie) && !TextUtils.isEmpty(mPageUrl)) {
-            String[] cookies = mRawCookie.split("\n");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                CookieManager.getInstance().removeSessionCookies(null);
-            } else {
-                CookieManager.getInstance().removeAllCookie();
-            }
-            CookieManager.getInstance().setAcceptCookie(true);
-            for (String cookie : cookies) {
-                CookieManager.getInstance().setCookie(mPageUrl, cookie);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                CookieManager.getInstance().flush();
-            } else {
-                CookieSyncManager.getInstance().sync();
-            }
-        }
+        initCookies(mRawCookie, mPageUrl);
 
         // init webSettings
         WebSettings webSettings = mWebView.getSettings();
@@ -213,6 +197,26 @@ public class WebViewActivity extends AppCompatActivity {
         });
 
         loadPage();
+    }
+
+    protected void initCookies(String rawCookie, String pageUrl) {
+        if (!TextUtils.isEmpty(rawCookie) && !TextUtils.isEmpty(pageUrl)) {
+            String[] cookies = rawCookie.split("\n");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeSessionCookies(null);
+            } else {
+                CookieManager.getInstance().removeAllCookie();
+            }
+            CookieManager.getInstance().setAcceptCookie(true);
+            for (String cookie : cookies) {
+                CookieManager.getInstance().setCookie(pageUrl, cookie);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().flush();
+            } else {
+                CookieSyncManager.getInstance().sync();
+            }
+        }
     }
 
     protected void loadPage() {

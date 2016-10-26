@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,10 +13,12 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.TitleBar;
@@ -28,11 +31,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.balance;
+
 public class WithdrawActivity extends BaseActivity {
 
     private static final int REQ_CODE_ADD_BANKCARD = 1;
 
-    @BindView(R.id.balance)
+    @BindView(balance)
     TextView mBalance;
     @BindView(R.id.withdrawBankcard)
     TextView mWithdrawBankcard;
@@ -46,6 +51,10 @@ public class WithdrawActivity extends BaseActivity {
     TitleBar mTitleBar;
     @BindView(R.id.withdrawAmount)
     EditText mWithdrawAmount;
+
+
+    private double mMoneyDrawUsable;
+    private UserFundInfo userFundInfo;
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
 
@@ -78,6 +87,7 @@ public class WithdrawActivity extends BaseActivity {
         setContentView(R.layout.activity_withdraw);
         ButterKnife.bind(this);
 
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,13 +98,27 @@ public class WithdrawActivity extends BaseActivity {
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
         updateBankInfoView();
-
-        updateBalanceView();
+        getMoneyDrawUsable();
     }
 
-    private void updateBalanceView() {
-        double balance = LocalUser.getUser().getUserInfo().getMoneyUsable();
-        mBalance.setText(FinanceUtil.formatWithScale(balance));
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setResult(RESULT_OK);
+    }
+
+    private void getMoneyDrawUsable() {
+        API.Finance.getFundInfo().setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserFundInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<UserFundInfo> resp) {
+                        userFundInfo = resp.getData();
+                        Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
+                        mMoneyDrawUsable = userFundInfo.getMoneyDrawUsable();
+                        mBalance.setText(FinanceUtil.formatWithScale(mMoneyDrawUsable));
+                    }
+                }).fire();
     }
 
     private void updateBankInfoView() {
@@ -147,7 +171,6 @@ public class WithdrawActivity extends BaseActivity {
                         }
                     }).fire();
         }
-
     }
 
     @OnClick(R.id.addBankcardButton)
@@ -161,10 +184,12 @@ public class WithdrawActivity extends BaseActivity {
     }
 
     private void updateUserInfoBalance(double withdrawAmount) {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        double balance = userInfo.getMoneyUsable();
-        userInfo.setMoneyUsable(FinanceUtil.subtraction(balance, withdrawAmount).doubleValue());
-        updateBalanceView();
+
+        LocalUser user = LocalUser.getUser();
+        UserInfo userInfo = user.getUserInfo();
+        userInfo.setMoneyUsable(FinanceUtil.subtraction(userFundInfo.getMoneyUsable(), withdrawAmount).doubleValue());
+        user.setUserInfo(userInfo);
+        mBalance.setText(FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue()));
     }
 
     @Override

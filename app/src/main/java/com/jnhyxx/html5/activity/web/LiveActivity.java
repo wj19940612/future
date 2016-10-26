@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -20,7 +21,6 @@ import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
@@ -48,13 +48,13 @@ public class LiveActivity extends WebViewActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWebView = getWebView();
+
+        Log.d(TAG, "地址" + mPageUrl);
         getTitleBar().setRightText(R.string.live_right_title);
         getTitleBar().setRightVisible(true);
         getTitleBar().setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2016/10/25 跳入交易界面
-                ToastUtil.curt("进入交易界面");
                 requestProductList();
                 requestSimulationPositions();
             }

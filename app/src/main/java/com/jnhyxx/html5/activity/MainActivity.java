@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
 
     private BroadcastReceiver mNetworkChangeReceiver;
 
-    private int selectPosition;
+    private int mTabPosition;
 
     private static final int REQUEST_CODE_LIVE = 770;
 
@@ -104,11 +104,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position >= 1) {
-                    selectPosition = position + 1;
-                    mBottomTabs.selectTab(selectPosition);
+                    mTabPosition = position + 1;
+                    mBottomTabs.selectTab(mTabPosition);
                 } else {
-                    selectPosition = position;
-                    mBottomTabs.selectTab(selectPosition);
+                    mTabPosition = position;
+                    mBottomTabs.selectTab(mTabPosition);
                 }
             }
 
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity {
             public void onTabClick(int position) {
                 mBottomTabs.selectTab(position);
                 if (position == 1) {
-                    openLiveHtml();
+                    openLivePage();
 
                 } else if (position >= 1) {
                     mViewPager.setCurrentItem(position - 1, false);
@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void openLiveHtml() {
+    private void openLivePage() {
         API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
             @Override
             public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
@@ -216,7 +216,7 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LIVE && resultCode == RESULT_OK) {
-            mBottomTabs.selectTab(selectPosition);
+            mBottomTabs.selectTab(mTabPosition);
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +54,9 @@ public class ModifyPwdActivity extends BaseActivity {
         setContentView(R.layout.activity_modify_pwd);
         ButterKnife.bind(this);
 
+
+        mNewPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        mConfirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         mNewPassword.addTextChangedListener(mValidationWatcher);
         mConfirmPassword.addTextChangedListener(mValidationWatcher);
 

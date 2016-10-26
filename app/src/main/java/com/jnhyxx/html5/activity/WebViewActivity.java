@@ -195,6 +195,11 @@ public class WebViewActivity extends BaseActivity {
             }
         });
 
+//        if(mPageUrl.contains()){
+//
+//        }
+        boolean hasCookies = CookieManager.getInstance().hasCookies();
+
         loadPage();
     }
 

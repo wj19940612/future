@@ -2,14 +2,12 @@ package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,6 +64,7 @@ public class SignInActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
+        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         mPassword.addTextChangedListener(mValidationWatcher);
 
         mPhoneNum.setText(LocalUser.getUser().getPhone());
@@ -215,9 +214,6 @@ public class SignInActivity extends BaseActivity {
         if (text != null) {
             Spannable spanText = (Spannable) text;
             Selection.setSelection(spanText, text.length());
-            mPassword.setTextColor(ContextCompat.getColor(SignInActivity.this, R.color.blackPrimary));
-            int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6, getResources().getDisplayMetrics());
-            mPassword.setTextSize(textSize);
         }
         mPassword.postInvalidate();
     }

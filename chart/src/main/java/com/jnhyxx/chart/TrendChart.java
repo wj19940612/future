@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 
 import com.jnhyxx.chart.domain.TrendViewData;
 
@@ -104,6 +105,12 @@ public class TrendChart extends ChartView {
 
     public void setUnstableData(TrendViewData unstableData) {
         mUnstableData = unstableData;
+
+        ViewGroup viewGroup = (ViewGroup) getParent();
+        if (viewGroup.getVisibility() != VISIBLE || getVisibility() != VISIBLE) {
+            return;
+        }
+
         redraw();
     }
 

@@ -119,22 +119,25 @@ public class TradeActivity extends BaseActivity implements
     private List<Product> mProductList;
     private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
+    private boolean mShowFragmentOfContainer;
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            updateFourMainPrices(data);
-            updateLastPriceView(data);
-            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
-            updateChartView(data);
-            mBuyLongBtn.setText(getString(R.string.buy_long)
-                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
-            mSellShortBtn.setText(getString(R.string.sell_short)
-                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
-            mHoldingOrderPresenter.setFullMarketData(data);
+            if (!mShowFragmentOfContainer) {
+                updateFourMainPrices(data);
+                updateLastPriceView(data);
+                mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+                updateChartView(data);
+                mBuyLongBtn.setText(getString(R.string.buy_long)
+                        + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
+                mSellShortBtn.setText(getString(R.string.sell_short)
+                        + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+            }
             updatePlaceOrderFragment(data);
+            mHoldingOrderPresenter.setFullMarketData(data);
         }
     };
 
@@ -221,7 +224,6 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
-            mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         }
     }
 
@@ -499,6 +501,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void showAgreementFragment(int longOrShort) {
+        mShowFragmentOfContainer = true;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
@@ -508,6 +511,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void showPlaceOrderFragment(int longOrShort) {
+        mShowFragmentOfContainer = true;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
@@ -517,6 +521,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void hideFragmentOfContainer() {
+        mShowFragmentOfContainer = false;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -598,8 +603,12 @@ public class TradeActivity extends BaseActivity implements
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
-        hideFragmentOfContainer();
-        placeOrder(longOrShort);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .commit();
+        }
     }
 
     @Override

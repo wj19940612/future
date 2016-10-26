@@ -262,6 +262,8 @@ public class HomeFragment extends BaseFragment {
                             Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
                             if (homePositionsResp.isSuccess()) {
                                 HomePositions homePositions = homePositionsResp.getData();
+                                updateSimulateButton(homePositions);
+
                                 mCashPositionList = homePositions.getCashOpS();
                                 ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                                 updateProductListView();
@@ -276,6 +278,15 @@ public class HomeFragment extends BaseFragment {
             ProductPkg.clearPositions(mProductPkgList);
             mCashPositionList = null;
             updateProductListView();
+        }
+    }
+
+    private void updateSimulateButton(HomePositions homePositions) {
+        if (mHomeListHeader == null) return;
+        if (homePositions.getIntegralOpS().size() > 0) {
+            mHomeListHeader.setSimulationHolding(true);
+        } else {
+            mHomeListHeader.setSimulationHolding(false);
         }
     }
 
@@ -372,7 +383,7 @@ public class HomeFragment extends BaseFragment {
                     mMarketOpenTime.setText(marketOpenTime);
                 } else {
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
-                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE: View.GONE);
+                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
                     mMarketCloseText.setVisibility(View.GONE);

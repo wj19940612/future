@@ -184,12 +184,13 @@ public class RechargeActivity extends BaseActivity {
         double amount = Double.valueOf(rechargeAmount);
 
         Launcher.with(getActivity(), PaymentActivity.class)
-                .putExtra(PaymentActivity.EX_URL, "http://newtest.jnhyxx.com/user/finance/deposit.do?money=" + amount)
+                .putExtra(PaymentActivity.EX_URL, API.Finance.depositByBankApply(amount))
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .executeForResult(REQUEST_CODE_BANK_PAY);
 
     }
+
     private void depositByAliPay() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);

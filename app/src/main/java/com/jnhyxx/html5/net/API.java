@@ -351,8 +351,8 @@ public class API extends APIBase {
          * @param money
          * @return
          */
-        public static API depositByBankApply(double money) {
-            return new API("/user/finance/deposit.do", new ApiParams().put("money", money));
+        public static String depositByBankApply(double money) {
+            return getHost() + "/user/finance/deposit.do?" + "&money=" + money;
         }
 
 //        /**
@@ -365,6 +365,7 @@ public class API extends APIBase {
 //        public static API depositByWeChartApply(double money) {
 //            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
 //        }
+
 
         public static String depositByWeChartApply(double money) {
             return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;

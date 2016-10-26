@@ -327,6 +327,15 @@ public class API extends APIBase {
         public static API getChannelByDomain() {
             return new API("/user/user/getChannelByDomain.do", new ApiParams());
         }
+
+        /**
+         * /user/user/findUserInfo.do 获取用户非完整数据
+         *
+         * @return
+         */
+        public static API getUserShortInfo() {
+            return new API("/user/user/findUserInfo.do", null);
+        }
     }
 
     public static class Finance {
@@ -354,6 +363,7 @@ public class API extends APIBase {
         public static String depositByBankApply(double money) {
             return getHost() + "/user/finance/deposit.do?" + "&money=" + money;
         }
+
 
 //        /**
 //         * 接口名：用户充值(微信充值)

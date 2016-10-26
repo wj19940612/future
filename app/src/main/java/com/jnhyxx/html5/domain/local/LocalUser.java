@@ -8,6 +8,10 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 
 public class LocalUser {
 
+    public interface Callback {
+        void onUpdateCompleted();
+    }
+
     private UserInfo mUserInfo;
     private String mPhone;
     private static LocalUser sLocalUser;
@@ -48,6 +52,10 @@ public class LocalUser {
         saveToPreference();
     }
 
+    public void setUsableMoneyScore(UserInfo userInfo) {
+        mUserInfo.setMoneyUsable(userInfo.getMoneyUsable());
+        mUserInfo.setScoreUsable(userInfo.getScoreUsable());
+    }
 
     public UserInfo getUserInfo() {
         return mUserInfo;
@@ -103,17 +111,6 @@ public class LocalUser {
             return mUserInfo.getScoreUsable();
         }
         return 0;
-    }
-
-    /**
-     * @return
-     * @deprecated
-     */
-    public String getUserPhoneNum() {
-        if (mUserInfo != null) {
-            return mUserInfo.getUserPhone();
-        }
-        return "";
     }
 
     public String getPhone() {

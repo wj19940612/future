@@ -8,7 +8,6 @@ import java.io.Serializable;
  */
 
 public class UserFundInfo implements Serializable {
-    private static final long serialVersionUID = 695390150803880416L;
 
     /**
      * createTime : 2016-08-16 15:33:14
@@ -129,7 +128,6 @@ public class UserFundInfo implements Serializable {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
-
 
     @Override
     public String toString() {

@@ -4,7 +4,6 @@ package com.jnhyxx.html5.fragment;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +89,6 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.headImage)
     CircularAnnulusImageView mHeadImage;
 
-
     private Unbinder mBinder;
 
     @Override
@@ -113,6 +111,14 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            requestUserInfo();
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
@@ -122,6 +128,16 @@ public class MineFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         updateAccountInfoView();
+        requestUserInfo();
+    }
+
+    private void requestUserInfo() {
+        updateUsableMoneyScore(new LocalUser.Callback() {
+            @Override
+            public void onUpdateCompleted() {
+                updateAccountInfoView();
+            }
+        });
     }
 
     private void updateAccountInfoView() {
@@ -149,7 +165,6 @@ public class MineFragment extends BaseFragment {
             mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
         }
     }
-
 
     @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage})
     public void onClick(View view) {
@@ -250,9 +265,8 @@ public class MineFragment extends BaseFragment {
                         @Override
                         protected void onRespSuccess(Resp<UserFundInfo> resp) {
                             UserFundInfo userFundInfo = resp.getData();
-                            Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
                             Launcher.with(getActivity(), TradeDetailActivity.class)
-                                    .putExtra(TradeDetailActivity.INTENT_KEY, userFundInfo).execute();
+                                    .putExtra(Launcher.EX_PAYLOAD, userFundInfo).execute();
                         }
                     }).fire();
         } else {

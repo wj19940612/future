@@ -81,6 +81,7 @@ public class SignInActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_REGISTER && resultCode == RESULT_OK) {
             // User register done, then finish
+            setResult(RESULT_OK);
             finish();
         }
     }

@@ -39,7 +39,6 @@ public class UserInfo {
     public static final int REAL_NAME_STATUS_FILLED = 1;
     public static final int REAL_NAME_STATUS_VERIFIED = 2;
 
-
     /**
      * moneyUsable可用资金余额
      */
@@ -56,6 +55,7 @@ public class UserInfo {
      * userPhone用户手机号
      */
     private String userPhone;
+
     /**
      * idStatus实名状态 0未填写，1已填写，2已认证
      */

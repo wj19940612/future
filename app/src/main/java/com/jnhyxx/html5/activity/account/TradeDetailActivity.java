@@ -16,6 +16,7 @@ import com.jnhyxx.html5.fragment.TradeDetailListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
+import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
 
@@ -39,10 +40,7 @@ public class TradeDetailActivity extends BaseActivity {
     @BindView(R.id.blockedNumber)
     TextView mBlockedNumber;
 
-    public static final String INTENT_KEY = "userFundInfo";
-
     UserFundInfo mUserFundInfo;
-
 
     ArrayList<Fragment> fragmentList;
 
@@ -56,7 +54,7 @@ public class TradeDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         initViewPager();
 
-        mUserFundInfo = (UserFundInfo) getIntent().getSerializableExtra(INTENT_KEY);
+        mUserFundInfo = (UserFundInfo) getIntent().getSerializableExtra(Launcher.EX_PAYLOAD);
         if (mUserFundInfo == null) return;
         initData();
 
@@ -77,7 +75,6 @@ public class TradeDetailActivity extends BaseActivity {
                         mRemainTitle.setText(R.string.account_trade_detail_integral_remain);
                         mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getScoreUsable()));
                         mBlockedTitle.setText(R.string.integral_frozen);
-                        // TODO: 2016/9/19 目前不知冻结积分如何获取
                         mBlockedNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getMarginScore()));
                         break;
                 }

@@ -115,6 +115,8 @@ public class SignUpActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             // User login done, then finish
+
+            setResult(RESULT_OK);
             finish();
         }
     }

@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +139,6 @@ public class HomeFragment extends BaseFragment {
 
         requestHomeInformation();
         //requestOrderReport();
-        requestProductList();
         requestProductMarketList();
     }
 
@@ -205,6 +205,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        requestProductList();
         requestHomePositions();
         startScheduleJob(5 * 1000);
     }
@@ -255,17 +256,20 @@ public class HomeFragment extends BaseFragment {
     private void requestHomePositions() {
         if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
+                    .setCallback(new Callback<Resp<HomePositions>>(false) {
                         @Override
-                        public void onRespSuccess(HomePositions homePositions) {
-                            mCashPositionList = homePositions.getCashOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
-                            if (updateProductList) {
-                                requestProductList();
-                            } else {
+                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
+                            Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
+                            if (homePositionsResp.isSuccess()) {
+                                HomePositions homePositions = homePositionsResp.getData();
+                                mCashPositionList = homePositions.getCashOpS();
+                                ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                                 updateProductListView();
                             }
+                        }
+
+                        @Override
+                        public void onReceive(Resp<HomePositions> homePositionsResp) {
                         }
                     }).fire();
         } else { // clearHoldingOrderList all product position

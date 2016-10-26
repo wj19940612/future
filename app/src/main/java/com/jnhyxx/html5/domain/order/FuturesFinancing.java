@@ -5,6 +5,8 @@ import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -125,6 +127,15 @@ public class FuturesFinancing {
 
     public void setAssets(List<AssetsBean> assets) {
         this.assets = assets;
+    }
+
+    public void sort() {
+        Collections.sort(getAssets(), new Comparator<AssetsBean>() {
+            @Override
+            public int compare(AssetsBean o1, AssetsBean o2) {
+                return (int) (o1.getStopLossBeat() - o2.getStopLossBeat());
+            }
+        });
     }
 
     public static class AssetsBean {
@@ -301,6 +312,12 @@ public class FuturesFinancing {
                 double stopProfit = entry.getValue().doubleValue();
                 result.add(new StopProfit(stopProfitPoint, stopProfit, profitLossScale, sign));
             }
+            Collections.sort(result, new Comparator<StopProfit>() {
+                @Override
+                public int compare(StopProfit o1, StopProfit o2) {
+                    return o1.getStopProfitPoint() - o2.getStopProfitPoint();
+                }
+            });
             return result;
         }
 
@@ -319,6 +336,12 @@ public class FuturesFinancing {
                 }
                 result.add(new TradeQuantity(Integer.valueOf(hand).intValue(), feePrimary, marginPrimary));
             }
+            Collections.sort(result, new Comparator<TradeQuantity>() {
+                @Override
+                public int compare(TradeQuantity o1, TradeQuantity o2) {
+                    return o1.getQuantity() - o2.getQuantity();
+                }
+            });
             return result;
         }
     }

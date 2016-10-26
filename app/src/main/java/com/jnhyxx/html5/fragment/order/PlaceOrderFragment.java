@@ -325,6 +325,7 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updatePlaceOrderViews() {
         // 设置止损
+        mFuturesFinancing.sort();
         mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }
 

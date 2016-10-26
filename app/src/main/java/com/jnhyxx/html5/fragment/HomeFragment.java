@@ -194,7 +194,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onTimeUp(int count) {
-        super.onTimeUp(count);
         if (getUserVisibleHint()) {
             requestProductMarketList();
             mHomeListHeader.nextOrderReport();

@@ -254,6 +254,7 @@
     <string name="highest">最高 %1$s</string>
     <string name="lowest">最低 %1$s</string>
     <string name="gold">金币</string>
+    <string name="sell_order_submit_successfully">卖出委托提交成功</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>

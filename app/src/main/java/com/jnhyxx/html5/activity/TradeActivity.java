@@ -637,6 +637,18 @@ public class TradeActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    public void onSubmitAllHoldingPositionsCompleted(String message) {
+        SmartDialog.with(getActivity(),
+                getString(R.string.sell_order_submit_successfully) + "\n" + message)
+                .setPositive(R.string.ok)
+                .show();
+    }
+
+    @Override
+    public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
+    }
+
     static class MenuAdapter extends ArrayAdapter<Product> {
 
         public MenuAdapter(Context context) {

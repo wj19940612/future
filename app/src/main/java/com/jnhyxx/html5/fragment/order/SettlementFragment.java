@@ -82,6 +82,14 @@ public class SettlementFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,

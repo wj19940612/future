@@ -21,7 +21,9 @@ import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 
 import java.math.BigDecimal;
@@ -224,6 +226,19 @@ public class HoldingFragment extends BaseFragment
                 mLossProfitArea.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void onSubmitAllHoldingPositionsCompleted(String message) {
+        SmartDialog.with(getActivity(),
+                getString(R.string.sell_order_submit_successfully) + "\n" + message)
+                .setPositive(R.string.ok)
+                .show();
+    }
+
+    @Override
+    public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
+        ToastUtil.center(R.string.sell_order_submit_successfully, R.dimen.toast_offset);
     }
 
     @OnClick(R.id.oneKeyClosePositionBtn)

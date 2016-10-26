@@ -45,6 +45,9 @@ public class HoldingOrderPresenter {
 
         void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio);
 
+        void onSubmitAllHoldingPositionsCompleted(String message);
+
+        void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder);
     }
 
     public void destroy() {
@@ -81,7 +84,9 @@ public class HoldingOrderPresenter {
                         protected void onRespSuccess(Resp<JsonObject> resp) {
                             setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                             onViewShowHoldingOrderList(mHoldingOrderList);
+                            onSubmitAllHoldingPositionsCompleted(resp.getMsg());
                             startQueryJob();
+
                         }
                     }).fire();
         }
@@ -109,6 +114,7 @@ public class HoldingOrderPresenter {
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                         onViewShowHoldingOrderList(mHoldingOrderList);
+                        onSubmitHoldingOrderCompleted(order);
                         startQueryJob();
                     }
                 }).fireSync();
@@ -172,6 +178,18 @@ public class HoldingOrderPresenter {
         }
     }
 
+    private void onSubmitAllHoldingPositionsCompleted(String message) {
+        if (!mDestroyed && mIHoldingOrderView != null) {
+            mIHoldingOrderView.onSubmitAllHoldingPositionsCompleted(message);
+        }
+    }
+
+    private void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
+        if (!mDestroyed && mIHoldingOrderView != null) {
+            mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
+        }
+    }
+
     public void loadHoldingOrderList(int varietyId, int fundType) {
         if (!LocalUser.getUser().isLogin()) return;
 
@@ -199,8 +217,8 @@ public class HoldingOrderPresenter {
      * 刷新策略:
      * <p/>
      * 500ms 间隔, 刷新5次
-     * 2s 间隔, 刷新10次
-     * 4s 间隔, 刷新20次
+     * 2s 间隔, 刷新5次
+     * 4s 间隔, 刷新10次
      */
     private void startQueryJob() {
         boolean refresh = false;

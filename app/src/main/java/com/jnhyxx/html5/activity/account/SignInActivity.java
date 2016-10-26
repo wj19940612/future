@@ -190,7 +190,7 @@ public class SignInActivity extends BaseActivity {
                         if (jsonObjectResp.isSuccess()) {
                             UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(userInfo, phoneNum);
-                            ToastUtil.curt(R.string.login_success);
+                            ToastUtil.show(R.string.login_success);
 
                             setResult(RESULT_OK);
                             finish();

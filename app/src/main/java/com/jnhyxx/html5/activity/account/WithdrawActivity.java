@@ -188,6 +188,7 @@ public class WithdrawActivity extends BaseActivity {
         LocalUser user = LocalUser.getUser();
         UserInfo userInfo = user.getUserInfo();
         userInfo.setMoneyUsable(FinanceUtil.subtraction(userFundInfo.getMoneyUsable(), withdrawAmount).doubleValue());
+        user.setUserInfo(userInfo);
         mBalance.setText(FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue()));
     }
 

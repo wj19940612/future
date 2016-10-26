@@ -27,6 +27,7 @@ import com.jnhyxx.chart.domain.FlashViewData;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.constans.Unit;
@@ -561,19 +562,18 @@ public class TradeActivity extends BaseActivity implements
                                     })
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-//                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
-//                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-//                                    .setPositive(R.string.go_to_recharge,
-//                                            new SmartDialog.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(Dialog dialog) {
-//                                                    dialog.dismiss();
-//                                                    Launcher.with(getActivity(), RechargeActivity.class)
-//                                                            .execute();
-//                                                }
-//                                            }).setNegative(R.string.cancel)
-//                                    .show();
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.go_to_recharge,
+                                            new SmartDialog.OnClickListener() {
+                                                @Override
+                                                public void onClick(Dialog dialog) {
+                                                    dialog.dismiss();
+                                                    Launcher.with(getActivity(), RechargeActivity.class)
+                                                            .execute();
+                                                }
+                                            }).setNegative(R.string.cancel)
+                                    .show();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)

@@ -33,12 +33,18 @@
     </style>
 
     <style name="SignEditText.PhoneNum">
+        <item name="android:textColorHint">@color/grayHint</item>
+        <item name="textSize">16sp</item>
+        <item name="textColor">@color/blackPrimary</item>
         <item name="android:inputType">phone</item>
         <item name="android:maxLength">13</item>
         <item name="android:drawablePadding">10dp</item>
     </style>
 
     <style name="SignEditText.Password">
+        <item name="android:textColorHint">@color/grayHint</item>
+        <item name="textSize">16sp</item>
+        <item name="textColor">@color/blackPrimary</item>
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">20</item>
         <item name="android:drawablePadding">10dp</item>
@@ -46,6 +52,8 @@
     </style>
 
     <style name="SignEditText.AuthCode">
+        <item name="textSize">16sp</item>
+        <item name="textColor">@color/blackPrimary</item>
         <item name="android:maxLength">6</item>
         <item name="android:drawablePadding">10dp</item>
         <item name="android:digits">0123456789qwertyuioplkjhgfdsazxcvbnm</item>

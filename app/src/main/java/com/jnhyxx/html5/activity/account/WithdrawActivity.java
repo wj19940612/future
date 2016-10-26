@@ -31,13 +31,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.balance;
-
 public class WithdrawActivity extends BaseActivity {
 
     private static final int REQ_CODE_ADD_BANKCARD = 1;
 
-    @BindView(balance)
+    @BindView(R.id.balance)
     TextView mBalance;
     @BindView(R.id.withdrawBankcard)
     TextView mWithdrawBankcard;

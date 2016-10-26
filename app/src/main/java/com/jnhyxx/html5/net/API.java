@@ -361,7 +361,11 @@ public class API extends APIBase {
          * @return
          */
         public static String depositByBankApply(double money) {
-            return getHost() + "/user/finance/deposit.do?" + "&money=" + money;
+            return depositByBankApply() + "&money=" + money;
+        }
+
+        public static String depositByBankApply() {
+            return getHost() + "/user/finance/deposit.do?";
         }
 
 
@@ -548,7 +552,7 @@ public class API extends APIBase {
          * @return
          */
         public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?activityId=" + liveRoomId+"&nohead=1";
+            return getHost() + "/zhibo/live.html?activityId=" + liveRoomId + "&nohead=1";
         }
     }
 

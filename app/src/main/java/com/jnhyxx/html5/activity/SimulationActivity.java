@@ -221,6 +221,8 @@ public class SimulationActivity extends BaseActivity {
             TextView mProductName;
             @BindView(R.id.hotIcon)
             ImageView mHotIcon;
+            @BindView(R.id.newTag)
+            TextView mNewTag;
             @BindView(R.id.marketCloseText)
             TextView mMarketCloseText;
             @BindView(R.id.holdingPosition)
@@ -244,6 +246,8 @@ public class SimulationActivity extends BaseActivity {
                     mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
                     mAdvertisement.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.GONE);
+                    mHotIcon.setVisibility(View.GONE);
+                    mNewTag.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
                     mMarketOpenTime.setVisibility(View.VISIBLE);
                     String marketOpenTime = createMarketOpenTime(product, context);
@@ -253,10 +257,14 @@ public class SimulationActivity extends BaseActivity {
                     mAdvertisement.setVisibility(View.VISIBLE);
                     mMarketCloseText.setVisibility(View.GONE);
                     mMarketOpenTime.setVisibility(View.GONE);
+                    mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
+                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE: View.GONE);
                 }
                 HomePositions.Position position = pkg.getPosition(); // Position status
                 if (position != null && position.getHandsNum() > 0) {
                     mHoldingPosition.setVisibility(View.VISIBLE);
+                    mNewTag.setVisibility(View.GONE);
+                    mHotIcon.setVisibility(View.GONE);
                 } else {
                     mHoldingPosition.setVisibility(View.GONE);
                 }

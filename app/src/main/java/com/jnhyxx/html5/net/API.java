@@ -864,4 +864,12 @@ public class API extends APIBase {
     public static String getInfoLiveUrl() {
         return "http://m.jin10.com/flash?maxId=0";
     }
+
+    /**
+     * 新手引导页面网址
+     * @return
+     */
+    public static String getNewbieUrl() {
+        return getHost() + "/newtrader.html?nohead=1";
+    }
 }

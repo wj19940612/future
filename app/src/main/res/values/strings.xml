@@ -52,7 +52,7 @@
     <string name="live">直播</string>
     <string name="information">资讯</string>
     <string name="mine">我的</string>
-
+    <string name="newbie_title">新手引导</string>
 
     <!-- Local Prompt -->
     <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；

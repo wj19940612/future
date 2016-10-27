@@ -162,7 +162,7 @@
                 android:layout_weight="1"
                 android:hint="@string/please_input_your_bankcard_num"
                 android:inputType="number"
-                android:maxLength="23"/>
+                android:maxLength="26"/>
         </LinearLayout>
 
         <LinearLayout

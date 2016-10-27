@@ -357,7 +357,7 @@
     <string name="common_phone_num_fail">手机格式错误，请输入正确的手机号码</string>
 
     <!--实名认证-->
-    <string name="prompt_about_name_verify">一张身份证只能绑定一个账号,请填写本人真实信息，核实后不可修改</string>
+    <string name="prompt_about_name_verify">一张身份证只能绑定一个账号,请填写本人真实信息，核实后将不可修改</string>
     <string name="settings_identity_card_fail">身份证格式错误，请输入15位或18位身份证号码</string>
     <string name="settings_identity_card_when_login">请先登录后再认证</string>
     <string name="auth_name_write_success">实名认证填写成功</string>

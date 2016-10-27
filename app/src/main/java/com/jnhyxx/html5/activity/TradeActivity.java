@@ -391,6 +391,7 @@ public class TradeActivity extends BaseActivity implements
             trendView = new TrendView(this);
             mChartContainer.addTrendView(trendView);
         }
+        trendView.clearData();
         TrendView.Settings settings = new TrendView.Settings();
         settings.setBaseLines(mProduct.getBaseline());
         settings.setNumberScale(mProduct.getPriceDecimalScale());
@@ -399,7 +400,6 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
-        trendView.setDataList(null);
 
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView == null) {
@@ -476,6 +476,8 @@ public class TradeActivity extends BaseActivity implements
         if (product.getVarietyId() == mProduct.getVarietyId()) {
             mMenu.toggle();
         } else {
+            NettyClient.getInstance().stop();
+
             hideFragmentOfContainer();
             mMenu.toggle();
 
@@ -483,7 +485,6 @@ public class TradeActivity extends BaseActivity implements
             updateProductRelatedViews();
             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-            NettyClient.getInstance().stop();
             NettyClient.getInstance().start(mProduct.getContractsCode());
         }
     }
@@ -517,7 +518,6 @@ public class TradeActivity extends BaseActivity implements
     private void showAgreementFragment(int longOrShort) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
-            mUpdateRealTimeData = false;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
                     .commit();
@@ -527,7 +527,6 @@ public class TradeActivity extends BaseActivity implements
     private void showPlaceOrderFragment(int longOrShort) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
-            mUpdateRealTimeData = false;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
                     .commit();
@@ -540,7 +539,6 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
-            mUpdateRealTimeData = true;
         }
     }
 
@@ -551,7 +549,6 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
-            mUpdateRealTimeData = true;
         } else {
             super.onBackPressed();
         }
@@ -615,6 +612,16 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
+    public void onPlaceOrderFragmentShow() {
+        mUpdateRealTimeData = false;
+    }
+
+    @Override
+    public void onPlaceOrderFragmentExited() {
+        mUpdateRealTimeData = true;
+    }
+
+    @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
@@ -629,6 +636,16 @@ public class TradeActivity extends BaseActivity implements
     @Override
     public void onAgreementFragmentEmptyAreaClick() {
         hideFragmentOfContainer();
+    }
+
+    @Override
+    public void onAgreementFragmentShow() {
+        mUpdateRealTimeData = false;
+    }
+
+    @Override
+    public void onAgreementFragmentExited() {
+        mUpdateRealTimeData = true;
     }
 
     @Override

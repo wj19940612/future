@@ -334,6 +334,9 @@ public class PlaceOrderFragment extends BaseFragment {
         super.onDestroyView();
         mBlurEngine.onDestroyView();
         mBinder.unbind();
+        if (mCallback != null) {
+            mCallback.onPlaceOrderFragmentExited();
+        }
     }
 
     @Override
@@ -362,6 +365,10 @@ public class PlaceOrderFragment extends BaseFragment {
         void onConfirmBtnClick(SubmittedOrder submittedOrder);
 
         void onPlaceOrderFragmentEmptyAreaClick();
+
+        void onPlaceOrderFragmentShow();
+
+        void onPlaceOrderFragmentExited();
     }
 
     @Override
@@ -383,6 +390,9 @@ public class PlaceOrderFragment extends BaseFragment {
         @Override
         public void onAnimationStart(Animation animation) {
             mIsShowing = true;
+            if (mCallback != null) {
+                mCallback.onPlaceOrderFragmentShow();
+            }
         }
 
         @Override
@@ -404,6 +414,4 @@ public class PlaceOrderFragment extends BaseFragment {
         public void onAnimationRepeat(Animation animation) {
         }
     }
-
-
 }

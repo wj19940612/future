@@ -60,6 +60,11 @@ public class TrendView extends FrameLayout {
         return mChart.getDataList();
     }
 
+    public void clearData() {
+        setDataList(null);
+        setUnstableData(null);
+    }
+
     public static class Util {
 
         /**

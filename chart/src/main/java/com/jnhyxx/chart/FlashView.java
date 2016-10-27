@@ -173,7 +173,7 @@ public class FlashView extends ChartView {
                 String baseLineValue = formatNumber(baselines[i]);
                 float textWidth = sPaint.measureText(baseLineValue);
                 float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
-                float y = topY + mFontHeight / 2 + mOffset4CenterText;
+                float y = topY + mOffset4CenterText;
                 canvas.drawText(baseLineValue, x, y, sPaint);
             }
             topY += verticalInterval;

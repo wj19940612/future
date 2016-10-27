@@ -151,21 +151,23 @@ public class HoldingFragment extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
-        mHoldingOrderPresenter.destroy();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mHoldingOrderPresenter.onResume();
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override
@@ -175,8 +177,6 @@ public class HoldingFragment extends BaseFragment
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     @Override

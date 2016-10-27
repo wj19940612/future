@@ -156,14 +156,17 @@ public class TrendChart extends ChartView {
                 max = new BigDecimal(min).add(new BigDecimal(limitUp)).floatValue();
             }
 
+            float pricePadding = mDataList.get(0).getLastPrice() * 0.0025f;
+            /** expand max ~ min to not let trend line touch top and bottom **/
+            max = max + pricePadding;
+            min = min - pricePadding;
+
             float priceRange = BigDecimal.valueOf(max).subtract(new BigDecimal(min))
                     .divide(new BigDecimal(baselines.length - 1), RoundingMode.HALF_EVEN)
                     .floatValue();
 
-            float pricePadding = mDataList.get(0).getLastPrice() * 0.0025f;
-            /** expand max ~ min to not let trend line touch top and bottom **/
-            baselines[0] = max + pricePadding;
-            baselines[baselines.length - 1] = min - pricePadding;
+            baselines[0] = max;
+            baselines[baselines.length - 1] = min;
             for (int i = baselines.length - 2; i > 0; i--) {
                 baselines[i] = baselines[i + 1] + priceRange;
             }

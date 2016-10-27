@@ -119,14 +119,15 @@ public class TradeActivity extends BaseActivity implements
     private List<Product> mProductList;
     private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
-    private boolean mShowFragmentOfContainer;
+
+    private boolean mUpdateRealTimeData;
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            if (!mShowFragmentOfContainer) {
+            if (mUpdateRealTimeData) {
                 updateFourMainPrices(data);
                 updateLastPriceView(data);
                 mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
@@ -155,6 +156,7 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
+        mUpdateRealTimeData = true;
 
         initData(getIntent());
 
@@ -190,8 +192,6 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         updateSignTradePagerHeader();
         updateProductRelatedViews();
-
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     private void openOrdersPage() {
@@ -350,7 +350,9 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         startScheduleJob(60 * 1000, 60 * 1000);
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
+        mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
@@ -367,14 +369,14 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
+        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHoldingOrderPresenter.destroy();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
 
@@ -443,6 +445,18 @@ public class TradeActivity extends BaseActivity implements
         mMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         mMenu.setBehindWidthRes(R.dimen.sliding_menu_width);
         mMenu.setMenu(R.layout.sm_behind_menu);
+        mMenu.setSecondaryOnOpenListner(new SlidingMenu.OnOpenListener() {
+            @Override
+            public void onOpen() {
+                mUpdateRealTimeData = false;
+            }
+        });
+        mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
+            @Override
+            public void onClosed() {
+                mUpdateRealTimeData = true;
+            }
+        });
         ListView listView = (ListView) mMenu.getMenu();
         MenuAdapter menuAdapter = new MenuAdapter(this);
         menuAdapter.addAll(mProductList);
@@ -501,9 +515,9 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void showAgreementFragment(int longOrShort) {
-        mShowFragmentOfContainer = true;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
+            mUpdateRealTimeData = false;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.placeOrderContainer, AgreementFragment.newInstance(longOrShort))
                     .commit();
@@ -511,9 +525,9 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void showPlaceOrderFragment(int longOrShort) {
-        mShowFragmentOfContainer = true;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
+            mUpdateRealTimeData = false;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
                     .commit();
@@ -521,12 +535,12 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void hideFragmentOfContainer() {
-        mShowFragmentOfContainer = false;
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
+            mUpdateRealTimeData = true;
         }
     }
 
@@ -537,6 +551,7 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
+            mUpdateRealTimeData = true;
         } else {
             super.onBackPressed();
         }

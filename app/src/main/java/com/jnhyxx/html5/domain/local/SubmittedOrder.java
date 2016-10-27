@@ -35,6 +35,10 @@ public class SubmittedOrder {
         this.orderPrice = orderPrice;
     }
 
+    public int getDirection() {
+        return direction;
+    }
+
     @Override
     public String toString() {
         return "SubmittedOrder{" +

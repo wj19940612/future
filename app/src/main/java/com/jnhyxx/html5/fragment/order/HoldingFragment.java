@@ -40,6 +40,10 @@ import static com.jnhyxx.html5.R.id.hands;
 public class HoldingFragment extends BaseFragment
         implements HoldingOrderPresenter.IHoldingOrderView {
 
+    public interface Callback {
+        void onClosePositionButtonsClick();
+    }
+
     @BindView(android.R.id.list)
     ListView mList;
     @BindView(R.id.totalProfitAndUnit)
@@ -61,7 +65,9 @@ public class HoldingFragment extends BaseFragment
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
+
     private HoldingOrderPresenter mHoldingOrderPresenter;
+    private Callback mCallback;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
@@ -128,6 +134,17 @@ public class HoldingFragment extends BaseFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnBuyBtnClickListener");
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -188,12 +205,19 @@ public class HoldingFragment extends BaseFragment
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mHoldingOrderPresenter.closePosition(mFundType, order);
+                        onClosePositionButtonsClick();
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
+        }
+    }
+
+    private void onClosePositionButtonsClick() {
+        if (mCallback != null) {
+            mCallback.onClosePositionButtonsClick();
         }
     }
 
@@ -244,6 +268,7 @@ public class HoldingFragment extends BaseFragment
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
+        onClosePositionButtonsClick();
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

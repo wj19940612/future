@@ -151,4 +151,26 @@ public class SettledOrder extends AbsOrder implements Serializable {
     public double getWinOrLoss() {
         return winOrLoss;
     }
+
+    @Override
+    public String toString() {
+        return "SettledOrder{" +
+                "batchNoTime=" + batchNoTime +
+                ", currencyUnit='" + currencyUnit + '\'' +
+                ", direction=" + direction +
+                ", handsNum=" + handsNum +
+                ", orderStatus=" + orderStatus +
+                ", orderTime=" + orderTime +
+                ", ratio=" + ratio +
+                ", realAvgPrice=" + realAvgPrice +
+                ", realMarketVal=" + realMarketVal +
+                ", sellTime=" + sellTime +
+                ", showId='" + showId + '\'' +
+                ", stopLossPrice=" + stopLossPrice +
+                ", stopWinPrice=" + stopWinPrice +
+                ", unwindAvgPrice=" + unwindAvgPrice +
+                ", unwindType=" + unwindType +
+                ", winOrLoss=" + winOrLoss +
+                '}';
+    }
 }

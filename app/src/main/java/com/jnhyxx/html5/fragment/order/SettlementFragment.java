@@ -59,6 +59,7 @@ public class SettlementFragment extends BaseFragment {
     private int mPageNo;
     private int mPageSize;
     private Set<String> mSet;
+    private boolean mHoldingFragmentClosedPositions;
 
     private TextView mFooter;
     private SettlementAdapter mSettlementAdapter;
@@ -70,6 +71,10 @@ public class SettlementFragment extends BaseFragment {
         args.putInt(Product.EX_FUND_TYPE, fundType);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setHoldingFragmentClosedPositions(boolean closePositions) {
+        mHoldingFragmentClosedPositions = closePositions;
     }
 
     @Override
@@ -86,7 +91,13 @@ public class SettlementFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isAdded()) {
-
+            if (mHoldingFragmentClosedPositions) {
+                mPageNo = 1;
+                mSet.clear();
+                mSwipeRefreshLayout.setRefreshing(true);
+                requestSettlementOrderList();
+                mHoldingFragmentClosedPositions = false;
+            }
         }
     }
 

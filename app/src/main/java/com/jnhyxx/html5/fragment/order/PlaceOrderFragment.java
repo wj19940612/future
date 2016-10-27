@@ -211,8 +211,12 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     private void updateSubmittedOrder() {
-        if (mSubmittedOrder != null) {
-            // TODO: 10/8/16 确认下最新买入价是什么
+        if (mSubmittedOrder != null && mMarketData != null) {
+            if (mSubmittedOrder.getDirection() == TYPE_BUY_LONG) {
+                mSubmittedOrder.setOrderPrice(mMarketData.getAskPrice());
+            } else {
+                mSubmittedOrder.setOrderPrice(mMarketData.getBidPrice());
+            }
         }
     }
 
@@ -334,14 +338,14 @@ public class PlaceOrderFragment extends BaseFragment {
         super.onDestroyView();
         mBlurEngine.onDestroyView();
         mBinder.unbind();
-        if (mCallback != null) {
-            mCallback.onPlaceOrderFragmentExited();
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mCallback != null) {
+            mCallback.onPlaceOrderFragmentExited();
+        }
         mCallback = null;
     }
 

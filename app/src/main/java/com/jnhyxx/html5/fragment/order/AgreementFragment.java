@@ -122,14 +122,14 @@ public class AgreementFragment extends BaseFragment {
         super.onDestroyView();
         mBlurEngine.onDestroyView();
         mBinder.unbind();
-        if (mCallback != null) {
-            mCallback.onAgreementFragmentExited();
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mCallback != null) {
+            mCallback.onAgreementFragmentExited();
+        }
         mCallback = null;
     }
 

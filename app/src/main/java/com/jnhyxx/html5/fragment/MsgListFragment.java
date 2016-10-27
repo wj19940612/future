@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.msg.SysTradeMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
@@ -105,6 +106,9 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
                 mSet.clear();
                 mPageNo = 0;
                 requestMessageList();
+                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         requestMessageList();

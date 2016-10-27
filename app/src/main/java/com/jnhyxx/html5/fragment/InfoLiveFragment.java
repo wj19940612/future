@@ -22,6 +22,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.Network;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -110,6 +111,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     @Override
     public void onRefresh() {
         getInfoLiveData();
+        if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

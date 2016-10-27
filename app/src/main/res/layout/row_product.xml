@@ -88,6 +88,7 @@
         android:visibility="visible">
 
         <TextView
+            android:layout_marginRight="10dp"
             android:id="@+id/lastPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,11 +100,10 @@
             android:id="@+id/priceChangePercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_red_primary"
             android:drawableLeft="@drawable/ic_up_arrow"
             android:drawablePadding="6dp"
-            android:minWidth="64dp"
+            android:gravity="center"
             android:paddingBottom="2dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"

@@ -25,8 +25,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
             android:layout_marginTop="15dp"
             android:background="@drawable/bg_bank_bg"
             android:orientation="vertical"
@@ -39,13 +39,14 @@
                 android:src="@drawable/ic_bank_zhaoshang"/>
 
             <TextView
+                tools:text="中国银行"
                 android:id="@+id/bankName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/bankCardIcon"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:paddingTop="5dp"
+                android:textSize="16sp"
                 android:textColor="@android:color/white"/>
 
             <TextView
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:lineSpacingExtra="25dp"
+            android:lineSpacingExtra="20dp"
             android:paddingTop="30dp"
             android:text="@string/bing_bank_behind_warn"
             android:textColor="@color/colorDisable"/>
@@ -106,7 +107,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/common_margin"
                 android:layout_marginRight="@dimen/common_margin"
-                android:background="@drawable/bg_input_enable"
+                android:background="@drawable/bg_line_division_center"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -144,7 +145,7 @@
             android:layout_height="60dp"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_center"
             android:gravity="center_vertical|bottom"
             android:orientation="horizontal">
 
@@ -170,7 +171,7 @@
             android:layout_height="60dp"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_center"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
             android:orientation="horizontal">
@@ -196,7 +197,7 @@
             android:layout_height="60dp"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_center"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
             android:orientation="horizontal">

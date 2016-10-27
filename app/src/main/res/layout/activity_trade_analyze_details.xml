@@ -115,7 +115,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/line_division_fill"
+            android:background="@drawable/bg_line_division_fill"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin"

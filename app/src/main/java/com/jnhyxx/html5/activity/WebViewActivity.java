@@ -26,11 +26,9 @@ import android.widget.ProgressBar;
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
-import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.net.CookieManger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -197,18 +195,6 @@ public class WebViewActivity extends BaseActivity {
             }
         });
 
-        // TODO: 2016/10/26 防止Cookies没有及时设置成功
-        if (mPageUrl.contains(API.Finance.depositByBankApply())) {
-            boolean hasCookies = CookieManager.getInstance().hasCookies();
-            Log.d("recharge", "充值的时候是否有cookies  " + hasCookies);
-            if (hasCookies) {
-                loadPage();
-                return;
-            } else {
-                initCookies(CookieManger.getInstance().getRawCookie(), mPageUrl);
-                mWebView.reload();
-            }
-        }
 
         loadPage();
     }

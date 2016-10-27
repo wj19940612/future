@@ -63,10 +63,8 @@ public class StrFormatter {
      * @return
      */
     public static String getHintFormatBankCardNumber(String bankCardNoSpace) {
-        if (bankCardNoSpace.length() == 16) {
-            return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
-        } else if (bankCardNoSpace.length() == 19) {
-            return "*** **** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
+        if (bankCardNoSpace.length() >= 16) {
+            return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4);
         }
         return bankCardNoSpace;
     }

@@ -189,9 +189,14 @@ public class TradeActivity extends BaseActivity implements
                 openOrdersPage();
             }
         });
+
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
+        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit());
+
+        updateTitleBar(); // based on product
         updateSignTradePagerHeader();
-        updateProductRelatedViews();
+        updateChartView(); // based on product
+        updateExchangeStatusView(); // based on product
     }
 
     private void openOrdersPage() {
@@ -199,13 +204,6 @@ public class TradeActivity extends BaseActivity implements
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
                 .execute();
-    }
-
-    private void updateProductRelatedViews() {
-        updateTitleBar();
-        updateChartView();
-        updateExchangeStatusView();
-        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit());
     }
 
     private void updateSignTradePagerHeader() {
@@ -455,6 +453,15 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onClosed() {
                 mUpdateRealTimeData = true;
+
+                NettyClient.getInstance().stop();
+
+                hideFragmentOfContainer();
+                updateChartView(); // based on product
+                mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+                NettyClient.getInstance().start(mProduct.getContractsCode());
+
             }
         });
         ListView listView = (ListView) mMenu.getMenu();
@@ -466,27 +473,18 @@ public class TradeActivity extends BaseActivity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
-                    switchToNewProduct(product);
+                    if (product.getVarietyId() == mProduct.getVarietyId()) {
+                        mMenu.toggle();
+                    } else {
+                        mProduct = product;
+                        mMenu.toggle();
+
+                        updateTitleBar(); // based on product
+                        updateExchangeStatusView(); // based on product
+                    }
                 }
             }
         });
-    }
-
-    private void switchToNewProduct(Product product) {
-        if (product.getVarietyId() == mProduct.getVarietyId()) {
-            mMenu.toggle();
-        } else {
-            NettyClient.getInstance().stop();
-
-            hideFragmentOfContainer();
-            mMenu.toggle();
-
-            mProduct = product;
-            updateProductRelatedViews();
-            mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-            NettyClient.getInstance().start(mProduct.getContractsCode());
-        }
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})

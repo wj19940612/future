@@ -276,24 +276,17 @@ public class SimulationActivity extends BaseActivity {
                     String[] timeSplit = timeLine.split(";");
                     String startTime = timeSplit[0];
                     String endTime = timeSplit[timeSplit.length - 1];
-                    startTime = addChinesePrefix(startTime, context);
-                    endTime = addChinesePrefix(endTime, context);
+                    endTime = addChinesePrefix(startTime, endTime, context);
                     return startTime + "~" + endTime;
                 }
                 return "";
             }
 
-            private String addChinesePrefix(String time, Context context) {
-                if (time.compareTo("06:00") < 0) {
-                    return context.getString(R.string.dawn) + time;
-                } else if (time.compareTo("12:00") < 0) {
-                    return context.getString(R.string.forenoon) + time;
-                } else if (time.compareTo("18:00") < 0) {
-                    return context.getString(R.string.afternoon) + time;
-                } else if (time.compareTo("24:00") < 0) {
-                    return context.getString(R.string.night) + time;
+            private String addChinesePrefix(String startTime, String endTime, Context context) {
+                if (startTime.compareTo(endTime) > 0) {
+                    return context.getString(R.string.next_day) + endTime;
                 }
-                return "";
+                return endTime;
             }
         }
     }

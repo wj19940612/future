@@ -285,6 +285,7 @@ public class HomeFragment extends BaseFragment {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
+            mHomeListHeader.setSimulationHolding(false);
             mCashPositionList = null;
             updateProductListView();
         }

@@ -434,7 +434,8 @@
     <string name="available_gold">可用金币</string>
     <string name="gold_store">金币商城</string>
     <string name="choose_trade_variety">选择交易品种</string>
-
+    <string name="coming_soon">敬请期待</string>
+    
 
     <!--直播 live-->
     <string name="live_right_title">交易</string>

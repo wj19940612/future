@@ -26,6 +26,7 @@ import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
@@ -170,7 +171,7 @@ public class SimulationActivity extends BaseActivity {
 
     @OnClick(R.id.goldStoreButton)
     public void onClick() {
-
+        ToastUtil.show(R.string.coming_soon);
     }
 
     static class ProductAdapter extends BaseAdapter {

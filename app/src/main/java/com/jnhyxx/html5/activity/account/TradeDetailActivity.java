@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
-import com.jnhyxx.html5.fragment.TradeDetailListFragment;
+import com.jnhyxx.html5.fragment.FundDetailFragment;
+import com.jnhyxx.html5.fragment.ScoreDetailListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -136,9 +137,9 @@ public class TradeDetailActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return TradeDetailListFragment.newInstance(TradeDetailListFragment.TYPE_FUND);
+                    return FundDetailFragment.newInstance(FundDetailFragment.TYPE_FUND);
                 case 1:
-                    return TradeDetailListFragment.newInstance(TradeDetailListFragment.TYPE_INTEGRAL);
+                    return ScoreDetailListFragment.newInstance(ScoreDetailListFragment.TYPE_INTEGRAL);
             }
             return null;
         }

@@ -42,7 +42,7 @@ import butterknife.Unbinder;
  * Created by Administrator on 2016/8/30.
  */
 
-public class TradeDetailListFragment extends BaseFragment implements AbsListView.OnScrollListener {
+public class ScoreDetailListFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     //积分
     public static final String TYPE_INTEGRAL = "score";
@@ -82,16 +82,16 @@ public class TradeDetailListFragment extends BaseFragment implements AbsListView
     boolean isLoaded;
     private Unbinder mBinder;
 
-    public static TradeDetailListFragment newInstance(String type) {
-        TradeDetailListFragment mTradeDetailListFragment = new TradeDetailListFragment();
+    public static ScoreDetailListFragment newInstance(String type) {
+        ScoreDetailListFragment mTradeDetailListFragment = new ScoreDetailListFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TYPE, type);
         mTradeDetailListFragment.setArguments(bundle);
         return mTradeDetailListFragment;
     }
 
-    public static TradeDetailListFragment newInstance() {
-        return new TradeDetailListFragment();
+    public static ScoreDetailListFragment newInstance() {
+        return new ScoreDetailListFragment();
     }
 
     @Override

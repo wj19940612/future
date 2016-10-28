@@ -157,6 +157,9 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
         if (sysTradeMessages == null || sysTradeMessages.isEmpty()) {
             mListView.setEmptyView(mEmpty);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
         if (mFooter == null) {

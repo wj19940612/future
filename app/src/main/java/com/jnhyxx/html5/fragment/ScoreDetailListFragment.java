@@ -160,6 +160,9 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
             mList.setEmptyView(mEmpty);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
         if (mFooter == null) {

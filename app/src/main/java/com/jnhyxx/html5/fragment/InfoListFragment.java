@@ -131,6 +131,9 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
     private void updateInfoList(List<Information> messageLists) {
         if (messageLists == null) {
             mListView.setEmptyView(mEmptyView);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
         if (mFooter == null) {

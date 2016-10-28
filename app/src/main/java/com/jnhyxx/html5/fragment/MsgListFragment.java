@@ -153,6 +153,9 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
         if (sysTradeMessages == null) {
             mListView.setEmptyView(mEmpty);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
         if (mFooter == null) {

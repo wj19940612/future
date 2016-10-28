@@ -20,6 +20,7 @@ import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.Network;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -113,6 +114,18 @@ public class FundDetailFragment extends BaseFragment {
         mSet = new HashSet<>();
 //        getListView().setDivider(null);
         getTradeInfoList();
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mOffset = 0;
+                mSet.clear();
+                getTradeInfoList();
+                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -142,6 +155,9 @@ public class FundDetailFragment extends BaseFragment {
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             mEmpty.setText(R.string.there_is_no_info_for_now);
             mListView.setEmptyView(mEmpty);
             return;

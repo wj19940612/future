@@ -48,8 +48,8 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_vertical_margin">
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
 
 
             <com.jnhyxx.html5.view.ExpandableLayout

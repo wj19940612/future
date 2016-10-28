@@ -23,6 +23,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
+import com.johnz.kutils.DateUtil;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -235,7 +236,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 for (int i = 0; i < infoLiveMessage.size(); i++) {
                     String content = getContent(mViewHolder, infoLiveMessage);
 
-                    mViewHolder.mTime.setText(infoLiveMessage.get(2));
+                    setTime(mViewHolder, infoLiveMessage);
+
+
                     if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
                         mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
                     } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
@@ -252,6 +255,16 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
             }
             return convertView;
+        }
+
+        private void setTime(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
+            String time = infoLiveMessage.get(2);
+            if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
+                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
+            } else {
+                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+                mViewHolder.mTime.setText(time);
+            }
         }
 
         //特殊的显示,比如含有预期值,实际值等数据的特殊数据

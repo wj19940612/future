@@ -51,6 +51,8 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:paddingTop="@dimen/common_margin"
+            android:textColor="@color/colorDisable"
+            android:textSize="@dimen/min_text_size"
             tools:text="@string/time"/>
 
         <LinearLayout

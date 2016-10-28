@@ -24,7 +24,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_disable"
+            android:background="@drawable/bg_line_division_compile"
             android:gravity="bottom"
             android:orientation="horizontal">
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="@string/recharge_amount"
-                android:textColor="@color/blackPrimary"/>
+                android:textColor="@color/lucky"/>
 
             <EditText
                 android:id="@+id/rechargeAmount"

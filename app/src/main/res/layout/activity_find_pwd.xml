@@ -24,7 +24,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_compile"
             android:orientation="horizontal">
 
             <EditText
@@ -60,7 +60,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:background="@drawable/bg_input_enable"
+        android:background="@drawable/bg_line_division_compile"
         android:orientation="horizontal">
 
         <TextView
@@ -97,7 +97,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:background="@drawable/bg_input_enable"
+        android:background="@drawable/bg_line_division_compile"
         android:visibility="gone">
 
         <ImageView

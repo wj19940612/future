@@ -19,6 +19,7 @@
         app:titleText="@string/withdraw"/>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bluePrimary"
@@ -27,8 +28,7 @@
         android:paddingTop="25dp"
         android:text="@string/mine_balance"
         android:textColor="@color/colorDisable"
-        android:textSize="12sp"
-        android:id="@+id/textView"/>
+        android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/balance"
@@ -96,7 +96,10 @@
             android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>
 
-        <include layout="@layout/split_line_blue_primary"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@drawable/bg_line_division_compile"/>
 
         <TextView
             android:id="@+id/confirmButton"

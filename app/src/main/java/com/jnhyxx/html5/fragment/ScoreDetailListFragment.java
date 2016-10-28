@@ -159,6 +159,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+            mEmpty.setText("暂无金币明细");
             mList.setEmptyView(mEmpty);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

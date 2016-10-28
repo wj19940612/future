@@ -133,7 +133,7 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void updateInfoList(List<Information> messageLists) {
-        if (messageLists == null) {
+        if (messageLists == null || messageLists.isEmpty()) {
             mListView.setEmptyView(mEmptyView);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

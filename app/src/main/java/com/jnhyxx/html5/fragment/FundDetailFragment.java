@@ -161,6 +161,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+            mEmpty.setText("暂无资金明细");
             mList.setEmptyView(mEmpty);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

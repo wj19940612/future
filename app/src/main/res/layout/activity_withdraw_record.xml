@@ -19,17 +19,19 @@
     <ListView
         android:id="@+id/withdrawRecord"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:drawableTop="@drawable/image_no_record"
-        android:gravity="center"
-        android:paddingTop="50dp"
+        android:gravity="center_horizontal"
+        android:drawablePadding="16dp"
+        android:paddingTop="150dp"
         android:text="@string/withdraw_no_content"
-        android:textColor="#CACACA"
+        android:textColor="@color/emptyViewColor"
         android:textSize="20sp"/>
 </LinearLayout>

@@ -21,11 +21,12 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:drawablePadding="16dp"
             android:drawableTop="@drawable/image_no_record"
-            android:gravity="center"
-            android:paddingTop="50dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:paddingTop="150dp"
             android:text="@string/there_is_no_holding_position_records"
             android:textColor="#CACACA"
             android:textSize="20sp"/>

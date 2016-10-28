@@ -17,22 +17,20 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/empty"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:drawablePadding="16dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:drawableTop="@drawable/image_no_record"
             android:gravity="center_horizontal"
-            android:paddingTop="100dp"
-            android:text="@string/there_is_no_data_for_now"
-            android:textColor="#CACACA"
-            android:textSize="20sp"
-            android:visibility="gone"/>
+            android:drawablePadding="16dp"
+            android:paddingTop="150dp"
+            android:text="@string/withdraw_no_content"
+            android:textColor="@color/emptyViewColor"
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

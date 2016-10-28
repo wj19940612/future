@@ -107,7 +107,7 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_fund_transfer);
+            mWithdrawStatus.setText(R.string.withdraw_start);
 
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {

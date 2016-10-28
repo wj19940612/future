@@ -195,5 +195,5 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
         android:clickable="true"
-        android:text="@string/sign_up_free"/>
+        android:text="@string/sign_up_free_has_space"/>
 </LinearLayout>

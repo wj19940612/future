@@ -71,5 +71,5 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:text="@string/ok"/>
+        android:text="@string/ok_has_space"/>
 </LinearLayout>

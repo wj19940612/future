@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="@string/sign_in"/>
+            android:text="@string/sign_in_has_space"/>
 
         <TextView
             android:id="@+id/signUpButton"
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="@string/sign_up_free"/>
+            android:text="@string/sign_up_free_has_space"/>
 
         <TextView
             android:layout_width="match_parent"

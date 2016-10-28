@@ -111,7 +111,7 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="13sp"
-            android:text="@string/ok"
+            android:text="@string/ok_has_space"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 

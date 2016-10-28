@@ -34,9 +34,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class InfoListFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+/**
+ * Created by ${wangJie} on 2016/10/28.
+ * 行情分析
+ */
 
-    private static final String TAG = "InfoListFragment";
+public class PriceAnalyzeFragment  extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener{
+
+    private static final String TAG = "PriceAnalyzeFragment";
 
     private static final String TYPE = "fragmentType";
 
@@ -58,8 +63,8 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
     private TextView mFooter;
     private Unbinder mBind;
 
-    public static InfoListFragment newInstance(int type) {
-        InfoListFragment fragment = new InfoListFragment();
+    public static PriceAnalyzeFragment newInstance(int type) {
+        PriceAnalyzeFragment fragment = new PriceAnalyzeFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         fragment.setArguments(args);
@@ -210,13 +215,13 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            NewsListAdapter.ViewHolder holder = null;
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_info, null);
-                holder = new ViewHolder(convertView);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_info_analyze, null);
+                holder = new NewsListAdapter.ViewHolder(convertView);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (NewsListAdapter.ViewHolder) convertView.getTag();
             }
             holder.bindingData(getItem(position), getContext());
             return convertView;
@@ -239,5 +244,4 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
             }
         }
     }
-
 }

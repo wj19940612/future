@@ -73,7 +73,9 @@
     <string name="nickname_logged">您好 %1$s</string>
     <string name="account_balance">账户余额(元)</string>
     <string name="sign_in">登录</string>
+    <string name="sign_in_has_space">登    录</string>
     <string name="sign_up_free">注册</string>
+    <string name="sign_up_free_has_space">注    册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
     <string name="score_detail">金币明细</string>
@@ -89,6 +91,7 @@
     <string name="read_and_agreed">  我已阅读并同意</string>
     <string name="service_protocol">《服务协议》</string>
     <string name="ok">确定</string>
+    <string name="ok_has_space">确    定</string>
     <string name="cancel">取消</string>
     <string name="resend_after_n_seconds">%1$ds</string>
     <string name="please_input_phone_num">请输入手机号码</string>
@@ -366,7 +369,7 @@
     <!--绑定银行卡-->
     <string name="bind_bank_title">绑定银行卡</string>
     <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与提现操作</string>
-    <string name="bind_bank_bind">绑定</string>
+    <string name="bind_bank_bind">绑    定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">为了您账户的安全，解绑银行卡需本人拨打\n客服电话:  %1$s</string>
     <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>

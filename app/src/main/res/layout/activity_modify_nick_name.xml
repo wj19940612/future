@@ -25,11 +25,12 @@
             android:layout_height="60dp"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_line_division_center"
+            android:background="@drawable/bg_line_division_compile"
             android:gravity="center_vertical|bottom"
             android:orientation="horizontal">
 
             <TextView
+                android:textColor="@color/lucky"
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,5 +71,5 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:text="@string/ok"/>
+        android:text="@string/ok_has_space"/>
 </LinearLayout>

@@ -263,8 +263,8 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
             } else {
                 time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
-                mViewHolder.mTime.setText(time);
             }
+            mViewHolder.mTime.setText(time);
         }
 
         //特殊的显示,比如含有预期值,实际值等数据的特殊数据

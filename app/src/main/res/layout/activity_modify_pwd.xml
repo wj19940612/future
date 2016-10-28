@@ -26,7 +26,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_line_division_center">
+            android:background="@drawable/bg_line_division_compile">
 
             <EditText
                 android:id="@+id/newPassword"
@@ -62,7 +62,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:background="@drawable/bg_line_division_center">
+        android:background="@drawable/bg_line_division_compile">
 
         <EditText
             android:id="@+id/confirmPassword"
@@ -95,5 +95,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="50dp"
-        android:text="@string/ok"/>
+        android:text="@string/ok_has_space"/>
 </LinearLayout>

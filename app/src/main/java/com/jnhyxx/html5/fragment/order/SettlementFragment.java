@@ -186,7 +186,12 @@ public class SettlementFragment extends BaseFragment {
     }
 
     private void updateSettlementOrderListView(List<SettledOrder> settlementOrderList) {
-        if (settlementOrderList == null) return;
+        if (settlementOrderList == null) {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
 
         if (mFooter == null) {
             mFooter = new TextView(getActivity());

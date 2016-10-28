@@ -17,6 +17,7 @@
         app:titleText="@string/trade_detail"/>
 
     <com.jnhyxx.html5.view.SlidingTabLayout
+        android:background="@android:color/white"
         android:id="@+id/tradeDetailSlidingTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

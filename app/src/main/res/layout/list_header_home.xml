@@ -29,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_with_gray_bottom_border"
-        android:paddingBottom="8dp"
-        android:paddingTop="9dp">
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp">
 
         <TextView
             android:id="@+id/currentOnlineNumber"
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="16dp"
+            android:textSize="12sp"
             tools:text="当前在线977人"/>
 
         <ViewSwitcher

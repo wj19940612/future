@@ -184,10 +184,7 @@
     <!-- Home page -->
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
-    <string name="forenoon">上午</string>
-    <string name="afternoon">下午</string>
-    <string name="night">晚上</string>
-    <string name="dawn">凌晨</string>
+    <string name="next_day">次日</string>
     <string name="simulation">模拟操盘</string>
     <string name="newer_guide">新手引导</string>
     <string name="contact_service">联系客服</string>
@@ -231,6 +228,7 @@
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>
     <string name="market_price_buy">市价买入</string>
+    <string name="manually_sale">人工卖出</string>
 
 
     <!-- Trade page -->

@@ -128,7 +128,7 @@
             android:layout_height="@dimen/market_status_area_height"
             android:background="@color/bluePrimary"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/holdingPositionTimeTo"

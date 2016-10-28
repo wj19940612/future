@@ -318,6 +318,8 @@ public class SettlementFragment extends BaseFragment {
                     mSellType.setText(R.string.stop_loss_sale);
                 } else if (sellType == SettledOrder.SELL_OUT_STOP_PROFIT) {
                     mSellType.setText(R.string.stop_profit_sale);
+                } else if (sellType == SettledOrder.SELL_OUT_MANUALLY) {
+                    mSellType.setText(R.string.manually_sale);
                 } else {
                     mSellType.setText(R.string.market_price_sale);
                 }

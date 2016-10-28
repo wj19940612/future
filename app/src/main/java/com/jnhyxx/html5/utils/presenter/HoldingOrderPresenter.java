@@ -59,6 +59,7 @@ public class HoldingOrderPresenter {
 
     public void onPause() {
         mResume = false;
+        mLoading = false;
         if (mHoldingOrderList != null) {
             mHoldingOrderList.clear();
         }

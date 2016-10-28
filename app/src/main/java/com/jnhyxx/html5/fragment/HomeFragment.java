@@ -202,7 +202,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onTimeUp(int count) {
-        super.onTimeUp(count);
         if (getUserVisibleHint()) {
             requestProductMarketList();
             mHomeListHeader.nextOrderReport();
@@ -270,6 +269,8 @@ public class HomeFragment extends BaseFragment {
                             Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
                             if (homePositionsResp.isSuccess()) {
                                 HomePositions homePositions = homePositionsResp.getData();
+                                updateSimulateButton(homePositions);
+
                                 mCashPositionList = homePositions.getCashOpS();
                                 ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                                 updateProductListView();
@@ -282,6 +283,17 @@ public class HomeFragment extends BaseFragment {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
+            mCashPositionList = null;
+            updateProductListView();
+        }
+    }
+
+    private void updateSimulateButton(HomePositions homePositions) {
+        if (mHomeListHeader == null) return;
+        if (homePositions.getIntegralOpS().size() > 0) {
+            mHomeListHeader.setSimulationHolding(true);
+        } else {
+            mHomeListHeader.setSimulationHolding(false);
         }
     }
 
@@ -335,6 +347,8 @@ public class HomeFragment extends BaseFragment {
             TextView mProductName;
             @BindView(R.id.hotIcon)
             ImageView mHotIcon;
+            @BindView(R.id.newTag)
+            TextView mNewTag;
             @BindView(R.id.marketCloseText)
             TextView mMarketCloseText;
             @BindView(R.id.holdingPosition)
@@ -363,10 +377,11 @@ public class HomeFragment extends BaseFragment {
                 Product product = pkg.getProduct();
                 mProductName.setText(product.getVarietyName());
                 mAdvertisement.setText(product.getAdvertisement());
-                mHotIcon.setVisibility((product.getTags() == Product.TAG_HOT) ? View.VISIBLE : View.GONE);
                 if (product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
                     mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
                     mAdvertisement.setTextColor(Color.parseColor("#7FA8A8A8"));
+                    mHotIcon.setVisibility(View.GONE);
+                    mNewTag.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
                     mMarketCloseArea.setVisibility(View.VISIBLE);
@@ -374,6 +389,8 @@ public class HomeFragment extends BaseFragment {
                     String marketOpenTime = createMarketOpenTime(product, context);
                     mMarketOpenTime.setText(marketOpenTime);
                 } else {
+                    mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
+                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
                     mMarketCloseText.setVisibility(View.GONE);

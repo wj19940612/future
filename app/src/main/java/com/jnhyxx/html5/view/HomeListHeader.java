@@ -128,6 +128,14 @@ public class HomeListHeader extends FrameLayout {
         }
     }
 
+    public void setSimulationHolding(boolean holding) {
+        if (holding) {
+            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate_holding, 0, 0);
+        } else {
+            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate, 0, 0);
+        }
+    }
+
     public void setOrderReport(OrderReport orderReport) {
         mOrderReport = orderReport;
         SpannableString currentOnlineNumber = StrUtil.mergeTextWithColor("当前在线",

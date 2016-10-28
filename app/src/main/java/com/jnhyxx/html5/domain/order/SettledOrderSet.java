@@ -58,4 +58,15 @@ public class SettledOrderSet {
     public void setData(List<SettledOrder> data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "SettledOrderSet{" +
+                "pageSize=" + pageSize +
+                ", resultCount=" + resultCount +
+                ", start=" + start +
+                ", total=" + total +
+                ", data=" + data +
+                '}';
+    }
 }

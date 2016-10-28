@@ -21,7 +21,9 @@ import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 
 import java.math.BigDecimal;
@@ -37,6 +39,10 @@ import static com.jnhyxx.html5.R.id.hands;
 
 public class HoldingFragment extends BaseFragment
         implements HoldingOrderPresenter.IHoldingOrderView {
+
+    public interface Callback {
+        void onClosePositionButtonsClick();
+    }
 
     @BindView(android.R.id.list)
     ListView mList;
@@ -59,7 +65,9 @@ public class HoldingFragment extends BaseFragment
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
+
     private HoldingOrderPresenter mHoldingOrderPresenter;
+    private Callback mCallback;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
@@ -126,6 +134,17 @@ public class HoldingFragment extends BaseFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnBuyBtnClickListener");
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -149,21 +168,23 @@ public class HoldingFragment extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
-        mHoldingOrderPresenter.destroy();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mHoldingOrderPresenter.onResume();
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override
@@ -173,8 +194,6 @@ public class HoldingFragment extends BaseFragment
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     @Override
@@ -186,12 +205,19 @@ public class HoldingFragment extends BaseFragment
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mHoldingOrderPresenter.closePosition(mFundType, order);
+                        onClosePositionButtonsClick();
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
+        }
+    }
+
+    private void onClosePositionButtonsClick() {
+        if (mCallback != null) {
+            mCallback.onClosePositionButtonsClick();
         }
     }
 
@@ -226,9 +252,23 @@ public class HoldingFragment extends BaseFragment
         }
     }
 
+    @Override
+    public void onSubmitAllHoldingPositionsCompleted(String message) {
+        SmartDialog.with(getActivity(),
+                getString(R.string.sell_order_submit_successfully) + "\n" + message)
+                .setPositive(R.string.ok)
+                .show();
+    }
+
+    @Override
+    public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
+        ToastUtil.center(R.string.sell_order_submit_successfully, R.dimen.toast_offset);
+    }
+
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
+        onClosePositionButtonsClick();
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

@@ -19,7 +19,7 @@ import com.jnhyxx.html5.view.SlidingTabLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends BaseActivity {
+public class OrderActivity extends BaseActivity implements HoldingFragment.Callback {
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -28,6 +28,7 @@ public class OrderActivity extends BaseActivity {
 
     private Product mProduct;
     private int mFundType;
+    private OrderAdapter mOrderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class OrderActivity extends BaseActivity {
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(this, android.R.color.transparent));
-        mViewPager.setAdapter(new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType));
+        mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType);
+        mViewPager.setAdapter(mOrderAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
@@ -48,14 +50,24 @@ public class OrderActivity extends BaseActivity {
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
     }
 
+    @Override
+    public void onClosePositionButtonsClick() {
+        SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
+        if (fragment != null) {
+            fragment.setHoldingFragmentClosedPositions(true);
+        }
+    }
+
     static class OrderAdapter extends FragmentPagerAdapter {
 
         private Context mContext;
         private Product mProduct;
         private int mFundType;
+        private FragmentManager mFragmentManager;
 
         public OrderAdapter(FragmentManager fm, Context context, Product product, int fundType) {
             super(fm);
+            mFragmentManager = fm;
             mContext = context;
             mProduct = product;
             mFundType = fundType;
@@ -86,6 +98,10 @@ public class OrderActivity extends BaseActivity {
         @Override
         public int getCount() {
             return 2;
+        }
+
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
         }
     }
 }

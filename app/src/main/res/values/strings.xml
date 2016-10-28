@@ -180,6 +180,7 @@
     <string name="expect_data">预期: %1$s</string>
     <string name="real_data">实际: %1$s</string>
 
+
     <!-- Home page -->
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
@@ -191,6 +192,7 @@
     <string name="newer_guide">新手引导</string>
     <string name="contact_service">联系客服</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
+    <string name="new_tag">NEW</string>
 
 
     <!-- Order page -->
@@ -252,6 +254,7 @@
     <string name="highest">最高 %1$s</string>
     <string name="lowest">最低 %1$s</string>
     <string name="gold">金币</string>
+    <string name="sell_order_submit_successfully">卖出委托提交成功</string>
 
     <!-- Trade page: place an order -->
     <string name="touch_stop_loss">触发止损</string>

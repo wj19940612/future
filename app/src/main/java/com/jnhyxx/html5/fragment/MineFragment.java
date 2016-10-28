@@ -218,7 +218,7 @@ public class MineFragment extends BaseFragment {
                             } else if (resp.getCode() == Resp.CODE_GET_PROMOTE_CODE_FAILED) {
                                 showAskApplyPromoterDialog();
                             } else {
-                                ToastUtil.curt(resp.getMsg());
+                                ToastUtil.show(resp.getMsg());
                             }
                         }
                     }).fire();

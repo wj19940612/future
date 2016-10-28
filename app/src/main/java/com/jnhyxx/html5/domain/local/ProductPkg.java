@@ -1,8 +1,8 @@
 package com.jnhyxx.html5.domain.local;
 
 import com.jnhyxx.html5.domain.market.MarketData;
-import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 
 import java.util.List;
@@ -82,7 +82,6 @@ public class ProductPkg implements GroupAdapter.Groupable  {
             throw new NullPointerException("productPkgList is null");
         }
 
-        int count = 0;
         boolean holdingPositionWhenMarketClosed = false;
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
@@ -99,22 +98,12 @@ public class ProductPkg implements GroupAdapter.Groupable  {
                     }
 
                     pkg.setPosition(position);
-                    count++; // when each product has its position brief, count++.
                     break;
                 }
             }
         }
 
-        boolean haveSameSize = true;
-        boolean haveSameProducts = true;
-        if (positionList != null) {
-            haveSameSize = (productPkgList.size() == positionList.size());
-            haveSameProducts = (count == productPkgList.size());
-        }
-
-        boolean updateProductList = !(haveSameProducts && haveSameSize);
-
-        return updateProductList || holdingPositionWhenMarketClosed;
+        return holdingPositionWhenMarketClosed;
     }
 
 

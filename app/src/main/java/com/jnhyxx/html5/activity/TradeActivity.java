@@ -27,6 +27,7 @@ import com.jnhyxx.chart.domain.FlashViewData;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.constans.Unit;
@@ -119,21 +120,25 @@ public class TradeActivity extends BaseActivity implements
     private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
 
+    private boolean mUpdateRealTimeData;
+
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            updateFourMainPrices(data);
-            updateLastPriceView(data);
-            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
-            updateChartView(data);
-            mBuyLongBtn.setText(getString(R.string.buy_long)
-                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
-            mSellShortBtn.setText(getString(R.string.sell_short)
-                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
-            mHoldingOrderPresenter.setFullMarketData(data);
+            if (mUpdateRealTimeData) {
+                updateFourMainPrices(data);
+                updateLastPriceView(data);
+                mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+                updateChartView(data);
+                mBuyLongBtn.setText(getString(R.string.buy_long)
+                        + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
+                mSellShortBtn.setText(getString(R.string.sell_short)
+                        + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+            }
             updatePlaceOrderFragment(data);
+            mHoldingOrderPresenter.setFullMarketData(data);
         }
     };
 
@@ -151,6 +156,7 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
+        mUpdateRealTimeData = true;
 
         initData(getIntent());
 
@@ -186,8 +192,6 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         updateSignTradePagerHeader();
         updateProductRelatedViews();
-
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
     private void openOrdersPage() {
@@ -220,7 +224,6 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
-            mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         }
     }
 
@@ -347,7 +350,9 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         startScheduleJob(60 * 1000, 60 * 1000);
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
+        mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
@@ -364,14 +369,14 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
+        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHoldingOrderPresenter.destroy();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mNettyHandler = null;
     }
 
@@ -386,6 +391,7 @@ public class TradeActivity extends BaseActivity implements
             trendView = new TrendView(this);
             mChartContainer.addTrendView(trendView);
         }
+        trendView.clearData();
         TrendView.Settings settings = new TrendView.Settings();
         settings.setBaseLines(mProduct.getBaseline());
         settings.setNumberScale(mProduct.getPriceDecimalScale());
@@ -394,7 +400,6 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
-        trendView.setDataList(null);
 
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView == null) {
@@ -440,6 +445,18 @@ public class TradeActivity extends BaseActivity implements
         mMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         mMenu.setBehindWidthRes(R.dimen.sliding_menu_width);
         mMenu.setMenu(R.layout.sm_behind_menu);
+        mMenu.setSecondaryOnOpenListner(new SlidingMenu.OnOpenListener() {
+            @Override
+            public void onOpen() {
+                mUpdateRealTimeData = false;
+            }
+        });
+        mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
+            @Override
+            public void onClosed() {
+                mUpdateRealTimeData = true;
+            }
+        });
         ListView listView = (ListView) mMenu.getMenu();
         MenuAdapter menuAdapter = new MenuAdapter(this);
         menuAdapter.addAll(mProductList);
@@ -459,6 +476,8 @@ public class TradeActivity extends BaseActivity implements
         if (product.getVarietyId() == mProduct.getVarietyId()) {
             mMenu.toggle();
         } else {
+            NettyClient.getInstance().stop();
+
             hideFragmentOfContainer();
             mMenu.toggle();
 
@@ -466,7 +485,6 @@ public class TradeActivity extends BaseActivity implements
             updateProductRelatedViews();
             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-            NettyClient.getInstance().stop();
             NettyClient.getInstance().start(mProduct.getContractsCode());
         }
     }
@@ -561,19 +579,18 @@ public class TradeActivity extends BaseActivity implements
                                     })
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-//                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
-//                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-//                                    .setPositive(R.string.go_to_recharge,
-//                                            new SmartDialog.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(Dialog dialog) {
-//                                                    dialog.dismiss();
-//                                                    Launcher.with(getActivity(), RechargeActivity.class)
-//                                                            .execute();
-//                                                }
-//                                            }).setNegative(R.string.cancel)
-//                                    .show();
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
+                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                    .setPositive(R.string.go_to_recharge,
+                                            new SmartDialog.OnClickListener() {
+                                                @Override
+                                                public void onClick(Dialog dialog) {
+                                                    dialog.dismiss();
+                                                    Launcher.with(getActivity(), RechargeActivity.class)
+                                                            .execute();
+                                                }
+                                            }).setNegative(R.string.cancel)
+                                    .show();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
@@ -595,16 +612,40 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
+    public void onPlaceOrderFragmentShow() {
+        mUpdateRealTimeData = false;
+    }
+
+    @Override
+    public void onPlaceOrderFragmentExited() {
+        mUpdateRealTimeData = true;
+    }
+
+    @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
-        hideFragmentOfContainer();
-        placeOrder(longOrShort);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .commit();
+        }
     }
 
     @Override
     public void onAgreementFragmentEmptyAreaClick() {
         hideFragmentOfContainer();
+    }
+
+    @Override
+    public void onAgreementFragmentShow() {
+        mUpdateRealTimeData = false;
+    }
+
+    @Override
+    public void onAgreementFragmentExited() {
+        mUpdateRealTimeData = true;
     }
 
     @Override
@@ -626,6 +667,18 @@ public class TradeActivity extends BaseActivity implements
         } else {
             updateSignTradePagerHeader();
         }
+    }
+
+    @Override
+    public void onSubmitAllHoldingPositionsCompleted(String message) {
+        SmartDialog.with(getActivity(),
+                getString(R.string.sell_order_submit_successfully) + "\n" + message)
+                .setPositive(R.string.ok)
+                .show();
+    }
+
+    @Override
+    public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

@@ -67,7 +67,8 @@ public class AgreementFragment extends BaseFragment {
     public interface Callback {
         void onAgreeProtocolBtnClick(int longOrShort);
         void onAgreementFragmentEmptyAreaClick();
-
+        void onAgreementFragmentShow();
+        void onAgreementFragmentExited();
     }
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -126,6 +127,9 @@ public class AgreementFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if (mCallback != null) {
+            mCallback.onAgreementFragmentExited();
+        }
         mCallback = null;
     }
 
@@ -135,10 +139,29 @@ public class AgreementFragment extends BaseFragment {
 
         if (enter) {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_bottom);
+            animation.setAnimationListener(new EnterAnimListener());
         } else {
             animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_bottom);
         }
 
         return animation;
+    }
+
+    private class EnterAnimListener implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            if (mCallback != null) {
+                mCallback.onAgreementFragmentShow();
+            }
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
     }
 }

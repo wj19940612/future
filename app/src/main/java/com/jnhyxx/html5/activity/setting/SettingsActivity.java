@@ -144,7 +144,7 @@ public class SettingsActivity extends BaseActivity {
     private void openModifyNicknamePage() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo.isNickNameModifiedBefore()) {
-            ToastUtil.curt(R.string.nick_name_can_be_modified_once_only);
+            ToastUtil.show(R.string.nick_name_can_be_modified_once_only);
         } else {
             Launcher.with(getActivity(), ModifyNickNameActivity.class)
                     .executeForResult(REQ_CODE_BASE);

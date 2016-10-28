@@ -8,6 +8,8 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="split_line_height">0.5dp</dimen>
     <dimen name="button_radius">2dp</dimen>
+    <dimen name="one_key_close_radius">20dp</dimen>
+    <dimen name="toast_offset">150dp</dimen>
 
     <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
@@ -20,9 +22,6 @@
     <dimen name="common_margin">16dp</dimen>
 
     <dimen name="padding_ten">10dp</dimen>
-
-    <!-- Order -->
-    <dimen name="one_key_close_radius">20dp</dimen>
 
     <dimen name="min_text_size">12sp</dimen>
 

@@ -60,6 +60,7 @@ public class SettlementFragment extends BaseFragment {
     private int mPageNo;
     private int mPageSize;
     private Set<String> mSet;
+    private boolean mHoldingFragmentClosedPositions;
 
     private TextView mFooter;
     private SettlementAdapter mSettlementAdapter;
@@ -73,6 +74,10 @@ public class SettlementFragment extends BaseFragment {
         return fragment;
     }
 
+    public void setHoldingFragmentClosedPositions(boolean closePositions) {
+        mHoldingFragmentClosedPositions = closePositions;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,20 @@ public class SettlementFragment extends BaseFragment {
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isAdded()) {
+            if (mHoldingFragmentClosedPositions) {
+                mPageNo = 1;
+                mSet.clear();
+                mSwipeRefreshLayout.setRefreshing(true);
+                requestSettlementOrderList();
+                mHoldingFragmentClosedPositions = false;
+            }
         }
     }
 

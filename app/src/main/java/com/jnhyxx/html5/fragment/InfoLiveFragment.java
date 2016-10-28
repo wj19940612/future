@@ -129,37 +129,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                  @Override
                                  public void onReceive(Resp resp) {
                                      if (resp.isSuccess()) {
-                                         mAutoRefreshTime = 30;
-//                                         Log.d(TAG, "直播资讯" + resp.getData().toString());
-                                         ArrayList<ArrayList<String>> infoLiveMessageList = new ArrayList<>();
-                                         String timeHint = "0#1#";
-                                         String well = "#";
-                                         String endHint = "#####0###";
-                                         try {
-                                             JSONArray jsonArray = new JSONArray(resp.getData().toString().replaceAll("\\\"", "\""));
-                                             for (int i = 0; i < jsonArray.length(); i++) {
-                                                 String data = jsonArray.optString(i);
-//                                                 Log.d(TAG, "直播具体数据" + data);
-                                                 String[] split = data.split(well);
-                                                 ArrayList<String> strings = new ArrayList<>();
-                                                 for (int j = 0; j < split.length; j++) {
-                                                     if (split[j] == null || TextUtils.isEmpty(split[j])) {
-                                                         continue;
-                                                     }
-//                                                     Log.d(TAG, "分割开的数据" + split[j].toString());
-                                                     strings.add(split[j]);
-                                                 }
-
-//                                                 InfoLiveMessage infoLiveMessage = new InfoLiveMessage(strings.get(0), strings.get(1), null, false);
-                                                 if (!strings.toString().contains("<a") && !strings.toString().contains("</a>")) {
-                                                     infoLiveMessageList.add(strings);
-                                                 }
-                                             }
-                                         } catch (JSONException e) {
-                                             e.printStackTrace();
-                                         }
-
-                                         setAdapter(infoLiveMessageList);
+                                         InfoLiveFragment.this.getInfoLiveData(resp);
                                      } else {
                                          if (mSwipeRefreshLayout.isRefreshing()) {
                                              mSwipeRefreshLayout.setRefreshing(false);
@@ -169,6 +139,36 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                              }
 
                 ).fire();
+    }
+
+    private void getInfoLiveData(Resp resp) {
+        mAutoRefreshTime = 30;
+        Log.d(TAG, "直播资讯" + resp.getData().toString());
+        ArrayList<ArrayList<String>> infoLiveMessageList = new ArrayList<>();
+        String well = "#";
+        try {
+            JSONArray jsonArray = new JSONArray(resp.getData().toString().replaceAll("\\\"", "\""));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String data = jsonArray.optString(i);
+                Log.d(TAG, "直播具体数据" + data);
+                String[] split = data.split(well);
+                ArrayList<String> strings = new ArrayList<>();
+                for (int j = 0; j < split.length; j++) {
+                    if (split[j] == null || TextUtils.isEmpty(split[j])) {
+                        continue;
+                    }
+                    Log.d(TAG, "分割开的数据" + split[j].toString());
+                    strings.add(split[j]);
+                }
+                if (!strings.toString().contains("<a") && !strings.toString().contains("</a>")) {
+                    infoLiveMessageList.add(strings);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        setAdapter(infoLiveMessageList);
     }
 
     private void setAdapter(ArrayList<ArrayList<String>> infoLiveMessageList) {

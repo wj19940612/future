@@ -121,7 +121,8 @@ public class HomeFragment extends BaseFragment {
                 Launcher.with(getActivity(), WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_URL, API.getNewbieUrl())
                         .putExtra(WebViewActivity.EX_TITLE, getString(R.string.newbie_title))
-                        .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie()).execute();
+                        .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .execute();
             }
 
             @Override

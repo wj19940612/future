@@ -96,6 +96,12 @@ public class WebViewActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebView.destroy();
+    }
+
+    @Override
     public void onBackPressed() {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
@@ -307,6 +313,7 @@ public class WebViewActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
+        mWebView.onPause();
     }
 
     private void showSaveImageDialog(WebView.HitTestResult result) {

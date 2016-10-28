@@ -37,7 +37,7 @@
                 android:layout_height="1dp"
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
-                android:background="@color/colorDisable"/>
+                android:background="@color/lucky"/>
 
             <TextView
                 android:id="@+id/title"
@@ -57,7 +57,7 @@
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignRight="@+id/title"
                 android:layout_below="@+id/title"
-                android:background="@color/colorDisable"/>
+                android:background="@color/lucky"/>
         </RelativeLayout>
 
         <LinearLayout

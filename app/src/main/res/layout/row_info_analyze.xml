@@ -21,7 +21,6 @@
             android:ellipsize="end"
             android:lineSpacingExtra="15dp"
             android:maxLines="3"
-            android:paddingBottom="20dp"
             android:text="摘要原油连续从四小时走势图来看，布林带整体依旧向下运行，上、中、下三轨一致下行，K线价格自中轨处承压下行，并跌穿下轨(40美元大关)，但随后受下轨支撑强势反弹，目前价格在..."
             android:textColor="@color/blackPrimary"/>
 

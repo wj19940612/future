@@ -125,11 +125,6 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
                             }
                         }
                     }
-
-                    @Override
-                    public boolean getErrorVisible() {
-                        return super.getErrorVisible();
-                    }
                 }).fire();
     }
 

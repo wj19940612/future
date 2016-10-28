@@ -25,31 +25,29 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
+            android:paddingLeft="16dp"
             android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/dateYear"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="2012/12/12"
-                android:textSize="12sp"/>
+                android:text="12/12"
+                android:textSize="10sp"/>
 
             <TextView
                 android:id="@+id/dateHour"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dateYear"
-                android:paddingTop="7dp"
-                android:text="8:18:12"
+                android:gravity="left"
+                android:paddingTop="4dp"
                 android:textColor="@color/lucky"
-                android:textSize="14sp"/>
+                tools:text="08:18"/>
         </LinearLayout>
 
         <View

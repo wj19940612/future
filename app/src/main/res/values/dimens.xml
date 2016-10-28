@@ -19,7 +19,7 @@
     <dimen name="market_status_area_height">77dp</dimen>
     <dimen name="market_date_row_padding">14dp</dimen>
     <!--目前大部分容器距离边界15dp-->
-    <dimen name="common_margin">16dp</dimen>
+    <dimen name="common_margin">15dp</dimen>
 
     <dimen name="padding_ten">10dp</dimen>
 

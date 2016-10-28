@@ -22,6 +22,7 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
@@ -96,6 +97,9 @@ public class InfoListFragment extends BaseFragment implements AdapterView.OnItem
                 mPageNo = 0;
                 mSet.clear();
                 requestInfoList();
+                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         requestInfoList();

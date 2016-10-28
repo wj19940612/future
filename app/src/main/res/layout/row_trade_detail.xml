@@ -23,9 +23,9 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.23"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingBottom="8dp"
@@ -58,7 +58,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="9"
+            android:layout_weight="0.77"
             android:orientation="horizontal">
 
             <TextView

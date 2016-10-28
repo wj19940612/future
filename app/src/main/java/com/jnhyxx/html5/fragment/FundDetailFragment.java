@@ -142,12 +142,17 @@ public class FundDetailFragment extends BaseFragment {
                 .setCallback(new Callback<Resp<List<TradeDetail>>>() {
                     @Override
                     public void onReceive(Resp<List<TradeDetail>> listResp) {
-
-                        mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                        for (int i = 0; i < mTradeDetailList.size(); i++) {
-                            Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
+                        if (listResp.isSuccess()) {
+                            mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
+                            for (int i = 0; i < mTradeDetailList.size(); i++) {
+                                Log.d(TAG, "资金明细查询结果" + mTradeDetailList.get(i).toString());
+                            }
+                            setAdapter(mTradeDetailList);
+                        } else {
+                            if (mSwipeRefreshLayout.isRefreshing()) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                            }
                         }
-                        setAdapter(mTradeDetailList);
                     }
                 }).fire();
 

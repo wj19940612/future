@@ -382,7 +382,7 @@ public class BankcardBindingActivity extends BaseActivity {
 
 
     private void unbindServiceTelephone() {
-        String dialogContent = getString(R.string.unBind_dialog_content);
+        String dialogContent = getString(R.string.unBind_dialog_content, Preference.get().getServicePhone());
         SmartDialog.with(getActivity(), dialogContent)
                 .setCancelableOnTouchOutside(false)
                 .setPositive(R.string.ok, new SmartDialog.OnClickListener() {

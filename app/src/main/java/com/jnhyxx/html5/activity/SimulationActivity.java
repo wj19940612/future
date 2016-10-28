@@ -60,12 +60,6 @@ public class SimulationActivity extends BaseActivity {
 
         initData(getIntent());
 
-        if (LocalUser.getUser().isLogin()) {
-            mAvailableGold.setText(FinanceUtil.formatWithScale(LocalUser.getUser().getAvailableScore()));
-        } else {
-            mAvailableGold.setText(FinanceUtil.formatWithScale(0));
-        }
-
         updateProductGridView();
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,6 +71,14 @@ public class SimulationActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void updateUserAvailableScore() {
+        if (LocalUser.getUser().isLogin()) {
+            mAvailableGold.setText(FinanceUtil.formatWithScale(LocalUser.getUser().getAvailableScore()));
+        } else {
+            mAvailableGold.setText(FinanceUtil.formatWithScale(0));
+        }
     }
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
@@ -120,6 +122,7 @@ public class SimulationActivity extends BaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        updateUserAvailableScore();
         requestSimulationPositions();
     }
 

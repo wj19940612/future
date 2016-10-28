@@ -48,6 +48,7 @@
                     android:id="@+id/nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
                     android:layout_marginTop="12dp"
                     android:gravity="center_horizontal"
                     android:text="@string/no_logged"
@@ -68,7 +69,7 @@
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
-                android:background="#3E546C"/>
+                android:background="@color/splitLineBlueLight"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -82,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/mine_balance"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@color/mine_balance_text_color"/>
 
                 <me.grantland.widget.AutofitTextView
                     android:id="@+id/balance"
@@ -101,7 +102,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="34dp"
                     android:orientation="horizontal"
                     android:visibility="visible">
 
@@ -137,6 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="30dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
                     android:visibility="gone">
@@ -189,7 +192,7 @@
         app:leftIcon="@drawable/ic_account_list_news"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rowText="@string/message_center"
-        app:rowTextColor="@android:color/black"
+        app:rowTextColor="@color/blackPrimary"
         app:subTextColor="@android:color/white"/>
 
     <include layout="@layout/split_line_gray_dark"/>

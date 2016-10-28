@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -104,6 +105,7 @@ public class BankcardBindingActivity extends BaseActivity {
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
     }
+
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -147,9 +149,10 @@ public class BankcardBindingActivity extends BaseActivity {
     private void formatBankCardNumber() {
         String oldBankCard = mBankcardNum.getText().toString();
         String bankCardNoSpace = oldBankCard.replaceAll(" ", "");
-        String newBankCard = StrFormatter.getFormatBankCardNumber(bankCardNoSpace);
+        String newBankCard = StrFormatter.getFormatBankCardNumber(bankCardNoSpace).trim();
         if (!newBankCard.equalsIgnoreCase(oldBankCard)) {
             mBankcardNum.setText(newBankCard);
+            Log.d("wj", "银行卡长度" + newBankCard.length());
             mBankcardNum.setSelection(newBankCard.length());
         }
     }
@@ -350,11 +353,22 @@ public class BankcardBindingActivity extends BaseActivity {
 
     @NonNull
     private View setWheelView(List<ChannelBank> channelBanks) {
+
+        int mDefaultSelectBankId = 0;
+
         View view = LayoutInflater.from(BankcardBindingActivity.this).inflate(R.layout.dialog_wheel_view, null);
         final WheelView mWheelView = (WheelView) view
                 .findViewById(R.id.wheelView);
         mWheelView.setOffset(1);
-        mWheelView.setSeletion(0);// 设置默认被选中的项目
+        if (!LocalUser.getUser().isBankcardBound()) {
+            for (int i = 0; i < channelBanks.size(); i++) {
+                if (LocalUser.getUser().getUserInfo().getBankId() == channelBanks.get(i).getId()) {
+                    mDefaultSelectBankId = i;
+                    break;
+                }
+            }
+        }
+        mWheelView.setSeletion(mDefaultSelectBankId);// 设置默认被选中的项目
 
         mWheelView.setItemObjects((channelBanks));// 实际内容
         mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {

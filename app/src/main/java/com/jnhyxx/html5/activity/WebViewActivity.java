@@ -195,6 +195,7 @@ public class WebViewActivity extends BaseActivity {
             }
         });
 
+
         loadPage();
     }
 

@@ -64,6 +64,7 @@ public class SignInActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
+        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         mPassword.addTextChangedListener(mValidationWatcher);
 
         mPhoneNum.setText(LocalUser.getUser().getPhone());
@@ -209,11 +210,11 @@ public class SignInActivity extends BaseActivity {
             mPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             mShowPasswordButton.setSelected(true);
         }
-        mPassword.postInvalidate();
         CharSequence text = mPassword.getText();
-        if (text instanceof Spannable) {
+        if (text != null) {
             Spannable spanText = (Spannable) text;
             Selection.setSelection(spanText, text.length());
         }
+        mPassword.postInvalidate();
     }
 }

@@ -25,6 +25,7 @@
         android:paddingRight="15dp">
 
         <TextView
+            tools:text="沪铜、沪镍主力合约更换提醒"
             android:id="@+id/messageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
             android:textSize="17sp"/>
 
         <TextView
+            android:text="@string/time"
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,6 +51,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                tools:text="沪铜、沪镍主力合约更换提醒内容顺撒即可很快就撒发挥空间撒恢复健康还是非积分哈萨克金凤凰就回复即可收到回复可见独守空房就会受到客服号多少空间尽快发货点上课就发货速度空间和福克斯将对方很快就看见对方会离开的手机话费即可收到回复可见了的说法就恢复到客户发多少看了回复开始发货快速大家好"
                 android:id="@+id/messageContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -90,6 +90,7 @@ public class SignUpActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mRegisterAuthCode.addTextChangedListener(mValidationWatcher);
+        mPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
         mPassword.addTextChangedListener(mValidationWatcher);
         mImageAuthCode.addTextChangedListener(mValidationWatcher);
 
@@ -341,7 +342,7 @@ public class SignUpActivity extends BaseActivity {
         }
         mPassword.postInvalidate();
         CharSequence text = mPassword.getText();
-        if (text instanceof Spannable) {
+        if (text != null) {
             Spannable spanText = (Spannable) text;
             Selection.setSelection(spanText, text.length());
         }

@@ -5,6 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:background="@color/splitBlockLight"
               tools:context=".activity.account.MessageCenterActivity">
 
     <com.jnhyxx.html5.view.TitleBar
@@ -16,7 +17,8 @@
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"

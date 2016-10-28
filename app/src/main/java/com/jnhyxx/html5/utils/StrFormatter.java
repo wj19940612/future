@@ -46,12 +46,19 @@ public class StrFormatter {
                     + " " + bankCardNoSpace.substring(4, 8)
                     + " " + bankCardNoSpace.substring(8, 12)
                     + " " + bankCardNoSpace.substring(12, bankCardNoSpace.length());
-        } else if (bankCardNoSpace.length() < 20) {
+        } else if (bankCardNoSpace.length() <= 20) {
             return bankCardNoSpace.substring(0, 4)
                     + " " + bankCardNoSpace.substring(4, 8)
                     + " " + bankCardNoSpace.substring(8, 12)
                     + " " + bankCardNoSpace.substring(12, 16)
                     + " " + bankCardNoSpace.substring(16, bankCardNoSpace.length());
+        } else if (bankCardNoSpace.length() <= 25) {
+            return bankCardNoSpace.substring(0, 4)
+                    + " " + bankCardNoSpace.substring(4, 8)
+                    + " " + bankCardNoSpace.substring(8, 12)
+                    + " " + bankCardNoSpace.substring(12, 16)
+                    + " " + bankCardNoSpace.substring(16, 20)
+                    + " " + bankCardNoSpace.substring(20, bankCardNoSpace.length());
         }
         return bankCardNoSpace;
     }
@@ -63,10 +70,8 @@ public class StrFormatter {
      * @return
      */
     public static String getHintFormatBankCardNumber(String bankCardNoSpace) {
-        if (bankCardNoSpace.length() == 16) {
-            return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
-        } else if (bankCardNoSpace.length() == 19) {
-            return "*** **** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4, bankCardNoSpace.length());
+        if (bankCardNoSpace.length() >= 16) {
+            return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4);
         }
         return bankCardNoSpace;
     }

@@ -27,5 +27,6 @@
     <color name="lucky">#666666</color>
 
     <color name="emptyViewColor">#CACACA</color>
+    <color name="mine_balance_text_color">#CCCCCC</color>
 
 </resources>

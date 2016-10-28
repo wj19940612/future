@@ -2,7 +2,9 @@ package com.jnhyxx.html5.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
@@ -112,14 +115,19 @@ public class HomeFragment extends BaseFragment {
                         }).fire();
             }
 
+            //新手引导
             @Override
             public void onNewerGuideClick() {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getNewbieUrl())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.newbie_title))
+                        .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie()).execute();
             }
 
             @Override
             public void onContactService() {
-
+                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
             }
         });
 

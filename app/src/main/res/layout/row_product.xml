@@ -108,6 +108,7 @@
             android:id="@+id/lastPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:textColor="@color/redPrimary"
             android:textSize="17sp"
             tools:text="46.24"/>
@@ -116,7 +117,6 @@
             android:id="@+id/priceChangePercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_red_primary"
             android:drawableLeft="@drawable/ic_up_arrow"
             android:drawablePadding="5dp"

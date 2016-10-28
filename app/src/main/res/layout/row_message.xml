@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:textSize="12sp"
-                tools:text="2016-08-02 10:11:49"/>
+                tools:text="2016/08/02 10:11:49"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

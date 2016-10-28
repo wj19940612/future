@@ -65,21 +65,21 @@ public class NameVerifyActivity extends BaseActivity {
             mIdentityNum.setText(userInfo.getIdCard());
 
             if (userInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_VERIFIED) {
-                mNameArea.setBackgroundResource(R.drawable.bg_input_disable);
                 mNameTitle.setEnabled(false);
                 mName.setEnabled(false);
 
-                mIdentityNumArea.setBackgroundResource(R.drawable.bg_input_disable);
+                mNameArea.setBackgroundResource(R.drawable.bg_line_division_fill);
+                mIdentityNumArea.setBackgroundResource(R.drawable.bg_line_division_fill);
                 mIdentityNumTitle.setEnabled(false);
                 mIdentityNum.setEnabled(false);
 
                 mSubmitToAuthButton.setVisibility(View.GONE);
             } else {
-                mNameArea.setBackgroundResource(R.drawable.bg_input_enable);
+//                mNameArea.setBackgroundResource(R.drawable.bg_line_division_center);
                 mNameTitle.setEnabled(true);
                 mName.setEnabled(true);
 
-                mIdentityNumArea.setBackgroundResource(R.drawable.bg_input_enable);
+//                mIdentityNumArea.setBackgroundResource(R.drawable.bg_input_enable);
                 mIdentityNumTitle.setEnabled(true);
                 mIdentityNum.setEnabled(true);
 

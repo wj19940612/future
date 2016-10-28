@@ -25,7 +25,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_center"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -63,7 +63,7 @@
             android:id="@+id/identityNumArea"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/bg_input_enable"
+            android:background="@drawable/bg_line_division_center"
             android:gravity="bottom"
             android:orientation="horizontal">
 
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:lineSpacingExtra="2dp"
+            android:lineSpacingExtra="3dp"
             android:paddingTop="15dp"
             android:text="@string/prompt_about_name_verify"
             android:textColor="@color/redPrimary"

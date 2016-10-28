@@ -131,7 +131,7 @@ public class LiveActivity extends WebViewActivity {
 
                         Launcher.with(LiveActivity.this, TradeActivity.class)
                                 .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
+                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
                                 .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))

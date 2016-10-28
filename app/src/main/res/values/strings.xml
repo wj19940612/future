@@ -228,6 +228,7 @@
     <string name="stop_loss_sale">止损卖出</string>
     <string name="market_price_sale">市价卖出</string>
     <string name="market_price_buy">市价买入</string>
+    <string name="manually_sale">人工卖出</string>
 
 
     <!-- Trade page -->

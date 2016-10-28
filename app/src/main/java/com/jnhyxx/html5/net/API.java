@@ -552,7 +552,7 @@ public class API extends APIBase {
          * @return
          */
         public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?activityId=" + liveRoomId + "&nohead=1";
+            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId + "&nohead=1";
         }
     }
 

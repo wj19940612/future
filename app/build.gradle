@@ -11,7 +11,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        buildConfigField('String', 'API_HOST', '\"http://www.jnhyxx.com\"')
+        buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
@@ -58,8 +58,8 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 6
-            versionName '1.2.1'
+            versionCode 12
+            versionName '2.0.11'
         }
         microil {
             versionCode 11

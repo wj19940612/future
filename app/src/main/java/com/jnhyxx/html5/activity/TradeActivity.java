@@ -505,11 +505,15 @@ public class TradeActivity extends BaseActivity implements
             return;
         }
 
-        String userPhone = LocalUser.getUser().getPhone();
-        if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
-            showPlaceOrderFragment(longOrShort);
+        if (mFundType == Product.FUND_TYPE_CASH) {
+            String userPhone = LocalUser.getUser().getPhone();
+            if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
+                showPlaceOrderFragment(longOrShort);
+            } else {
+                showAgreementFragment(longOrShort);
+            }
         } else {
-            showAgreementFragment(longOrShort);
+            showPlaceOrderFragment(longOrShort);
         }
     }
 
@@ -578,17 +582,7 @@ public class TradeActivity extends BaseActivity implements
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
-                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-                                    .setPositive(R.string.go_to_recharge,
-                                            new SmartDialog.OnClickListener() {
-                                                @Override
-                                                public void onClick(Dialog dialog) {
-                                                    dialog.dismiss();
-                                                    Launcher.with(getActivity(), RechargeActivity.class)
-                                                            .execute();
-                                                }
-                                            }).setNegative(R.string.cancel)
-                                    .show();
+                            showFundNotEnoughDialog(jsonObjectResp);
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
@@ -596,6 +590,26 @@ public class TradeActivity extends BaseActivity implements
                         }
                     }
                 }).fire();
+    }
+
+    private void showFundNotEnoughDialog(Resp<JsonObject> jsonObjectResp) {
+        if (mFundType == Product.FUND_TYPE_CASH) {
+            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                    .setPositive(R.string.go_to_recharge,
+                            new SmartDialog.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), RechargeActivity.class)
+                                            .execute();
+                                }
+                            }).setNegative(R.string.cancel)
+                    .show();
+        } else {
+            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                    .setPositive(R.string.ok)
+                    .show();
+        }
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.jnhyxx.html5.domain.order;
 
+import com.jnhyxx.html5.domain.local.SysTime;
+import com.jnhyxx.html5.utils.StrFormatter;
+import com.johnz.kutils.DateUtil;
+
 import java.io.Serializable;
 
 public class ExchangeStatus implements Serializable {
@@ -29,7 +33,22 @@ public class ExchangeStatus implements Serializable {
     }
 
     public String getNextTime() {
-        return nextTime;
+        return createNextTime();
+    }
+
+    private String createNextTime() {
+        long now = SysTime.getSysTime().getSystemTimestamp();
+        if (DateUtil.isToday(inventoryNextTime, now)) {
+            return StrFormatter.getChinesePrefixTime(inventoryNextTime);
+        } else if (DateUtil.isTomorrow(inventoryNextTime, now)) {
+            return "明天" + StrFormatter.getChinesePrefixTime(inventoryNextTime);
+        } else if (DateUtil.isNextWeek(inventoryNextTime, now)) {
+            return "下周" + DateUtil.getDayOfWeek(inventoryNextTime)
+                    + StrFormatter.getChinesePrefixTime(inventoryNextTime);
+        } else {
+            return DateUtil.format(inventoryNextTime, "MM月d日") +
+                    StrFormatter.getChinesePrefixTime(inventoryNextTime);
+        }
     }
 
     public void setNextTime(String nextTime) {

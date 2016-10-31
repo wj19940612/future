@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.utils;
 
+import com.johnz.kutils.DateUtil;
+
 /**
  * 工具类: 格式化字符串
  */
@@ -74,5 +76,19 @@ public class StrFormatter {
             return "**** **** **** " + bankCardNoSpace.substring(bankCardNoSpace.length() - 4);
         }
         return bankCardNoSpace;
+    }
+
+    public static String getChinesePrefixTime(long inventoryNextTime) {
+        String HHmm = DateUtil.format(inventoryNextTime, "HH:mm");
+        if (HHmm.compareTo("00:00") >= 0 && HHmm.compareTo("06:00") <= 0) {
+            return "凌晨 " + HHmm;
+        } else if (HHmm.compareTo("06:00") > 0 && HHmm.compareTo("12:00") <= 0) {
+            return "上午 " + HHmm;
+        } else if (HHmm.compareTo("12:00") > 0 && HHmm.compareTo("18:00") <= 0) {
+            return "下午 " + HHmm;
+        } else if (HHmm.compareTo("18:00") > 0 && HHmm.compareTo("24:00") < 0) {
+            return "晚上 " + HHmm;
+        }
+        return "";
     }
 }

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.jnhyxx.html5.Preference;
@@ -138,12 +137,16 @@ public class MainActivity extends BaseActivity {
         API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
             @Override
             public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
-                Log.d(TAG, "直播间数据" + liveRoomInfoResp.getData().toString());
+                String liveId = "";
+                if (liveRoomInfoResp.getData() != null) {
+                    liveId = liveRoomInfoResp.getData().getActivityId();
+                }
                 Launcher.with(getActivity(), LiveActivity.class)
-                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveRoomInfoResp.getData().getActivityId()))
+                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveId))
                         .putExtra(LiveActivity.EX_TITLE, getString(R.string.live))
                         .putExtra(LiveActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                         .executeForResult(REQUEST_CODE_LIVE);
+
             }
         }).fire();
     }

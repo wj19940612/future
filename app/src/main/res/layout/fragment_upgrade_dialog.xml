@@ -16,7 +16,8 @@
         android:text="@string/discovery_new_version"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:id="@+id/textView2"/>
 
     <TextView
         android:id="@+id/upgradeLog"

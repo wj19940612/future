@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -21,6 +20,7 @@ import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -33,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import me.grantland.widget.AutofitTextView;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
@@ -49,15 +50,15 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.totalProfitAndUnit)
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
-    TextView mTotalProfit;
+    AutofitTextView mTotalProfit;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
     @BindView(android.R.id.empty)
     LinearLayout mEmpty;
     @BindView(R.id.lossProfitArea)
-    RelativeLayout mLossProfitArea;
+    LinearLayout mLossProfitArea;
     @BindView(R.id.totalProfitRmb)
-    TextView mTotalProfitRmb;
+    AutofitTextView mTotalProfitRmb;
 
     private Unbinder mBinder;
 
@@ -191,6 +192,7 @@ public class HoldingFragment extends BaseFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mList.setEmptyView(mEmpty);
+        FontUtil.setTt0173MFont(mTotalProfit);
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);

@@ -26,6 +26,7 @@ import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -63,6 +64,7 @@ public class SimulationActivity extends BaseActivity {
 
         updateProductGridView();
 
+        FontUtil.setTt0173MFont(mAvailableGold);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

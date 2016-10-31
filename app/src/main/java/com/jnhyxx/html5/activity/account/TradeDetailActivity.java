@@ -14,6 +14,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.fragment.FundDetailFragment;
 import com.jnhyxx.html5.fragment.ScoreDetailListFragment;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.grantland.widget.AutofitTextView;
 
 public class TradeDetailActivity extends BaseActivity {
 
@@ -35,11 +37,11 @@ public class TradeDetailActivity extends BaseActivity {
     @BindView(R.id.remainTitle)
     TextView mRemainTitle;
     @BindView(R.id.remainNumber)
-    TextView mRemainNumber;
+    AutofitTextView mRemainNumber;
     @BindView(R.id.blockedTitle)
     TextView mBlockedTitle;
     @BindView(R.id.blockedNumber)
-    TextView mBlockedNumber;
+    AutofitTextView mBlockedNumber;
 
     UserFundInfo mUserFundInfo;
 
@@ -58,6 +60,9 @@ public class TradeDetailActivity extends BaseActivity {
         mUserFundInfo = (UserFundInfo) getIntent().getSerializableExtra(Launcher.EX_PAYLOAD);
         if (mUserFundInfo == null) return;
         initData();
+
+        FontUtil.setTt0173MFont(mRemainNumber);
+        FontUtil.setTt0173MFont(mBlockedNumber);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

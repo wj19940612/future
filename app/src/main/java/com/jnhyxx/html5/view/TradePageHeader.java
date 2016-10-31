@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.johnz.kutils.FinanceUtil;
 
 import butterknife.BindView;
@@ -123,11 +124,12 @@ public class TradePageHeader extends FrameLayout {
         if (totalProfit >= 0) {
             color = ContextCompat.getColor(getContext(), R.color.redPrimary);
         }
+        FontUtil.setTt0173MFont(mTotalProfit);
         mTotalProfit.setTextColor(color);
         mTotalProfitRmb.setTextColor(color);
 
         String totalProfitStr = totalProfit >= 0 ?
-                "+" + FinanceUtil.formatWithScale(totalProfit, scale):
+                "+" + FinanceUtil.formatWithScale(totalProfit, scale) :
                 "" + FinanceUtil.formatWithScale(totalProfit, scale);
         if (isForeign) {
             double totalProfitRmb = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
@@ -142,6 +144,7 @@ public class TradePageHeader extends FrameLayout {
     }
 
     public void setAvailableBalance(double availableBalance) {
+        FontUtil.setTt0173MFont(mAvailableBalance);
         mAvailableBalance.setText(FinanceUtil.formatWithScale(availableBalance));
     }
 

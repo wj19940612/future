@@ -11,6 +11,7 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.OrderDetail;
 import com.jnhyxx.html5.domain.order.SettledOrder;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -70,6 +71,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        FontUtil.setTt0173MFont(mLossProfit);
         mLossProfitUnit.setText(getString(R.string.settlement_loss_profit_unit, mProduct.getCurrencyUnit()));
 
         int tradeType = mSettledOrder.getDirection();

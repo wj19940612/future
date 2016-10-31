@@ -39,6 +39,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
@@ -129,7 +130,12 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onContactService() {
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    ToastUtil.show(R.string.install_qq_first);
+                }
             }
         });
 

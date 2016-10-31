@@ -11,6 +11,7 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.AppInfo;
 
 import butterknife.BindView;
@@ -79,7 +80,12 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             case R.id.serviceQq:
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl)));
+                Intent intentQQ = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
+                if (intentQQ.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intentQQ);
+                } else {
+                    ToastUtil.show(R.string.install_qq_first);
+                }
                 break;
 
         }

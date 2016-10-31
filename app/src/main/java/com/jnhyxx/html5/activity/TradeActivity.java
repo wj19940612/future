@@ -693,6 +693,10 @@ public class TradeActivity extends BaseActivity implements
     public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
     }
 
+    @Override
+    public void onRiskControlTriggered() {
+    }
+
     static class MenuAdapter extends ArrayAdapter<Product> {
 
         public MenuAdapter(Context context) {

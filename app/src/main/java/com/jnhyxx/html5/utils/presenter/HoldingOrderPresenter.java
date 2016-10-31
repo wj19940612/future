@@ -51,6 +51,8 @@ public class HoldingOrderPresenter {
         void onSubmitAllHoldingPositionsCompleted(String message);
 
         void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder);
+
+        void onRiskControlTriggered();
     }
 
     public void onResume() {
@@ -177,6 +179,7 @@ public class HoldingOrderPresenter {
         if (refresh) { // 触及风控刷新
             Log.d("TAG", "触及风控刷新");
             loadHoldingOrderList(mVarietyId, mFundType);
+            onRiskControlTriggered();
         }
     }
 
@@ -208,6 +211,12 @@ public class HoldingOrderPresenter {
     private void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
         if (mResume && mIHoldingOrderView != null) {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
+        }
+    }
+
+    private void onRiskControlTriggered() {
+        if (mResume && mIHoldingOrderView != null) {
+            mIHoldingOrderView.onRiskControlTriggered();
         }
     }
 

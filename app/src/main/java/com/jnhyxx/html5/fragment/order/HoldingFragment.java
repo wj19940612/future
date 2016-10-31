@@ -41,7 +41,7 @@ public class HoldingFragment extends BaseFragment
         implements HoldingOrderPresenter.IHoldingOrderView {
 
     public interface Callback {
-        void onClosePositionButtonsClick();
+        void onHoldingPositionsCloseEventTriggered();
     }
 
     @BindView(android.R.id.list)
@@ -205,7 +205,7 @@ public class HoldingFragment extends BaseFragment
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mHoldingOrderPresenter.closePosition(mFundType, order);
-                        onClosePositionButtonsClick();
+                        onHoldingPositionsCloseEventTriggered();
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
@@ -215,9 +215,9 @@ public class HoldingFragment extends BaseFragment
         }
     }
 
-    private void onClosePositionButtonsClick() {
+    private void onHoldingPositionsCloseEventTriggered() {
         if (mCallback != null) {
-            mCallback.onClosePositionButtonsClick();
+            mCallback.onHoldingPositionsCloseEventTriggered();
         }
     }
 
@@ -265,10 +265,15 @@ public class HoldingFragment extends BaseFragment
         ToastUtil.center(R.string.sell_order_submit_successfully, R.dimen.toast_offset);
     }
 
+    @Override
+    public void onRiskControlTriggered() {
+        onHoldingPositionsCloseEventTriggered();
+    }
+
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
-        onClosePositionButtonsClick();
+        onHoldingPositionsCloseEventTriggered();
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

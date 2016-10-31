@@ -109,6 +109,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SettingsActivity.class).execute();
             }
         });
+        FontUtil.setTt0173MFont(mBalance);
     }
 
     @Override
@@ -153,7 +154,6 @@ public class MineFragment extends BaseFragment {
             double moneyUsable = userInfo.getMoneyUsable();
             double scoreUsable = userInfo.getScoreUsable();
             mNickname.setText(getString(R.string.nickname_logged, userName));
-            FontUtil.setTt0173MFont(mBalance);
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
 

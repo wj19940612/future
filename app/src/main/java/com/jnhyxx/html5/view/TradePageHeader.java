@@ -97,6 +97,8 @@ public class TradePageHeader extends FrameLayout {
         }
         mHeaderIndex = -1;
         showView(HEADER_UNLOGIN);
+        FontUtil.setTt0173MFont(mAvailableBalance);
+        FontUtil.setTt0173MFont(mTotalProfit);
         ButterKnife.bind(this);
     }
 
@@ -124,7 +126,6 @@ public class TradePageHeader extends FrameLayout {
         if (totalProfit >= 0) {
             color = ContextCompat.getColor(getContext(), R.color.redPrimary);
         }
-        FontUtil.setTt0173MFont(mTotalProfit);
         mTotalProfit.setTextColor(color);
         mTotalProfitRmb.setTextColor(color);
 
@@ -144,7 +145,6 @@ public class TradePageHeader extends FrameLayout {
     }
 
     public void setAvailableBalance(double availableBalance) {
-        FontUtil.setTt0173MFont(mAvailableBalance);
         mAvailableBalance.setText(FinanceUtil.formatWithScale(availableBalance));
     }
 

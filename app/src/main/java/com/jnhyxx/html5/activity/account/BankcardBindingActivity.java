@@ -84,6 +84,8 @@ public class BankcardBindingActivity extends BaseActivity {
 
     private ChannelBank mChannelBank;
 
+    private int mMDefaultSelectBankId = LocalUser.getUser().getUserInfo().getBankId();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -354,27 +356,26 @@ public class BankcardBindingActivity extends BaseActivity {
     @NonNull
     private View setWheelView(List<ChannelBank> channelBanks) {
 
-        int mDefaultSelectBankId = 0;
-
         View view = LayoutInflater.from(BankcardBindingActivity.this).inflate(R.layout.dialog_wheel_view, null);
         final WheelView mWheelView = (WheelView) view
                 .findViewById(R.id.wheelView);
         mWheelView.setOffset(1);
         if (!LocalUser.getUser().isBankcardBound()) {
             for (int i = 0; i < channelBanks.size(); i++) {
-                if (LocalUser.getUser().getUserInfo().getBankId() == channelBanks.get(i).getId()) {
-                    mDefaultSelectBankId = i;
+                if (mMDefaultSelectBankId == channelBanks.get(i).getId()) {
+                    mMDefaultSelectBankId = i;
                     break;
                 }
             }
         }
-        mWheelView.setSeletion(mDefaultSelectBankId);// 设置默认被选中的项目
+        mWheelView.setSeletion(mMDefaultSelectBankId);// 设置默认被选中的项目
 
         mWheelView.setItemObjects((channelBanks));// 实际内容
         mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, Object item) {
                 mChannelBank = (ChannelBank) item;
+                mMDefaultSelectBankId = mChannelBank.getId();
             }
         });
         return view;

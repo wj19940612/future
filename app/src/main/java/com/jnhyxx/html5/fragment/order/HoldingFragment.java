@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -34,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import me.grantland.widget.AutofitTextView;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
@@ -50,15 +50,15 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.totalProfitAndUnit)
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
-    TextView mTotalProfit;
+    AutofitTextView mTotalProfit;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
     @BindView(android.R.id.empty)
     LinearLayout mEmpty;
     @BindView(R.id.lossProfitArea)
-    RelativeLayout mLossProfitArea;
+    LinearLayout mLossProfitArea;
     @BindView(R.id.totalProfitRmb)
-    TextView mTotalProfitRmb;
+    AutofitTextView mTotalProfitRmb;
 
     private Unbinder mBinder;
 

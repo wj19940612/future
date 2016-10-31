@@ -260,7 +260,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         private void setTime(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
             String time = infoLiveMessage.get(2);
             if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
-                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "MM/dd HH:mm");
+                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "HH:mm:ss");
             } else {
                 time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
             }

@@ -6,8 +6,8 @@
                 android:background="@color/bluePrimary"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingLeft="@dimen/common_margin"
+                android:paddingRight="@dimen/common_margin">
 
     <TextView
         android:id="@+id/availableBalanceAndUnit"

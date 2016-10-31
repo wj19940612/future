@@ -5,32 +5,33 @@
               android:layout_height="@dimen/trade_header_height"
               android:background="@color/bluePrimary"
               android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp">
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/common_margin"
+              android:paddingRight="@dimen/common_margin">
+
+    <TextView
+        android:id="@+id/totalProfitAndUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/holding_position_total_profit_and_unit"
+        android:textColor="#CCCCCC"
+        android:textSize="12sp"/>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/totalProfitAndUnit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/holding_position_total_profit_and_unit"
-            android:textColor="#CCCCCC"
-            android:textSize="12sp"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/totalProfitArea"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/totalProfit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
                 android:textSize="40sp"
                 tools:text="+00000"/>
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/totalProfitRmb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,18 +53,18 @@
                 android:textSize="14sp"
                 tools:text="(+0000000)"/>
         </LinearLayout>
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/oneKeyClosePositionBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/btn_blue"
-        android:gravity="center"
-        android:minWidth="@dimen/trade_header_btn_width"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/one_key_close_position"
-        android:textColor="@android:color/white"/>
+        <TextView
+            android:id="@+id/oneKeyClosePositionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/btn_blue"
+            android:gravity="center"
+            android:minWidth="@dimen/trade_header_btn_width"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/one_key_close_position"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
 </LinearLayout>

@@ -62,6 +62,8 @@ public class HoldingOrderPresenter {
     public void onPause() {
         mResume = false;
         mLoading = false;
+        mMarketData = null;
+        mCounter = 0;
         if (mHoldingOrderList != null) {
             mHoldingOrderList.clear();
         }
@@ -139,6 +141,9 @@ public class HoldingOrderPresenter {
         }
 
         mMarketData = marketData;
+
+        if (mMarketData == null) return;
+
         BigDecimal totalProfit = new BigDecimal(0);
         boolean hasHoldingOrders = false;
         double ratio = 0;
@@ -154,9 +159,9 @@ public class HoldingOrderPresenter {
                 BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                 BigDecimal diff;
                 if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    diff = FinanceUtil.subtraction(marketData.getBidPrice(), holdingOrder.getRealAvgPrice());
+                    diff = FinanceUtil.subtraction(mMarketData.getBidPrice(), holdingOrder.getRealAvgPrice());
                 } else {
-                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), marketData.getAskPrice());
+                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), mMarketData.getAskPrice());
                 }
                 diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
 
@@ -237,8 +242,14 @@ public class HoldingOrderPresenter {
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
                         Log.d("TAG", "onRespSuccess: loadHoldingOrderList finished");
                         mLoading = false;
+
                         mHoldingOrderList = holdingOrderList;
-                        onViewShowHoldingOrderList(holdingOrderList);
+                        onViewShowHoldingOrderList(mHoldingOrderList);
+
+                        if (mMarketData == null && mHoldingOrderList.size() > 0) { // 还没行情的时候，显示 0 收益
+                            onViewShowTotalProfit(true, 0, mHoldingOrderList.get(0).getRatio());
+                        }
+
                         startQueryJob();
                     }
                 }).fire();

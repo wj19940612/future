@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.grantland.widget.AutofitTextView;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
@@ -50,7 +49,7 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.totalProfitAndUnit)
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
-    AutofitTextView mTotalProfit;
+    TextView mTotalProfit;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
     @BindView(android.R.id.empty)
@@ -58,7 +57,7 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.lossProfitArea)
     LinearLayout mLossProfitArea;
     @BindView(R.id.totalProfitRmb)
-    AutofitTextView mTotalProfitRmb;
+    TextView mTotalProfitRmb;
 
     private Unbinder mBinder;
 
@@ -191,8 +190,9 @@ public class HoldingFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mList.setEmptyView(mEmpty);
         FontUtil.setTt0173MFont(mTotalProfit);
+
+        mList.setEmptyView(mEmpty);
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);

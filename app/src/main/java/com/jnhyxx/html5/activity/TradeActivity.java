@@ -404,12 +404,12 @@ public class TradeActivity extends BaseActivity implements
             flashView = new FlashView(this);
             mChartContainer.addFlashView(flashView);
         }
+        flashView.clearData();
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
         settings1.setBaseLines(mProduct.getBaseline());
         flashView.setSettings(settings1);
-        flashView.clearData();
 
         MarketDataView marketDataView = mChartContainer.getMarketDataView();
         if (marketDataView == null) {
@@ -452,16 +452,16 @@ public class TradeActivity extends BaseActivity implements
         mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
-                mUpdateRealTimeData = true;
-
                 NettyClient.getInstance().stop();
 
                 hideFragmentOfContainer();
                 updateChartView(); // based on product
+
+                mHoldingOrderPresenter.setFullMarketData(null);
                 mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
+                mUpdateRealTimeData = true;
                 NettyClient.getInstance().start(mProduct.getContractsCode());
-
             }
         });
         ListView listView = (ListView) mMenu.getMenu();

@@ -58,12 +58,12 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 12
-            versionName '2.0.11'
+            versionCode 13
+            versionName '2.0.12'
         }
         microil {
-            versionCode 11
-            versionName '2.0.10'
+            versionCode 13
+            versionName '2.0.12'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
         }
         tst {

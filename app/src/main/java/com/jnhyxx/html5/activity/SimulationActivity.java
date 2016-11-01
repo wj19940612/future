@@ -60,11 +60,12 @@ public class SimulationActivity extends BaseActivity {
         setContentView(R.layout.activity_simulation);
         ButterKnife.bind(this);
 
+        FontUtil.setTt0173MFont(mAvailableGold);
+
         initData(getIntent());
 
         updateProductGridView();
 
-        FontUtil.setTt0173MFont(mAvailableGold);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -71,7 +71,6 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        FontUtil.setTt0173MFont(mLossProfit);
         mLossProfitUnit.setText(getString(R.string.settlement_loss_profit_unit, mProduct.getCurrencyUnit()));
 
         int tradeType = mSettledOrder.getDirection();
@@ -94,6 +93,8 @@ public class OrderDetailActivity extends BaseActivity {
             color = ContextCompat.getColor(this, R.color.redPrimary);
             lossProfitStr = "+" + FinanceUtil.formatWithScale(lossProfit, mProduct.getLossProfitScale());
         }
+
+        FontUtil.setTt0173MFont(mLossProfit);
         mLossProfit.setTextColor(color);
         mLossProfit.setText(lossProfitStr);
         if (mProduct.isForeign()) {

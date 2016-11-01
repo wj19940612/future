@@ -103,13 +103,14 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        FontUtil.setTt0173MFont(mBalance);
+
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), SettingsActivity.class).execute();
             }
         });
-        FontUtil.setTt0173MFont(mBalance);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.johnz.kutils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +26,54 @@ public class DateUtil {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static boolean isToday(long time, long today) {
+        Date date = new Date(time);
+        Date todayDate = new Date(today);
+        return isToday(date, todayDate);
+    }
+
+    public static boolean isToday(Date date, Date todayDate) {
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.setTime(todayDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return todayCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+                && todayCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
+                && todayCalendar.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR);
+    }
+
+    public static boolean isTomorrow(long time, long today) {
+        Date date = new Date(time);
+        Date todayDate = new Date(today);
+        return isTomorrow(date, todayDate);
+    }
+
+    public static boolean isTomorrow(Date date, Date todayDate) {
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.setTime(todayDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        todayCalendar.add(Calendar.DAY_OF_YEAR, 1);
+        return isToday(calendar.getTime(), todayCalendar.getTime());
+    }
+
+    public static boolean isNextWeek(long time, long today) {
+        Date date = new Date(time);
+        Date todayDate = new Date(today);
+        return isNextWeek(date, todayDate);
+    }
+
+    public static boolean isNextWeek(Date date, Date todayDate) {
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.setTime(todayDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        todayCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+        Log.d("TAG", "isNextWeek: calendar.get(Calendar.WEEK_OF_YEAR): " + calendar.get(Calendar.WEEK_OF_YEAR));
+        Log.d("TAG", "isNextWeek: todayCalendar.get(Calendar.WEEK_OF_YEAR)): " + todayCalendar.get(Calendar.WEEK_OF_YEAR));
+        return calendar.get(Calendar.WEEK_OF_YEAR) == todayCalendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     public static boolean isInThisYear(long time) {
@@ -65,6 +115,38 @@ public class DateUtil {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static String getDayOfWeek(long time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        String result = "";
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.MONDAY:
+                result = "一";
+                break;
+            case Calendar.TUESDAY:
+                result = "二";
+                break;
+            case Calendar.WEDNESDAY:
+                result = "三";
+                break;
+            case Calendar.THURSDAY:
+                result = "四";
+                break;
+            case Calendar.FRIDAY:
+                result = "五";
+                break;
+            case Calendar.SATURDAY:
+                result = "六";
+                break;
+            case Calendar.SUNDAY:
+                result = "日";
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 
     public static String format(long timestamp) {

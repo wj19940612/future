@@ -85,7 +85,6 @@ public class WithdrawActivity extends BaseActivity {
         setContentView(R.layout.activity_withdraw);
         ButterKnife.bind(this);
 
-
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,12 +96,6 @@ public class WithdrawActivity extends BaseActivity {
 
         updateBankInfoView();
         getMoneyDrawUsable();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        setResult(RESULT_OK);
     }
 
     private void getMoneyDrawUsable() {
@@ -152,7 +145,6 @@ public class WithdrawActivity extends BaseActivity {
                         @Override
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
-
                                 updateUserInfoBalance(amount);
 
                                 SmartDialog.with(getActivity(), resp.getMsg())
@@ -182,12 +174,11 @@ public class WithdrawActivity extends BaseActivity {
     }
 
     private void updateUserInfoBalance(double withdrawAmount) {
-
-        LocalUser user = LocalUser.getUser();
-        UserInfo userInfo = user.getUserInfo();
-        userInfo.setMoneyUsable(FinanceUtil.subtraction(userFundInfo.getMoneyUsable(), withdrawAmount).doubleValue());
-        user.setUserInfo(userInfo);
-        mBalance.setText(FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue()));
+        if (LocalUser.getUser().isLogin()) {
+            UserInfo userInfo = LocalUser.getUser().getUserInfo();
+            userInfo.setMoneyUsable(FinanceUtil.subtraction(userFundInfo.getMoneyUsable(), withdrawAmount).doubleValue());
+            mBalance.setText(FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue()));
+        }
     }
 
     @Override

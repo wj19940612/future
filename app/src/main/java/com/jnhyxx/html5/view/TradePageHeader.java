@@ -98,6 +98,7 @@ public class TradePageHeader extends FrameLayout {
         mHeaderIndex = -1;
         showView(HEADER_UNLOGIN);
         ButterKnife.bind(this);
+
         FontUtil.setTt0173MFont(mAvailableBalance);
         FontUtil.setTt0173MFont(mTotalProfit);
     }

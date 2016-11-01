@@ -20,8 +20,6 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -44,9 +42,6 @@ public class TradeDetailActivity extends BaseActivity {
     AutofitTextView mBlockedNumber;
 
     UserFundInfo mUserFundInfo;
-
-    ArrayList<Fragment> fragmentList;
-
 
     TradeDetailFragmentAdapter mTradeDetailFragmentAdapter;
 
@@ -103,8 +98,6 @@ public class TradeDetailActivity extends BaseActivity {
     }
 
     private void initViewPager() {
-        fragmentList = new ArrayList<>();
-
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(0, false);
         mTradeDetailFragmentAdapter = new TradeDetailFragmentAdapter(getSupportFragmentManager(), TradeDetailActivity.this);

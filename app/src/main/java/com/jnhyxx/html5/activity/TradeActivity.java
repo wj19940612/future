@@ -121,6 +121,7 @@ public class TradeActivity extends BaseActivity implements
     private AnimationDrawable mQuestionMark;
 
     private boolean mUpdateRealTimeData;
+    private boolean mProductChanged;
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
@@ -136,9 +137,10 @@ public class TradeActivity extends BaseActivity implements
                         + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
                 mSellShortBtn.setText(getString(R.string.sell_short)
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+
+                mHoldingOrderPresenter.setFullMarketData(data);
             }
             updatePlaceOrderFragment(data);
-            mHoldingOrderPresenter.setFullMarketData(data);
         }
     };
 
@@ -404,12 +406,12 @@ public class TradeActivity extends BaseActivity implements
             flashView = new FlashView(this);
             mChartContainer.addFlashView(flashView);
         }
+        flashView.clearData();
         FlashView.Settings settings1 = new FlashView.Settings();
         settings1.setFlashChartPriceInterval(mProduct.getFlashChartPriceInterval());
         settings1.setNumberScale(mProduct.getPriceDecimalScale());
         settings1.setBaseLines(mProduct.getBaseline());
         flashView.setSettings(settings1);
-        flashView.clearData();
 
         MarketDataView marketDataView = mChartContainer.getMarketDataView();
         if (marketDataView == null) {
@@ -452,16 +454,20 @@ public class TradeActivity extends BaseActivity implements
         mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
+                if (mProductChanged) {
+                    NettyClient.getInstance().stop();
+
+                    hideFragmentOfContainer();
+                    updateChartView(); // based on product
+
+                    mHoldingOrderPresenter.clearData();
+                    mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+                    NettyClient.getInstance().start(mProduct.getContractsCode());
+
+                    mProductChanged = false;
+                }
                 mUpdateRealTimeData = true;
-
-                NettyClient.getInstance().stop();
-
-                hideFragmentOfContainer();
-                updateChartView(); // based on product
-                mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-
-                NettyClient.getInstance().start(mProduct.getContractsCode());
-
             }
         });
         ListView listView = (ListView) mMenu.getMenu();
@@ -474,9 +480,11 @@ public class TradeActivity extends BaseActivity implements
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
                     if (product.getVarietyId() == mProduct.getVarietyId()) {
+                        mProductChanged = false;
                         mMenu.toggle();
                     } else {
                         mProduct = product;
+                        mProductChanged = true;
                         mMenu.toggle();
 
                         updateTitleBar(); // based on product
@@ -505,11 +513,15 @@ public class TradeActivity extends BaseActivity implements
             return;
         }
 
-        String userPhone = LocalUser.getUser().getPhone();
-        if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
-            showPlaceOrderFragment(longOrShort);
+        if (mFundType == Product.FUND_TYPE_CASH) {
+            String userPhone = LocalUser.getUser().getPhone();
+            if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
+                showPlaceOrderFragment(longOrShort);
+            } else {
+                showAgreementFragment(longOrShort);
+            }
         } else {
-            showAgreementFragment(longOrShort);
+            showPlaceOrderFragment(longOrShort);
         }
     }
 
@@ -578,17 +590,7 @@ public class TradeActivity extends BaseActivity implements
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
-                            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-                                    .setPositive(R.string.go_to_recharge,
-                                            new SmartDialog.OnClickListener() {
-                                                @Override
-                                                public void onClick(Dialog dialog) {
-                                                    dialog.dismiss();
-                                                    Launcher.with(getActivity(), RechargeActivity.class)
-                                                            .execute();
-                                                }
-                                            }).setNegative(R.string.cancel)
-                                    .show();
+                            showFundNotEnoughDialog(jsonObjectResp);
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
@@ -596,6 +598,26 @@ public class TradeActivity extends BaseActivity implements
                         }
                     }
                 }).fire();
+    }
+
+    private void showFundNotEnoughDialog(Resp<JsonObject> jsonObjectResp) {
+        if (mFundType == Product.FUND_TYPE_CASH) {
+            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                    .setPositive(R.string.go_to_recharge,
+                            new SmartDialog.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), RechargeActivity.class)
+                                            .execute();
+                                }
+                            }).setNegative(R.string.cancel)
+                    .show();
+        } else {
+            SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                    .setPositive(R.string.ok)
+                    .show();
+        }
     }
 
     @Override
@@ -677,6 +699,10 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
+    }
+
+    @Override
+    public void onRiskControlTriggered() {
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

@@ -51,7 +51,7 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
-    public void onClosePositionButtonsClick() {
+    public void onHoldingPositionsCloseEventTriggered() {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);

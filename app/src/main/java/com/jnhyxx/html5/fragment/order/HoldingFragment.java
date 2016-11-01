@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.grantland.widget.AutofitTextView;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
@@ -42,7 +41,7 @@ public class HoldingFragment extends BaseFragment
         implements HoldingOrderPresenter.IHoldingOrderView {
 
     public interface Callback {
-        void onClosePositionButtonsClick();
+        void onHoldingPositionsCloseEventTriggered();
     }
 
     @BindView(android.R.id.list)
@@ -50,7 +49,7 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.totalProfitAndUnit)
     TextView mTotalProfitAndUnit;
     @BindView(R.id.totalProfit)
-    AutofitTextView mTotalProfit;
+    TextView mTotalProfit;
     @BindView(R.id.oneKeyClosePositionBtn)
     TextView mOneKeyClosePositionBtn;
     @BindView(android.R.id.empty)
@@ -58,7 +57,7 @@ public class HoldingFragment extends BaseFragment
     @BindView(R.id.lossProfitArea)
     LinearLayout mLossProfitArea;
     @BindView(R.id.totalProfitRmb)
-    AutofitTextView mTotalProfitRmb;
+    TextView mTotalProfitRmb;
 
     private Unbinder mBinder;
 
@@ -77,50 +76,50 @@ public class HoldingFragment extends BaseFragment
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
             }
-            updateHoldingOrderVisibleItems(data);
+            if (mHoldingOrderAdapter != null && mHoldingOrderAdapter.getCount() > 0) {
+                updateHoldingOrderVisibleItems(data);
+            }
         }
     };
 
     private void updateHoldingOrderVisibleItems(FullMarketData data) {
-        if (mList != null && mHoldingOrderAdapter != null) {
-            int first = mList.getFirstVisiblePosition();
-            int last = mList.getLastVisiblePosition();
-            for (int i = first; i <= last; i++) {
-                HoldingOrder holdingOrder = (HoldingOrder) mHoldingOrderAdapter.getItem(i);
-                View itemView = mList.getChildAt(i - mList.getFirstVisiblePosition());
-                TextView lastPrice = ButterKnife.findById(itemView, R.id.lastPrice);
-                TextView lossProfit = ButterKnife.findById(itemView, R.id.lossProfit);
-                TextView lossProfitRmb = ButterKnife.findById(itemView, R.id.lossProfitRmb);
+        int first = mList.getFirstVisiblePosition();
+        int last = mList.getLastVisiblePosition();
+        for (int i = first; i <= last; i++) {
+            HoldingOrder holdingOrder = (HoldingOrder) mHoldingOrderAdapter.getItem(i);
+            View itemView = mList.getChildAt(i - mList.getFirstVisiblePosition());
+            TextView lastPrice = ButterKnife.findById(itemView, R.id.lastPrice);
+            TextView lossProfit = ButterKnife.findById(itemView, R.id.lossProfit);
+            TextView lossProfitRmb = ButterKnife.findById(itemView, R.id.lossProfitRmb);
 
-                int priceScale = mProduct.getPriceDecimalScale();
-                int profitScale = mProduct.getLossProfitScale();
-                double ratio = holdingOrder.getRatio();
-                BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
-                BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
-                    diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
-                } else {
-                    lastPrice.setText(FinanceUtil.formatWithScale(data.getAskPrice(), priceScale));
-                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), data.getAskPrice());
-                }
-                diff = diff.multiply(eachPointMoney);
+            int priceScale = mProduct.getPriceDecimalScale();
+            int profitScale = mProduct.getLossProfitScale();
+            double ratio = holdingOrder.getRatio();
+            BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
+            BigDecimal diff;
+            if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
+                diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
+            } else {
+                lastPrice.setText(FinanceUtil.formatWithScale(data.getAskPrice(), priceScale));
+                diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), data.getAskPrice());
+            }
+            diff = diff.multiply(eachPointMoney);
 
-                String lossProfitStr;
-                String lossProfitRmbStr;
-                double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
-                if (diff.doubleValue() >= 0) {
-                    lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                } else {
-                    lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
-                    lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                }
-                lossProfit.setText(lossProfitStr);
-                if (mProduct.isForeign()) {
-                    lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + mFundUnit + ")";
-                    lossProfitRmb.setText(lossProfitRmbStr);
-                }
+            String lossProfitStr;
+            String lossProfitRmbStr;
+            double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
+            if (diff.doubleValue() >= 0) {
+                lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+                lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
+            } else {
+                lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+                lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
+            }
+            lossProfit.setText(lossProfitStr);
+            if (mProduct.isForeign()) {
+                lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + mFundUnit + ")";
+                lossProfitRmb.setText(lossProfitRmbStr);
             }
         }
     }
@@ -191,8 +190,9 @@ public class HoldingFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mList.setEmptyView(mEmpty);
         FontUtil.setTt0173MFont(mTotalProfit);
+
+        mList.setEmptyView(mEmpty);
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
@@ -207,7 +207,7 @@ public class HoldingFragment extends BaseFragment
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mHoldingOrderPresenter.closePosition(mFundType, order);
-                        onClosePositionButtonsClick();
+                        onHoldingPositionsCloseEventTriggered();
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
@@ -217,9 +217,9 @@ public class HoldingFragment extends BaseFragment
         }
     }
 
-    private void onClosePositionButtonsClick() {
+    private void onHoldingPositionsCloseEventTriggered() {
         if (mCallback != null) {
-            mCallback.onClosePositionButtonsClick();
+            mCallback.onHoldingPositionsCloseEventTriggered();
         }
     }
 
@@ -267,10 +267,15 @@ public class HoldingFragment extends BaseFragment
         ToastUtil.center(R.string.sell_order_submit_successfully, R.dimen.toast_offset);
     }
 
+    @Override
+    public void onRiskControlTriggered() {
+        onHoldingPositionsCloseEventTriggered();
+    }
+
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
-        onClosePositionButtonsClick();
+        onHoldingPositionsCloseEventTriggered();
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {
@@ -432,7 +437,7 @@ public class HoldingFragment extends BaseFragment
                     }
                     mLossProfit.setText(lossProfitStr);
                     if (product.isForeign()) {
-                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + fundUnit +  ")";
+                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + fundUnit + ")";
                         mLossProfitRmb.setText(lossProfitRmbStr);
                     } else {
                         mLossProfitRmb.setText("");

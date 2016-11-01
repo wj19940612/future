@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -35,6 +36,7 @@ public class TitleBar extends RelativeLayout {
 
     private TextView mTitleView;
     private TextView mLeftView;
+    private LinearLayout mRightViewParent;
     private TextView mRightView;
     private View mCustomView;
 
@@ -100,15 +102,15 @@ public class TitleBar extends RelativeLayout {
         addView(mLeftView, params);
 
         // right view
-        LinearLayout rightViewParent = new LinearLayout(getContext());
-        rightViewParent.setGravity(Gravity.CENTER);
-        rightViewParent.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
+        mRightViewParent = new LinearLayout(getContext());
+        mRightViewParent.setGravity(Gravity.CENTER);
+        mRightViewParent.setPadding(paddingHorizontal, 0, paddingHorizontal, 0);
         mRightView = new TextView(getContext());
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        rightViewParent.addView(mRightView, params);
+        mRightViewParent.addView(mRightView, params);
         params = new LayoutParams(LayoutParams.WRAP_CONTENT, fixedHeight);
         params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        addView(rightViewParent, params);
+        addView(mRightViewParent, params);
         if (mBackFeature) {
             setBackButtonIcon(mBackIcon);
             mLeftView.setOnClickListener(new OnClickListener() {
@@ -182,7 +184,11 @@ public class TitleBar extends RelativeLayout {
 
     private void setRightBackground(Drawable background) {
         mRightBackground = background;
-        mRightView.setBackground(mRightBackground);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mRightView.setBackground(mRightBackground);
+        } else {
+            mRightView.setBackgroundDrawable(mRightBackground);
+        }
     }
 
     public void setRightImage(Drawable rightImage) {
@@ -196,7 +202,7 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void setOnRightViewClickListener(View.OnClickListener listener) {
-        mRightView.setOnClickListener(listener);
+        mRightViewParent.setOnClickListener(listener);
     }
 
     public void setTitleColor(ColorStateList titleColor) {

@@ -33,14 +33,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp">
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/remainTitle"
@@ -76,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:padding="10dp"
+            android:padding="15dp"
             android:paddingLeft="@dimen/common_margin">
 
             <TextView

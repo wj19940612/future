@@ -48,7 +48,7 @@ public class BankcardBindingActivity extends BaseActivity {
     @BindView(R.id.bankcardInputArea)
     LinearLayout mBankcardInputArea;
     @BindView(R.id.cardholderName)
-    EditText mCardholderName;
+    TextView mCardholderName;
     @BindView(R.id.bankcardNum)
     EditText mBankcardNum;
     @BindView(R.id.phoneNum)
@@ -93,7 +93,6 @@ public class BankcardBindingActivity extends BaseActivity {
         ButterKnife.bind(this);
 
 
-        mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
 
@@ -105,7 +104,6 @@ public class BankcardBindingActivity extends BaseActivity {
         super.onDestroy();
         mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
-        mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -121,19 +119,6 @@ public class BankcardBindingActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
             formatBankCardNumber();
-        }
-    };
-
-    private ValidationWatcher mCardHolderValidationWatcher = new ValidationWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            mValidationWatcher.afterTextChanged(s);
-            String newData = s.toString();
-            if (newData.contains(" ")) {
-                newData = newData.replaceAll(" ", "");
-                mCardholderName.setText(newData);
-                mCardholderName.setSelection(mCardholderName.getText().toString().length());
-            }
         }
     };
 

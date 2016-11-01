@@ -9,8 +9,10 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -22,6 +24,7 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -57,6 +60,15 @@ public class SignInActivity extends BaseActivity {
     @BindView(R.id.failWarn)
     CommonFailWarn mCommonFailWarn;
 
+
+    @BindView(R.id.topLayout)
+    LinearLayout mTopLayout;
+    @BindView(R.id.hideLayout)
+    LinearLayout mHideLayout;
+
+    private KeyBoardHelper mKeyBoardHelper;
+    private int bottomHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +80,24 @@ public class SignInActivity extends BaseActivity {
         mPassword.addTextChangedListener(mValidationWatcher);
 
         mPhoneNum.setText(LocalUser.getUser().getPhone());
+
+
+        setKeyboardHelper();
+    }
+
+    /**
+     * 设置对键盘高度的监听
+     */
+    private void setKeyboardHelper() {
+        mKeyBoardHelper = new KeyBoardHelper(this);
+        mKeyBoardHelper.onCreate();
+        mKeyBoardHelper.setOnKeyBoardStatusChangeListener(onKeyBoardStatusChangeListener);
+        mHideLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomHeight = mHideLayout.getHeight();
+            }
+        });
     }
 
     @Override
@@ -75,6 +105,7 @@ public class SignInActivity extends BaseActivity {
         super.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mPassword.removeTextChangedListener(mValidationWatcher);
+        mKeyBoardHelper.onDestroy();
     }
 
     @Override
@@ -87,7 +118,39 @@ public class SignInActivity extends BaseActivity {
         }
     }
 
-    private ValidationWatcher mValidationWatcher = new com.jnhyxx.html5.utils.ValidationWatcher() {
+    private KeyBoardHelper.OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener = new KeyBoardHelper.OnKeyBoardStatusChangeListener() {
+
+        @Override
+        public void OnKeyBoardPop(int keyboardHeight) {
+
+            final int height = keyboardHeight;
+            if (bottomHeight > height) {
+                mHideLayout.setVisibility(View.GONE);
+            } else {
+                int offset = bottomHeight - height;
+                final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mTopLayout
+                        .getLayoutParams();
+                lp.topMargin = offset;
+                mTopLayout.setLayoutParams(lp);
+            }
+
+        }
+
+        @Override
+        public void OnKeyBoardClose(int oldKeyboardHeight) {
+            if (View.VISIBLE != mHideLayout.getVisibility()) {
+                mHideLayout.setVisibility(View.VISIBLE);
+            }
+            final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mTopLayout
+                    .getLayoutParams();
+            if (lp.topMargin != 0) {
+                lp.topMargin = 0;
+                mTopLayout.setLayoutParams(lp);
+            }
+
+        }
+    };
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSignInButtonEnable();

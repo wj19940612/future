@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AboutUsActivity extends BaseActivity {
-    private static final String SERVICE_QQ = "3088152027";
 
     @BindView(R.id.versionName)
     TextView mVersionName;
@@ -80,14 +79,13 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             case R.id.serviceQq:
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
-                Intent qqIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
-                if (qqIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(qqIntent);
+                Intent intentQQ = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
+                if (intentQQ.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intentQQ);
                 } else {
                     ToastUtil.show(R.string.install_qq_first);
                 }
                 break;
-
         }
     }
 

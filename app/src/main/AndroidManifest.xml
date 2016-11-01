@@ -91,6 +91,7 @@
             android:name=".activity.account.SignUpActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".activity.account.SignInActivity"
             android:screenOrientation="portrait"/>
         <activity

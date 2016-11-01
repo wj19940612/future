@@ -39,15 +39,15 @@
                 android:src="@drawable/ic_bank_zhaoshang"/>
 
             <TextView
-                tools:text="中国银行"
                 android:id="@+id/bankName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/bankCardIcon"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                tools:text="中国银行"/>
 
             <TextView
                 android:id="@+id/unbindBankcard"
@@ -112,19 +112,19 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textColor="@color/lucky"
                     style="@style/InputTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cardholder"/>
+                    android:text="@string/cardholder"
+                    android:textColor="@color/lucky"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/cardholderName"
                     style="@style/SignEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/please_input_real_name"/>
+                    android:enabled="false"/>
 
                 <ImageView
                     android:id="@+id/bindCardHint"
@@ -151,11 +151,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:textColor="@color/lucky"
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/bankcard_num"/>
+                android:text="@string/bankcard_num"
+                android:textColor="@color/lucky"/>
 
             <EditText
                 android:id="@+id/bankcardNum"
@@ -179,11 +179,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:textColor="@color/lucky"
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/paying_bank"/>
+                android:text="@string/paying_bank"
+                android:textColor="@color/lucky"/>
 
             <TextView
                 android:id="@+id/payingBank"
@@ -206,11 +206,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:textColor="@color/lucky"
                 style="@style/InputTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/phone_number2"/>
+                android:text="@string/phone_number2"
+                android:textColor="@color/lucky"/>
 
             <EditText
                 android:id="@+id/phoneNum"

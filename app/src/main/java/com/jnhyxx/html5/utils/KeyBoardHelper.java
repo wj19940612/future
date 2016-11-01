@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
+/**
+ * 对软键盘的高度进行计算，避免出现软键盘覆盖登陆按钮
+ */
 public class KeyBoardHelper {
 
     private Activity activity;
@@ -32,7 +35,7 @@ public class KeyBoardHelper {
         content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
-    public void onDestory() {
+    public void onDestroy() {
         View content = activity.findViewById(android.R.id.content);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             content.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
@@ -46,16 +49,17 @@ public class KeyBoardHelper {
         @Override
         public void onGlobalLayout() {
             Rect rect = new Rect();
+            //获取到程序显示的区域，包括标题栏，但不包括状态栏
             activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
             int newBlankheight = screenHeight - rect.bottom;
             if (newBlankheight != blankHeight) {
                 if (newBlankheight > blankHeight) {
-                    // keyboard pop
+                    // 键盘打开
                     if (onKeyBoardStatusChangeListener != null) {
                         onKeyBoardStatusChangeListener.OnKeyBoardPop(newBlankheight);
                     }
                 } else { // newBlankheight < blankHeight
-                    // keyboard close
+                    // 键盘关闭
                     if (onKeyBoardStatusChangeListener != null) {
                         onKeyBoardStatusChangeListener.OnKeyBoardClose(blankHeight);
                     }
@@ -65,15 +69,14 @@ public class KeyBoardHelper {
         }
     };
 
-    public void setOnKeyBoardStatusChangeListener(
-            OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener) {
+    public void setOnKeyBoardStatusChangeListener(OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener) {
         this.onKeyBoardStatusChangeListener = onKeyBoardStatusChangeListener;
     }
 
     public interface OnKeyBoardStatusChangeListener {
 
-        void OnKeyBoardPop(int keyBoardheight);
+        void OnKeyBoardPop(int keyboardHeight);
 
-        void OnKeyBoardClose(int oldKeyBoardheight);
+        void OnKeyBoardClose(int oldKeyboardHeight);
     }
 }

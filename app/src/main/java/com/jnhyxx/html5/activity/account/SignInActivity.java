@@ -82,6 +82,13 @@ public class SignInActivity extends BaseActivity {
         mPhoneNum.setText(LocalUser.getUser().getPhone());
 
 
+        setKeyboardHelper();
+    }
+
+    /**
+     * 设置对键盘高度的监听
+     */
+    private void setKeyboardHelper() {
         mKeyBoardHelper = new KeyBoardHelper(this);
         mKeyBoardHelper.onCreate();
         mKeyBoardHelper.setOnKeyBoardStatusChangeListener(onKeyBoardStatusChangeListener);
@@ -98,7 +105,7 @@ public class SignInActivity extends BaseActivity {
         super.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mPassword.removeTextChangedListener(mValidationWatcher);
-        mKeyBoardHelper.onDestory();
+        mKeyBoardHelper.onDestroy();
     }
 
     @Override
@@ -114,9 +121,9 @@ public class SignInActivity extends BaseActivity {
     private KeyBoardHelper.OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener = new KeyBoardHelper.OnKeyBoardStatusChangeListener() {
 
         @Override
-        public void OnKeyBoardPop(int keyBoardheight) {
+        public void OnKeyBoardPop(int keyboardHeight) {
 
-            final int height = keyBoardheight;
+            final int height = keyboardHeight;
             if (bottomHeight > height) {
                 mHideLayout.setVisibility(View.GONE);
             } else {
@@ -130,7 +137,7 @@ public class SignInActivity extends BaseActivity {
         }
 
         @Override
-        public void OnKeyBoardClose(int oldKeyBoardheight) {
+        public void OnKeyBoardClose(int oldKeyboardHeight) {
             if (View.VISIBLE != mHideLayout.getVisibility()) {
                 mHideLayout.setVisibility(View.VISIBLE);
             }

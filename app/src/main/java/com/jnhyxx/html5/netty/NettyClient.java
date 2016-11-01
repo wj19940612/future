@@ -202,6 +202,7 @@ public class NettyClient {
 
         public DefaultQuotaDataFilter(String contractCode) {
             mContractCode = contractCode;
+            Log.d("TAG", "DefaultQuotaDataFilter: " + mContractCode);
         }
 
         @Override

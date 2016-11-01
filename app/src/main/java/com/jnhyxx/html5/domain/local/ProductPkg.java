@@ -85,6 +85,7 @@ public class ProductPkg implements GroupAdapter.Groupable  {
         boolean holdingPositionWhenMarketClosed = false;
         for (int i = 0; i < productPkgList.size(); i++) {
             ProductPkg pkg = productPkgList.get(i);
+            pkg.setPosition(null);
             Product product = pkg.getProduct();
             for (int j = 0; positionList != null && j < positionList.size(); j++) {
                 HomePositions.Position position = positionList.get(j);

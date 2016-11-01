@@ -23,24 +23,27 @@ import java.util.List;
 
 public class HoldingOrderPresenter {
 
+    private static final String TAG = "HoldingOrderPresenter";
+
     public HoldingOrderPresenter(IHoldingOrderView iHoldingOrderView) {
-        mHandler = new Handler();
         mIHoldingOrderView = iHoldingOrderView;
+
+        mHoldingOrderList = new ArrayList<>();
+        mHandler = new Handler();
         mResume = false;
     }
 
     private IHoldingOrderView mIHoldingOrderView;
     private List<HoldingOrder> mHoldingOrderList;
+    private Handler mHandler;
 
-    private int mVarietyId;
-    private int mFundType;
+    private int sVarietyId;
+    private int sFundType;
+
     private FullMarketData mMarketData;
 
     private boolean mResume;
-    private boolean mLoading;
     private int mCounter;
-
-    private Handler mHandler;
 
     public interface IHoldingOrderView {
 
@@ -61,12 +64,9 @@ public class HoldingOrderPresenter {
 
     public void onPause() {
         mResume = false;
-        mLoading = false;
         mMarketData = null;
         mCounter = 0;
-        if (mHoldingOrderList != null) {
-            mHoldingOrderList.clear();
-        }
+        mHoldingOrderList.clear();
     }
 
     public void closeAllHoldingPositions(int fundType) {
@@ -100,8 +100,8 @@ public class HoldingOrderPresenter {
                             setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                             onViewShowHoldingOrderList(mHoldingOrderList);
                             onSubmitAllHoldingPositionsCompleted(resp.getMsg());
-                            startQueryJob();
 
+                            queryHoldingOrderListAndUpdate(sVarietyId, sFundType);
                         }
                     }).fire();
         }
@@ -130,7 +130,8 @@ public class HoldingOrderPresenter {
                         order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                         onViewShowHoldingOrderList(mHoldingOrderList);
                         onSubmitHoldingOrderCompleted(order);
-                        startQueryJob();
+
+                        queryHoldingOrderListAndUpdate(sVarietyId, sFundType);
                     }
                 }).fireSync();
     }
@@ -168,10 +169,10 @@ public class HoldingOrderPresenter {
                 BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
                 if (diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
                     refresh = true;
-                    Log.d("TAG", "setFullMarketData: diff: " + diff.doubleValue() + ", stopWin: " + holdingOrder.getStopWin());
+                    Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopWin: " + holdingOrder.getStopWin());
                 }
                 if (diff.compareTo(bigDecimalStopLoss) <= 0) {
-                    Log.d("TAG", "setFullMarketData: diff: " + diff.doubleValue() + ", stopLoss: " + bigDecimalStopLoss.doubleValue());
+                    Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopLoss: " + bigDecimalStopLoss.doubleValue());
                     refresh = true;
                 }
                 totalProfit = totalProfit.add(diff);
@@ -182,8 +183,8 @@ public class HoldingOrderPresenter {
         onViewShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
 
         if (refresh) { // 触及风控刷新
-            Log.d("TAG", "触及风控刷新");
-            loadHoldingOrderList(mVarietyId, mFundType);
+            Log.d(TAG, "触及风控刷新");
+            loadHoldingOrderList(sVarietyId, sFundType);
             onRiskControlTriggered();
         }
     }
@@ -198,9 +199,9 @@ public class HoldingOrderPresenter {
         if (mResume && mIHoldingOrderView != null) {
 
             if (mIHoldingOrderView instanceof TradeActivity) {
-                Log.d("TAG", "onViewShowHoldingOrderList: " + "TradeActivity");
+                Log.d(TAG, "onViewShowHoldingOrderList: " + "TradeActivity");
             } else if (mIHoldingOrderView instanceof HoldingFragment) {
-                Log.d("TAG", "onViewShowHoldingOrderList: " + "HoldingFragment");
+                Log.d(TAG, "onViewShowHoldingOrderList: " + "HoldingFragment");
             }
 
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
@@ -225,32 +226,31 @@ public class HoldingOrderPresenter {
         }
     }
 
-    public void loadHoldingOrderList(int varietyId, int fundType) {
+    public void loadHoldingOrderList(final int varietyId, final int fundType) {
         if (!LocalUser.getUser().isLogin()) return;
 
-        Log.d("TAG", "mLoading: " + mLoading);
-        if (mLoading) return;
-        Log.d("TAG", "Counter: " + mCounter);
+        mHandler.removeCallbacksAndMessages(null);
+        mCounter = 0;
+        sVarietyId = varietyId;
+        sFundType = fundType;
 
-        mVarietyId = varietyId;
-        mFundType = fundType;
-
-        mLoading = true;
+        Log.d(TAG, "loadHoldingOrderList: " + varietyId + ", fund: " + fundType);
         API.Order.getHoldingOrderList(varietyId, fundType)
                 .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                     @Override
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
-                        Log.d("TAG", "onRespSuccess: loadHoldingOrderList finished");
-                        mLoading = false;
+                        Log.d(TAG, "loadHoldingOrderList finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
+                        if (varietyId == sVarietyId) {
 
-                        mHoldingOrderList = holdingOrderList;
-                        onViewShowHoldingOrderList(mHoldingOrderList);
+                            mHoldingOrderList = holdingOrderList;
+                            onViewShowHoldingOrderList(mHoldingOrderList);
 
-                        if (mMarketData == null && mHoldingOrderList.size() > 0) { // 还没行情的时候，显示 0 收益
-                            onViewShowTotalProfit(true, 0, mHoldingOrderList.get(0).getRatio());
+                            if (mMarketData == null && mHoldingOrderList.size() > 0) { // 还没行情的时候，显示 0 收益
+                                onViewShowTotalProfit(true, 0, mHoldingOrderList.get(0).getRatio());
+                            }
+
+                            queryHoldingOrderListAndUpdate(varietyId, fundType);
                         }
-
-                        startQueryJob();
                     }
                 }).fire();
     }
@@ -261,12 +261,41 @@ public class HoldingOrderPresenter {
      * 500ms 间隔, 刷新5次
      * 2s 间隔, 刷新5次
      * 4s 间隔, 刷新10次
+     *
+     * @param varietyId
+     * @param fundType
      */
-    private void startQueryJob() {
+    private void doQueryJobDelay(final int varietyId, final int fundType) {
+        if (mCounter++ < 5) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                }
+            }, 5 * 100);
+        } else if (mCounter++ < 10) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                }
+            }, 2 * 1000);
+        } else if (mCounter++ < 20) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                }
+            }, 4 * 1000);
+        } else {
+            mCounter = 0;
+        }
+    }
+
+    private void queryHoldingOrderListAndUpdate(final int varietyId, final int fundType) {
         boolean refresh = false;
         for (HoldingOrder holdingOrder : mHoldingOrderList) {
             int orderStatus = holdingOrder.getOrderStatus();
-
             // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
             if (orderStatus == HoldingOrder.ORDER_STATUS_PAID_UNHOLDING
                     || orderStatus == HoldingOrder.ORDER_STATUS_CLOSING) {
@@ -275,37 +304,25 @@ public class HoldingOrderPresenter {
             }
         }
 
+        Log.d(TAG, "queryHoldingOrderListAndUpdate before start: " + refresh);
         if (refresh) {
-            Log.d("TAG", "startQueryJob: " + refresh);
-            doDelayRefreshJob();
+            API.Order.getHoldingOrderList(varietyId, fundType)
+                    .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
+                        @Override
+                        public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
+                            Log.d(TAG, "queryHoldingOrderListAndUpdate finished count: " + mCounter);
+                            Log.d(TAG, "queryHoldingOrderListAndUpdate finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
+                            if (varietyId == sVarietyId) {
+
+                                mHoldingOrderList = holdingOrderList;
+                                onViewShowHoldingOrderList(mHoldingOrderList);
+
+                                doQueryJobDelay(varietyId, fundType);
+                            }
+                        }
+                    }).fire();
         } else {
             mCounter = 0;
         }
-    }
-
-    private void doDelayRefreshJob() {
-        if (mCounter < 5) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadHoldingOrderList(mVarietyId, mFundType);
-                }
-            }, mCounter == 0 ? 0 : 5 * 100); // 第一次不延时
-        } else if (mCounter < 10) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadHoldingOrderList(mVarietyId, mFundType);
-                }
-            }, 2 * 1000);
-        } else if (mCounter < 20) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadHoldingOrderList(mVarietyId, mFundType);
-                }
-            }, 4 * 1000);
-        }
-        mCounter++;
     }
 }

@@ -76,50 +76,50 @@ public class HoldingFragment extends BaseFragment
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
             }
-            updateHoldingOrderVisibleItems(data);
+            if (mHoldingOrderAdapter != null && mHoldingOrderAdapter.getCount() > 0) {
+                updateHoldingOrderVisibleItems(data);
+            }
         }
     };
 
     private void updateHoldingOrderVisibleItems(FullMarketData data) {
-        if (mList != null && mHoldingOrderAdapter != null) {
-            int first = mList.getFirstVisiblePosition();
-            int last = mList.getLastVisiblePosition();
-            for (int i = first; i <= last; i++) {
-                HoldingOrder holdingOrder = (HoldingOrder) mHoldingOrderAdapter.getItem(i);
-                View itemView = mList.getChildAt(i - mList.getFirstVisiblePosition());
-                TextView lastPrice = ButterKnife.findById(itemView, R.id.lastPrice);
-                TextView lossProfit = ButterKnife.findById(itemView, R.id.lossProfit);
-                TextView lossProfitRmb = ButterKnife.findById(itemView, R.id.lossProfitRmb);
+        int first = mList.getFirstVisiblePosition();
+        int last = mList.getLastVisiblePosition();
+        for (int i = first; i <= last; i++) {
+            HoldingOrder holdingOrder = (HoldingOrder) mHoldingOrderAdapter.getItem(i);
+            View itemView = mList.getChildAt(i - mList.getFirstVisiblePosition());
+            TextView lastPrice = ButterKnife.findById(itemView, R.id.lastPrice);
+            TextView lossProfit = ButterKnife.findById(itemView, R.id.lossProfit);
+            TextView lossProfitRmb = ButterKnife.findById(itemView, R.id.lossProfitRmb);
 
-                int priceScale = mProduct.getPriceDecimalScale();
-                int profitScale = mProduct.getLossProfitScale();
-                double ratio = holdingOrder.getRatio();
-                BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
-                BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
-                    diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
-                } else {
-                    lastPrice.setText(FinanceUtil.formatWithScale(data.getAskPrice(), priceScale));
-                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), data.getAskPrice());
-                }
-                diff = diff.multiply(eachPointMoney);
+            int priceScale = mProduct.getPriceDecimalScale();
+            int profitScale = mProduct.getLossProfitScale();
+            double ratio = holdingOrder.getRatio();
+            BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
+            BigDecimal diff;
+            if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                lastPrice.setText(FinanceUtil.formatWithScale(data.getBidPrice(), priceScale));
+                diff = FinanceUtil.subtraction(data.getBidPrice(), holdingOrder.getRealAvgPrice());
+            } else {
+                lastPrice.setText(FinanceUtil.formatWithScale(data.getAskPrice(), priceScale));
+                diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), data.getAskPrice());
+            }
+            diff = diff.multiply(eachPointMoney);
 
-                String lossProfitStr;
-                String lossProfitRmbStr;
-                double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
-                if (diff.doubleValue() >= 0) {
-                    lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                } else {
-                    lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
-                    lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
-                }
-                lossProfit.setText(lossProfitStr);
-                if (mProduct.isForeign()) {
-                    lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + mFundUnit + ")";
-                    lossProfitRmb.setText(lossProfitRmbStr);
-                }
+            String lossProfitStr;
+            String lossProfitRmbStr;
+            double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
+            if (diff.doubleValue() >= 0) {
+                lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+                lossProfitStr = "+" + FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
+            } else {
+                lossProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+                lossProfitStr = FinanceUtil.formatWithScale(diff.doubleValue(), profitScale);
+            }
+            lossProfit.setText(lossProfitStr);
+            if (mProduct.isForeign()) {
+                lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + mFundUnit + ")";
+                lossProfitRmb.setText(lossProfitRmbStr);
             }
         }
     }
@@ -437,7 +437,7 @@ public class HoldingFragment extends BaseFragment
                     }
                     mLossProfit.setText(lossProfitStr);
                     if (product.isForeign()) {
-                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + fundUnit +  ")";
+                        lossProfitRmbStr = "(" + FinanceUtil.formatWithScale(Math.abs(diffRmb)) + fundUnit + ")";
                         mLossProfitRmb.setText(lossProfitRmbStr);
                     } else {
                         mLossProfitRmb.setText("");

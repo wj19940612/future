@@ -87,7 +87,6 @@ public class AboutUsActivity extends BaseActivity {
                     ToastUtil.show(R.string.install_qq_first);
                 }
                 break;
-
         }
     }
 

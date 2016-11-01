@@ -37,8 +37,8 @@ public class HoldingOrderPresenter {
     private List<HoldingOrder> mHoldingOrderList;
     private Handler mHandler;
 
-    private int sVarietyId;
-    private int sFundType;
+    private static int sVarietyId;
+    private static int sFundType;
 
     private FullMarketData mMarketData;
 
@@ -136,11 +136,12 @@ public class HoldingOrderPresenter {
                 }).fireSync();
     }
 
-    public void setFullMarketData(FullMarketData marketData) {
-        if (mHoldingOrderList == null) {
-            mHoldingOrderList = new ArrayList<>();
-        }
+    public void clearData() {
+        mMarketData = null;
+        mHoldingOrderList.clear();
+    }
 
+    public void setFullMarketData(FullMarketData marketData) {
         mMarketData = marketData;
 
         if (mMarketData == null) return;

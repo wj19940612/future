@@ -121,6 +121,7 @@ public class TradeActivity extends BaseActivity implements
     private AnimationDrawable mQuestionMark;
 
     private boolean mUpdateRealTimeData;
+    private boolean mProductChanged;
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
@@ -136,9 +137,10 @@ public class TradeActivity extends BaseActivity implements
                         + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale()));
                 mSellShortBtn.setText(getString(R.string.sell_short)
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
+
+                mHoldingOrderPresenter.setFullMarketData(data);
             }
             updatePlaceOrderFragment(data);
-            mHoldingOrderPresenter.setFullMarketData(data);
         }
     };
 
@@ -452,16 +454,20 @@ public class TradeActivity extends BaseActivity implements
         mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
-                NettyClient.getInstance().stop();
+                if (mProductChanged) {
+                    NettyClient.getInstance().stop();
 
-                hideFragmentOfContainer();
-                updateChartView(); // based on product
+                    hideFragmentOfContainer();
+                    updateChartView(); // based on product
 
-                mHoldingOrderPresenter.setFullMarketData(null);
-                mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+                    mHoldingOrderPresenter.clearData();
+                    mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
+                    NettyClient.getInstance().start(mProduct.getContractsCode());
+
+                    mProductChanged = false;
+                }
                 mUpdateRealTimeData = true;
-                NettyClient.getInstance().start(mProduct.getContractsCode());
             }
         });
         ListView listView = (ListView) mMenu.getMenu();
@@ -474,9 +480,11 @@ public class TradeActivity extends BaseActivity implements
                 Product product = (Product) adapterView.getItemAtPosition(position);
                 if (product != null) {
                     if (product.getVarietyId() == mProduct.getVarietyId()) {
+                        mProductChanged = false;
                         mMenu.toggle();
                     } else {
                         mProduct = product;
+                        mProductChanged = true;
                         mMenu.toggle();
 
                         updateTitleBar(); // based on product

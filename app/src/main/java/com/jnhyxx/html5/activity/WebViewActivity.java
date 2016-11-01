@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -16,7 +15,6 @@ import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -257,12 +255,16 @@ public class WebViewActivity extends BaseActivity {
                 mWebView.setVisibility(View.GONE);
                 mErrorPage.setVisibility(View.VISIBLE);
             }
-
+            if (isNotNeedNetTitle()) {
+                mTitleBar.setTitle(mTitle);
+                return;
+            }
             String titleText = view.getTitle();
             if (!TextUtils.isEmpty(titleText) && !url.contains(titleText)) {
                 mTitle = titleText;
             }
             mTitleBar.setTitle(mTitle);
+
         }
 
         @Override
@@ -291,12 +293,10 @@ public class WebViewActivity extends BaseActivity {
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
+    }
 
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            Log.d("recharge", "shouldInterceptRequest: " + url);
-            return super.shouldInterceptRequest(view, url);
-        }
+    protected boolean isNotNeedNetTitle() {
+        return false;
     }
 
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {

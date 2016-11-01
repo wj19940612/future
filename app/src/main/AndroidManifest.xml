@@ -171,7 +171,8 @@
         <activity
             android:name=".activity.web.NewbieActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.web.BannerActivity"
+            android:screenOrientation="portrait"/>
         <!-- Receiver for getui push -->
         <receiver
             android:name=".receiver.PushReceiver"

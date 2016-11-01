@@ -25,6 +25,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.NewbieActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -89,6 +90,7 @@ public class HomeFragment extends BaseFragment {
         mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
             @Override
             public void onBannerClick(Information information) {
+                Log.d(TAG, "bananer数据" + information.toString());
                 if (information.isH5Style()) {
                     Launcher.with(getActivity(), WebViewActivity.class)
                             .putExtra(WebViewActivity.EX_URL, information.getContent())
@@ -96,10 +98,10 @@ public class HomeFragment extends BaseFragment {
                             .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                             .execute();
                 } else {
-                    Launcher.with(getActivity(), WebViewActivity.class)
-                            .putExtra(WebViewActivity.EX_HTML, information.getContent())
-                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
-                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                    Launcher.with(getActivity(), BannerActivity.class)
+                            .putExtra(BannerActivity.EX_HTML, information.getContent())
+                            .putExtra(BannerActivity.EX_TITLE, information.getTitle())
+                            .putExtra(BannerActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                             .execute();
                 }
             }

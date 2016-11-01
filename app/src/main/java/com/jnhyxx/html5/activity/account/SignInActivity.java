@@ -81,7 +81,6 @@ public class SignInActivity extends BaseActivity {
 
         mPhoneNum.setText(LocalUser.getUser().getPhone());
 
-
         setKeyboardHelper();
     }
 
@@ -122,11 +121,8 @@ public class SignInActivity extends BaseActivity {
 
         @Override
         public void OnKeyBoardPop(int keyboardHeight) {
-
             final int height = keyboardHeight;
-            if (bottomHeight > height) {
-                mHideLayout.setVisibility(View.GONE);
-            } else {
+            if (bottomHeight < height) {
                 int offset = bottomHeight - height;
                 final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mTopLayout
                         .getLayoutParams();
@@ -138,10 +134,7 @@ public class SignInActivity extends BaseActivity {
 
         @Override
         public void OnKeyBoardClose(int oldKeyboardHeight) {
-            if (View.VISIBLE != mHideLayout.getVisibility()) {
-                mHideLayout.setVisibility(View.VISIBLE);
-            }
-            final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mTopLayout
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mTopLayout
                     .getLayoutParams();
             if (lp.topMargin != 0) {
                 lp.topMargin = 0;

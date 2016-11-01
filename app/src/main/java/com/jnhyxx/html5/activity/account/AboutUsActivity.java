@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AboutUsActivity extends BaseActivity {
-    private static final String SERVICE_QQ = "3088152027";
 
     @BindView(R.id.versionName)
     TextView mVersionName;

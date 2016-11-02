@@ -120,7 +120,7 @@ public class WithdrawActivity extends BaseActivity {
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
             String cardNumber = userInfo.getCardNumber();
             String bankName = userInfo.getIssuingbankName();
-            StringBuffer mStringBuffer = new StringBuffer();
+            StringBuilder mStringBuffer = new StringBuilder();
             mStringBuffer.append(bankName);
             mStringBuffer.append("  ");
             if (!TextUtils.isEmpty(bankName)) {

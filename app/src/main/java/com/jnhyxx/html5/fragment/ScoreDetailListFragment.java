@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -28,7 +27,6 @@ import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
-import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -319,16 +317,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 } else {
                     mTradeDetailAdapter.remove(item);
                 }
-
-
-                if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
-                    mStringBuffer.append(Unit.YUAN);
-                } else {
-                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
-
-//                    mStringBuffer.append(Constant.INTEGRAL);
-                }
+                mStringBuffer.append(item.getScore());
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }
         }

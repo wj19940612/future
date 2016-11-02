@@ -63,11 +63,11 @@
 
             <TextView
                 android:id="@+id/tradeDetailDataType"
-                android:layout_width="51dp"
+                android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="18dp"
                 android:background="@drawable/bg_buy_volume"
                 android:gravity="center"
                 android:textColor="@android:color/white"
@@ -80,12 +80,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="18dp"
                 android:layout_toRightOf="@+id/tradeDetailDataType"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="@color/lucky"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 tools:text="返还(DAX1612)"/>
 
             <TextView

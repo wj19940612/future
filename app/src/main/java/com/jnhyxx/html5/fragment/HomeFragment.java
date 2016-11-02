@@ -54,9 +54,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * 首页的fragment
- */
 public class HomeFragment extends BaseFragment {
 
     @BindView(android.R.id.list)
@@ -90,7 +87,6 @@ public class HomeFragment extends BaseFragment {
         mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
             @Override
             public void onBannerClick(Information information) {
-                Log.d(TAG, "bananer数据" + information.toString());
                 if (information.isH5Style()) {
                     Launcher.with(getActivity(), WebViewActivity.class)
                             .putExtra(WebViewActivity.EX_URL, information.getContent())

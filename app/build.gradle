@@ -63,8 +63,8 @@ android {
         }
         yybd {
             applicationId 'com.jnhyxx.yybd'
-            versionCode 14
-            versionName '2.0.13'
+            versionCode 15
+            versionName '2.0.14'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 
             manifestPlaceholders = [

@@ -2,8 +2,6 @@ package com.jnhyxx.html5.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.widget.TextView;
 
 import com.igexin.sdk.PushManager;
@@ -25,14 +23,7 @@ public class SplashActivity extends BaseActivity {
         PushManager.getInstance().initialize(this.getApplicationContext());
 
         mVersionName = (TextView) findViewById(R.id.versionName);
-        mVersionName.setText(AppInfo.getVersionName(this));
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mVersionName.setVisibility(View.VISIBLE);
-            }
-        }, 1000);
+        mVersionName.setText("V" + AppInfo.getVersionName(this));
 
         new Thread(new Runnable() {
             @Override

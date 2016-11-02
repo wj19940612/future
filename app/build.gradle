@@ -61,7 +61,8 @@ android {
             versionCode 13
             versionName '2.0.12'
         }
-        microil {
+        yybd {
+            applicationId 'com.jnhyxx.yybd'
             versionCode 14
             versionName '2.0.13'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
@@ -100,11 +101,13 @@ android {
 }
 
 dependencies {
-    microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
+    yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
+
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')

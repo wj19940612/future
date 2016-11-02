@@ -39,7 +39,7 @@ import butterknife.Unbinder;
  * 行情分析
  */
 
-public class PriceAnalyzeFragment  extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener{
+public class IndustryAnalyzeFragment  extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener{
 
     private static final String TAG = "PriceAnalyzeFragment";
 
@@ -63,8 +63,8 @@ public class PriceAnalyzeFragment  extends BaseFragment implements AdapterView.O
     private TextView mFooter;
     private Unbinder mBind;
 
-    public static PriceAnalyzeFragment newInstance(int type) {
-        PriceAnalyzeFragment fragment = new PriceAnalyzeFragment();
+    public static IndustryAnalyzeFragment newInstance(int type) {
+        IndustryAnalyzeFragment fragment = new IndustryAnalyzeFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         fragment.setArguments(args);

@@ -62,6 +62,13 @@ public class MarketDataView extends FrameLayout {
         }
     }
 
+    public void clearData() {
+        mTodayPosition.setText(getPrice(0, 0));
+        mPrePosition.setText(getPrice(0, 0));
+        mTodaySettlement.setText(getPrice(0, 0));
+        mPreSettlement.setText(getPrice(0, 0));
+    }
+
     private String getPrice(double price, int priceScale) {
         if (price == 0) {
             return NO_DATA;

@@ -144,42 +144,42 @@ public class HoldingOrderPresenter {
     public void setFullMarketData(FullMarketData marketData) {
         mMarketData = marketData;
 
-        if (mMarketData == null) return;
-
         BigDecimal totalProfit = new BigDecimal(0);
         boolean hasHoldingOrders = false;
         double ratio = 0;
         boolean refresh = false;
 
-        for (HoldingOrder holdingOrder : mHoldingOrderList) {
-            int orderStatus = holdingOrder.getOrderStatus();
-            if (orderStatus >= HoldingOrder.ORDER_STATUS_HOLDING && orderStatus < HoldingOrder.ORDER_STATUS_SETTLED) {
-                // 持仓中、卖处理中的订单
-                hasHoldingOrders = true;
-                ratio = holdingOrder.getRatio();
+        if (marketData != null) {
+            for (HoldingOrder holdingOrder : mHoldingOrderList) {
+                int orderStatus = holdingOrder.getOrderStatus();
+                if (orderStatus >= HoldingOrder.ORDER_STATUS_HOLDING && orderStatus < HoldingOrder.ORDER_STATUS_SETTLED) {
+                    // 持仓中、卖处理中的订单
+                    hasHoldingOrders = true;
+                    ratio = holdingOrder.getRatio();
 
-                BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
-                BigDecimal diff;
-                if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
-                    diff = FinanceUtil.subtraction(mMarketData.getBidPrice(), holdingOrder.getRealAvgPrice());
-                } else {
-                    diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), mMarketData.getAskPrice());
-                }
-                diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
+                    BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
+                    BigDecimal diff;
+                    if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+                        diff = FinanceUtil.subtraction(mMarketData.getBidPrice(), holdingOrder.getRealAvgPrice());
+                    } else {
+                        diff = FinanceUtil.subtraction(holdingOrder.getRealAvgPrice(), mMarketData.getAskPrice());
+                    }
+                    diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
 
-                BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
-                if (diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
-                    refresh = true;
-                    Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopWin: " + holdingOrder.getStopWin());
+                    BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
+                    if (diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
+                        refresh = true;
+                        Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopWin: " + holdingOrder.getStopWin());
+                    }
+                    if (diff.compareTo(bigDecimalStopLoss) <= 0) {
+                        Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopLoss: " + bigDecimalStopLoss.doubleValue());
+                        refresh = true;
+                    }
+                    totalProfit = totalProfit.add(diff);
                 }
-                if (diff.compareTo(bigDecimalStopLoss) <= 0) {
-                    Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopLoss: " + bigDecimalStopLoss.doubleValue());
-                    refresh = true;
-                }
-                totalProfit = totalProfit.add(diff);
             }
-
         }
+
 
         onViewShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
 
@@ -246,9 +246,7 @@ public class HoldingOrderPresenter {
                             mHoldingOrderList = holdingOrderList;
                             onViewShowHoldingOrderList(mHoldingOrderList);
 
-                            if (mMarketData == null && mHoldingOrderList.size() > 0) { // 还没行情的时候，显示 0 收益
-                                onViewShowTotalProfit(true, 0, mHoldingOrderList.get(0).getRatio());
-                            }
+                            setFullMarketData(mMarketData);
 
                             queryHoldingOrderListAndUpdate(varietyId, fundType);
                         }

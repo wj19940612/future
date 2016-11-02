@@ -5,13 +5,13 @@
               android:layout_height="@dimen/trade_header_height"
               android:background="@color/bluePrimary"
               android:orientation="vertical"
-
               android:paddingLeft="@dimen/common_margin"
-              android:paddingRight="@dimen/common_margin">
+              android:paddingRight="@dimen/common_margin"
+              android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/totalProfitAndUnit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/holding_position_total_profit_and_unit"
         android:textColor="#CCCCCC"
@@ -19,14 +19,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/totalProfitArea"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -34,8 +33,8 @@
             <TextView
                 android:id="@+id/totalProfit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
@@ -44,9 +43,9 @@
             <TextView
                 android:id="@+id/totalProfitRmb"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingTop="11dp"
                 android:textColor="@color/redPrimary"
@@ -59,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/btn_blue"
             android:gravity="center"
             android:minWidth="@dimen/trade_header_btn_width"

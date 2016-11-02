@@ -418,6 +418,7 @@ public class TradeActivity extends BaseActivity implements
             marketDataView = new MarketDataView(this);
             mChartContainer.addMarketDataView(marketDataView);
         }
+        marketDataView.clearData();
 
         mChartContainer.showTrendView();
 

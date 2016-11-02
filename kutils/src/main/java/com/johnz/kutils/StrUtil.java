@@ -4,15 +4,41 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.os.Parcel;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.ReplacementSpan;
+import android.text.style.TypefaceSpan;
 
 public class StrUtil {
+
+    /**
+     * 设置 s1 的字体，按比例缩放 s2 的大小，同时拼接 s1 和 s2
+     * @param s1
+     * @param typeface
+     * @param s2
+     * @param ratio
+     * @return
+     */
+    public static SpannableString mergeTextWithTypefaceRatio(String s1, Typeface typeface, String s2, float ratio) {
+        SpannableString res = new SpannableString("");
+        if (!TextUtils.isEmpty(s1)) {
+            int typefaceEnd = s1.length();
+            int start = s1.length();
+            s1 = s1 + s2;
+            int end = s1.length();
+            res = new SpannableString(s1);
+            res.setSpan(new CustomTypefaceSpan("", typeface), 0, typefaceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            res.setSpan(new RelativeSizeSpan(ratio), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return res;
+    }
 
     /**
      * 按比例缩放 s2 的大小，同时拼接 s1 和 s2
@@ -191,5 +217,63 @@ public class StrUtil {
             return paint.measureText(text, start, end);
         }
     }
+
+    public static class CustomTypefaceSpan extends TypefaceSpan {
+
+        private Typeface newType;
+
+        public CustomTypefaceSpan(String family, Typeface type) {
+            super(family);
+            newType = type;
+        }
+
+        public CustomTypefaceSpan(Parcel src) {
+            super(src);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            applyCustomTypeFace(ds, newType);
+        }
+
+        @Override
+        public void updateMeasureState(TextPaint paint) {
+            applyCustomTypeFace(paint, newType);
+        }
+
+        private static void applyCustomTypeFace(Paint paint, Typeface tf) {
+            int oldStyle;
+            Typeface old = paint.getTypeface();
+            if (old == null) {
+                oldStyle = 0;
+            } else {
+                oldStyle = old.getStyle();
+            }
+
+            int fake = oldStyle & ~tf.getStyle();
+            if ((fake & Typeface.BOLD) != 0) {
+                paint.setFakeBoldText(true);
+            }
+
+            if ((fake & Typeface.ITALIC) != 0) {
+                paint.setTextSkewX(-0.25f);
+            }
+
+            paint.setTypeface(tf);
+        }
+
+        public static final Creator<CustomTypefaceSpan> CREATOR = new Creator<CustomTypefaceSpan>() {
+            @Override
+            public CustomTypefaceSpan createFromParcel(Parcel source) {
+                return new CustomTypefaceSpan(source);
+            }
+
+            @Override
+            public CustomTypefaceSpan[] newArray(int size) {
+                return new CustomTypefaceSpan[size];
+            }
+        };
+    }
+
 
 }

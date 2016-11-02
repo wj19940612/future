@@ -126,6 +126,7 @@ public class SimulationActivity extends BaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        requestProductList();
         updateUserAvailableScore();
         requestSimulationPositions();
     }
@@ -137,13 +138,8 @@ public class SimulationActivity extends BaseActivity {
                         @Override
                         public void onRespSuccess(HomePositions homePositions) {
                             mSimulationPositionList = homePositions.getIntegralOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mSimulationPositionList);
-                            if (updateProductList) {
-                                requestProductList();
-                            } else {
-                                updateProductGridView();
-                            }
+                            ProductPkg.updatePositionInProductPkg(mProductPkgList, mSimulationPositionList);
+                            updateProductGridView();
                         }
                     }).fire();
         } else { // clearHoldingOrderList all product position
@@ -157,8 +153,9 @@ public class SimulationActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products,
+                        ProductPkg.updateProductPkgList(mProductPkgList, mProductList,
                                 mSimulationPositionList, null);
+                        updateProductGridView();
                     }
                 }).fire();
     }
@@ -265,7 +262,7 @@ public class SimulationActivity extends BaseActivity {
                     mMarketCloseText.setVisibility(View.GONE);
                     mMarketOpenTime.setVisibility(View.GONE);
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
-                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE: View.GONE);
+                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                 }
                 HomePositions.Position position = pkg.getPosition(); // Position status
                 if (position != null && position.getHandsNum() > 0) {

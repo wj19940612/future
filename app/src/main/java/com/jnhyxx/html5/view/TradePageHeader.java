@@ -138,6 +138,8 @@ public class TradePageHeader extends FrameLayout {
             String totalProfitRmbStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitRmb)
                     : FinanceUtil.formatWithScale(totalProfitRmb);
             totalProfitRmbStr = "(" + totalProfitRmbStr + fundUnit + ")";
+//            mTotalProfit.setText(StrUtil.mergeTextWithTypefaceRatio(totalProfitStr, FontUtil.getTt0173MFont(), " " + totalProfitRmbStr, 0.5f),
+//                    TextView.BufferType.SPANNABLE);
             mTotalProfit.setText(totalProfitStr);
             mTotalProfitRmb.setText(totalProfitRmbStr);
         } else {

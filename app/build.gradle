@@ -11,7 +11,6 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
@@ -60,11 +59,20 @@ android {
         origin {
             versionCode 13
             versionName '2.0.12'
-        }
-        microil {
-            versionCode 13
-            versionName '2.0.12'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+        }
+        yybd {
+            applicationId 'com.jnhyxx.yybd'
+            versionCode 14
+            versionName '2.0.13'
+            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
+                    GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
+                    GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
         tst {
             applicationId 'com.jnhyxx.test'
@@ -100,11 +108,13 @@ android {
 }
 
 dependencies {
-    microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
+    yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
+
     tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
     ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
     rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')

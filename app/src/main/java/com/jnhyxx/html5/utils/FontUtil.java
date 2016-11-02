@@ -19,7 +19,7 @@ public class FontUtil {
                 "fonts/OpenSans-Bold.ttf");
     }
 
-    private static Typeface getTt0173MFont() {
+    public static Typeface getTt0173MFont() {
         return Typeface.createFromAsset(App.getAppContext().getAssets(),
                 "fonts/tt0173m.ttf");
     }

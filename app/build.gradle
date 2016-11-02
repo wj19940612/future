@@ -68,9 +68,9 @@ android {
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 
             manifestPlaceholders = [
-                    GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
-                    GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
-                    GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
+                    GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
+                    GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
+                    GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
                     PACKAGE_NAME    : applicationId
             ]
         }

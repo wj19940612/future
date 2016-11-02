@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain;
 
+import com.jnhyxx.html5.net.API;
+
 import java.io.Serializable;
 
 public class Information implements Serializable {
@@ -50,6 +52,9 @@ public class Information implements Serializable {
     }
 
     public String getContent() {
+        if (isH5Style() && content.startsWith("/")) {
+            return API.getHost() + content;
+        }
         return content;
     }
 

@@ -85,8 +85,8 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="@color/lucky"
-                android:textSize="15sp"
-                tools:text="美原油000000"/>
+                android:textSize="14sp"
+                tools:text="返还(DAX1612)"/>
 
             <TextView
                 android:id="@+id/tradeDetailGrade"
@@ -95,7 +95,7 @@
                 android:layout_gravity="center_vertical|right"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="14sp"
-                tools:text="1251分"/>
+                tools:text="(125122.00元)"/>
         </LinearLayout>
 
     </LinearLayout>

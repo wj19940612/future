@@ -28,7 +28,6 @@ import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
-import com.johnz.kutils.FinanceUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -321,16 +320,8 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 } else {
                     mTradeDetailAdapter.remove(item);
                 }
-
-
-                if (TextUtils.equals(mFragmentType, TYPE_FUND)) {
-                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getMoney()));
-                    mStringBuffer.append(Unit.YUAN);
-                } else {
-                    mStringBuffer.append(FinanceUtil.formatWithScale(item.getScore()));
-
-//                    mStringBuffer.append(Constant.INTEGRAL);
-                }
+                mStringBuffer.append(item.getMoney());
+                mStringBuffer.append(Unit.YUAN);
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());
             }
         }

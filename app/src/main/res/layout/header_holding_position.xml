@@ -4,8 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/trade_header_height"
               android:background="@color/bluePrimary"
-              android:gravity="center_vertical"
               android:orientation="vertical"
+
               android:paddingLeft="@dimen/common_margin"
               android:paddingRight="@dimen/common_margin">
 

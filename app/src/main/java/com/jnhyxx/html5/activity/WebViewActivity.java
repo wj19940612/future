@@ -146,7 +146,7 @@ public class WebViewActivity extends BaseActivity {
         webSettings.setDomStorageEnabled(true);
         webSettings.setUseWideViewPort(true);
 
-
+        
         mWebView.clearHistory();
         mWebView.clearCache(true);
         mWebView.clearFormData();

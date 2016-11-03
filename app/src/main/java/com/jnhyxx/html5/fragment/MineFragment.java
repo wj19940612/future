@@ -42,7 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.grantland.widget.AutofitTextView;
 
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
@@ -50,7 +49,7 @@ public class MineFragment extends BaseFragment {
 
     //账户余额
     @BindView(R.id.balance)
-    AutofitTextView mBalance;
+    TextView mBalance;
     //我的积分
     @BindView(R.id.score)
     TextView mScore;

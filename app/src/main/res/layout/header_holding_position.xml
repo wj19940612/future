@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="@dimen/trade_header_height"
@@ -30,7 +31,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/totalProfit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -38,19 +39,22 @@
                 android:maxLines="1"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
+                app:maxViewWidth="140dp"
                 tools:text="+00000"/>
 
-            <TextView
+            <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/totalProfitRmb"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="6dp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingTop="11dp"
+                android:paddingTop="10dp"
                 android:textColor="@color/redPrimary"
                 android:textSize="14sp"
-                tools:text="(+0000000)"/>
+                android:visibility="visible"
+                app:maxViewWidth="90dp"
+                tools:text="(+00000000)"/>
         </LinearLayout>
 
         <TextView

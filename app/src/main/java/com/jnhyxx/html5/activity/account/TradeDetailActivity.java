@@ -22,7 +22,6 @@ import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.grantland.widget.AutofitTextView;
 
 public class TradeDetailActivity extends BaseActivity {
 
@@ -35,11 +34,11 @@ public class TradeDetailActivity extends BaseActivity {
     @BindView(R.id.remainTitle)
     TextView mRemainTitle;
     @BindView(R.id.remainNumber)
-    AutofitTextView mRemainNumber;
+    TextView mRemainNumber;
     @BindView(R.id.blockedTitle)
     TextView mBlockedTitle;
     @BindView(R.id.blockedNumber)
-    AutofitTextView mBlockedNumber;
+    TextView mBlockedNumber;
 
     UserFundInfo mUserFundInfo;
 

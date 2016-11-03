@@ -85,7 +85,7 @@
                     android:text="@string/mine_balance"
                     android:textColor="@color/mine_balance_text_color"/>
 
-                <me.grantland.widget.AutofitTextView
+                <com.jnhyxx.html5.view.autofit.AutofitTextView
                     android:id="@+id/balance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

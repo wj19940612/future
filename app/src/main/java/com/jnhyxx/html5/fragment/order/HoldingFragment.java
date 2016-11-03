@@ -175,6 +175,7 @@ public class HoldingFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         mHoldingOrderPresenter.onResume();
+        mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
     }
@@ -195,7 +196,6 @@ public class HoldingFragment extends BaseFragment
         mList.setEmptyView(mEmpty);
         mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
                 mProduct.getCurrencyUnit()));
-        mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
     @Override

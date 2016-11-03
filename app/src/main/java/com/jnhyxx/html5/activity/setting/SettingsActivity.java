@@ -48,6 +48,7 @@ public class SettingsActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         updateViews();
+
     }
 
     private void updateViews() {

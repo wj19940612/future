@@ -552,7 +552,7 @@ public class API extends APIBase {
          * @return
          */
         public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId + "&nohead=1";
+            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId;
         }
     }
 
@@ -808,7 +808,7 @@ public class API extends APIBase {
      * @return
      */
     public static String getCooperationAgreementUrl() {
-        return getHost() + "/agreement/tradeAndCost.html?nohead=1";
+        return getHost() + "/agreement/tradeAndCost.html";
     }
 
     /**
@@ -817,7 +817,7 @@ public class API extends APIBase {
      * @return
      */
     public static String getRiskNoticesUrl() {
-        return getHost() + "/agreement/risk.html?nohead=1";
+        return getHost() + "/agreement/risk.html";
     }
 
     /**
@@ -827,21 +827,21 @@ public class API extends APIBase {
      * @return
      */
     public static String getTradeRule(String varietyType) {
-        return getHost() + "/activity/" + varietyType + "TradeRule.html?nohead=1";
+        return getHost() + "/activity/" + varietyType + "TradeRule.html";
     }
 
     /**
      * 推广赚钱 url
      */
     public static String getPromotePage() {
-        return getHost() + "/mine/extension.html?nohead=1";
+        return getHost() + "/mine/extension.html";
     }
 
     /**
      * 推广赚钱 我的用户 url
      */
     public static String getPromoteMyUsers() {
-        return getHost() + "/mine/users.html?nohead=1";
+        return getHost() + "/mine/users.html";
     }
 
     /**
@@ -849,7 +849,7 @@ public class API extends APIBase {
      * //服务协议的接口
      */
     public static String getRegisterServiceProtocol() {
-        return getHost() + "/xieyi/agreement.html?nohead=1";
+        return getHost() + "/xieyi/agreement.html";
     }
 
     public static String getServiceQQ(String serviceQQ) {
@@ -867,9 +867,18 @@ public class API extends APIBase {
 
     /**
      * 新手引导页面网址
+     *
      * @return
      */
     public static String getNewbieUrl() {
-        return getHost() + "/newtrader.html?nohead=1";
+        return getHost() + "/newtrader.html";
+    }
+
+    public static String getLoginUrl() {
+        return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
+    }
+
+    public static String getShutUpHtmlUrl() {
+        return getHost() + "/zhibo/liveRules.html";
     }
 }

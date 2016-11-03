@@ -32,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.attr.titleText;
 import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
@@ -89,8 +90,13 @@ public class WebViewActivity extends BaseActivity {
         mLoadSuccess = true;
 
         initData(getIntent());
-
         initWebView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
     }
 
     @Override
@@ -146,7 +152,7 @@ public class WebViewActivity extends BaseActivity {
         webSettings.setDomStorageEnabled(true);
         webSettings.setUseWideViewPort(true);
 
-        
+
         mWebView.clearHistory();
         mWebView.clearCache(true);
         mWebView.clearFormData();
@@ -265,7 +271,6 @@ public class WebViewActivity extends BaseActivity {
                 mTitle = titleText;
             }
             mTitleBar.setTitle(mTitle);
-
         }
 
         @Override

@@ -70,6 +70,18 @@ public class LiveActivity extends WebViewActivity {
         return super.onShouldOverrideUrlLoading(view, url);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
+    }
+
     private void requestSimulationPositions() {
         if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)

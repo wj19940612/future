@@ -63,14 +63,14 @@ android {
         }
         yybd {
             applicationId 'com.jnhyxx.yybd'
-            versionCode 15
-            versionName '2.0.14'
-            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+            versionCode 1
+            versionName '1.0.0'
+            buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
-                    GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
-                    GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
-                    GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
+                    GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
+                    GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
+                    GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
                     PACKAGE_NAME    : applicationId
             ]
         }

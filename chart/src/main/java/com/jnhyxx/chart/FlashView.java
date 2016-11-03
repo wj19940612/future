@@ -106,7 +106,8 @@ public class FlashView extends ChartView {
         if (lastPoint != null) {
             int areaCount = baselines.length - 1;
             float priceRange = new BigDecimal(mSettings.getFlashChartPriceInterval())
-                    .divide(new BigDecimal(areaCount), 3, RoundingMode.HALF_EVEN).floatValue();
+                    .divide(new BigDecimal(areaCount), mSettings.getNumberScale(),
+                            RoundingMode.HALF_EVEN).floatValue();
 
             if (baselines[0] == 0 && baselines[baselines.length - 1] == 0) { // the first time
                 BigDecimal bigMid = BigDecimal.valueOf(lastPoint.getLastPrice())

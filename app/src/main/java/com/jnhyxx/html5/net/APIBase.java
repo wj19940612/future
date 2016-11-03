@@ -157,7 +157,7 @@ public class APIBase extends RequestManager {
 
         public void onFinished(String url) {
             if (sCurrentUrls != null) {
-                Log.d(TAG, "onFinished: " + url);
+                if (BuildConfig.DEBUG) Log.d(TAG, "onFinished: " + url);
                 sCurrentUrls.remove(url);
             }
         }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.android.volley.BuildConfig;
 import com.android.volley.NetworkError;
 import com.android.volley.ParseError;
 import com.android.volley.ServerError;
@@ -32,7 +33,7 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onSuccess(T t) {
-        Log.d("VolleyHttp", getUrl() + " onSuccess: " + t.toString());
+        if (BuildConfig.DEBUG) Log.d("VolleyHttp", getUrl() + " onSuccess: " + t.toString());
 
         if (t instanceof Resp) {
             if (((Resp) t).isTokenExpired()) {
@@ -64,7 +65,8 @@ public abstract class Callback<T> extends ApiCallback<T> {
 
     @Override
     public void onFailure(VolleyError volleyError) {
-        Log.d("VolleyHttp", getUrl() + " " + volleyError.toString());
+        if (BuildConfig.DEBUG) Log.d("VolleyHttp", getUrl() + " " + volleyError.toString());
+
         int toastResId = R.string.api_error_network;
         if (volleyError instanceof NullResponseError) {
             toastResId = R.string.api_error_null;

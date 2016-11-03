@@ -86,7 +86,6 @@ public class LiveActivity extends WebViewActivity {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
-//            requestProductList();
         }
     }
 
@@ -100,7 +99,14 @@ public class LiveActivity extends WebViewActivity {
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             //美原油
-                            ProductPkg productPkg = mProductPkgList.get(1);
+                            int crudeId = 1;
+                            for (int i = 0; i < mProductPkgList.size(); i++) {
+                                if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
+                                    crudeId = i;
+                                    break;
+                                }
+                            }
+                            ProductPkg productPkg = mProductPkgList.get(crudeId);
                             requestServerIpAndPort(productPkg);
                         }
                     }

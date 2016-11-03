@@ -32,7 +32,6 @@ public class App extends MultiDexApplication {
         UmengLib.init(sContext);
 
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
-        MobclickAgent.setCatchUncaughtExceptions(BuildConfig.DEBUG);
 
         if (!BuildConfig.DEBUG) {
             handleUncaughtException();

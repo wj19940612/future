@@ -103,11 +103,13 @@ public class TrendView extends FrameLayout {
                 if (end > start) {
                     String singleData = rawData.substring(start, end);
                     String[] splitData = singleData.split(",");
+                    float lastPrice = Float.valueOf(splitData[1]);
                     String date = splitData[2];
                     start = end + 1;
                     // filter invalid data and repeated data based on data.date
-                    if (!isRepeatedDate(date, hashSet) && isValidDate(date, openMarketTime)) {
-                        TrendViewData validData = new TrendViewData(splitData[0], Float.valueOf(splitData[1]), date);
+                    if (!isRepeatedDate(date, hashSet) && isValidDate(date, openMarketTime)
+                            && lastPrice != 0) {
+                        TrendViewData validData = new TrendViewData(splitData[0], lastPrice, date);
                         result.add(validData);
                     }
                 }

@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <TextView
+        <com.jnhyxx.html5.view.autofit.AutofitTextView
             android:id="@+id/availableBalance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

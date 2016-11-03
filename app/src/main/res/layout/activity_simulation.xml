@@ -37,9 +37,9 @@
                 android:textColor="@color/colorDisable"
                 android:textSize="12sp"/>
 
-            <me.grantland.widget.AutofitTextView
+            <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/availableGold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"

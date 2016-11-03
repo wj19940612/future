@@ -90,6 +90,8 @@ public class WebViewActivity extends BaseActivity {
 
         initData(getIntent());
 
+        mTitleBar.setTitle(mTitle);
+
         initWebView();
     }
 
@@ -260,12 +262,6 @@ public class WebViewActivity extends BaseActivity {
                 mTitleBar.setTitle(mTitle);
                 return;
             }
-            String titleText = view.getTitle();
-            if (!TextUtils.isEmpty(titleText) && !url.contains(titleText)) {
-                mTitle = titleText;
-            }
-            mTitleBar.setTitle(mTitle);
-
         }
 
         @Override

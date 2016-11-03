@@ -27,9 +27,6 @@ android {
             manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
         }
 
-        tst {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
-        }
         ycp {
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
         }

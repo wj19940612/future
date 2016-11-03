@@ -877,4 +877,8 @@ public class API extends APIBase {
     public static String getLoginUrl() {
         return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
     }
+
+    public static String getShutUpHtmlUrl() {
+        return getHost() + "/zhibo/liveRules.html";
+    }
 }

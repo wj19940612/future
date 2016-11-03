@@ -63,24 +63,14 @@ public class LiveActivity extends WebViewActivity {
 
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
-        if (url.contains("http://newtest.jnhyxx.com/user/login.html?callBack=/zhibo/live.html?r=login")) {
+        if (url.contains(API.getLoginUrl())) {
             Launcher.with(LiveActivity.this, SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
             return true;
         }
         return super.onShouldOverrideUrlLoading(view, url);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mWebView.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mWebView.onPause();
-    }
 
     private void requestSimulationPositions() {
         if (LocalUser.getUser().isLogin()) {

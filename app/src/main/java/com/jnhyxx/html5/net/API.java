@@ -552,7 +552,7 @@ public class API extends APIBase {
          * @return
          */
         public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId ;
+            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId;
         }
     }
 
@@ -867,9 +867,14 @@ public class API extends APIBase {
 
     /**
      * 新手引导页面网址
+     *
      * @return
      */
     public static String getNewbieUrl() {
         return getHost() + "/newtrader.html";
+    }
+
+    public static String getLoginUrl() {
+        return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
     }
 }

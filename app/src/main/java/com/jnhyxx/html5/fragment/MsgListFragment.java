@@ -151,7 +151,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null) {
+        if (sysTradeMessages == null || sysTradeMessages.isEmpty()) {
             mEmpty.setText("暂无系统消息");
             mListView.setEmptyView(mEmpty);
             if (mSwipeRefreshLayout.isRefreshing()) {

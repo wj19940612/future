@@ -94,6 +94,11 @@ public class WebViewActivity extends BaseActivity {
 
         initWebView();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+    }
 
     @Override
     protected void onDestroy() {

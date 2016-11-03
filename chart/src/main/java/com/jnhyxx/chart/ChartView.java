@@ -521,12 +521,10 @@ public abstract class ChartView extends View {
     protected String formatNumber(float value, int numberScale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
 
-        String pattern = "##0";
-        for (int i = 1; i <= numberScale; i++) {
-            if (i == 1) pattern += ".0";
-            else pattern += "0";
-        }
-        decimalFormat.applyPattern(pattern);
+        decimalFormat.setMaximumFractionDigits(numberScale);
+        decimalFormat.setMinimumFractionDigits(numberScale);
+        decimalFormat.setMinimumIntegerDigits(1);
+        decimalFormat.setGroupingUsed(false);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
 
         String v = decimalFormat.format(value);

@@ -121,14 +121,12 @@ public class FinanceUtil {
     public static String formatWithThousandsSeparatorAndScale(double value, int scale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
 
-        String pattern = "#,##0";
-        for (int i = 1; i <= scale; i++) {
-            if (i == 1) pattern += ".0";
-            else pattern += "0";
-        }
-
-        decimalFormat.applyPattern(pattern);
+        decimalFormat.setMaximumFractionDigits(scale);
+        decimalFormat.setMinimumFractionDigits(scale);
+        decimalFormat.setMinimumIntegerDigits(1);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        decimalFormat.setGroupingSize(3);
+        
         return decimalFormat.format(value);
     }
 
@@ -150,13 +148,16 @@ public class FinanceUtil {
      */
     public static String formatWithScale(double value, int scale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
-
-        String pattern = "##0";
-        for (int i = 1; i <= scale; i++) {
-            if (i == 1) pattern += ".0";
-            else pattern += "0";
-        }
-        decimalFormat.applyPattern(pattern);
+//        String pattern = "##0"; // not work for android 4.4
+//        for (int i = 1; i <= scale; i++) {
+//            if (i == 1) pattern += ".0";
+//            else pattern += "0";
+//        }
+//        decimalFormat.applyPattern(pattern);
+        decimalFormat.setMaximumFractionDigits(scale);
+        decimalFormat.setMinimumFractionDigits(scale);
+        decimalFormat.setMinimumIntegerDigits(1);
+        decimalFormat.setGroupingUsed(false);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
 
         String v = decimalFormat.format(value);

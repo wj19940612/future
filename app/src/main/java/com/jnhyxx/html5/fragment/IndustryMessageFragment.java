@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PriceMessageFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class IndustryMessageFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String TAG = "InfoListFragment";
 
@@ -58,8 +58,8 @@ public class PriceMessageFragment extends BaseFragment implements AdapterView.On
     private TextView mFooter;
     private Unbinder mBind;
 
-    public static PriceMessageFragment newInstance(int type) {
-        PriceMessageFragment fragment = new PriceMessageFragment();
+    public static IndustryMessageFragment newInstance(int type) {
+        IndustryMessageFragment fragment = new IndustryMessageFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, type);
         fragment.setArguments(args);

@@ -229,9 +229,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             ArrayList<String> infoLiveMessage = getItem(position);
             Log.d(TAG, "大小" + infoLiveMessage.size() + "\n直播的具体数据" + infoLiveMessage.toString());
 
-            String[] mSplit = null;
-
-            StringBuffer stringBuffer = null;
             if (infoLiveMessage != null) {
                 for (int i = 0; i < infoLiveMessage.size(); i++) {
                     String content = getContent(mViewHolder, infoLiveMessage);
@@ -310,8 +307,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
         }
 
         private String getContent(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
-            String[] mSplit;
-            StringBuffer stringBuffer;
             String content = infoLiveMessage.get(3);
 
             if (content.contains("<font ")) {

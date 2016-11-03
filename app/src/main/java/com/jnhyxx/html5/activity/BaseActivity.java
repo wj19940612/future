@@ -27,6 +27,7 @@ import com.jnhyxx.html5.view.dialog.Progress;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.ApiIndeterminate;
+import com.umeng.analytics.MobclickAgent;
 
 public class BaseActivity extends AppCompatActivity implements
         ApiIndeterminate, TimerHandler.TimerCallback {
@@ -109,11 +110,18 @@ public class BaseActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Preference.get().setForeground(false);
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(mReceiver);
+        MobclickAgent.onPause(this);
     }
 
     @Override

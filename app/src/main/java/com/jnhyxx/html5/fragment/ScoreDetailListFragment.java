@@ -287,8 +287,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                  *            如果是正数  最前面是+
                  *            如果是负数  最前面是-
                  */
-                StringBuffer mStringBuffer = new StringBuffer();
-
+                StringBuilder mStringBuffer = new StringBuilder();
                 if (item.getTypeDetail() > 0) {
                     mStringBuffer.append("+");
                     mDataType.setBackgroundResource(R.drawable.bg_red_primary);

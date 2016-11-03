@@ -126,7 +126,7 @@ public class FinanceUtil {
         decimalFormat.setMinimumIntegerDigits(1);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
         decimalFormat.setGroupingSize(3);
-        
+
         return decimalFormat.format(value);
     }
 

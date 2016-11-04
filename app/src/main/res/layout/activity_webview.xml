@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:titleText=""/>
+        app:titleText=""
+        android:paddingBottom="2dp"/>
 
     <View
         android:id="@+id/finishView"

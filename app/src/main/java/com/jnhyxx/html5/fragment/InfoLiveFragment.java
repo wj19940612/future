@@ -23,7 +23,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
-import com.johnz.kutils.DateUtil;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -229,38 +229,29 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             ArrayList<String> infoLiveMessage = getItem(position);
             Log.d(TAG, "大小" + infoLiveMessage.size() + "\n直播的具体数据" + infoLiveMessage.toString());
 
-            if (infoLiveMessage != null) {
-                for (int i = 0; i < infoLiveMessage.size(); i++) {
-                    String content = getContent(mViewHolder, infoLiveMessage);
-
-                    setTime(mViewHolder, infoLiveMessage);
-
-
-                    if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
-                    }
-                    mViewHolder.mContent.setText(content);
-
-
-                    String messageData = infoLiveMessage.toString();
-                    handleImage(mViewHolder, infoLiveMessage, messageData);
-                }
-
+            if (infoLiveMessage != null && !infoLiveMessage.isEmpty()) {
+                String content = getContent(mViewHolder, infoLiveMessage);
+                setTime(mViewHolder, infoLiveMessage);
+                changeTxtColor(mViewHolder, infoLiveMessage);
+                mViewHolder.mContent.setText(content);
+                String messageData = infoLiveMessage.toString();
+                handleImage(mViewHolder, infoLiveMessage, messageData);
                 setSpecialContent(mViewHolder, infoLiveMessage);
-
             }
             return convertView;
         }
 
+        private void changeTxtColor(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
+            if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+            } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
+            }
+        }
+
         private void setTime(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
             String time = infoLiveMessage.get(2);
-            if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
-                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "HH:mm:ss");
-            } else {
-                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
-            }
+            time = StrFormatter.getTimeHint(time);
             mViewHolder.mTime.setText(time);
         }
 
@@ -281,7 +272,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     }
                 }
                 mViewHolder.mContent.setText(infoLiveMessage.get(2));
-                mViewHolder.mTime.setText(infoLiveMessage.get(1));
+                mViewHolder.mTime.setText(StrFormatter.getTimeHint(infoLiveMessage.get(8)));
             } else {
                 mViewHolder.mDataLayout.setVisibility(View.GONE);
             }

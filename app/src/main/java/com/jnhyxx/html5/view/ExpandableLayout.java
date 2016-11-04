@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 
-import static com.android.volley.Request.Method.HEAD;
-
 
 /**
  * Created by Administrator on 2016/8/25.
@@ -30,6 +28,8 @@ public class ExpandableLayout extends RelativeLayout {
     private Animation mAnimation;
     private Boolean mIsAnimationRunning = false;
     private Boolean mIsOpened = false;
+
+    private TextView mBottomTxt;
 
     public ExpandableLayout(Context context) {
         super(context);
@@ -54,13 +54,13 @@ public class ExpandableLayout extends RelativeLayout {
         TextView tv_leftTxt = (TextView) view.findViewById(R.id.leftText);
         final ImageView ivAboutUsRight = (ImageView) view.findViewById(R.id.downwardArrow);
 
-        final TextView tv_bottom = (TextView) view.findViewById(R.id.bottomTxt);
+        mBottomTxt = (TextView) view.findViewById(R.id.bottomTxt);
         RelativeLayout rlHeadlayout = (RelativeLayout) view.findViewById(R.id.expandableLayoutBody);
 
         tv_leftTxt.setText(leftTxt);
-        tv_bottom.setText(bottomTxt);
+        mBottomTxt.setText(bottomTxt);
         Log.d(TAG, "左边文字 " + leftTxt + "\n右边文字 " + bottomTxt);
-        tv_bottom.setVisibility(GONE);
+        mBottomTxt.setVisibility(GONE);
 
         final RotateAnimation rotateAnimationUp = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF,
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -77,12 +77,12 @@ public class ExpandableLayout extends RelativeLayout {
             public void onClick(View view) {
 
                 if (!mIsAnimationRunning) {
-                    if (tv_bottom.getVisibility() == VISIBLE) {
-                        collapse(tv_bottom);
+                    if (mBottomTxt.getVisibility() == VISIBLE) {
+                        collapse(mBottomTxt);
                         ivAboutUsRight.startAnimation(rotateAnimationDown);
                     } else {
                         ivAboutUsRight.startAnimation(rotateAnimationUp);
-                        expand(tv_bottom);
+                        expand(mBottomTxt);
                     }
 
                     mIsAnimationRunning = true;
@@ -96,6 +96,10 @@ public class ExpandableLayout extends RelativeLayout {
             }
         });
         typedArray.recycle();
+    }
+
+    public void setBottomTxt(String bottomTxt) {
+        mBottomTxt.setText(bottomTxt);
     }
 
     public void expand(final View v) {

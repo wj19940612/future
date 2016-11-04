@@ -64,7 +64,7 @@ android {
         yybd { // 原油宝典
             applicationId 'com.jnhyxx.yybd'
             versionCode 3
-            versionName '1.0.0'
+            versionName '1.0'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [

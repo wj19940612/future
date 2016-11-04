@@ -12,6 +12,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.view.ExpandableLayout;
 import com.johnz.kutils.AppInfo;
 
 import butterknife.BindView;
@@ -29,8 +30,8 @@ public class AboutUsActivity extends BaseActivity {
     TextView mSerViceQQ;
     @BindView(R.id.servicePhone)
     TextView mServicePhone;
-    //记录被点击的item;
-    private int selectPosition = -1;
+    @BindView(R.id.companyInfo)
+    ExpandableLayout mCompanyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class AboutUsActivity extends BaseActivity {
     private void initData() {
         String versionName = AppInfo.getVersionName(getApplicationContext());
         mVersionName.setText(getString(R.string.account_about_us_app_version, getString(R.string.app_name), versionName));
+        String appName = getString(R.string.app_name);
+        mCompanyInfo.setBottomTxt(getString(R.string.account_about_us_company_info_child, appName));
     }
 
     @OnClick({R.id.companyInfo, R.id.managerTeam, R.id.companyCulture, R.id.collaborateCase, R.id.companyTelephone, R.id.serviceQq})

@@ -3,6 +3,8 @@ package com.jnhyxx.html5;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.jnhyxx.html5.domain.msg.SysMessage;
+
 public class Preference {
 
     private static final String SHARED_PREFERENCES_NAME = BuildConfig.FLAVOR + "_prefs";
@@ -17,6 +19,7 @@ public class Preference {
         String PHONE_NUMBER = "phone";
         String SERVICE_PHONE = "servicePhone";
         String SERVICE_QQ = "serviceQQ";
+        String SYS_MESSAGE_ID = "sys_message_id";
     }
 
     private static Preference sInstance;
@@ -39,7 +42,7 @@ public class Preference {
     }
 
     public void setForeground(boolean foreground) {
-        getEditor().putBoolean(Key.IS_FOREGROUND, foreground).commit();
+        getEditor().putBoolean(Key.IS_FOREGROUND, foreground).apply();
     }
 
     public boolean isForeground() {
@@ -63,7 +66,7 @@ public class Preference {
     }
 
     public void setTimestamp(String key, long timestamp) {
-        getEditor().putLong(key, timestamp).commit();
+        getEditor().putLong(key, timestamp).apply();
     }
 
     public long getTimestamp(String key) {
@@ -71,7 +74,7 @@ public class Preference {
     }
 
     public void setServerTime(long serverTime) {
-        getEditor().putLong(Key.SERVER_TIME, serverTime).commit();
+        getEditor().putLong(Key.SERVER_TIME, serverTime).apply();
     }
 
     public long getServerTime() {
@@ -83,7 +86,7 @@ public class Preference {
     }
 
     public void setTradeAgreementShowed(String userPhone, String varietyType) {
-        getEditor().putBoolean(userPhone + Key.HAD_SHOW_TRADE_AGREEMENT + varietyType, true).commit();
+        getEditor().putBoolean(userPhone + Key.HAD_SHOW_TRADE_AGREEMENT + varietyType, true).apply();
     }
 
     public boolean isTradeRuleClicked(String userPhone, String varietyType) {
@@ -91,7 +94,7 @@ public class Preference {
     }
 
     public void setTradeRuleClicked(String userPhone, String varietyType) {
-        getEditor().putBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, true).commit();
+        getEditor().putBoolean(userPhone + Key.IS_TRADE_RULE_CLICKED + varietyType, true).apply();
     }
 
     public void setPushClientId(String clientId) {
@@ -116,5 +119,17 @@ public class Preference {
 
     public String getServiceQQ() {
         return mPrefs.getString(Key.SERVICE_QQ, null);
+    }
+
+    public boolean hasShowedThisSysMessage(SysMessage sysMessage) {
+        String sysMessageId = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
+        if (sysMessageId.equals(sysMessage.getId())) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setThisSysMessageShowed(SysMessage sysMessage) {
+        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getId()).apply();
     }
 }

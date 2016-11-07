@@ -208,7 +208,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
         Context mContext;
 
-
         public InfoLiveMessageAdapter(Context context) {
             super(context, 0);
             this.mContext = context;
@@ -260,6 +259,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             if (infoLiveMessage.size() >= 11) {
                 Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
                 mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
+                mViewHolder.mStarImage.setVisibility(View.VISIBLE);
+                mViewHolder.mTextHint.setVisibility(View.VISIBLE);
+                mViewHolder.mOrganizeMarket.setVisibility(View.VISIBLE);
                 if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
                     if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
                         mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(3)));
@@ -271,10 +273,17 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                         mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
                     }
                 }
+                Picasso.with(mContext).load(API.Message.getMessageLiveStarUrl(infoLiveMessage.get(6))).into(mViewHolder.mStarImage);
+                Picasso.with(mContext).load(API.Message.getOrganizeMarkUrl(infoLiveMessage.get(9))).into(mViewHolder.mOrganizeMarket);
                 mViewHolder.mContent.setText(infoLiveMessage.get(2));
                 mViewHolder.mTime.setText(StrFormatter.getTimeHint(infoLiveMessage.get(8)));
+                mViewHolder.mTextHint.setText(infoLiveMessage.get(7));
+
             } else {
+                mViewHolder.mOrganizeMarket.setVisibility(View.GONE);
                 mViewHolder.mDataLayout.setVisibility(View.GONE);
+                mViewHolder.mStarImage.setVisibility(View.GONE);
+                mViewHolder.mTextHint.setVisibility(View.GONE);
             }
         }
 
@@ -289,7 +298,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     }
                 }
                 mViewHolder.mImageHint.setVisibility(View.VISIBLE);
-                String imageUrl = "https://res.6006.com/jin10/" + infoLiveMessage.get(imageUrlPosition);
+                String imageUrl = API.Message.getMessageLiveInfoUrl() + infoLiveMessage.get(imageUrlPosition);
                 Log.d(TAG, "图片地址" + imageUrl);
                 Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
             } else {
@@ -318,8 +327,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             TextView mTime;
             @BindView(R.id.content)
             TextView mContent;
-
-
             @BindView(R.id.beforeData)
             TextView mBeforeData;
             @BindView(R.id.expectData)
@@ -330,6 +337,12 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             LinearLayout mDataLayout;
             @BindView(R.id.imageHint)
             ImageView mImageHint;
+            @BindView(R.id.organizeMarket)
+            ImageView mOrganizeMarket;
+            @BindView(R.id.starImage)
+            ImageView mStarImage;
+            @BindView(R.id.TextHint)
+            TextView mTextHint;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);

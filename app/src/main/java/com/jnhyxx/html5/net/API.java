@@ -612,6 +612,21 @@ public class API extends APIBase {
         public static API findNewsByUrl(String url) {
             return new API(GET, "/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
         }
+
+        //资讯直播的大图网址
+        public static String getMessageLiveInfoUrl() {
+            return "https://res.6006.com/jin10/";
+        }
+
+        //资讯直播中星星的网址
+        public static String getMessageLiveStarUrl(String star) {
+            return "https://res.6006.com/assets/ext/news/" + star + ".png";
+        }
+
+        //资讯直播组织的图标  https://res.6006.com/jin10/flag/法国.png
+        public static String getOrganizeMarkUrl(String markUrl) {
+            return getMessageLiveInfoUrl() + "/flag/" + markUrl + ".png";
+        }
     }
 
     public static class Market {
@@ -874,11 +889,11 @@ public class API extends APIBase {
         return getHost() + "/newtrader.html";
     }
 
-    public static String getLoginUrl() {
+    public static String getLivePageLoginUrl() {
         return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
     }
 
-    public static String getShutUpHtmlUrl() {
+    public static String getLivePageShutUpHtmlUrl() {
         return getHost() + "/zhibo/liveRules.html";
     }
 }

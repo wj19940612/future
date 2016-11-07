@@ -102,7 +102,7 @@ public class StrFormatter {
      * @param createTime
      * @return
      */
-    public  static String getTimeHint(String createTime) {
+    public static String getTimeHint(String createTime) {
         if (!TextUtils.isEmpty(createTime)) {
             String serverTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "HH:mm").replace(":", "");
             String localTime = DateUtil.format(System.currentTimeMillis(), "HH:mm").replace(":", "");
@@ -116,7 +116,7 @@ public class StrFormatter {
                     Long timeDifference = localTimeNum - serverTimeNum;
                     Log.d(TAG, "系统时间  " + serverTime + "本地时间  " + localTime + "时间差  " + timeDifference);
                     if (0 <= timeDifference && timeDifference < 60) {
-                        return timeDifference % 60< 1 ? "刚刚" : timeDifference % 60 + "分钟前";
+                        return timeDifference % 60 < 1 ? "刚刚" : timeDifference % 60 + "分钟前";
                     } else if (timeDifference >= 60) {
                         return timeDifference / 60 + "小时前";
                     } else {
@@ -127,4 +127,28 @@ public class StrFormatter {
         }
         return createTime;
     }
+//    public static String getTimeHint(String createTime) {
+//        if (!TextUtils.isEmpty(createTime)) {
+//            String serverTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy-MM-ddHH-mm").replace("-", "");
+//            String localTime = DateUtil.format(System.currentTimeMillis(), "yyyy-MM-ddHH-mm").replace("-", "");
+//            if (!TextUtils.isEmpty(serverTime) || !TextUtils.isEmpty(localTime)) {
+//                long timeDifference = Long.valueOf(localTime) - Long.valueOf(serverTime);
+//                String format = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "yyyy年-MM月-dd日HH:mm");
+//                String format1 = DateUtil.format(System.currentTimeMillis(), "yyyy年-MM月-dd日HH:mm");
+//                Log.d(TAG, "服务器时间  " + format + "   本地时间  " + format1 + " 时间差 " + timeDifference);
+//                if (timeDifference == 0) {
+//                    return "刚刚";
+//                } else if (0 < timeDifference && timeDifference < 60) {
+//                    return timeDifference + "分钟前";
+//                } else if (0 < timeDifference && timeDifference < 1440) {
+//                    return timeDifference / 60 + "小时前";
+//                } else if (0 < timeDifference && timeDifference > 1440) {
+//                    return timeDifference / 1440 + "天以前";
+//                } else {
+//                    return createTime;
+//                }
+//            }
+//        }
+//        return createTime;
+//    }
 }

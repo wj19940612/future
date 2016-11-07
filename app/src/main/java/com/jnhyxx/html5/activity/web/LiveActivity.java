@@ -63,13 +63,13 @@ public class LiveActivity extends WebViewActivity {
 
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
-        if (url.contains(API.getLoginUrl())) {
+        if (url.contains(API.getLivePageLoginUrl())) {
             Launcher.with(LiveActivity.this, SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
             return true;
         }
-        if (url.equals(API.getShutUpHtmlUrl())) {
+        if (url.equals(API.getLivePageShutUpHtmlUrl())) {
             Launcher.with(LiveActivity.this, WebViewActivity.class)
-                    .putExtra(WebViewActivity.EX_URL, API.getShutUpHtmlUrl())
+                    .putExtra(WebViewActivity.EX_URL, API.getLivePageShutUpHtmlUrl())
                     .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                     .putExtra(WebViewActivity.EX_TITLE, getString(R.string.live_manager))
                     .execute();

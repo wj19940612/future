@@ -1,1 +1,1 @@
-include ':app', ':umenglibrary', ':kutils', ':SlidingMenu', ':chart'
+include ':app', ':umenglibrary', ':kutils', ':SlidingMenu', ':chart', ':LePlayerSkin', ':LePlayerSdk'

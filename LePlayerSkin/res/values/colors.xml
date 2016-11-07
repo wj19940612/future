@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="letv_color_b3000000">#b3000000</color>
+    <color name="letv_color_ffffffff">#ffffffff</color>
+    <color name="letv_color_fff6f6f6">#fff6f6f6</color>
+    <color name="letv_color_ff00a0e9">#ff00a0e9</color>
+    <color name="download_btn_normal">#cc000000</color>
+    <color name="download_btn_pressed">#e5198fdd</color>
+    <color name="download_btn_enable">#e57d7d7d</color>
+    <!-- 这个是活动中的颜色样式 -->
+    <color name="action_mult_live_shape">#ff1073BF</color>
+    <color name="letv_skin_vnew_controller_background">#c0000000</color>
+    <color name="blue">#6A42EC</color>
+    <color name="blue_tran">#6A42e0</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+</resources>

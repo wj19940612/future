@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="letv_skin_v4_ratetype_item_width">55dp</dimen>
+    <dimen name="letv_skin_v4_ratetype_item_height">30dp</dimen>
+    
+    
+    <dimen name="letv_skin_v4_volume_seekbar_width">35dp</dimen>
+    <dimen name="letv_skin_v4_volume_seekbar_height">130dp</dimen>
+
+</resources>

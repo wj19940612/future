@@ -18,8 +18,9 @@ import java.util.List;
  */
 
 public class InitLiveSdk {
+    private static final String TAG = "InitLiveSdk";
 
-    private static boolean cdeInitSuccess;
+    public static boolean cdeInitSuccess;
     private static InitLiveSdk sInitLiveSdk;
 
 
@@ -49,7 +50,7 @@ public class InitLiveSdk {
                     public void onCdeStartSuccess() {
                         //cde启动成功,可以开始播放
                         cdeInitSuccess = true;
-                        Log.d("huahua", "onCdeStartSuccess: ");
+                        Log.d(TAG, "onCdeStartSuccess: ");
                     }
 
                     @Override
@@ -57,7 +58,7 @@ public class InitLiveSdk {
                         //cde启动失败,不能正常播放;如果使用remote版本则可能是remote下载失败;
                         //如果使用普通版本,则可能是so文件加载失败导致
                         cdeInitSuccess = false;
-                        Log.d("huahua", "onCdeStartFail: ");
+                        Log.d(TAG, "onCdeStartFail: ");
                     }
 
                     @Override
@@ -85,6 +86,7 @@ public class InitLiveSdk {
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block
+                Log.d(TAG,"异常"+e.getCause());
                 e.printStackTrace();
             }
         }

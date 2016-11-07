@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.jnhyxx.html5"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jnhyxx.html5">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -22,6 +22,14 @@
     <!-- Phone -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!--ls Tv-->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+
 
     <application
         android:name=".App"
@@ -91,9 +99,9 @@
             android:name=".activity.account.SignUpActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".activity.account.SignInActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.account.FindPwdActivity"
             android:screenOrientation="portrait"/>
@@ -171,7 +179,8 @@
         <activity
             android:name=".activity.web.NewbieActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.web.BannerActivity"
+        <activity
+            android:name=".activity.web.BannerActivity"
             android:screenOrientation="portrait"/>
         <!-- Receiver for getui push -->
         <receiver
@@ -181,7 +190,19 @@
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
             </intent-filter>
         </receiver>
+        <service
+            android:name="com.letvcloud.cmf.MediaService"
+            android:process=":cmf"/>
 
+        <activity
+            android:name=".activity.LiveActivity"
+            android:configChanges="keyboard|screenSize|orientation|layoutDirection"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.lecloud.skin.activity.FeedBackActivity"
+            android:configChanges="keyboard|screenSize|orientation|layoutDirection"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
     </application>
 
 </manifest>

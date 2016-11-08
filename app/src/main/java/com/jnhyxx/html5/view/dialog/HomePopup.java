@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -15,7 +16,7 @@ public class HomePopup {
 
     TextView mTitle;
     TextView mMessage;
-    TextView mClose;
+    ImageView mClose;
     TextView mCheckDetailButton;
 
     private String mMessageText;
@@ -77,7 +78,7 @@ public class HomePopup {
         mDialog.setContentView(view);
         mTitle = (TextView) view.findViewById(R.id.title);
         mMessage = (TextView) view.findViewById(R.id.message);
-        mClose = (TextView) view.findViewById(R.id.close);
+        mClose = (ImageView) view.findViewById(R.id.close);
         mCheckDetailButton = (TextView) view.findViewById(R.id.checkDetail);
 
         mTitle.setText(mTitleText);

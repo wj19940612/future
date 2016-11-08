@@ -5,39 +5,42 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/dialogHeader"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:src="@drawable/dialog_header_home_popup"/>
 
-            <ImageView
-                android:id="@+id/dialogHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/dialog_header_home_popup"/>
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/dialogHeader"
+            android:layout_alignTop="@+id/dialogHeader"
+            android:layout_marginTop="10dp"
+            android:padding="@dimen/common_margin"
+            android:src="@drawable/ic_close_popup"/>
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/close"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignRight="@+id/dialogHeader"
-                android:layout_marginTop="10dp"/>
-        </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
             android:gravity="center_horizontal"
-            android:paddingBottom="20dp"
             android:paddingLeft="22dp"
             android:paddingRight="22dp"
-            android:paddingTop="25dp"
             android:textColor="@color/blackPrimary"
             android:textSize="16sp"
             tools:text="此处是标题"/>
@@ -46,12 +49,14 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:layout_marginBottom="30dp"
             android:lineSpacingExtra="10dp"
             android:maxLines="4"
-            android:minHeight="130dp"
+            android:minHeight="100dp"
             android:paddingLeft="22dp"
             android:paddingRight="22dp"
+            android:scrollbars="vertical|none"
+            android:textColor="@color/blackPrimary"
             tools:text="1.为了您的账户资金安全,只能绑定持卡人本人的银行卡,\n 2获取更多帮助,请联系客服~\n 2获取更多帮助,请联系客服~"/>
     </LinearLayout>
 

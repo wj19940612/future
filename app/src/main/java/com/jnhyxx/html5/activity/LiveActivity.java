@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketServer;
@@ -75,22 +76,22 @@ public class LiveActivity extends BaseActivity {
         initSlidingTabLayout();
         initVideoPlayFragment();
         initTitleBar();
-//        getLiveMessage();
+        getLiveMessage();
     }
 
-//    private void getLiveMessage() {
-//        API.Live.getLiveMessage()
-//                .setTag(TAG)
-//                .setIndeterminate(this)
-//                .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
-//                    @Override
-//                    public void onRespSuccess(LiveMessage liveMessage) {
-//                        if (liveMessage == null) return;
-//                        Log.d(TAG, "直播信息" + liveMessage.toString());
-//                    }
-//                })
-//                .fire();
-//    }
+    private void getLiveMessage() {
+        API.Live.getLiveMessage()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
+                    @Override
+                    public void onRespSuccess(LiveMessage liveMessage) {
+                        if (liveMessage == null) return;
+                        Log.d(TAG, "直播信息" + liveMessage.toString());
+                    }
+                })
+                .fire();
+    }
 
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);

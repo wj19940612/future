@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/colorPrimary"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/live"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <LinearLayout
+        android:id="@+id/liveRule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/live_program_dir"
+            android:textColor="@color/blueAssist"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:id="@+id/ruleIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/arrow_live_icon_manu_down"/>
+    </LinearLayout>
+</LinearLayout>

@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:backFeature="true"
+        app:customView="@layout/tb_live_program_dir"
         app:rightText="@string/live_right_title"
         app:rightTextColor="@android:color/white"
         app:rightTextSize="16sp"

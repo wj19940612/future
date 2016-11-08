@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
+import com.lecloud.sdk.constant.PlayerEvent;
 import com.lecloud.sdk.constant.PlayerParams;
 import com.lecloud.sdk.videoview.IMediaDataVideoView;
 import com.lecloud.sdk.videoview.VideoViewListener;
@@ -80,7 +81,27 @@ public class VideoPlayFragment extends BaseFragment {
      * 处理播放器本身事件，具体事件可以参见IPlayer类
      */
     private void handlePlayerEvent(int event, Bundle bundle) {
+        switch (event) {
+            case PlayerEvent.ACTION_LIVE_PLAY_PROTOCOL:
+                setActionLiveParameter(bundle.getBoolean(PlayerParams.KEY_PLAY_USEHLS));
+                break;
+            case PlayerEvent.PLAY_VIDEOSIZE_CHANGED:
+                /**
+                 * 获取到视频的宽高的时候，此时可以通过视频的宽高计算出比例，进而设置视频view的显示大小。
+                 * 如果不按照视频的比例进行显示的话，(以surfaceView为例子)内容会填充整个surfaceView。
+                 * 意味着你的surfaceView显示的内容有可能是拉伸的
+                 */
+                break;
 
+            case PlayerEvent.PLAY_PREPARED:
+                // 播放器准备完成，此刻调用start()就可以进行播放了
+                if (videoView != null) {
+                    videoView.onStart();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void handleVideoInfoEvent(int event, Bundle bundle) {
@@ -103,11 +124,17 @@ public class VideoPlayFragment extends BaseFragment {
     //是否有皮肤
     public static final String KEY_HAS_SKIN = "hasSkin";
 
+    public interface OnConfigurationChangedListener {
+        void onConfigurationChanged(Configuration newConfig);
+    }
+
+    OnConfigurationChangedListener mOnConfigurationChangedListener;
+
 
     public static VideoPlayFragment newInstance(Bundle bundle) {
         VideoPlayFragment videoPlayFragment = new VideoPlayFragment();
         Bundle data = new Bundle();
-        data.putBundle(DATA, data);
+        data.putBundle(DATA, bundle);
         videoPlayFragment.setArguments(data);
         return videoPlayFragment;
     }
@@ -135,7 +162,6 @@ public class VideoPlayFragment extends BaseFragment {
 
         initData();
         initView();
-
     }
 
     @Override
@@ -169,6 +195,7 @@ public class VideoPlayFragment extends BaseFragment {
         super.onConfigurationChanged(newConfig);
         if (videoView != null) {
             videoView.onConfigurationChanged(newConfig);
+            mOnConfigurationChangedListener.onConfigurationChanged(newConfig);
         }
     }
 
@@ -194,20 +221,7 @@ public class VideoPlayFragment extends BaseFragment {
 
         videoView.setVideoViewListener(mVideoViewListener);
 
-//        final RelativeLayout videoContainer = (RelativeLayout) findViewById(R.id.videoContainer);
         mLiveLayout.addView((View) videoView, VideoLayoutParams.computeContainerSize(getActivity(), 16, 9));
-
-//        Button next = (Button) findViewById(R.id.next);
-//        next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                for (Map.Entry<String, String> rates : rateMap.entrySet()) {
-//                    if (rates.getValue().equals("标清")) {
-//                        videoView.setRate(rates.getKey());
-//                    }
-//                }
-//            }
-//        });
         if (!TextUtils.isEmpty(mPlayUrl)) {
             videoView.setDataSource(mPlayUrl);
         } else {
@@ -244,5 +258,9 @@ public class VideoPlayFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
+    }
+
+    public void setOnConfigurationChangedListener(OnConfigurationChangedListener onConfigurationChangedListener) {
+        this.mOnConfigurationChangedListener = onConfigurationChangedListener;
     }
 }

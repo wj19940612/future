@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -39,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 public class LiveActivity extends BaseActivity {
 
@@ -73,8 +75,22 @@ public class LiveActivity extends BaseActivity {
         initSlidingTabLayout();
         initVideoPlayFragment();
         initTitleBar();
-
+//        getLiveMessage();
     }
+
+//    private void getLiveMessage() {
+//        API.Live.getLiveMessage()
+//                .setTag(TAG)
+//                .setIndeterminate(this)
+//                .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
+//                    @Override
+//                    public void onRespSuccess(LiveMessage liveMessage) {
+//                        if (liveMessage == null) return;
+//                        Log.d(TAG, "直播信息" + liveMessage.toString());
+//                    }
+//                })
+//                .fire();
+//    }
 
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);
@@ -89,6 +105,21 @@ public class LiveActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 openTradePage();
+            }
+        });
+
+        setTitleBarCustomView();
+    }
+
+    //TitleBar中间的view的点击事件
+    private void setTitleBarCustomView() {
+        View customView = mTitleBar.getCustomView();
+        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.liveRule);
+        ImageView mRuleIcon = (ImageView) customView.findViewById(R.id.ruleIcon);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

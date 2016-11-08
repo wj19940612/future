@@ -49,16 +49,11 @@
                 android:background="@color/splitLineGrayLight"/>
         </LinearLayout>
 
-
-        <!--     <LinearLayout
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:orientation="horizontal">-->
         <RelativeLayout
             android:id="@+id/managerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_margin">
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:id="@+id/userStatus"
@@ -86,12 +81,19 @@
                 android:layout_below="@+id/userStatus"
                 android:gravity="center_vertical">
 
-                <ImageView
-                    android:id="@+id/userHeadImage"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_live_pic_head"/>
+                    android:background="@drawable/bg_live_adminrhead"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/userHeadImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_live_pic_head"/>
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/arrow"
@@ -116,7 +118,7 @@
             android:id="@+id/userMineLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/common_margin">
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:id="@+id/userMineStatus"
@@ -133,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="40dp"
+                android:layout_marginRight="42dp"
                 android:textColor="@color/colorDisable"
                 android:textSize="11sp"
                 tools:text="10分钟前"/>
@@ -153,7 +155,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_live_user_mine"
                     android:padding="10dp"
-                    android:textColor="@color/blackPrimary"
+                    android:textColor="@android:color/white"
                     tools:text="明天非空撒酒疯雷克萨解放路加上符号及咖啡撒假设开发好看教案是否看见爱上将客服撒谎发空间按双方尽快尽快恢复萨卡减肥哈就开始发货空间撒李开复就分手了空间按法律快捷方式快乐撒娇福利卡时间弗兰克接口即可"/>
 
                 <ImageView
@@ -161,14 +163,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_arrow_left_white"/>
+                    android:src="@drawable/arrow_live_angle_me_right"/>
 
-                <ImageView
-                    android:id="@+id/userMineHeadImage"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_live_pic_head"/>
+                    android:background="@drawable/bg_live_userhead"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:id="@+id/userMineHeadImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_live_pic_head"/>
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

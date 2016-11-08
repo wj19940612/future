@@ -14,10 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:rightBackground="@drawable/btn_blue_inverse_login"
         app:rightText="@string/live_right_title"
-        app:rightTextColor="@color/blueAssist"
-        app:rightTextSize="12sp"
+        app:rightTextColor="@android:color/white"
+        app:rightTextSize="16sp"
         app:rightVisible="true"
         app:titleText="@string/live"/>
 

@@ -554,6 +554,32 @@ public class API extends APIBase {
         public static String getH5LiveHtmlUrl(String liveRoomId) {
             return getHost() + "/zhibo/live.html?liveId=" + liveRoomId;
         }
+
+        /**
+         * 接口名：一大块，获取直播的节目单，直播的老师信息及头像，直播公告
+         * URL  http://域名/user/live/getLiveMessage.do
+         *
+         * @return
+         */
+        public static API getLiveMessage() {
+            return new API("/user/live/getLiveMessage.do", new ApiParams());
+        }
+
+        /**
+         *接口名：分页获取直播老师指导
+         * URL  http://域名/user/live/findTeacherMsg.do
+         *
+         * @param page  第几页
+         * @param pageSize
+         * @param teacherId   老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
+         * @return
+         */
+        public static API getTeacherGuide( int page,int pageSize,int teacherId) {
+            return new API("/user/live/findTeacherMsg.do",new ApiParams()
+            .put("page",page)
+            .put("pageSize",pageSize)
+            .put("teacherId",teacherId));
+        }
     }
 
     public static class Message {

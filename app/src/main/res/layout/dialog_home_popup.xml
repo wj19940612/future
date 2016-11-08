@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -14,7 +13,7 @@
             android:id="@+id/dialogHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dialog_header_upgrade"/>
+            android:src="@drawable/dialog_header_home_popup"/>
 
         <ImageView
             android:id="@+id/close"
@@ -22,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/dialogHeader"
             android:layout_alignTop="@+id/dialogHeader"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:padding="@dimen/common_margin"
             android:src="@drawable/ic_close_popup"/>
     </RelativeLayout>
@@ -34,7 +33,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/titleVersionName"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -42,13 +41,12 @@
             android:gravity="center_horizontal"
             android:paddingLeft="22dp"
             android:paddingRight="22dp"
-            android:text="@string/version_upgrade"
             android:textColor="@color/blackPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textSize="16sp"
+            tools:text="此处是标题"/>
 
         <TextView
-            android:id="@+id/upgradeLog"
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
@@ -59,18 +57,17 @@
             android:paddingRight="22dp"
             android:scrollbars="vertical|none"
             android:textColor="@color/blackPrimary"
-            tools:text="更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log"/>
+            tools:text="1.为了您的账户资金安全,只能绑定持卡人本人的银行卡,\n 2获取更多帮助,请联系客服~\n 2获取更多帮助,请联系客服~"/>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/downloadInstall"
+        android:id="@+id/checkDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_dialog_single_assist_blue"
-        android:clickable="true"
         android:gravity="center_horizontal"
         android:padding="12dp"
-        android:text="@string/upgrade_now"
+        android:text="@string/check_detail"
         android:textColor="@android:color/white"
         android:textSize="16sp"/>
 </LinearLayout>

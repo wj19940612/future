@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.msg.SysTradeMessage;
+import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
@@ -58,7 +58,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     private Unbinder mBinder;
 
     private TradeListAdapter mTradeListAdapter;
-    private Set<Integer> mSet;
+    private Set<String> mSet;
     private TextView mFooter;
 
     private boolean isLoad = false;
@@ -136,9 +136,9 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)
-                .setCallback(new Callback<Resp<List<SysTradeMessage>>>() {
+                .setCallback(new Callback<Resp<List<SysMessage>>>() {
                                  @Override
-                                 public void onReceive(Resp<List<SysTradeMessage>> listResp) {
+                                 public void onReceive(Resp<List<SysMessage>> listResp) {
                                      if (listResp.isSuccess()) {
                                          updateMessageList(listResp.getData());
                                          for (int i = 0; i < listResp.getData().size(); i++) {
@@ -154,8 +154,8 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 ).fire();
     }
 
-    private void updateMessageList(List<SysTradeMessage> sysTradeMessages) {
-        if (sysTradeMessages == null || sysTradeMessages.isEmpty()) {
+    private void updateMessageList(List<SysMessage> sysMessages) {
+        if (sysMessages == null || sysMessages.isEmpty()) {
             mEmpty.setText("暂无交易提醒");
             mListView.setEmptyView(mEmpty);
             if (mSwipeRefreshLayout.isRefreshing()) {
@@ -181,7 +181,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             mListView.addFooterView(mFooter);
         }
 
-        if (sysTradeMessages.size() < mPageSize) {
+        if (sysMessages.size() < mPageSize) {
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
             mListView.removeFooterView(mFooter);
@@ -195,7 +195,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
             mTradeListAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        for (SysTradeMessage item : sysTradeMessages) {
+        for (SysMessage item : sysMessages) {
             if (mSet.add(item.getId())) {
                 mTradeListAdapter.add(item);
             }
@@ -205,7 +205,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SysTradeMessage message = (SysTradeMessage) parent.getAdapter().getItem(position);
+        SysMessage message = (SysMessage) parent.getAdapter().getItem(position);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
-    static class TradeListAdapter extends ArrayAdapter<SysTradeMessage> {
+    static class TradeListAdapter extends ArrayAdapter<SysMessage> {
 
         public TradeListAdapter(Context context) {
             super(context, 0);
@@ -256,7 +256,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(SysTradeMessage item, int position) {
+            public void bindingData(SysMessage item, int position) {
                 if (item == null) return;
                 if (position == 0) {
                     mView.setVisibility(View.VISIBLE);
@@ -269,7 +269,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 mTradeHintContent.setText(item.getPushContent());
             }
 
-            private void setTradeStatus(SysTradeMessage item) {
+            private void setTradeStatus(SysMessage item) {
                 if (item.isTradeStatus()) {
                     // TODO: 2016/10/10 是提现信息的显示
                     if (item.isSuccess()) {
@@ -291,7 +291,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 mTradeStatusHint.setImageResource(R.drawable.ic_common_toast_succeed);
             }
 
-            private void setOrderStatus(SysTradeMessage item) {
+            private void setOrderStatus(SysMessage item) {
                 if (item.isSuccess()) {
                     mTradeStatusHint.setImageResource(R.drawable.ic_trade_warn_list_icon_good);
                 } else {
@@ -299,7 +299,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 }
             }
 
-            private void setTradeTime(SysTradeMessage item) {
+            private void setTradeTime(SysMessage item) {
                 String tradeTime = item.getCreateTime();
                 if (TextUtils.isEmpty(tradeTime)) return;
                 if (DateUtil.isInThisYear(tradeTime, DateUtil.DEFAULT_FORMAT)) {

@@ -610,7 +610,16 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET, "/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+            return new API(GET, "/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+        }
+
+        /**
+         * 获取大厅 弹出框
+         *
+         * @return
+         */
+        public static API getHomePopup() {
+            return new API(GET, "/user/news/getPopPush.do", null);
         }
     }
 

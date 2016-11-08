@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +13,11 @@ import android.webkit.WebView;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.activity.web.LiveActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.domain.live.LiveRoomInfo;
+import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
@@ -28,10 +31,12 @@ import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
+import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -193,20 +198,35 @@ public class MainActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
-//
-//        final LocalUser localUser = LocalUser.getUser();
-//        final UserInfo userInfo = localUser.getUserInfo();
-//        API.Finance.getFundInfo().setTag(TAG)
-//                .setIndeterminate(this)
-//                .setCallback(new Callback1<Resp<UserFundInfo>>() {
-//                    @Override
-//                    protected void onRespSuccess(Resp<UserFundInfo> resp) {
-//                        UserFundInfo userFundInfo = resp.getData();
-//                        userInfo.setMoneyUsable(userFundInfo.getMoneyUsable());
-//                        userInfo.setScoreUsable(userFundInfo.getScoreUsable());
-//                        localUser.setUserInfo(userInfo);
-//                    }
-//                }).fire();
+
+        requestHomePopup();
+    }
+
+    private void requestHomePopup() {
+        API.Message.getHomePopup().setTag(TAG)
+                .setCallback(new Callback1<Resp<List<SysMessage>>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<List<SysMessage>> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            showSysMessageDialog(resp.getData().get(0));
+                        }
+                    }
+                }).fire();
+    }
+
+    private void showSysMessageDialog(final SysMessage sysMessage) {
+        if (!Preference.get().hasShowedThisSysMessage(sysMessage)) {
+            HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
+                    .setOnCheckDetailListener(new HomePopup.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
+                        }
+                    }).show();
+            Preference.get().setThisSysMessageShowed(sysMessage);
+        }
     }
 
     @Override

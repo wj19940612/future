@@ -23,6 +23,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
+    <!--自定义权限解释:部分手机型号不能正常运行个推SDK，需添加自定义权限进行配置-->
+    <uses-permission android:name="getui.permission.GetuiService.com.jnhyxx.html5"/>
+    <permission
+        android:name="getui.permission.GetuiService.com.jnhyxx.html5"
+        android:protectionLevel="normal"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -91,9 +97,9 @@
             android:name=".activity.account.SignUpActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".activity.account.SignInActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.account.FindPwdActivity"
             android:screenOrientation="portrait"/>
@@ -171,7 +177,8 @@
         <activity
             android:name=".activity.web.NewbieActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.web.BannerActivity"
+        <activity
+            android:name=".activity.web.BannerActivity"
             android:screenOrientation="portrait"/>
         <!-- Receiver for getui push -->
         <receiver

@@ -12,7 +12,7 @@ import android.support.v4.view.ViewPager;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.domain.msg.SysTradeMessage;
+import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
 import com.jnhyxx.html5.fragment.TradeHintListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
@@ -116,7 +116,8 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
     }
 
     @Override
-    public void onMsgItemClick(SysTradeMessage sysTradeMessage) {
-        Launcher.with(MessageCenterActivity.this, MessageCenterListItemInfoActivity.class).putExtra(Launcher.EX_PAYLOAD, sysTradeMessage).execute();
+    public void onMsgItemClick(SysMessage sysMessage) {
+        Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
+                .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
     }
 }

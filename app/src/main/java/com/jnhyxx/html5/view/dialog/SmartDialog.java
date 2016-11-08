@@ -36,13 +36,11 @@ public class SmartDialog {
     private boolean mIsDoubleButtons;
 
     private String mMessageText;
-
     private String mTitleText;
 
     private boolean mCancelableOnTouchOutside;
 
     private Dialog mDialog;
-
     private Activity mActivity;
 
     public interface OnClickListener {
@@ -184,7 +182,7 @@ public class SmartDialog {
         return this;
     }
 
-    private SmartDialog setMessage(String message) {
+    public SmartDialog setMessage(String message) {
         mMessageText = message;
         return this;
     }
@@ -194,7 +192,7 @@ public class SmartDialog {
         return this;
     }
 
-    private SmartDialog setTitle(String title) {
+    public SmartDialog setTitle(String title) {
         mTitleText = title;
         return this;
     }

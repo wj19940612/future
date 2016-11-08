@@ -2,7 +2,6 @@ package com.johnz.kutils.net;
 
 import android.util.Log;
 
-import com.android.volley.BuildConfig;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +34,7 @@ public class RequestManager {
 
     public static void enqueue(Request<?> request) {
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "enqueue: " + request.toString());
+        Log.d(TAG, "enqueue: " + request.toString());
 
         if (sRequestQueue != null) {
             sRequestQueue.add(request);

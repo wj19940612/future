@@ -4,8 +4,11 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
+import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.fragment.live.VideoPlayFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -66,8 +70,18 @@ public class LiveActivity extends BaseActivity {
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
 
+        initSlidingTabLayout();
         initVideoPlayFragment();
         initTitleBar();
+
+    }
+
+    private void initSlidingTabLayout() {
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
+        mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
+        mViewPager.setOffscreenPageLimit(3);
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     private void initTitleBar() {
@@ -214,6 +228,37 @@ public class LiveActivity extends BaseActivity {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
+        }
+    }
+
+    private class LivePageFragmentAdapter extends FragmentPagerAdapter {
+        public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
+            super(supportFragmentManager);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.live_interaction);
+                case 1:
+                    return getString(R.string.live_teacher_guide);
+            }
+            return super.getPageTitle(position);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new TeacherGuideFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
         }
     }
 }

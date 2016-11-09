@@ -25,6 +25,7 @@ import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
+import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.fragment.live.VideoPlayFragment;
 import com.jnhyxx.html5.net.API;
@@ -57,8 +58,8 @@ public class LiveActivity extends BaseActivity {
     TitleBar mTitleBar;
 
     // TODO: 2016/11/8 房间Id 
-//    private String mLiveId = "A2016080200000n1";
-    private String mLiveId = "A2016053100000je";
+    private String mLiveId = "A2016080200000n1";
+//    private String mLiveId = "A2016053100000je";
 
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
@@ -283,6 +284,8 @@ public class LiveActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
+                    return new LiveInteractionFragment();
+                case 1:
                     return new TeacherGuideFragment();
             }
             return null;

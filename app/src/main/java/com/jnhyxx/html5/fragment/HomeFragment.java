@@ -189,7 +189,7 @@ public class HomeFragment extends BaseFragment {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(ServerIpPort.EX_MARKET_SERVER, new ArrayList<Parcelable>(serverIpPorts))
+                                .putExtra(ServerIpPort.EX_IP_PORTS, new ArrayList<Parcelable>(serverIpPorts))
                                 .execute();
                     }
                 }).fire();

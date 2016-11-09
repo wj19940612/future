@@ -14,7 +14,6 @@ import android.webkit.WebView;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
-import com.jnhyxx.html5.activity.web.LiveActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;

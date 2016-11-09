@@ -2,11 +2,6 @@ package com.jnhyxx.html5.domain.live;
 
 import java.util.List;
 
-/**
- * Created by ${wangJie} on 2016/11/8.
- * getLiveMessage所返回的信息
- */
-
 public class LiveMessage {
 
     /**
@@ -49,7 +44,6 @@ public class LiveMessage {
      */
 
     private List<ProgramInfo> program;
-
 
     public TeacherInfo getTeacher() {
         return teacher;

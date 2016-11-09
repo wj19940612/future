@@ -111,7 +111,7 @@ public class SimulationActivity extends BaseActivity {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(ServerIpPort.EX_MARKET_SERVER, new ArrayList<Parcelable>(serverIpPorts))
+                                .putExtra(ServerIpPort.EX_IP_PORTS, new ArrayList<Parcelable>(serverIpPorts))
                                 .execute();
                     }
                 }).fire();

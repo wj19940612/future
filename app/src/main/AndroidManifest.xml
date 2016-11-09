@@ -179,9 +179,6 @@
             android:name=".activity.web.PaymentActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.web.LiveActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.web.NewbieActivity"
             android:screenOrientation="portrait"/>
         <activity

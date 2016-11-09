@@ -243,7 +243,7 @@ public class TradeActivity extends BaseActivity implements
                 Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());
             }
         });
-        ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
+        ImageView ruleIcon = (ImageView) view.findViewById(R.id.programmeArrow);
         mQuestionMark = (AnimationDrawable) ruleIcon.getBackground();
         updateQuestionMarker();
     }
@@ -281,7 +281,7 @@ public class TradeActivity extends BaseActivity implements
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
 
-        List<ServerIpPort> serverIpPorts = intent.getParcelableArrayListExtra(ServerIpPort.EX_MARKET_SERVER);
+        List<ServerIpPort> serverIpPorts = intent.getParcelableArrayListExtra(ServerIpPort.EX_IP_PORTS);
         ServerIpPort serverIpPort = serverIpPorts.get(0);
         NettyClient.getInstance().setIpAndPort(serverIpPort.getIp(), serverIpPort.getPort());
 

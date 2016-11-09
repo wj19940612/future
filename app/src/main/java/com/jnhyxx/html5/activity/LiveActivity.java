@@ -21,8 +21,8 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
@@ -74,24 +74,22 @@ public class LiveActivity extends BaseActivity {
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
 
-        initSlidingTabLayout();
-        initVideoPlayFragment();
         initTitleBar();
+        initVideoPlayFragment();
+        initSlidingTabLayout();
+
         getLiveMessage();
     }
 
     private void getLiveMessage() {
         API.Live.getLiveMessage()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
-                        if (liveMessage == null) return;
                         Log.d(TAG, "直播信息" + liveMessage.toString());
                     }
-                })
-                .fire();
+                }).fire();
     }
 
     private void initSlidingTabLayout() {
@@ -109,16 +107,14 @@ public class LiveActivity extends BaseActivity {
                 openTradePage();
             }
         });
-
         setTitleBarCustomView();
     }
 
-    //TitleBar中间的view的点击事件
     private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
-        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.liveRule);
-        ImageView mRuleIcon = (ImageView) customView.findViewById(R.id.ruleIcon);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+        LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
+        ImageView programmeArrow = (ImageView) customView.findViewById(R.id.programmeArrow);
+        liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -156,21 +152,21 @@ public class LiveActivity extends BaseActivity {
                 public void onConfigurationChanged(Configuration newConfig) {
                     if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         Log.d(TAG, "横屏");
-                        hideLayout();
+                        hideTitleBar();
                     } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                         Log.d(TAG, "竖屏");
-                        showLayout();
+                        showTitleBar();
                     }
                 }
             });
         }
     }
 
-    private void showLayout() {
+    private void showTitleBar() {
         mTitleBar.setVisibility(View.VISIBLE);
     }
 
-    private void hideLayout() {
+    private void hideTitleBar() {
         mTitleBar.setVisibility(View.GONE);
     }
 
@@ -214,9 +210,9 @@ public class LiveActivity extends BaseActivity {
 
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
+                    public void onRespSuccess(List<ServerIpPort> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
                             requestProductExchangeStatus(productPkg.getProduct(), marketServers);
                         }
@@ -224,7 +220,7 @@ public class LiveActivity extends BaseActivity {
                 }).fire();
     }
 
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
+    private void requestProductExchangeStatus(final Product product, final List<ServerIpPort> marketServers) {
         API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
@@ -238,7 +234,7 @@ public class LiveActivity extends BaseActivity {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
+                                .putExtra(ServerIpPort.EX_IP_PORTS, new ArrayList<Parcelable>(marketServers))
                                 .execute();
                     }
                 }).fire();
@@ -265,6 +261,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
+
         public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
         }

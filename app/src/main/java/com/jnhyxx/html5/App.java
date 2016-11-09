@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.DeviceInfoUtil;
-import com.jnhyxx.html5.utils.InitLiveSdk;
+import com.jnhyxx.html5.utils.LeLiveSdk;
 import com.jnhyxx.umenglibrary.UmengLib;
 import com.johnz.kutils.net.CookieManger;
 import com.umeng.analytics.MobclickAgent;
@@ -32,7 +32,7 @@ public class App extends MultiDexApplication {
 
         UmengLib.init(sContext);
 
-        InitLiveSdk.getInstance();
+        LeLiveSdk.getInstance().initSdk(sContext);
 
         MobclickAgent.setDebugMode(true);
 

@@ -129,8 +129,8 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 .setCallback(new Callback<Resp>() {
                                  @Override
                                  public void onReceive(Resp resp) {
-                                     if (resp.isSuccess()) {
-                                         InfoLiveFragment.this.getInfoLiveData(resp);
+                                     if (resp.isSuccess() && resp.hasData()) {
+                                             getInfoLiveData(resp);
                                      } else {
                                          if (mSwipeRefreshLayout.isRefreshing()) {
                                              mSwipeRefreshLayout.setRefreshing(false);

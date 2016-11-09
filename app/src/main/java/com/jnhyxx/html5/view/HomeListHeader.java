@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -186,11 +187,15 @@ public class HomeListHeader extends FrameLayout {
     }
 
     private void filterEmptyInformation(List<Information> informationList) {
+        List<Information> removeList = new ArrayList<>();
         for (int i = 0; i < informationList.size(); i++) {
             Information information = informationList.get(i);
             if (TextUtils.isEmpty(information.getCover())) {
-                informationList.remove(i);
+                removeList.add(information);
             }
+        }
+        for (int i = 0; i < removeList.size(); i++) {
+            informationList.remove(removeList.get(i));
         }
     }
 

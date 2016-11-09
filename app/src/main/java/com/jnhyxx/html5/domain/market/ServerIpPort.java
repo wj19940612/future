@@ -3,9 +3,9 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MarketServer implements Parcelable {
+public class ServerIpPort implements Parcelable {
 
-    public static final String EX_MARKET_SERVER = "marketServer";
+    public static final String EX_IP_PORTS = "server";
 
     /**
      * port : 8068
@@ -42,23 +42,23 @@ public class MarketServer implements Parcelable {
         dest.writeString(this.ip);
     }
 
-    public MarketServer() {
+    public ServerIpPort() {
     }
 
-    protected MarketServer(Parcel in) {
+    protected ServerIpPort(Parcel in) {
         this.port = in.readString();
         this.ip = in.readString();
     }
 
-    public static final Parcelable.Creator<MarketServer> CREATOR = new Parcelable.Creator<MarketServer>() {
+    public static final Parcelable.Creator<ServerIpPort> CREATOR = new Parcelable.Creator<ServerIpPort>() {
         @Override
-        public MarketServer createFromParcel(Parcel source) {
-            return new MarketServer(source);
+        public ServerIpPort createFromParcel(Parcel source) {
+            return new ServerIpPort(source);
         }
 
         @Override
-        public MarketServer[] newArray(int size) {
-            return new MarketServer[size];
+        public ServerIpPort[] newArray(int size) {
+            return new ServerIpPort[size];
         }
     };
 }

@@ -78,6 +78,7 @@ public class NettyClient {
 
             @Override
             public void onReceiveData(String data) {
+                onReceiveOriginalData(data);
                 handleRealTimeQuotaData(data);
             }
 
@@ -86,6 +87,14 @@ public class NettyClient {
                 Log.d("TAG", "onError: ");
             }
         };
+    }
+
+    private void onReceiveOriginalData(String data) {
+        for (int i = 0; i < mHandlerList.size(); i++) {
+            Handler handler = mHandlerList.get(i);
+            Message message = handler.obtainMessage(NettyHandler.WHAT_ORIGINAL, data);
+            handler.sendMessage(message);
+        }
     }
 
     private void handleRealTimeQuotaData(String data) {
@@ -141,10 +150,6 @@ public class NettyClient {
             e.printStackTrace();
             mPort = null;
         }
-    }
-
-    public void setQuotaDataFilter(QuotaDataFilter quotaDataFilter) {
-        mQuotaDataFilter = quotaDataFilter;
     }
 
     public void start(String contractCode) {

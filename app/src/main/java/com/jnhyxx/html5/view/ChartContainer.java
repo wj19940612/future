@@ -100,7 +100,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
 //        for (int i = 0; i < popupViewGroup.getChildCount(); i++) {
 //            View child = popupViewGroup.getChildAt(i);
 //            if (child instanceof TextView) {
-//                child.setOnClickListener(this);
+//                child.setOnCheckDetailListener(this);
 //            }
 //        }
 //

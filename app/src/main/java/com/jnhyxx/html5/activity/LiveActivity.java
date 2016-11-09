@@ -1,18 +1,15 @@
 package com.jnhyxx.html5.activity;
 
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,22 +18,22 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
-import com.jnhyxx.html5.fragment.live.VideoPlayFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.LiveProgramDir;
+import com.jnhyxx.html5.utils.VideoLayoutParams;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
-import com.lecloud.sdk.constant.PlayerParams;
+import com.lecloud.sdk.videoview.IMediaDataVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LiveActivity extends BaseActivity {
+public class LiveActivity extends LiveVideoActivity {
 
     @BindView(R.id.liveLayout)
     RelativeLayout mLiveLayout;
@@ -55,6 +52,7 @@ public class LiveActivity extends BaseActivity {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+
 
     // TODO: 2016/11/8 房间Id 
 //    private String mLiveId = "A2016080200000n1";
@@ -69,22 +67,25 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
 
-        initSlidingTabLayout();
         initTitleBar();
-        initVideoPlayFragment();
+        initVideoView();
+        initSlidingTabLayout();
+
         getLiveMessage();
+    }
+
+    @Override
+    protected void onAddViewView(IMediaDataVideoView videoView) {
+        mLiveLayout.addView((View) videoView, VideoLayoutParams.computeContainerSize(this, 16, 9));
     }
 
     private void getLiveMessage() {
         API.Live.getLiveMessage()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
@@ -92,15 +93,13 @@ public class LiveActivity extends BaseActivity {
                         mLiveMessage = liveMessage;
                         Log.d(TAG, "直播信息" + liveMessage.toString());
                     }
-                })
-                .fire();
+                }).fire();
     }
 
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
         mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
-        mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
@@ -111,16 +110,14 @@ public class LiveActivity extends BaseActivity {
                 openTradePage();
             }
         });
-
         setTitleBarCustomView();
     }
 
-    //TitleBar中间的view的点击事件
     private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
-        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.liveRule);
-        ImageView mRuleIcon = (ImageView) customView.findViewById(R.id.ruleIcon);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+        LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
+        ImageView programmeArrow = (ImageView) customView.findViewById(R.id.programmeArrow);
+        liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mLiveMessage == null || mLiveMessage.getProgram().isEmpty()) return;
@@ -130,65 +127,26 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void openTradePage() {
-        // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入最新的持仓页
-        boolean userHasTrade = false;
-        if (userHasTrade) {
-            openPositionsPage();
+        // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
+        boolean userHasHolding = false;
+        if (userHasHolding) {
+
         } else {
             requestProductList();
             requestSimulationPositions();
         }
     }
 
-    /**
-     * 打开最新的持仓页
-     */
-    private void openPositionsPage() {
-        ToastUtil.curt("进入持仓页");
-    }
-
-    private void initVideoPlayFragment() {
-        Bundle bundle = setBundle();
-        FragmentManager mSupportFragmentManager = getSupportFragmentManager();
-        if (mSupportFragmentManager.findFragmentByTag(VideoPlayFragment.class.getSimpleName()) == null) {
-            VideoPlayFragment videoPlayFragment = VideoPlayFragment.newInstance(bundle);
-            FragmentTransaction mFragmentTransaction = mSupportFragmentManager.beginTransaction();
-            mFragmentTransaction.replace(R.id.liveLayout, videoPlayFragment, VideoPlayFragment.class.getSimpleName()).commitAllowingStateLoss();
-            videoPlayFragment.setOnConfigurationChangedListener(new VideoPlayFragment.OnConfigurationChangedListener() {
-                @Override
-                public void onConfigurationChanged(Configuration newConfig) {
-                    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        Log.d(TAG, "横屏");
-                        hideLayout();
-                    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Log.d(TAG, "竖屏");
-                        showLayout();
-                    }
-                }
-            });
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "横屏");
+            mTitleBar.setVisibility(View.GONE);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "竖屏");
+            mTitleBar.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void showLayout() {
-        mTitleBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideLayout() {
-        mTitleBar.setVisibility(View.GONE);
-    }
-
-    private Bundle setBundle() {
-        Bundle mBundle = new Bundle();
-        mBundle.putInt(PlayerParams.KEY_PLAY_MODE, PlayerParams.VALUE_PLAYER_ACTION_LIVE);
-        mBundle.putString(PlayerParams.KEY_PLAY_ACTIONID, mLiveId);
-        mBundle.putString(PlayerParams.KEY_PLAY_PU, "0");
-        mBundle.putBoolean(PlayerParams.KEY_PLAY_USEHLS, false);
-        mBundle.putString(PlayerParams.KEY_ACTION_CUID, "");
-        mBundle.putString(PlayerParams.KEY_ACTION_UTOKEN, "");
-        //是否全景
-        mBundle.putBoolean(VideoPlayFragment.KEY_IS_PANORAMA, false);
-        mBundle.putBoolean(VideoPlayFragment.KEY_HAS_SKIN, true);
-        return mBundle;
     }
 
     private void requestProductList() {
@@ -217,9 +175,9 @@ public class LiveActivity extends BaseActivity {
 
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
+                    public void onRespSuccess(List<ServerIpPort> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
                             requestProductExchangeStatus(productPkg.getProduct(), marketServers);
                         }
@@ -227,7 +185,7 @@ public class LiveActivity extends BaseActivity {
                 }).fire();
     }
 
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
+    private void requestProductExchangeStatus(final Product product, final List<ServerIpPort> marketServers) {
         API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
@@ -241,7 +199,7 @@ public class LiveActivity extends BaseActivity {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
+                                .putExtra(ServerIpPort.EX_IP_PORTS, new ArrayList<Parcelable>(marketServers))
                                 .execute();
                     }
                 }).fire();
@@ -268,6 +226,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
+
         public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
         }

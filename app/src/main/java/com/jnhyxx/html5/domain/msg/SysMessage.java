@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 系统消息和交易提醒的model
  */
-public class SysTradeMessage implements Serializable {
+public class SysMessage implements Serializable {
     private static final long serialVersionUID = 6769828919623446685L;
 
     /**
@@ -54,7 +54,7 @@ public class SysTradeMessage implements Serializable {
     /**
      * 资讯ID
      */
-    private int id;
+    private String id;
     /**
      * 操作人员Id
      */
@@ -100,14 +100,6 @@ public class SysTradeMessage implements Serializable {
      */
     private boolean success;
 
-    public int getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(int channelId) {
-        this.channelId = channelId;
-    }
-
     public String getCreateTime() {
         return createTime;
     }
@@ -116,84 +108,20 @@ public class SysTradeMessage implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getHtmlLink() {
-        return htmlLink;
-    }
-
-    public void setHtmlLink(String htmlLink) {
-        this.htmlLink = htmlLink;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public int getOperatorId() {
-        return operatorId;
-    }
-
-    public void setOperatorId(int operatorId) {
-        this.operatorId = operatorId;
-    }
-
-    public String getOperatorName() {
-        return operatorName;
-    }
-
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
-    }
-
-    public boolean isPass() {
-        return pass;
-    }
-
-    public void setPass(boolean pass) {
-        this.pass = pass;
     }
 
     public String getPushContent() {
         return pushContent;
     }
 
-    public void setPushContent(String pushContent) {
-        this.pushContent = pushContent;
-    }
-
-    public String getPushMsg() {
-        return pushMsg;
-    }
-
-    public void setPushMsg(String pushMsg) {
-        this.pushMsg = pushMsg;
-    }
-
-    public int getPushStatus() {
-        return pushStatus;
-    }
-
-    public void setPushStatus(int pushStatus) {
-        this.pushStatus = pushStatus;
-    }
-
     public String getPushTopic() {
         return pushTopic;
-    }
-
-    public void setPushTopic(String pushTopic) {
-        this.pushTopic = pushTopic;
-    }
-
-    public int getPushType() {
-        return pushType;
-    }
-
-    public void setPushType(int pushType) {
-        this.pushType = pushType;
     }
 
     public boolean isText() {
@@ -208,16 +136,8 @@ public class SysTradeMessage implements Serializable {
         return taskType;
     }
 
-    public void setTaskType(int taskType) {
-        this.taskType = taskType;
-    }
-
     public boolean isSuccess() {
         return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
     @Override

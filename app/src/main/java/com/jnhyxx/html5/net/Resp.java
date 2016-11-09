@@ -1,6 +1,8 @@
 package com.jnhyxx.html5.net;
 
 
+import java.util.List;
+
 public class Resp<T> {
 
     // 注册、登入、找回密码请求验证码次数超过限制
@@ -39,6 +41,9 @@ public class Resp<T> {
     }
 
     public boolean hasData() {
+        if (data != null && data instanceof List) {
+            return ((List) data).size() > 0;
+        }
         return data != null;
     }
 

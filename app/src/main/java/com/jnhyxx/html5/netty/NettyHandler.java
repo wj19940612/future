@@ -9,10 +9,15 @@ public abstract class NettyHandler extends Handler {
 
     public static final int WHAT_ERROR = 0;
     public static final int WHAT_DATA = 1;
+    public static final int WHAT_ORIGINAL = 2;
 
-    protected abstract void onReceiveData(FullMarketData data);
+    protected void onReceiveData(FullMarketData data){
+    }
 
     protected void onError(String message) {
+    }
+
+    protected void onReceiveOriginalData(String data) {
     }
 
     @Override
@@ -24,6 +29,9 @@ public abstract class NettyHandler extends Handler {
                 break;
             case WHAT_DATA:
                 onReceiveData((FullMarketData) msg.obj);
+                break;
+            case WHAT_ORIGINAL:
+                onReceiveOriginalData((String) msg.obj);
                 break;
         }
     }

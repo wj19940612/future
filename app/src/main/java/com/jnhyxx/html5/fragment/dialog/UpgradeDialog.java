@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -30,7 +33,8 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
 
     private TextView mUpgradeLog;
     private TextView mDownloadInstall;
-    private TextView mUpgradeLater;
+    private ImageView mCloseButton;
+    private TextView mTitleVersionName;
 
     private boolean mForceUpgrade;
 
@@ -81,23 +85,23 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTitleVersionName = (TextView) view.findViewById(R.id.titleVersionName);
         mUpgradeLog = (TextView) view.findViewById(R.id.upgradeLog);
         mDownloadInstall = (TextView) view.findViewById(R.id.downloadInstall);
-        mUpgradeLater = (TextView) view.findViewById(R.id.upgradeLater);
+        mCloseButton = (ImageView) view.findViewById(R.id.close);
     }
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        scaleDialogWindowWidth(0.90);
+        //scaleDialogWindowWidth(0.90);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setDialogCancelable(mForceUpgrade);
-        mUpgradeLater.setVisibility(mForceUpgrade? View.INVISIBLE: View.VISIBLE);
+        mCloseButton.setVisibility(mForceUpgrade? View.INVISIBLE: View.VISIBLE);
 
-        String upgradeLog = new StringBuilder(getString(R.string.app_name))
-                .append(" ").append(UpgradeUtil.getVersionCode(getActivity())).append(":\n\n")
-                .append(UpgradeUtil.getUpdateLog(getActivity())).toString();
-        mUpgradeLog.setText(upgradeLog);
+        mTitleVersionName.setText(getString(R.string.version_upgrade, UpgradeUtil.getVersionCode(getActivity())));
+        mUpgradeLog.setText(UpgradeUtil.getUpdateLog(getActivity()));
         mUpgradeLog.setMovementMethod(new ScrollingMovementMethod());
 
         mDownloadInstall.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +111,7 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
                 downloadInstall();
             }
         });
-        mUpgradeLater.setOnClickListener(new View.OnClickListener() {
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

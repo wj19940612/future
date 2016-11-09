@@ -114,7 +114,6 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     private void requestInfoList() {
         API.Message.findNewsList(mType, mPageNo, mPageSize)
                 .setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback<Resp<List<Information>>>() {
                     @Override
                     public void onReceive(Resp<List<Information>> listResp) {

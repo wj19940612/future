@@ -636,7 +636,16 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET, "/user/news/findNewsByUrl.do", (new ApiParams().put("url", url)));
+            return new API(GET, "/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+        }
+
+        /**
+         * 获取大厅 弹出框
+         *
+         * @return
+         */
+        public static API getHomePopup() {
+            return new API(GET, "/user/news/getPopPush.do", null);
         }
     }
 
@@ -667,6 +676,18 @@ public class API extends APIBase {
          */
         public static API getMarketServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
+        }
+
+        /**
+         * /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
+         *
+         * @param type
+         * @return
+         */
+        public static API getChatServerIpAndPort(String type) {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do",
+                    new ApiParams()
+                            .put("type", type));
         }
     }
 

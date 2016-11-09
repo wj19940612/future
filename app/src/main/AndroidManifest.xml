@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.jnhyxx.html5">
+<manifest package="com.jnhyxx.html5"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -23,13 +23,18 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <!--ls Tv-->
+    <!--自定义权限解释:部分手机型号不能正常运行个推SDK，需添加自定义权限进行配置-->
+    <uses-permission android:name="getui.permission.GetuiService.com.jnhyxx.html5"/>
+    <permission
+        android:name="getui.permission.GetuiService.com.jnhyxx.html5"
+        android:protectionLevel="normal"/>
+
+    <!--Ls Tv-->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
-
 
     <application
         android:name=".App"
@@ -80,9 +85,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <!-- service -->
-        <service android:name=".service.DownloadService"/>
 
         <!-- dialog activity -->
         <activity
@@ -174,9 +176,6 @@
             android:name=".activity.web.PaymentActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.web.LiveActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.web.NewbieActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -190,10 +189,6 @@
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
             </intent-filter>
         </receiver>
-        <service
-            android:name="com.letvcloud.cmf.MediaService"
-            android:process=":cmf"/>
-
         <activity
             android:name=".activity.LiveActivity"
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"
@@ -202,7 +197,15 @@
             android:name="com.lecloud.skin.activity.FeedBackActivity"
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <!-- service -->
+        <service android:name=".service.DownloadService"/>
+
+        <service
+            android:name="com.letvcloud.cmf.MediaService"
+            android:process=":cmf"/>
+
     </application>
 
 </manifest>

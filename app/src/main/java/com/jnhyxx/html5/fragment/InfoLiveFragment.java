@@ -35,6 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.string.live;
+
 /**
  * Created by ${wangJie} on 2016/10/18.
  */
@@ -129,9 +131,8 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 .setCallback(new Callback<Resp>() {
                                  @Override
                                  public void onReceive(Resp resp) {
-                                     if (resp.isSuccess()) {
-                                         if (resp.getData() == null) return;
-                                         InfoLiveFragment.this.getInfoLiveData(resp);
+                                     if (resp.isSuccess() && resp.hasData()) {
+                                         getInfoLiveData(resp);
                                      } else {
                                          if (mSwipeRefreshLayout.isRefreshing()) {
                                              mSwipeRefreshLayout.setRefreshing(false);

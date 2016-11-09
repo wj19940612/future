@@ -9,6 +9,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/LePlayerSdk" />
+            <option value="$PROJECT_DIR$/LePlayerSkin" />
             <option value="$PROJECT_DIR$/SlidingMenu" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/chart" />

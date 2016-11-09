@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/letv_skin_v4_ratetype_item_height"
+    android:gravity="center"
+    android:background="@drawable/letv_skin_v4_large_controller_ratetype_bg"
+    android:textSize="14sp" 
+    android:textColor="#ffffff" >
+
+</TextView>

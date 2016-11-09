@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mutl_live_lay"
+    android:layout_width="wrap_content"
+    android:layout_height="150dp"
+    android:layout_marginTop="100dp"
+    android:layout_alignParentRight="true"
+    android:gravity="center_vertical"
+     >
+
+    <LinearLayout
+        android:id="@+id/floating_right_mutl_live_lay"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#60000000"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="60dp" 
+        android:visibility="gone"
+        >
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/mutl_live_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/letv_skin_v4_large_mult_live_action_on" />
+
+</FrameLayout>

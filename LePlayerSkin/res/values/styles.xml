@@ -1,0 +1,52 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean"/>
+        <attr name="matProg_barColor" format="color"/>
+        <attr name="matProg_rimColor" format="color"/>
+        <attr name="matProg_rimWidth" format="dimension"/>
+        <attr name="matProg_spinSpeed" format="float"/>
+        <attr name="matProg_barSpinCycleTime" format="integer"/>
+        <attr name="matProg_circleRadius" format="dimension"/>
+        <attr name="matProg_fillRadius" format="boolean"/>
+        <attr name="matProg_barWidth" format="dimension"/>
+        <attr name="matProg_linearProgress" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="V4PageSeekBar">
+        <attr name="v4PageSeekBar_minValue" format="integer"/>
+        <attr name="v4PageSeekBar_maxValue" format="integer"/>
+        <attr name="v4PageSeekBar_currentValue" format="integer"/>
+        <attr name="v4PageSeekBar_perPageValue" format="integer"/>
+        <attr name="v4PageSeekBar_leftPageIndicatorValue" format="integer"/>
+        <attr name="v4PageSeekBar_rightPageIndicatorValue" format="integer"/>
+        <attr name="v4PageSeekBar_progressBackgroundDrawable" format="reference"/>
+        <attr name="v4PageSeekBar_currentThumb" format="reference"/>
+        <attr name="v4PageSeekBar_progressDrawable" format="reference"/>
+        <attr name="v4PageSeekBar_secondaryProgressDrawable" format="reference"/>
+        <attr name="v4PageSeekBar_leftPageIndicatorDrawable" format="reference"/>
+        <attr name="v4PageSeekBar_rightPageIndicatorDrawable" format="reference"/>
+        <attr name="v4PageSeekBar_text" format="string"/>
+        <attr name="v4PageSeekBar_textColor" format="color"/>
+        <attr name="v4PageSeekBar_textSize" format="dimension"/>
+        <attr name="v4PageSeekBar_textPaddingTop" format="dimension"/>
+    </declare-styleable>
+</resources>

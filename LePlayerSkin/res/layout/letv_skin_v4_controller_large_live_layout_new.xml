@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lecloud.skin.ui.view.V4LargeLiveMediaControllerNew xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/vnew_play_btn"
+        android:background="@color/letv_skin_vnew_controller_background" />
+
+    <com.lecloud.skin.ui.view.V4LivePlayBtn
+        android:id="@+id/vnew_play_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:padding="10dp" />
+
+    <!-- Fix width for compute left margin when move -->
+    <TextView
+        android:id="@+id/vnew_back_to_live"
+        android:layout_width="180dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/vnew_play_btn"
+        android:background="@drawable/letv_skin_v4_back_to_live"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
+        android:visibility="invisible" />
+
+    <com.lecloud.skin.ui.view.V4ChgScreenBtn
+        android:id="@+id/vnew_chg_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:padding="10dp" />
+
+    <com.lecloud.skin.ui.view.V4RateTypeBtn
+        android:id="@+id/vnew_rate_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/vnew_chg_btn"
+        android:background="@drawable/letv_skin_v4_large_controller_ratetype_bg"
+        android:textColor="@color/letv_color_ffffffff"
+        android:textSize="14sp" />
+
+    <com.lecloud.skin.ui.view.V4LivePageSeekBar
+        android:id="@+id/vnew_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/vnew_change_mode"
+        android:layout_toRightOf="@+id/vnew_play_btn"
+        android:visibility="invisible" />
+
+    <com.lecloud.skin.ui.view.V4ChangeModeBtn
+        android:id="@+id/vnew_change_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/vnew_change_vr_mode"
+        android:visibility="gone" />
+
+    <com.lecloud.skin.ui.view.V4ChangeDisplayModeBtn
+        android:id="@+id/vnew_change_vr_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/vnew_rate_btn"
+        android:visibility="gone" />
+
+</com.lecloud.skin.ui.view.V4LargeLiveMediaControllerNew>

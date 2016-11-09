@@ -16,14 +16,12 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.activity.web.LiveActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
-import com.jnhyxx.html5.domain.live.LiveRoomInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
@@ -137,20 +135,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openLivePage() {
-        API.Live.getLiveRoomId().setTag(TAG)
-                .setCallback(new Callback<Resp<LiveRoomInfo>>() {
-            @Override
-            public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
-                String liveId = "";
-                if (liveRoomInfoResp.hasData()) {
-                    liveId = liveRoomInfoResp.getData().getActivityId();
-                }
-                Launcher.with(getActivity(), LiveActivity.class)
-                        .putExtra(Launcher.EX_PAYLOAD, liveId)
-                        .executeForResult(REQUEST_CODE_LIVE);
-
-            }
-        }).fire();
+        Launcher.with(getActivity(), LiveActivity.class).execute();
     }
 
     private void processIntent(Intent intent) {

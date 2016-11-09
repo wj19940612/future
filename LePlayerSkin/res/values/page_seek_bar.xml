@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="v4_page_seek_bar_background_color">#FF515151</color>
+    <color name="v4_page_seek_bar_progress_color">#1074C2</color>
+    <color name="v4_page_seek_bar_secondary_progress_color">#FFC5CAE9</color>
+    <color name="v4_page_seek_bar_indicator_color">#FFFFEB3B</color>
+    <color name="v4_page_seek_bar_text_color">#FF000000</color>
+    <color name="v4_page_seek_bar_follow_max_value_text_color">#FF000000</color>
+
+    <dimen name="v4_page_seek_bar_text_size">12sp</dimen>
+    <dimen name="v4_page_seek_bar_text_padding_top">2dp</dimen>
+</resources>

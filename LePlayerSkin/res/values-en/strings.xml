@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">playerskin</string>
+    <string name="letv_network_message">Current network state is not WIFI,please check.</string>
+    <string name="letv_notice_message">Play failed, try again?</string>
+    <string name="replay">Replay</string>
+    <string name="submit_error_info">Submit feedback</string>
+
+    <string name="online_feedback">Online feedback</string>
+    <string name="problem">My problem</string>
+    <string name="select">In order to solve your feedback problem, please feed back under the network where your encountered the problem.(Multiple choices)</string>
+    <string name="no_play">Unable to play</string>
+    <string name="play_slow">video buffering slowly</string>
+    <string name="pic_sound_problem">Video/audio has problem</string>
+    <string name="other">other</string>
+    <string name="write_proposal">Please describe the problem(s) that you encountered in detail and provide your suggestions:</string>
+    <string name="phone">Contacts(necessary):：</string>
+    <string name="number_qq">Mobile/QQ</string>
+    <string name="confirm_report">Confirm report?</string>
+    <string name="sure">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_signal">No signal</string>
+    <string name="seat_one">Camera 1</string>
+    <string name="refresh_fail">Refresh failed, submit feedback</string>
+
+    <string name="network_none">No network, Try again later.</string>
+    <string name="request_fail">Network request failed</string>
+    <string name="play_error">Player internal error</string>
+    <string name="net_fail">Network access failed</string>
+    <string name="net_error">Unable to connect to network. Check and try again.</string>
+    <string name="play_fail">Play failed</string>
+    <string name="people_more">Maximum number of viewers exceeded. Unable to play.</string>
+
+    <string name="live_sig_recovery">Live signal restored</string>
+    <string name="live_no_sig">No live signal now. Please wait</string>
+    <string name="live_no_start">The live broadcast has not started. Try again later</string>
+    <string name="live_end">Sorry, the live broadcast has ended</string>
+
+    <string name="proxy_black_list">The proxy server is on the blacklist. Unable to play</string>
+    <string name="linkshell_fail">Failed to encrypt. Unable to play</string>
+    <string name="no_live_plan">No live broadcast plan. Unable to play</string>
+
+    <string name="video_camera">Camera</string>
+    
+   	<string name="error_code">Error Code:</string>
+	<string name="no_video">No this video</string>
+	<string name="is_playing">Now Playing:</string>
+	<string name="leave_contact_hint">Please leave your contacts to let us help you</string>
+	<string name="no_network_hint">No network, please try later</string>
+	<string name="submitting">Submitting…</string>
+	<string name="feedback_submit_success">Feedback submitted</string>
+	<string name="feedback_submit_failed">Feedback submit failed</string>
+	<string name="your_phone_not_support">Your phone does not support this function</string>
+	<string name="returned_to_live_time">Returned to the live time now</string>
+	<string name="ad">AD&#160;</string>
+	<string name="back_to_live">Back to live</string>
+	<string name="submit">Submit</string>
+    <string name="clear_log">Clear Log</string>
+    </resources>

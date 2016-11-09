@@ -207,6 +207,13 @@ public class NettyClient {
         });
     }
 
+    public void sendMessage(String msg) {
+        if (!mClosed && mChattingConn != null && mChannel != null) {
+            mChattingConn.setMsg(msg);
+            mChannel.writeAndFlush(mChattingConn.toJson());
+        }
+    }
+
     public void stop() {
         mClosed = true;
         mMarketConn = null;
@@ -237,14 +244,14 @@ public class NettyClient {
     }
 
     private static class ChattingConn {
-        private int teacherId;
+        private int id;
         private String token1;
         private String token2;
         private String msg;
 
         public ChattingConn(int teacherId, String originalTokenStr) {
-            this.teacherId = teacherId;
-            this.msg = "";
+            this.id = teacherId;
+            this.msg = "testJ"; //// TODO: 09/11/2016 delete late
             initTokens(originalTokenStr);
         }
 
@@ -260,6 +267,10 @@ public class NettyClient {
                     token2 = splits[1];
                 }
             }
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
         }
 
         public String toJson() {

@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -89,7 +90,6 @@ public class LiveActivity extends LiveVideoActivity {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
         mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
-        mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
@@ -126,12 +126,16 @@ public class LiveActivity extends LiveVideoActivity {
         }
     }
 
-    private void showTitleBar() {
-        mTitleBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideTitleBar() {
-        mTitleBar.setVisibility(View.GONE);
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "横屏");
+            mTitleBar.setVisibility(View.GONE);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "竖屏");
+            mTitleBar.setVisibility(View.VISIBLE);
+        }
     }
 
     private void requestProductList() {

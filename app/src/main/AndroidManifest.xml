@@ -86,9 +86,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <!-- service -->
-        <service android:name=".service.DownloadService"/>
-
         <!-- dialog activity -->
         <activity
             android:name=".activity.dialog.SaveImageActivity"
@@ -192,10 +189,6 @@
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
             </intent-filter>
         </receiver>
-        <service
-            android:name="com.letvcloud.cmf.MediaService"
-            android:process=":cmf"/>
-
         <activity
             android:name=".activity.LiveActivity"
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"
@@ -205,6 +198,14 @@
             android:configChanges="keyboard|screenSize|orientation|layoutDirection"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <!-- service -->
+        <service android:name=".service.DownloadService"/>
+
+        <service
+            android:name="com.letvcloud.cmf.MediaService"
+            android:process=":cmf"/>
+
     </application>
 
 </manifest>

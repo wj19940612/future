@@ -81,8 +81,8 @@ public abstract class LiveVideoActivity extends BaseActivity {
         mVideoView.setDataSource(initBundle());
     }
 
-    private static final String LIVE_ID = "A2016080200000n1";
-    //private static final String LIVE_ID = "A2016053100000je";
+//    private static final String LIVE_ID = "A2016080200000n1";
+    private static final String LIVE_ID = "A2016053100000je";
 
     private Bundle initBundle() {
         Bundle bundle = new Bundle();

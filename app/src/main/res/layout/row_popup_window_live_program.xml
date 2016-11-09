@@ -4,11 +4,11 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="65dp"
+              android:layout_marginLeft="10dp"
+              android:layout_marginRight="10dp"
               android:background="@drawable/bg_line_division_center"
               android:gravity="center_vertical"
-              android:orientation="horizontal"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp">
+              android:orientation="horizontal">
 
     <com.jnhyxx.html5.view.CircularAnnulusImageView
         android:id="@+id/managerHeadImage"

@@ -10,7 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -23,12 +23,11 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
+import com.jnhyxx.html5.fragment.live.LiveProgramDirFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
-import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
@@ -42,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LiveActivity extends LiveVideoActivity {
+public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFragment.FragmentStatusListener, View.OnClickListener {
 
     @BindView(R.id.liveLayout)
     RelativeLayout mLiveLayout;
@@ -52,6 +51,8 @@ public class LiveActivity extends LiveVideoActivity {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.liveProgramDir)
+    FrameLayout mLiveProgramDir;
 
 
     // TODO: 2016/11/8 房间Id 
@@ -64,6 +65,8 @@ public class LiveActivity extends LiveVideoActivity {
     private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
 
     private LiveMessage mLiveMessage;
+
+    private LiveProgramDirFragment mLiveProgramDirFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,11 @@ public class LiveActivity extends LiveVideoActivity {
     @Override
     protected void onAddViewView(IMediaDataVideoView videoView) {
         mLiveLayout.addView((View) videoView, VideoLayoutParams.computeContainerSize(this, 16, 9));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void getLiveMessage() {
@@ -116,14 +124,58 @@ public class LiveActivity extends LiveVideoActivity {
     private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
         LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
-        ImageView programmeArrow = (ImageView) customView.findViewById(R.id.programmeArrow);
-        liveProgramme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLiveMessage == null || mLiveMessage.getProgram().isEmpty()) return;
-                LiveProgramDir.showLiveProgramDirPopupWindow(LiveActivity.this, mLiveMessage.getProgram(), mTitleBar);
-            }
-        });
+        liveProgramme.setClickable(true);
+        liveProgramme.setOnClickListener(this);
+    }
+
+    boolean tag = true;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            // TODO: 2016/11/9 逻辑还有问题
+            case R.id.liveProgramme:
+                if (mLiveProgramDir.isShown()) {
+                    hideLiveProgramFragment();
+                    mLiveProgramDir.setVisibility(View.GONE);
+                    break;
+                } else if (!mLiveProgramDir.isShown()) {
+                    mLiveProgramDir.setVisibility(View.VISIBLE);
+                    showLiveProgramFragment();
+                    break;
+                }
+//                if (mLiveProgramDir.isShown()) {
+//                    mLiveProgramDir.setVisibility(View.GONE);
+//                } else {
+//                    mLiveProgramDir.setVisibility(View.VISIBLE);
+//                }
+                break;
+        }
+    }
+
+    private void showLiveProgramFragment() {
+//        if (getSupportFragmentManager().findFragmentById(R.id.liveProgramDir) == null) {
+        mLiveProgramDirFragment = LiveProgramDirFragment.newInstance(mLiveMessage);
+        mLiveProgramDirFragment.setFragmentStatus(true);
+        mLiveProgramDirFragment.setFragmentStatusListener(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.liveProgramDir, mLiveProgramDirFragment).commitAllowingStateLoss();
+//        }
+    }
+
+    @Override
+    public void hideFragment() {
+        hideLiveProgramFragment();
+    }
+
+    private void hideLiveProgramFragment() {
+//        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.liveProgramDir);
+        if (mLiveProgramDirFragment != null) {
+            mLiveProgramDirFragment.setFragmentStatus(false);
+            getActivity().getSupportFragmentManager().beginTransaction().remove(mLiveProgramDirFragment).commitAllowingStateLoss();
+        }
+//        if (fragment != null) {
+//            getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+//        }
     }
 
     private void openTradePage() {
@@ -173,6 +225,7 @@ public class LiveActivity extends LiveVideoActivity {
                 }).fire();
     }
 
+
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
@@ -204,7 +257,6 @@ public class LiveActivity extends LiveVideoActivity {
                     }
                 }).fire();
     }
-
 
     private void requestSimulationPositions() {
         if (LocalUser.getUser().isLogin()) {

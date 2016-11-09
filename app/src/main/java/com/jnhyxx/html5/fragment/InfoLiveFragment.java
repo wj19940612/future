@@ -35,8 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.string.live;
-
 /**
  * Created by ${wangJie} on 2016/10/18.
  */
@@ -328,8 +326,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             TextView mTime;
             @BindView(R.id.content)
             TextView mContent;
-
-
             @BindView(R.id.beforeData)
             TextView mBeforeData;
             @BindView(R.id.expectData)

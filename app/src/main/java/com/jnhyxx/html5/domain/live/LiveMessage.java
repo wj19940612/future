@@ -1,9 +1,11 @@
 package com.jnhyxx.html5.domain.live;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LiveMessage {
+public class LiveMessage implements Serializable {
 
+    private static final long serialVersionUID = 1834564711596475416L;
     /**
      * account : haibo
      * channelId : 12
@@ -11,8 +13,8 @@ public class LiveMessage {
      * goodAt : 外盘：原油，黄金
      * id : 22
      * introduction : 主修金融证券专业，微盘期货首席分析师 8年实战操盘经验
-     做单风格：以雷厉风行著称，以快、准、稳为主，通常小止损大盈利。擅长内盘镍铜橡胶波段狙击，外盘美原油 纳指 恒指 德指 短线收割。千万谨记要跟紧哦~
-     座右铭：良好的心态+精湛的技术——-成功的砝码
+     * 做单风格：以雷厉风行著称，以快、准、稳为主，通常小止损大盈利。擅长内盘镍铜橡胶波段狙击，外盘美原油 纳指 恒指 德指 短线收割。千万谨记要跟紧哦~
+     * 座右铭：良好的心态+精湛的技术——-成功的砝码
      * name : 海波
      * pictureUrl : https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1477393215749088083.png
      * teacherAccountId : 146

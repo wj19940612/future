@@ -75,8 +75,8 @@ public class LiveActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initSlidingTabLayout();
-        initVideoPlayFragment();
         initTitleBar();
+        initVideoPlayFragment();
         getLiveMessage();
     }
 

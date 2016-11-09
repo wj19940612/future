@@ -81,7 +81,6 @@ public class LiveMessage {
         private int teacherAccountId;
         private String updateTime;
 
-
         public String getAccount() {
             return account;
         }

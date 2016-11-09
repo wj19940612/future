@@ -544,7 +544,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveRoomId() {
-            return new API("/user/live/getActivity.do", new ApiParams());
+            return new API("/user/live/getActivity.do", null);
         }
 
         /**
@@ -562,23 +562,23 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveMessage() {
-            return new API("/user/live/getLiveMessage.do", new ApiParams());
+            return new API("/user/live/getLiveMessage.do", null);
         }
 
         /**
-         *接口名：分页获取直播老师指导
+         * 接口名：分页获取直播老师指导
          * URL  http://域名/user/live/findTeacherMsg.do
          *
-         * @param page  第几页
+         * @param page      第几页
          * @param pageSize
-         * @param teacherId   老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
+         * @param teacherId 老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
          * @return
          */
-        public static API getTeacherGuide( int page,int pageSize,int teacherId) {
-            return new API("/user/live/findTeacherMsg.do",new ApiParams()
-            .put("page",page)
-            .put("pageSize",pageSize)
-            .put("teacherId",teacherId));
+        public static API getTeacherGuide(int page, int pageSize, int teacherId) {
+            return new API("/user/live/findTeacherMsg.do", new ApiParams()
+                    .put("page", page)
+                    .put("pageSize", pageSize)
+                    .put("teacherId", teacherId));
         }
     }
 
@@ -636,7 +636,9 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET, "/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+            return new API(GET, "/user/news/findNewsByUrl.do",
+                    new ApiParams()
+                            .put("url", url));
         }
 
         /**
@@ -681,13 +683,12 @@ public class API extends APIBase {
         /**
          * /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
          *
-         * @param type
          * @return
          */
-        public static API getChatServerIpAndPort(String type) {
+        public static API getChattingServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do",
                     new ApiParams()
-                            .put("type", type));
+                            .put("type", "chatApp"));
         }
     }
 

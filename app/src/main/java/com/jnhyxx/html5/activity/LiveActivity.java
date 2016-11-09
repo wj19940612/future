@@ -27,10 +27,13 @@ import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
+import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 import com.lecloud.sdk.videoview.IMediaDataVideoView;
 
 import java.util.ArrayList;
@@ -57,6 +60,16 @@ public class LiveActivity extends LiveVideoActivity {
     private List<Product> mProductList;
     private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
 
+    private LiveMessage mLiveMessage;
+    private ServerIpPort mServerIpPort;
+
+    private NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveOriginalData(String data) {
+            Log.d("TAG", "onReceiveOriginalData: " + data);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +80,29 @@ public class LiveActivity extends LiveVideoActivity {
         initVideoView();
         initSlidingTabLayout();
 
+        getChattingIpPort();
         getLiveMessage();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disconnectNettySocket();
+    }
+
+    private void getChattingIpPort() {
+        API.Market.getChattingServerIpAndPort().setTag(TAG)
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
+                    @Override
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            mServerIpPort = serverIpPorts.get(0);
+                            if (mLiveMessage != null) {
+                                connectNettySocket();
+                            }
+                        }
+                    }
+                }).fire();
     }
 
     @Override
@@ -76,14 +111,30 @@ public class LiveActivity extends LiveVideoActivity {
     }
 
     private void getLiveMessage() {
-        API.Live.getLiveMessage()
-                .setTag(TAG).setIndeterminate(this)
+        API.Live.getLiveMessage().setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
-                        Log.d(TAG, "直播信息" + liveMessage.toString());
+                        mLiveMessage = liveMessage;
+                        if (mServerIpPort != null) {
+                            connectNettySocket();
+                        }
                     }
                 }).fire();
+    }
+
+    private void connectNettySocket() {
+        if (mLiveMessage.getTeacher() != null) {
+            int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
+            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+            NettyClient.getInstance().start(teacherId, CookieManger.getInstance().getCookies());
+        }
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
+    }
+
+    private void disconnectNettySocket() {
+        NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     private void initSlidingTabLayout() {
@@ -122,7 +173,7 @@ public class LiveActivity extends LiveVideoActivity {
 
         } else {
             requestProductList();
-            requestSimulationPositions();
+            // requestSimulationPositions(); // TODO: 09/11/2016 不是获取模拟持仓 修改
         }
     }
 

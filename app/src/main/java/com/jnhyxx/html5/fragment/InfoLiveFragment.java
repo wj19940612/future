@@ -130,6 +130,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                  @Override
                                  public void onReceive(Resp resp) {
                                      if (resp.isSuccess()) {
+                                         if (resp.getData() == null) return;
                                          InfoLiveFragment.this.getInfoLiveData(resp);
                                      } else {
                                          if (mSwipeRefreshLayout.isRefreshing()) {
@@ -144,7 +145,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
     private void getInfoLiveData(Resp resp) {
         mAutoRefreshTime = 30;
-        Log.d(TAG, "直播资讯" + resp.getData().toString());
         ArrayList<ArrayList<String>> infoLiveMessageList = new ArrayList<>();
         String well = "#";
         try {

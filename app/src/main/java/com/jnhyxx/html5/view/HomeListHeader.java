@@ -52,8 +52,11 @@ public class HomeListHeader extends FrameLayout {
 
     public interface OnViewClickListener {
         void onBannerClick(Information information);
+
         void onSimulationClick();
+
         void onNewerGuideClick();
+
         void onContactService();
     }
 
@@ -225,7 +228,9 @@ public class HomeListHeader extends FrameLayout {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final Information information = mList.get(pos);
             container.addView(imageView, 0);
-            Picasso.with(mContext).load(information.getCover()).into(imageView);
+            if (!TextUtils.isEmpty(information.getCover())) {
+                Picasso.with(mContext).load(information.getCover()).into(imageView);
+            }
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

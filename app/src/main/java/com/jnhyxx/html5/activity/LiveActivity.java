@@ -32,6 +32,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -52,19 +53,19 @@ public class LiveActivity extends BaseActivity {
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
-    @BindView(R.id.activity_live)
-    LinearLayout mActivityLive;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
     // TODO: 2016/11/8 房间Id 
-    private String mLiveId = "A2016080200000n1";
-//    private String mLiveId = "A2016053100000je";
+//    private String mLiveId = "A2016080200000n1";
+    private String mLiveId = "A2016053100000je";
 
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
     private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
+
+    private LiveMessage mLiveMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class LiveActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
                         if (liveMessage == null) return;
+                        mLiveMessage = liveMessage;
                         Log.d(TAG, "直播信息" + liveMessage.toString());
                     }
                 })
@@ -121,7 +123,8 @@ public class LiveActivity extends BaseActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mLiveMessage == null || mLiveMessage.getProgram().isEmpty()) return;
+                LiveProgramDir.showLiveProgramDirPopupWindow(LiveActivity.this, mLiveMessage.getProgram(), mTitleBar);
             }
         });
     }

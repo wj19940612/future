@@ -34,7 +34,7 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
-import com.jnhyxx.html5.domain.market.MarketServer;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -281,9 +281,9 @@ public class TradeActivity extends BaseActivity implements
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
 
-        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
-        MarketServer marketServer = marketServers.get(0);
-        NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+        List<ServerIpPort> serverIpPorts = intent.getParcelableArrayListExtra(ServerIpPort.EX_MARKET_SERVER);
+        ServerIpPort serverIpPort = serverIpPorts.get(0);
+        NettyClient.getInstance().setIpAndPort(serverIpPort.getIp(), serverIpPort.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }

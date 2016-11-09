@@ -31,7 +31,7 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
-import com.jnhyxx.html5.domain.market.MarketServer;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
@@ -158,17 +158,17 @@ public class HomeFragment extends BaseFragment {
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(pkg.getProduct(), marketServers);
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            requestProductExchangeStatus(pkg.getProduct(), serverIpPorts);
                         }
                     }
                 }).fire();
     }
 
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
+    private void requestProductExchangeStatus(final Product product, final List<ServerIpPort> serverIpPorts) {
 //        Launcher.with(getActivity(), TradeActivity.class)
 //                .putExtra(Product.EX_PRODUCT, product)
 //                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
@@ -189,7 +189,7 @@ public class HomeFragment extends BaseFragment {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
+                                .putExtra(ServerIpPort.EX_MARKET_SERVER, new ArrayList<Parcelable>(serverIpPorts))
                                 .execute();
                     }
                 }).fire();

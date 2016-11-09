@@ -33,7 +33,6 @@ import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.net.CookieManger;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -127,7 +126,6 @@ public class MainActivity extends BaseActivity {
                 mBottomTabs.selectTab(position);
                 if (position == 1) {
                     openLivePage();
-
                 } else if (position >= 1) {
                     mViewPager.setCurrentItem(position - 1, false);
                 } else {
@@ -139,17 +137,16 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openLivePage() {
-        API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
+        API.Live.getLiveRoomId().setTag(TAG)
+                .setCallback(new Callback<Resp<LiveRoomInfo>>() {
             @Override
             public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
                 String liveId = "";
-                if (liveRoomInfoResp.getData() != null) {
+                if (liveRoomInfoResp.hasData()) {
                     liveId = liveRoomInfoResp.getData().getActivityId();
                 }
                 Launcher.with(getActivity(), LiveActivity.class)
-                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveId))
-                        .putExtra(LiveActivity.EX_TITLE, getString(R.string.live))
-                        .putExtra(LiveActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .putExtra(Launcher.EX_PAYLOAD, liveId)
                         .executeForResult(REQUEST_CODE_LIVE);
 
             }

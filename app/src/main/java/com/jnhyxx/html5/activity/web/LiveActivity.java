@@ -4,93 +4,56 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.View;
-import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.activity.WebViewActivity;
-import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.net.CookieManger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ${wangJie} on 2016/10/25.
- */
-
-public class LiveActivity extends WebViewActivity {
+public class LiveActivity extends BaseActivity {
     private static final String TAG = "LiveActivity";
-
-    public static final String liveRoomId = "liveRoomId";
-    private WebView mWebView;
-
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
-    private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
+    private List<HomePositions.CashOpSBean> mCashPositionList;
 
     private static final int REQUEST_CODE_LOGIN = 905;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWebView = getWebView();
+        setContentView(R.layout.activity_main);
 
-        Log.d(TAG, "地址" + mPageUrl);
-        getTitleBar().setRightText(R.string.live_right_title);
-        getTitleBar().setRightVisible(true);
-        getTitleBar().setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestProductList();
-                requestSimulationPositions();
-            }
-        });
+        API.Market.getChatServerIpAndPort("chatApp")
+                .setTag(TAG)
+                .setCallback(new Callback2<Resp<ServerIpPort>, ServerIpPort>() {
+                    @Override
+                    public void onRespSuccess(ServerIpPort serverIpPort) {
+
+                    }
+                }).fire();
     }
 
-    @Override
-    protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
-        if (url.contains(API.getLoginUrl())) {
-            Launcher.with(LiveActivity.this, SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
-            return true;
-        }
-        if (url.equals(API.getShutUpHtmlUrl())) {
-            Launcher.with(LiveActivity.this, WebViewActivity.class)
-                    .putExtra(WebViewActivity.EX_URL, API.getShutUpHtmlUrl())
-                    .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                    .putExtra(WebViewActivity.EX_TITLE, getString(R.string.live_manager))
-                    .execute();
-            return true;
-        }
-        return super.onShouldOverrideUrlLoading(view, url);
-    }
-
-
-    private void requestSimulationPositions() {
+    private void requestCashPositions() {
         if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                         @Override
                         public void onRespSuccess(HomePositions homePositions) {
-                            mSimulationPositionList = homePositions.getIntegralOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mSimulationPositionList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            }
+                            mCashPositionList = homePositions.getCashOpS();
+                            ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                         }
                     }).fire();
         } else { // clearHoldingOrderList all product position
@@ -104,7 +67,7 @@ public class LiveActivity extends WebViewActivity {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products, mSimulationPositionList, null);
+                        ProductPkg.updateProductPkgList(mProductPkgList, products, null, null);
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             //美原油
@@ -125,17 +88,17 @@ public class LiveActivity extends WebViewActivity {
 
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(productPkg.getProduct(), marketServers);
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            requestProductExchangeStatus(productPkg.getProduct(), serverIpPorts);
                         }
                     }
                 }).fire();
     }
 
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
+    private void requestProductExchangeStatus(final Product product, final List<ServerIpPort> serverIpPorts) {
         API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
@@ -149,29 +112,17 @@ public class LiveActivity extends WebViewActivity {
                                 .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                 .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
+                                .putExtra(ServerIpPort.EX_MARKET_SERVER, new ArrayList<Parcelable>(serverIpPorts))
                                 .execute();
                     }
                 }).fire();
     }
 
     @Override
-    public void onBackPressed() {
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
-        } else {
-            setResult(RESULT_OK);
-            super.onBackPressed();
-        }
-        super.onBackPressed();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            initCookies(CookieManger.getInstance().getRawCookie(), mPageUrl);
-            mWebView.reload();
+
         }
     }
 }

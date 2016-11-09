@@ -651,6 +651,18 @@ public class API extends APIBase {
         public static API getMarketServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
         }
+
+        /**
+         * /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
+         *
+         * @param type
+         * @return
+         */
+        public static API getChatServerIpAndPort(String type) {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do",
+                    new ApiParams()
+                            .put("type", type));
+        }
     }
 
     public static class Order {

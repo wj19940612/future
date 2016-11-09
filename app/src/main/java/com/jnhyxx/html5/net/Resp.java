@@ -41,7 +41,6 @@ public class Resp<T> {
     }
 
     public boolean hasData() {
-        boolean result = false;
         if (data != null && data instanceof List) {
             return ((List) data).size() > 0;
         }

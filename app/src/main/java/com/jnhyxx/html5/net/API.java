@@ -566,19 +566,35 @@ public class API extends APIBase {
         }
 
         /**
-         *接口名：分页获取直播老师指导
+         * 接口名：分页获取直播老师指导
          * URL  http://域名/user/live/findTeacherMsg.do
          *
-         * @param page  第几页
+         * @param page      第几页
          * @param pageSize
-         * @param teacherId   老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
+         * @param teacherId 老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
          * @return
          */
-        public static API getTeacherGuide( int page,int pageSize,int teacherId) {
-            return new API("/user/live/findTeacherMsg.do",new ApiParams()
-            .put("page",page)
-            .put("pageSize",pageSize)
-            .put("teacherId",teacherId));
+        public static API getTeacherGuide(int page, int pageSize, int teacherId) {
+            return new API("/user/live/findTeacherMsg.do", new ApiParams()
+                    .put("page", page)
+                    .put("pageSize", pageSize)
+                    .put("teacherId", teacherId));
+        }
+
+        /**
+         * 接口名：按条件查询
+         * URL  http://域名/user/live/queryPagingBy.do
+         *
+         * @param timeStamp 最上面一条数据
+         * @param page
+         * @param pageSize
+         * @return
+         */
+        public static API getLiveTalk(long timeStamp, int page, int pageSize) {
+            return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
+                    .put("timeStamp", timeStamp)
+                    .put("page", page)
+                    .put("pageSize", pageSize));
         }
     }
 

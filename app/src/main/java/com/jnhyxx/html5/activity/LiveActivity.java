@@ -8,11 +8,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -28,11 +30,13 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
+import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.lecloud.sdk.videoview.IMediaDataVideoView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,17 +59,17 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     FrameLayout mLiveProgramDir;
 
 //    //    老师指令布局
-//    @BindView(R.id.teacherGuideLayout)
-//    RelativeLayout mTeacherGuideLayout;
-//    @BindView(R.id.teacherHeadImage)
-//    CircularAnnulusImageView mTeacherHeadImage;
-//    @BindView(R.id.teacherGuideContent)
-//    TextView mTeacherGuideContent;
+    @BindView(R.id.teacherGuideLayout)
+    RelativeLayout mTeacherGuideLayout;
+    @BindView(R.id.teacherHeadImage)
+    CircularAnnulusImageView mTeacherHeadImage;
+    @BindView(R.id.teacherGuideContent)
+    TextView mTeacherGuideContent;
 
 
     // TODO: 2016/11/8 房间Id 
-    private String mLiveId = "A2016080200000n1";
-//    private String mLiveId = "A2016053100000je";
+//    private String mLiveId = "A2016080200000n1";
+    private String mLiveId = "A2016053100000je";
 
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
@@ -91,15 +95,15 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     }
 
     private void setLayoutData() {
-//        if (mLiveMessage == null) return;
-//        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
-//        if (teacher != null) {
-//            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
-//                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
-//            }
-//            //老师指令内容
-//            mTeacherGuideContent.setText(teacher.getAccount());
-//        }
+        if (mLiveMessage == null) return;
+        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
+        if (teacher != null) {
+            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
+                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
+            }
+            //老师指令内容
+            mTeacherGuideContent.setText(teacher.getAccount());
+        }
     }
 
     @Override

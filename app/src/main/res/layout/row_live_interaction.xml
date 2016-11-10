@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <View
             android:layout_width="57dp"
@@ -67,7 +67,6 @@
             android:textColor="@color/colorDisable"
             android:textSize="11sp"
             tools:text="10分钟前"/>
-        <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,7 +111,8 @@
         android:id="@+id/userMineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/userMineStatus"
@@ -122,7 +122,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/mineTimeHint"
             android:textColor="@color/blueAssist"
-            tools:text="管理员"/>
+            tools:text="我"/>
 
         <TextView
             android:id="@+id/mineTimeHint"
@@ -139,7 +139,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/userMineStatus"
             android:gravity="center_vertical">
-
 
             <TextView
                 android:id="@+id/userMineContent"
@@ -172,46 +171,5 @@
                     android:src="@drawable/ic_live_pic_head"/>
             </LinearLayout>
         </LinearLayout>
-        <!--      <RelativeLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@+id/userMineStatus"
-                  android:gravity="center_vertical">
-
-
-                  <TextView
-                      android:id="@+id/userMineContent"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentLeft="true"
-                      android:layout_toLeftOf="@+id/userMineArrow"
-                      android:background="@drawable/bg_live_user_mine"
-                      android:padding="10dp"
-                      android:textColor="@android:color/white"
-                      tools:text="明天非空撒酒疯雷克萨解放路加上符号及咖啡撒假设开发好看教案是否看见爱上将客服撒谎发空间按双方尽快尽快恢复萨卡减肥哈就开始发货空间撒李开复就分手了空间按法律快捷方式快乐撒娇福利卡时间弗兰克接口即可"/>
-
-                  <ImageView
-                      android:id="@+id/userMineArrow"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignLeft="@+id/userMineHeadImage"
-                      android:layout_centerVertical="true"
-                      android:src="@drawable/arrow_live_angle_me_right"/>
-                  <ImageView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentRight="true"
-                      android:layout_centerVertical="true"
-                      android:src="@drawable/bg_live_userhead"/>
-
-                  <ImageView
-                      android:id="@+id/userMineHeadImage"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentRight="true"
-                      android:layout_centerVertical="true"
-                      android:layout_gravity="center_vertical"
-                      android:src="@drawable/ic_live_pic_head"/>
-              </RelativeLayout>-->
     </RelativeLayout>
 </LinearLayout>

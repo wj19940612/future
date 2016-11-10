@@ -23,12 +23,12 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
-import com.jnhyxx.html5.fragment.live.LiveProgramDirFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
+import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFragment.FragmentStatusListener, View.OnClickListener {
+public class LiveActivity extends LiveVideoActivity implements View.OnClickListener {
 
     @BindView(R.id.liveLayout)
     RelativeLayout mLiveLayout;
@@ -54,10 +54,18 @@ public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFra
     @BindView(R.id.liveProgramDir)
     FrameLayout mLiveProgramDir;
 
+//    //    老师指令布局
+//    @BindView(R.id.teacherGuideLayout)
+//    RelativeLayout mTeacherGuideLayout;
+//    @BindView(R.id.teacherHeadImage)
+//    CircularAnnulusImageView mTeacherHeadImage;
+//    @BindView(R.id.teacherGuideContent)
+//    TextView mTeacherGuideContent;
+
 
     // TODO: 2016/11/8 房间Id 
-//    private String mLiveId = "A2016080200000n1";
-    private String mLiveId = "A2016053100000je";
+    private String mLiveId = "A2016080200000n1";
+//    private String mLiveId = "A2016053100000je";
 
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
@@ -66,7 +74,6 @@ public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFra
 
     private LiveMessage mLiveMessage;
 
-    private LiveProgramDirFragment mLiveProgramDirFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,20 @@ public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFra
         initSlidingTabLayout();
 
         getLiveMessage();
+
+        setLayoutData();
+    }
+
+    private void setLayoutData() {
+//        if (mLiveMessage == null) return;
+//        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
+//        if (teacher != null) {
+//            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
+//                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
+//            }
+//            //老师指令内容
+//            mTeacherGuideContent.setText(teacher.getAccount());
+//        }
     }
 
     @Override
@@ -135,49 +156,10 @@ public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFra
         switch (v.getId()) {
             // TODO: 2016/11/9 逻辑还有问题
             case R.id.liveProgramme:
-                if (mLiveProgramDir.isShown()) {
-                    hideLiveProgramFragment();
-                    mLiveProgramDir.setVisibility(View.GONE);
-                    break;
-                } else if (!mLiveProgramDir.isShown()) {
-                    mLiveProgramDir.setVisibility(View.VISIBLE);
-                    showLiveProgramFragment();
-                    break;
-                }
-//                if (mLiveProgramDir.isShown()) {
-//                    mLiveProgramDir.setVisibility(View.GONE);
-//                } else {
-//                    mLiveProgramDir.setVisibility(View.VISIBLE);
-//                }
+                LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
                 break;
         }
     }
-
-    private void showLiveProgramFragment() {
-//        if (getSupportFragmentManager().findFragmentById(R.id.liveProgramDir) == null) {
-        mLiveProgramDirFragment = LiveProgramDirFragment.newInstance(mLiveMessage);
-        mLiveProgramDirFragment.setFragmentStatus(true);
-        mLiveProgramDirFragment.setFragmentStatusListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.liveProgramDir, mLiveProgramDirFragment).commitAllowingStateLoss();
-//        }
-    }
-
-    @Override
-    public void hideFragment() {
-        hideLiveProgramFragment();
-    }
-
-    private void hideLiveProgramFragment() {
-//        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.liveProgramDir);
-        if (mLiveProgramDirFragment != null) {
-            mLiveProgramDirFragment.setFragmentStatus(false);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(mLiveProgramDirFragment).commitAllowingStateLoss();
-        }
-//        if (fragment != null) {
-//            getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
-//        }
-    }
-
     private void openTradePage() {
         // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
         boolean userHasHolding = false;
@@ -276,6 +258,10 @@ public class LiveActivity extends LiveVideoActivity implements LiveProgramDirFra
             ProductPkg.clearPositions(mProductPkgList);
         }
     }
+
+//    @OnClick(R.id.teacherHeadImage)
+//    public void onClick() {
+//    }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 

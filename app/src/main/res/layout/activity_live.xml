@@ -22,10 +22,21 @@
         app:titleText="@string/live"/>
 
     <RelativeLayout
-        android:id="@+id/liveLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"/>
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/liveLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"/>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/teacherHeadPortrait"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/bg_teacher_head_portrait"/>-->
+    </RelativeLayout>
 
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/slidingTabLayout"

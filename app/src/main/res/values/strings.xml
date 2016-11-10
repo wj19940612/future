@@ -443,4 +443,7 @@
     <string name="live_teacher_guide">老师指导</string>
     <string name="live_teacher_good">擅长</string>
     <string name="live_teacher_resume">简介</string>
+    <string name="live_type_manager">管理员</string>
+    <string name="live_type_teacher">老师</string>
+    <string name="live_type_mine">我</string>
 </resources>

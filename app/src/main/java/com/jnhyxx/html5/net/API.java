@@ -591,11 +591,18 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveTalk(long timeStamp, int page, int pageSize) {
+            if (timeStamp == 0) {
+                return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
+                        .put("timeStamp", null)
+                        .put("page", page)
+                        .put("pageSize", pageSize));
+            }
             return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
                     .put("timeStamp", timeStamp)
                     .put("page", page)
                     .put("pageSize", pageSize));
         }
+
     }
 
     public static class Message {

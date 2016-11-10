@@ -31,4 +31,5 @@
 
     <color name="bg_live_program_popupwindow">#80000000</color>
 
+    <color name="live_teacher_info">#323232</color>
 </resources>

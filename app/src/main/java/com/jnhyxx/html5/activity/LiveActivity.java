@@ -8,13 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -25,6 +23,7 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
+import com.jnhyxx.html5.fragment.live.LiveTeacherInfoDialogFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -32,14 +31,12 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.VideoLayoutParams;
-import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 import com.lecloud.sdk.videoview.IMediaDataVideoView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +59,12 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     FrameLayout mLiveProgramDir;
 
 //    //    老师指令布局
-    @BindView(R.id.teacherGuideLayout)
-    RelativeLayout mTeacherGuideLayout;
-    @BindView(R.id.teacherHeadImage)
-    CircularAnnulusImageView mTeacherHeadImage;
-    @BindView(R.id.teacherGuideContent)
-    TextView mTeacherGuideContent;
+//    @BindView(R.id.teacherGuideLayout)
+//    RelativeLayout mTeacherGuideLayout;
+//    @BindView(R.id.teacherHeadImage)
+//    CircularAnnulusImageView mTeacherHeadImage;
+//    @BindView(R.id.teacherGuideContent)
+//    TextView mTeacherGuideContent;
 
 
     // TODO: 2016/11/8 房间Id 
@@ -86,7 +83,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
-            Log.d("TAG", "onReceiveOriginalData: " + data);
+            Log.d(TAG, "onReceiveOriginalData: " + data);
         }
     };
 
@@ -108,15 +105,15 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     }
 
     private void setLayoutData() {
-        if (mLiveMessage == null) return;
-        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
-        if (teacher != null) {
-            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
-                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
-            }
-            //老师指令内容
-            mTeacherGuideContent.setText(teacher.getAccount());
-        }
+//        if (mLiveMessage == null) return;
+//        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
+//        if (teacher != null) {
+//            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
+//                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
+//            }
+//            //老师指令内容
+//            mTeacherGuideContent.setText(teacher.getAccount());
+//        }
     }
 
     @Override
@@ -184,10 +181,17 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTradePage();
+                // TODO: 2016/11/10 打开交易界面，目前先显示老师详情
+//                openTradePage();
+                showTeacherInfoDialog();
             }
         });
         setTitleBarCustomView();
+    }
+
+    private void showTeacherInfoDialog() {
+        LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment = LiveTeacherInfoDialogFragment.newInstance(mLiveMessage.getTeacher());
+        liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
     }
 
     private void setTitleBarCustomView() {
@@ -205,6 +209,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
                 break;
         }
     }
+
     private void openTradePage() {
         // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
         boolean userHasHolding = false;

@@ -71,7 +71,9 @@ public class LiveMessage implements Serializable {
         this.program = program;
     }
 
-    public static class TeacherInfo {
+    public static class TeacherInfo implements Serializable{
+        private static final long serialVersionUID = 4872621540454770670L;
+
         private String account;
         private int channelId;
         private String createTime;
@@ -259,7 +261,10 @@ public class LiveMessage implements Serializable {
         }
     }
 
-    public static class ProgramInfo {
+    public static class ProgramInfo implements Serializable{
+
+        private static final long serialVersionUID = -544694799079972750L;
+
         private int channelId;
         private String createTime;
         private String cycleStr;

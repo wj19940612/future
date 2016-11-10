@@ -15,6 +15,8 @@ import com.lecloud.skin.videoview.live.UIActionLiveVideoView;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.jnhyxx.html5.R.string.live;
+
 public abstract class LiveVideoActivity extends BaseActivity {
 
     private IMediaDataVideoView mVideoView;
@@ -27,7 +29,6 @@ public abstract class LiveVideoActivity extends BaseActivity {
             handleVideoInfoEvent(event, bundle);// 处理视频信息事件
             handlePlayerEvent(event, bundle);// 处理播放器事件
             handleLiveEvent(event, bundle);// 处理直播类事件,如果是点播，则这些事件不会回调
-
         }
 
         @Override
@@ -81,7 +82,8 @@ public abstract class LiveVideoActivity extends BaseActivity {
         mVideoView.setDataSource(initBundle());
     }
 
-//    private static final String LIVE_ID = "A2016080200000n1";
+
+    //private static final String LIVE_ID = "A2016080200000n1";
     private static final String LIVE_ID = "A2016053100000je";
 
     private Bundle initBundle() {

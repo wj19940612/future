@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 
@@ -31,7 +32,10 @@ public class NettyClient {
 
     private String mHost;
     private Integer mPort;
-    private String mContractCode;
+
+    private MarketConn mMarketConn;
+    private ChattingConn mChattingConn;
+
     private boolean mClosed;
 
     private NettyClientHandler.Callback mCallback;
@@ -106,7 +110,7 @@ public class NettyClient {
             if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) {
                 return;
             }
-            if (mContractCode != null) {
+            if (mMarketConn != null) {
                 onReceiveSingleData(marketData);
             }
         } catch (JsonSyntaxException e) {
@@ -152,9 +156,22 @@ public class NettyClient {
         }
     }
 
-    public void start(String contractCode) {
-        mContractCode = contractCode;
+    public void start(int teacherId, String tokenStr) {
         mClosed = false;
+        mChattingConn = new ChattingConn(teacherId, tokenStr);
+
+        mWorkerGroup = new NioEventLoopGroup();
+        mBootstrap = new Bootstrap()
+                .group(mWorkerGroup)
+                .channel(NioSocketChannel.class)
+                .handler(new NettyInitializer(mCallback));
+        connect();
+    }
+
+    public void start(String contractCode) {
+        mClosed = false;
+        mMarketConn = new MarketConn(contractCode);
+        mQuotaDataFilter = new DefaultQuotaDataFilter(contractCode);
 
         mWorkerGroup = new NioEventLoopGroup();
         mBootstrap = new Bootstrap()
@@ -167,16 +184,19 @@ public class NettyClient {
     private void connect() {
         if (mClosed && mBootstrap != null) return;
 
-        mQuotaDataFilter = new DefaultQuotaDataFilter(mContractCode);
-
         ChannelFuture channelFuture = mBootstrap.connect(mHost, mPort);
         channelFuture.addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()) {
                     mChannel = channelFuture.sync().channel();
-                    if (!TextUtils.isEmpty(mContractCode)) {
-                        mChannel.writeAndFlush(NettyLoginFactory.getOpenSecret(mContractCode));
+                    if (mMarketConn != null) {
+                        mChannel.writeAndFlush(mMarketConn.toJson());
+                    }
+
+                    if (mChattingConn != null) {
+                        Log.d("TAG", "operationComplete: " + mChattingConn.toJson());
+                        mChannel.writeAndFlush(mChattingConn.toJson());
                     }
                 } else {
                     Throwable throwable = channelFuture.cause();
@@ -187,9 +207,17 @@ public class NettyClient {
         });
     }
 
+    public void sendMessage(String msg) {
+        if (!mClosed && mChattingConn != null && mChannel != null) {
+            mChattingConn.setMsg(msg);
+            mChannel.writeAndFlush(mChattingConn.toJson());
+        }
+    }
+
     public void stop() {
         mClosed = true;
-        mContractCode = null;
+        mMarketConn = null;
+        mChattingConn = null;
 
         if (mWorkerGroup != null) {
             mWorkerGroup.shutdownGracefully();
@@ -207,12 +235,59 @@ public class NettyClient {
 
         public DefaultQuotaDataFilter(String contractCode) {
             mContractCode = contractCode;
-            Log.d("TAG", "DefaultQuotaDataFilter: " + mContractCode);
         }
 
         @Override
         public boolean filter(FullMarketData data) {
             return !data.getInstrumentId().equalsIgnoreCase(mContractCode);
+        }
+    }
+
+    private static class ChattingConn {
+        private int id;
+        private String token1;
+        private String token2;
+        private String msg;
+
+        public ChattingConn(int teacherId, String originalTokenStr) {
+            this.id = teacherId;
+            this.msg = "testJ"; //// TODO: 09/11/2016 delete late
+            initTokens(originalTokenStr);
+        }
+
+        private void initTokens(String originalTokenStr) {
+            if (!TextUtils.isEmpty(originalTokenStr)) {
+                String[] splits = originalTokenStr.split(";");
+                for (int i = 0; i < splits.length; i++) {
+                    String split = splits[i].trim();
+                    splits[i] = split.substring(split.indexOf("\""));
+                }
+                if (splits.length >= 2) {
+                    token1 = splits[0];
+                    token2 = splits[1];
+                }
+            }
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public String toJson() {
+            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            return gson.toJson(this);
+        }
+    }
+
+    private static class MarketConn {
+        private String code;
+
+        public MarketConn(String code) {
+            this.code = code;
+        }
+
+        public String toJson() {
+            return new Gson().toJson(this);
         }
     }
 }

@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openLivePage() {
-        Launcher.with(getActivity(), LiveActivity.class).execute();
+        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQUEST_CODE_LIVE);
     }
 
     private void processIntent(Intent intent) {
@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LIVE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_LIVE) {
             mBottomTabs.selectTab(mTabPosition);
         }
     }

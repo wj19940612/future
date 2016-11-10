@@ -83,7 +83,6 @@ public class LiveMessage implements Serializable {
         private int teacherAccountId;
         private String updateTime;
 
-
         public String getAccount() {
             return account;
         }

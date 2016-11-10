@@ -544,7 +544,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveRoomId() {
-            return new API("/user/live/getActivity.do", new ApiParams());
+            return new API("/user/live/getActivity.do", null);
         }
 
         /**
@@ -562,7 +562,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveMessage() {
-            return new API("/user/live/getLiveMessage.do", new ApiParams());
+            return new API("/user/live/getLiveMessage.do", null);
         }
 
         /**
@@ -652,7 +652,9 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET, "/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+            return new API(GET, "/user/news/findNewsByUrl.do",
+                    new ApiParams()
+                            .put("url", url));
         }
 
         /**
@@ -697,13 +699,12 @@ public class API extends APIBase {
         /**
          * /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
          *
-         * @param type
          * @return
          */
-        public static API getChatServerIpAndPort(String type) {
+        public static API getChattingServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do",
                     new ApiParams()
-                            .put("type", type));
+                            .put("type", "chatApp"));
         }
     }
 

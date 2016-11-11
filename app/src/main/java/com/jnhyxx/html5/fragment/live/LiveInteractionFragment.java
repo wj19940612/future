@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -266,14 +267,54 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             public void bindViewWithData(LiveHomeChatInfo.ChatData item, int position, Context context) {
 
                 String format = DateUtil.format(item.getCreateTime());
-                // TODO: 2016/11/10 测试老师
-                if (position % 3 == 2) {
-                    showManagerLayout();
-                    setChaterStatus(item, context);
-                    mContent.setText(item.getMsg());
-                    mTimeHint.setText(format);
-                    return;
+
+                /**
+                 *   DateUtils.formatDateTime(getApplicationContext(), //格式化时间，最多显示到分钟。最后参数设定显示的格式
+                 System.currentTimeMillis(),
+                 DateUtils.FORMAT_24HOUR|DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_SHOW_TIME
+                 |DateUtils.FORMAT_SHOW_YEAR|DateUtils.LENGTH_LONG|DateUtils.FORMAT_ABBREV_MONTH);
+
+                 DateUtils.getRelativeTimeSpanString(System.currentTimeMillis()+60*4000));
+                 //返回相对于当前时间的最大区间表示的字符串：几(分钟,小时,天,周,月,年)前/后
+
+                 DateUtils.getRelativeTimeSpanString(context, long timeMillis);
+                 //返回相对于当前时间的，参数时间字符串：在同一天显示时分；在不同一天，显示月日；在不同一年，显示年月日
+
+                 DateUtils.formatDateRange(getApplicationContext(), System.currentTimeMillis(), System.currentTimeMillis() + 60 * 60 * 3000,
+                 DateUtils.FORMAT_SHOW_TIME));  //返回两个时间值间的 相距 字符串
+                 */
+
+                boolean today = DateUtils.isToday(item.getCreateTime());
+                if (today) {
+                    Log.d(TAG, "isToday  " + today);
+                    String formatElapsedTime = DateUtils.formatElapsedTime(item.getCreateTime());
+                    Log.d(TAG, "formatElapsedTime  " + formatElapsedTime);
+                    String dateTime = DateUtils.formatDateTime(context, item.getCreateTime(), DateUtils.FORMAT_ABBREV_ALL);
+                    Log.d(TAG, "formatDateTime " + dateTime);
+                    String formatDateRange = DateUtils.formatDateRange(context, item.getCreateTime(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR);
+                    Log.d(TAG, "formatDateRange " + formatDateRange);
+                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
+//                    CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(context, item.getCreateTime());
+//                    Log.d(TAG, "二参 relativeTimeSpanString " + relativeTimeSpanString);
+//                    CharSequence relativeTimeSpanString1 = DateUtils.getRelativeTimeSpanString(context, item.getCreateTime(), true);
+//                    Log.d(TAG, "三参 relativeTimeSpanString1 " + relativeTimeSpanString1);
+                    format = format + "  " + relativeTimeSpanString2;
+                } else {
+                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                    format = format + "    " + relativeTimeSpanString2;
+                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
                 }
+
+
+                // TODO: 2016/11/10 测试老师
+//                if (position % 3 == 2) {
+//                    showManagerLayout();
+//                    setChaterStatus(item, context);
+//                    mContent.setText(item.getMsg());
+//                    mTimeHint.setText(format);
+//                    return;
+//                }
                 //老师或者管理员
                 if (!item.isCommonUser()) {
                     showManagerLayout();
@@ -330,8 +371,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     chatUser = context.getString(R.string.live_type_teacher);
                 }
                 // TODO: 2016/11/10  测试，需删除
-                mUserStatus.setText(R.string.live_type_manager);
-//                mUserStatus.setText(chatUser);
+//                mUserStatus.setText(R.string.live_type_manager);
+                mUserStatus.setText(chatUser);
             }
         }
     }

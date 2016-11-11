@@ -110,8 +110,15 @@ public class LiveProgramDir {
                     if (!TextUtils.isEmpty(pictureUrl)) {
                         Picasso.with(context).load(pictureUrl).error(R.drawable.ic_live_pic_head).into(mManagerHeadImage);
                     }
-                    mLiveTime.setText(programInfo.getLiveTime());
-                    mTimeHint.setText(programInfo.getCycleStr());
+                    String liveTime;
+                    if (programInfo.getLiveTime().contains(",")) {
+                        liveTime = programInfo.getLiveTime().replaceAll(",", "\r\n");
+                    } else {
+                        liveTime = programInfo.getLiveTime();
+                    }
+                    mLiveTime.setText(liveTime);
+                    // TODO: 2016/11/11 目前先写工作日
+//                    mTimeHint.setText(programInfo.getCycleStr());
                     mTeacherName.setText(programInfo.getTeacherName());
                 }
             }

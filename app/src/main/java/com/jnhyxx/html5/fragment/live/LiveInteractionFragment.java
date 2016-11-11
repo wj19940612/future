@@ -85,7 +85,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPageSize = 10;
+        mPageSize = 30;
         mHashSet = new HashSet<>();
         mListView.setOnScrollListener(this);
         getChatInfo();

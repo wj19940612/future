@@ -270,10 +270,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     Log.d(TAG, "formatDateRange " + formatDateRange);
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
                     Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
-//                    CharSequence relativeTimeSpanString = DateUtils.getRelativeTimeSpanString(context, item.getCreateTime());
-//                    Log.d(TAG, "二参 relativeTimeSpanString " + relativeTimeSpanString);
-//                    CharSequence relativeTimeSpanString1 = DateUtils.getRelativeTimeSpanString(context, item.getCreateTime(), true);
-//                    Log.d(TAG, "三参 relativeTimeSpanString1 " + relativeTimeSpanString1);
                     format = format + "  " + relativeTimeSpanString2;
                 } else {
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
@@ -283,13 +279,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
                 // TODO: 2016/11/10 测试老师
-//                if (position % 3 == 2) {
-//                    showManagerLayout();
-//                    setChaterStatus(item, context);
-//                    mContent.setText(item.getMsg());
-//                    mTimeHint.setText(format);
-//                    return;
-//                }
                 //老师或者管理员
                 if (!item.isCommonUser()) {
                     showManagerLayout();
@@ -345,8 +334,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
                     chatUser = context.getString(R.string.live_type_teacher);
                 }
-                // TODO: 2016/11/10  测试，需删除
-//                mUserStatus.setText(R.string.live_type_manager);
                 mUserStatus.setText(chatUser);
             }
         }

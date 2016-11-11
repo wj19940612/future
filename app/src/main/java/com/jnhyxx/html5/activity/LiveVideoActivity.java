@@ -15,8 +15,6 @@ import com.lecloud.skin.videoview.live.UIActionLiveVideoView;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.jnhyxx.html5.R.string.live;
-
 public abstract class LiveVideoActivity extends BaseActivity {
 
     private IMediaDataVideoView mVideoView;
@@ -79,7 +77,7 @@ public abstract class LiveVideoActivity extends BaseActivity {
 //        final RelativeLayout videoContainer = (RelativeLayout) findViewById(R.id.videoContainer);
 //        videoContainer.addView((View) mVideoView, VideoLayoutParams.computeContainerSize(this, 16, 9));
 
-        mVideoView.setDataSource(initBundle());
+//        mVideoView.setDataSource(initBundle());
     }
 
 

@@ -89,6 +89,7 @@ public class LiveTeacherInfoDialogFragment extends DialogFragment {
     }
 
     private void initData() {
+        if (mTeacherInfo == null) return;
         if (!TextUtils.isEmpty(mTeacherInfo.getPictureUrl())) {
             Picasso.with(getActivity()).load(mTeacherInfo.getPictureUrl()).into(mTeacherHeadImage);
         }
@@ -98,7 +99,7 @@ public class LiveTeacherInfoDialogFragment extends DialogFragment {
         mHideDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getDialog().isShowing()){
+                if (getDialog().isShowing()) {
                     dismiss();
                 }
             }

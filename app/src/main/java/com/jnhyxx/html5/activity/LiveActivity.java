@@ -96,10 +96,10 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
 
         initTitleBar();
         initVideoView();
+        getLiveMessage();
         initSlidingTabLayout();
 
         getChattingIpPort();
-        getLiveMessage();
 
         setLayoutData();
     }
@@ -331,9 +331,9 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new LiveInteractionFragment();
+                    return LiveInteractionFragment.newInstance();
                 case 1:
-                    return new TeacherGuideFragment();
+                    return TeacherGuideFragment.newInstance();
             }
             return null;
         }

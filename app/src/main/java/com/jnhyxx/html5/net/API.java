@@ -562,7 +562,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveMessage() {
-            return new API("/user/live/getLiveMessage.do", null);
+            return new API(GET, "/user/live/getLiveMessage.do", null);
         }
 
         /**
@@ -575,7 +575,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getTeacherGuide(int page, int pageSize, int teacherId) {
-            return new API("/user/live/findTeacherMsg.do", new ApiParams()
+            return new API(GET, "/user/live/findTeacherMsg.do", new ApiParams()
                     .put("page", page)
                     .put("pageSize", pageSize)
                     .put("teacherId", teacherId));

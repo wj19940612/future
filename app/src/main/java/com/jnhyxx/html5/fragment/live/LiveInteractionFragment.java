@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +58,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private HashSet<Long> mHashSet;
 
+    private List<LiveHomeChatInfo.ChatData> chatDatas;
+
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
         LiveInteractionFragment fragment = new LiveInteractionFragment();
@@ -85,15 +85,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPageSize = 15;
+        mPageSize = 10;
         mHashSet = new HashSet<>();
         mListView.setOnScrollListener(this);
         getChatInfo();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPage = 0;
-                mHashSet.clear();
+                mTimeStamp = getTimeStamp(chatDatas);
+                mPage = mPage + 1;
                 getChatInfo();
                 if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
@@ -111,6 +111,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
                             Log.d(TAG, "谈话内容" + liveHomeChatInfoResp.getData().getData().toString());
+                            chatDatas=liveHomeChatInfoResp.getData().getData();
                             updateCHatInfo(liveHomeChatInfoResp.getData().getData());
                         }
                     }
@@ -120,7 +121,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private long getTimeStamp(List<LiveHomeChatInfo.ChatData> chatDatas) {
         if (chatDatas != null && !chatDatas.isEmpty()) {
-            return chatDatas.get(chatDatas.size() - 1).getTimeStamp();
+            return chatDatas.get(0).getTimeStamp();
         }
         return 0;
     }
@@ -131,35 +132,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 mSwipeRefreshLayout.setRefreshing(false);
                 return;
             }
-        }
-        if (mFooter == null) {
-            mFooter = new TextView(getContext());
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
-                    getResources().getDisplayMetrics());
-            mFooter.setPadding(padding, padding, padding, padding);
-            mFooter.setGravity(Gravity.CENTER);
-            mFooter.setText(R.string.click_to_load_more);
-            mFooter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPage = mPage + 1;
-                    mTimeStamp = getTimeStamp(chatDatas);
-                    Log.d(TAG, "数据的位移标识 " + mTimeStamp);
-                    getChatInfo();
-                }
-            });
-            mListView.addFooterView(mFooter);
-        }
-
-        if (chatDatas.size() < mPageSize) {
-            // When get number of data is less than mPageSize, means no data anymore
-            // so remove footer
-            mListView.removeFooterView(mFooter);
-            mFooter = null;
+            return;
         }
         if (mSwipeRefreshLayout.isRefreshing()) {
-            mLiveChatInfoAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
         }
 

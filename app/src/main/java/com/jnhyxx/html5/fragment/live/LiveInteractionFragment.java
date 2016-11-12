@@ -26,13 +26,13 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.LiveActivity;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
+import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -51,7 +51,7 @@ import butterknife.Unbinder;
  * 直播互动界面
  */
 
-public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener, LiveActivity.LiveDataListener {
+public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener {
     private static final String TAG = "LiveInteractionFragment";
 
     @BindView(R.id.listView)
@@ -119,10 +119,21 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
         });
-        if (getActivity() instanceof LiveActivity) {
-            ((LiveActivity) getActivity()).setLiveDataListener(this);
-        }
     }
+
+    NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveOriginalData(String data) {
+            super.onReceiveOriginalData(data);
+            LiveHomeChatInfo.ChatData chatData = new Gson().fromJson(data, LiveHomeChatInfo.ChatData.class);
+            if (chatData != null) {
+                if (mHashSet.add(chatData.getCreateTime())) {
+                    mLiveChatInfoAdapter.add(chatData);
+                    mLiveChatInfoAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    };
 
     @OnClick({R.id.liveSpeak})
     public void onClick(View view) {
@@ -241,7 +252,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         liveHomeChatInfo.sort();
         for (LiveHomeChatInfo.ChatData item : liveHomeChatInfo.getData()) {
 //            if (mHashSet.add(item.getCreateTime())) {
-                mLiveChatInfoAdapter.add(item);
+            mLiveChatInfoAdapter.add(item);
 //            }
         }
         mLiveChatInfoAdapter.notifyDataSetChanged();
@@ -258,17 +269,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         int topRowVerticalPosition =
                 (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-    }
-
-    @Override
-    public void liveHomeData(String data) {
-        LiveHomeChatInfo.ChatData chatData = new Gson().fromJson(data, LiveHomeChatInfo.ChatData.class);
-        if (chatData != null) {
-            if (mHashSet.add(chatData.getCreateTime())) {
-                mLiveChatInfoAdapter.add(chatData);
-                mLiveChatInfoAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     static class LiveChatInfoAdapter extends ArrayAdapter<LiveHomeChatInfo.ChatData> {

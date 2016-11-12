@@ -29,5 +29,31 @@
             android:textColor="@color/emptyViewColor"
             android:textSize="20sp"
             android:visibility="gone"/>/>
+
+        <EditText
+            android:focusable="true"
+            android:imeOptions="actionDone"
+            android:id="@+id/speakEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/blueAssist"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:textColor="@color/blackPrimary"
+            android:textColorHint="@color/grayHint"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/liveSpeak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:src="@drawable/bg_live_speak"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

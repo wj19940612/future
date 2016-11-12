@@ -14,6 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -47,7 +49,6 @@
         android:id="@+id/managerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="@dimen/common_margin">
 
         <TextView
@@ -58,6 +59,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/blueAssist"
+            android:textSize="11dp"
             tools:text="管理员"/>
 
         <TextView
@@ -111,12 +113,11 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/commonUserLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="@dimen/common_margin">
+        android:layout_marginTop="@dimen/common_margin"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/commonUserStatus"
@@ -126,6 +127,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/colorDisable"
+            android:textSize="11sp"
             tools:text="普通游客"/>
 
         <TextView
@@ -181,7 +183,6 @@
         android:id="@+id/userMineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="@dimen/common_margin"
         android:visibility="gone">
 
@@ -193,6 +194,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/mineTimeHint"
             android:textColor="@color/colorDisable"
+            android:textSize="11sp"
             tools:text="我"/>
 
         <TextView

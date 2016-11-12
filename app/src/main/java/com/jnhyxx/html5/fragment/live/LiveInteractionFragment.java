@@ -5,26 +5,37 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
+import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.LiveActivity;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
@@ -32,6 +43,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -39,13 +51,19 @@ import butterknife.Unbinder;
  * 直播互动界面
  */
 
-public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener {
+public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener, LiveActivity.LiveDataListener {
     private static final String TAG = "LiveInteractionFragment";
 
     @BindView(R.id.listView)
     ListView mListView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.empty)
+    TextView mEmpty;
+    @BindView(R.id.liveSpeak)
+    ImageView mLiveSpeak;
+    @BindView(R.id.speakEditText)
+    EditText mSpeakEditText;
 
     private Unbinder mBind;
 
@@ -59,6 +77,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private HashSet<Long> mHashSet;
 
     private List<LiveHomeChatInfo.ChatData> chatDatas;
+    private InputMethodManager mInputMethodManager;
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -100,7 +119,83 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
         });
+        if (getActivity() instanceof LiveActivity) {
+            ((LiveActivity) getActivity()).setLiveDataListener(this);
+        }
     }
+
+    @OnClick({R.id.liveSpeak})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.liveSpeak:
+                sendLiveSpeak();
+                break;
+        }
+    }
+
+    private void sendLiveSpeak() {
+//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        if (!mSpeakEditText.isShown()) {
+            ToastUtil.curt("点击了发送狂");
+            mSpeakEditText.setVisibility(View.VISIBLE);
+            mLiveSpeak.setVisibility(View.GONE);
+            mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+            mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
+
+            mSpeakEditText.addTextChangedListener(new ValidationWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
+    }
+
+    private OnEditorActionListener mOnEditorActionListener = new OnEditorActionListener() {
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                ToastUtil.curt("enter键盘");
+                if (mSpeakEditText != null && TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
+                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
+                }
+                if (mInputMethodManager.isActive(mSpeakEditText)) {
+                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if (mSpeakEditText.isShown()) {
+                    mSpeakEditText.setVisibility(View.GONE);
+                }
+                if (!mLiveSpeak.isShown()) {
+                    mLiveSpeak.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+//            if (actionId == EditorInfo.IME_ACTION_GO) {
+//                ToastUtil.curt("你点了软键盘'去往'按钮");
+//                return true;
+//            } else if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                ToastUtil.curt("你点了软键盘'搜索'按钮");
+//                return true;
+//            } else if (actionId == EditorInfo.IME_ACTION_SEND) {
+//                ToastUtil.curt("你点了软键盘'发送'按钮");
+//                return true;
+//            } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                ToastUtil.curt("你点了软键盘下一个按钮");
+//                return true;
+//            } else if (actionId == EditorInfo.IME_ACTION_NONE) {
+//                ToastUtil.curt("你点击了none按钮");
+//                return true;
+//            } else if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                ToastUtil.curt("你点击了完成按钮");
+//                return true;
+//            }
+            return false;
+        }
+    };
 
     private void getChatInfo() {
         API.Live.getLiveTalk(mTimeStamp, mPage, mPageSize)
@@ -111,7 +206,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
                             Log.d(TAG, "谈话内容" + liveHomeChatInfoResp.getData().getData().toString());
-                            chatDatas=liveHomeChatInfoResp.getData().getData();
+                            chatDatas = liveHomeChatInfoResp.getData().getData();
                             updateCHatInfo(liveHomeChatInfoResp.getData().getData());
                         }
                     }
@@ -162,6 +257,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         int topRowVerticalPosition =
                 (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+    }
+
+    @Override
+    public void liveHomeData(String data) {
+        LiveHomeChatInfo.ChatData chatData = new Gson().fromJson(data, LiveHomeChatInfo.ChatData.class);
+        if (chatData != null) {
+            if (mHashSet.add(chatData.getCreateTime())) {
+                mLiveChatInfoAdapter.add(chatData);
+                mLiveChatInfoAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     static class LiveChatInfoAdapter extends ArrayAdapter<LiveHomeChatInfo.ChatData> {

@@ -80,15 +80,26 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
 
     private ServerIpPort mServerIpPort;
 
+    private LiveDataListener mLiveDataListener;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
             Log.d(TAG, "onReceiveOriginalData: " + data);
+            mLiveDataListener.liveHomeData(data);
         }
     };
 
+    public interface LiveDataListener {
+        void liveHomeData(String data);
+    }
+
+    public void setLiveDataListener(LiveDataListener dataListener) {
+        this.mLiveDataListener = dataListener;
+    }
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);

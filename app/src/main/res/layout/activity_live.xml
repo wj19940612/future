@@ -25,17 +25,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/liveLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"/>
+        <!--<com.jnhnxx.livevideo.NEVideoView-->
+        <!--android:id="@+id/videoView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="203dp"-->
+        <!--android:visibility="visible"/>-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/teacherHeadPortrait"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/bg_teacher_head_portrait"/>-->
+        <com.jnhnxx.livevideo.LivePlayer
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="203dp"/>
+
+        <LinearLayout
+            android:id="@+id/bufferingPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:text="@string/buffering"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp"/>
+
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Large"
+                android:layout_width="50dip"
+                android:layout_height="50dip"/>
+        </LinearLayout>
     </RelativeLayout>
 
     <com.jnhyxx.html5.view.SlidingTabLayout

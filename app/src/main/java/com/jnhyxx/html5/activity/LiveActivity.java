@@ -12,8 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
+import com.jnhnxx.livevideo.LivePlayer;
+import com.jnhnxx.livevideo.LivePlayerController;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -29,12 +30,10 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.VideoLayoutParams;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
-import com.lecloud.sdk.videoview.IMediaDataVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +44,10 @@ import butterknife.ButterKnife;
 
 public class LiveActivity extends LiveVideoActivity {
 
-    @BindView(R.id.liveLayout)
-    RelativeLayout mLiveLayout;
+    private static final String MEDIA_TYPE = "livestream";
+    private static final boolean HARDWARE_DECODE = true;
+    private static final boolean PAUSE_IN_BACKGROUND = true;
+
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
@@ -55,6 +56,12 @@ public class LiveActivity extends LiveVideoActivity {
     LinearLayout mActivityLive;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.videoView)
+    LivePlayer mVideoView;
+    @BindView(R.id.bufferingPrompt)
+    LinearLayout mBufferingPrompt;
+
+    private String mVideoPath;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
@@ -77,11 +84,52 @@ public class LiveActivity extends LiveVideoActivity {
         ButterKnife.bind(this);
 
         initTitleBar();
-        initVideoView();
+        //initVideoView();
+        initVideoPlayer();
         initSlidingTabLayout();
 
         getChattingIpPort();
         getLiveMessage();
+    }
+
+    private void initVideoPlayer() {
+        mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
+
+        LivePlayerController playerController = new LivePlayerController(this);
+        mVideoView.setPlayerController(playerController);
+        mVideoView.setVideoPath(mVideoPath);
+    }
+
+    private void initVideoView() {
+//        mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
+//
+//        NEMediaController mediaController = new NEMediaController(this);
+//        mVideoView.setMediaController(mediaController);
+//        mVideoView.setBufferStrategy(0); //直播低延时
+//        mVideoView.setBufferingIndicator(mBufferingPrompt);
+//        mVideoView.setMediaType(MEDIA_TYPE);
+//        mVideoView.setHardwareDecoder(HARDWARE_DECODE);
+//        mVideoView.setPauseInBackground(PAUSE_IN_BACKGROUND);
+//        mVideoView.setVideoPath(mVideoPath);
+//        // mMediaPlayer.setLogLevel(NELP_LOG_SILENT); //设置log级别
+//        mVideoView.requestFocus();
+//        mVideoView.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PAUSE_IN_BACKGROUND && !mVideoView.isPaused()) {
+            mVideoView.start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (PAUSE_IN_BACKGROUND) {
+            mVideoView.pause(); //锁屏时暂停
+        }
     }
 
     @Override
@@ -103,11 +151,6 @@ public class LiveActivity extends LiveVideoActivity {
                         }
                     }
                 }).fire();
-    }
-
-    @Override
-    protected void onAddViewView(IMediaDataVideoView videoView) {
-        mLiveLayout.addView((View) videoView, VideoLayoutParams.computeContainerSize(this, 16, 9));
     }
 
     private void getLiveMessage() {

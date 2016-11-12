@@ -110,8 +110,7 @@ dependencies {
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')
-    compile project(':LePlayerSkin')
-
+    compile project(':livevideo')
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'

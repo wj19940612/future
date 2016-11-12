@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_live"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.LiveActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:customView="@layout/tb_live_program_dir"
+        app:rightText="@string/live_right_title"
+        app:rightTextColor="@android:color/white"
+        app:rightTextSize="16sp"
+        app:rightVisible="true"
+        app:titleText="@string/live"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.jnhnxx.livevideo.NEVideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="203dp"
+            android:visibility="visible"/>
+
+        <!--<com.jnhnxx.livevideo.LiveVideoView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="203dp"/>-->
+
+        <LinearLayout
+            android:id="@+id/bufferingPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:text="@string/buffering"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp"/>
+
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Large"
+                android:layout_width="50dip"
+                android:layout_height="50dip"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.jnhyxx.html5.view.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

@@ -9,12 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/LePlayerSdk" />
-            <option value="$PROJECT_DIR$/LePlayerSkin" />
             <option value="$PROJECT_DIR$/SlidingMenu" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/chart" />
             <option value="$PROJECT_DIR$/kutils" />
+            <option value="$PROJECT_DIR$/livevideo" />
             <option value="$PROJECT_DIR$/umenglibrary" />
           </set>
         </option>

@@ -441,4 +441,5 @@
     <string name="live_program_dir">节目单</string>
     <string name="live_interaction">直播互动</string>
     <string name="live_teacher_guide">老师指导</string>
+    <string name="buffering">缓冲中</string>
 </resources>

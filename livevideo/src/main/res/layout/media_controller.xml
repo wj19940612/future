@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:background="@drawable/media_controller_bg"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/media_controller_play_pause"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/media_controller_pause"/>
+
+    <TextView
+        android:id="@+id/media_controller_time_current"
+        style="@style/MediaController_Text"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/media_controller_play_pause"
+        android:gravity="center"
+        android:textSize="13dp"/>
+
+    <SeekBar
+        android:id="@+id/media_controller_seekbar"
+        style="@style/MediaController_SeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:focusable="true"
+        android:gravity="center"
+        android:max="1000"/>
+
+    <TextView
+        android:id="@+id/media_controller_time_total"
+        style="@style/MediaController_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/video_player_mute"
+        android:gravity="center"
+        android:textSize="13dp"/>
+
+    <ImageView
+        android:id="@+id/video_player_mute"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/media_controller_mute02"/>
+
+    <ImageView
+        android:id="@+id/snapShot"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:focusable="true"
+        android:src="@drawable/media_controller_takesnap"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/video_player_scale"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/media_controller_scale01"/>
+</LinearLayout>

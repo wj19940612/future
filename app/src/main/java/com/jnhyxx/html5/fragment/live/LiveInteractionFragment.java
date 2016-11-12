@@ -104,7 +104,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPageSize = 30;
+        mPageSize = 20;
         mHashSet = new HashSet<>();
         mListView.setOnScrollListener(this);
         getChatInfo();
@@ -137,11 +137,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 //        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         if (!mSpeakEditText.isShown()) {
-            ToastUtil.curt("点击了发送狂");
             mSpeakEditText.setVisibility(View.VISIBLE);
             mLiveSpeak.setVisibility(View.GONE);
             mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+//            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+            mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
             mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
 
             mSpeakEditText.addTextChangedListener(new ValidationWatcher() {
@@ -205,9 +205,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     @Override
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
-                            Log.d(TAG, "谈话内容" + liveHomeChatInfoResp.getData().getData().toString());
+                            Log.d(TAG, "谈话内容" + liveHomeChatInfoResp.getData().toString());
                             chatDatas = liveHomeChatInfoResp.getData().getData();
-                            updateCHatInfo(liveHomeChatInfoResp.getData().getData());
+                            updateCHatInfo(liveHomeChatInfoResp.getData());
                         }
                     }
                 })
@@ -221,8 +221,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         return 0;
     }
 
-    private void updateCHatInfo(final List<LiveHomeChatInfo.ChatData> chatDatas) {
-        if (chatDatas == null || chatDatas.isEmpty() || chatDatas.size() == 0) {
+    private void updateCHatInfo(final LiveHomeChatInfo liveHomeChatInfo) {
+        if (liveHomeChatInfo == null || liveHomeChatInfo.getData().isEmpty() || liveHomeChatInfo.getData().size() == 0) {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 return;
@@ -238,10 +238,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
 
-        for (LiveHomeChatInfo.ChatData item : chatDatas) {
-            if (mHashSet.add(item.getCreateTime())) {
+        liveHomeChatInfo.sort();
+        for (LiveHomeChatInfo.ChatData item : liveHomeChatInfo.getData()) {
+//            if (mHashSet.add(item.getCreateTime())) {
                 mLiveChatInfoAdapter.add(item);
-            }
+//            }
         }
         mLiveChatInfoAdapter.notifyDataSetChanged();
     }
@@ -375,12 +376,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     String formatDateRange = DateUtils.formatDateRange(context, item.getCreateTime(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR);
                     Log.d(TAG, "formatDateRange " + formatDateRange);
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
+//                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
                     format = format + "  " + relativeTimeSpanString2;
                 } else {
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
                     format = format + "    " + relativeTimeSpanString2;
-                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
+//                    Log.d(TAG, "一参 relativeTimeSpanString2 " + relativeTimeSpanString2);
                 }
 
 

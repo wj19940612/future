@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain.live;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -78,6 +80,14 @@ public class LiveHomeChatInfo {
         this.data = data;
     }
 
+    public void sort() {
+        Collections.sort(getData(), new Comparator<ChatData>() {
+            @Override
+            public int compare(ChatData o1, ChatData o2) {
+                return (int) (o2.getCreateTime() - o1.getCreateTime());
+            }
+        });
+    }
 
     /**
      * 聊天人的类型,0代表管理员 1 代表老师 2 代表普通用户
@@ -259,6 +269,7 @@ public class LiveHomeChatInfo {
                     ", owner=" + owner +
                     '}';
         }
+
     }
 
     @Override

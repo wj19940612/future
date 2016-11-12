@@ -48,6 +48,7 @@ public class NettyClient {
     public interface QuotaDataFilter {
         /**
          * Filter quota data
+         *
          * @param data
          * @return if the data need to be filtered return true, false otherwise
          */

@@ -51,6 +51,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.android.volley.Request.Method.HEAD;
+
 /**
  * Created by ${wangJie} on 2016/11/8.
  * 直播互动界面
@@ -161,8 +163,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mDataArrayList.add(0, chatData);
             mLiveChatInfoAdapter.notifyDataSetChanged();
         }
-        mLiveChatInfoAdapter.add(chatData);
-        mDataArrayList.add(0, chatData);
+        if (mHashSet.add(chatData.getCreateTime())) {
+            mLiveChatInfoAdapter.add(chatData);
+            mDataArrayList.add(0, chatData);
+        }
+
         mLiveChatInfoAdapter.notifyDataSetChanged();
     }
 
@@ -192,8 +197,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                             ToastUtil.curt(R.string.live_time_is_not);
                         }
                     }
-
-
                 }).fire();
     }
 
@@ -408,7 +411,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(ChatData item, int position, Context context) {
 
-                String format = DateUtil.format(item.getCreateTime(),"HH:mm:ss");
+                String format = DateUtil.format(item.getCreateTime(), "HH:mm:ss");
 
                 boolean today = DateUtils.isToday(item.getCreateTime());
 //                if (today) {

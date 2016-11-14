@@ -61,25 +61,10 @@ public class LiveActivity extends BaseActivity {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-<<<<<<< HEAD
-
-
-//    //    老师指令布局
-//    @BindView(R.id.teacherGuideLayout)
-//    RelativeLayout mTeacherGuideLayout;
-//    @BindView(R.id.teacherHeadImage)
-//    CircularAnnulusImageView mTeacherHeadImage;
-//    @BindView(R.id.teacherGuideContent)
-//    TextView mTeacherGuideContent;
-
-
-    @BindView(R.id.videoView)
-    LivePlayer mVideoView;
-=======
 
     @BindView(R.id.livePlayer)
     LivePlayer mLivePlayer;
->>>>>>> 3775b53cecf313e82bfed35de7d8b295db6282a5
+
     @BindView(R.id.bufferingPrompt)
     LinearLayout mBufferingPrompt;
 

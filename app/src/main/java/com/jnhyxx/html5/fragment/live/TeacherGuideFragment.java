@@ -94,7 +94,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mLiveSpeak.setVisibility(View.GONE);
-        mPageSize = 5;
+        mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataInfos = new ArrayList<>();
         mListView.setOnScrollListener(this);
@@ -146,6 +146,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void getTeacherGuideIfo() {
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
+            mEmpty.setText("老师暂未发出指令");
+            mListView.setEmptyView(mEmpty);
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

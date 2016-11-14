@@ -57,10 +57,9 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 6
-            versionName '1.2.5'
+            versionCode 7
+            versionName '1.2.6'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion 18
         }
         yybd { // 原油宝典
             applicationId 'com.jnhyxx.yybd'

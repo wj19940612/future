@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,7 +30,7 @@ import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.LiveTeacherInfoDialogFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
@@ -59,8 +58,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.liveProgramDir)
-    FrameLayout mLiveProgramDir;
+
 
 //    //    老师指令布局
 //    @BindView(R.id.teacherGuideLayout)
@@ -69,11 +67,6 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
 //    CircularAnnulusImageView mTeacherHeadImage;
 //    @BindView(R.id.teacherGuideContent)
 //    TextView mTeacherGuideContent;
-
-
-    // TODO: 2016/11/8 房间Id 
-//    private String mLiveId = "A2016080200000n1";
-    private String mLiveId = "A2016053100000je";
 
 
     @BindView(R.id.videoView)
@@ -313,8 +306,8 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         requestUserPositions();
     }
 
-    private boolean userHasPositions(HomePositions mHomePositions) {
-        if (mHomePositions != null && !mHomePositions.getCashOpS().isEmpty()) {
+    private boolean ifHasPositions(HomePositions mHomePositions) {
+        if (mHomePositions != null && mHomePositions.getCashOpS() != null && !mHomePositions.getCashOpS().isEmpty()) {
             return true;
         }
         return false;
@@ -323,19 +316,15 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     private void requestUserPositions() {
         if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback<Resp<HomePositions>>(false) {
-                        @Override
-                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
-                            Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
-                            if (homePositionsResp.isSuccess()) {
-                                HomePositions mHomePositions = homePositionsResp.getData();
-                                boolean userHasPositions = userHasPositions(mHomePositions);
-                                requestProductList(userHasPositions, mHomePositions);
-                            }
-                        }
+                    .setCallback(new Callback1<Resp<HomePositions>>() {
 
                         @Override
-                        public void onReceive(Resp<HomePositions> homePositionsResp) {
+                        protected void onRespSuccess(Resp<HomePositions> resp) {
+                            if (resp.isSuccess() && resp.hasData()) {
+                                HomePositions mHomePositions = resp.getData();
+                                boolean userHasPositions = ifHasPositions(mHomePositions);
+                                requestProductList(userHasPositions, mHomePositions);
+                            }
                         }
                     }).fire();
         }

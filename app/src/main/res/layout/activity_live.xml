@@ -124,51 +124,6 @@
                 android:layout_height="50dp"/>
         </LinearLayout>
     </RelativeLayout>
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/titleBar"-->
-        <!--android:layout_marginLeft="@dimen/common_margin"-->
-        <!--android:layout_marginRight="@dimen/common_margin"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/teacherGuideLayout"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/bg_live_teacherhead"-->
-            <!--android:gravity="center">-->
-
-            <!--<com.jnhyxx.html5.view.CircularAnnulusImageView-->
-                <!--android:id="@+id/teacherHeadImage"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:clickable="true"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:src="@drawable/ic_live_pic_head"-->
-                <!--app:borderColor="@android:color/white"-->
-                <!--app:borderWidth="1dp"/>-->
-        <!--</RelativeLayout>-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:src="@drawable/arrow_live_angle_teacher_right"/>-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/teacherGuideContent"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/bg_live_tacher_guide"-->
-            <!--android:lineSpacingExtra="8dp"-->
-            <!--android:minHeight="60dp"-->
-            <!--android:padding="10dp"-->
-            <!--android:textColor="@color/blackPrimary"-->
-            <!--android:textSize="@dimen/min_text_size"-->
-            <!--android:text="老设计费哈萨克金凤凰刷卡机划分空间撒谎手机卡号放假快乐撒谎发空间撒"/>-->
-    <!--</LinearLayout>-->
 
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
@@ -182,12 +137,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/slidingTabLayout"/>
-
-    <FrameLayout
-        android:id="@+id/liveProgramDir"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/titleBar"
-        android:visibility="gone"/>
 
 </LinearLayout>

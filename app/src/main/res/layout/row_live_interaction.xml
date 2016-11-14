@@ -102,13 +102,12 @@
 
             <TextView
                 android:id="@+id/content"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/bg_live_manager"
                 android:padding="10dp"
                 android:textColor="@color/blackPrimary"
-                tools:text="我是管理员卡司法局阿喀琉斯解放路卡就是房间里萨科技福利卡时间福建省拉开房间拉斯克奖爱上付款了撒附加费拉开始减肥"/>
+                tools:text="我是管理员卡司法局阿喀琉斯解放路卡肥"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -169,13 +168,12 @@
 
             <TextView
                 android:id="@+id/commonUserContent"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/bg_white"
                 android:padding="10dp"
                 android:textColor="@color/blackPrimary"
-                tools:text="普通游客收款返款撒放空间撒谎发发空间发货快睡觉阿富汗奥斯卡积分换空间按时发货是否会看见哈萨克解放后撒付款时间啊回复空间撒谎发"/>
+                tools:text="普通游客收款返款谎发"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -184,7 +182,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/userMineStatus"
@@ -215,14 +213,18 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/userMineContent"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/userMineContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_live_user_mine"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
-                tools:text="我自己是会计法律框架阿拉山口房间爱空间首付款法律框架埃里克森积分来看撒娇弗兰克会计师福利卡时间浪费空间撒联发科联发科数据爱丽丝卡减肥了咖啡发生可立即发送卡即可"/>
+                tools:text="我自己是所的撒多大撒多的撒奥所蒂可拉倒就流口水发卡机上来发数据来看多岁撒多"/>
 
             <ImageView
                 android:id="@+id/userMineArrow"
@@ -235,7 +237,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_live_userhead"
-                android:clickable="true">
+                android:clickable="true"
+                android:minWidth="25dp">
 
                 <ImageView
                     android:id="@+id/userMineHeadImage"

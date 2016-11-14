@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
+import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BaseFragment;
@@ -148,26 +149,55 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         });
     }
 
+    LiveHomeChatInfo.ChatData chatData;
+
     public void setData(String data) {
+
         Log.d("newData", "新数据" + data);
         LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-        LiveHomeChatInfo.ChatData chatData = new LiveHomeChatInfo.ChatData();
-        chatData.setLiveSpeakInfo(liveSpeakInfo);
-        if (chatData != null) {
-            mLiveChatInfoAdapter.add(chatData);
-            mDataArrayList.add(0, chatData);
-            mLiveChatInfoAdapter.notifyDataSetChanged();
+        if (chatData == null) {
+            chatData = new LiveHomeChatInfo.ChatData();
         }
+        chatData.setLiveSpeakInfo(liveSpeakInfo);
+        mLiveChatInfoAdapter.add(chatData);
+        mDataArrayList.add(0, chatData);
+        mLiveChatInfoAdapter.notifyDataSetChanged();
     }
 
     @OnClick({R.id.liveSpeak})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.liveSpeak:
-                sendLiveSpeak();
+                getLiveMessage();
                 break;
         }
     }
+
+
+    private LiveMessage mLiveMessage;
+
+    public void getLiveMessage() {
+        API.Live.getLiveMessage().setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback<Resp<LiveMessage>>() {
+                    @Override
+                    public void onReceive(Resp<LiveMessage> liveMessageResp) {
+                        if (liveMessageResp.isSuccess() &&
+                                liveMessageResp.hasData() &&
+                                liveMessageResp.getData().getTeacher() != null &&
+                                liveMessageResp.getData().getTeacher().getTeacherAccountId() != 0) {
+                            sendLiveSpeak();
+                        } else {
+                            if (!mSpeakEditText.isShown()) {
+                                mSpeakEditText.setVisibility(View.VISIBLE);
+                            }
+                            mSpeakEditText.setHint(R.string.live_time_is_not);
+                        }
+                    }
+
+
+                }).fire();
+    }
+
 
     private void sendLiveSpeak() {
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

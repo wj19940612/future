@@ -213,7 +213,7 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -221,10 +221,11 @@
                 android:id="@+id/userMineContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="300dp"
                 android:background="@drawable/bg_live_user_mine"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
-                tools:text="我自己是所的撒多大撒多的撒奥所蒂可拉倒就流口水发卡机上来发数据来看多岁撒多"/>
+                tools:text="我自卡机上来发数据来看多岁撒多"/>
 
             <ImageView
                 android:id="@+id/userMineArrow"

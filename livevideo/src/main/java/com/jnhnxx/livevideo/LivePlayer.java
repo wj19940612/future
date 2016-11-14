@@ -48,7 +48,7 @@ public class LivePlayer extends TextureView implements
     private View mBufferView;
     private boolean mMute;
 
-    // assist
+    // assist log
     private String mLogPath = null;
     private int mLogLevel = 0;
 
@@ -68,7 +68,6 @@ public class LivePlayer extends TextureView implements
     }
 
     private void initVideoView() {
-        Log.d(TAG, "initVideoView: ");
         mVideoWidth = 0;
         mVideoHeight = 0;
         mPixelSarNum = 0;
@@ -77,18 +76,25 @@ public class LivePlayer extends TextureView implements
         registerBroadcast();
         mCurState = IDLE;
 
+        initLivePlayerController();
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMediaPlayer != null && mPlayerController != null) {
-                    if (mPlayerController.isShowing()) {
-                        mPlayerController.hide();
-                    } else {
-                        mPlayerController.show();
-                    }
+                if (mPlayerController.isShowing()) {
+                    mPlayerController.hide();
+                } else {
+                    mPlayerController.show();
                 }
             }
         });
+    }
+
+    private void initLivePlayerController() {
+        mPlayerController = new LivePlayerController(getContext());
+        mPlayerController.setAnchorView(this);
+        mPlayerController.setPlayer(this);
+        mPlayerController.setEnabled(false);
     }
 
     private void registerBroadcast() {
@@ -112,13 +118,10 @@ public class LivePlayer extends TextureView implements
 
     public void setVideoURI(Uri uri) {
         mUri = uri;
-        openVideo();
-        requestLayout();
-        invalidate();
-    }
-
-    public void setPlayerController(LivePlayerController playerController) {
-        mPlayerController = playerController;
+        mCurState = PAUSED;
+        if (mPlayerController != null) {
+            mPlayerController.setEnabled(true);
+        }
     }
 
     public void setBufferView(View bufferView) {
@@ -129,7 +132,6 @@ public class LivePlayer extends TextureView implements
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Log.d(TAG, "onSurfaceTextureAvailable: w: " + width + " h: " + height);
         mSurfaceTexture = surface;
-        openVideo();
     }
 
     @Override
@@ -193,7 +195,6 @@ public class LivePlayer extends TextureView implements
             mMediaPlayer.prepareAsync(getContext()); //初始化视频文件
             mCurState = PREPARING;
 
-            attachPlayerController();
         } catch (IOException ex) {
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
@@ -202,16 +203,6 @@ public class LivePlayer extends TextureView implements
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
             return;
-        }
-    }
-
-    private void attachPlayerController() {
-        if (mMediaPlayer != null && mPlayerController != null) {
-            mPlayerController.setPlayer(this);
-            View anchorView = this.getParent() instanceof View ?
-                    (View) this.getParent() : this;
-            mPlayerController.setAnchorView(anchorView);
-            mPlayerController.setEnabled(isPrepared());
         }
     }
 
@@ -226,7 +217,7 @@ public class LivePlayer extends TextureView implements
 
     private NELivePlayer.OnVideoParseErrorListener mVideoParseErrorListener = new NELivePlayer.OnVideoParseErrorListener() {
         public void onVideoParseError(NELivePlayer mp) {
-            Toast.makeText(getContext(), "错误: 视频解析异常", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "错误: 视频解析异常", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -304,7 +295,7 @@ public class LivePlayer extends TextureView implements
                 mPlayerController.hide();
             }
 
-            Toast.makeText(getContext(), "错误: 直播已经结束,请稍后再试", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "错误: 直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
 
             return true;
         }
@@ -342,13 +333,8 @@ public class LivePlayer extends TextureView implements
          */
         @Override
         public void onPrepared(NELivePlayer mp) {
-            Log.d(TAG, "onPrepared");
             mCurState = PREPARED;
 
-            // briefly show the mediacontroller
-            if (mPlayerController != null) {
-                mPlayerController.setEnabled(true);
-            }
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
 
@@ -357,14 +343,13 @@ public class LivePlayer extends TextureView implements
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 scalePlayerBasedOnVideoSize();
                 if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
-                    if (!isPaused()) {
 
-                        start();
+                    Log.d(TAG, "onPrepared: start play");
 
-                        if (mPlayerController != null) {
-                            mPlayerController.show();
-                            mPlayerController.setEnabled(isPrepared());
-                        }
+                    if (mMediaPlayer != null) {
+                        mMediaPlayer.start();
+                        mMediaPlayer.setMute(mMute);
+                        mCurState = STARTED;
                     }
                 }
             }
@@ -385,16 +370,15 @@ public class LivePlayer extends TextureView implements
 
     @Override
     public void start() {
-        if (mMediaPlayer != null && isPrepared()) {
-            mMediaPlayer.start();
-            mCurState = STARTED;
+        if (isPaused()) {
+            openVideo();
         }
     }
 
     @Override
     public void pause() {
-        if (mMediaPlayer != null && isPrepared()) {
-            if (mMediaPlayer.isPlaying()) {
+        if (isPlaying()) {
+            if (mMediaPlayer != null) {
                 mMediaPlayer.pause();
             }
             mCurState = PAUSED;

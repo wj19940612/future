@@ -27,6 +27,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
+import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
@@ -82,10 +83,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private HashSet<Long> mHashSet;
 
-    private List<LiveHomeChatInfo.ChatData> mChatDataListInfo;
+
+    private List<ChatData> mChatDataListInfo;
     private InputMethodManager mInputMethodManager;
 
-    private ArrayList<LiveHomeChatInfo.ChatData> mDataArrayList;
+    private ArrayList<ChatData> mDataArrayList;
 
     private boolean isRefreshed;
 
@@ -148,17 +150,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             }
         });
     }
-
-    LiveHomeChatInfo.ChatData chatData;
-
     public void setData(String data) {
 
         Log.d("newData", "新数据" + data);
         LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-        if (chatData == null) {
-            chatData = new LiveHomeChatInfo.ChatData();
+
+        ChatData chatData = new ChatData(liveSpeakInfo);
+        if (chatData != null) {
+            mLiveChatInfoAdapter.add(chatData);
+            mDataArrayList.add(0, chatData);
+            mLiveChatInfoAdapter.notifyDataSetChanged();
         }
-        chatData.setLiveSpeakInfo(liveSpeakInfo);
         mLiveChatInfoAdapter.add(chatData);
         mDataArrayList.add(0, chatData);
         mLiveChatInfoAdapter.notifyDataSetChanged();
@@ -268,7 +270,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 .fire();
     }
 
-    private long getTimeStamp(List<LiveHomeChatInfo.ChatData> chatDatas) {
+    private long getTimeStamp(List<ChatData> chatDatas) {
         if (chatDatas != null && !chatDatas.isEmpty()) {
             return chatDatas.get(chatDatas.size() - 1).getTimeStamp();
         }
@@ -329,7 +331,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
     }
 
-    static class LiveChatInfoAdapter extends ArrayAdapter<LiveHomeChatInfo.ChatData> {
+    static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
 
         Context mContext;
 
@@ -404,7 +406,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(LiveHomeChatInfo.ChatData item, int position, Context context) {
+            public void bindViewWithData(ChatData item, int position, Context context) {
 
                 String format = DateUtil.format(item.getCreateTime(),"HH:mm:ss");
 
@@ -421,7 +423,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 //                }
 
                 //老师或者管理员
-                if (!item.isCommonUser()) {
+                if (!item.isNormalUser()) {
                     showManagerLayout();
                     setChaterStatus(item, context);
                     mContent.setText(item.getMsg());
@@ -468,7 +470,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void setChaterStatus(LiveHomeChatInfo.ChatData item, Context context) {
+            private void setChaterStatus(ChatData item, Context context) {
                 String chatUser = "";
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);

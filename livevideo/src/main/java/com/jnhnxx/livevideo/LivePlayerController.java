@@ -37,10 +37,6 @@ public class LivePlayerController extends FrameLayout {
     private ImageView mSetPlayerScaleButton;
     private ImageView mMuteButton;
 
-    private boolean mMuteFlag = false;
-    private boolean mPaused = false;
-    private boolean mIsFullScreen = false;
-
     public LivePlayerController(Context context) {
         super(context);
         mContext = context;
@@ -57,12 +53,15 @@ public class LivePlayerController extends FrameLayout {
 
     public void setAnchorView(View view) {
         mAnchor = view;
-        removeAllViews();
         mRoot = LayoutInflater.from(mContext).inflate(R.layout.media_controller, this);
         mWindow.setContentView(mRoot);
         mWindow.setWidth(LayoutParams.MATCH_PARENT);
         mWindow.setHeight(LayoutParams.WRAP_CONTENT);
         initControllerView(mRoot);
+    }
+
+    public void setPauseButton() {
+        mPauseButton.setImageResource(R.drawable.media_controller_pause);
     }
 
     private void initControllerView(View v) {
@@ -94,7 +93,7 @@ public class LivePlayerController extends FrameLayout {
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayer == null) return;
+                if (mPlayer == null || !mPlayer.isPlaying()) return;
 
                 if (mPlayer.isMute()) {
                     mPlayer.setMute(false);
@@ -119,8 +118,6 @@ public class LivePlayerController extends FrameLayout {
 
         mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
-
-        setEnabled(false);
     }
 
     private Handler mHandler = new Handler() {

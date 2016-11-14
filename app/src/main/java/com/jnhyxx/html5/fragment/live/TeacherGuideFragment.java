@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveTeacherGuideInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
@@ -65,7 +66,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private LiveTeacherGuideAdapter mLiveTeacherGuideAdapter;
 
-    private ArrayList<LiveTeacherGuideInfo.DataInfo> mDataInfos;
+    private ArrayList<ChatData> mDataInfos;
 
     public static TeacherGuideFragment newInstance() {
 
@@ -166,7 +167,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 .fire();
     }
 
-    private void updateTeacherGuide(List<LiveTeacherGuideInfo.DataInfo> data) {
+    private void updateTeacherGuide(List<ChatData> data) {
         if (data == null || data.isEmpty()) {
             mEmpty.setText("老师暂未发出指令");
             mListView.setEmptyView(mEmpty);
@@ -178,7 +179,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         addListViewFootView(data);
     }
 
-    private void addListViewFootView(List<LiveTeacherGuideInfo.DataInfo> data) {
+    private void addListViewFootView(List<ChatData> data) {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
 //            mLiveTeacherGuideAdapter.clear();
@@ -212,7 +213,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
-    static class LiveTeacherGuideAdapter extends ArrayAdapter<LiveTeacherGuideInfo.DataInfo> {
+    static class LiveTeacherGuideAdapter extends ArrayAdapter<ChatData> {
         Context mContext;
 
         public LiveTeacherGuideAdapter(Context context) {
@@ -257,7 +258,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(LiveTeacherGuideInfo.DataInfo item, int position, Context context) {
+            public void bindDataWithView(ChatData item, int position, Context context) {
                 if (item == null) return;
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);

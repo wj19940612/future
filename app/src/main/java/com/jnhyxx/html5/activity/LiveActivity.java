@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -181,8 +182,14 @@ public class LiveActivity extends LiveVideoActivity {
         LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
         mPublicNoticeArea.setVisibility(View.GONE);
         mTeacherHead.setVisibility(View.VISIBLE);
-        Picasso.with(getActivity()).load(teacher.getPictureUrl())
-                .transform(new CircleTransform()).into(mTeacherHead);
+        String teacherHead = teacher.getPictureUrl();
+        if (TextUtils.isEmpty(teacherHead)) {
+            Picasso.with(getActivity()).load(R.drawable.ic_live_pic_head)
+                    .transform(new CircleTransform()).into(mTeacherHead);
+        } else {
+            Picasso.with(getActivity()).load(teacherHead)
+                    .transform(new CircleTransform()).into(mTeacherHead);
+        }
         connectRTMPServer(mLiveMessage.getActive());
     }
 

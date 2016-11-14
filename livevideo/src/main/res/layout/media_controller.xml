@@ -11,7 +11,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/media_controller_play"/>
+        android:src="@drawable/media_controller_pause"/>
 
     <TextView
         android:id="@+id/media_controller_time_current"

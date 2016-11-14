@@ -94,7 +94,7 @@ public class LivePlayerController extends FrameLayout {
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayer == null) return;
+                if (mPlayer == null || !mPlayer.isPlaying()) return;
 
                 if (mPlayer.isMute()) {
                     mPlayer.setMute(false);
@@ -119,8 +119,6 @@ public class LivePlayerController extends FrameLayout {
 
         mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
-
-        setEnabled(false);
     }
 
     private Handler mHandler = new Handler() {

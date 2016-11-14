@@ -159,8 +159,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             chatData = new LiveHomeChatInfo.ChatData();
         }
         chatData.setLiveSpeakInfo(liveSpeakInfo);
-        mLiveChatInfoAdapter.add(chatData);
-        mDataArrayList.add(0, chatData);
+        if (mHashSet.add(chatData.getCreateTime())) {
+            mLiveChatInfoAdapter.add(chatData);
+            mDataArrayList.add(0, chatData);
+        }
         mLiveChatInfoAdapter.notifyDataSetChanged();
     }
 
@@ -190,8 +192,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                             ToastUtil.curt(R.string.live_time_is_not);
                         }
                     }
-
-
                 }).fire();
     }
 
@@ -406,7 +406,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(LiveHomeChatInfo.ChatData item, int position, Context context) {
 
-                String format = DateUtil.format(item.getCreateTime(),"HH:mm:ss");
+                String format = DateUtil.format(item.getCreateTime(), "HH:mm:ss");
 
                 boolean today = DateUtils.isToday(item.getCreateTime());
 //                if (today) {

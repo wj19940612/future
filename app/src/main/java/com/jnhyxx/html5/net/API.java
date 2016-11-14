@@ -602,7 +602,6 @@ public class API extends APIBase {
                     .put("page", page)
                     .put("pageSize", pageSize));
         }
-
     }
 
     public static class Message {

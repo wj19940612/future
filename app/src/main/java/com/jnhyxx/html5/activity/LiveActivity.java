@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -93,7 +92,6 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
             }
         }
     };
-    private Product mProduct;
 
     @Override
 
@@ -111,19 +109,6 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
 
         setLayoutData();
 
-        receiveIntentData();
-    }
-
-    private void receiveIntentData() {
-        Intent intent = getIntent();
-        mProduct = (Product) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        receiveIntentData();
     }
 
     private void setLayoutData() {
@@ -227,14 +212,13 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.liveProgramme:
                 LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
-                // TODO: 2016/11/10 打开交易界面，目前先显示老师详情
+                // TODO: 2016/11/10 ，目前先显示老师详情
                 showTeacherInfoDialog();
                 break;
         }
     }
 
     private void openTradePage() {
-        // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
         //获取用户持仓数据
         requestUserPositions();
     }
@@ -265,7 +249,6 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
                         }
                     }).fire();
         }
-
     }
 
 

@@ -509,7 +509,7 @@ public class TradeActivity extends BaseActivity implements
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
             case R.id.live:
-                Launcher.with(TradeActivity.this, LiveActivity.class).putExtra(Launcher.EX_PAYLOAD, mProduct).execute();
+                Launcher.with(TradeActivity.this, LiveActivity.class).execute();
                 break;
         }
     }

@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +28,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -64,8 +63,9 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     private HashSet<Long> mHashSet;
     private LiveMessage mLiveMessage;
 
-    private TextView mFooter;
     private LiveTeacherGuideAdapter mLiveTeacherGuideAdapter;
+
+    private ArrayList<LiveTeacherGuideInfo.DataInfo> mDataInfos;
 
     public static TeacherGuideFragment newInstance() {
 
@@ -93,11 +93,11 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mLiveSpeak.setVisibility(View.GONE);
-        mPageSize = 15;
+        mPageSize = 5;
         mHashSet = new HashSet<>();
+        mDataInfos = new ArrayList<>();
         mListView.setOnScrollListener(this);
         getLiveMessage();
-
         initSwipeRefreshLayout();
     }
 
@@ -125,11 +125,16 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     }
 
     private void initSwipeRefreshLayout() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPage = 0;
-                mHashSet.clear();
+                mPage++;
                 getTeacherGuideIfo();
                 if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
                     mSwipeRefreshLayout.setRefreshing(false);
@@ -137,6 +142,14 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             }
         });
     }
+
+    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+
+        @Override
+        public void onRefresh() {
+
+        }
+    };
 
     private void getTeacherGuideIfo() {
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) return;
@@ -146,7 +159,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
                     @Override
                     public void onReceive(Resp<LiveTeacherGuideInfo> liveTeacherGuideInfoResp) {
-                        if (liveTeacherGuideInfoResp.isSuccess() && liveTeacherGuideInfoResp.getData() != null) {
+                        if (liveTeacherGuideInfoResp.isSuccess() && liveTeacherGuideInfoResp.hasData()) {
+                            mDataInfos.addAll(0, liveTeacherGuideInfoResp.getData().getData());
                             updateTeacherGuide(liveTeacherGuideInfoResp.getData().getData());
                         }
                     }
@@ -161,51 +175,28 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
+            return;
         }
-
         addListViewFootView(data);
-        if (mSwipeRefreshLayout.isRefreshing()) {
-//            mLiveChatInfoAdapter.clear();
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
     }
 
     private void addListViewFootView(List<LiveTeacherGuideInfo.DataInfo> data) {
-        if (mFooter == null) {
-            mFooter = new TextView(getContext());
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
-                    getResources().getDisplayMetrics());
-            mFooter.setPadding(padding, padding, padding, padding);
-            mFooter.setGravity(Gravity.CENTER);
-            mFooter.setText(R.string.click_to_load_more);
-            mFooter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPage = mPage + 1;
-                    getTeacherGuideIfo();
-                }
-            });
-            mListView.addFooterView(mFooter);
-        }
-        if (data.size() < mPageSize) {
-            // When get number of data is less than mPageSize, means no data anymore
-            // so remove footer
-            mListView.removeFooterView(mFooter);
-            mFooter = null;
-        }
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
-            mLiveTeacherGuideAdapter.clear();
+//            mLiveTeacherGuideAdapter.clear();
         }
 
         if (mLiveTeacherGuideAdapter == null) {
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
             mListView.setAdapter(mLiveTeacherGuideAdapter);
         }
-        for (LiveTeacherGuideInfo.DataInfo dataInfo : data) {
-            mHashSet.add(dataInfo.getCreateTime());
-            mLiveTeacherGuideAdapter.add(dataInfo);
+//        for (LiveTeacherGuideInfo.DataInfo dataInfo : data) {
+//            mHashSet.add(dataInfo.getCreateTime());
+//            mLiveTeacherGuideAdapter.add(dataInfo);
+//        }
+        mLiveTeacherGuideAdapter.clear();
+        if (mDataInfos != null && !mDataInfos.isEmpty()) {
+            mLiveTeacherGuideAdapter.addAll(mDataInfos);
         }
         mLiveTeacherGuideAdapter.notifyDataSetChanged();
     }

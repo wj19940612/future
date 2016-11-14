@@ -12,15 +12,16 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jnhnxx.livevideo.LivePlayer;
-import com.jnhnxx.livevideo.LivePlayerController;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveMessage;
+import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.Product;
@@ -49,9 +50,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
-public class LiveActivity extends BaseActivity implements View.OnClickListener {
+public class LiveActivity extends BaseActivity {
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -60,8 +62,8 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
-    @BindView(R.id.videoView)
-    LivePlayer mVideoView;
+    @BindView(R.id.livePlayer)
+    LivePlayer mLivePlayer;
     @BindView(R.id.bufferingPrompt)
     LinearLayout mBufferingPrompt;
 
@@ -76,13 +78,13 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     TextView mTeacherCommand;
     @BindView(R.id.teacherCommandArea)
     LinearLayout mTeacherCommandArea;
+    @BindView(R.id.teacherCommandClose)
+    ImageView mTeacherCommandClose;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
-    private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
 
     private LiveMessage mLiveMessage;
-
     private ServerIpPort mServerIpPort;
 
     private LiveInteractionFragment mLiveInteractionFragment;
@@ -94,62 +96,75 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
             if (mLiveInteractionFragment != null) {
                 mLiveInteractionFragment.setData(data);
             }
+
+            LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
+            ChatData chatData = new ChatData(liveSpeakInfo);
+            if (chatData.getChatType() == ChatData.CHAT_TYPE_TEACHER && chatData.isOrder()) {
+                setTeacherCommand(chatData);
+            }
         }
     };
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
+
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
+
         initTitleBar();
-
         initVideoPlayer();
-
-//        initVideoView();
-
         initSlidingTabLayout();
 
         getLiveMessage();
         getChattingIpPort();
+        getLastTeacherCommand();
+    }
+
+    private void getLastTeacherCommand() {
+        API.Live.getLastTeacherGuide().setTag(TAG)
+                .setCallback(new Callback2<Resp<ChatData>, ChatData>() {
+                    @Override
+                    public void onRespSuccess(ChatData chatData) {
+                        setTeacherCommand(chatData);
+                    }
+                }).fire();
+    }
+
+    private void setTeacherCommand(ChatData chatData) {
+        if (chatData != null && !TextUtils.isEmpty(chatData.getMsg())) {
+            mTeacherCommandClose.setVisibility(View.VISIBLE);
+            mTeacherCommandArea.setVisibility(View.VISIBLE);
+            mTeacherCommand.setText(chatData.getMsg());
+            mTeacherCommand.setMovementMethod(new ScrollingMovementMethod());
+        }
     }
 
     private void initVideoPlayer() {
-        LivePlayerController playerController = new LivePlayerController(this);
-        mVideoView.setPlayerController(playerController);
-        mVideoView.setBufferView(mBufferingPrompt);
+        mLivePlayer.setBufferView(mBufferingPrompt);
     }
 
 //    private void initVideoView() {
 //        mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
 //
 //        NEMediaController mediaController = new NEMediaController(this);
-//        mVideoView.setMediaController(mediaController);
-//        mVideoView.setBufferStrategy(0); //直播低延时
-//        mVideoView.setBufferingIndicator(mBufferingPrompt);
-//        mVideoView.setMediaType(MEDIA_TYPE);
-//        mVideoView.setHardwareDecoder(HARDWARE_DECODE);
-//        mVideoView.setPauseInBackground(PAUSE_IN_BACKGROUND);
-//        mVideoView.setVideoPath(mVideoPath);
+//        mLivePlayer.setMediaController(mediaController);
+//        mLivePlayer.setBufferStrategy(0); //直播低延时
+//        mLivePlayer.setBufferingIndicator(mBufferingPrompt);
+//        mLivePlayer.setMediaType(MEDIA_TYPE);
+//        mLivePlayer.setHardwareDecoder(HARDWARE_DECODE);
+//        mLivePlayer.setPauseInBackground(PAUSE_IN_BACKGROUND);
+//        mLivePlayer.setVideoPath(mVideoPath);
 //        // mMediaPlayer.setLogLevel(NELP_LOG_SILENT); //设置log级别
-//        mVideoView.requestFocus();
-//        mVideoView.start();
+//        mLivePlayer.requestFocus();
+//        mLivePlayer.start();
 //    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mVideoView.isPaused()) {
-            mVideoView.start();
-        }
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mVideoView.pause(); //锁屏时暂停
+        mLivePlayer.pause();
     }
 
     @Override
@@ -213,17 +228,18 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         mPublicNoticeArea.setVisibility(View.VISIBLE);
         mPublicNotice.setText(mLiveMessage.getNotice().getFormattedContent());
         mPublicNotice.setMovementMethod(new ScrollingMovementMethod());
+        mTeacherHead.setVisibility(View.GONE);
     }
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         Log.d(TAG, "connectRTMPServer: ");
-        String videoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
-        mVideoView.setVideoPath(videoPath);
-        return;
-//
-//        if (!TextUtils.isEmpty(activeInfo.getRtmp())) {
-//            mVideoView.setVideoPath(activeInfo.getRtmp());
-//        }
+        //String videoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
+        //mLivePlayer.setVideoPath(videoPath);
+        //return;
+
+        if (!TextUtils.isEmpty(active.getRtmp())) {
+            mLivePlayer.setVideoPath(active.getRtmp());
+        }
     }
 
     private void connectNettySocket() {
@@ -251,7 +267,6 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 openTradePage();
             }
         });
@@ -259,24 +274,23 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void showTeacherInfoDialog() {
-        LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment = LiveTeacherInfoDialogFragment.newInstance(mLiveMessage.getTeacher());
-        liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
+        LiveMessage.TeacherInfo teacherInfo = mLiveMessage.getTeacher();
+        if (teacherInfo != null) {
+            LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment
+                    = LiveTeacherInfoDialogFragment.newInstance(teacherInfo);
+            liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
+        }
     }
 
     private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
         LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
-        liveProgramme.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.liveProgramme:
+        liveProgramme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
-                showTeacherInfoDialog();
-                break;
-        }
+            }
+        });
     }
 
     private void openTradePage() {
@@ -312,7 +326,6 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -325,19 +338,19 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void requestProductList(final boolean hasPositions, final HomePositions mHomePositions) {
+    private void requestProductList(final boolean hasPositions, final HomePositions homePositions) {
         API.Market.getProductList().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products, mSimulationPositionList, null);
+                        ProductPkg.updateProductPkgList(mProductPkgList, products, null, null);
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
                             int crudeId = 1;
                             if (hasPositions) {
-                                String varietyType = mHomePositions.getCashOpS().get(0).getVarietyType();
+                                String varietyType = homePositions.getCashOpS().get(0).getVarietyType();
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
                                         crudeId = i;
@@ -392,6 +405,18 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
                 }).fire();
     }
 
+    @OnClick({R.id.teacherHead, R.id.teacherCommandClose})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.teacherHead:
+                showTeacherInfoDialog();
+                break;
+            case R.id.teacherCommandClose:
+                mTeacherCommandArea.setVisibility(View.GONE);
+                mTeacherCommandClose.setVisibility(View.GONE);
+                break;
+        }
+    }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 

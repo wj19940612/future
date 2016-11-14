@@ -35,7 +35,7 @@ public class LiveTeacherGuideInfo {
      * userId : 139
      */
 
-    private List<DataInfo> data;
+    private List<ChatData> data;
 
     public int getPageSize() {
         return pageSize;
@@ -69,11 +69,11 @@ public class LiveTeacherGuideInfo {
         this.total = total;
     }
 
-    public List<DataInfo> getData() {
+    public List<ChatData> getData() {
         return data;
     }
 
-    public void setData(List<DataInfo> data) {
+    public void setData(List<ChatData> data) {
         this.data = data;
     }
 
@@ -86,142 +86,5 @@ public class LiveTeacherGuideInfo {
                 ", total=" + total +
                 ", data=" + data +
                 '}';
-    }
-
-    public static class DataInfo {
-
-        private int chatType;
-        private long createTime;
-        private boolean deleted;
-        private String msg;
-        private String name;
-        private boolean normalSpeak;
-        private boolean once;
-        private boolean order;
-        private boolean text;
-        private long timeStamp;
-        private int topChannelId;
-        private int userId;
-
-        public int getChatType() {
-            return chatType;
-        }
-
-        public void setChatType(int chatType) {
-            this.chatType = chatType;
-        }
-
-        public long getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(long createTime) {
-            this.createTime = createTime;
-        }
-
-        public boolean isDeleted() {
-            return deleted;
-        }
-
-        public void setDeleted(boolean deleted) {
-            this.deleted = deleted;
-        }
-
-        public String getMsg() {
-            return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public boolean isNormalSpeak() {
-            return normalSpeak;
-        }
-
-        public void setNormalSpeak(boolean normalSpeak) {
-            this.normalSpeak = normalSpeak;
-        }
-
-        public boolean isOnce() {
-            return once;
-        }
-
-        public void setOnce(boolean once) {
-            this.once = once;
-        }
-
-        public boolean isOrder() {
-            return order;
-        }
-
-        public void setOrder(boolean order) {
-            this.order = order;
-        }
-
-        public boolean isText() {
-            return text;
-        }
-
-        public void setText(boolean text) {
-            this.text = text;
-        }
-
-        public long getTimeStamp() {
-            return timeStamp;
-        }
-
-        public void setTimeStamp(long timeStamp) {
-            this.timeStamp = timeStamp;
-        }
-
-        public int getTopChannelId() {
-            return topChannelId;
-        }
-
-        public void setTopChannelId(int topChannelId) {
-            this.topChannelId = topChannelId;
-        }
-
-        public int getUserId() {
-            return userId;
-        }
-
-        public void setUserId(int userId) {
-            this.userId = userId;
-        }
-
-        public boolean isTeacherGuide() {
-            if (getChatType() == 1) {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public String toString() {
-            return "DataInfo{" +
-                    "chatType=" + chatType +
-                    ", createTime=" + createTime +
-                    ", deleted=" + deleted +
-                    ", msg='" + msg + '\'' +
-                    ", name='" + name + '\'' +
-                    ", normalSpeak=" + normalSpeak +
-                    ", once=" + once +
-                    ", order=" + order +
-                    ", text=" + text +
-                    ", timeStamp=" + timeStamp +
-                    ", topChannelId=" + topChannelId +
-                    ", userId=" + userId +
-                    '}';
-        }
     }
 }

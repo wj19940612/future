@@ -48,7 +48,7 @@ public class LivePlayer extends TextureView implements
     private View mBufferView;
     private boolean mMute;
 
-    // assist
+    // assist log
     private String mLogPath = null;
     private int mLogLevel = 0;
 
@@ -76,18 +76,25 @@ public class LivePlayer extends TextureView implements
         registerBroadcast();
         mCurState = IDLE;
 
+        initLivePlayerController();
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayerController != null) {
-                    if (mPlayerController.isShowing()) {
-                        mPlayerController.hide();
-                    } else {
-                        mPlayerController.show();
-                    }
+                if (mPlayerController.isShowing()) {
+                    mPlayerController.hide();
+                } else {
+                    mPlayerController.show();
                 }
             }
         });
+    }
+
+    private void initLivePlayerController() {
+        mPlayerController = new LivePlayerController(getContext());
+        mPlayerController.setAnchorView(this);
+        mPlayerController.setPlayer(this);
+        mPlayerController.setEnabled(false);
     }
 
     private void registerBroadcast() {
@@ -115,11 +122,6 @@ public class LivePlayer extends TextureView implements
         if (mPlayerController != null) {
             mPlayerController.setEnabled(true);
         }
-    }
-
-    public void setPlayerController(LivePlayerController playerController) {
-        mPlayerController = playerController;
-        attachPlayerController();
     }
 
     public void setBufferView(View bufferView) {
@@ -201,16 +203,6 @@ public class LivePlayer extends TextureView implements
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
             return;
-        }
-    }
-
-    private void attachPlayerController() {
-        if (mPlayerController != null) {
-            mPlayerController.setPlayer(this);
-            View anchorView = this.getParent() instanceof View ? (View) this.getParent() : this;
-            mPlayerController.setAnchorView(anchorView);
-            mPlayerController.setEnabled(false);
-            mPlayerController.show();
         }
     }
 

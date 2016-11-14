@@ -84,7 +84,6 @@ public class LiveActivity extends LiveVideoActivity {
         ButterKnife.bind(this);
 
         initTitleBar();
-        //initVideoView();
         initVideoPlayer();
         initSlidingTabLayout();
 
@@ -94,13 +93,12 @@ public class LiveActivity extends LiveVideoActivity {
 
     private void initVideoPlayer() {
         mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
-
         LivePlayerController playerController = new LivePlayerController(this);
         mVideoView.setPlayerController(playerController);
         mVideoView.setVideoPath(mVideoPath);
     }
 
-    private void initVideoView() {
+//    private void initVideoView() {
 //        mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
 //
 //        NEMediaController mediaController = new NEMediaController(this);
@@ -114,7 +112,7 @@ public class LiveActivity extends LiveVideoActivity {
 //        // mMediaPlayer.setLogLevel(NELP_LOG_SILENT); //设置log级别
 //        mVideoView.requestFocus();
 //        mVideoView.start();
-    }
+//    }
 
     @Override
     protected void onResume() {

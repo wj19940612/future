@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,10 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.util.Locale;
+
+import static com.netease.neliveplayer.util.sys.NetworkUtil.TAG;
 
 public class LivePlayerController extends FrameLayout {
 
@@ -24,16 +29,12 @@ public class LivePlayerController extends FrameLayout {
     private View mRoot;
     private ProgressBar mProgress;
     private TextView mEndTime, mCurrentTime;
-    private TextView mFileName;
-    private String mTitle;
-    private long mDuration;
     private boolean mShowing;
     private static final int sDefaultTimeout = 3000; // 3000ms;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private ImageView mPauseButton;
     private ImageView mSetPlayerScaleButton;
-    private ImageView mSnapshotButton;
     private ImageView mMuteButton;
 
     private boolean mMuteFlag = false;
@@ -69,11 +70,15 @@ public class LivePlayerController extends FrameLayout {
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPlayer == null) return;
+
                 if (mPlayer.isPlaying()) {
                     mPlayer.pause();
+                    mPauseButton.setBackgroundResource(R.drawable.media_controller_pause);
                 }
                 if (mPlayer.isPaused()) {
                     mPlayer.start();
+                    mPauseButton.setBackgroundResource(R.drawable.media_controller_play);
                 }
             }
         });
@@ -90,7 +95,13 @@ public class LivePlayerController extends FrameLayout {
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mPlayer == null) return;
 
+                if (mPlayer.isMute()) {
+                    mPlayer.setMute(false);
+                } else {
+                    mPlayer.setMute(true);
+                }
             }
         });
 
@@ -107,6 +118,7 @@ public class LivePlayerController extends FrameLayout {
 
         mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
+
         setEnabled(false);
     }
 
@@ -117,10 +129,41 @@ public class LivePlayerController extends FrameLayout {
                 case FADE_OUT:
                     hide();
                     break;
+                case SHOW_PROGRESS:
+                    updateProgress();
+                    if (mShowing) {
+                        sendEmptyMessageDelayed(SHOW_PROGRESS, 1000);
+                    }
+                    break;
             }
         }
     };
 
+    private void updateProgress() {
+        if (mPlayer != null) {
+            long position = mPlayer.getCurrentPosition();
+            long duration = mPlayer.getDuration();
+            Log.d(TAG, "updateProgress: pos: " + position + ", dur: " + duration);
+
+            if (duration > 0) {
+                mEndTime.setText(stringForTime(duration));
+            } else {
+                mEndTime.setText("--:--:--");
+            }
+
+            mCurrentTime.setText(stringForTime(position));
+        }
+    }
+
+    private static String stringForTime(long position) {
+        int totalSeconds = (int) ((position / 1000.0) + 0.5);
+
+        int seconds = totalSeconds % 60;
+        int minutes = (totalSeconds / 60) % 60;
+        int hours = totalSeconds / 3600;
+
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds).toString();
+    }
 
     public void show() {
         show(sDefaultTimeout);
@@ -140,10 +183,11 @@ public class LivePlayerController extends FrameLayout {
 
             mWindow.setAnimationStyle(mAnimStyle);
             mWindow.showAtLocation(mAnchor, Gravity.NO_GRAVITY,
-                    anchorRect.left, anchorRect.bottom);
-            
+                    anchorRect.left, anchorRect.bottom - popupView.getMeasuredHeight());
+
             mShowing = true;
 
+            mHandler.sendEmptyMessage(SHOW_PROGRESS);
             if (timeout != 0) {
                 mHandler.removeMessages(FADE_OUT);
                 mHandler.sendMessageDelayed(mHandler.obtainMessage(FADE_OUT), timeout);
@@ -153,6 +197,7 @@ public class LivePlayerController extends FrameLayout {
 
     public void hide() {
         if (mShowing && mAnchor != null) {
+            mHandler.removeMessages(SHOW_PROGRESS);
             mWindow.dismiss();
             mShowing = false;
         }
@@ -166,15 +211,19 @@ public class LivePlayerController extends FrameLayout {
         if (mSetPlayerScaleButton != null) {
             mSetPlayerScaleButton.setEnabled(enabled);
         }
-        if (mSnapshotButton != null) {
-            mSnapshotButton.setEnabled(enabled);
-        }
         if (mMuteButton != null) {
             mMuteButton.setEnabled(enabled);
         }
         super.setEnabled(enabled);
     }
 
+    public void setPlayer(LivePlayer livePlayer) {
+        mPlayer = livePlayer;
+    }
+
+    public boolean isShowing() {
+        return mShowing;
+    }
 
     private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
         public void onStartTrackingTouch(SeekBar bar) {
@@ -239,8 +288,4 @@ public class LivePlayerController extends FrameLayout {
 //            mHandler.sendEmptyMessageDelayed(SHOW_PROGRESS, 1000);
         }
     };
-
-    public void setPlayer(LivePlayer livePlayer) {
-        mPlayer = livePlayer;
-    }
 }

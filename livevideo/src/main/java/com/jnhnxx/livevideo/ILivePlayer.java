@@ -10,6 +10,10 @@ public interface ILivePlayer {
 
     boolean isPlaying();
 
+    long getDuration();
+
+    long getCurrentPosition();
+
     int getBufferPercentage();
 
     void setMute(boolean mute);

@@ -25,12 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--<com.jnhnxx.livevideo.NEVideoView-->
-        <!--android:id="@+id/videoView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="203dp"-->
-        <!--android:visibility="visible"/>-->
-
         <com.jnhnxx.livevideo.LivePlayer
             android:id="@+id/videoView"
             android:layout_width="match_parent"

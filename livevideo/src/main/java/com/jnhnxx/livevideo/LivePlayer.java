@@ -20,7 +20,8 @@ import com.netease.neliveplayer.NEMediaPlayer;
 
 import java.io.IOException;
 
-public class LivePlayer extends TextureView implements TextureView.SurfaceTextureListener, ILivePlayer {
+public class LivePlayer extends TextureView implements
+        TextureView.SurfaceTextureListener, ILivePlayer {
     private static final String TAG = "LiveVideoView";
 
     private static final int IDLE = 0;
@@ -47,14 +48,14 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
     private ResourceReleaseReceiver mReceiver; //接收资源释放成功的通知
     private LivePlayerController mPlayerController;
     private View mBufferView;
+    private boolean mMute;
 
     // assist
     private String mLogPath = null;
     private int mLogLevel = 0;
 
     // state
-    private int mCurrState;
-    private int mNextState;
+    private int mCurState;
 
     private boolean mFullScreen;
 
@@ -76,8 +77,20 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
         mPixelSarDen = 0;
         setSurfaceTextureListener(this);
         registerBroadcast();
-        mCurrState = IDLE;
-        mNextState = IDLE;
+        mCurState = IDLE;
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMediaPlayer != null && mPlayerController != null) {
+                    if (mPlayerController.isShowing()) {
+                        mPlayerController.hide();
+                    } else {
+                        mPlayerController.show();
+                    }
+                }
+            }
+        });
     }
 
     private void registerBroadcast() {
@@ -96,7 +109,6 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
     }
 
     public void setVideoPath(String path) { //设置视频文件路径
-        isBackground = false; //指示是否在后台
         setVideoURI(Uri.parse(path));
     }
 
@@ -172,17 +184,14 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
                     releaseResource();
                     return;
                 }
-                mCurrState = INITIALIZED;
-                mNextState = PREPARING;
+                mCurState = INITIALIZED;
             }
             mMediaPlayer.setSurface(new Surface(mSurfaceTexture));
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync(getContext()); //初始化视频文件
-            mCurrState = PREPARING;
-            mNextState = PREPARED;
+            mCurState = PREPARING;
 
             attachPlayerController();
-
         } catch (IOException ex) {
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
@@ -200,7 +209,7 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
             View anchorView = this.getParent() instanceof View ?
                     (View) this.getParent() : this;
             mPlayerController.setAnchorView(anchorView);
-            mPlayerController.setEnabled(mCurrState >= PREPARED);
+            mPlayerController.setEnabled(isPrepared());
         }
     }
 
@@ -209,7 +218,7 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
             mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
-            mCurrState = IDLE;
+            mCurState = IDLE;
         }
     }
 
@@ -288,7 +297,7 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
         @Override
         public boolean onError(NELivePlayer mp, int what, int extra) {
             Log.d(TAG, "Error: " + what + " ," + extra);
-            mCurrState = ERROR;
+            mCurState = ERROR;
             if (mPlayerController != null) {
                 mPlayerController.hide();
             }
@@ -332,8 +341,7 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
         @Override
         public void onPrepared(NELivePlayer mp) {
             Log.d(TAG, "onPrepared");
-            mCurrState = PREPARED;
-            mNextState = STARTED;
+            mCurState = PREPARED;
 
             // briefly show the mediacontroller
             if (mPlayerController != null) {
@@ -347,16 +355,18 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 scalePlayerBasedOnVideoSize();
                 if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
-                    if (mNextState == STARTED) {
-                        if (!isPaused()) {
-                            start();
-                        }
+                    if (!isPaused()) {
+
+                        start();
+
                         if (mPlayerController != null) {
                             mPlayerController.show();
+                            mPlayerController.setEnabled(isPrepared());
                         }
                     }
                 }
             }
+
         } // onPrepared
     };
 
@@ -373,32 +383,50 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
 
     @Override
     public void start() {
-        if (mMediaPlayer != null && mCurrState == PREPARED) {
+        if (mMediaPlayer != null && isPrepared()) {
             mMediaPlayer.start();
-            mCurrState = STARTED;
+            mCurState = STARTED;
         }
-        mNextState = STARTED;
     }
 
     @Override
     public void pause() {
-        if (mMediaPlayer != null && mCurrState >= PREPARED) {
+        if (mMediaPlayer != null && isPrepared()) {
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
-                mCurrState = PAUSED;
             }
+            mCurState = PAUSED;
         }
-        mNextState = PAUSED;
+    }
+
+    private boolean isPrepared() {
+        return mCurState >= PREPARED;
     }
 
     @Override
     public boolean isPaused() {
-        return mCurrState == PAUSED;
+        return mCurState == PAUSED;
     }
 
     @Override
     public boolean isPlaying() {
-        return mCurrState == STARTED;
+        return mCurState == STARTED;
+    }
+
+    @Override
+    public long getDuration() {
+        if (mMediaPlayer != null && isPrepared()) {
+            return mMediaPlayer.getDuration();
+        }
+        return 0;
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        if (mMediaPlayer != null && isPrepared()) {
+            return mMediaPlayer.getCurrentPosition();
+        }
+        return 0;
     }
 
     @Override
@@ -408,12 +436,15 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
 
     @Override
     public void setMute(boolean mute) {
-
+        if (mMediaPlayer != null) {
+            mMute = mute;
+            mMediaPlayer.setMute(mMute);
+        }
     }
 
     @Override
     public boolean isMute() {
-        return false;
+        return mMute;
     }
 
     @Override
@@ -425,7 +456,6 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
     public boolean isFullScreen() {
         return mFullScreen;
     }
-
 
     /**
      * 资源释放成功通知的消息接收器类
@@ -456,6 +486,9 @@ public class LivePlayer extends TextureView implements TextureView.SurfaceTextur
             } else {
                 params.width = getWidth();
                 params.height = (int) (params.width / aspectRatio);
+
+                Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurfaceW: " + mSurfaceWidth + ", mSurfaceH: " + mSurfaceHeight);
+                Log.d(TAG, "scalePlayerBasedOnVideoSize: params.width: " + params.width + ", params.height: " + params.height);
             }
             setLayoutParams(params);
         }

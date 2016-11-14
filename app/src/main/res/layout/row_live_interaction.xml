@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_live_manager"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:textColor="@color/blackPrimary"
                 tools:text="我是管理员卡司法局阿喀琉斯解放路卡肥"/>
         </LinearLayout>
@@ -149,7 +149,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_live_adminrhead"
+                android:background="@drawable/bg_live_userhead"
                 android:gravity="center">
 
                 <ImageView
@@ -171,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_white"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:textColor="@color/blackPrimary"
                 tools:text="普通游客收款返款谎发"/>
         </LinearLayout>
@@ -182,7 +182,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_margin"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/userMineStatus"
@@ -223,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="300dp"
                 android:background="@drawable/bg_live_user_mine"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:textColor="@android:color/white"
                 tools:text="我自卡机上来发数据来看多岁撒多"/>
 
@@ -235,6 +235,7 @@
                 android:src="@drawable/arrow_live_angle_me_right"/>
 
             <LinearLayout
+                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_live_userhead"

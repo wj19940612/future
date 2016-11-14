@@ -82,7 +82,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private HashSet<Long> mHashSet;
 
-    private List<LiveHomeChatInfo.ChatData> chatDatas;
+    private List<LiveHomeChatInfo.ChatData> mChatDataListInfo;
     private InputMethodManager mInputMethodManager;
 
     private ArrayList<LiveHomeChatInfo.ChatData> mDataArrayList;
@@ -177,7 +177,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private LiveMessage mLiveMessage;
 
     public void getLiveMessage() {
-        API.Live.getLiveMessage().setTag(TAG).setIndeterminate(this)
+        API.Live.getLiveMessage().setTag(TAG)
                 .setCallback(new Callback<Resp<LiveMessage>>() {
                     @Override
                     public void onReceive(Resp<LiveMessage> liveMessageResp) {
@@ -187,10 +187,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                 liveMessageResp.getData().getTeacher().getTeacherAccountId() != 0) {
                             sendLiveSpeak();
                         } else {
-                            if (!mSpeakEditText.isShown()) {
-                                mSpeakEditText.setVisibility(View.VISIBLE);
-                            }
-                            mSpeakEditText.setHint(R.string.live_time_is_not);
+                            ToastUtil.curt(R.string.live_time_is_not);
                         }
                     }
 
@@ -211,7 +208,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mSpeakEditText.requestFocus();
 
         boolean b = mInputMethodManager.isActive(mSpeakEditText);
-        if (b) {
+        if (!b) {
 //            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
             mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
         } else {
@@ -219,7 +216,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 mSpeakEditText.setVisibility(View.GONE);
             }
         }
-
         mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
     }
 
@@ -259,11 +255,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     @Override
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
-                            chatDatas = liveHomeChatInfoResp.getData().getData();
-                            Log.d("dataLive", "== page" + mPage + " 数据大小 " + chatDatas.size());
-                            mDataArrayList.addAll(0, chatDatas);
+                            mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
+                            Log.d("dataLive", "== page" + mPage + " 数据大小 " + mChatDataListInfo.size());
+                            mDataArrayList.addAll(0, mChatDataListInfo);
                             updateCHatInfo(liveHomeChatInfoResp.getData());
-                            if (chatDatas.size() < mPageSize) {
+                            if (mChatDataListInfo.size() < mPageSize) {
                                 isRefreshed = true;
                             }
                         }
@@ -410,20 +406,19 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(LiveHomeChatInfo.ChatData item, int position, Context context) {
 
-                String format = DateUtil.format(item.getCreateTime());
+                String format = DateUtil.format(item.getCreateTime(),"HH:mm:ss");
 
                 boolean today = DateUtils.isToday(item.getCreateTime());
-                if (today) {
-                    String formatElapsedTime = DateUtils.formatElapsedTime(item.getCreateTime());
-                    String dateTime = DateUtils.formatDateTime(context, item.getCreateTime(), DateUtils.FORMAT_ABBREV_ALL);
-                    String formatDateRange = DateUtils.formatDateRange(context, item.getCreateTime(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR);
-                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                    format = format + "  " + relativeTimeSpanString2;
-                } else {
-                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                    format = format + "    " + relativeTimeSpanString2;
-                }
-
+//                if (today) {
+//                    String formatElapsedTime = DateUtils.formatElapsedTime(item.getCreateTime());
+//                    String dateTime = DateUtils.formatDateTime(context, item.getCreateTime(), DateUtils.FORMAT_ABBREV_ALL);
+//                    String formatDateRange = DateUtils.formatDateRange(context, item.getCreateTime(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR);
+//                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+//                    format = relativeTimeSpanString2.toString();
+//                } else {
+//                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+//                    format =  relativeTimeSpanString2.toString();
+//                }
 
                 //老师或者管理员
                 if (!item.isCommonUser()) {

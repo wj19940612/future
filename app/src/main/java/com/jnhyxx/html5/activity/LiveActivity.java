@@ -306,8 +306,8 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         requestUserPositions();
     }
 
-    private boolean ifHasPositions(HomePositions mHomePositions) {
-        if (mHomePositions != null && mHomePositions.getCashOpS() != null && !mHomePositions.getCashOpS().isEmpty()) {
+    private boolean ifHasPositions(HomePositions homePositions) {
+        if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
             return true;
         }
         return false;
@@ -343,7 +343,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void requestProductList(final boolean hasPositions, final HomePositions mHomePositions) {
+    private void requestProductList(final boolean hasPositions, final HomePositions homePositions) {
         API.Market.getProductList().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
@@ -355,7 +355,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
                             //如果没有持仓  默认进入美原油,如果有持仓,进入持仓界面
                             int crudeId = 1;
                             if (hasPositions) {
-                                String varietyType = mHomePositions.getCashOpS().get(0).getVarietyType();
+                                String varietyType = homePositions.getCashOpS().get(0).getVarietyType();
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
                                         crudeId = i;

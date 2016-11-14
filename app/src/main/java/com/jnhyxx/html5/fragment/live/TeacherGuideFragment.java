@@ -143,16 +143,14 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         });
     }
 
-    SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-
-        @Override
-        public void onRefresh() {
-
-        }
-    };
-
     private void getTeacherGuideIfo() {
-        if (mLiveMessage == null || mLiveMessage.getTeacher() == null) return;
+        if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
+
         API.Live.getTeacherGuide(mPage, mPageSize, mLiveMessage.getTeacher().getTeacherAccountId())
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<LiveTeacherGuideInfo>>() {

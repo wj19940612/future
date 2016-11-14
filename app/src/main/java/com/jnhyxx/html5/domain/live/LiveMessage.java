@@ -1,8 +1,20 @@
 package com.jnhyxx.html5.domain.live;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 public class LiveMessage {
+
+    /**
+     * active: {
+        activityId: "12",
+        hls: "",
+        liveTv: 0,
+        rtmp: ""
+        },
+     */
+    private ActiveInfo active;
 
     /**
      * account : haibo
@@ -53,6 +65,10 @@ public class LiveMessage {
         this.teacher = teacher;
     }
 
+    public ActiveInfo getActive() {
+        return active;
+    }
+
     public NoticeInfo getNotice() {
         return notice;
     }
@@ -67,6 +83,17 @@ public class LiveMessage {
 
     public void setProgram(List<ProgramInfo> program) {
         this.program = program;
+    }
+
+    public static class ActiveInfo {
+        private String activityId;
+        private String hls;
+        private int liveTv;
+        private String rtmp;
+
+        public String getRtmp() {
+            return rtmp;
+        }
     }
 
     public static class TeacherInfo {
@@ -241,6 +268,13 @@ public class LiveMessage {
 
         public void setUpdateTime(String updateTime) {
             this.updateTime = updateTime;
+        }
+
+        public String getFormattedContent() {
+            if (!TextUtils.isEmpty(content)) {
+                return content.replace("^", "\n");
+            }
+            return content;
         }
 
         @Override

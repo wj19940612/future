@@ -41,8 +41,6 @@ public class LivePlayer extends TextureView implements
     private int mSurfaceWidth;
     private int mSurfaceHeight;
 
-    private boolean isBackground;
-
     private SurfaceTexture mSurfaceTexture;
     private NELivePlayer mMediaPlayer;
     private ResourceReleaseReceiver mReceiver; //接收资源释放成功的通知
@@ -121,6 +119,10 @@ public class LivePlayer extends TextureView implements
 
     public void setPlayerController(LivePlayerController playerController) {
         mPlayerController = playerController;
+    }
+
+    public void setBufferView(View bufferView) {
+        mBufferView = bufferView;
     }
 
     @Override

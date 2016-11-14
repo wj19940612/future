@@ -74,11 +74,10 @@ public class LivePlayerController extends FrameLayout {
 
                 if (mPlayer.isPlaying()) {
                     mPlayer.pause();
-                    mPauseButton.setBackgroundResource(R.drawable.media_controller_pause);
-                }
-                if (mPlayer.isPaused()) {
+                    mPauseButton.setImageResource(R.drawable.media_controller_pause);
+                } else {
                     mPlayer.start();
-                    mPauseButton.setBackgroundResource(R.drawable.media_controller_play);
+                    mPauseButton.setImageResource(R.drawable.media_controller_play);
                 }
             }
         });
@@ -99,8 +98,10 @@ public class LivePlayerController extends FrameLayout {
 
                 if (mPlayer.isMute()) {
                     mPlayer.setMute(false);
+                    mMuteButton.setImageResource(R.drawable.media_controller_mute01);
                 } else {
                     mPlayer.setMute(true);
+                    mMuteButton.setImageResource(R.drawable.media_controller_mute02);
                 }
             }
         });

@@ -539,23 +539,6 @@ public class API extends APIBase {
     public static class Live {
 
         /**
-         * http://newtest.jnhyxx.com:8080/user/live/getActivity.do
-         *
-         * @return
-         */
-        public static API getLiveRoomId() {
-            return new API("/user/live/getActivity.do", null);
-        }
-
-        /**
-         * @param liveRoomId
-         * @return
-         */
-        public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId;
-        }
-
-        /**
          * 接口名：一大块，获取直播的节目单，直播的老师信息及头像，直播公告
          * URL  http://域名/user/live/getLiveMessage.do
          *
@@ -579,6 +562,15 @@ public class API extends APIBase {
                     .put("page", page)
                     .put("pageSize", pageSize)
                     .put("teacherId", teacherId));
+        }
+
+        /**
+         * 获取最后一条老师指导
+         *
+         * @return
+         */
+        public static API getLastTeacherGuide() {
+            return new API("/user/live/findFirstTeacherMsg.do", null);
         }
     }
 

@@ -29,4 +29,7 @@
     <color name="emptyViewColor">#CACACA</color>
     <color name="mine_balance_text_color">#CCCCCC</color>
 
+    <color name="bg_live_program_popupwindow">#80000000</color>
+
+    <color name="live_teacher_info">#323232</color>
 </resources>

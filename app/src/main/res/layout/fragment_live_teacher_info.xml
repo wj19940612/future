@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:minHeight="250dp"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_line_division_center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_live_teacher_head"
+            android:gravity="center">
+
+            <com.jnhyxx.html5.view.CircularAnnulusImageView
+                android:id="@+id/teacherHeadImage"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_live_pic_head"
+                app:borderColor="@android:color/white"
+                app:borderWidth="1dp"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/teacherName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            tools:text="金虎老师"/>
+
+        <ImageView
+            android:id="@+id/hideDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:src="@drawable/ic_delete_x"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="15dp"
+            android:background="@drawable/btn_blue"
+            android:gravity="center"
+            android:text="@string/live_teacher_good"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/teacherGoodInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:lineSpacingExtra="7dp"
+            android:textColor="@color/live_teacher_info"
+            android:textSize="13sp"
+            tools:text="原油、黄金等国内外期货交易"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="15dp"
+            android:background="@drawable/btn_blue"
+            android:gravity="center"
+            android:text="@string/live_teacher_resume"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/teacherResumeInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:lineSpacingExtra="7dp"
+            android:textColor="@color/live_teacher_info"
+            android:textSize="13sp"
+            tools:text="海龟、13年期货交易历史"/>
+    </LinearLayout>
+
+</LinearLayout>

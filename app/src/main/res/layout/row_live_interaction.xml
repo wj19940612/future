@@ -14,9 +14,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <View
             android:layout_width="57dp"
@@ -47,7 +49,7 @@
         android:id="@+id/managerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="@dimen/common_margin">
 
         <TextView
             android:id="@+id/userStatus"
@@ -57,17 +59,19 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/blueAssist"
+            android:textSize="11dp"
             tools:text="管理员"/>
 
         <TextView
             android:id="@+id/timeHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
             android:layout_toRightOf="@+id/userStatus"
+            android:gravity="center_vertical"
             android:textColor="@color/colorDisable"
             android:textSize="11sp"
             tools:text="10分钟前"/>
-        <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +108,74 @@
                 android:background="@drawable/bg_live_manager"
                 android:padding="10dp"
                 android:textColor="@color/blackPrimary"
-                tools:text="明天非空撒酒疯雷克萨解放路加上符号及咖啡撒假设开发好看教案是否看见爱上将客服撒谎发空间按双方尽快尽快恢复萨卡减肥哈就开始发货空间撒李开复就分手了空间按法律快捷方式快乐撒娇福利卡时间弗兰克接口即可"/>
+                tools:text="我是管理员卡司法局阿喀琉斯解放路卡就是房间里萨科技福利卡时间福建省拉开房间拉斯克奖爱上付款了撒附加费拉开始减肥"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/commonUserLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_margin"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/commonUserStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorDisable"
+            android:textSize="11sp"
+            tools:text="普通游客"/>
+
+        <TextView
+            android:id="@+id/commonUserTimeHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@+id/commonUserStatus"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorDisable"
+            android:textSize="11sp"
+            tools:text="10分钟前"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/commonUserStatus"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_live_adminrhead"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/commonUserHeadImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_live_pic_head"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/arrow_live_angle_user"/>
+
+            <TextView
+                android:id="@+id/commonUserContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_white"
+                android:padding="10dp"
+                android:textColor="@color/blackPrimary"
+                tools:text="普通游客收款返款撒放空间撒谎发发空间发货快睡觉阿富汗奥斯卡积分换空间按时发货是否会看见哈萨克解放后撒付款时间啊回复空间撒谎发"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -112,7 +183,8 @@
         android:id="@+id/userMineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="@dimen/common_margin"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/userMineStatus"
@@ -121,8 +193,9 @@
             android:layout_marginBottom="5dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/mineTimeHint"
-            android:textColor="@color/blueAssist"
-            tools:text="管理员"/>
+            android:textColor="@color/colorDisable"
+            android:textSize="11sp"
+            tools:text="我"/>
 
         <TextView
             android:id="@+id/mineTimeHint"
@@ -130,6 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="42dp"
+            android:layout_marginTop="1dp"
             android:textColor="@color/colorDisable"
             android:textSize="11sp"
             tools:text="10分钟前"/>
@@ -140,7 +214,6 @@
             android:layout_below="@+id/userMineStatus"
             android:gravity="center_vertical">
 
-
             <TextView
                 android:id="@+id/userMineContent"
                 android:layout_width="0dp"
@@ -149,7 +222,7 @@
                 android:background="@drawable/bg_live_user_mine"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
-                tools:text="明天非空撒酒疯雷克萨解放路加上符号及咖啡撒假设开发好看教案是否看见爱上将客服撒谎发空间按双方尽快尽快恢复萨卡减肥哈就开始发货空间撒李开复就分手了空间按法律快捷方式快乐撒娇福利卡时间弗兰克接口即可"/>
+                tools:text="我自己是会计法律框架阿拉山口房间爱空间首付款法律框架埃里克森积分来看撒娇弗兰克会计师福利卡时间浪费空间撒联发科联发科数据爱丽丝卡减肥了咖啡发生可立即发送卡即可"/>
 
             <ImageView
                 android:id="@+id/userMineArrow"
@@ -172,46 +245,5 @@
                     android:src="@drawable/ic_live_pic_head"/>
             </LinearLayout>
         </LinearLayout>
-        <!--      <RelativeLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@+id/userMineStatus"
-                  android:gravity="center_vertical">
-
-
-                  <TextView
-                      android:id="@+id/userMineContent"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentLeft="true"
-                      android:layout_toLeftOf="@+id/userMineArrow"
-                      android:background="@drawable/bg_live_user_mine"
-                      android:padding="10dp"
-                      android:textColor="@android:color/white"
-                      tools:text="明天非空撒酒疯雷克萨解放路加上符号及咖啡撒假设开发好看教案是否看见爱上将客服撒谎发空间按双方尽快尽快恢复萨卡减肥哈就开始发货空间撒李开复就分手了空间按法律快捷方式快乐撒娇福利卡时间弗兰克接口即可"/>
-
-                  <ImageView
-                      android:id="@+id/userMineArrow"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignLeft="@+id/userMineHeadImage"
-                      android:layout_centerVertical="true"
-                      android:src="@drawable/arrow_live_angle_me_right"/>
-                  <ImageView
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentRight="true"
-                      android:layout_centerVertical="true"
-                      android:src="@drawable/bg_live_userhead"/>
-
-                  <ImageView
-                      android:id="@+id/userMineHeadImage"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentRight="true"
-                      android:layout_centerVertical="true"
-                      android:layout_gravity="center_vertical"
-                      android:src="@drawable/ic_live_pic_head"/>
-              </RelativeLayout>-->
     </RelativeLayout>
 </LinearLayout>

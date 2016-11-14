@@ -8,9 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,13 +28,16 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
+import com.jnhyxx.html5.fragment.live.LiveTeacherInfoDialogFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
+import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -46,7 +51,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class LiveActivity extends LiveVideoActivity {
+public class LiveActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -54,6 +59,22 @@ public class LiveActivity extends LiveVideoActivity {
     ViewPager mViewPager;
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
+    @BindView(R.id.liveProgramDir)
+    FrameLayout mLiveProgramDir;
+
+//    //    老师指令布局
+//    @BindView(R.id.teacherGuideLayout)
+//    RelativeLayout mTeacherGuideLayout;
+//    @BindView(R.id.teacherHeadImage)
+//    CircularAnnulusImageView mTeacherHeadImage;
+//    @BindView(R.id.teacherGuideContent)
+//    TextView mTeacherGuideContent;
+
+
+    // TODO: 2016/11/8 房间Id 
+//    private String mLiveId = "A2016080200000n1";
+    private String mLiveId = "A2016053100000je";
+
 
     @BindView(R.id.videoView)
     LivePlayer mVideoView;
@@ -77,27 +98,53 @@ public class LiveActivity extends LiveVideoActivity {
     private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
 
     private LiveMessage mLiveMessage;
+
     private ServerIpPort mServerIpPort;
+
+    private LiveInteractionFragment mLiveInteractionFragment;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
-            Log.d("TAG", "onReceiveOriginalData: " + data);
+            Log.d(TAG, "onReceiveOriginalData: " + data);
+            if (mLiveInteractionFragment != null) {
+                mLiveInteractionFragment.setData(data);
+            }
         }
     };
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
-
+        mLiveInteractionFragment = LiveInteractionFragment.newInstance();
         initTitleBar();
+
         initVideoPlayer();
+
+//        initVideoView();
+        getLiveMessage();
+
         initSlidingTabLayout();
 
         getChattingIpPort();
-        getLiveMessage();
+
+        setLayoutData();
+
+    }
+
+    private void setLayoutData() {
+//        if (mLiveMessage == null) return;
+//        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
+//        if (teacher != null) {
+//            if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
+//                Picasso.with(getActivity()).load(teacher.getPictureUrl()).into(mTeacherHeadImage);
+//            }
+//            //老师指令内容
+//            mTeacherGuideContent.setText(teacher.getAccount());
+//        }
     }
 
     private void initVideoPlayer() {
@@ -162,6 +209,7 @@ public class LiveActivity extends LiveVideoActivity {
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
+
                         mLiveMessage = liveMessage;
 
                         if (mServerIpPort != null) {
@@ -181,8 +229,10 @@ public class LiveActivity extends LiveVideoActivity {
         LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
         mPublicNoticeArea.setVisibility(View.GONE);
         mTeacherHead.setVisibility(View.VISIBLE);
-        Picasso.with(getActivity()).load(teacher.getPictureUrl())
-                .transform(new CircleTransform()).into(mTeacherHead);
+        if (!TextUtils.isEmpty(teacher.getPictureUrl())) {
+            Picasso.with(getActivity()).load(teacher.getPictureUrl())
+                    .transform(new CircleTransform()).into(mTeacherHead);
+        }
         connectRTMPServer(mLiveMessage.getActive());
     }
 
@@ -228,34 +278,69 @@ public class LiveActivity extends LiveVideoActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 openTradePage();
             }
         });
         setTitleBarCustomView();
     }
 
+    private void showTeacherInfoDialog() {
+        LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment = LiveTeacherInfoDialogFragment.newInstance(mLiveMessage.getTeacher());
+        liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
+    }
+
     private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
         LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
-        ImageView programmeArrow = (ImageView) customView.findViewById(R.id.programmeArrow);
-        liveProgramme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        liveProgramme.setClickable(true);
+        liveProgramme.setOnClickListener(this);
+    }
 
-            }
-        });
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.liveProgramme:
+                LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
+                // TODO: 2016/11/10 ，目前先显示老师详情
+                showTeacherInfoDialog();
+                break;
+        }
     }
 
     private void openTradePage() {
-        // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
-        boolean userHasHolding = false;
-        if (userHasHolding) {
+        //获取用户持仓数据
+        requestUserPositions();
+    }
 
-        } else {
-            requestProductList();
-            // requestSimulationPositions(); // TODO: 09/11/2016 不是获取模拟持仓 修改
+    private boolean userHasPositions(HomePositions mHomePositions) {
+        if (mHomePositions != null && !mHomePositions.getCashOpS().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void requestUserPositions() {
+        if (LocalUser.getUser().isLogin()) {
+            API.Order.getHomePositions().setTag(TAG)
+                    .setCallback(new Callback<Resp<HomePositions>>(false) {
+                        @Override
+                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
+                            Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
+                            if (homePositionsResp.isSuccess()) {
+                                HomePositions mHomePositions = homePositionsResp.getData();
+                                boolean userHasPositions = userHasPositions(mHomePositions);
+                                requestProductList(userHasPositions, mHomePositions);
+                            }
+                        }
+
+                        @Override
+                        public void onReceive(Resp<HomePositions> homePositionsResp) {
+                        }
+                    }).fire();
         }
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -269,7 +354,7 @@ public class LiveActivity extends LiveVideoActivity {
         }
     }
 
-    private void requestProductList() {
+    private void requestProductList(final boolean hasPositions, final HomePositions mHomePositions) {
         API.Market.getProductList().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
@@ -278,12 +363,22 @@ public class LiveActivity extends LiveVideoActivity {
                         ProductPkg.updateProductPkgList(mProductPkgList, products, mSimulationPositionList, null);
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
-                            //如果没有持仓  默认进入美原油
+                            //如果没有持仓  默认进入美原油,如果有持仓,进入持仓界面
                             int crudeId = 1;
-                            for (int i = 0; i < mProductPkgList.size(); i++) {
-                                if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
-                                    crudeId = i;
-                                    break;
+                            if (hasPositions) {
+                                String varietyType = mHomePositions.getCashOpS().get(0).getVarietyType();
+                                for (int i = 0; i < mProductPkgList.size(); i++) {
+                                    if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
+                                        crudeId = i;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                for (int i = 0; i < mProductPkgList.size(); i++) {
+                                    if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
+                                        crudeId = i;
+                                        break;
+                                    }
                                 }
                             }
                             ProductPkg productPkg = mProductPkgList.get(crudeId);
@@ -292,6 +387,7 @@ public class LiveActivity extends LiveVideoActivity {
                     }
                 }).fire();
     }
+
 
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
@@ -326,25 +422,6 @@ public class LiveActivity extends LiveVideoActivity {
     }
 
 
-    private void requestSimulationPositions() {
-        if (LocalUser.getUser().isLogin()) {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
-                        @Override
-                        public void onRespSuccess(HomePositions homePositions) {
-                            mSimulationPositionList = homePositions.getIntegralOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mSimulationPositionList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            }
-                        }
-                    }).fire();
-        } else { // clearHoldingOrderList all product position
-            ProductPkg.clearPositions(mProductPkgList);
-        }
-    }
-
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
         public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
@@ -366,9 +443,9 @@ public class LiveActivity extends LiveVideoActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new LiveInteractionFragment();
+                    return mLiveInteractionFragment;
                 case 1:
-                    return new TeacherGuideFragment();
+                    return TeacherGuideFragment.newInstance();
             }
             return null;
         }

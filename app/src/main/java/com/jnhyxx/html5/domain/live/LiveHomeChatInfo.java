@@ -84,7 +84,7 @@ public class LiveHomeChatInfo {
         Collections.sort(getData(), new Comparator<ChatData>() {
             @Override
             public int compare(ChatData o1, ChatData o2) {
-                return (int) (o2.getCreateTime() - o1.getCreateTime());
+                return (int) (o1.getCreateTime() - o2.getCreateTime());
             }
         });
     }
@@ -250,6 +250,15 @@ public class LiveHomeChatInfo {
             return true;
         }
 
+        public void setLiveSpeakInfo(LiveSpeakInfo liveSpeakInfo) {
+            setMsg(liveSpeakInfo.getMsg());
+            setOwner(liveSpeakInfo.isOwner());
+            setName(liveSpeakInfo.getName());
+            setCreateTime(liveSpeakInfo.getTime());
+            setText(liveSpeakInfo.isIsText());
+            setOrder(liveSpeakInfo.isIsOrder());
+            setChatType(liveSpeakInfo.getAccountType());
+        }
 
         @Override
         public String toString() {

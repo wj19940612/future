@@ -32,7 +32,7 @@
 
         <EditText
             android:focusable="true"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSend"
             android:id="@+id/speakEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

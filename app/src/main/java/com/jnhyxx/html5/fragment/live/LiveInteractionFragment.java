@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -27,17 +26,17 @@ import android.widget.TextView.OnEditorActionListener;
 import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
+import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
-import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
-import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.DateUtil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -79,6 +78,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private List<LiveHomeChatInfo.ChatData> chatDatas;
     private InputMethodManager mInputMethodManager;
 
+    private ArrayList<LiveHomeChatInfo.ChatData> mDataArrayList;
+
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
         LiveInteractionFragment fragment = new LiveInteractionFragment();
@@ -101,13 +102,28 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mPageSize = 20;
+        mPageSize = 10;
         mHashSet = new HashSet<>();
+        mDataArrayList = new ArrayList<>();
         mListView.setOnScrollListener(this);
         getChatInfo();
+        setOnRefresh();
+    }
+
+    private void setOnRefresh() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -121,19 +137,16 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         });
     }
 
-    NettyHandler mNettyHandler = new NettyHandler() {
-        @Override
-        protected void onReceiveOriginalData(String data) {
-            super.onReceiveOriginalData(data);
-            LiveHomeChatInfo.ChatData chatData = new Gson().fromJson(data, LiveHomeChatInfo.ChatData.class);
-            if (chatData != null) {
-                if (mHashSet.add(chatData.getCreateTime())) {
-                    mLiveChatInfoAdapter.add(chatData);
-                    mLiveChatInfoAdapter.notifyDataSetChanged();
-                }
-            }
+    public void setData(String data) {
+        Log.d("newData", "新数据" + data);
+        LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
+        LiveHomeChatInfo.ChatData chatData = new LiveHomeChatInfo.ChatData();
+        chatData.setLiveSpeakInfo(liveSpeakInfo);
+        if (chatData != null) {
+            mLiveChatInfoAdapter.add(chatData);
+            mLiveChatInfoAdapter.notifyDataSetChanged();
         }
-    };
+    }
 
     @OnClick({R.id.liveSpeak})
     public void onClick(View view) {
@@ -143,48 +156,51 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 break;
         }
     }
-
     private void sendLiveSpeak() {
-//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         if (!mSpeakEditText.isShown()) {
             mSpeakEditText.setVisibility(View.VISIBLE);
             mLiveSpeak.setVisibility(View.GONE);
-            mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        }
+        mSpeakEditText.setFocusable(true);
+        mSpeakEditText.setFocusableInTouchMode(true);
+        mSpeakEditText.requestFocus();
+
+        boolean b = mInputMethodManager.isActive(mSpeakEditText);
+        if (b) {
 //            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
             mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
-            mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
-
-            mSpeakEditText.addTextChangedListener(new ValidationWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
+        } else {
+            if (mSpeakEditText != null && mSpeakEditText.isShown()) {
+                mSpeakEditText.setVisibility(View.GONE);
+            }
         }
+
+//        mSpeakEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                Log.d("taggggg", "焦点" + hasFocus);
+//                if (!hasFocus) {
+//                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+//                    if (mSpeakEditText != null && mSpeakEditText.isShown()) {
+//                        mSpeakEditText.setVisibility(View.GONE);
+//                    }
+//                } else {
+////                    mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//////            mInputMethodManager.toggleSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+////                    mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
+//                }
+//            }
+//        });
+
+        mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
     }
 
     private OnEditorActionListener mOnEditorActionListener = new OnEditorActionListener() {
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                ToastUtil.curt("enter键盘");
-                if (mSpeakEditText != null && TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
-                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
-                }
-                if (mInputMethodManager.isActive(mSpeakEditText)) {
-                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                }
-                if (mSpeakEditText.isShown()) {
-                    mSpeakEditText.setVisibility(View.GONE);
-                }
-                if (!mLiveSpeak.isShown()) {
-                    mLiveSpeak.setVisibility(View.VISIBLE);
-                }
-                return true;
-            }
 //            if (actionId == EditorInfo.IME_ACTION_GO) {
 //                ToastUtil.curt("你点了软键盘'去往'按钮");
 //                return true;
@@ -204,6 +220,24 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 //                ToastUtil.curt("你点击了完成按钮");
 //                return true;
 //            }
+
+            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                ToastUtil.curt("enter键盘");
+                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
+                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
+                }
+                if (mInputMethodManager.isActive(mSpeakEditText)) {
+                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if (mSpeakEditText.isShown()) {
+                    mSpeakEditText.setText("");
+                    mSpeakEditText.setVisibility(View.GONE);
+                }
+                if (!mLiveSpeak.isShown()) {
+                    mLiveSpeak.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
             return false;
         }
     };
@@ -218,6 +252,21 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
                             Log.d(TAG, "谈话内容" + liveHomeChatInfoResp.getData().toString());
                             chatDatas = liveHomeChatInfoResp.getData().getData();
+
+//                            for (LiveHomeChatInfo.ChatData data : liveHomeChatInfoResp.getData().getData()) {
+//                                if (mHashSet.add(data.getCreateTime())) {
+//                                    mDataArrayList.add(0, data);
+//                                }
+//                            }
+//                            liveHomeChatInfoResp.getData().sort();
+                            for (LiveHomeChatInfo.ChatData data : liveHomeChatInfoResp.getData().getData()) {
+                                Log.d("wangjietag", "\n数据  " + data);
+//                                if (mHashSet.add(data.getCreateTime())) {
+//                                    mDataArrayList.add(0, data);
+//                                }
+                            }
+                            mDataArrayList.addAll(0, liveHomeChatInfoResp.getData().getData());
+
                             updateCHatInfo(liveHomeChatInfoResp.getData());
                         }
                     }
@@ -227,7 +276,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private long getTimeStamp(List<LiveHomeChatInfo.ChatData> chatDatas) {
         if (chatDatas != null && !chatDatas.isEmpty()) {
-            return chatDatas.get(0).getTimeStamp();
+            return chatDatas.get(chatDatas.size() - 1).getTimeStamp();
         }
         return 0;
     }
@@ -249,11 +298,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
 
-        liveHomeChatInfo.sort();
-        for (LiveHomeChatInfo.ChatData item : liveHomeChatInfo.getData()) {
-//            if (mHashSet.add(item.getCreateTime())) {
-            mLiveChatInfoAdapter.add(item);
-//            }
+//        liveHomeChatInfo.sort();
+//        for (LiveHomeChatInfo.ChatData item : liveHomeChatInfo.getData()) {
+////            if (mHashSet.add(item.getCreateTime())) {
+//            mLiveChatInfoAdapter.add(item);
+////            }
+//        }
+        mLiveChatInfoAdapter.clear();
+        if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
+            mLiveChatInfoAdapter.addAll(mDataArrayList);
         }
         mLiveChatInfoAdapter.notifyDataSetChanged();
     }
@@ -263,6 +316,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     }
+
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -350,22 +404,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                 String format = DateUtil.format(item.getCreateTime());
 
-                /**
-                 *   DateUtils.formatDateTime(getApplicationContext(), //格式化时间，最多显示到分钟。最后参数设定显示的格式
-                 System.currentTimeMillis(),
-                 DateUtils.FORMAT_24HOUR|DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_SHOW_TIME
-                 |DateUtils.FORMAT_SHOW_YEAR|DateUtils.LENGTH_LONG|DateUtils.FORMAT_ABBREV_MONTH);
-
-                 DateUtils.getRelativeTimeSpanString(System.currentTimeMillis()+60*4000));
-                 //返回相对于当前时间的最大区间表示的字符串：几(分钟,小时,天,周,月,年)前/后
-
-                 DateUtils.getRelativeTimeSpanString(context, long timeMillis);
-                 //返回相对于当前时间的，参数时间字符串：在同一天显示时分；在不同一天，显示月日；在不同一年，显示年月日
-
-                 DateUtils.formatDateRange(getApplicationContext(), System.currentTimeMillis(), System.currentTimeMillis() + 60 * 60 * 3000,
-                 DateUtils.FORMAT_SHOW_TIME));  //返回两个时间值间的 相距 字符串
-                 */
-
                 boolean today = DateUtils.isToday(item.getCreateTime());
                 if (today) {
                     Log.d(TAG, "isToday  " + today);
@@ -385,7 +423,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
 
 
-                // TODO: 2016/11/10 测试老师
                 //老师或者管理员
                 if (!item.isCommonUser()) {
                     showManagerLayout();

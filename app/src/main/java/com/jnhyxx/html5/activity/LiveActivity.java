@@ -82,11 +82,15 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
 
     private ServerIpPort mServerIpPort;
 
+    private LiveInteractionFragment mLiveInteractionFragment;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
             Log.d(TAG, "onReceiveOriginalData: " + data);
+            if (mLiveInteractionFragment != null) {
+                mLiveInteractionFragment.setData(data);
+            }
         }
     };
     private Product mProduct;
@@ -97,7 +101,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
-
+        mLiveInteractionFragment = LiveInteractionFragment.newInstance();
         initTitleBar();
         initVideoView();
         getLiveMessage();
@@ -119,6 +123,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        receiveIntentData();
     }
 
     private void setLayoutData() {
@@ -230,15 +235,8 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
 
     private void openTradePage() {
         // TODO: 2016/11/8 如果没有持仓，则进入美原油  如果持仓，则进入有持仓的品种
-        boolean userHasHolding = false;
         //获取用户持仓数据
         requestUserPositions();
-//        if (userHasHolding) {
-//
-//        } else {
-//            requestProductList();
-//            // requestSimulationPositions(); // TODO: 09/11/2016 不是获取模拟持仓 修改
-//        }
     }
 
     private boolean userHasPositions(HomePositions mHomePositions) {
@@ -258,7 +256,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
                             if (homePositionsResp.isSuccess()) {
                                 HomePositions mHomePositions = homePositionsResp.getData();
                                 boolean userHasPositions = userHasPositions(mHomePositions);
-                                requestProductList(userHasPositions,mHomePositions);
+                                requestProductList(userHasPositions, mHomePositions);
                             }
                         }
 
@@ -294,7 +292,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             //如果没有持仓  默认进入美原油,如果有持仓,进入持仓界面
                             int crudeId = 1;
-                            if (hasPositions ) {
+                            if (hasPositions) {
                                 String varietyType = mHomePositions.getCashOpS().get(0).getVarietyType();
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
@@ -350,25 +348,6 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
                 }).fire();
     }
 
-    private void requestSimulationPositions() {
-        if (LocalUser.getUser().isLogin()) {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
-                        @Override
-                        public void onRespSuccess(HomePositions homePositions) {
-                            mSimulationPositionList = homePositions.getIntegralOpS();
-                            boolean updateProductList =
-                                    ProductPkg.updatePositionInProductPkg(mProductPkgList, mSimulationPositionList);
-//                            if (updateProductList) {
-//                                requestProductList();
-//                            }
-                        }
-                    }).fire();
-        } else { // clearHoldingOrderList all product position
-            ProductPkg.clearPositions(mProductPkgList);
-        }
-    }
-
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
@@ -391,7 +370,7 @@ public class LiveActivity extends LiveVideoActivity implements View.OnClickListe
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return LiveInteractionFragment.newInstance();
+                    return mLiveInteractionFragment;
                 case 1:
                     return TeacherGuideFragment.newInstance();
             }

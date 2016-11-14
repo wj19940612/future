@@ -545,7 +545,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getLiveMessage() {
-            return new API("/user/live/getLiveMessage.do", null);
+            return new API(GET, "/user/live/getLiveMessage.do", null);
         }
 
         /**
@@ -558,7 +558,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getTeacherGuide(int page, int pageSize, int teacherId) {
-            return new API("/user/live/findTeacherMsg.do", new ApiParams()
+            return new API(GET, "/user/live/findTeacherMsg.do", new ApiParams()
                     .put("page", page)
                     .put("pageSize", pageSize)
                     .put("teacherId", teacherId));
@@ -571,6 +571,29 @@ public class API extends APIBase {
          */
         public static API getLastTeacherGuide() {
             return new API("/user/live/findFirstTeacherMsg.do", null);
+        }
+
+
+        /**
+         * 接口名：按条件查询
+         * URL  http://域名/user/live/queryPagingBy.do
+         *
+         * @param timeStamp 最上面一条数据
+         * @param page
+         * @param pageSize
+         * @return
+         */
+        public static API getLiveTalk(long timeStamp, int page, int pageSize) {
+            if (timeStamp == 0) {
+                return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
+                        .put("timeStamp", null)
+                        .put("page", page)
+                        .put("pageSize", pageSize));
+            }
+            return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
+                    .put("timeStamp", timeStamp)
+                    .put("page", page)
+                    .put("pageSize", pageSize));
         }
     }
 

@@ -34,8 +34,8 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
@@ -110,6 +110,9 @@ public class TradeActivity extends BaseActivity implements
 
     @BindView(R.id.placeOrderContainer)
     FrameLayout mPlaceOrderContainer;
+    //直播按钮
+    @BindView(R.id.live)
+    TextView mLive;
 
     private SlidingMenu mMenu;
 
@@ -496,7 +499,7 @@ public class TradeActivity extends BaseActivity implements
         });
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.live})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -504,6 +507,9 @@ public class TradeActivity extends BaseActivity implements
                 break;
             case R.id.sellShortBtn:
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
+                break;
+            case R.id.live:
+                Launcher.with(TradeActivity.this, LiveActivity.class).execute();
                 break;
         }
     }

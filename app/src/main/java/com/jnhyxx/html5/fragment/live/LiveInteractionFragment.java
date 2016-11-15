@@ -339,12 +339,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
 
-//        liveHomeChatInfo.sort();
-//        for (LiveHomeChatInfo.ChatData item : liveHomeChatInfo.getData()) {
-////            if (mHashSet.add(item.getCreateTime())) {
-//            mLiveChatInfoAdapter.add(item);
-////            }
-//        }
         mLiveChatInfoAdapter.clear();
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
             mLiveChatInfoAdapter.addAll(mDataArrayList);
@@ -394,7 +388,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindViewWithData(getItem(position), position, mContext, this);
+            viewHolder.bindViewWithData(getItem(position), position, mContext);
             return convertView;
         }
 
@@ -449,19 +443,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(ChatData item, int position, Context context, LiveChatInfoAdapter liveChatInfoAdapter) {
-
-
-//                if (item.isDeleted()) {
-//                    liveChatInfoAdapter.remove(item);
-//                    liveChatInfoAdapter.notifyDataSetChanged();
-//                    return;
-//                }
-//////                //如果不是本人并且被禁言，其他人不应看到
-//                if (!item.isOwner() && !item.isNormalSpeak()) {
-//                    liveChatInfoAdapter.remove(item);
-//                    return;
-//                }
+            public void bindViewWithData(ChatData item, int position, Context context) {
 
                 String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
 

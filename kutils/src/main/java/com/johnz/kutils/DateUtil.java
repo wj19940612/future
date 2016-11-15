@@ -155,8 +155,24 @@ public class DateUtil {
         return dateFormat.format(date);
     }
 
-
     public static long isTimeBetweenFiveMin(long startTime, long endTime) {
         return (startTime - endTime) / (60 * 1000);
+    }
+
+    /**
+     * 将日期格式转化为时间(秒数)
+     *
+     * @param time
+     * @return
+     */
+    public static long getStringToDate(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_FORMAT);
+        Date date = new Date();
+        try {
+            date = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime() ;
     }
 }

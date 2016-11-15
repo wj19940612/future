@@ -154,4 +154,9 @@ public class DateUtil {
         Date date = new Date(timestamp);
         return dateFormat.format(date);
     }
+
+
+    public static long isTimeBetweenFiveMin(long startTime, long endTime) {
+        return (startTime - endTime) / (60 * 1000);
+    }
 }

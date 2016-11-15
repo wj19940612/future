@@ -51,8 +51,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.android.volley.Request.Method.HEAD;
-
 /**
  * Created by ${wangJie} on 2016/11/8.
  * 直播互动界面
@@ -152,6 +150,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             }
         });
     }
+
     public void setData(String data) {
 
         Log.d("newData", "新数据" + data);
@@ -261,6 +260,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                         if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
                             mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
+                            Log.d(TAG, "下载的数据" + liveHomeChatInfoResp.toString());
                             Log.d("dataLive", "== page" + mPage + " 数据大小 " + mChatDataListInfo.size());
                             mDataArrayList.addAll(0, mChatDataListInfo);
                             updateCHatInfo(liveHomeChatInfoResp.getData());
@@ -411,24 +411,22 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(ChatData item, int position, Context context) {
 
-                String format = DateUtil.format(item.getCreateTime(), "HH:mm:ss");
+
+                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
 
                 boolean today = DateUtils.isToday(item.getCreateTime());
-//                if (today) {
-//                    String formatElapsedTime = DateUtils.formatElapsedTime(item.getCreateTime());
-//                    String dateTime = DateUtils.formatDateTime(context, item.getCreateTime(), DateUtils.FORMAT_ABBREV_ALL);
-//                    String formatDateRange = DateUtils.formatDateRange(context, item.getCreateTime(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_YEAR);
-//                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-//                    format = relativeTimeSpanString2.toString();
-//                } else {
-//                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-//                    format =  relativeTimeSpanString2.toString();
-//                }
+                if (today) {
+                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                    format = format + "  " + relativeTimeSpanString2.toString();
+                } else {
+                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                    format = format + "  " + relativeTimeSpanString2.toString();
+                }
 
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();
-                    setChaterStatus(item, context);
+                    setChatUserStatus(item, context);
                     mContent.setText(item.getMsg());
                     mTimeHint.setText(format);
                     //普通游客发言
@@ -473,7 +471,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void setChaterStatus(ChatData item, Context context) {
+            private void setChatUserStatus(ChatData item, Context context) {
                 String chatUser = "";
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);

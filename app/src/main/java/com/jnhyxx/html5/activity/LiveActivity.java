@@ -299,7 +299,7 @@ public class LiveActivity extends BaseActivity {
         requestUserPositions();
     }
 
-    private boolean ifHasPositions(HomePositions homePositions) {
+    private boolean ifUserHasPositions(HomePositions homePositions) {
         if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
             return true;
         }
@@ -315,7 +315,7 @@ public class LiveActivity extends BaseActivity {
                         protected void onRespSuccess(Resp<HomePositions> resp) {
                             if (resp.isSuccess() && resp.hasData()) {
                                 HomePositions mHomePositions = resp.getData();
-                                boolean userHasPositions = ifHasPositions(mHomePositions);
+                                boolean userHasPositions = ifUserHasPositions(mHomePositions);
                                 requestProductList(userHasPositions, mHomePositions);
                             }
                         }

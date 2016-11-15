@@ -166,4 +166,23 @@ public class ChatData {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "ChatData{" +
+                "chatType=" + chatType +
+                ", createTime=" + createTime +
+                ", deleted=" + deleted +
+                ", msg='" + msg + '\'' +
+                ", name='" + name + '\'' +
+                ", normalSpeak=" + normalSpeak +
+                ", once=" + once +
+                ", order=" + order +
+                ", text=" + text +
+                ", timeStamp=" + timeStamp +
+                ", topChannelId=" + topChannelId +
+                ", userId=" + userId +
+                ", owner=" + owner +
+                '}';
+    }
 }

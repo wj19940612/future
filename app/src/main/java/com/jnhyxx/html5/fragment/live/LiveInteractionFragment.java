@@ -164,24 +164,23 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
 
         if (liveSpeakInfo != null) {
-//            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-//                recordUserIsDeny = true;
-//            } else {
-//                recordUserIsDeny = false;
-//            }
-
-            if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())
-                    && liveSpeakInfo.isOwner()
-                    && !liveSpeakInfo.isSlience()) {
-                ChatData chatData = new ChatData(liveSpeakInfo);
-                if (chatData != null && mLiveChatInfoAdapter != null) {
-                    if (mHashSet.add(chatData.getCreateTime())) {
-                        mLiveChatInfoAdapter.add(chatData);
-                        mDataArrayList.add(0, chatData);
-                        mLiveChatInfoAdapter.notifyDataSetChanged();
-                        // TODO: 2016/11/15 自动跑到ListView的最后一个item
+            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
+                recordUserIsDeny = true;
+            } else {
+                recordUserIsDeny = false;
+            }
+            if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
+                if (liveSpeakInfo.isOwner() || !liveSpeakInfo.isSlience()) {
+                    ChatData chatData = new ChatData(liveSpeakInfo);
+                    if (chatData != null && mLiveChatInfoAdapter != null) {
+                        if (mHashSet.add(chatData.getCreateTime())) {
+                            mLiveChatInfoAdapter.add(chatData);
+                            mDataArrayList.add(0, chatData);
+                            mLiveChatInfoAdapter.notifyDataSetChanged();
+                            // TODO: 2016/11/15 自动跑到ListView的最后一个item
 //                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 //                    mListView.setStackFromBottom(true);
+                        }
                     }
                 }
             }
@@ -200,9 +199,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 break;
         }
     }
-
-
-    private LiveMessage mLiveMessage;
 
     public void getLiveMessage() {
         API.Live.getLiveMessage().setTag(TAG)
@@ -292,23 +288,27 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                     @Override
                     public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
-                        if (liveHomeChatInfoResp.isSuccess() && liveHomeChatInfoResp.hasData()) {
-                            mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
+                        if (liveHomeChatInfoResp.isSuccess()) {
+                            if (liveHomeChatInfoResp.hasData()) {
 
-                            // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
-                            Iterator<ChatData> iterator = mChatDataListInfo.iterator();
-                            while (iterator.hasNext()) {
-                                ChatData chatData = iterator.next();
-                                Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
-                                if (!chatData.isOwner() && !chatData.isNormalSpeak() && chatData.isDeleted()) {
-                                    iterator.remove();
+                                mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
+
+                                // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
+                                Iterator<ChatData> iterator = mChatDataListInfo.iterator();
+                                while (iterator.hasNext()) {
+                                    ChatData chatData = iterator.next();
+                                    Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
+                                    if (!chatData.isOwner() && !chatData.isNormalSpeak() || chatData.isDeleted()) {
+                                        iterator.remove();
+                                    }
                                 }
-                            }
 
-                            mDataArrayList.addAll(0, mChatDataListInfo);
-                            updateCHatInfo(liveHomeChatInfoResp.getData());
-                            if (mChatDataListInfo.size() < mPageSize) {
-                                isRefreshed = true;
+                                mDataArrayList.addAll(0, mChatDataListInfo);
+                                updateCHatInfo(liveHomeChatInfoResp.getData());
+                            } else {
+                                if (mChatDataListInfo.size() < mPageSize) {
+                                    isRefreshed = true;
+                                }
                             }
                         }
                     }

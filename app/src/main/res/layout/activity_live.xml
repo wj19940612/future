@@ -1,157 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.LiveActivity">
 
-    <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/titleBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:backFeature="true"
-        app:customView="@layout/tb_live_program_dir"
-        app:rightText="@string/live_right_title"
-        app:rightTextColor="@android:color/white"
-        app:rightTextSize="16sp"
-        app:rightVisible="true"
-        app:titleText="@string/live"/>
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/black">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.jnhnxx.livevideo.LivePlayer
-            android:id="@+id/livePlayer"
-            android:layout_width="match_parent"
-            android:layout_height="203dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.jnhyxx.html5.view.TitleBar
+            android:id="@+id/titleBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:backFeature="true"
+            app:customView="@layout/tb_live_program_dir"
+            app:rightText="@string/live_right_title"
+            app:rightTextColor="@android:color/white"
+            app:rightTextSize="16sp"
+            app:rightVisible="true"
+            app:titleText="@string/live"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="203dp">
 
-                <ImageView
-                    android:id="@+id/teacherHead"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/bg_live_teacher_head"
-                    android:padding="5dp"
-                    android:visibility="visible"/>
-
-                <LinearLayout
-                    android:id="@+id/teacherCommandArea"
+                <com.jnhnxx.livevideo.LiveVideo
+                    android:id="@+id/liveVideo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/common_margin"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_left_arrow_live_teacher"/>
-
-                    <TextView
-                        android:id="@+id/teacherCommand"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_real_time_command"
-                        android:gravity="center_vertical"
-                        android:maxHeight="120dp"
-                        android:minHeight="60dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="8dp"
-                        android:scrollbars="vertical|none"
-                        android:textColor="@color/blackPrimary"
-                        android:textSize="12sp"
-                        tools:text="老师指令: xxooxxooxxooxxooxxooxxooxxooxxoo"/>
-                </LinearLayout>
+                    android:layout_height="match_parent"/>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/teacherCommandClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="@dimen/common_margin"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:visibility="gone"
-                android:src="@drawable/ic_teacher_command_close"/>
-        </LinearLayout>
+            <com.jnhyxx.html5.view.TeacherCommand
+                android:id="@+id/teacherCommand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:id="@+id/publicNoticeArea"
+            <LinearLayout
+                android:id="@+id/publicNoticeArea"
+                android:layout_width="match_parent"
+                android:layout_height="203dp"
+                android:background="@drawable/bg_live_blackboard"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/common_margin"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_there_is_no_live"/>
+
+                <TextView
+                    android:id="@+id/publicNotice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:lineSpacingExtra="5dp"
+                    android:maxLines="4"
+                    android:scrollbars="vertical|none"
+                    android:textColor="@android:color/white"
+                    tools:text="平台直播时间：\n [上午]09:00-11:00 刘老师\n [下午]13:30-15:30 刘老师\n [晚上]19:30-23:30 金虎老师\n"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <com.jnhyxx.html5.view.SlidingTabLayout
+            android:id="@+id/slidingTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="203dp"
-            android:background="@drawable/bg_live_blackboard"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/common_margin"
-            android:visibility="visible">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/image_there_is_no_live"/>
-
-            <TextView
-                android:id="@+id/publicNotice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:lineSpacingExtra="5dp"
-                android:maxLines="4"
-                android:scrollbars="vertical|none"
-                android:textColor="@android:color/white"
-                tools:text="平台直播时间：\n [上午]09:00-11:00 刘老师\n [下午]13:30-15:30 刘老师\n [晚上]19:30-23:30 金虎老师\n"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bufferingPrompt"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:background="@android:color/white"/>
 
-            <ProgressBar
-                style="@android:style/Widget.ProgressBar.Large"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-        </LinearLayout>
-    </RelativeLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
-    <com.jnhyxx.html5.view.SlidingTabLayout
-        android:id="@+id/slidingTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/liveLayout"
-        android:background="@android:color/white"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/slidingTabLayout"/>
-</LinearLayout>
+</FrameLayout>

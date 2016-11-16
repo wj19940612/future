@@ -4,11 +4,11 @@ public interface ILivePlayer {
 
     void start();
 
-    void pause();
+    void stop();
 
-    boolean isPaused();
+    boolean isStopped();
 
-    boolean isPlaying();
+    boolean isStarted();
 
     long getDuration();
 

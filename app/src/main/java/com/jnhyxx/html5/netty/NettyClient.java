@@ -143,10 +143,6 @@ public class NettyClient {
         }
     }
 
-    public void setQuotaDataFilter(QuotaDataFilter quotaDataFilter) {
-        mQuotaDataFilter = quotaDataFilter;
-    }
-
     public void start(String contractCode) {
         mContractCode = contractCode;
         mClosed = false;

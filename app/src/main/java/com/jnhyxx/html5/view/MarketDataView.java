@@ -59,6 +59,13 @@ public class MarketDataView extends FrameLayout {
             int priceScale = product.getPriceDecimalScale();
             mTodaySettlement.setText(getPrice(marketData.getSettlePrice(), priceScale));
             mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
+        } else {
+            mTodayPosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume()));
+            mPrePosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume()));
+
+            int priceScale = product.getPriceDecimalScale();
+            mTodaySettlement.setText(getPrice(marketData.getSettlePrice(), priceScale));
+            mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
         }
     }
 

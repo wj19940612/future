@@ -156,9 +156,16 @@ public class DateUtil {
         return dateFormat.format(date);
     }
 
-
+    /**
+     * @param startTime 最新的时间
+     * @param endTime
+     * @return
+     */
     public static boolean isTimeBetweenFiveMin(long startTime, long endTime) {
-        return 5 >(startTime - endTime) / (60 * 1000);
+        int difference = (int) (startTime - endTime) / (60 * 1000);
+        Log.d("dateUtil", "相差数据" + difference + "  开始的时间" + DateUtil.format(startTime) + "  比较时间" + DateUtil.format(endTime));
+
+        return 5 < difference;
     }
 
     /**

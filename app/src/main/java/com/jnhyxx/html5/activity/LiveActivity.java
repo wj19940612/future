@@ -11,8 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -61,6 +64,8 @@ public class LiveActivity extends BaseActivity {
 
     @BindView(R.id.liveVideo)
     LiveVideo mLivePlayer;
+    @BindView(R.id.videoContainer)
+    RelativeLayout mVideoContainer;
 
     @BindView(R.id.publicNoticeArea)
     LinearLayout mPublicNoticeArea;
@@ -281,13 +286,21 @@ public class LiveActivity extends BaseActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            mPlayerContainer.removeAllViews();
-//            mPlayerFullContainer.setVisibility(View.VISIBLE);
-//            mPlayerFullContainer.addView(mLivePlayer);
+            mTitleBar.setVisibility(View.GONE);
+            mTeacherCommand.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            mVideoContainer.setLayoutParams(params);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            mPlayerFullContainer.removeAllViews();
-//            mPlayerFullContainer.setVisibility(View.GONE);
-//            mPlayerContainer.addView(mLivePlayer);
+            mTitleBar.setVisibility(View.VISIBLE);
+            mTeacherCommand.setVisibility(View.VISIBLE);
+            int containerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203,
+                    getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    containerHeight);
+            mVideoContainer.setLayoutParams(params);
         }
     }
 

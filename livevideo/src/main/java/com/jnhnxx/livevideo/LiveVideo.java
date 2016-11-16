@@ -51,6 +51,7 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
         mPlayer = new LivePlayer(getContext());
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(CENTER_IN_PARENT);
         addView(mPlayer, params);
 
         params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

@@ -6,15 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.netease.neliveplayer.NELivePlayer;
@@ -130,11 +134,15 @@ public class LivePlayer extends TextureView implements
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Log.d(TAG, "onSurfaceTextureAvailable: w: " + width + " h: " + height);
         mSurfaceTexture = surface;
+        mSurfaceWidth = width;
+        mSurfaceHeight = width;
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         Log.d(TAG, "onSurfaceTextureSizeChanged: w: " + width + " h: " + height);
+        mSurfaceWidth = width;
+        mSurfaceHeight = height;
     }
 
     @Override
@@ -340,15 +348,12 @@ public class LivePlayer extends TextureView implements
 
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 scalePlayerBasedOnVideoSize();
-                if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
 
-                    Log.d(TAG, "onPrepared: start play");
 
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.start();
-                        mMediaPlayer.setMute(mMute);
-                        mCurState = STARTED;
-                    }
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.start();
+                    mMediaPlayer.setMute(mMute);
+                    mCurState = STARTED;
                 }
             }
 
@@ -439,8 +444,10 @@ public class LivePlayer extends TextureView implements
             mFullScreen = fullScreen;
             if (mFullScreen) {
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                scalePlayerBasedOnVideoSize();
             } else {
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                scalePlayerBasedOnVideoSize();
             }
         }
 
@@ -471,21 +478,44 @@ public class LivePlayer extends TextureView implements
                 aspectRatio = aspectRatio * mPixelSarNum / mPixelSarDen;
             }
 
-            mSurfaceHeight = mVideoHeight;
-            mSurfaceWidth = mVideoWidth;
+            if (mFullScreen) {
+                int[] size = new int[2];
+                getScreenSize(size);
+                mSurfaceWidth = size[0];
+                mSurfaceHeight = size[1];
+                Log.d(TAG, "scalePlayerBasedOnVideoSize: screenW: " + size[0] + ", screenH: " + size[1]);
+            }
+            float viewAspectRation = mSurfaceWidth / mSurfaceHeight;
+            if (viewAspectRation < aspectRatio) {
+                mSurfaceHeight = (int) (mSurfaceWidth / aspectRatio);
+            } else {
+                mSurfaceWidth = (int) (mSurfaceHeight * aspectRatio);
+            }
 
             ViewGroup.LayoutParams params = getLayoutParams();
-            if (mFullScreen) {
+            params.width = mSurfaceWidth;
+            params.height = mSurfaceHeight;
 
-            } else {
-                params.width = getWidth();
-                params.height = (int) (params.width / aspectRatio);
+            Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurW: " + mSurfaceWidth + ", mSurH: " + mSurfaceHeight);
+            Log.d(TAG, "scalePlayerBasedOnVideoSize: params.width: " + params.width + ", params.height: " + params.height);
 
-                Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurfaceW: " + mSurfaceWidth + ", mSurfaceH: " + mSurfaceHeight);
-                Log.d(TAG, "scalePlayerBasedOnVideoSize: params.width: " + params.width + ", params.height: " + params.height);
-            }
             setLayoutParams(params);
         }
+    }
+
+    private void getScreenSize(int[] size) {
+        int winWidth;
+        int winHeight;
+        Rect rect = new Rect();
+        this.getWindowVisibleDisplayFrame(rect);//获取状态栏高度
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay(); //获取屏幕分辨率
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        winWidth = metrics.widthPixels;
+        winHeight = metrics.heightPixels - rect.top;
+        size[0] = winWidth;
+        size[1] = winHeight;
     }
 
 }

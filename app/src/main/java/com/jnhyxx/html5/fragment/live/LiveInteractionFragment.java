@@ -76,6 +76,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @BindView(R.id.speakEditText)
     EditText mSpeakEditText;
 
+    //发送发言
+    @BindView(R.id.sendSpeak)
+    TextView mSendSpeak;
+    @BindView(R.id.speakLayout)
+    LinearLayout mSpeakLayout;
+
     private Unbinder mBind;
 
     private TextView mFooter;
@@ -202,7 +208,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
     }
 
-    @OnClick({R.id.liveSpeak})
+    @OnClick({R.id.liveSpeak, R.id.sendSpeak})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.liveSpeak:
@@ -211,6 +217,19 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
                 }
+                break;
+            case R.id.sendSpeak:
+                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
+                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
+                    mSpeakEditText.setText("");
+                }
+//                AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
+//                alphaAnimation.setDuration(500);
+//                alphaAnimation.setFillAfter(false);
+//                mSpeakLayout.startAnimation(alphaAnimation);
+//                mSpeakLayout.setVisibility(View.GONE);
+//                mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getApplicationWindowToken(), 0);
+//                mLiveSpeak.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -241,8 +260,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private void sendLiveSpeak() {
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        if (!mSpeakEditText.isShown()) {
-            mSpeakEditText.setVisibility(View.VISIBLE);
+        if (!mSpeakLayout.isShown()) {
+            mSpeakLayout.setVisibility(View.VISIBLE);
             mLiveSpeak.setVisibility(View.GONE);
         }
         mSpeakEditText.setFocusable(true);
@@ -260,8 +279,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mSpeakEditText.isShown()) {
-                mSpeakEditText.setVisibility(View.GONE);
+            if (mSpeakLayout.isShown()) {
+                mSpeakLayout.setVisibility(View.GONE);
                 mLiveSpeak.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -284,7 +303,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
                 if (mSpeakEditText.isShown()) {
                     mSpeakEditText.setText("");
-                    mSpeakEditText.setVisibility(View.GONE);
+                    mSpeakLayout.setVisibility(View.GONE);
                 }
                 if (!mLiveSpeak.isShown()) {
                     mLiveSpeak.setVisibility(View.VISIBLE);

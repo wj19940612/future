@@ -48,13 +48,15 @@
 
                     <TextView
                         android:id="@+id/tradeType"
-                        android:layout_width="40dp"
-                        android:layout_height="18dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:background="@drawable/bg_red_primary"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:minWidth="35dp"
+                        android:paddingBottom="2dp"
+                        android:paddingTop="2dp"
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
                         tools:text="买涨"/>

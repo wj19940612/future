@@ -1,83 +1,90 @@
 package com.jnhnxx.livevideo;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Locale;
 
-import static com.netease.neliveplayer.util.sys.NetworkUtil.TAG;
+public class LiveVideo extends RelativeLayout implements IPlayerController {
 
-public class LivePlayerController extends FrameLayout {
+    private static final String TAG = "LiveVideo";
 
-    private ILivePlayer mPlayer;
-    private Context mContext;
-    private PopupWindow mWindow;
-    private int mAnimStyle;
-    private View mAnchor;
-    private View mRoot;
-    private ProgressBar mProgress;
-    private TextView mEndTime, mCurrentTime;
-    private boolean mShowing;
     private static final int sDefaultTimeout = 3000; // 3000ms;
     private static final int FADE_OUT = 1;
-    private static final int SHOW_PROGRESS = 2;
+    private static final int SHOW = 2;
+
+    private LivePlayer mPlayer;
+    private ProgressBar mProgress;
+    private TextView mEndTime;
+    private TextView mCurrentTime;
+    private boolean mShowing;
+
+    private View mBufferingView;
+    private View mController;
     private ImageView mPauseButton;
     private ImageView mSetPlayerScaleButton;
     private ImageView mMuteButton;
 
-    public LivePlayerController(Context context) {
+    public LiveVideo(Context context) {
         super(context);
-        mContext = context;
-        initFloatingWindow();
+        init();
     }
 
-    private void initFloatingWindow() {
-        mWindow = new PopupWindow(mContext);
-        mWindow.setFocusable(false);
-        mWindow.setBackgroundDrawable(null);
-        mWindow.setOutsideTouchable(true);
-        mAnimStyle = android.R.style.Animation;
+    public LiveVideo(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
     }
 
-    public void setAnchorView(View view) {
-        mAnchor = view;
-        mRoot = LayoutInflater.from(mContext).inflate(R.layout.media_controller, this);
-        mWindow.setContentView(mRoot);
-        mWindow.setWidth(LayoutParams.MATCH_PARENT);
-        mWindow.setHeight(LayoutParams.WRAP_CONTENT);
-        initControllerView(mRoot);
+    private void init() {
+        mPlayer = new LivePlayer(getContext());
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        addView(mPlayer, params);
+
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mBufferingView = createBufferingView();
+        mBufferingView.setVisibility(GONE);
+        addView(mBufferingView, params);
+
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                dp2px(40));
+        params.addRule(ALIGN_PARENT_BOTTOM);
+        mController = createController();
+        addView(mController, params);
+
+        mPlayer.setPlayerController(this);
+        mPlayer.setBufferingView(mBufferingView);
     }
 
-    public void setPauseButton() {
-        mPauseButton.setImageResource(R.drawable.media_controller_pause);
+    private int dp2px(float dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
-    private void initControllerView(View v) {
+    private View createBufferingView() {
+        return LayoutInflater.from(getContext()).inflate(R.layout.player_buffering, null);
+    }
+
+    private View createController() {
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.player_controller, null);
         mPauseButton = (ImageView) v.findViewById(R.id.media_controller_play_pause); //播放暂停按钮
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayer == null) return;
-
-                if (mPlayer.isPlaying()) {
-                    mPlayer.pause();
-                    mPauseButton.setImageResource(R.drawable.media_controller_pause);
-                } else {
-                    mPlayer.start();
-                    mPauseButton.setImageResource(R.drawable.media_controller_play);
-                }
+                onStartButtonClick();
             }
         });
 
@@ -85,7 +92,7 @@ public class LivePlayerController extends FrameLayout {
         mSetPlayerScaleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onScaleButtonClick();
             }
         });
 
@@ -93,15 +100,7 @@ public class LivePlayerController extends FrameLayout {
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayer == null || !mPlayer.isPlaying()) return;
-
-                if (mPlayer.isMute()) {
-                    mPlayer.setMute(false);
-                    mMuteButton.setImageResource(R.drawable.media_controller_mute01);
-                } else {
-                    mPlayer.setMute(true);
-                    mMuteButton.setImageResource(R.drawable.media_controller_mute02);
-                }
+                onMuteButtonClick();
             }
         });
 
@@ -118,6 +117,78 @@ public class LivePlayerController extends FrameLayout {
 
         mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
+
+        return v;
+    }
+
+    public void setVideoPath(String path) { //设置视频文件路径
+        mPlayer.setVideoPath(path);
+    }
+
+    @Override
+    public void show() {
+        show(sDefaultTimeout);
+    }
+
+    @Override
+    public void hide() {
+        if (mShowing) {
+            mHandler.removeMessages(SHOW);
+            mController.setVisibility(GONE);
+            mShowing = false;
+        }
+    }
+
+    @Override
+    public void onMuteButtonClick() {
+        if (mPlayer == null || !mShowing) return;
+
+        if (mPlayer.isMute()) {
+            mPlayer.setMute(false);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+        } else {
+            mPlayer.setMute(true);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
+        }
+    }
+
+    @Override
+    public void enable(boolean enable) {
+        if (mPauseButton != null) {
+            mPauseButton.setEnabled(enable);
+        }
+        if (mSetPlayerScaleButton != null) {
+            mSetPlayerScaleButton.setEnabled(enable);
+        }
+        if (mMuteButton != null) {
+            mMuteButton.setEnabled(enable);
+        }
+    }
+
+    @Override
+    public void onScaleButtonClick() {
+        if (mPlayer == null || !mShowing) return;
+
+        if (mPlayer.isFullScreen()) {
+            mPlayer.setFullScreen(false);
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
+        } else {
+            mPlayer.setFullScreen(true);
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
+        }
+    }
+
+    @Override
+    public void onStartButtonClick() {
+        if (mPlayer == null || !mShowing) return;
+
+        if (mPlayer.isStarted()) {
+            mPlayer.stop();
+            mPauseButton.setImageResource(R.drawable.media_controller_start);
+        } else {
+            mPlayer.start();
+            mPauseButton.setImageResource(R.drawable.media_controller_stop);
+        }
     }
 
     private Handler mHandler = new Handler() {
@@ -127,21 +198,47 @@ public class LivePlayerController extends FrameLayout {
                 case FADE_OUT:
                     hide();
                     break;
-                case SHOW_PROGRESS:
-                    updateProgress();
+                case SHOW:
                     if (mShowing) {
-                        sendEmptyMessageDelayed(SHOW_PROGRESS, 1000);
+                        updatePlayerController();
+                        sendEmptyMessageDelayed(SHOW, 1000);
                     }
                     break;
             }
         }
     };
 
-    private void updateProgress() {
+    private void updatePlayerController() {
+        if (mController.getVisibility() != VISIBLE) {
+            mController.setVisibility(VISIBLE);
+        }
+
+        if (mPlayer.isStopped()) {
+            mPauseButton.setImageResource(R.drawable.media_controller_start);
+        } else {
+            mPauseButton.setImageResource(R.drawable.media_controller_stop);
+        }
+
+        if (mPlayer.isMute()) {
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
+        } else {
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+        }
+
+        if (mPlayer.isFullScreen()) {
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
+        } else {
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
+        }
+
+        updateTimes();
+    }
+
+    private void updateTimes() {
         if (mPlayer != null) {
             long position = mPlayer.getCurrentPosition();
             long duration = mPlayer.getDuration();
-            Log.d(TAG, "updateProgress: pos: " + position + ", dur: " + duration);
+            Log.d(TAG, "updatePlayerController: pos: " + position + ", dur: " + duration);
 
             if (duration > 0) {
                 mEndTime.setText(stringForTime(duration));
@@ -163,29 +260,11 @@ public class LivePlayerController extends FrameLayout {
         return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds).toString();
     }
 
-    public void show() {
-        show(sDefaultTimeout);
-    }
-
-    public void show(int timeout) {
-        if (!mShowing && mAnchor != null && mAnchor.getWindowToken() != null) {
-            int[] location = new int[2];
-            mAnchor.getLocationOnScreen(location);
-            Rect anchorRect = new Rect(location[0], location[1],
-                    location[0] + mAnchor.getWidth(), location[1]
-                    + mAnchor.getHeight());
-
-            View popupView = mWindow.getContentView();
-            popupView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-
-            mWindow.setAnimationStyle(mAnimStyle);
-            mWindow.showAtLocation(mAnchor, Gravity.NO_GRAVITY,
-                    anchorRect.left, anchorRect.bottom - popupView.getMeasuredHeight());
-
+    private void show(int timeout) {
+        if (!mShowing) {
             mShowing = true;
+            mHandler.sendEmptyMessage(SHOW);
 
-            mHandler.sendEmptyMessage(SHOW_PROGRESS);
             if (timeout != 0) {
                 mHandler.removeMessages(FADE_OUT);
                 mHandler.sendMessageDelayed(mHandler.obtainMessage(FADE_OUT), timeout);
@@ -193,44 +272,22 @@ public class LivePlayerController extends FrameLayout {
         }
     }
 
-    public void hide() {
-        if (mShowing && mAnchor != null) {
-            mHandler.removeMessages(SHOW_PROGRESS);
-            mWindow.dismiss();
-            mShowing = false;
-        }
-    }
-
     @Override
-    public void setEnabled(boolean enabled) {
-        if (mPauseButton != null) {
-            mPauseButton.setEnabled(enabled);
-        }
-        if (mSetPlayerScaleButton != null) {
-            mSetPlayerScaleButton.setEnabled(enabled);
-        }
-        if (mMuteButton != null) {
-            mMuteButton.setEnabled(enabled);
-        }
-        super.setEnabled(enabled);
-    }
-
-    public void setPlayer(LivePlayer livePlayer) {
-        mPlayer = livePlayer;
-    }
-
     public boolean isShowing() {
         return mShowing;
     }
 
     private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
+
+        @Override
         public void onStartTrackingTouch(SeekBar bar) {
 //            show(3600000);
 //            mDragging = true;
 //
-//            mHandler.removeMessages(SHOW_PROGRESS);
+//            mHandler.removeMessages(SHOW);
         }
 
+        @Override
         public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
 //            if (mPlayer.getMediaType().equals("livestream")) {
 //                return;
@@ -256,6 +313,7 @@ public class LivePlayerController extends FrameLayout {
 //                mCurrentTime.setText(time);
         }
 
+        @Override
         public void onStopTrackingTouch(SeekBar bar) {
 //            if (mPlayer.getMediaType().equals("livestream")) {
 //                AlertDialog alertDialog;
@@ -281,9 +339,9 @@ public class LivePlayerController extends FrameLayout {
 //            }
 //
 //            show(sDefaultTimeout);
-//            mHandler.removeMessages(SHOW_PROGRESS);
+//            mHandler.removeMessages(SHOW);
 //            mDragging = false;
-//            mHandler.sendEmptyMessageDelayed(SHOW_PROGRESS, 1000);
+//            mHandler.sendEmptyMessageDelayed(SHOW, 1000);
         }
     };
 }

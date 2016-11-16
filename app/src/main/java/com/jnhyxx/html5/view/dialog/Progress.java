@@ -38,7 +38,7 @@ public class Progress {
         } else {
             mCounter.incrementAndGet();
         }
-        Log.d("TEST", "show: " + mCounter.get());
+        Log.d("TEST", "showController: " + mCounter.get());
     }
 
     public void dismiss() {

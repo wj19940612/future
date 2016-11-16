@@ -1,5 +1,6 @@
 package com.johnz.kutils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -155,8 +156,9 @@ public class DateUtil {
         return dateFormat.format(date);
     }
 
-    public static long isTimeBetweenFiveMin(long startTime, long endTime) {
-        return (startTime - endTime) / (60 * 1000);
+
+    public static boolean isTimeBetweenFiveMin(long startTime, long endTime) {
+        return 5 >(startTime - endTime) / (60 * 1000);
     }
 
     /**
@@ -173,6 +175,51 @@ public class DateUtil {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return date.getTime() ;
+        return date.getTime();
     }
+
+    /**
+     * 判断指定时间和当前时间是否小于minute分钟
+     *
+     * @param txtDate 指定的时间
+     * @return
+     */
+
+    public static boolean isTimeMatchFiveMin(String txtDate) {
+        return isTimeMatchFiveMin(txtDate, 1);
+    }
+
+    public static boolean isTimeMatchFiveMin(String txtDate, int minute) {
+        if (TextUtils.isEmpty(txtDate)) {
+            return false;
+        }
+        if (minute == 0) {
+            minute = 5;
+        }
+        try {
+            final SimpleDateFormat format = new SimpleDateFormat(DEFAULT_FORMAT);
+            final Date workDay = format.parse(txtDate);
+
+            final Calendar c1 = Calendar.getInstance();
+            final Calendar c2 = Calendar.getInstance();
+
+            final Date currTime = new Date();
+
+            c1.setTime(workDay);
+            c2.setTime(currTime);
+
+            if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                    && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)
+                    && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH)
+                    && c1.get(Calendar.HOUR_OF_DAY) == c2.get(Calendar.HOUR_OF_DAY)) {
+                if (Math.abs(c1.get(Calendar.MINUTE) - c2.get(Calendar.MINUTE)) < minute) {
+                    return true;
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

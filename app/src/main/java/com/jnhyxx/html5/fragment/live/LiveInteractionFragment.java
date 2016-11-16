@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private ArrayList<ChatData> mDataArrayList;
 
+    //用来记录时间好超过5分钟的集合
+    private ArrayList<Integer> mTimeMoreThanFiveItemPosition;
+
     private boolean isRefreshed;
 
     //判断用户是否被禁言
@@ -124,9 +128,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mListView.setStackFromBottom(true);
+
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
+        mTimeMoreThanFiveItemPosition = new ArrayList<>();
         mListView.setOnScrollListener(this);
         getChatInfo();
         setOnRefresh();
@@ -149,6 +157,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
+                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+                    mListView.setStackFromBottom(false);
                 } else {
                     ToastUtil.curt("没有更多的数据了");
                     if (mSwipeRefreshLayout.isRefreshing()) {
@@ -174,12 +184,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
+                            if (DateUtil.isTimeMatchFiveMin(DateUtil.format(chatData.getCreateTime()))) {
+                                mTimeMoreThanFiveItemPosition.add(0);
+                                mLiveChatInfoAdapter.setTimeMoreThanFive(true);
+                            }
+
                             mLiveChatInfoAdapter.add(chatData);
                             mDataArrayList.add(0, chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
                             // TODO: 2016/11/15 自动跑到ListView的最后一个item
-//                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-//                    mListView.setStackFromBottom(true);
+                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                            mListView.setStackFromBottom(true);
                         }
                     }
                 }
@@ -303,7 +318,18 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                                          iterator.remove();
                                                      }
                                              }
+
                                              mDataArrayList.addAll(0, mChatDataListInfo);
+                                             ChatData chatData = mDataArrayList.get(0);
+                                             //用来记录时间大于5分钟的数据在数组中的索引
+                                             int position = 0;
+                                             for (int i = 0; i < mDataArrayList.size(); i++) {
+                                                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(position).getCreateTime(), mDataArrayList.get(i).getCreateTime())) {
+                                                     mTimeMoreThanFiveItemPosition.add(i);
+                                                     Log.d("tagTest", "超过5分钟的" + mDataArrayList.get(i).toString() + "\n");
+                                                     position = i;
+                                                 }
+                                             }
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                          } else {
                                              if (mChatDataListInfo.size() < mPageSize) {
@@ -341,6 +367,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
 
         mLiveChatInfoAdapter.clear();
+//        if (mTimeMoreThanFiveItemPosition != null && !mTimeMoreThanFiveItemPosition.isEmpty()) {
+//            mLiveChatInfoAdapter.setTimeMoreThanFiveList(mTimeMoreThanFiveItemPosition);
+//        }
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
             mLiveChatInfoAdapter.addAll(mDataArrayList);
         }
@@ -371,12 +400,24 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
 
-        Context mContext;
+        private Context mContext;
+        private ArrayList<Integer> mIntegerArrayList;
+        private boolean isMoreThanFive = false;
 
         public LiveChatInfoAdapter(Context context) {
             super(context, 0);
             this.mContext = context;
         }
+
+        public void setTimeMoreThanFiveList(ArrayList<Integer> timeMoreThanFive) {
+            mIntegerArrayList = timeMoreThanFive;
+            notifyDataSetChanged();
+        }
+
+        public void setTimeMoreThanFive(boolean isMoreThanFive) {
+            this.isMoreThanFive = isMoreThanFive;
+        }
+
 
         @NonNull
         @Override
@@ -389,7 +430,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindViewWithData(getItem(position), position, mContext);
+            viewHolder.bindViewWithData(getItem(position), position, mContext, mIntegerArrayList, isMoreThanFive, getCount());
             return convertView;
         }
 
@@ -444,22 +485,39 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(ChatData item, int position, Context context) {
+            public void bindViewWithData(ChatData item, int position, Context context, ArrayList<Integer> integerArrayList, boolean isMoreThanFive, int count) {
+//                if (position == count && isMoreThanFive) {
+//                    mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
+//                    mTimeBeforeHint.setText(DateUtil.format(item.getCreateTime()));
+//                }
 
+//                if (integerArrayList != null && !integerArrayList.isEmpty()) {
+//                    Log.d("test111", "数组中的大小" + integerArrayList.size());
+//                    for (int i = integerArrayList.size(); i > 0; i--) {
+//                        if (position == integerArrayList.get(i-1)) {
+//                            mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
+//                            mTimeBeforeHint.setText(DateUtil.format(item.getCreateTime()));
+//                        } else {
+//                            mTimeBeforeHintLayout.setVisibility(View.GONE);
+//                        }
+//
+//                    }
+//                }
+
+                int dimension = 0;
+                if (position == count) {
+                    dimension =
+                            (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, context.getResources().getDisplayMetrics());
+                }
                 String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-
-
-                boolean today = DateUtils.isToday(item.getCreateTime());
-                if (today) {
-                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                    format = format + "  " + relativeTimeSpanString2.toString();
-                } else {
-                    CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                    format = format + "  " + relativeTimeSpanString2.toString();
+                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                format = format + "  " + relativeTimeSpanString2.toString();
+                if (format.equalsIgnoreCase("0分钟前")) {
+                    format = "刚刚";
                 }
                 //老师或者管理员
                 if (!item.isNormalUser()) {
-                    showManagerLayout();
+                    showManagerLayout(dimension);
                     setChatUserStatus(item, context);
                     mContent.setText(item.getMsg());
                     mTimeHint.setText(format);
@@ -467,13 +525,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 } else {
                     //自己发的言
                     if (item.isOwner()) {
-                        showUserMineLayout();
+                        showUserMineLayout(dimension);
                         mMineTimeHint.setText(format);
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
                         //普通游客发言
                     } else {
-                        showCommonUserLayout();
+                        showCommonUserLayout(dimension);
                         mCommonUserStatus.setText(item.getName());
                         mCommonUserContent.setText(item.getMsg());
                         mCommonUserTimeHint.setText(format);
@@ -481,27 +539,43 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void showManagerLayout() {
+            private void showManagerLayout(int dimension) {
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);
                     mCommonUserLayout.setVisibility(View.GONE);
                     mUserMineLayout.setVisibility(View.GONE);
+//                    if (dimension != 0) {
+//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//                        layoutParams.setMargins(0, 0, 0, dimension);
+//                        mManagerLayout.setLayoutParams(layoutParams);
+//                    }
+
                 }
             }
 
-            private void showUserMineLayout() {
+            private void showUserMineLayout(int dimension) {
                 if (!mUserMineLayout.isShown()) {
                     mManagerLayout.setVisibility(View.GONE);
                     mCommonUserLayout.setVisibility(View.GONE);
                     mUserMineLayout.setVisibility(View.VISIBLE);
+//                    if (dimension != 0) {
+//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//                        layoutParams.setMargins(0, 0, 0, dimension);
+//                        mUserMineLayout.setLayoutParams(layoutParams);
+//                    }
                 }
             }
 
-            private void showCommonUserLayout() {
+            private void showCommonUserLayout(int dimension) {
                 if (!mCommonUserLayout.isShown()) {
                     mCommonUserLayout.setVisibility(View.VISIBLE);
                     mManagerLayout.setVisibility(View.GONE);
                     mUserMineLayout.setVisibility(View.GONE);
+//                    if (dimension != 0) {
+//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//                        layoutParams.setMargins(0, 0, 0, dimension);
+//                        mCommonUserLayout.setLayoutParams(layoutParams);
+//                    }
                 }
             }
 

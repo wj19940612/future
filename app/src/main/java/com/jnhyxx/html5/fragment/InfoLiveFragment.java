@@ -278,8 +278,15 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                         mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
                     }
                 }
-                Picasso.with(mContext).load(API.Message.getMessageLiveStarUrl(infoLiveMessage.get(6))).into(mViewHolder.mStarImage);
-                Picasso.with(mContext).load(API.Message.getOrganizeMarkUrl(infoLiveMessage.get(9))).into(mViewHolder.mOrganizeMarket);
+                String messageLiveStarUrl = API.Message.getMessageLiveStarUrl(infoLiveMessage.get(6));
+                if (!TextUtils.isEmpty(messageLiveStarUrl)) {
+                    Picasso.with(mContext).load(messageLiveStarUrl).into(mViewHolder.mStarImage);
+                }
+
+                String organizeMarkUrl = API.Message.getOrganizeMarkUrl(infoLiveMessage.get(9));
+                if (!TextUtils.isEmpty(organizeMarkUrl)) {
+                    Picasso.with(mContext).load(organizeMarkUrl).into(mViewHolder.mOrganizeMarket);
+                }
                 mViewHolder.mContent.setText(infoLiveMessage.get(2));
                 String time = DateUtils.getRelativeTimeSpanString(DateUtil.getStringToDate(infoLiveMessage.get(8))).toString();
                 if (time.equalsIgnoreCase("0分钟前")) {
@@ -309,7 +316,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                 mViewHolder.mImageHint.setVisibility(View.VISIBLE);
                 String imageUrl = API.Message.getMessageLiveInfoUrl() + infoLiveMessage.get(imageUrlPosition);
                 Log.d(TAG, "图片地址" + imageUrl);
-                Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
+                }
             } else {
                 mViewHolder.mImageHint.setVisibility(View.GONE);
             }

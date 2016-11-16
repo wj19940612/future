@@ -286,33 +286,34 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<LiveHomeChatInfo>>() {
 
-                    @Override
-                    public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
-                        if (liveHomeChatInfoResp.isSuccess()) {
-                            if (liveHomeChatInfoResp.hasData()) {
+                                 @Override
+                                 public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
+                                     if (liveHomeChatInfoResp.isSuccess()) {
+                                         if (liveHomeChatInfoResp.hasData()) {
 
-                                mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
+                                             mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
 
-                                // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
-                                Iterator<ChatData> iterator = mChatDataListInfo.iterator();
-                                while (iterator.hasNext()) {
-                                    ChatData chatData = iterator.next();
-                                    Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
-                                    if (!chatData.isOwner() && !chatData.isNormalSpeak() || chatData.isDeleted()) {
-                                        iterator.remove();
-                                    }
-                                }
-
-                                mDataArrayList.addAll(0, mChatDataListInfo);
-                                updateCHatInfo(liveHomeChatInfoResp.getData());
-                            } else {
-                                if (mChatDataListInfo.size() < mPageSize) {
-                                    isRefreshed = true;
-                                }
-                            }
-                        }
-                    }
-                }).fire();
+                                             // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
+                                             Iterator<ChatData> iterator = mChatDataListInfo.iterator();
+                                             while (iterator.hasNext()) {
+                                                 ChatData chatData = iterator.next();
+                                                 Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
+                                                 if (!chatData.isOwner())
+                                                     if (!chatData.isNormalSpeak() || chatData.isDeleted()) {
+                                                         iterator.remove();
+                                                     }
+                                             }
+                                             mDataArrayList.addAll(0, mChatDataListInfo);
+                                             updateCHatInfo(liveHomeChatInfoResp.getData());
+                                         } else {
+                                             if (mChatDataListInfo.size() < mPageSize) {
+                                                 isRefreshed = true;
+                                             }
+                                         }
+                                     }
+                                 }
+                             }
+                ).fire();
     }
 
     private long getTimeStamp(List<ChatData> chatDatas) {
@@ -447,6 +448,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                 String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
 
+
                 boolean today = DateUtils.isToday(item.getCreateTime());
                 if (today) {
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
@@ -455,7 +457,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
                     format = format + "  " + relativeTimeSpanString2.toString();
                 }
-
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();

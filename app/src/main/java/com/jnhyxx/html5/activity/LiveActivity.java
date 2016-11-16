@@ -347,24 +347,24 @@ public class LiveActivity extends BaseActivity {
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
-                            int crudeId = 1;
+                            int enterPageProductId = 1;
                             if (hasPositions) {
                                 String varietyType = homePositions.getCashOpS().get(0).getVarietyType();
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
-                                        crudeId = i;
+                                        enterPageProductId = i;
                                         break;
                                     }
                                 }
                             } else {
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
-                                        crudeId = i;
+                                        enterPageProductId = i;
                                         break;
                                     }
                                 }
                             }
-                            ProductPkg productPkg = mProductPkgList.get(crudeId);
+                            ProductPkg productPkg = mProductPkgList.get(enterPageProductId);
                             requestServerIpAndPort(productPkg);
                         }
                     }

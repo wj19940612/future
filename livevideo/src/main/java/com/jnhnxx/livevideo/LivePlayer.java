@@ -1,9 +1,11 @@
 package com.jnhnxx.livevideo;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import java.io.IOException;
 
 public class LivePlayer extends TextureView implements
         TextureView.SurfaceTextureListener, ILivePlayer {
+
     private static final String TAG = "LiveVideoView";
 
     private static final int IDLE = 0;
@@ -43,10 +46,10 @@ public class LivePlayer extends TextureView implements
 
     private SurfaceTexture mSurfaceTexture;
     private NELivePlayer mMediaPlayer;
+    private IPlayerController mPlayerController;
+    private View mBufferingView;
+
     private ResourceReleaseReceiver mReceiver; //接收资源释放成功的通知
-    private LivePlayerController mPlayerController;
-    private View mBufferView;
-    private boolean mMute;
 
     // assist log
     private String mLogPath = null;
@@ -54,20 +57,20 @@ public class LivePlayer extends TextureView implements
 
     // state
     private int mCurState;
-
+    private boolean mMute;
     private boolean mFullScreen;
 
     public LivePlayer(Context context) {
         super(context);
-        initVideoView();
+        init();
     }
 
     public LivePlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initVideoView();
+        init();
     }
 
-    private void initVideoView() {
+    private void init() {
         mVideoWidth = 0;
         mVideoHeight = 0;
         mPixelSarNum = 0;
@@ -75,8 +78,6 @@ public class LivePlayer extends TextureView implements
         setSurfaceTextureListener(this);
         registerBroadcast();
         mCurState = IDLE;
-
-        initLivePlayerController();
 
         setOnClickListener(new OnClickListener() {
             @Override
@@ -88,13 +89,6 @@ public class LivePlayer extends TextureView implements
                 }
             }
         });
-    }
-
-    private void initLivePlayerController() {
-        mPlayerController = new LivePlayerController(getContext());
-        mPlayerController.setAnchorView(this);
-        mPlayerController.setPlayer(this);
-        mPlayerController.setEnabled(false);
     }
 
     private void registerBroadcast() {
@@ -120,12 +114,16 @@ public class LivePlayer extends TextureView implements
         mUri = uri;
         mCurState = PAUSED;
         if (mPlayerController != null) {
-            mPlayerController.setEnabled(true);
+            mPlayerController.enable(true);
         }
     }
 
-    public void setBufferView(View bufferView) {
-        mBufferView = bufferView;
+    public void setPlayerController(IPlayerController controller) {
+        mPlayerController = controller;
+    }
+
+    public void setBufferingView(View bufferingView) {
+        mBufferingView = bufferingView;
     }
 
     @Override
@@ -156,9 +154,9 @@ public class LivePlayer extends TextureView implements
             return;
         }
 
-        // Tell the music playback service to pause
+        // Tell the music playback service to stop
         Intent i = new Intent("com.android.music.musicservicecommand");
-        i.putExtra("command", "pause");
+        i.putExtra("command", "stop");
         getContext().sendBroadcast(i);
 
         releaseResource();
@@ -234,13 +232,13 @@ public class LivePlayer extends TextureView implements
             if (mMediaPlayer != null) {
                 if (what == NELivePlayer.NELP_BUFFERING_START) {
                     Log.d(TAG, "onInfo: NELP_BUFFERING_START");
-                    if (mBufferView != null) {
-                        mBufferView.setVisibility(View.VISIBLE);
+                    if (mBufferingView != null) {
+                        mBufferingView.setVisibility(View.VISIBLE);
                     }
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
                     Log.d(TAG, "onInfo: NELP_BUFFERING_END");
-                    if (mBufferView != null) {
-                        mBufferView.setVisibility(View.GONE);
+                    if (mBufferingView != null) {
+                        mBufferingView.setVisibility(View.GONE);
                     }
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
                     Log.d(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
@@ -301,7 +299,7 @@ public class LivePlayer extends TextureView implements
         }
     };
 
-    NELivePlayer.OnVideoSizeChangedListener mSizeChangedListener = new NELivePlayer.OnVideoSizeChangedListener() {
+    private NELivePlayer.OnVideoSizeChangedListener mSizeChangedListener = new NELivePlayer.OnVideoSizeChangedListener() {
 
         /**
          * 视频大小发生变化时调用，可以在该函数内添加处理逻辑
@@ -325,7 +323,7 @@ public class LivePlayer extends TextureView implements
         }
     };
 
-    NELivePlayer.OnPreparedListener mPreparedListener = new NELivePlayer.OnPreparedListener() {
+    private NELivePlayer.OnPreparedListener mPreparedListener = new NELivePlayer.OnPreparedListener() {
 
         /**
          * 预处理完成后调用，可以在该函数内添加处理逻辑
@@ -370,14 +368,14 @@ public class LivePlayer extends TextureView implements
 
     @Override
     public void start() {
-        if (isPaused()) {
+        if (isStopped()) {
             openVideo();
         }
     }
 
     @Override
-    public void pause() {
-        if (isPlaying()) {
+    public void stop() {
+        if (isStarted()) {
             if (mMediaPlayer != null) {
                 mMediaPlayer.pause();
             }
@@ -390,12 +388,12 @@ public class LivePlayer extends TextureView implements
     }
 
     @Override
-    public boolean isPaused() {
+    public boolean isStopped() {
         return mCurState == PAUSED;
     }
 
     @Override
-    public boolean isPlaying() {
+    public boolean isStarted() {
         return mCurState == STARTED;
     }
 
@@ -435,7 +433,17 @@ public class LivePlayer extends TextureView implements
 
     @Override
     public void setFullScreen(boolean fullScreen) {
-        mFullScreen = fullScreen;
+        Context context = getContext();
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            mFullScreen = fullScreen;
+            if (mFullScreen) {
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+
     }
 
     @Override
@@ -456,7 +464,7 @@ public class LivePlayer extends TextureView implements
         }
     }
 
-    public void scalePlayerBasedOnVideoSize() {
+    private void scalePlayerBasedOnVideoSize() {
         if (mVideoWidth > 0 && mVideoHeight > 0) {
             float aspectRatio = mVideoWidth * 1.0f / mVideoHeight;
             if (mPixelSarNum > 0 && mPixelSarDen > 0) {

@@ -12,12 +12,11 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.jnhnxx.livevideo.LivePlayer;
+import com.jnhnxx.livevideo.LiveVideo;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -36,20 +35,18 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.LiveProgramDir;
 import com.jnhyxx.html5.view.SlidingTabLayout;
+import com.jnhyxx.html5.view.TeacherCommand;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class LiveActivity extends BaseActivity {
@@ -61,25 +58,16 @@ public class LiveActivity extends BaseActivity {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
 
-    @BindView(R.id.livePlayer)
-    LivePlayer mLivePlayer;
-
-    @BindView(R.id.bufferingPrompt)
-    LinearLayout mBufferingPrompt;
+    @BindView(R.id.liveVideo)
+    LiveVideo mLivePlayer;
 
     @BindView(R.id.publicNoticeArea)
     LinearLayout mPublicNoticeArea;
     @BindView(R.id.publicNotice)
     TextView mPublicNotice;
 
-    @BindView(R.id.teacherHead)
-    ImageView mTeacherHead;
     @BindView(R.id.teacherCommand)
-    TextView mTeacherCommand;
-    @BindView(R.id.teacherCommandArea)
-    LinearLayout mTeacherCommandArea;
-    @BindView(R.id.teacherCommandClose)
-    ImageView mTeacherCommandClose;
+    TeacherCommand mTeacherCommand;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
@@ -114,8 +102,14 @@ public class LiveActivity extends BaseActivity {
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
 
         initTitleBar();
-        initVideoPlayer();
         initSlidingTabLayout();
+
+        mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTeacherInfoDialog();
+            }
+        });
 
         getLiveMessage();
         getChattingIpPort();
@@ -134,37 +128,8 @@ public class LiveActivity extends BaseActivity {
 
     private void setTeacherCommand(ChatData chatData) {
         if (chatData != null && !TextUtils.isEmpty(chatData.getMsg())) {
-            mTeacherCommandClose.setVisibility(View.VISIBLE);
-            mTeacherCommandArea.setVisibility(View.VISIBLE);
-            mTeacherCommand.setText(chatData.getMsg());
-            mTeacherCommand.setMovementMethod(new ScrollingMovementMethod());
+            mTeacherCommand.setTeacherCommand(chatData.getMsg());
         }
-    }
-
-    private void initVideoPlayer() {
-        mLivePlayer.setBufferView(mBufferingPrompt);
-    }
-
-//    private void initVideoView() {
-//        mVideoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
-//
-//        NEMediaController mediaController = new NEMediaController(this);
-//        mLivePlayer.setMediaController(mediaController);
-//        mLivePlayer.setBufferStrategy(0); //直播低延时
-//        mLivePlayer.setBufferingIndicator(mBufferingPrompt);
-//        mLivePlayer.setMediaType(MEDIA_TYPE);
-//        mLivePlayer.setHardwareDecoder(HARDWARE_DECODE);
-//        mLivePlayer.setPauseInBackground(PAUSE_IN_BACKGROUND);
-//        mLivePlayer.setVideoPath(mVideoPath);
-//        // mMediaPlayer.setLogLevel(NELP_LOG_SILENT); //设置log级别
-//        mLivePlayer.requestFocus();
-//        mLivePlayer.start();
-//    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mLivePlayer.pause();
     }
 
     @Override
@@ -217,15 +182,8 @@ public class LiveActivity extends BaseActivity {
     private void showLiveViews() {
         LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
         mPublicNoticeArea.setVisibility(View.GONE);
-        mTeacherHead.setVisibility(View.VISIBLE);
-        String teacherHead = teacher.getPictureUrl();
-        if (TextUtils.isEmpty(teacherHead)) {
-            Picasso.with(getActivity()).load(R.drawable.ic_live_pic_head)
-                    .transform(new CircleTransform()).into(mTeacherHead);
-        } else {
-            Picasso.with(getActivity()).load(teacherHead)
-                    .transform(new CircleTransform()).into(mTeacherHead);
-        }
+        mTeacherCommand.setVisibility(View.VISIBLE);
+        mTeacherCommand.setTeacherHeader(teacher.getPictureUrl());
         connectRTMPServer(mLiveMessage.getActive());
     }
 
@@ -233,15 +191,11 @@ public class LiveActivity extends BaseActivity {
         mPublicNoticeArea.setVisibility(View.VISIBLE);
         mPublicNotice.setText(mLiveMessage.getNotice().getFormattedContent());
         mPublicNotice.setMovementMethod(new ScrollingMovementMethod());
-        mTeacherHead.setVisibility(View.GONE);
+        mTeacherCommand.setVisibility(View.GONE);
     }
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         Log.d(TAG, "connectRTMPServer: ");
-        //String videoPath = "http://flvdl18cf21ad.live.126.net/live/99c60b27b4154734822974a95381904c.flv?netease=flvdl18cf21ad.live.126.net";
-        //mLivePlayer.setVideoPath(videoPath);
-        //return;
-
         if (!TextUtils.isEmpty(active.getRtmp())) {
             mLivePlayer.setVideoPath(active.getRtmp());
         }
@@ -329,11 +283,13 @@ public class LiveActivity extends BaseActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "横屏");
-            mTitleBar.setVisibility(View.GONE);
+//            mPlayerContainer.removeAllViews();
+//            mPlayerFullContainer.setVisibility(View.VISIBLE);
+//            mPlayerFullContainer.addView(mLivePlayer);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.d(TAG, "竖屏");
-            mTitleBar.setVisibility(View.VISIBLE);
+//            mPlayerFullContainer.removeAllViews();
+//            mPlayerFullContainer.setVisibility(View.GONE);
+//            mPlayerContainer.addView(mLivePlayer);
         }
     }
 
@@ -402,19 +358,6 @@ public class LiveActivity extends BaseActivity {
                                 .execute();
                     }
                 }).fire();
-    }
-
-    @OnClick({R.id.teacherHead, R.id.teacherCommandClose})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.teacherHead:
-                showTeacherInfoDialog();
-                break;
-            case R.id.teacherCommandClose:
-                mTeacherCommandArea.setVisibility(View.GONE);
-                mTeacherCommandClose.setVisibility(View.GONE);
-                break;
-        }
     }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {

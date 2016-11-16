@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="3dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/teacherHead"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_live_teacher_head"
+        android:padding="5dp"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/teacherCommandArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/common_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_left_arrow_live_teacher"/>
+
+        <TextView
+            android:id="@+id/teacherCommand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_real_time_command"
+            android:gravity="center_vertical"
+            android:maxHeight="120dp"
+            android:minHeight="60dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="8dp"
+            android:scrollbars="vertical|none"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"
+            tools:text="老师指令: xxooxxooxxooxxooxxooxxooxxooxxoo"/>
+    </LinearLayout>
+</LinearLayout>

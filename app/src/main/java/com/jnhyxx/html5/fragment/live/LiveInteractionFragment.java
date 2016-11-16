@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -144,6 +144,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mListView.setOnScrollListener(this);
         getChatInfo();
         setOnRefresh();
+
     }
 
     private void setOnRefresh() {
@@ -190,12 +191,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
-                            if (DateUtil.isTimeMatchFiveMin(DateUtil.format(chatData.getCreateTime()))) {
-                                mTimeMoreThanFiveItemPosition.add(0);
-                                mLiveChatInfoAdapter.setTimeMoreThanFive(true);
-                            }
+//                            if (DateUtil.isTimeMatchFiveMin(DateUtil.format(chatData.getCreateTime()))) {
+//                                mTimeMoreThanFiveItemPosition.add(0);
+//                                mLiveChatInfoAdapter.setTimeMoreThanFive(true);
+//                            }
 
-                            mLiveChatInfoAdapter.add(chatData);
+                            mLiveChatInfoAdapter.setChatData(chatData);
                             mDataArrayList.add(0, chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
                             // TODO: 2016/11/15 自动跑到ListView的最后一个item
@@ -339,16 +340,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                              }
 
                                              mDataArrayList.addAll(0, mChatDataListInfo);
-                                             ChatData chatData = mDataArrayList.get(0);
-                                             //用来记录时间大于5分钟的数据在数组中的索引
-                                             int position = 0;
-                                             for (int i = 0; i < mDataArrayList.size(); i++) {
-                                                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(position).getCreateTime(), mDataArrayList.get(i).getCreateTime())) {
-                                                     mTimeMoreThanFiveItemPosition.add(i);
-                                                     Log.d("tagTest", "超过5分钟的" + mDataArrayList.get(i).toString() + "\n");
-                                                     position = i;
-                                                 }
-                                             }
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                          } else {
                                              if (mChatDataListInfo.size() < mPageSize) {
@@ -385,12 +376,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
 
-        mLiveChatInfoAdapter.clear();
+//        mLiveChatInfoAdapter.clear();
 //        if (mTimeMoreThanFiveItemPosition != null && !mTimeMoreThanFiveItemPosition.isEmpty()) {
 //            mLiveChatInfoAdapter.setTimeMoreThanFiveList(mTimeMoreThanFiveItemPosition);
 //        }
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-            mLiveChatInfoAdapter.addAll(mDataArrayList);
+            mLiveChatInfoAdapter.setChatDataList(mDataArrayList);
         }
         mLiveChatInfoAdapter.notifyDataSetChanged();
     }
@@ -417,26 +408,46 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
 
-    static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
+    static class LiveChatInfoAdapter extends BaseAdapter {
 
         private Context mContext;
-        private ArrayList<Integer> mIntegerArrayList;
         private boolean isMoreThanFive = false;
 
-        public LiveChatInfoAdapter(Context context) {
-            super(context, 0);
-            this.mContext = context;
-        }
+        private ArrayList<ChatData> mChatDataArrayList;
+        private ChatData mChatData;
 
-        public void setTimeMoreThanFiveList(ArrayList<Integer> timeMoreThanFive) {
-            mIntegerArrayList = timeMoreThanFive;
-            notifyDataSetChanged();
+        public LiveChatInfoAdapter(Context context) {
+            this.mContext = context;
         }
 
         public void setTimeMoreThanFive(boolean isMoreThanFive) {
             this.isMoreThanFive = isMoreThanFive;
         }
 
+        public void setChatDataList(ArrayList<ChatData> chatDataList) {
+            mChatDataArrayList = chatDataList;
+            notifyDataSetChanged();
+        }
+
+        public void setChatData(ChatData chatData) {
+            this.mChatData = chatData;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return mChatDataArrayList == null ? 0 : mChatDataArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mChatDataArrayList == null ? "" : mChatDataArrayList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
 
         @NonNull
         @Override
@@ -449,7 +460,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindViewWithData(getItem(position), position, mContext, mIntegerArrayList, isMoreThanFive, getCount());
+            viewHolder.bindViewWithData(mChatDataArrayList, position, mContext, isMoreThanFive, getCount());
             return convertView;
         }
 
@@ -504,24 +515,27 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(ChatData item, int position, Context context, ArrayList<Integer> integerArrayList, boolean isMoreThanFive, int count) {
+            public void bindViewWithData(ArrayList<ChatData> chatDataArrayList, int position, Context context, boolean isMoreThanFive, int count) {
+                ChatData item = chatDataArrayList.get(position);
+
+
 //                if (position == count && isMoreThanFive) {
 //                    mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
 //                    mTimeBeforeHint.setText(DateUtil.format(item.getCreateTime()));
 //                }
 
-//                if (integerArrayList != null && !integerArrayList.isEmpty()) {
-//                    Log.d("test111", "数组中的大小" + integerArrayList.size());
-//                    for (int i = integerArrayList.size(); i > 0; i--) {
-//                        if (position == integerArrayList.get(i-1)) {
-//                            mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
-//                            mTimeBeforeHint.setText(DateUtil.format(item.getCreateTime()));
-//                        } else {
-//                            mTimeBeforeHintLayout.setVisibility(View.GONE);
-//                        }
-//
-//                    }
-//                }
+
+                //用来记录时间大于5分钟的数据在数组中的索引
+                int dataPosition = 0;
+                for (int i = 0; i < position - 1; i++) {
+                    if (DateUtil.isTimeBetweenFiveMin(chatDataArrayList.get(i + 1).getCreateTime(), chatDataArrayList.get(dataPosition).getCreateTime())) {
+                        mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
+                        mTimeBeforeHint.setText(DateUtil.format(chatDataArrayList.get(i + 1).getCreateTime()));
+                        dataPosition = i + 1;
+                    } else {
+                        mTimeBeforeHintLayout.setVisibility(View.GONE);
+                    }
+                }
 
                 int dimension = 0;
                 if (position == count) {

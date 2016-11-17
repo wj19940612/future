@@ -39,6 +39,10 @@ public class ChatData {
     private int userId;
     private boolean owner;
 
+
+
+    private boolean isMoreThanFiveMin;
+
     public ChatData(LiveSpeakInfo speakInfo) {
         msg = speakInfo.getMsg();
         owner = speakInfo.isOwner();
@@ -153,6 +157,13 @@ public class ChatData {
         this.owner = owner;
     }
 
+    public boolean isMoreThanFiveMin() {
+        return isMoreThanFiveMin;
+    }
+
+    public void setMoreThanFiveMin(boolean moreThanFiveMin) {
+        isMoreThanFiveMin = moreThanFiveMin;
+    }
     public boolean isTeacherGuide() {
         if (chatType == CHAT_TYPE_TEACHER) {
             return true;
@@ -183,6 +194,7 @@ public class ChatData {
                 ", topChannelId=" + topChannelId +
                 ", userId=" + userId +
                 ", owner=" + owner +
+                ", isMoreThanFiveMin=" + isMoreThanFiveMin +
                 '}';
     }
 }

@@ -12,6 +12,9 @@ public class DateUtil {
 
     public static String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    public static String FORMAT_YEAR = "yyyy年MM月dd日 HH:mm";
+    public static String FORMAT_NOT_SECOND = "MM月dd日 HH:mm";
+
     public static String format(long time, String toFormat) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(toFormat);
         return dateFormat.format(new Date(time));
@@ -58,6 +61,21 @@ public class DateUtil {
         calendar.setTime(date);
         todayCalendar.add(Calendar.DAY_OF_YEAR, 1);
         return isToday(calendar.getTime(), todayCalendar.getTime());
+    }
+
+    public static boolean isYesterday(long time, long today) {
+        Date date = new Date(time);
+        Date todayDate = new Date(today);
+        return isYesterday(date, todayDate);
+    }
+
+    private static boolean isYesterday(Date date, Date todayDate) {
+        Calendar toadyCalendar = Calendar.getInstance();
+        toadyCalendar.setTime(todayDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        toadyCalendar.add(Calendar.DAY_OF_YEAR, -1);
+        return isToday(calendar.getTime(), toadyCalendar.getTime());
     }
 
     public static boolean isNextWeek(long time, long today) {

@@ -53,19 +53,47 @@ public class MarketDataView extends FrameLayout {
 
     public void setMarketData(FullMarketData marketData, Product product) {
         if (product.isForeign()) {
-            mTodayPosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume()));
-            mPrePosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume()));
+            mTodayPosition.setText(marketData.getPositionVolume() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume())
+                    : NO_DATA);
+            mPrePosition.setText(marketData.getPrePositionVolume() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume())
+                    : NO_DATA);
 
             int priceScale = product.getPriceDecimalScale();
             mTodaySettlement.setText(getPrice(marketData.getSettlePrice(), priceScale));
             mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
+
+            mTotalHands.setText(marketData.getVolume() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume())
+                    : NO_DATA);
+            mTotalAmount.setText(marketData.getTurnover() != 0
+                    ? FinanceUtil.addUnitWhenBeyondHundredMillion(marketData.getTurnover())
+                    : NO_DATA);
+
+            mRisingLimit.setText(getPrice(marketData.getUpLimitPrice(), priceScale));
+            mDownLimit.setText(getPrice(marketData.getDownLimitPrice(), priceScale));
         } else {
-            mTodayPosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPositionVolume()));
-            mPrePosition.setText(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPrePositionVolume()));
+            mTodayPosition.setText(marketData.getOpenInterest() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getOpenInterest())
+                    : NO_DATA);
+            mPrePosition.setText(marketData.getPreOpenInterest() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getPreOpenInterest())
+                    : NO_DATA);
 
             int priceScale = product.getPriceDecimalScale();
             mTodaySettlement.setText(getPrice(marketData.getSettlePrice(), priceScale));
             mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
+
+            mTotalHands.setText(marketData.getVolume() != 0
+                    ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume())
+                    : NO_DATA);
+            mTotalAmount.setText(marketData.getTurnover() != 0
+                    ? FinanceUtil.addUnitWhenBeyondHundredMillion(marketData.getTurnover())
+                    : NO_DATA);
+
+            mRisingLimit.setText(getPrice(marketData.getUpLimitPrice(), priceScale));
+            mDownLimit.setText(getPrice(marketData.getDownLimitPrice(), priceScale));
         }
     }
 

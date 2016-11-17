@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -207,7 +208,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
         Context mContext;
 
-
         public InfoLiveMessageAdapter(Context context) {
             super(context, 0);
             this.mContext = context;
@@ -228,37 +228,33 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             ArrayList<String> infoLiveMessage = getItem(position);
             Log.d(TAG, "大小" + infoLiveMessage.size() + "\n直播的具体数据" + infoLiveMessage.toString());
 
-            if (infoLiveMessage != null) {
-                for (int i = 0; i < infoLiveMessage.size(); i++) {
-                    String content = getContent(mViewHolder, infoLiveMessage);
-
-                    setTime(mViewHolder, infoLiveMessage);
-
-
-                    if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                    } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
-                        mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
-                    }
-                    mViewHolder.mContent.setText(content);
-
-
-                    String messageData = infoLiveMessage.toString();
-                    handleImage(mViewHolder, infoLiveMessage, messageData);
-                }
-
+            if (infoLiveMessage != null && !infoLiveMessage.isEmpty()) {
+                String content = getContent(mViewHolder, infoLiveMessage);
+                setTime(mViewHolder, infoLiveMessage);
+                changeTxtColor(mViewHolder, infoLiveMessage);
+                mViewHolder.mContent.setText(content);
+                String messageData = infoLiveMessage.toString();
+                handleImage(mViewHolder, infoLiveMessage, messageData);
                 setSpecialContent(mViewHolder, infoLiveMessage);
-
             }
             return convertView;
         }
 
+        private void changeTxtColor(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
+            if (infoLiveMessage.get(1).equalsIgnoreCase("0")) {
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+            } else if (infoLiveMessage.get(1).equalsIgnoreCase("1")) {
+                mViewHolder.mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.blackPrimary));
+            }
+        }
+
         private void setTime(ViewHolder mViewHolder, ArrayList<String> infoLiveMessage) {
             String time = infoLiveMessage.get(2);
-            if (DateUtil.isInThisYear(time, DateUtil.DEFAULT_FORMAT)) {
-                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "HH:mm:ss");
-            } else {
-                time = DateUtil.format(time, DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
+            long stringToDate = DateUtil.getStringToDate(time);
+//            time = StrFormatter.getTimeHint(time);
+            time = DateUtils.getRelativeTimeSpanString(stringToDate).toString();
+            if (time.equalsIgnoreCase("0分钟前")) {
+                time = "刚刚";
             }
             mViewHolder.mTime.setText(time);
         }
@@ -268,6 +264,9 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             if (infoLiveMessage.size() >= 11) {
                 Log.d("55555", "size大小" + infoLiveMessage.size() + "   " + infoLiveMessage.toString());
                 mViewHolder.mDataLayout.setVisibility(View.VISIBLE);
+                mViewHolder.mStarImage.setVisibility(View.VISIBLE);
+                mViewHolder.mTextHint.setVisibility(View.VISIBLE);
+                mViewHolder.mOrganizeMarket.setVisibility(View.VISIBLE);
                 if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
                     if (!TextUtils.isEmpty(infoLiveMessage.get(3))) {
                         mViewHolder.mBeforeData.setText(getString(R.string.before_data, infoLiveMessage.get(3)));
@@ -279,10 +278,28 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                         mViewHolder.mRealData.setText(getString(R.string.real_data, infoLiveMessage.get(5)));
                     }
                 }
+                String messageLiveStarUrl = API.Message.getMessageLiveStarUrl(infoLiveMessage.get(6));
+                if (!TextUtils.isEmpty(messageLiveStarUrl)) {
+                    Picasso.with(mContext).load(messageLiveStarUrl).into(mViewHolder.mStarImage);
+                }
+
+                String organizeMarkUrl = API.Message.getOrganizeMarkUrl(infoLiveMessage.get(9));
+                if (!TextUtils.isEmpty(organizeMarkUrl)) {
+                    Picasso.with(mContext).load(organizeMarkUrl).into(mViewHolder.mOrganizeMarket);
+                }
                 mViewHolder.mContent.setText(infoLiveMessage.get(2));
-                mViewHolder.mTime.setText(infoLiveMessage.get(1));
+                String time = DateUtils.getRelativeTimeSpanString(DateUtil.getStringToDate(infoLiveMessage.get(8))).toString();
+                if (time.equalsIgnoreCase("0分钟前")) {
+                    time = "刚刚";
+                }
+                mViewHolder.mTime.setText(time);
+                mViewHolder.mTextHint.setText(infoLiveMessage.get(7));
+
             } else {
+                mViewHolder.mOrganizeMarket.setVisibility(View.GONE);
                 mViewHolder.mDataLayout.setVisibility(View.GONE);
+                mViewHolder.mStarImage.setVisibility(View.GONE);
+                mViewHolder.mTextHint.setVisibility(View.GONE);
             }
         }
 
@@ -297,9 +314,11 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     }
                 }
                 mViewHolder.mImageHint.setVisibility(View.VISIBLE);
-                String imageUrl = "https://res.6006.com/jin10/" + infoLiveMessage.get(imageUrlPosition);
+                String imageUrl = API.Message.getMessageLiveInfoUrl() + infoLiveMessage.get(imageUrlPosition);
                 Log.d(TAG, "图片地址" + imageUrl);
-                Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    Picasso.with(getContext()).load(imageUrl).into(mViewHolder.mImageHint);
+                }
             } else {
                 mViewHolder.mImageHint.setVisibility(View.GONE);
             }
@@ -336,6 +355,12 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
             LinearLayout mDataLayout;
             @BindView(R.id.imageHint)
             ImageView mImageHint;
+            @BindView(R.id.organizeMarket)
+            ImageView mOrganizeMarket;
+            @BindView(R.id.starImage)
+            ImageView mStarImage;
+            @BindView(R.id.TextHint)
+            TextView mTextHint;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);

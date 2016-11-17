@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/white"
+              android:background="@drawable/bg_white"
               android:minHeight="250dp"
               android:orientation="vertical"
               android:padding="10dp">
@@ -16,8 +16,8 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/bg_live_teacher_head"
             android:gravity="center">

@@ -448,4 +448,5 @@
     <string name="live_type_teacher">老师</string>
     <string name="live_type_mine">我</string>
     <string name="live_time_is_not">非直播时间段，无法发言</string>
+    <string name="live_speak_send">发送</string>
 </resources>

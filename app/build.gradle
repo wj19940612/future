@@ -58,7 +58,11 @@ android {
     productFlavors {
         origin {
             versionCode 8
+<<<<<<< HEAD
+            versionName '1.2.7'
+=======
             versionName '1.2.8'
+>>>>>>> da07e69ea38682f98dc0a24770cae801ee4a4c7b
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
             minSdkVersion 21
         }

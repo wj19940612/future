@@ -252,7 +252,6 @@ public class NettyClient {
 
         public ChattingConn(int teacherId, String originalTokenStr) {
             this.id = teacherId;
-            this.msg = "testJ"; //// TODO: 09/11/2016 delete late
             initTokens(originalTokenStr);
         }
 

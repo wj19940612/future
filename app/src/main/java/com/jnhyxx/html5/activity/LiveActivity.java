@@ -24,7 +24,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
@@ -144,6 +143,11 @@ public class LiveActivity extends BaseActivity {
         disconnectNettySocket();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void getChattingIpPort() {
         API.Market.getChattingServerIpAndPort().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
@@ -258,7 +262,7 @@ public class LiveActivity extends BaseActivity {
         requestUserPositions();
     }
 
-    private boolean ifHasPositions(HomePositions homePositions) {
+    private boolean ifUserHasPositions(HomePositions homePositions) {
         if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
             return true;
         }
@@ -266,7 +270,6 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void requestUserPositions() {
-        if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
                     .setCallback(new Callback1<Resp<HomePositions>>() {
 
@@ -274,12 +277,11 @@ public class LiveActivity extends BaseActivity {
                         protected void onRespSuccess(Resp<HomePositions> resp) {
                             if (resp.isSuccess() && resp.hasData()) {
                                 HomePositions mHomePositions = resp.getData();
-                                boolean userHasPositions = ifHasPositions(mHomePositions);
+                                boolean userHasPositions = ifUserHasPositions(mHomePositions);
                                 requestProductList(userHasPositions, mHomePositions);
                             }
                         }
                     }).fire();
-        }
     }
 
     @Override
@@ -314,24 +316,24 @@ public class LiveActivity extends BaseActivity {
 
                         if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
                             // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
-                            int crudeId = 1;
+                            int enterPageProductId = 1;
                             if (hasPositions) {
                                 String varietyType = homePositions.getCashOpS().get(0).getVarietyType();
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
-                                        crudeId = i;
+                                        enterPageProductId = i;
                                         break;
                                     }
                                 }
                             } else {
                                 for (int i = 0; i < mProductPkgList.size(); i++) {
                                     if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
-                                        crudeId = i;
+                                        enterPageProductId = i;
                                         break;
                                     }
                                 }
                             }
-                            ProductPkg productPkg = mProductPkgList.get(crudeId);
+                            ProductPkg productPkg = mProductPkgList.get(enterPageProductId);
                             requestServerIpAndPort(productPkg);
                         }
                     }

@@ -71,6 +71,7 @@ public class SysMessage implements Serializable {
      * 咨询简要
      */
     private String pushContent;
+
     /**
      * ,咨询详情(test为true时候 这个文本有值)
      */
@@ -139,6 +140,14 @@ public class SysMessage implements Serializable {
     public boolean isSuccess() {
         return success;
     }
+    public String getPushMsg() {
+        return pushMsg;
+    }
+
+    public void setPushMsg(String pushMsg) {
+        this.pushMsg = pushMsg;
+    }
+
 
     @Override
     public String toString() {

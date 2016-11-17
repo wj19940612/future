@@ -35,7 +35,7 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         SysMessage mSysMessage = (SysMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mTvMessageTitle.setText(mSysMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
-        String content = "\t\t\t\t" + mSysMessage.getPushContent();
+        String content = "\t\t\t\t" + mSysMessage.getPushMsg().replaceAll("<p>|</p>", "\r\n");
         mTvMessageContent.setText(content);
 
     }

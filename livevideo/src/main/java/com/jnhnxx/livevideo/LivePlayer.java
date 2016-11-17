@@ -119,6 +119,7 @@ public class LivePlayer extends TextureView implements
         mCurState = PAUSED;
         if (mPlayerController != null) {
             mPlayerController.enable(true);
+            mPlayerController.show();
         }
     }
 

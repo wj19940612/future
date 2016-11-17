@@ -64,6 +64,7 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
                 dp2px(40));
         params.addRule(ALIGN_PARENT_BOTTOM);
         mController = createController();
+        mController.setVisibility(GONE);
         addView(mController, params);
 
         mPlayer.setPlayerController(this);

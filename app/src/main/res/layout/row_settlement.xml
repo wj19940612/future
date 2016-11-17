@@ -67,7 +67,7 @@
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/bg_red_primary"
                 android:gravity="center"
-                android:minHeight="23dp"
+                android:minHeight="22dp"
                 android:minWidth="40dp"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"

@@ -54,9 +54,8 @@
                         android:background="@drawable/bg_red_primary"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:minWidth="35dp"
-                        android:paddingBottom="2dp"
-                        android:paddingTop="2dp"
+                        android:minHeight="20dp"
+                        android:minWidth="40dp"
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
                         tools:text="买涨"/>

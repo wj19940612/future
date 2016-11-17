@@ -30,10 +30,10 @@ public class HomePopup {
         void onClick(Dialog dialog);
     }
 
-    public static HomePopup with(Activity activity, String msg, String titleTxt) {
+    public static HomePopup with(Activity activity, String titleText, String msg) {
         HomePopup dialog = new HomePopup(activity);
+        dialog.setTitle(titleText);
         dialog.setMessage(msg);
-        dialog.setTitle(titleTxt);
         return dialog;
     }
 

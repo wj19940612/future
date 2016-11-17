@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -49,7 +49,7 @@
         android:id="@+id/managerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin">
+        android:layout_marginBottom="@dimen/common_margin">
 
         <TextView
             android:id="@+id/userStatus"
@@ -116,7 +116,7 @@
         android:id="@+id/commonUserLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
         android:visibility="gone">
 
         <TextView
@@ -182,7 +182,7 @@
         android:id="@+id/userMineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_margin"
+        android:layout_marginBottom="@dimen/common_margin"
         android:visibility="gone">
 
         <TextView
@@ -222,8 +222,8 @@
                 android:id="@+id/userMineContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="300dp"
                 android:background="@drawable/bg_live_user_mine"
+                android:maxWidth="300dp"
                 android:padding="8dp"
                 android:textColor="@android:color/white"
                 tools:text="我自卡机上来发数据来看多岁撒多"/>
@@ -236,11 +236,11 @@
                 android:src="@drawable/arrow_live_angle_me_right"/>
 
             <LinearLayout
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_live_userhead"
                 android:clickable="true"
+                android:gravity="center"
                 android:minWidth="25dp">
 
                 <ImageView

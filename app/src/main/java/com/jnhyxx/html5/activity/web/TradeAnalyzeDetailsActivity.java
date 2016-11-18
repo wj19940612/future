@@ -32,7 +32,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.android.volley.Request.Method.HEAD;
 import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
@@ -113,16 +112,16 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeInfoMessageFrom.setText(getString(R.string.message_from, source));
         mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
-            setWebViewMargin();
             String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
+            setWebViewMargin();
             mWebView.loadUrl(information.getContent());
         }
     }
 
     private void setWebViewMargin() {
-        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20,
+        int defaultFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0,
                 getResources().getDisplayMetrics());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(defaultFontSize, defaultFontSize, defaultFontSize, 0);
@@ -139,10 +138,10 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mMessageFrom.setText(getString(R.string.message_from, source));
         mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         if (!information.isH5Style()) {
-            setWebViewMargin();
             String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
+            setWebViewMargin();
             mWebView.loadUrl(information.getContent());
         }
     }

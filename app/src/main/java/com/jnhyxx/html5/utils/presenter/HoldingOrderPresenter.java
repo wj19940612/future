@@ -23,7 +23,7 @@ import java.util.List;
 
 public class HoldingOrderPresenter {
 
-    private static final String TAG = "HoldingOrderPresenter";
+    private static final String TAG = "VolleyHttp";
 
     public HoldingOrderPresenter(IHoldingOrderView iHoldingOrderView) {
         mIHoldingOrderView = iHoldingOrderView;

@@ -21,7 +21,19 @@ public class FullMarketData {
      * upDropPrice : -0.75
      * upDropSpeed : -0.02
      * upTime : 1473669891736
+     * positionVolume 今日持仓量
+     * prePositionVolume 昨日持仓量
+     *
+     * 内盘新增:
+     * downLimitPrice: 2621,
+     * upLimitPrice: 2956,
+     * exchangeId:
+     * openInterest: 1399424,
+     * preOpenInterest: 1399424,
+     * turnover: 2.468655404E+10,
+     * upTimeFormat: "2016-11-16 22:13:15.000",
      * volume : 296902
+     *
      */
 
     private double askPrice; // 卖一价
@@ -40,55 +52,40 @@ public class FullMarketData {
     private double upDropPrice; //涨跌值
     private double upDropSpeed; //涨跌幅
     private long upTime; // 行情时间戳
-    private int positionVolume;//今日持仓量
-    private int prePositionVolume;//昨日持仓量
+    private long positionVolume;//今日持仓量
+    private long prePositionVolume;//昨日持仓量
+
+    private double downLimitPrice; //跌停板
+    private double upLimitPrice; //涨停板
+    private String exchangeId;
+    private long openInterest; //今日持仓量
+    private long preOpenInterest; //昨日持仓量
+    private double turnover; //成交金额
+    private String upTimeFormat;
+    private long volume; //成交量
 
     public double getAskPrice() {
         return askPrice;
-    }
-
-    public void setAskPrice(double askPrice) {
-        this.askPrice = askPrice;
     }
 
     public int getAskVolume() {
         return askVolume;
     }
 
-    public void setAskVolume(int askVolume) {
-        this.askVolume = askVolume;
-    }
-
     public double getBidPrice() {
         return bidPrice;
-    }
-
-    public void setBidPrice(double bidPrice) {
-        this.bidPrice = bidPrice;
     }
 
     public int getBidVolume() {
         return bidVolume;
     }
 
-    public void setBidVolume(int bidVolume) {
-        this.bidVolume = bidVolume;
-    }
-
     public double getHighestPrice() {
         return highestPrice;
     }
 
-    public void setHighestPrice(double highestPrice) {
-        this.highestPrice = highestPrice;
-    }
-
     public String getInstrumentId() {
         return instrumentId;
-    }
-
-    public void setInstrumentId(String instrumentId) {
-        this.instrumentId = instrumentId;
     }
 
     public double getLastPrice() {
@@ -103,80 +100,52 @@ public class FullMarketData {
         return lowestPrice;
     }
 
-    public void setLowestPrice(double lowestPrice) {
-        this.lowestPrice = lowestPrice;
-    }
-
     public double getOpenPrice() {
         return openPrice;
-    }
-
-    public void setOpenPrice(double openPrice) {
-        this.openPrice = openPrice;
     }
 
     public double getPreClsPrice() {
         return preClsPrice;
     }
 
-    public void setPreClsPrice(double preClsPrice) {
-        this.preClsPrice = preClsPrice;
-    }
-
     public double getPreSetPrice() {
         return preSetPrice;
-    }
-
-    public void setPreSetPrice(double preSetPrice) {
-        this.preSetPrice = preSetPrice;
     }
 
     public double getSettlePrice() {
         return settlePrice;
     }
 
-    public void setSettlePrice(double settlePrice) {
-        this.settlePrice = settlePrice;
-    }
-
-    public String getTradeDay() {
-        return tradeDay;
-    }
-
-    public void setTradeDay(String tradeDay) {
-        this.tradeDay = tradeDay;
-    }
-
-    public double getUpDropPrice() {
-        return upDropPrice;
-    }
-
-    public void setUpDropPrice(double upDropPrice) {
-        this.upDropPrice = upDropPrice;
-    }
-
-    public double getUpDropSpeed() {
-        return upDropSpeed;
-    }
-
-    public void setUpDropSpeed(double upDropSpeed) {
-        this.upDropSpeed = upDropSpeed;
-    }
-
-    public long getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(long upTime) {
-        this.upTime = upTime;
-    }
-
-    public int getPositionVolume() {
+    public long getPositionVolume() {
         return positionVolume;
     }
 
-    public int getPrePositionVolume() {
+    public long getPrePositionVolume() {
         return prePositionVolume;
+    }
+
+    public long getOpenInterest() {
+        return openInterest;
+    }
+
+    public long getPreOpenInterest() {
+        return preOpenInterest;
+    }
+
+    public long getVolume() {
+        return volume;
+    }
+
+    public double getTurnover() {
+        return turnover;
+    }
+
+    public double getDownLimitPrice() {
+        return downLimitPrice;
+    }
+
+    public double getUpLimitPrice() {
+        return upLimitPrice;
     }
 
     @Override

@@ -493,7 +493,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     mTimeBeforeHintLayout.setVisibility(View.GONE);
                 }
 
-                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
+                String format="" ;
+                format= DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
                 CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
                 format = format + "  " + relativeTimeSpanString2.toString();
                 if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {

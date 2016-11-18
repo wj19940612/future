@@ -190,11 +190,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
-//                            if (DateUtil.isTimeMatchFiveMin(DateUtil.format(chatData.getCreateTime()))) {
-//                                mTimeMoreThanFiveItemPosition.add(0);
-//                                mLiveChatInfoAdapter.setTimeMoreThanFive(true);
-//                            }
-
+                            if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(0).getCreateTime())) {
+                                chatData.setMoreThanFiveMin(true);
+                            }
                             mDataArrayList.add(0, chatData);
                             mLiveChatInfoAdapter.add(chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
@@ -320,6 +318,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                                              mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
 
+                                             Log.d("wjTest", "数据 " + liveHomeChatInfoResp.getData().getData() + "\n");
                                              // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
                                              Iterator<ChatData> iterator = mChatDataListInfo.iterator();
                                              while (iterator.hasNext()) {
@@ -373,6 +372,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 //            mLiveChatInfoAdapter.setTimeMoreThanFiveList(mTimeMoreThanFiveItemPosition);
 //        }
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
+            int dataPosition = mDataArrayList.size() - 1;
+            for (int i = mDataArrayList.size(); i > 0; i--) {
+                if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(dataPosition).getCreateTime(), mDataArrayList.get(i - 1).getCreateTime())) {
+                    mDataArrayList.get(dataPosition).setMoreThanFiveMin(true);
+                    dataPosition = i - 1;
+                }
+            }
             mLiveChatInfoAdapter.addAll(mDataArrayList);
         }
         mLiveChatInfoAdapter.notifyDataSetChanged();
@@ -478,22 +484,19 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(ChatData item, Context context, boolean isMoreThanFive, int count) {
 
-                //用来记录时间大于5分钟的数据在数组中的索引
-//                int dataPosition = 0;
-//                for (int i = 0; i < position - 1; i++) {
-//                    if (DateUtil.isTimeBetweenFiveMin(chatDataArrayList.get(i + 1).getCreateTime(), chatDataArrayList.get(dataPosition).getCreateTime())) {
-//                        mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
-//                        mTimeBeforeHint.setText(DateUtil.format(chatDataArrayList.get(i + 1).getCreateTime()));
-//                        dataPosition = i + 1;
-//                    } else {
-//                        mTimeBeforeHintLayout.setVisibility(View.GONE);
-//                    }
-//                }
+                String formatTime = getFormatTime(item.getCreateTime());
+
+                if (item.isMoreThanFiveMin()) {
+                    mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
+                    mTimeBeforeHint.setText(formatTime);
+                } else {
+                    mTimeBeforeHintLayout.setVisibility(View.GONE);
+                }
 
                 String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
                 CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                format = relativeTimeSpanString2.toString();
-                if (format.equalsIgnoreCase("0分钟前")||format.equalsIgnoreCase("0分钟后")) {
+                format = format + "  " + relativeTimeSpanString2.toString();
+                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
                     format = "刚刚";
                 }
                 //老师或者管理员
@@ -517,6 +520,27 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         mCommonUserContent.setText(item.getMsg());
                         mCommonUserTimeHint.setText(format);
                     }
+                }
+            }
+
+            /**
+             * 格式化中间的时间提示
+             *
+             * @param createTime
+             * @return
+             */
+            private String getFormatTime(long createTime) {
+                long systemTime = System.currentTimeMillis();
+                if (DateUtil.isInThisYear(createTime)) {
+                    if (DateUtil.isToday(createTime, systemTime)) {
+                        return DateUtil.format(createTime, "HH:mm");
+                    } else if (DateUtil.isYesterday(createTime, systemTime)) {
+                        return DateUtil.format(createTime, "昨天  " + "HH:mm");
+                    } else {
+                        return DateUtil.format(createTime, DateUtil.FORMAT_NOT_SECOND);
+                    }
+                } else {
+                    return DateUtil.format(createTime, DateUtil.FORMAT_YEAR);
                 }
             }
 

@@ -37,6 +37,5 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
         String content = "\t\t\t\t" + mSysMessage.getPushMsg().replaceAll("<p>|</p>", "\r\n");
         mTvMessageContent.setText(content);
-
     }
 }

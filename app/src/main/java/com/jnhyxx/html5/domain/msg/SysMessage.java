@@ -47,6 +47,8 @@ public class SysMessage implements Serializable {
      */
     private int channelId;
     private String createTime;
+
+
     /**
      * 超链接 (test为false时候 这个链接有值)
      */
@@ -90,7 +92,7 @@ public class SysMessage implements Serializable {
      */
     private int pushType;
     /**
-     * 是链接 还是纯文本
+     * 是链接 还是纯文本   false 是html  true是h5连接  后台错误
      */
     private boolean text;
     /**
@@ -149,6 +151,15 @@ public class SysMessage implements Serializable {
     public void setPushMsg(String pushMsg) {
         this.pushMsg = pushMsg;
     }
+
+    public String getHtmlLink() {
+        return htmlLink;
+    }
+
+    public void setHtmlLink(String htmlLink) {
+        this.htmlLink = htmlLink;
+    }
+
     @Override
     public String toString() {
         return "SysTradeMessage{" +
@@ -172,6 +183,7 @@ public class SysMessage implements Serializable {
 
     /**
      * 是否是提现信息提示
+     *
      * @return
      */
     public boolean isTradeStatus() {

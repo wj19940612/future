@@ -47,6 +47,14 @@
             android:textSize="12sp"/>
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:progressDrawable="@drawable/progress_horizontal"
+        android:visibility="visible"/>
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"

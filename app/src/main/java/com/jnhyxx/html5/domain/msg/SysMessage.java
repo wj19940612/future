@@ -95,6 +95,9 @@ public class SysMessage implements Serializable {
      * 是链接 还是纯文本   false 是html  true是h5连接  后台错误
      */
     private boolean text;
+
+
+    private boolean isText;
     /**
      * 0代表 提现信息提示 1 代表订单 平仓 和 止赢止损
      */
@@ -158,6 +161,10 @@ public class SysMessage implements Serializable {
 
     public void setHtmlLink(String htmlLink) {
         this.htmlLink = htmlLink;
+    }
+
+    public boolean getIsText() {
+        return isText;
     }
 
     @Override

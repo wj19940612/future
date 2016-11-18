@@ -8,9 +8,11 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.AppJs;
@@ -32,6 +34,8 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
     TextView mTvMessageTime;
     @BindView(R.id.webView)
     WebView mWebView;
+    @BindView(R.id.progress)
+    ProgressBar mProgress;
 
     public static final String INFO_HTML_META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no\">";
 
@@ -50,7 +54,7 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         SysMessage mSysMessage = (SysMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mTvMessageTitle.setText(mSysMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
-        if (mSysMessage.isText()) {
+        if (mSysMessage.isText() || mSysMessage.getIsText()) {
             if (!TextUtils.isEmpty(mSysMessage.getHtmlLink())) {
                 setWebViewMargin();
                 mWebView.loadUrl(mSysMessage.getHtmlLink());
@@ -108,6 +112,25 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         }
 
         mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress == 100) {
+                    mProgress.setVisibility(View.GONE);
+                } else {
+                    if (mProgress.getVisibility() == View.GONE) {
+                        mProgress.setVisibility(View.VISIBLE);
+                    }
+                    mProgress.setProgress(newProgress);
+                }
+            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+            }
+        });
     }
 
     protected class WebViewClient extends android.webkit.WebViewClient {

@@ -193,7 +193,7 @@ public class TradeActivity extends BaseActivity implements
         });
 
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
-        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit());
+        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
 
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
@@ -490,6 +490,7 @@ public class TradeActivity extends BaseActivity implements
 
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product
+                        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
                     }
                 }
             }

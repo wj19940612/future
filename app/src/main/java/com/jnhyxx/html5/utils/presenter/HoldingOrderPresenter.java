@@ -255,37 +255,44 @@ public class HoldingOrderPresenter {
     }
 
     /**
-     * 刷新策略:
+     * 查询策略:
      * <p/>
-     * 500ms 间隔, 刷新5次
-     * 2s 间隔, 刷新5次
-     * 4s 间隔, 刷新10次
-     *
+     * 500ms 间隔, 刷新10次
+     * 2s 间隔, 刷新20次(10 + 20)
+     * 8s 间隔, 刷新30次(30 + 30)
+     * 32s 间隔, 刷新60次(60 + 60)
      * @param varietyId
      * @param fundType
      */
     private void doQueryJobDelay(final int varietyId, final int fundType) {
-        if (mCounter++ < 5) {
+        if (mCounter++ < 10) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     queryHoldingOrderListAndUpdate(varietyId, fundType);
                 }
             }, 5 * 100);
-        } else if (mCounter++ < 10) {
+        } else if (mCounter++ < 30) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     queryHoldingOrderListAndUpdate(varietyId, fundType);
                 }
             }, 2 * 1000);
-        } else if (mCounter++ < 20) {
+        } else if (mCounter++ < 60) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     queryHoldingOrderListAndUpdate(varietyId, fundType);
                 }
-            }, 4 * 1000);
+            }, 8 * 1000);
+        } else if (mCounter++ < 120) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                }
+            }, 32 * 1000);
         } else {
             mCounter = 0;
         }

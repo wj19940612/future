@@ -30,7 +30,7 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
-import com.jnhyxx.html5.fragment.live.LiveTeacherInfoDialogFragment;
+import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
@@ -168,13 +168,11 @@ public class LiveActivity extends BaseActivity {
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
-
                         mLiveMessage = liveMessage;
 
                         if (mServerIpPort != null) {
                             connectNettySocket();
                         }
-
                         if (mLiveMessage.getTeacher() != null) { // 在直播
                             showLiveViews();
                         } else if (mLiveMessage.getNotice() != null) { // 未直播,显示通告
@@ -236,19 +234,6 @@ public class LiveActivity extends BaseActivity {
                 openTradePage();
             }
         });
-        setTitleBarCustomView();
-    }
-
-    private void showTeacherInfoDialog() {
-        LiveMessage.TeacherInfo teacherInfo = mLiveMessage.getTeacher();
-        if (teacherInfo != null) {
-            LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment
-                    = LiveTeacherInfoDialogFragment.newInstance(teacherInfo);
-            liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
-        }
-    }
-
-    private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
         LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
         liveProgramme.setOnClickListener(new View.OnClickListener() {
@@ -257,6 +242,15 @@ public class LiveActivity extends BaseActivity {
                 LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
             }
         });
+    }
+
+    private void showTeacherInfoDialog() {
+        LiveMessage.TeacherInfo teacherInfo = mLiveMessage.getTeacher();
+        if (teacherInfo != null) {
+            LiveTeacherInfoFragment liveTeacherInfoFragment
+                    = LiveTeacherInfoFragment.newInstance(teacherInfo);
+            liveTeacherInfoFragment.show(getSupportFragmentManager());
+        }
     }
 
     private void openTradePage() {

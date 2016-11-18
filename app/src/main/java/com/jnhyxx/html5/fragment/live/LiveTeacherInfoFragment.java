@@ -29,7 +29,7 @@ import butterknife.Unbinder;
  * Created by ${wangJie} on 2016/11/10.
  */
 
-public class LiveTeacherInfoDialogFragment extends DialogFragment {
+public class LiveTeacherInfoFragment extends DialogFragment {
 
     @BindView(R.id.teacherHeadImage)
     CircularAnnulusImageView mTeacherHeadImage;
@@ -42,17 +42,16 @@ public class LiveTeacherInfoDialogFragment extends DialogFragment {
     @BindView(R.id.teacherResumeInfo)
     TextView mTeacherResumeInfo;
 
-
-    private static final String KEY_TEACHER_INFO = "TEACHER_INFO";
+    private static final String KEY_TEACHER_INFO = "teacher_info";
 
     private LiveMessage.TeacherInfo mTeacherInfo;
     private Unbinder mBind;
     private View mDialogView;
 
-    public static LiveTeacherInfoDialogFragment newInstance(LiveMessage.TeacherInfo teacherInfo) {
+    public static LiveTeacherInfoFragment newInstance(LiveMessage.TeacherInfo teacherInfo) {
         Bundle args = new Bundle();
         args.putSerializable(KEY_TEACHER_INFO, teacherInfo);
-        LiveTeacherInfoDialogFragment fragment = new LiveTeacherInfoDialogFragment();
+        LiveTeacherInfoFragment fragment = new LiveTeacherInfoFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,6 +113,6 @@ public class LiveTeacherInfoDialogFragment extends DialogFragment {
 
 
     public void show(FragmentManager manager) {
-        show(manager, LiveTeacherInfoDialogFragment.class.getSimpleName());
+        show(manager, LiveTeacherInfoFragment.class.getSimpleName());
     }
 }

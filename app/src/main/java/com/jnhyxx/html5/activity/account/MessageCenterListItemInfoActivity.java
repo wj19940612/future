@@ -20,8 +20,6 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
     TextView mTvMessageTitle;
     @BindView(R.id.time)
     TextView mTvMessageTime;
-    @BindView(R.id.messageContent)
-    TextView mTvMessageContent;
     @BindView(R.id.webView)
     WebView mWebView;
 
@@ -36,21 +34,13 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
 
     private void initData() {
         Intent intent = getIntent();
-        boolean isUpdateNotice = intent.getBooleanExtra(Launcher.EX_PAYLOAD_1, false);
 
         SysMessage mSysMessage = (SysMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mTvMessageTitle.setText(mSysMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
-        if (isUpdateNotice) {
-            mWebView.setVisibility(View.VISIBLE);
-            mWebView.loadDataWithBaseURL(null, mSysMessage.getPushMsg(), "text/html", "utf-8", null);
-            mTvMessageContent.setVisibility(View.GONE);
-        } else {
-            mWebView.setVisibility(View.GONE);
-            mTvMessageContent.setVisibility(View.VISIBLE);
-            String content = "\t\t\t\t" + mSysMessage.getPushMsg().replaceAll("<p>|</p>", "\r\n");
-            mTvMessageContent.setText(content);
-        }
+        mWebView.setVisibility(View.VISIBLE);
+        mWebView.loadDataWithBaseURL(null, mSysMessage.getPushMsg(), "text/html", "utf-8", null);
+
 
     }
 }

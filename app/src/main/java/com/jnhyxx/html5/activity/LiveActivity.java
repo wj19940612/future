@@ -223,6 +223,8 @@ public class LiveActivity extends BaseActivity {
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
+        mSlidingTabLayout.setPadding(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics()));
         mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -297,11 +299,10 @@ public class LiveActivity extends BaseActivity {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTitleBar.setVisibility(View.VISIBLE);
             mTeacherCommand.setVisibility(View.VISIBLE);
-            int containerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203,
-                    getResources().getDisplayMetrics());
+            int playerHeight = getResources().getDimensionPixelOffset(R.dimen.player_height);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    containerHeight);
+                    playerHeight);
             mVideoContainer.setLayoutParams(params);
         }
     }

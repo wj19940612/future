@@ -23,7 +23,8 @@
     <RelativeLayout
         android:id="@+id/videoContainer"
         android:layout_width="match_parent"
-        android:layout_height="203dp">
+        android:layout_height="@dimen/player_height"
+        android:background="@android:color/black">
 
         <com.jnhnxx.livevideo.LiveVideo
             android:id="@+id/liveVideo"

@@ -136,7 +136,7 @@ public class LivePlayer extends TextureView implements
         Log.d(TAG, "onSurfaceTextureAvailable: w: " + width + " h: " + height);
         mSurfaceTexture = surface;
         mSurfaceWidth = width;
-        mSurfaceHeight = width;
+        mSurfaceHeight = height;
     }
 
     @Override
@@ -144,6 +144,7 @@ public class LivePlayer extends TextureView implements
         Log.d(TAG, "onSurfaceTextureSizeChanged: w: " + width + " h: " + height);
         mSurfaceWidth = width;
         mSurfaceHeight = height;
+        scalePlayerBasedOnVideoSize();
     }
 
     @Override
@@ -279,6 +280,7 @@ public class LivePlayer extends TextureView implements
         @Override
         public void onCompletion(NELivePlayer mp) {
             Log.d(TAG, "onCompletion");
+            Toast.makeText(getContext(), "直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
             /**
              * 对于点播文件或本地文件，播放结束后会触发该回调。
              * 对于直播来说，播放器无法判断直播是否结束，只能通过业务服务器来进行通知。
@@ -302,7 +304,7 @@ public class LivePlayer extends TextureView implements
                 mPlayerController.hide();
             }
 
-            Toast.makeText(getContext(), "错误: 直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
 
             return true;
         }
@@ -486,18 +488,19 @@ public class LivePlayer extends TextureView implements
                 mSurfaceHeight = size[1];
                 Log.d(TAG, "scalePlayerBasedOnVideoSize: screenW: " + size[0] + ", screenH: " + size[1]);
             }
-            float viewAspectRation = mSurfaceWidth / mSurfaceHeight;
+            float viewAspectRation = mSurfaceWidth * 1.0f / mSurfaceHeight;
+            Log.d(TAG, "scalePlayerBasedOnVideoSize: viewAspectRation: " + viewAspectRation + ", aspectRatio: " + aspectRatio);
             if (viewAspectRation < aspectRatio) {
                 mSurfaceHeight = (int) (mSurfaceWidth / aspectRatio);
             } else {
                 mSurfaceWidth = (int) (mSurfaceHeight * aspectRatio);
             }
+            Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurW: " + mSurfaceWidth + ", mSurH: " + mSurfaceHeight);
 
             ViewGroup.LayoutParams params = getLayoutParams();
             params.width = mSurfaceWidth;
             params.height = mSurfaceHeight;
 
-            Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurW: " + mSurfaceWidth + ", mSurH: " + mSurfaceHeight);
             Log.d(TAG, "scalePlayerBasedOnVideoSize: params.width: " + params.width + ", params.height: " + params.height);
 
             setLayoutParams(params);

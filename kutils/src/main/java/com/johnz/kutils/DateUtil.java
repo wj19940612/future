@@ -247,4 +247,27 @@ public class DateUtil {
         return false;
     }
 
+    /**
+     * 格式化时间  如果是当天 则显示18:20
+     *            如果是昨天 则 昨天 18:20
+     *            其他的   12月12日 12:20
+     *            不是今年  则 2015年12月18日
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getFormatTime(long createTime) {
+        long systemTime = System.currentTimeMillis();
+        if (DateUtil.isInThisYear(createTime)) {
+            if (DateUtil.isToday(createTime, systemTime)) {
+                return DateUtil.format(createTime, "HH:mm");
+            } else if (DateUtil.isYesterday(createTime, systemTime)) {
+                return DateUtil.format(createTime, "昨天  " + "HH:mm");
+            } else {
+                return DateUtil.format(createTime, DateUtil.FORMAT_NOT_SECOND);
+            }
+        } else {
+            return DateUtil.format(createTime, DateUtil.FORMAT_YEAR);
+        }
+    }
 }

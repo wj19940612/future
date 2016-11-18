@@ -190,7 +190,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
-                            if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(0).getCreateTime())) {
+                            if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 1).getCreateTime())) {
                                 chatData.setMoreThanFiveMin(true);
                             }
                             mDataArrayList.add(0, chatData);
@@ -375,7 +375,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             int dataPosition = mDataArrayList.size() - 1;
             for (int i = mDataArrayList.size(); i > 0; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(dataPosition).getCreateTime(), mDataArrayList.get(i - 1).getCreateTime())) {
-                    mDataArrayList.get(dataPosition).setMoreThanFiveMin(true);
+                    mDataArrayList.get(i).setMoreThanFiveMin(true);
                     dataPosition = i - 1;
                 }
             }
@@ -484,7 +484,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             public void bindViewWithData(ChatData item, Context context, boolean isMoreThanFive, int count) {
 
-                String formatTime = getFormatTime(item.getCreateTime());
+                String formatTime = DateUtil.getFormatTime(item.getCreateTime());
 
                 if (item.isMoreThanFiveMin()) {
                     mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
@@ -520,27 +520,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         mCommonUserContent.setText(item.getMsg());
                         mCommonUserTimeHint.setText(format);
                     }
-                }
-            }
-
-            /**
-             * 格式化中间的时间提示
-             *
-             * @param createTime
-             * @return
-             */
-            private String getFormatTime(long createTime) {
-                long systemTime = System.currentTimeMillis();
-                if (DateUtil.isInThisYear(createTime)) {
-                    if (DateUtil.isToday(createTime, systemTime)) {
-                        return DateUtil.format(createTime, "HH:mm");
-                    } else if (DateUtil.isYesterday(createTime, systemTime)) {
-                        return DateUtil.format(createTime, "昨天  " + "HH:mm");
-                    } else {
-                        return DateUtil.format(createTime, DateUtil.FORMAT_NOT_SECOND);
-                    }
-                } else {
-                    return DateUtil.format(createTime, DateUtil.FORMAT_YEAR);
                 }
             }
 

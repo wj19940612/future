@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -197,6 +198,13 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 //        }
         mLiveTeacherGuideAdapter.clear();
         if (mDataInfos != null && !mDataInfos.isEmpty()) {
+            int dataPosition = mDataInfos.size() - 1;
+            for (int i = mDataInfos.size(); i > 0; i--) {
+                if (DateUtil.isTimeBetweenFiveMin(mDataInfos.get(dataPosition).getCreateTime(), mDataInfos.get(i - 1).getCreateTime())) {
+                    mDataInfos.get(i).setMoreThanFiveMin(true);
+                    dataPosition = i - 1;
+                }
+            }
             mLiveTeacherGuideAdapter.addAll(mDataInfos);
         }
         mLiveTeacherGuideAdapter.notifyDataSetChanged();
@@ -243,6 +251,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             TextView mTimeBeforeHint;
             @BindView(R.id.timeBeforeHintLayout)
             LinearLayout mTimeBeforeHintLayout;
+
+
             @BindView(R.id.userStatus)
             TextView mUserStatus;
             @BindView(R.id.timeHint)
@@ -262,12 +272,28 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
             public void bindDataWithView(ChatData item, int position, Context context) {
                 if (item == null) return;
+
+                String formatTime = DateUtil.getFormatTime(item.getCreateTime());
+
+                if (item.isMoreThanFiveMin()) {
+                    mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
+                    mTimeBeforeHint.setText(formatTime);
+                } else {
+                    mTimeBeforeHintLayout.setVisibility(View.GONE);
+                }
+
+                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
+                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                format = format + "  " + relativeTimeSpanString2.toString();
+                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
+                    format = "刚刚";
+                }
+
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);
                 }
-                String format = DateUtil.format(item.getCreateTime());
-//                if (item.isTeacherGuide()) {
-//                }
+
+
                 mTimeHint.setText(format);
                 mUserStatus.setText(item.getName());
                 mContent.setText(item.getMsg());

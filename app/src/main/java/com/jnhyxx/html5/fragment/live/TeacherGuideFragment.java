@@ -67,7 +67,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private LiveTeacherGuideAdapter mLiveTeacherGuideAdapter;
 
-    private ArrayList<ChatData> mDataInfos;
+    private ArrayList<ChatData> mDataInfoList;
+
 
     public static TeacherGuideFragment newInstance() {
 
@@ -97,7 +98,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mLiveSpeak.setVisibility(View.GONE);
         mPageSize = 10;
         mHashSet = new HashSet<>();
-        mDataInfos = new ArrayList<>();
+        mDataInfoList = new ArrayList<>();
         mListView.setOnScrollListener(this);
         getLiveMessage();
         initSwipeRefreshLayout();
@@ -121,7 +122,13 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isAdded()) {
+        if (isVisibleToUser
+                && isAdded()
+                && !getActivity().isFinishing()) {
+            mPage = 0;
+            if (mDataInfoList != null) {
+                mDataInfoList.clear();
+            }
             getLiveMessage();
         }
     }
@@ -162,7 +169,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     @Override
                     public void onReceive(Resp<LiveTeacherGuideInfo> liveTeacherGuideInfoResp) {
                         if (liveTeacherGuideInfoResp.isSuccess() && liveTeacherGuideInfoResp.hasData()) {
-                            mDataInfos.addAll(0, liveTeacherGuideInfoResp.getData().getData());
+                            mDataInfoList.addAll(0, liveTeacherGuideInfoResp.getData().getData());
                             updateTeacherGuide(liveTeacherGuideInfoResp.getData().getData());
                         }
                     }
@@ -192,20 +199,16 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
             mListView.setAdapter(mLiveTeacherGuideAdapter);
         }
-//        for (LiveTeacherGuideInfo.DataInfo dataInfo : data) {
-//            mHashSet.add(dataInfo.getCreateTime());
-//            mLiveTeacherGuideAdapter.add(dataInfo);
-//        }
         mLiveTeacherGuideAdapter.clear();
-        if (mDataInfos != null && !mDataInfos.isEmpty()) {
-            int dataPosition = mDataInfos.size() - 1;
-            for (int i = mDataInfos.size(); i > 0; i--) {
-                if (DateUtil.isTimeBetweenFiveMin(mDataInfos.get(dataPosition).getCreateTime(), mDataInfos.get(i - 1).getCreateTime())) {
-                    mDataInfos.get(i).setMoreThanFiveMin(true);
+        if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
+            int dataPosition = mDataInfoList.size() - 1;
+            for (int i = mDataInfoList.size(); i > 0; i--) {
+                if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(dataPosition).getCreateTime(), mDataInfoList.get(i - 1).getCreateTime())) {
+                    mDataInfoList.get(i).setMoreThanFiveMin(true);
                     dataPosition = i - 1;
                 }
             }
-            mLiveTeacherGuideAdapter.addAll(mDataInfos);
+            mLiveTeacherGuideAdapter.addAll(mDataInfoList);
         }
         mLiveTeacherGuideAdapter.notifyDataSetChanged();
     }

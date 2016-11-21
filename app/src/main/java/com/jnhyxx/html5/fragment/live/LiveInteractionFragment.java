@@ -2,6 +2,8 @@ package com.jnhyxx.html5.fragment.live;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -83,7 +86,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private Unbinder mBind;
 
-    private TextView mFooter;
 
     private int mPage = 0;
     private int mPageSize = 0;
@@ -98,13 +100,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private ArrayList<ChatData> mDataArrayList;
 
-    //用来记录时间好超过5分钟的集合
-    private ArrayList<Integer> mTimeMoreThanFiveItemPosition;
-
     private boolean isRefreshed;
 
     //判断用户是否被禁言
     private boolean recordUserIsDeny;
+
+    private boolean mKeyBoardIsOpen = false;
+
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -112,7 +114,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Nullable
     @Override
@@ -123,11 +124,29 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (mInputMethodManager != null && mSpeakEditText != null) {
+            mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        View content = getActivity().findViewById(android.R.id.content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            content.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        } else {
+            content.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -139,12 +158,42 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
-        mTimeMoreThanFiveItemPosition = new ArrayList<>();
         mListView.setOnScrollListener(this);
         getChatInfo();
         setOnRefresh();
 
+        setKeyboardHelper();
+
+        View content = getActivity().findViewById(android.R.id.content);
+        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
     }
+
+    private void setKeyboardHelper() {
+
+    }
+
+    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        @Override
+        public void onGlobalLayout() {
+
+            Rect rect = new Rect();
+            //获取到程序显示的区域，包括标题栏，但不包括状态
+            getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+            //获取屏幕的高度
+            int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
+            //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
+            int heightDifference = screenHeight - rect.bottom;
+            if (heightDifference > 0) {
+                mKeyBoardIsOpen = true;
+            }
+            if (heightDifference == 0 && mSpeakEditText.isShown() && mKeyBoardIsOpen) {
+                mSpeakLayout.setVisibility(View.GONE);
+                mLiveSpeak.setVisibility(View.VISIBLE);
+                mKeyBoardIsOpen = false;
+            }
+        }
+    };
 
     private void setOnRefresh() {
         mSwipeRefreshLayout.post(new Runnable() {
@@ -368,9 +417,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
 
         mLiveChatInfoAdapter.clear();
-//        if (mTimeMoreThanFiveItemPosition != null && !mTimeMoreThanFiveItemPosition.isEmpty()) {
-//            mLiveChatInfoAdapter.setTimeMoreThanFiveList(mTimeMoreThanFiveItemPosition);
-//        }
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
             int dataPosition = mDataArrayList.size() - 1;
             for (int i = mDataArrayList.size(); i > 0; i--) {
@@ -493,8 +539,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     mTimeBeforeHintLayout.setVisibility(View.GONE);
                 }
 
-                String format="" ;
-                format= DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
+                String format = "";
+                format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
                 CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
                 format = format + "  " + relativeTimeSpanString2.toString();
                 if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {

@@ -5,7 +5,7 @@
               android:id="@+id/activityMessageCenterListItemInfo"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/transparent"
+              android:background="@android:color/white"
               android:orientation="vertical"
               tools:context="com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity">
 
@@ -25,39 +25,41 @@
         android:paddingRight="15dp">
 
         <TextView
-            tools:text="沪铜、沪镍主力合约更换提醒"
             android:id="@+id/messageTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:lineSpacingExtra="25sp"
+            android:lineSpacingExtra="8sp"
             android:paddingTop="30dp"
             android:textColor="@color/blackPrimary"
-            android:textSize="17sp"/>
+            android:textSize="17sp"
+            tools:text="沪铜、沪镍主力合约更换提醒"/>
 
         <TextView
-            android:text="@string/time"
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="35dp"
             android:paddingTop="15dp"
+            android:text="@string/time"
             android:textColor="@color/colorDisable"
             android:textSize="12sp"/>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                tools:text="沪铜、沪镍主力合约更换提醒内容顺撒即可很快就撒发挥空间撒恢复健康还是非积分哈萨克金凤凰就回复即可收到回复可见独守空房就会受到客服号多少空间尽快发货点上课就发货速度空间和福克斯将对方很快就看见对方会离开的手机话费即可收到回复可见了的说法就恢复到客户发多少看了回复开始发货快速大家好"
-                android:id="@+id/messageContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="10dp"
-                android:paddingBottom="30dp"
-                android:textColor="@color/lucky"/>
-        </ScrollView>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:progressDrawable="@drawable/progress_horizontal"
+        android:visibility="visible"/>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:scrollbars="none"/>
 </LinearLayout>

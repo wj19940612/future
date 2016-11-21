@@ -104,9 +104,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     //判断用户是否被禁言
     private boolean recordUserIsDeny;
-
+    //用来记录键盘是否打开
     private boolean mKeyBoardIsOpen = false;
-
+    //用来根据其和发言集合的长度的差来表示最新数据所要比较的对象
+    private int i = 1;
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -130,6 +131,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
         }
     }
+
 
     @Override
     public void onDestroyView() {
@@ -239,15 +241,22 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
-                            if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 1).getCreateTime())) {
+//                            mDataArrayList.add(0, chatData);
+                            mDataArrayList.add(chatData);
+                            if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
                                 chatData.setMoreThanFiveMin(true);
+//                                i++;
                             }
-                            mDataArrayList.add(0, chatData);
+//                            Log.d("tagTest", "数组长度" + mDataArrayList.size() +
+//                                    "  ===" + DateUtil.format(chatData.getCreateTime()) +
+//                                    " 數組中最後一位" + DateUtil.format(mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())
+//                                    + " i所代表的数据" + DateUtil.format(mDataArrayList.get(mDataArrayList.size() - i).getCreateTime())
+//                                    + "1  所代表的最后一位" + DateUtil.format(mDataArrayList.get(1).getCreateTime()));
                             mLiveChatInfoAdapter.add(chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
                             // TODO: 2016/11/15 自动跑到ListView的最后一个item
-                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-                            mListView.setStackFromBottom(true);
+//                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+//                            mListView.setStackFromBottom(true);
                         }
                     }
                 }
@@ -300,7 +309,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private void sendLiveSpeak() {
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        if (!mSpeakLayout.isShown()) {
+        if (mSpeakLayout.getVisibility() == View.GONE) {
             mSpeakLayout.setVisibility(View.VISIBLE);
             mLiveSpeak.setVisibility(View.GONE);
         }

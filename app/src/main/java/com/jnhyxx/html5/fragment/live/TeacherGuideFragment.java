@@ -95,6 +95,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mListView.setStackFromBottom(true);
         mLiveSpeak.setVisibility(View.GONE);
         mPageSize = 10;
         mHashSet = new HashSet<>();
@@ -148,6 +150,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
+                mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+                mListView.setStackFromBottom(false);
             }
         });
     }

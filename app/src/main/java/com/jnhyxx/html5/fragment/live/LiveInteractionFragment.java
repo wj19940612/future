@@ -102,12 +102,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private boolean isRefreshed;
 
-    //判断用户是否被禁言
-    private boolean recordUserIsDeny;
     //用来记录键盘是否打开
     private boolean mKeyBoardIsOpen = false;
-    //用来根据其和发言集合的长度的差来表示最新数据所要比较的对象
-    private int i = 1;
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -232,26 +228,18 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         if (liveSpeakInfo != null) {
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-                recordUserIsDeny = true;
-            } else {
-                recordUserIsDeny = false;
+                ToastUtil.curt("您被禁言，请稍后发言");
+                return;
             }
             if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
                 if (liveSpeakInfo.isOwner() || !liveSpeakInfo.isSlience()) {
                     ChatData chatData = new ChatData(liveSpeakInfo);
                     if (chatData != null && mLiveChatInfoAdapter != null) {
                         if (mHashSet.add(chatData.getCreateTime())) {
-//                            mDataArrayList.add(0, chatData);
                             mDataArrayList.add(chatData);
                             if (DateUtil.isTimeBetweenFiveMin(chatData.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
                                 chatData.setMoreThanFiveMin(true);
-//                                i++;
                             }
-//                            Log.d("tagTest", "数组长度" + mDataArrayList.size() +
-//                                    "  ===" + DateUtil.format(chatData.getCreateTime()) +
-//                                    " 數組中最後一位" + DateUtil.format(mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())
-//                                    + " i所代表的数据" + DateUtil.format(mDataArrayList.get(mDataArrayList.size() - i).getCreateTime())
-//                                    + "1  所代表的最后一位" + DateUtil.format(mDataArrayList.get(1).getCreateTime()));
                             mLiveChatInfoAdapter.add(chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
                             // TODO: 2016/11/15 自动跑到ListView的最后一个item
@@ -292,12 +280,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                 liveMessageResp.hasData() &&
                                 liveMessageResp.getData().getTeacher() != null &&
                                 liveMessageResp.getData().getTeacher().getTeacherAccountId() != 0) {
-                            // TODO: 2016/11/15 处理被禁言状态
-                            if (!recordUserIsDeny) {
-                                sendLiveSpeak();
-                            } else {
-                                ToastUtil.curt("您被禁言，请稍后发言");
-                            }
+                            sendLiveSpeak();
                         } else {
                             ToastUtil.curt(R.string.live_time_is_not);
                         }
@@ -464,7 +447,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
 
         private Context mContext;
-        private boolean isMoreThanFive = false;
 
         public LiveChatInfoAdapter(Context context) {
             super(context, 0);
@@ -482,7 +464,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindViewWithData(getItem(position), mContext, isMoreThanFive, getCount());
+            viewHolder.bindViewWithData(getItem(position), mContext);
             return convertView;
         }
 
@@ -537,7 +519,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(ChatData item, Context context, boolean isMoreThanFive, int count) {
+            public void bindViewWithData(ChatData item, Context context) {
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
 

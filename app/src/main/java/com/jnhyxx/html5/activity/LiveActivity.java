@@ -239,9 +239,13 @@ public class LiveActivity extends BaseActivity {
         liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
+                showLiveProgramme();
             }
         });
+    }
+
+    private void showLiveProgramme() {
+        LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
     }
 
     private void showTeacherInfoDialog() {

@@ -144,6 +144,7 @@ public class TradePageHeader extends FrameLayout {
             mTotalProfitRmb.setText(totalProfitRmbStr);
         } else {
             mTotalProfit.setText(totalProfitStr);
+            mTotalProfitRmb.setText("");
         }
     }
 

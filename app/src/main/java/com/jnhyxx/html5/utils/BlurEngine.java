@@ -20,6 +20,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.lang.ref.WeakReference;
 
@@ -27,23 +28,28 @@ public class BlurEngine {
 
     private static final float BITMAP_SCALE = 0.4f;
     private static final float BLUR_RADIUS = 8f;
-    private static final int ANIM_DURATION = 500;
+    private static final int ANIM_DURATION = 300;
 
     private BlurTask mBlurTask;
     private ImageView mBlurBackgroundView;
     private ViewGroup mViewGroup;
     private int mBackgroundRes;
+    private boolean mForeground;
 
     public BlurEngine(ViewGroup viewGroup) {
-        mBlurTask = new BlurTask(viewGroup);
         mViewGroup = viewGroup;
         mBackgroundRes = -1;
     }
 
     public BlurEngine(ViewGroup viewGroup, int backgroundRes) {
-        mBlurTask = new BlurTask(viewGroup);
         mViewGroup = viewGroup;
         mBackgroundRes = backgroundRes;
+    }
+
+    public BlurEngine(ViewGroup viewGroup, int backgroundRes, boolean foreground) {
+        mViewGroup = viewGroup;
+        mBackgroundRes = backgroundRes;
+        mForeground = foreground;
     }
 
     private Bitmap getScreenshot(View v) {
@@ -65,6 +71,7 @@ public class BlurEngine {
 
     public void onResume() {
         if (mBlurBackgroundView == null) {
+            mBlurTask = new BlurTask(mViewGroup);
             if (mBackgroundRes == -1) {
                 mBlurTask.execute(getScreenshot(mViewGroup));
             } else {
@@ -133,16 +140,20 @@ public class BlurEngine {
             if (mReference.get() != null) {
                 ViewGroup viewGroup = mReference.get();
 
-                if (viewGroup instanceof FrameLayout) {
+                if (viewGroup instanceof FrameLayout || viewGroup instanceof RelativeLayout) {
                     mBlurBackgroundView = blurBackgroundView;
 
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT);
 
-                    viewGroup.addView(mBlurBackgroundView, 0, params);
+                    if (mForeground) {
+                        viewGroup.addView(mBlurBackgroundView, params);
+                    } else {
+                        viewGroup.addView(mBlurBackgroundView, 0, params);
+                    }
                 } else {
-                    throw new RuntimeException("the ViewGroup of blurEngine must be a FrameLayout");
+                    throw new RuntimeException("the ViewGroup of blurEngine must be a FrameLayout or RelativeLayout");
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {

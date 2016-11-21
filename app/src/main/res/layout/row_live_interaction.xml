@@ -63,7 +63,7 @@
             tools:text="管理员"/>
 
         <TextView
-            android:id="@+id/timeHint"
+            android:id="@+id/workday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"

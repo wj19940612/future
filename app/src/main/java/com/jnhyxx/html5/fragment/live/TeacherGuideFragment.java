@@ -245,7 +245,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             LinearLayout mTimeBeforeHintLayout;
             @BindView(R.id.userStatus)
             TextView mUserStatus;
-            @BindView(R.id.timeHint)
+            @BindView(R.id.workday)
             TextView mTimeHint;
             @BindView(R.id.userHeadImage)
             ImageView mUserHeadImage;

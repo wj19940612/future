@@ -440,7 +440,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             //老师或者管理员的layout
             @BindView(R.id.userStatus)
             TextView mUserStatus;
-            @BindView(R.id.timeHint)
+            @BindView(R.id.workday)
             TextView mTimeHint;
             @BindView(R.id.userHeadImage)
             ImageView mUserHeadImage;

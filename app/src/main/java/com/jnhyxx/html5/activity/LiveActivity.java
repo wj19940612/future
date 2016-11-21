@@ -38,7 +38,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.view.LiveProgramDir;
+import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
 import com.jnhyxx.html5.view.TitleBar;
@@ -73,6 +73,10 @@ public class LiveActivity extends BaseActivity {
 
     @BindView(R.id.teacherCommand)
     TeacherCommand mTeacherCommand;
+    @BindView(R.id.dimBackground)
+    RelativeLayout mDimBackground;
+
+    private LiveProgrammeList mProgrammeList;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
@@ -105,16 +109,16 @@ public class LiveActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
-
-        initTitleBar();
-        initSlidingTabLayout();
-
+        mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTeacherInfoDialog();
             }
         });
+
+        initTitleBar();
+        initSlidingTabLayout();
 
         getLiveMessage();
         getChattingIpPort();
@@ -169,14 +173,18 @@ public class LiveActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
                         mLiveMessage = liveMessage;
-
                         if (mServerIpPort != null) {
                             connectNettySocket();
                         }
+
                         if (mLiveMessage.getTeacher() != null) { // 在直播
                             showLiveViews();
                         } else if (mLiveMessage.getNotice() != null) { // 未直播,显示通告
                             showNoLiveViews();
+                        }
+
+                        if (mLiveMessage.getProgram() != null) {
+                            mProgrammeList.setProgramme(mLiveMessage.getProgram());
                         }
                     }
                 }).fire();
@@ -245,7 +253,9 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void showLiveProgramme() {
-        LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
+        if (mProgrammeList != null) {
+            mProgrammeList.show(mTitleBar);
+        }
     }
 
     private void showTeacherInfoDialog() {
@@ -270,18 +280,18 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void requestUserPositions() {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback1<Resp<HomePositions>>() {
+        API.Order.getHomePositions().setTag(TAG)
+                .setCallback(new Callback1<Resp<HomePositions>>() {
 
-                        @Override
-                        protected void onRespSuccess(Resp<HomePositions> resp) {
-                            if (resp.isSuccess() && resp.hasData()) {
-                                HomePositions mHomePositions = resp.getData();
-                                boolean userHasPositions = ifUserHasPositions(mHomePositions);
-                                requestProductList(userHasPositions, mHomePositions);
-                            }
+                    @Override
+                    protected void onRespSuccess(Resp<HomePositions> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            HomePositions mHomePositions = resp.getData();
+                            boolean userHasPositions = ifUserHasPositions(mHomePositions);
+                            requestProductList(userHasPositions, mHomePositions);
                         }
-                    }).fire();
+                    }
+                }).fire();
     }
 
     @Override

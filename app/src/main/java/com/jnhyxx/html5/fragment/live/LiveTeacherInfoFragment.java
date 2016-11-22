@@ -1,38 +1,32 @@
 package com.jnhyxx.html5.fragment.live;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.view.Gravity;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveMessage;
-import com.jnhyxx.html5.utils.CommonMethodUtils;
-import com.jnhyxx.html5.view.CircularAnnulusImageView;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * Created by ${wangJie} on 2016/11/10.
- */
-
 public class LiveTeacherInfoFragment extends DialogFragment {
 
-    @BindView(R.id.teacherHeadImage)
-    CircularAnnulusImageView mTeacherHeadImage;
+    private static final String KEY_TEACHER_INFO = "teacher_info";
+
+    @BindView(R.id.teacherHead)
+    ImageView mTeacherHead;
     @BindView(R.id.teacherName)
     TextView mTeacherName;
     @BindView(R.id.hideDialog)
@@ -42,11 +36,8 @@ public class LiveTeacherInfoFragment extends DialogFragment {
     @BindView(R.id.teacherResumeInfo)
     TextView mTeacherResumeInfo;
 
-    private static final String KEY_TEACHER_INFO = "teacher_info";
-
     private LiveMessage.TeacherInfo mTeacherInfo;
     private Unbinder mBind;
-    private View mDialogView;
 
     public static LiveTeacherInfoFragment newInstance(LiveMessage.TeacherInfo teacherInfo) {
         Bundle args = new Bundle();
@@ -68,9 +59,9 @@ public class LiveTeacherInfoFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mDialogView = inflater.inflate(R.layout.fragment_live_teacher_info, container, false);
-        mBind = ButterKnife.bind(this, mDialogView);
-        return mDialogView;
+        View view = inflater.inflate(R.layout.fragment_live_teacher_info, container, false);
+        mBind = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -82,22 +73,20 @@ public class LiveTeacherInfoFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        scaleDialogWindowWidth(0.85);
 
         initData();
-        int screenHeight = CommonMethodUtils.getScreenHeight(getActivity());
-        int screenWidth = CommonMethodUtils.getScreenWidth(getActivity());
-
-        Dialog dialog = getDialog();
-        Window window = dialog.getWindow();
-        window.setGravity(Gravity.CENTER);
-        window.setLayout((int) (screenWidth * 0.8), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     private void initData() {
-        if (mTeacherInfo == null) return;
-        if (!TextUtils.isEmpty(mTeacherInfo.getPictureUrl())) {
-            Picasso.with(getActivity()).load(mTeacherInfo.getPictureUrl()).into(mTeacherHeadImage);
+        if (TextUtils.isEmpty(mTeacherInfo.getPictureUrl())) {
+            Picasso.with(getActivity()).load(R.drawable.ic_live_pic_head)
+                    .transform(new CircleTransform()).into(mTeacherHead);
+        } else {
+            Picasso.with(getActivity()).load(mTeacherInfo.getPictureUrl())
+                    .transform(new CircleTransform()).into(mTeacherHead);
         }
+
         mTeacherName.setText(mTeacherInfo.getName());
         mTeacherGoodInfo.setText(mTeacherInfo.getGoodAt());
         mTeacherResumeInfo.setText(mTeacherInfo.getIntroduction());
@@ -114,5 +103,12 @@ public class LiveTeacherInfoFragment extends DialogFragment {
 
     public void show(FragmentManager manager) {
         show(manager, LiveTeacherInfoFragment.class.getSimpleName());
+    }
+
+    private void scaleDialogWindowWidth(double scale) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        getDialog().getWindow().setLayout((int) (displayMetrics.widthPixels * scale),
+                ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 }

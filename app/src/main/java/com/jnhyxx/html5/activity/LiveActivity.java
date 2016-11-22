@@ -13,7 +13,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -157,8 +156,14 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-    }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (mLivePlayer != null) {
+                mLivePlayer.fullScreen(false);
+            }
+        } else {
+            super.onBackPressed();
+        }
+     }
 
     private void getChattingIpPort() {
         API.Market.getChattingServerIpAndPort().setTag(TAG)
@@ -308,16 +313,16 @@ public class LiveActivity extends BaseActivity {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mTitleBar.setVisibility(View.GONE);
             mTeacherCommand.setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
             mVideoContainer.setLayoutParams(params);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTitleBar.setVisibility(View.VISIBLE);
             mTeacherCommand.setVisibility(View.VISIBLE);
             int playerHeight = getResources().getDimensionPixelOffset(R.dimen.player_height);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
                     playerHeight);
             mVideoContainer.setLayoutParams(params);
         }

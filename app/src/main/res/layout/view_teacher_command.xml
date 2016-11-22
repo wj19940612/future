@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/teacherHead"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/bg_live_teacher_head"

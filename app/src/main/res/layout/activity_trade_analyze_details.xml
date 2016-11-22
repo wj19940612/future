@@ -148,10 +148,13 @@
         android:layout_height="1dp"
         android:progressDrawable="@drawable/progress_horizontal"
         android:visibility="visible"/>
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
         android:scrollbarSize="0dp"
         android:scrollbars="none"/>
 

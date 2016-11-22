@@ -1,7 +1,5 @@
 package com.johnz.kutils.net;
 
-import android.util.Log;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.internal.$Gson$Types;
@@ -75,12 +73,12 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
 
     @Override
     public void onResponse(T t) {
+        onFinish();
         if (t != null) {
             onSuccess(t);
         } else {
             onFailure(new NullResponseError("Server return null"));
         }
-        onFinish();
     }
 
     public Type getGenericType() {

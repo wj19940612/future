@@ -30,7 +30,7 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
-import com.jnhyxx.html5.fragment.live.LiveTeacherInfoDialogFragment;
+import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
@@ -38,7 +38,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.view.LiveProgramDir;
+import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
 import com.jnhyxx.html5.view.TitleBar;
@@ -73,6 +73,10 @@ public class LiveActivity extends BaseActivity {
 
     @BindView(R.id.teacherCommand)
     TeacherCommand mTeacherCommand;
+    @BindView(R.id.dimBackground)
+    RelativeLayout mDimBackground;
+
+    private LiveProgrammeList mProgrammeList;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
@@ -105,16 +109,16 @@ public class LiveActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
-
-        initTitleBar();
-        initSlidingTabLayout();
-
+        mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTeacherInfoDialog();
             }
         });
+
+        initTitleBar();
+        initSlidingTabLayout();
 
         getLiveMessage();
         getChattingIpPort();
@@ -168,9 +172,7 @@ public class LiveActivity extends BaseActivity {
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
-
                         mLiveMessage = liveMessage;
-
                         if (mServerIpPort != null) {
                             connectNettySocket();
                         }
@@ -179,6 +181,10 @@ public class LiveActivity extends BaseActivity {
                             showLiveViews();
                         } else if (mLiveMessage.getNotice() != null) { // 未直播,显示通告
                             showNoLiveViews();
+                        }
+
+                        if (mLiveMessage.getProgram() != null) {
+                            mProgrammeList.setProgramme(mLiveMessage.getProgram());
                         }
                     }
                 }).fire();
@@ -223,6 +229,8 @@ public class LiveActivity extends BaseActivity {
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
+        mSlidingTabLayout.setPadding(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics()));
         mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -234,27 +242,29 @@ public class LiveActivity extends BaseActivity {
                 openTradePage();
             }
         });
-        setTitleBarCustomView();
-    }
-
-    private void showTeacherInfoDialog() {
-        LiveMessage.TeacherInfo teacherInfo = mLiveMessage.getTeacher();
-        if (teacherInfo != null) {
-            LiveTeacherInfoDialogFragment liveTeacherInfoDialogFragment
-                    = LiveTeacherInfoDialogFragment.newInstance(teacherInfo);
-            liveTeacherInfoDialogFragment.show(getSupportFragmentManager());
-        }
-    }
-
-    private void setTitleBarCustomView() {
         View customView = mTitleBar.getCustomView();
         LinearLayout liveProgramme = (LinearLayout) customView.findViewById(R.id.liveProgramme);
         liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveProgramDir.showLiveProgramDirPopupWindow(getActivity(), mLiveMessage.getProgram(), mTitleBar);
+                showLiveProgramme();
             }
         });
+    }
+
+    private void showLiveProgramme() {
+        if (mProgrammeList != null) {
+            mProgrammeList.show(mTitleBar);
+        }
+    }
+
+    private void showTeacherInfoDialog() {
+        LiveMessage.TeacherInfo teacherInfo = mLiveMessage.getTeacher();
+        if (teacherInfo != null) {
+            LiveTeacherInfoFragment liveTeacherInfoFragment
+                    = LiveTeacherInfoFragment.newInstance(teacherInfo);
+            liveTeacherInfoFragment.show(getSupportFragmentManager());
+        }
     }
 
     private void openTradePage() {
@@ -270,18 +280,18 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void requestUserPositions() {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback1<Resp<HomePositions>>() {
+        API.Order.getHomePositions().setTag(TAG)
+                .setCallback(new Callback1<Resp<HomePositions>>() {
 
-                        @Override
-                        protected void onRespSuccess(Resp<HomePositions> resp) {
-                            if (resp.isSuccess() && resp.hasData()) {
-                                HomePositions mHomePositions = resp.getData();
-                                boolean userHasPositions = ifUserHasPositions(mHomePositions);
-                                requestProductList(userHasPositions, mHomePositions);
-                            }
+                    @Override
+                    protected void onRespSuccess(Resp<HomePositions> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            HomePositions mHomePositions = resp.getData();
+                            boolean userHasPositions = ifUserHasPositions(mHomePositions);
+                            requestProductList(userHasPositions, mHomePositions);
                         }
-                    }).fire();
+                    }
+                }).fire();
     }
 
     @Override
@@ -297,11 +307,10 @@ public class LiveActivity extends BaseActivity {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTitleBar.setVisibility(View.VISIBLE);
             mTeacherCommand.setVisibility(View.VISIBLE);
-            int containerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 203,
-                    getResources().getDisplayMetrics());
+            int playerHeight = getResources().getDimensionPixelOffset(R.dimen.player_height);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    containerHeight);
+                    playerHeight);
             mVideoContainer.setLayoutParams(params);
         }
     }

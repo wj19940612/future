@@ -57,15 +57,15 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 8
-            versionName '1.2.8'
+            versionCode 9
+            versionName '1.2.9'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 //            minSdkVersion 21
         }
-        yybd { // 原油宝典
+        yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 3
-            versionName '1.0'
+            versionCode 5
+            versionName '1.1.1'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [

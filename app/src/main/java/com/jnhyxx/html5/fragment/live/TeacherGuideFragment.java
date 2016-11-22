@@ -262,7 +262,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
             @BindView(R.id.userStatus)
             TextView mUserStatus;
-            @BindView(R.id.timeHint)
+            @BindView(R.id.workday)
             TextView mTimeHint;
             @BindView(R.id.userHeadImage)
             ImageView mUserHeadImage;

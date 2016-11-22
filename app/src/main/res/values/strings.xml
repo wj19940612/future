@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">原油期货宝</string>
+    <string name="app_name">期货交易通 TEST</string>
     <string name="install_qq_first">请先安装QQ</string>
     <string name="android_web_agent">ANDROID_AGENT</string>
 
@@ -438,7 +438,7 @@
 
     <!--直播 live-->
     <string name="live_right_title">交易</string>
-    <string name="live_program_dir">             节目单</string>
+    <string name="live_program_dir">节目单</string>
     <string name="live_interaction">直播互动</string>
     <string name="live_teacher_guide">老师指导</string>
     <string name="buffering">缓冲中</string>

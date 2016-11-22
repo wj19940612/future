@@ -295,9 +295,7 @@ public class LiveMessage implements Serializable {
         }
     }
 
-    public static class ProgramInfo implements Serializable{
-
-        private static final long serialVersionUID = -544694799079972750L;
+    public static class ProgramInfo implements Serializable {
 
         private int channelId;
         private String createTime;

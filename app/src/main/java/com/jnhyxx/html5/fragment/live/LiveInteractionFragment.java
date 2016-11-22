@@ -47,7 +47,6 @@ import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -229,7 +228,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         if (liveSpeakInfo != null) {
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
                 ToastUtil.curt("您被禁言，请稍后发言");
-                return;
+//                return;
             }
             if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
                 if (liveSpeakInfo.isOwner() || !liveSpeakInfo.isSlience()) {
@@ -361,15 +360,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                                              Log.d("wjTest", "数据 " + liveHomeChatInfoResp.getData().getData() + "\n");
                                              // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
-                                             Iterator<ChatData> iterator = mChatDataListInfo.iterator();
-                                             while (iterator.hasNext()) {
-                                                 ChatData chatData = iterator.next();
-                                                 Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
-                                                 if (!chatData.isOwner())
-                                                     if (!chatData.isNormalSpeak() || chatData.isDeleted()) {
-                                                         iterator.remove();
-                                                     }
-                                             }
+//                                             Iterator<ChatData> iterator = mChatDataListInfo.iterator();
+//                                             while (iterator.hasNext()) {
+//                                                 ChatData chatData = iterator.next();
+//                                                 Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
+//                                                 if (!chatData.isOwner())
+//                                                     if (!chatData.isNormalSpeak() || chatData.isDeleted()) {
+//                                                         iterator.remove();
+//                                                     }
+//                                             }
 
                                              mDataArrayList.addAll(0, mChatDataListInfo);
                                              updateCHatInfo(liveHomeChatInfoResp.getData());

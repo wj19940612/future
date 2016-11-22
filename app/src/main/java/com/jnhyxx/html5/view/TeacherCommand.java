@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 public class TeacherCommand extends LinearLayout {
 
+    private static final int DISMISS_DELAY = 10;
+
     private ImageView mTeacherHead;
     private TextView mTeacherCommand;
     private LinearLayout mTeacherCommandArea;
@@ -100,7 +102,7 @@ public class TeacherCommand extends LinearLayout {
             public void run() {
                 closeTeacherCommand();
             }
-        }, 10 * 1000);
+        }, DISMISS_DELAY * 1000);
     }
 
     public void setOnTeacherHeadClickListener(OnClickListener listener) {

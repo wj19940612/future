@@ -142,19 +142,6 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
     }
 
     @Override
-    public void onMuteButtonClick() {
-        if (mPlayer == null || !mShowing) return;
-
-        if (mPlayer.isMute()) {
-            mPlayer.setMute(false);
-            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
-        } else {
-            mPlayer.setMute(true);
-            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
-        }
-    }
-
-    @Override
     public void enable(boolean enable) {
         if (mPauseButton != null) {
             mPauseButton.setEnabled(enable);
@@ -168,19 +155,49 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
     }
 
     @Override
+    public void mute(boolean mute) {
+
+    }
+
+    @Override
+    public void start(boolean start) {
+
+    }
+
+    @Override
+    public void fullScreen(boolean full) {
+        if (full) {
+            mPlayer.setFullScreen(true);
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
+        } else {
+            mPlayer.setFullScreen(false);
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
+        }
+    }
+
+
+    public void onMuteButtonClick() {
+        if (mPlayer == null || !mShowing) return;
+
+        if (mPlayer.isMute()) {
+            mPlayer.setMute(false);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+        } else {
+            mPlayer.setMute(true);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
+        }
+    }
+
     public void onScaleButtonClick() {
         if (mPlayer == null || !mShowing) return;
 
         if (mPlayer.isFullScreen()) {
-            mPlayer.setFullScreen(false);
-            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
+            fullScreen(false);
         } else {
-            mPlayer.setFullScreen(true);
-            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
+            fullScreen(true);
         }
     }
 
-    @Override
     public void onStartButtonClick() {
         if (mPlayer == null || !mShowing) return;
 

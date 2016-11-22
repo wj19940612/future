@@ -146,7 +146,7 @@ public class IndustryAnalyzeFragment  extends BaseFragment implements AdapterVie
             return;
         }
         if (mFooter == null) {
-            mFooter = new TextView(getContext());
+            mFooter = new TextView(getActivity());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
                     getResources().getDisplayMetrics());
             mFooter.setPadding(padding, padding, padding, padding);

@@ -135,6 +135,22 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         }
     }
 
+    public void setData(ChatData data) {
+        if (data != null && mLiveTeacherGuideAdapter != null) {
+            if (mHashSet.add(data.getCreateTime())) {
+                mDataInfoList.add(data);
+                if (DateUtil.isTimeBetweenFiveMin(data.getCreateTime(), mDataInfoList.get(mDataInfoList.size() - 2).getCreateTime())) {
+                    data.setMoreThanFiveMin(true);
+                }
+                mLiveTeacherGuideAdapter.add(data);
+                mLiveTeacherGuideAdapter.notifyDataSetChanged();
+                // TODO: 2016/11/15 自动跑到ListView的最后一个item
+//                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+//                            mListView.setStackFromBottom(true);
+            }
+        }
+    }
+
     private void initSwipeRefreshLayout() {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -262,8 +278,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
             @BindView(R.id.userStatus)
             TextView mUserStatus;
-            @BindView(R.id.workday)
-            TextView mTimeHint;
             @BindView(R.id.userHeadImage)
             ImageView mUserHeadImage;
             @BindView(R.id.arrow)
@@ -300,8 +314,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     mManagerLayout.setVisibility(View.VISIBLE);
                 }
 
-
-                mTimeHint.setText(format);
                 mUserStatus.setText(item.getName());
                 mContent.setText(item.getMsg());
             }

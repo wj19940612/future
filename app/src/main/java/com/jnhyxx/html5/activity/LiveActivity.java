@@ -84,20 +84,27 @@ public class LiveActivity extends BaseActivity {
     private LiveMessage mLiveMessage;
     private ServerIpPort mServerIpPort;
 
+    private TeacherGuideFragment mTeacherGuideFragment;
     private LiveInteractionFragment mLiveInteractionFragment;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
             Log.d(TAG, "onReceiveOriginalData: " + data);
+
             if (mLiveInteractionFragment != null) {
                 mLiveInteractionFragment.setData(data);
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
             ChatData chatData = new ChatData(liveSpeakInfo);
+
             if (chatData.getChatType() == ChatData.CHAT_TYPE_TEACHER && chatData.isOrder()) {
                 setTeacherCommand(chatData);
+            }
+
+            if (chatData.isOrder()) {
+                mTeacherGuideFragment.setData(chatData);
             }
         }
     };
@@ -109,6 +116,7 @@ public class LiveActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
+        mTeacherGuideFragment = TeacherGuideFragment.newInstance();
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {
             @Override
@@ -405,7 +413,7 @@ public class LiveActivity extends BaseActivity {
                 case 0:
                     return mLiveInteractionFragment;
                 case 1:
-                    return TeacherGuideFragment.newInstance();
+                    return mTeacherGuideFragment;
             }
             return null;
         }

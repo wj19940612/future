@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -49,6 +50,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.jnhyxx.html5.fragment.live.LiveInteractionFragment.REQUEST_CODE_LOGIN;
 
 
 public class LiveActivity extends BaseActivity {
@@ -163,7 +166,7 @@ public class LiveActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
-     }
+    }
 
     private void getChattingIpPort() {
         API.Market.getChattingServerIpAndPort().setTag(TAG)
@@ -308,6 +311,16 @@ public class LiveActivity extends BaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            if (mLiveMessage != null) {
+                connectNettySocket();
+            }
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -397,8 +410,11 @@ public class LiveActivity extends BaseActivity {
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
+        private FragmentManager mFragmentManager;
+
         public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
+            this.mFragmentManager = supportFragmentManager;
         }
 
         @Override
@@ -427,5 +443,6 @@ public class LiveActivity extends BaseActivity {
         public int getCount() {
             return 2;
         }
+
     }
 }

@@ -62,7 +62,7 @@ import butterknife.Unbinder;
 
 public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener, View.OnKeyListener {
 
-    private static final int REQUEST_CODE_LOGIN = 583;
+    public static final int REQUEST_CODE_LOGIN = 583;
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -431,6 +431,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == getActivity().RESULT_OK) {
+            ToastUtil.curt("登陆成功了达到撒");
             getLiveMessage();
         }
     }

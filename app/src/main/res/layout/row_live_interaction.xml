@@ -35,6 +35,7 @@
             android:gravity="center"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
+            android:textColor="@color/colorDisable"
             tools:text="8月30日 14:28"/>
 
         <View
@@ -61,17 +62,6 @@
             android:textColor="@color/blueAssist"
             android:textSize="11dp"
             tools:text="管理员"/>
-
-        <TextView
-            android:id="@+id/workday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_toRightOf="@+id/userStatus"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorDisable"
-            android:textSize="11sp"
-            tools:text="10分钟前"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,17 +120,6 @@
             android:textSize="11sp"
             tools:text="普通游客"/>
 
-        <TextView
-            android:id="@+id/commonUserTimeHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_toRightOf="@+id/commonUserStatus"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorDisable"
-            android:textSize="11sp"
-            tools:text="10分钟前"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -189,22 +168,13 @@
             android:id="@+id/userMineStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
-            android:layout_toLeftOf="@+id/mineTimeHint"
+            android:layout_marginRight="42dp"
             android:textColor="@color/colorDisable"
             android:textSize="11sp"
             tools:text="我"/>
 
-        <TextView
-            android:id="@+id/mineTimeHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="42dp"
-            android:layout_marginTop="1dp"
-            android:textColor="@color/colorDisable"
-            android:textSize="11sp"
-            tools:text="10分钟前"/>
 
         <LinearLayout
             android:layout_width="match_parent"

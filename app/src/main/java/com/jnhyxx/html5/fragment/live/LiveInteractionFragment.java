@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,6 +46,7 @@ import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -360,15 +360,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                                              Log.d("wjTest", "数据 " + liveHomeChatInfoResp.getData().getData() + "\n");
                                              // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
-//                                             Iterator<ChatData> iterator = mChatDataListInfo.iterator();
-//                                             while (iterator.hasNext()) {
-//                                                 ChatData chatData = iterator.next();
-//                                                 Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
-//                                                 if (!chatData.isOwner())
-//                                                     if (!chatData.isNormalSpeak() || chatData.isDeleted()) {
-//                                                         iterator.remove();
-//                                                     }
-//                                             }
+                                             Iterator<ChatData> iterator = mChatDataListInfo.iterator();
+                                             while (iterator.hasNext()) {
+                                                 ChatData chatData = iterator.next();
+                                                 Log.d(TAG, "下载的数据" + chatData.toString() + "\n");
+                                                 if (!chatData.isOwner())
+                                                     if (!chatData.isNormalSpeak() || chatData.isDeleted()) {
+                                                         iterator.remove();
+                                                     }
+                                             }
 
                                              mDataArrayList.addAll(0, mChatDataListInfo);
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
@@ -476,8 +476,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             //老师或者管理员的layout
             @BindView(R.id.userStatus)
             TextView mUserStatus;
-            @BindView(R.id.workday)
-            TextView mTimeHint;
             @BindView(R.id.userHeadImage)
             ImageView mUserHeadImage;
             @BindView(R.id.arrow)
@@ -490,8 +488,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             //自己发言的layout
             @BindView(R.id.userMineStatus)
             TextView mUserMineStatus;
-            @BindView(R.id.mineTimeHint)
-            TextView mMineTimeHint;
             @BindView(R.id.userMineContent)
             TextView mUserMineContent;
             @BindView(R.id.userMineArrow)
@@ -504,8 +500,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             //普通游客
             @BindView(R.id.commonUserStatus)
             TextView mCommonUserStatus;
-            @BindView(R.id.commonUserTimeHint)
-            TextView mCommonUserTimeHint;
             @BindView(R.id.commonUserHeadImage)
             ImageView mCommonUserHeadImage;
             @BindView(R.id.commonUserContent)
@@ -529,25 +523,16 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     mTimeBeforeHintLayout.setVisibility(View.GONE);
                 }
 
-                String format = "";
-                format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                format = format + "  " + relativeTimeSpanString2.toString();
-                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
-                    format = "刚刚";
-                }
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();
                     setChatUserStatus(item, context);
                     mContent.setText(item.getMsg());
-                    mTimeHint.setText(format);
                     //普通游客发言
                 } else {
                     //自己发的言
                     if (item.isOwner()) {
                         showUserMineLayout();
-                        mMineTimeHint.setText(format);
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
                         //普通游客发言
@@ -555,7 +540,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         showCommonUserLayout();
                         mCommonUserStatus.setText(item.getName());
                         mCommonUserContent.setText(item.getMsg());
-                        mCommonUserTimeHint.setText(format);
                     }
                 }
             }

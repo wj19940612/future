@@ -195,6 +195,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
 
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
+            mList.setAdapter(mTradeDetailAdapter);
         }
 
         if (mSwipeRefreshLayout.isRefreshing()) {
@@ -206,7 +207,6 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 mTradeDetailAdapter.add(item);
             }
         }
-        mList.setAdapter(mTradeDetailAdapter);
         mTradeDetailAdapter.notifyDataSetChanged();
     }
 

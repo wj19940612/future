@@ -54,8 +54,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.id.listView;
-
 
 /**
  * Created by ${wangJie} on 2016/11/8.
@@ -66,7 +64,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private static final int REQUEST_CODE_LOGIN = 583;
 
-    @BindView(listView)
+    @BindView(R.id.listView)
     ListView mListView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -159,14 +157,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         getChatInfo();
         setOnRefresh();
 
-        setKeyboardHelper();
 
         View content = getActivity().findViewById(android.R.id.content);
         content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
-
-    private void setKeyboardHelper() {
-
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {

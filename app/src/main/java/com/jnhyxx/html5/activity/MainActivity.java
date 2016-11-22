@@ -203,8 +203,7 @@ public class MainActivity extends BaseActivity {
                         public void onClick(Dialog dialog) {
                             dialog.dismiss();
                             Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
-                                    .putExtra(Launcher.EX_PAYLOAD, sysMessage)
-                                    .putExtra(Launcher.EX_PAYLOAD_1, true).execute();
+                                    .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
                         }
                     }).show();
             Preference.get().setThisSysMessageShowed(sysMessage);

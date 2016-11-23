@@ -481,16 +481,17 @@ public class LiveActivity extends BaseActivity {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mTitleBar.setVisibility(View.GONE);
             mTeacherCommand.setVisibility(View.GONE);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
             mVideoContainer.setLayoutParams(params);
+            mKeyBoardIsOpen = false;
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTitleBar.setVisibility(View.VISIBLE);
             mTeacherCommand.setVisibility(View.VISIBLE);
             int playerHeight = getResources().getDimensionPixelOffset(R.dimen.player_height);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
                     playerHeight);
             mVideoContainer.setLayoutParams(params);
         }

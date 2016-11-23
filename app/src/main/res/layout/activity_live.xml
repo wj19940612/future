@@ -99,9 +99,10 @@
                 android:paddingLeft="8.5dp"
                 android:paddingRight="8.5dp"
                 android:paddingTop="7dp"
-                android:visibility="invisible">
+                android:visibility="gone">
 
                 <EditText
+                    android:inputType="text"
                     android:id="@+id/speakEditText"
                     android:layout_width="0dp"
                     android:layout_height="36dp"

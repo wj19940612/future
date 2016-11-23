@@ -320,7 +320,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     private void getLiveMessage() {
-        API.Live.getLiveMessage().setTag(TAG).setIndeterminate(this)
+        API.Live.getLiveMessage().setTag(TAG)
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {

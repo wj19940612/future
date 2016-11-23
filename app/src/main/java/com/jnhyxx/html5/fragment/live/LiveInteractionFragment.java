@@ -270,8 +270,19 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING||scrollState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+            mOnScrollListener.scroll(true);
+        }
+    }
 
+    private OnScrollListener mOnScrollListener;
 
+    public interface OnScrollListener {
+        void scroll(boolean isScroll);
+    }
+
+    public void setOnScrollListener(OnScrollListener scrollListener) {
+        mOnScrollListener = scrollListener;
     }
 
     @Override

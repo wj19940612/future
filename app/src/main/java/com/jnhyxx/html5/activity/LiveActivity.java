@@ -163,6 +163,23 @@ public class LiveActivity extends BaseActivity {
 
     private void initData() {
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
+        mLiveInteractionFragment.setOnScrollListener(new LiveInteractionFragment.OnScrollListener() {
+            @Override
+            public void scroll(boolean isScroll) {
+                if (isScroll && mKeyBoardIsOpen) {
+//                    mSpeakLayout.setVisibility(View.GONE);
+                    if (mSpeakEditText != null) {
+                        mSpeakEditText.setText("");
+                    }
+                    mKeyBoardIsOpen = false;
+                    if (mInputMethodManager != null && mSpeakEditText != null) {
+                        mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
+                    }
+                    mVideoContainer.setVisibility(View.VISIBLE);
+                    mLiveSpeak.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         mTeacherGuideFragment = TeacherGuideFragment.newInstance();
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {

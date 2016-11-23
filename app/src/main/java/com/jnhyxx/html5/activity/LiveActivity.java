@@ -347,6 +347,9 @@ public class LiveActivity extends BaseActivity {
                         }
 
                         if (mLiveMessage.getTeacher() != null) { // 在直播
+                            if (mLiveInteractionFragment != null) {
+                                mLiveInteractionFragment.setTeacherInfo(mLiveMessage.getTeacher());
+                            }
                             showLiveViews();
                         } else if (mLiveMessage.getNotice() != null) { // 未直播,显示通告
                             showNoLiveViews();
@@ -377,7 +380,9 @@ public class LiveActivity extends BaseActivity {
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         Log.d(TAG, "connectRTMPServer: ");
         if (!TextUtils.isEmpty(active.getRtmp())) {
-            mLivePlayer.setVideoPath(active.getRtmp());
+            // TODO: 2016/11/23 测试数据
+//            mLivePlayer.setVideoPath(active.getRtmp());
+            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         }
     }
 

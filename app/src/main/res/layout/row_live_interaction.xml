@@ -70,15 +70,16 @@
             android:gravity="center_vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="@drawable/bg_live_adminrhead"
                 android:gravity="center">
 
                 <ImageView
                     android:id="@+id/userHeadImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_live_pic_head"/>
             </LinearLayout>

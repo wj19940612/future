@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
+import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
@@ -30,7 +31,9 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,6 +78,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private ArrayList<ChatData> mDataArrayList;
 
     private boolean isRefreshed;
+    private LiveMessage.TeacherInfo mTeacherInfo;
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -140,6 +144,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         });
     }
 
+    public void setTeacherInfo(LiveMessage.TeacherInfo teacherInfo) {
+        mTeacherInfo = teacherInfo;
+    }
+
     public void setData(String data) {
         Log.d(TAG, "新数据" + data);
         LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -163,7 +171,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                             }
                             mLiveChatInfoAdapter.add(chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
-                            // TODO: 2016/11/15 自动跑到ListView的最后一个item
 
                         }
                     }
@@ -184,7 +191,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                                              mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
 
-                                             Log.d("wjTest", "数据 " + liveHomeChatInfoResp.getData().getData() + "\n");
                                              // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
                                              Iterator<ChatData> iterator = mChatDataListInfo.iterator();
                                              while (iterator.hasNext()) {
@@ -253,6 +259,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
+        if (mTeacherInfo != null) {
+            mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
+        }
 
         mLiveChatInfoAdapter.clear();
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
@@ -295,10 +304,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
 
         private Context mContext;
+        private LiveMessage.TeacherInfo mTeacherInfo;
 
         public LiveChatInfoAdapter(Context context) {
             super(context, 0);
             this.mContext = context;
+        }
+
+        public void setTeacher(LiveMessage.TeacherInfo teacher) {
+            mTeacherInfo = teacher;
         }
 
         @NonNull
@@ -312,7 +326,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindViewWithData(getItem(position), mContext);
+            viewHolder.bindViewWithData(getItem(position), mContext, mTeacherInfo);
             return convertView;
         }
 
@@ -361,7 +375,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ButterKnife.bind(this, view);
             }
 
-            public void bindViewWithData(ChatData item, Context context) {
+            public void bindViewWithData(ChatData item, Context context, LiveMessage.TeacherInfo teacherInfo) {
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
 
@@ -375,7 +389,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();
-                    setChatUserStatus(item, context);
+                    setChatUserStatus(item, context, teacherInfo);
                     mContent.setText(item.getMsg());
                     //普通游客发言
                 } else {
@@ -418,13 +432,23 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void setChatUserStatus(ChatData item, Context context) {
+            private void setChatUserStatus(ChatData item, Context context, LiveMessage.TeacherInfo teacherInfo) {
                 String chatUser = "";
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
                 } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
-//                    chatUser = context.getString(R.string.live_type_teacher);
                     chatUser = item.getName();
+
+
+//                    Picasso.with(context).load("https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1477449444225008026.png")
+//                            .transform(new CircleTransform()).into(mUserHeadImage);
+                    if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
+                        Picasso.with(context).load(teacherInfo.getPictureUrl())
+                                .transform(new CircleTransform()).into(mUserHeadImage);
+                    } else {
+                        Picasso.with(context).load(R.drawable.ic_live_pic_head)
+                                .transform(new CircleTransform()).into(mUserHeadImage);
+                    }
                 }
                 mUserStatus.setText(chatUser);
             }

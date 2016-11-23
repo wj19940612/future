@@ -288,7 +288,7 @@ public class LiveActivity extends BaseActivity {
 
     private void setTeacherCommand(ChatData chatData) {
         if (chatData != null && !TextUtils.isEmpty(chatData.getMsg())) {
-            mTeacherCommand.setTeacherCommand(chatData.getMsg());
+            mTeacherCommand.setTeacherCommand(getString(R.string.live_teacher_order, chatData.getMsg()));
         }
     }
 

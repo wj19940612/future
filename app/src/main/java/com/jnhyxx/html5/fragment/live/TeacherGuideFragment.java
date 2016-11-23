@@ -53,8 +53,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.empty)
     TextView mEmpty;
-    @BindView(R.id.liveSpeak)
-    ImageView mLiveSpeak;
+
 
 
     private Unbinder mBind;
@@ -97,7 +96,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         super.onActivityCreated(savedInstanceState);
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mListView.setStackFromBottom(true);
-        mLiveSpeak.setVisibility(View.GONE);
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataInfoList = new ArrayList<>();

@@ -1,7 +1,10 @@
 package com.jnhyxx.html5.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -13,7 +16,12 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,9 +29,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.jnhnxx.livevideo.LiveVideo;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
@@ -38,6 +48,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
@@ -50,11 +61,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-import static com.jnhyxx.html5.fragment.live.LiveInteractionFragment.REQUEST_CODE_LOGIN;
+import static com.jnhyxx.html5.R.id.videoContainer;
 
 
-public class LiveActivity extends BaseActivity {
+public class LiveActivity extends BaseActivity implements View.OnKeyListener {
+
+    private static final int REQUEST_CODE_LOGIN = 583;
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -65,7 +79,7 @@ public class LiveActivity extends BaseActivity {
 
     @BindView(R.id.liveVideo)
     LiveVideo mLivePlayer;
-    @BindView(R.id.videoContainer)
+    @BindView(videoContainer)
     RelativeLayout mVideoContainer;
 
     @BindView(R.id.publicNoticeArea)
@@ -76,7 +90,18 @@ public class LiveActivity extends BaseActivity {
     @BindView(R.id.teacherCommand)
     TeacherCommand mTeacherCommand;
     @BindView(R.id.dimBackground)
-    RelativeLayout mDimBackground;
+    LinearLayout mDimBackground;
+
+
+    @BindView(R.id.speakEditText)
+    EditText mSpeakEditText;
+    @BindView(R.id.sendSpeak)
+    TextView mSendSpeak;
+    @BindView(R.id.speakLayout)
+    LinearLayout mSpeakLayout;
+    @BindView(R.id.liveSpeak)
+    ImageView mLiveSpeak;
+
 
     private LiveProgrammeList mProgrammeList;
 
@@ -88,6 +113,12 @@ public class LiveActivity extends BaseActivity {
 
     private TeacherGuideFragment mTeacherGuideFragment;
     private LiveInteractionFragment mLiveInteractionFragment;
+
+
+    private InputMethodManager mInputMethodManager;
+    //用来记录键盘是否打开
+    private boolean mKeyBoardIsOpen = false;
+
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
@@ -133,7 +164,121 @@ public class LiveActivity extends BaseActivity {
         getLiveMessage();
         getChattingIpPort();
         getLastTeacherCommand();
+        View content = getActivity().findViewById(android.R.id.content);
+        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
     }
+
+    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        @Override
+        public void onGlobalLayout() {
+
+            Rect rect = new Rect();
+            //获取到程序显示的区域，包括标题栏，但不包括状态
+            getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+            //获取屏幕的高度
+            int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
+            //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
+            int heightDifference = screenHeight - rect.bottom;
+            if (heightDifference > 0) {
+                mKeyBoardIsOpen = true;
+            }
+            if (heightDifference == 0 && mSpeakEditText.isShown() && mKeyBoardIsOpen) {
+                mSpeakLayout.setVisibility(View.GONE);
+                mLiveSpeak.setVisibility(View.VISIBLE);
+                mKeyBoardIsOpen = false;
+            }
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mInputMethodManager != null && mSpeakEditText != null) {
+            mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
+        }
+    }
+
+    @OnClick({R.id.speakEditText, R.id.sendSpeak, R.id.liveSpeak})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.speakEditText:
+                break;
+            case R.id.sendSpeak:
+                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
+                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
+                    mSpeakEditText.setText("");
+                }
+                if (mInputMethodManager != null && mSpeakEditText != null) {
+                    mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
+                }
+                mSpeakLayout.setVisibility(View.GONE);
+                if (mVideoContainer.getVisibility() == View.GONE) {
+                    mVideoContainer.setVisibility(View.VISIBLE);
+                }
+                mLiveSpeak.setVisibility(View.VISIBLE);
+                break;
+            case R.id.liveSpeak:
+                if (LocalUser.getUser().isLogin()) {
+                    if (mLiveMessage != null &&
+                            mLiveMessage.getTeacher() != null &&
+                            mLiveMessage.getTeacher().getTeacherAccountId() != 0) {
+                        sendLiveSpeak();
+                    } else {
+                        ToastUtil.curt(R.string.live_time_is_not);
+                    }
+                } else {
+                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
+                }
+                break;
+        }
+    }
+
+    private void sendLiveSpeak() {
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (!mSpeakLayout.isShown()) {
+            mLiveSpeak.setVisibility(View.GONE);
+            mSpeakLayout.setVisibility(View.VISIBLE);
+            mVideoContainer.setVisibility(View.GONE);
+        }
+        mSpeakEditText.setFocusable(true);
+        mSpeakEditText.setFocusableInTouchMode(true);
+        mSpeakEditText.requestFocus();
+        mSpeakEditText.setOnKeyListener(this);
+
+        boolean b = mInputMethodManager.isActive(mSpeakEditText);
+        if (b) {
+            mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
+        }
+        mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
+    }
+
+    private TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
+                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
+                }
+                if (mInputMethodManager.isActive(mSpeakEditText)) {
+                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if (mSpeakEditText.isShown()) {
+                    mSpeakEditText.setText("");
+                    mSpeakLayout.setVisibility(View.GONE);
+                }
+                if (!mLiveSpeak.isShown()) {
+                    mLiveSpeak.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+
+            return false;
+        }
+    };
 
     private void getLastTeacherCommand() {
         API.Live.getLastTeacherGuide().setTag(TAG)
@@ -151,22 +296,35 @@ public class LiveActivity extends BaseActivity {
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         disconnectNettySocket();
+        View content = getActivity().findViewById(android.R.id.content);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            content.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        } else {
+            content.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+        }
     }
 
     @Override
     public void onBackPressed() {
+        ToastUtil.curt("返回");
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (mLivePlayer != null) {
                 mLivePlayer.fullScreen(false);
             }
+        } else if (mSpeakLayout.isShown() && mVideoContainer.getVisibility() == View.GONE) {
+            mVideoContainer.setVisibility(View.VISIBLE);
+            mSpeakLayout.setVisibility(View.GONE);
+            mLiveSpeak.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
     }
+
 
     private void getChattingIpPort() {
         API.Market.getChattingServerIpAndPort().setTag(TAG)
@@ -407,6 +565,20 @@ public class LiveActivity extends BaseActivity {
                     }
                 }).fire();
     }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mSpeakLayout.isShown() && mVideoContainer.getVisibility() == View.GONE) {
+                mVideoContainer.setVisibility(View.VISIBLE);
+                mSpeakLayout.setVisibility(View.GONE);
+                mLiveSpeak.setVisibility(View.VISIBLE);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 

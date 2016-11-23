@@ -30,56 +30,5 @@
             android:textSize="20sp"
             android:visibility="gone"
             tools:text="@string/withdraw_no_content"/>/>
-
-        <LinearLayout
-            android:id="@+id/speakLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:paddingBottom="7dp"
-            android:paddingLeft="8.5dp"
-            android:paddingRight="8.5dp"
-            android:paddingTop="7dp"
-            android:visibility="gone">
-
-            <EditText
-                android:id="@+id/speakEditText"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginRight="8.5dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_live_speak"
-                android:focusable="true"
-                android:imeOptions="actionSend"
-                android:padding="5dp"
-                android:textColor="@color/blackPrimary"
-                android:textColorHint="@color/grayHint"
-                android:textSize="16sp"
-                android:visibility="visible"/>
-
-            <TextView
-                android:id="@+id/sendSpeak"
-                android:layout_width="49dp"
-                android:layout_height="36dp"
-                android:background="@drawable/btn_blue"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/live_speak_send"
-                android:textColor="@android:color/white"/>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/liveSpeak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="10dp"
-            android:clickable="true"
-            android:src="@drawable/btn_live_speak"
-            android:visibility="visible"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

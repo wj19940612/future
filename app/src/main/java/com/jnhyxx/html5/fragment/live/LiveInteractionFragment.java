@@ -1,48 +1,35 @@
 package com.jnhyxx.html5.fragment.live;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
-import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.DateUtil;
-import com.johnz.kutils.Launcher;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,7 +38,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -60,9 +46,7 @@ import butterknife.Unbinder;
  * 直播互动界面
  */
 
-public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener, View.OnKeyListener {
-
-    public static final int REQUEST_CODE_LOGIN = 583;
+public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -70,16 +54,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.empty)
     TextView mEmpty;
-    @BindView(R.id.liveSpeak)
-    ImageView mLiveSpeak;
-    @BindView(R.id.speakEditText)
-    EditText mSpeakEditText;
-
-    //发送发言
-    @BindView(R.id.sendSpeak)
-    TextView mSendSpeak;
-    @BindView(R.id.speakLayout)
-    LinearLayout mSpeakLayout;
 
     private Unbinder mBind;
 
@@ -93,14 +67,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     private List<ChatData> mChatDataListInfo;
-    private InputMethodManager mInputMethodManager;
 
     private ArrayList<ChatData> mDataArrayList;
 
     private boolean isRefreshed;
-
-    //用来记录键盘是否打开
-    private boolean mKeyBoardIsOpen = false;
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -118,29 +88,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (mInputMethodManager != null && mSpeakEditText != null) {
-            mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
-        }
-    }
-
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        View content = getActivity().findViewById(android.R.id.content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            content.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-        } else {
-            content.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
-        }
     }
 
     @Override
@@ -156,34 +106,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mListView.setOnScrollListener(this);
         getChatInfo();
         setOnRefresh();
-
-
-        View content = getActivity().findViewById(android.R.id.content);
-        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
-    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-
-        @Override
-        public void onGlobalLayout() {
-
-            Rect rect = new Rect();
-            //获取到程序显示的区域，包括标题栏，但不包括状态
-            getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-            //获取屏幕的高度
-            int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
-            //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
-            int heightDifference = screenHeight - rect.bottom;
-            if (heightDifference > 0) {
-                mKeyBoardIsOpen = true;
-            }
-            if (heightDifference == 0 && mSpeakEditText.isShown() && mKeyBoardIsOpen) {
-                mSpeakLayout.setVisibility(View.GONE);
-                mLiveSpeak.setVisibility(View.VISIBLE);
-                mKeyBoardIsOpen = false;
-            }
-        }
-    };
 
     private void setOnRefresh() {
         mSwipeRefreshLayout.post(new Runnable() {
@@ -243,101 +167,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             }
         }
     }
-
-    @OnClick({R.id.liveSpeak, R.id.sendSpeak})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.liveSpeak:
-                if (LocalUser.getUser().isLogin()) {
-                    getLiveMessage();
-                } else {
-                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
-                }
-                break;
-            case R.id.sendSpeak:
-                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
-                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
-                    mSpeakEditText.setText("");
-                }
-                break;
-        }
-    }
-
-    public void getLiveMessage() {
-        API.Live.getLiveMessage().setTag(TAG)
-                .setCallback(new Callback<Resp<LiveMessage>>() {
-                    @Override
-                    public void onReceive(Resp<LiveMessage> liveMessageResp) {
-                        if (liveMessageResp.isSuccess() &&
-                                liveMessageResp.hasData() &&
-                                liveMessageResp.getData().getTeacher() != null &&
-                                liveMessageResp.getData().getTeacher().getTeacherAccountId() != 0) {
-                            sendLiveSpeak();
-                        } else {
-                            ToastUtil.curt(R.string.live_time_is_not);
-                        }
-                    }
-                }).fire();
-    }
-
-
-    private void sendLiveSpeak() {
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        if (mSpeakLayout.getVisibility() == View.GONE) {
-            mSpeakLayout.setVisibility(View.VISIBLE);
-            mLiveSpeak.setVisibility(View.GONE);
-        }
-        mSpeakEditText.setFocusable(true);
-        mSpeakEditText.setFocusableInTouchMode(true);
-        mSpeakEditText.requestFocus();
-        mSpeakEditText.setOnKeyListener(this);
-
-        boolean b = mInputMethodManager.isActive(mSpeakEditText);
-        if (b) {
-            mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
-        }
-        mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mSpeakLayout.isShown()) {
-                mSpeakLayout.setVisibility(View.GONE);
-                mLiveSpeak.setVisibility(View.VISIBLE);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    private OnEditorActionListener mOnEditorActionListener = new OnEditorActionListener() {
-
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-
-                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
-                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
-                }
-                if (mInputMethodManager.isActive(mSpeakEditText)) {
-                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                }
-                if (mSpeakEditText.isShown()) {
-                    mSpeakEditText.setText("");
-                    mSpeakLayout.setVisibility(View.GONE);
-                }
-                if (!mLiveSpeak.isShown()) {
-                    mLiveSpeak.setVisibility(View.VISIBLE);
-                }
-                return true;
-            }
-
-            return false;
-        }
-    };
 
     private void getChatInfo() {
         API.Live.getLiveTalk(mTimeStamp, mPage, mPageSize)
@@ -426,16 +255,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == getActivity().RESULT_OK) {
-            ToastUtil.curt("登陆成功了达到撒");
-            getLiveMessage();
-        }
-    }
-
 
     static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {
 

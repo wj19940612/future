@@ -55,7 +55,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     TextView mEmpty;
 
 
-
     private Unbinder mBind;
 
     private int mPage = 0;
@@ -134,6 +133,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     }
 
     public void setData(ChatData data) {
+        Log.d(TAG, "老师指令" + data.toString());
         if (data != null && mLiveTeacherGuideAdapter != null) {
             if (mHashSet.add(data.getCreateTime())) {
                 mDataInfoList.add(data);

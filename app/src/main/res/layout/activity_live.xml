@@ -99,7 +99,7 @@
                 android:paddingLeft="8.5dp"
                 android:paddingRight="8.5dp"
                 android:paddingTop="7dp"
-                android:visibility="gone">
+                android:visibility="invisible">
 
                 <EditText
                     android:id="@+id/speakEditText"
@@ -113,8 +113,7 @@
                     android:padding="5dp"
                     android:textColor="@color/blackPrimary"
                     android:textColorHint="@color/grayHint"
-                    android:textSize="16sp"
-                    android:visibility="visible"/>
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/sendSpeak"

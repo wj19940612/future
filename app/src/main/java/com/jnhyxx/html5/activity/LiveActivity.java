@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -66,9 +65,9 @@ import butterknife.OnClick;
 import static com.jnhyxx.html5.R.id.videoContainer;
 
 
-public class LiveActivity extends BaseActivity implements View.OnKeyListener {
+public class LiveActivity extends BaseActivity {
 
-    private static final int REQUEST_CODE_LOGIN = 583;
+    public static final int REQUEST_CODE_LOGIN = 583;
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -148,6 +147,21 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
 
+
+        initData();
+
+        initTitleBar();
+        initSlidingTabLayout();
+
+        getLiveMessage();
+        getChattingIpPort();
+        getLastTeacherCommand();
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        View content = getActivity().findViewById(android.R.id.content);
+        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+    }
+
+    private void initData() {
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
         mTeacherGuideFragment = TeacherGuideFragment.newInstance();
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
@@ -157,15 +171,6 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
                 showTeacherInfoDialog();
             }
         });
-
-        initTitleBar();
-        initSlidingTabLayout();
-
-        getLiveMessage();
-        getChattingIpPort();
-        getLastTeacherCommand();
-        View content = getActivity().findViewById(android.R.id.content);
-        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -186,6 +191,10 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
             if (heightDifference == 0 && mSpeakEditText.isShown() && mKeyBoardIsOpen) {
                 mSpeakLayout.setVisibility(View.GONE);
                 mLiveSpeak.setVisibility(View.VISIBLE);
+                mVideoContainer.setVisibility(View.VISIBLE);
+                if (mSpeakEditText != null) {
+                    mSpeakEditText.setText("");
+                }
                 mKeyBoardIsOpen = false;
             }
         }
@@ -205,18 +214,16 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
             case R.id.speakEditText:
                 break;
             case R.id.sendSpeak:
+                if (mInputMethodManager != null && mSpeakEditText != null) {
+                    mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
+                }
                 if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
                     NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
                     mSpeakEditText.setText("");
                 }
-                if (mInputMethodManager != null && mSpeakEditText != null) {
-                    mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
-                }
-                mSpeakLayout.setVisibility(View.GONE);
-                if (mVideoContainer.getVisibility() == View.GONE) {
-                    mVideoContainer.setVisibility(View.VISIBLE);
-                }
+//                mSpeakLayout.setVisibility(View.GONE);
                 mLiveSpeak.setVisibility(View.VISIBLE);
+                mVideoContainer.setVisibility(View.VISIBLE);
                 break;
             case R.id.liveSpeak:
                 if (LocalUser.getUser().isLogin()) {
@@ -235,50 +242,22 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
     }
 
     private void sendLiveSpeak() {
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mLiveSpeak.setVisibility(View.GONE);
+        mVideoContainer.setVisibility(View.GONE);
+        mSpeakLayout.setVisibility(View.VISIBLE);
 
-        if (!mSpeakLayout.isShown()) {
-            mLiveSpeak.setVisibility(View.GONE);
-            mSpeakLayout.setVisibility(View.VISIBLE);
-            mVideoContainer.setVisibility(View.GONE);
-        }
+
         mSpeakEditText.setFocusable(true);
         mSpeakEditText.setFocusableInTouchMode(true);
         mSpeakEditText.requestFocus();
-        mSpeakEditText.setOnKeyListener(this);
-
-        boolean b = mInputMethodManager.isActive(mSpeakEditText);
-        if (b) {
-            mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
+        if (mSpeakEditText.isShown()) {
+            boolean b = mInputMethodManager.isActive(mSpeakEditText);
+            if (b) {
+                mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
+            }
         }
-        mSpeakEditText.setOnEditorActionListener(mOnEditorActionListener);
     }
 
-    private TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
-
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-
-                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
-                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
-                }
-                if (mInputMethodManager.isActive(mSpeakEditText)) {
-                    mInputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                }
-                if (mSpeakEditText.isShown()) {
-                    mSpeakEditText.setText("");
-                    mSpeakLayout.setVisibility(View.GONE);
-                }
-                if (!mLiveSpeak.isShown()) {
-                    mLiveSpeak.setVisibility(View.VISIBLE);
-                }
-                return true;
-            }
-
-            return false;
-        }
-    };
 
     private void getLastTeacherCommand() {
         API.Live.getLastTeacherGuide().setTag(TAG)
@@ -311,7 +290,6 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
 
     @Override
     public void onBackPressed() {
-        ToastUtil.curt("返回");
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (mLivePlayer != null) {
                 mLivePlayer.fullScreen(false);
@@ -472,6 +450,8 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            mLiveInteractionFragment.setLoginSuccess(true);
+            disconnectNettySocket();
             if (mLiveMessage != null) {
                 connectNettySocket();
             }
@@ -564,19 +544,6 @@ public class LiveActivity extends BaseActivity implements View.OnKeyListener {
                                 .execute();
                     }
                 }).fire();
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mSpeakLayout.isShown() && mVideoContainer.getVisibility() == View.GONE) {
-                mVideoContainer.setVisibility(View.VISIBLE);
-                mSpeakLayout.setVisibility(View.GONE);
-                mLiveSpeak.setVisibility(View.VISIBLE);
-                return true;
-            }
-        }
-        return false;
     }
 
 

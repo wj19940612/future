@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment.live;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +40,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
+import static com.jnhyxx.html5.activity.LiveActivity.REQUEST_CODE_LOGIN;
 
 
 /**
@@ -96,10 +100,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mListView.setStackFromBottom(true);
-
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
@@ -143,9 +145,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
 
         if (liveSpeakInfo != null) {
+            if (liveSpeakInfo.isOwner()) {
+                mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                mListView.setStackFromBottom(true);
+            }
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
                 ToastUtil.curt("您被禁言，请稍后发言");
-//                return;
             }
             if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
                 if (liveSpeakInfo.isOwner() || !liveSpeakInfo.isSlience()) {
@@ -159,8 +164,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                             mLiveChatInfoAdapter.add(chatData);
                             mLiveChatInfoAdapter.notifyDataSetChanged();
                             // TODO: 2016/11/15 自动跑到ListView的最后一个item
-//                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-//                            mListView.setStackFromBottom(true);
+
                         }
                     }
                 }
@@ -210,6 +214,27 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             return chatDatas.get(chatDatas.size() - 1).getTimeStamp();
         }
         return 0;
+    }
+
+    //登录成功后需要清空数据，重新获取状态
+    public void setLoginSuccess(boolean isLogin) {
+        if (isLogin) {
+            if (mLiveChatInfoAdapter != null) {
+                mLiveChatInfoAdapter.clear();
+            }
+            if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
+                mDataArrayList.clear();
+            }
+            getChatInfo();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+            ToastUtil.curt("接到登录成功的回调了");
+        }
     }
 
     private void updateCHatInfo(final LiveHomeChatInfo liveHomeChatInfo) {

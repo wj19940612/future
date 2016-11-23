@@ -270,7 +270,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING||scrollState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
             mOnScrollListener.scroll(true);
         }
     }
@@ -423,7 +423,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
                 } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
-                    chatUser = context.getString(R.string.live_type_teacher);
+//                    chatUser = context.getString(R.string.live_type_teacher);
+                    chatUser = item.getName();
                 }
                 mUserStatus.setText(chatUser);
             }

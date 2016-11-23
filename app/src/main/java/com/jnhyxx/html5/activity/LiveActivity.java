@@ -19,11 +19,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.jnhnxx.livevideo.LiveVideo;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.ChatData;
+import com.jnhyxx.html5.domain.live.LastTeacherCommand;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
@@ -41,6 +44,7 @@ import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
@@ -81,6 +85,8 @@ public class LiveActivity extends BaseActivity {
     private List<Product> mProductList;
 
     private LiveMessage mLiveMessage;
+    private LiveMessage.TeacherInfo mTeacher;
+    private LiveMessage.NoticeInfo mNotice;
     private ServerIpPort mServerIpPort;
 
     private LiveInteractionFragment mLiveInteractionFragment;
@@ -96,7 +102,7 @@ public class LiveActivity extends BaseActivity {
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
             ChatData chatData = new ChatData(liveSpeakInfo);
             if (chatData.getChatType() == ChatData.CHAT_TYPE_TEACHER && chatData.isOrder()) {
-                setTeacherCommand(chatData);
+                mTeacherCommand.setTeacherCommand(chatData);
             }
         }
     };
@@ -109,10 +115,15 @@ public class LiveActivity extends BaseActivity {
 
         mLiveInteractionFragment = LiveInteractionFragment.newInstance();
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
-        mTeacherCommand.setOnTeacherHeadClickListener(new View.OnClickListener() {
+        mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onTeacherHeadClick() {
                 showTeacherInfoDialog();
+            }
+
+            @Override
+            public void onCloseButtonClick(ChatData teacherCommand) {
+                Preference.get().setThisLastTeacherCommandShowed(teacherCommand);
             }
         });
 
@@ -121,22 +132,27 @@ public class LiveActivity extends BaseActivity {
 
         getLiveMessage();
         getChattingIpPort();
-        getLastTeacherCommand();
     }
 
     private void getLastTeacherCommand() {
-        API.Live.getLastTeacherGuide().setTag(TAG)
-                .setCallback(new Callback2<Resp<ChatData>, ChatData>() {
-                    @Override
-                    public void onRespSuccess(ChatData chatData) {
-                        setTeacherCommand(chatData);
-                    }
-                }).fire();
-    }
+        if (mTeacher != null) {
+            final int teacherId = mTeacher.getTeacherAccountId();
+            API.Live.getLastTeacherGuide(teacherId).setTag(TAG)
+                    .setCallback(new Callback2<Resp<LastTeacherCommand>, LastTeacherCommand>() {
+                        @Override
+                        public void onRespSuccess(LastTeacherCommand lastTeacherCommand) {
+                            ChatData teacherCommand = lastTeacherCommand.getMsg();
+                            if (teacherCommand == null) return;
 
-    private void setTeacherCommand(ChatData chatData) {
-        if (chatData != null && !TextUtils.isEmpty(chatData.getMsg())) {
-            mTeacherCommand.setTeacherCommand(chatData.getMsg());
+                            if (!Preference.get().hasShowedThisLastTeacherCommand(teacherCommand)) {
+                                long timeStamp = teacherCommand.getCreateTime();
+                                long sysTime = SysTime.getSysTime().getSystemTimestamp();
+                                if (DateUtil.isLessThanTimeInterval(sysTime, timeStamp, 60 * 1000)) {
+                                    mTeacherCommand.setTeacherCommand(teacherCommand);
+                                }
+                            }
+                        }
+                    }).fire();
         }
     }
 
@@ -182,36 +198,35 @@ public class LiveActivity extends BaseActivity {
                             connectNettySocket();
                         }
 
-                        if (mLiveMessage.getTeacher() != null) { // 在直播
+                        mTeacher = mLiveMessage.getTeacher();
+                        mNotice = mLiveMessage.getNotice();
+                        if (mTeacher != null) { // 在直播
                             showLiveViews();
-                        } else if (mLiveMessage.getNotice() != null) { // 未直播,显示通告
+                            getLastTeacherCommand();
+                        } else if (mNotice != null) { // 未直播,显示通告
                             showNoLiveViews();
                         }
 
-                        if (mLiveMessage.getProgram() != null) {
-                            mProgrammeList.setProgramme(mLiveMessage.getProgram());
-                        }
+                        mProgrammeList.setProgramme(mLiveMessage.getProgram());
                     }
                 }).fire();
     }
 
     private void showLiveViews() {
-        LiveMessage.TeacherInfo teacher = mLiveMessage.getTeacher();
         mPublicNoticeArea.setVisibility(View.GONE);
         mTeacherCommand.setVisibility(View.VISIBLE);
-        mTeacherCommand.setTeacherHeader(teacher.getPictureUrl());
+        mTeacherCommand.setTeacherHeader(mTeacher.getPictureUrl());
         connectRTMPServer(mLiveMessage.getActive());
     }
 
     private void showNoLiveViews() {
         mPublicNoticeArea.setVisibility(View.VISIBLE);
-        mPublicNotice.setText(mLiveMessage.getNotice().getFormattedContent());
+        mPublicNotice.setText(mNotice.getFormattedContent());
         mPublicNotice.setMovementMethod(new ScrollingMovementMethod());
         mTeacherCommand.setVisibility(View.GONE);
     }
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
-        Log.d(TAG, "connectRTMPServer: ");
         if (!TextUtils.isEmpty(active.getRtmp())) {
             mLivePlayer.setVideoPath(active.getRtmp());
         }
@@ -287,7 +302,6 @@ public class LiveActivity extends BaseActivity {
     private void requestUserPositions() {
         API.Order.getHomePositions().setTag(TAG)
                 .setCallback(new Callback1<Resp<HomePositions>>() {
-
                     @Override
                     protected void onRespSuccess(Resp<HomePositions> resp) {
                         if (resp.isSuccess() && resp.hasData()) {

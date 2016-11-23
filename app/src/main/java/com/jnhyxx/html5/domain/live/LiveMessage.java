@@ -10,11 +10,11 @@ public class LiveMessage implements Serializable {
     private static final long serialVersionUID = 1834564711596475416L;
     /**
      * active: {
-        activityId: "12",
-        hls: "",
-        liveTv: 0,
-        rtmp: ""
-        },
+     * activityId: "12",
+     * hls: "",
+     * liveTv: 0,
+     * rtmp: ""
+     * },
      */
     private ActiveInfo active;
 
@@ -63,10 +63,6 @@ public class LiveMessage implements Serializable {
         return teacher;
     }
 
-    public void setTeacher(TeacherInfo teacher) {
-        this.teacher = teacher;
-    }
-
     public ActiveInfo getActive() {
         return active;
     }
@@ -75,16 +71,8 @@ public class LiveMessage implements Serializable {
         return notice;
     }
 
-    public void setNotice(NoticeInfo notice) {
-        this.notice = notice;
-    }
-
     public List<ProgramInfo> getProgram() {
         return program;
-    }
-
-    public void setProgram(List<ProgramInfo> program) {
-        this.program = program;
     }
 
     public static class ActiveInfo {
@@ -98,8 +86,7 @@ public class LiveMessage implements Serializable {
         }
     }
 
-    public static class TeacherInfo implements Serializable{
-        private static final long serialVersionUID = 4872621540454770670L;
+    public static class TeacherInfo implements Serializable {
 
         private String account;
         private int channelId;

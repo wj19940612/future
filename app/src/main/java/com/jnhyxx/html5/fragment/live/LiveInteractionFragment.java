@@ -345,7 +345,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private long getTimeStamp(List<ChatData> chatDatas) {
         if (chatDatas != null && !chatDatas.isEmpty()) {
-            return chatDatas.get(chatDatas.size() - 1).getTimeStamp();
+            return chatDatas.get(chatDatas.size() - 1).getCreateTime();
         }
         return 0;
     }

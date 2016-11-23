@@ -15,12 +15,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.live.ChatData;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 public class TeacherCommand extends LinearLayout {
 
-    private static final int DISMISS_DELAY = 10;
+    private static final int DISMISS_DELAY = 60;
+
+    public interface OnClickListener {
+        void onTeacherHeadClick();
+        void onCloseButtonClick(ChatData teacherCommand);
+    }
 
     private ImageView mTeacherHead;
     private TextView mTeacherCommand;
@@ -30,6 +36,9 @@ public class TeacherCommand extends LinearLayout {
     private ImageView mCloseButton;
 
     private Handler mHandler;
+    private OnClickListener mListener;
+
+    private ChatData mChatData;
 
     public TeacherCommand(Context context) {
         super(context);
@@ -48,6 +57,14 @@ public class TeacherCommand extends LinearLayout {
         mTeacherCommand = (TextView) mTeacherCommandView.findViewById(R.id.teacherCommand);
         mTeacherCommandArea = (LinearLayout) mTeacherCommandView.findViewById(R.id.teacherCommandArea);
         mTeacherCommandArea.setVisibility(INVISIBLE);
+        mTeacherHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onTeacherHeadClick();
+                }
+            }
+        });
 
         mCloseButton = new ImageView(getContext());
         mCloseButton.setImageResource(R.drawable.ic_teacher_command_close);
@@ -61,10 +78,13 @@ public class TeacherCommand extends LinearLayout {
         addView(mTeacherCommandView);
         addView(mCloseButton, params);
 
-        mCloseButton.setOnClickListener(new OnClickListener() {
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 closeTeacherCommand();
+                if (mListener != null) {
+                    mListener.onCloseButtonClick(mChatData);
+                }
             }
         });
 
@@ -91,22 +111,25 @@ public class TeacherCommand extends LinearLayout {
         }
     }
 
-    public void setTeacherCommand(String command) {
-        mTeacherCommandArea.setVisibility(VISIBLE);
-        mCloseButton.setVisibility(VISIBLE);
-        mTeacherCommand.setText(command);
-        mTeacherCommand.setMovementMethod(new ScrollingMovementMethod());
+    public void setTeacherCommand(ChatData teacherCommand) {
+        if (teacherCommand != null && !TextUtils.isEmpty(teacherCommand.getMsg())) {
+            mChatData = teacherCommand;
+            mTeacherCommandArea.setVisibility(VISIBLE);
+            mCloseButton.setVisibility(VISIBLE);
+            mTeacherCommand.setText(teacherCommand.getMsg());
+            mTeacherCommand.setMovementMethod(new ScrollingMovementMethod());
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                closeTeacherCommand();
-            }
-        }, DISMISS_DELAY * 1000);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    closeTeacherCommand();
+                }
+            }, DISMISS_DELAY * 1000);
+        }
     }
 
-    public void setOnTeacherHeadClickListener(OnClickListener listener) {
-        mTeacherHead.setOnClickListener(listener);
+    public void setOnClickListener(OnClickListener onClickListener) {
+        mListener = onClickListener;
     }
 
     @Override

@@ -34,13 +34,9 @@ public class ChatData {
     private boolean once;
     private boolean order;
     private boolean text;
-    private long timeStamp;
     private int topChannelId;
     private int userId;
     private boolean owner;
-
-
-
     private boolean isMoreThanFiveMin;
 
     public ChatData(LiveSpeakInfo speakInfo) {
@@ -125,14 +121,6 @@ public class ChatData {
         this.text = text;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
     public int getTopChannelId() {
         return topChannelId;
     }
@@ -190,7 +178,6 @@ public class ChatData {
                 ", once=" + once +
                 ", order=" + order +
                 ", text=" + text +
-                ", timeStamp=" + timeStamp +
                 ", topChannelId=" + topChannelId +
                 ", userId=" + userId +
                 ", owner=" + owner +

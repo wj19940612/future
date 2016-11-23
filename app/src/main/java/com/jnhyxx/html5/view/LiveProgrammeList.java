@@ -67,7 +67,7 @@ public class LiveProgrammeList {
     }
 
     public void setProgramme(List<LiveMessage.ProgramInfo> program) {
-        if (mProgramAdapter != null) {
+        if (mProgramAdapter != null && program != null) {
             mProgramAdapter.clear();
             mProgramAdapter.addAll(program);
         }

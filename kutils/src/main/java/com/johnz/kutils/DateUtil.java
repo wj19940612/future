@@ -90,8 +90,6 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         todayCalendar.add(Calendar.WEEK_OF_YEAR, 1);
-        Log.d("TAG", "isNextWeek: calendar.get(Calendar.WEEK_OF_YEAR): " + calendar.get(Calendar.WEEK_OF_YEAR));
-        Log.d("TAG", "isNextWeek: todayCalendar.get(Calendar.WEEK_OF_YEAR)): " + todayCalendar.get(Calendar.WEEK_OF_YEAR));
         return calendar.get(Calendar.WEEK_OF_YEAR) == todayCalendar.get(Calendar.WEEK_OF_YEAR);
     }
 
@@ -175,18 +173,6 @@ public class DateUtil {
     }
 
     /**
-     * @param startTime 最新的时间
-     * @param endTime
-     * @return
-     */
-    public static boolean isTimeBetweenFiveMin(long startTime, long endTime) {
-        int difference = (int) (startTime - endTime) / (60 * 1000);
-        Log.d("dateUtil", "相差数据" + difference + "  开始的时间" + DateUtil.format(startTime) + "  比较时间" + DateUtil.format(endTime));
-
-        return 5 < difference;
-    }
-
-    /**
      * 将日期格式转化为时间(秒数)
      *
      * @param time
@@ -204,12 +190,40 @@ public class DateUtil {
     }
 
     /**
+     * 判断 time1 是否比 time2 晚了 milliseconds, 即 time1 - time2 <= milliseconds && time1 - time2 >= 0
+     *
+     * @param time1
+     * @param time2
+     * @param milliseconds
+     * @return
+     */
+    public static boolean isLessThanTimeInterval(long time1, long time2, long milliseconds) {
+        long diff = time1 - time2;
+        Log.d("TAG", "isLessThanTimeInterval: " + diff);
+        if (diff >= 0 && diff <= milliseconds) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param startTime 最新的时间
+     * @param endTime
+     * @return
+     */
+    public static boolean isTimeBetweenFiveMin(long startTime, long endTime) {
+        int difference = (int) (startTime - endTime) / (60 * 1000);
+        Log.d("dateUtil", "相差数据" + difference + "  开始的时间" + DateUtil.format(startTime) + "  比较时间" + DateUtil.format(endTime));
+
+        return 5 < difference;
+    }
+
+    /**
      * 判断指定时间和当前时间是否小于minute分钟
      *
      * @param txtDate 指定的时间
      * @return
      */
-
     public static boolean isTimeMatchFiveMin(String txtDate) {
         return isTimeMatchFiveMin(txtDate, 1);
     }

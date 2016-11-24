@@ -514,11 +514,13 @@ public class LiveActivity extends BaseActivity {
                             // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
                             int enterPageProductId = 1;
                             if (hasPositions) {
-                                String varietyType = homePositions.getCashOpS().get(0).getVarietyType();
-                                for (int i = 0; i < mProductPkgList.size(); i++) {
-                                    if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
-                                        enterPageProductId = i;
-                                        break;
+                                if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
+                                    String varietyType = homePositions.getCashOpS().get(homePositions.getCashOpS().size() - 1).getVarietyType();
+                                    for (int i = 0; i < mProductPkgList.size(); i++) {
+                                        if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
+                                            enterPageProductId = i;
+                                            break;
+                                        }
                                     }
                                 }
                             } else {

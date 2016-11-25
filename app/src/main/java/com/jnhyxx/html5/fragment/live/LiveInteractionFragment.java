@@ -39,6 +39,7 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -361,6 +362,14 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onClick() {
         if (mOnSendButtonClickListener != null) {
             String message = ViewUtil.getTextTrim(mInputBox);
+            try {
+                message = new String(message.getBytes("UTF-8"), "GBK").replaceAll("/","");
+//                message = new String(message.getBytes("GBK"), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            Log.d("wangjieTest", "将要发送数据" + message);
             mOnSendButtonClickListener.onSendButtonClick(message);
         }
         mInputBox.setText("");

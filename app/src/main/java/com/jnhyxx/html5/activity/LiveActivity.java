@@ -56,6 +56,7 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,12 +115,16 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
-            Log.d(TAG, "onReceiveOriginalData: " + data);
 
+            Log.d(TAG, "onReceiveOriginalData: " + data);
             LiveInteractionFragment fragment =
                     (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
             if (fragment != null) {
-                fragment.setData(data);
+                try {
+                    fragment.setData(new String(data.getBytes("GBK"),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);

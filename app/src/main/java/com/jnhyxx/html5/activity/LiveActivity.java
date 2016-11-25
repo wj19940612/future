@@ -476,7 +476,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
             LiveInteractionFragment fragment = (LiveInteractionFragment)
                     mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-            if (fragment != null && !fragment.isInputBoxShowed()) {
+            if (fragment != null && !fragment.isInputBoxShowed() && fragment.getUserVisibleHint()) {
                 mShowEditTextButton.setVisibility(View.VISIBLE);
             }
 

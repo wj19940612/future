@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.fragment.live;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,9 +34,9 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
-import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,9 +48,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static android.app.Activity.RESULT_OK;
-import static com.jnhyxx.html5.activity.LiveActivity.REQUEST_CODE_LOGIN;
 
 
 /**
@@ -266,7 +262,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                                              mChatDataListInfo = liveHomeChatInfoResp.getData().getData();
 
-                                             // TODO: 2016/11/15 如果不是本人，则被屏蔽或者被禁言的部分看不到
+                                             // 如果不是本人，则被屏蔽或者被禁言的部分看不到
                                              Iterator<ChatData> iterator = mChatDataListInfo.iterator();
                                              while (iterator.hasNext()) {
                                                  ChatData chatData = iterator.next();
@@ -307,14 +303,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 mDataArrayList.clear();
             }
             getChatInfo();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            ToastUtil.curt("接到登录成功的回调了");
         }
     }
 
@@ -515,10 +503,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     chatUser = context.getString(R.string.live_type_manager);
                 } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
                     chatUser = item.getName();
-
-
-//                    Picasso.with(context).load("https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1477449444225008026.png")
-//                            .transform(new CircleTransform()).into(mUserHeadImage);
                     if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
                         Picasso.with(context).load(teacherInfo.getPictureUrl())
                                 .transform(new CircleTransform()).into(mUserHeadImage);

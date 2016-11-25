@@ -18,7 +18,6 @@ import com.johnz.kutils.FinanceUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HoldingOrderPresenter {
@@ -27,23 +26,16 @@ public class HoldingOrderPresenter {
 
     public HoldingOrderPresenter(IHoldingOrderView iHoldingOrderView) {
         mIHoldingOrderView = iHoldingOrderView;
-
-        mHoldingOrderList = new ArrayList<>();
         mHandler = new Handler();
-        mResume = false;
     }
 
     private IHoldingOrderView mIHoldingOrderView;
-    private List<HoldingOrder> mHoldingOrderList;
-    private Handler mHandler;
-
-    private static int sVarietyId;
-    private static int sFundType;
 
     private FullMarketData mMarketData;
-
-    private boolean mResume;
+    private List<HoldingOrder> mHoldingOrderList;
+    private Handler mHandler;
     private int mCounter;
+    private boolean mIsQuerying;
 
     public interface IHoldingOrderView {
 
@@ -58,18 +50,20 @@ public class HoldingOrderPresenter {
         void onRiskControlTriggered();
     }
 
-    public void onResume() {
-        mResume = true;
-    }
-
     public void onPause() {
-        mResume = false;
+        mHandler.removeCallbacksAndMessages(null);
         mMarketData = null;
         mCounter = 0;
-        mHoldingOrderList.clear();
+        if (mHoldingOrderList != null) {
+            mHoldingOrderList.clear();
+        }
     }
 
-    public void closeAllHoldingPositions(int fundType) {
+    public void onDestroy() {
+        mHandler = null;
+    }
+
+    public void closeAllHoldingPositions(final int varietyId, final int fundType) {
         StringBuilder showIds = new StringBuilder();
         StringBuilder unwindPrices = new StringBuilder();
         for (final HoldingOrder holdingOrder : mHoldingOrderList) {
@@ -97,23 +91,21 @@ public class HoldingOrderPresenter {
                     .setCallback(new Callback1<Resp<JsonObject>>() {
                         @Override
                         protected void onRespSuccess(Resp<JsonObject> resp) {
-                            setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                            onViewShowHoldingOrderList(mHoldingOrderList);
+                            setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING, mHoldingOrderList);
                             onSubmitAllHoldingPositionsCompleted(resp.getMsg());
-
-                            queryHoldingOrderListAndUpdate(sVarietyId, sFundType);
+                            loadHoldingOrderList(varietyId, fundType);
                         }
                     }).fire();
         }
     }
 
-    private void setOrderListStatus(int orderStatus) {
-        for (HoldingOrder holdingOrder : mHoldingOrderList) {
+    private void setOrderListStatus(int orderStatus, List<HoldingOrder> holdingOrderList) {
+        for (HoldingOrder holdingOrder : holdingOrderList) {
             holdingOrder.setOrderStatus(orderStatus);
         }
     }
 
-    public void closePosition(int fundType, final HoldingOrder order) {
+    public void closePosition(final int varietyId, final int fundType, final HoldingOrder order) {
         double unwindPrice = 0;
         if (mMarketData != null) {
             if (order.getDirection() == HoldingOrder.DIRECTION_LONG) {
@@ -128,10 +120,8 @@ public class HoldingOrderPresenter {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        onViewShowHoldingOrderList(mHoldingOrderList);
                         onSubmitHoldingOrderCompleted(order);
-
-                        queryHoldingOrderListAndUpdate(sVarietyId, sFundType);
+                        loadHoldingOrderList(varietyId, fundType);
                     }
                 }).fireSync();
     }
@@ -141,7 +131,7 @@ public class HoldingOrderPresenter {
         mHoldingOrderList.clear();
     }
 
-    public void setFullMarketData(FullMarketData marketData) {
+    public void setFullMarketData(FullMarketData marketData, int varietyId, int fundType) {
         mMarketData = marketData;
 
         BigDecimal totalProfit = new BigDecimal(0);
@@ -149,7 +139,7 @@ public class HoldingOrderPresenter {
         double ratio = 0;
         boolean refresh = false;
 
-        if (marketData != null) {
+        if (marketData != null && mHoldingOrderList != null) {
             for (HoldingOrder holdingOrder : mHoldingOrderList) {
                 int orderStatus = holdingOrder.getOrderStatus();
                 if (orderStatus >= HoldingOrder.ORDER_STATUS_HOLDING && orderStatus < HoldingOrder.ORDER_STATUS_SETTLED) {
@@ -169,10 +159,8 @@ public class HoldingOrderPresenter {
                     BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
                     if (diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
                         refresh = true;
-                        Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopWin: " + holdingOrder.getStopWin());
                     }
                     if (diff.compareTo(bigDecimalStopLoss) <= 0) {
-                        Log.d(TAG, "setFullMarketData: diff: " + diff.doubleValue() + ", stopLoss: " + bigDecimalStopLoss.doubleValue());
                         refresh = true;
                     }
                     totalProfit = totalProfit.add(diff);
@@ -181,28 +169,28 @@ public class HoldingOrderPresenter {
         }
 
 
-        onViewShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
+        onShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
 
         if (refresh) { // 触及风控刷新
             Log.d(TAG, "触及风控刷新");
-            loadHoldingOrderList(sVarietyId, sFundType);
+            loadHoldingOrderList(varietyId, fundType);
             onRiskControlTriggered();
         }
     }
 
-    private void onViewShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
-        if (mResume && mIHoldingOrderView != null) {
+    private void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
+        if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onShowTotalProfit(hasHoldingOrders, totalProfit, ratio);
         }
     }
 
-    private void onViewShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
-        if (mResume && mIHoldingOrderView != null) {
+    private void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
+        if (mIHoldingOrderView != null) {
 
             if (mIHoldingOrderView instanceof TradeActivity) {
-                Log.d(TAG, "onViewShowHoldingOrderList: " + "TradeActivity");
+                Log.d(TAG, "onShowHoldingOrderList: " + "TradeActivity");
             } else if (mIHoldingOrderView instanceof HoldingFragment) {
-                Log.d(TAG, "onViewShowHoldingOrderList: " + "HoldingFragment");
+                Log.d(TAG, "onShowHoldingOrderList: " + "HoldingFragment");
             }
 
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
@@ -210,19 +198,19 @@ public class HoldingOrderPresenter {
     }
 
     private void onSubmitAllHoldingPositionsCompleted(String message) {
-        if (mResume && mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onSubmitAllHoldingPositionsCompleted(message);
         }
     }
 
     private void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
-        if (mResume && mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
         }
     }
 
     private void onRiskControlTriggered() {
-        if (mResume && mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onRiskControlTriggered();
         }
     }
@@ -230,26 +218,21 @@ public class HoldingOrderPresenter {
     public void loadHoldingOrderList(final int varietyId, final int fundType) {
         if (!LocalUser.getUser().isLogin()) return;
 
-        mHandler.removeCallbacksAndMessages(null);
-        mCounter = 0;
-        sVarietyId = varietyId;
-        sFundType = fundType;
-
         Log.d(TAG, "loadHoldingOrderList: " + varietyId + ", fund: " + fundType);
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+
         API.Order.getHoldingOrderList(varietyId, fundType)
                 .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                     @Override
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
-                        Log.d(TAG, "loadHoldingOrderList finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
-                        if (varietyId == sVarietyId) {
+                        Log.d(TAG, "loadHoldingOrderList finished: varietyId: " + varietyId);
+                        mHoldingOrderList = holdingOrderList;
 
-                            mHoldingOrderList = holdingOrderList;
-                            onViewShowHoldingOrderList(mHoldingOrderList);
-
-                            setFullMarketData(mMarketData);
-
-                            queryHoldingOrderListAndUpdate(varietyId, fundType);
-                        }
+                        onShowHoldingOrderList(holdingOrderList);
+                        setFullMarketData(mMarketData, varietyId, fundType);
+                        queryHoldingOrderListAndUpdate(varietyId, fundType, holdingOrderList);
                     }
                 }).fire();
     }
@@ -261,46 +244,47 @@ public class HoldingOrderPresenter {
      * 2s 间隔, 刷新20次(10 + 20)
      * 8s 间隔, 刷新30次(30 + 30)
      * 32s 间隔, 刷新60次(60 + 60)
+     *
      * @param varietyId
      * @param fundType
      */
-    private void doQueryJobDelay(final int varietyId, final int fundType) {
-        if (mCounter++ < 10) {
+    private void doQueryJobDelay(final int varietyId, final int fundType, final List<HoldingOrder> holdingOrderList) {
+        if (mHandler == null) return;
+
+        if (mCounter < 10) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                    queryHoldingOrderListAndUpdate(varietyId, fundType, holdingOrderList);
                 }
             }, 5 * 100);
-        } else if (mCounter++ < 30) {
+        } else if (mCounter < 30) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                    queryHoldingOrderListAndUpdate(varietyId, fundType, holdingOrderList);
                 }
             }, 2 * 1000);
-        } else if (mCounter++ < 60) {
+        } else if (mCounter < 60) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                    queryHoldingOrderListAndUpdate(varietyId, fundType, holdingOrderList);
                 }
             }, 8 * 1000);
-        } else if (mCounter++ < 120) {
+        } else if (mCounter < 120) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    queryHoldingOrderListAndUpdate(varietyId, fundType);
+                    queryHoldingOrderListAndUpdate(varietyId, fundType, holdingOrderList);
                 }
             }, 32 * 1000);
-        } else {
-            mCounter = 0;
         }
     }
 
-    private void queryHoldingOrderListAndUpdate(final int varietyId, final int fundType) {
+    private void queryHoldingOrderListAndUpdate(final int varietyId, final int fundType, List<HoldingOrder> holdingOrderList) {
         boolean refresh = false;
-        for (HoldingOrder holdingOrder : mHoldingOrderList) {
+        for (HoldingOrder holdingOrder : holdingOrderList) {
             int orderStatus = holdingOrder.getOrderStatus();
             // 存在处理中的订单,买处理中(代持有),卖处理中(平仓中), 使用 "策略" 刷新持仓数据
             if (orderStatus == HoldingOrder.ORDER_STATUS_PAID_UNHOLDING
@@ -310,21 +294,22 @@ public class HoldingOrderPresenter {
             }
         }
 
-        Log.d(TAG, "queryHoldingOrderListAndUpdate before start: " + refresh);
+        Log.d(TAG, "queryHoldingOrderListAndUpdate before start: " + refresh + ", varietyId: " + varietyId + ", queryList.Size: " + holdingOrderList.size());
+
         if (refresh) {
             API.Order.getHoldingOrderList(varietyId, fundType)
                     .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                         @Override
                         public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
-                            Log.d(TAG, "queryHoldingOrderListAndUpdate finished count: " + mCounter);
-                            Log.d(TAG, "queryHoldingOrderListAndUpdate finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
-                            if (varietyId == sVarietyId) {
+                            mHoldingOrderList = holdingOrderList;
 
-                                mHoldingOrderList = holdingOrderList;
-                                onViewShowHoldingOrderList(mHoldingOrderList);
+                            mCounter++;
 
-                                doQueryJobDelay(varietyId, fundType);
-                            }
+                            Log.d(TAG, "queryHoldingOrderListAndUpdate finished count: " + mCounter + ", varietyId: " + varietyId);
+
+                            onShowHoldingOrderList(holdingOrderList);
+
+                            doQueryJobDelay(varietyId, fundType, holdingOrderList);
                         }
                     }).fire();
         } else {

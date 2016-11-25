@@ -79,7 +79,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live, container, false);
+        View view = inflater.inflate(R.layout.fragment_teacher_advise, container, false);
         mBind = ButterKnife.bind(this, view);
         return view;
     }

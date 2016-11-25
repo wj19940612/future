@@ -567,10 +567,13 @@ public class API extends APIBase {
         /**
          * 获取最后一条老师指导
          *
+         * @param teacherAccountId
          * @return
          */
-        public static API getLastTeacherGuide() {
-            return new API("/user/live/findFirstTeacherMsg.do", null);
+        public static API getLastTeacherGuide(int teacherAccountId) {
+            return new API(GET, "/user/live/findFirstTeacherMsg.do",
+                    new ApiParams()
+                            .put("teacherId", teacherAccountId));
         }
 
 

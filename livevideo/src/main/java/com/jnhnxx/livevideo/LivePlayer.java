@@ -468,7 +468,7 @@ public class LivePlayer extends TextureView implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(NEMediaPlayer.NELP_RELEASE_SUCCESS)) {
-                Log.i(TAG, NEMediaPlayer.NELP_RELEASE_SUCCESS);
+                Log.d(TAG, NEMediaPlayer.NELP_RELEASE_SUCCESS);
                 unregisterBroadcast(); // 接收到消息后反注册监听器
             }
         }

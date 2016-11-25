@@ -37,6 +37,12 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
     private ImageView mSetPlayerScaleButton;
     private ImageView mMuteButton;
 
+    private OnScaleButtonClickListener mOnScaleButtonClickListener;
+
+    public interface OnScaleButtonClickListener {
+        void onClick(boolean fullscreen);
+    }
+
     public LiveVideo(Context context) {
         super(context);
         init();
@@ -86,7 +92,13 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStartButtonClick();
+                if (mPlayer == null || !mShowing) return;
+
+                if (mPlayer.isStarted()) {
+                    start(false);
+                } else {
+                    start(true);
+                }
             }
         });
 
@@ -94,7 +106,13 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
         mSetPlayerScaleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onScaleButtonClick();
+                if (mPlayer == null || !mShowing) return;
+
+                if (mPlayer.isFullScreen()) {
+                    fullScreen(false);
+                } else {
+                    fullScreen(true);
+                }
             }
         });
 
@@ -102,7 +120,13 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onMuteButtonClick();
+                if (mPlayer == null || !mShowing) return;
+
+                if (mPlayer.isMute()) {
+                    mute(false);
+                } else {
+                    mute(true);
+                }
             }
         });
 
@@ -125,6 +149,10 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
 
     public void setVideoPath(String path) { //设置视频文件路径
         mPlayer.setVideoPath(path);
+    }
+
+    public void setOnScaleButtonClickListener(OnScaleButtonClickListener onScaleButtonClickListener) {
+        mOnScaleButtonClickListener = onScaleButtonClickListener;
     }
 
     @Override
@@ -156,57 +184,38 @@ public class LiveVideo extends RelativeLayout implements IPlayerController {
 
     @Override
     public void mute(boolean mute) {
-
+        if (mute) {
+            mPlayer.setMute(true);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
+        } else {
+            mPlayer.setMute(false);
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+        }
     }
 
     @Override
     public void start(boolean start) {
-
+        if (start) {
+            mPlayer.start();
+            mPauseButton.setImageResource(R.drawable.media_controller_stop);
+        } else {
+            mPlayer.stop();
+            mPauseButton.setImageResource(R.drawable.media_controller_start);
+        }
     }
 
     @Override
     public void fullScreen(boolean full) {
+        if (mOnScaleButtonClickListener != null) {
+            mOnScaleButtonClickListener.onClick(full);
+        }
+
         if (full) {
             mPlayer.setFullScreen(true);
             mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
         } else {
             mPlayer.setFullScreen(false);
             mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
-        }
-    }
-
-
-    public void onMuteButtonClick() {
-        if (mPlayer == null || !mShowing) return;
-
-        if (mPlayer.isMute()) {
-            mPlayer.setMute(false);
-            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
-        } else {
-            mPlayer.setMute(true);
-            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
-        }
-    }
-
-    public void onScaleButtonClick() {
-        if (mPlayer == null || !mShowing) return;
-
-        if (mPlayer.isFullScreen()) {
-            fullScreen(false);
-        } else {
-            fullScreen(true);
-        }
-    }
-
-    public void onStartButtonClick() {
-        if (mPlayer == null || !mShowing) return;
-
-        if (mPlayer.isStarted()) {
-            mPlayer.stop();
-            mPauseButton.setImageResource(R.drawable.media_controller_start);
-        } else {
-            mPlayer.start();
-            mPauseButton.setImageResource(R.drawable.media_controller_stop);
         }
     }
 

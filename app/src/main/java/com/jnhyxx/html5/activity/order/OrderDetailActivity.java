@@ -123,6 +123,8 @@ public class OrderDetailActivity extends BaseActivity {
             return R.string.stop_loss_sale;
         } else if (sellType == SettledOrder.SELL_OUT_STOP_PROFIT) {
             return R.string.stop_profit_sale;
+        } else if (sellType == SettledOrder.SELL_OUT_MANUALLY){
+            return R.string.manually_sale;
         } else {
             return R.string.market_price_sale;
         }

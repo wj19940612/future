@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,6 +173,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mInputBoxArea.setVisibility(View.VISIBLE);
         mInputBox.requestFocus();
         mInputMethodManager.showSoftInput(mInputBox, InputMethodManager.SHOW_FORCED);
+        mInputBoxArea.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    hideInputBox();
+                    ToastUtil.curt("返回键");
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void hideInputBox() {
@@ -345,7 +357,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
             if (mIsKeyboardOpened) {
-                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+//                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+                hideInputBox();
             }
         }
     }

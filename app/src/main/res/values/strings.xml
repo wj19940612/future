@@ -435,7 +435,6 @@
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
 
-
     <!--直播 live-->
     <string name="live_right_title">交易</string>
     <string name="live_program_dir">节目单</string>
@@ -449,4 +448,6 @@
     <string name="live_type_mine">我</string>
     <string name="live_time_is_not">非直播时间段，无法发言</string>
     <string name="live_speak_send">发送</string>
+    <string name="there_is_no_chatting_record">暂无聊天记录</string>
+    <string name="there_is_no_teacher_advise">暂无老师指导</string>
 </resources>

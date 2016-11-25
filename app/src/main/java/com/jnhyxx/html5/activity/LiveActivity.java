@@ -3,8 +3,6 @@ package com.jnhyxx.html5.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -17,9 +15,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -50,6 +46,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
@@ -66,9 +63,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LiveActivity extends BaseActivity {
+import static com.jnhyxx.html5.R.id.teacherCommand;
+
+public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
     public static final int REQUEST_CODE_LOGIN = 583;
+
+    private static final int LIVE_INTERACTION = 0;
+    private static final int TEACHER_ADVISE = 1;
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -87,23 +89,16 @@ public class LiveActivity extends BaseActivity {
     @BindView(R.id.publicNotice)
     TextView mPublicNotice;
 
-    @BindView(R.id.teacherCommand)
+    @BindView(teacherCommand)
     TeacherCommand mTeacherCommand;
     @BindView(R.id.dimBackground)
-    LinearLayout mDimBackground;
+    RelativeLayout mDimBackground;
 
-
-    @BindView(R.id.speakEditText)
-    EditText mSpeakEditText;
-    @BindView(R.id.sendSpeak)
-    TextView mSendSpeak;
-    @BindView(R.id.speakLayout)
-    LinearLayout mSpeakLayout;
-    @BindView(R.id.liveSpeak)
-    ImageView mLiveSpeak;
-
+    @BindView(R.id.showEditTextButton)
+    ImageView mShowEditTextButton;
 
     private LiveProgrammeList mProgrammeList;
+    private KeyBoardHelper mKeyBoardHelper;
 
     private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
@@ -112,23 +107,19 @@ public class LiveActivity extends BaseActivity {
     private LiveMessage.TeacherInfo mTeacher;
     private LiveMessage.NoticeInfo mNotice;
     private ServerIpPort mServerIpPort;
+    private NettyClient mNettyClient;
 
-    private TeacherGuideFragment mTeacherGuideFragment;
-    private LiveInteractionFragment mLiveInteractionFragment;
-
-
-    private InputMethodManager mInputMethodManager;
-    //用来记录键盘是否打开
-    private boolean mKeyBoardIsOpen = false;
-
+    private LivePageFragmentAdapter mLivePageFragmentAdapter;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
             Log.d(TAG, "onReceiveOriginalData: " + data);
 
-            if (mLiveInteractionFragment != null) {
-                mLiveInteractionFragment.setData(data);
+            LiveInteractionFragment fragment =
+                    (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+            if (fragment != null) {
+                fragment.setData(data);
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -139,7 +130,10 @@ public class LiveActivity extends BaseActivity {
             }
 
             if (chatData.isOrder()) {
-                mTeacherGuideFragment.setData(chatData);
+                TeacherGuideFragment fragment1 = (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(TEACHER_ADVISE);
+                if (fragment1 != null) {
+                    fragment1.setData(chatData);
+                }
             }
         }
     };
@@ -150,40 +144,6 @@ public class LiveActivity extends BaseActivity {
         setContentView(R.layout.activity_live);
         ButterKnife.bind(this);
 
-
-        initData();
-
-        initTitleBar();
-        initSlidingTabLayout();
-
-        getLiveMessage();
-        getChattingIpPort();
-
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        View content = getActivity().findViewById(android.R.id.content);
-        content.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
-
-    private void initData() {
-        mLiveInteractionFragment = LiveInteractionFragment.newInstance();
-        mLiveInteractionFragment.setOnScrollListener(new LiveInteractionFragment.OnScrollListener() {
-            @Override
-            public void scroll(boolean isScroll) {
-                if (isScroll && mKeyBoardIsOpen) {
-//                    mSpeakLayout.setVisibility(View.GONE);
-                    if (mSpeakEditText != null) {
-                        mSpeakEditText.setText("");
-                    }
-                    mKeyBoardIsOpen = false;
-                    if (mInputMethodManager != null && mSpeakEditText != null) {
-                        mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
-                    }
-                    mVideoContainer.setVisibility(View.VISIBLE);
-                    mLiveSpeak.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        mTeacherGuideFragment = TeacherGuideFragment.newInstance();
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
@@ -196,68 +156,69 @@ public class LiveActivity extends BaseActivity {
                 Preference.get().setThisLastTeacherCommandShowed(teacherCommand);
             }
         });
+
+        mLivePlayer.setOnScaleButtonClickListener(new LiveVideo.OnScaleButtonClickListener() {
+            @Override
+            public void onClick(boolean fullscreen) {
+                if (fullscreen) {
+                    mKeyBoardHelper.setOnKeyBoardStatusChangeListener(null);
+                }
+            }
+        });
+
+        mNettyClient = new NettyClient();
+
+        initTitleBar();
+        initSlidingTabLayout();
+        initKeyboardHelper();
+
+        getLiveMessage();
+        getChattingIpPort();
     }
 
-    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+    private void initKeyboardHelper() {
+        mKeyBoardHelper = new KeyBoardHelper(this);
+        mKeyBoardHelper.onCreate();
+        mKeyBoardHelper.setOnKeyBoardStatusChangeListener(mOnKeyBoardStatusChangeListener);
+    }
+
+    private KeyBoardHelper.OnKeyBoardStatusChangeListener mOnKeyBoardStatusChangeListener
+            = new KeyBoardHelper.OnKeyBoardStatusChangeListener() {
+        @Override
+        public void OnKeyBoardPop(int keyboardHeight) {
+            mVideoContainer.setVisibility(View.GONE);
+
+            LiveInteractionFragment fragment = (LiveInteractionFragment)
+                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+            if (fragment != null) {
+                fragment.setKeyboardOpened(true);
+            }
+        }
 
         @Override
-        public void onGlobalLayout() {
+        public void OnKeyBoardClose(int oldKeyboardHeight) {
+            mVideoContainer.setVisibility(View.VISIBLE);
 
-            Rect rect = new Rect();
-            //获取到程序显示的区域，包括标题栏，但不包括状态
-            getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-            //获取屏幕的高度
-            int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
-            //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
-            int heightDifference = screenHeight - rect.bottom;
-            if (heightDifference > 0) {
-                mKeyBoardIsOpen = true;
-            }
-            if (heightDifference == 0 && mSpeakEditText.isShown() && mKeyBoardIsOpen) {
-                mSpeakLayout.setVisibility(View.GONE);
-                mLiveSpeak.setVisibility(View.VISIBLE);
-                mVideoContainer.setVisibility(View.VISIBLE);
-                if (mSpeakEditText != null) {
-                    mSpeakEditText.setText("");
-                }
-                mKeyBoardIsOpen = false;
+            LiveInteractionFragment fragment = (LiveInteractionFragment)
+                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+            if (fragment != null) {
+                fragment.setKeyboardOpened(false);
             }
         }
     };
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mInputMethodManager != null && mSpeakEditText != null) {
-            mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
-        }
-    }
-
-    @OnClick({R.id.speakEditText, R.id.sendSpeak, R.id.liveSpeak})
+    @OnClick(R.id.showEditTextButton)
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.speakEditText:
-                break;
-            case R.id.sendSpeak:
-                if (mInputMethodManager != null && mSpeakEditText != null) {
-                    mInputMethodManager.hideSoftInputFromWindow(mSpeakEditText.getWindowToken(), 0);
-                }
-                if (mSpeakEditText != null && !TextUtils.isEmpty(mSpeakEditText.getText().toString())) {
-                    NettyClient.getInstance().sendMessage(mSpeakEditText.getText().toString());
-                    mSpeakEditText.setText("");
-                }
-//                mSpeakLayout.setVisibility(View.GONE);
-                mLiveSpeak.setVisibility(View.VISIBLE);
-                mVideoContainer.setVisibility(View.VISIBLE);
-                break;
-            case R.id.liveSpeak:
+            case R.id.showEditTextButton:
                 if (LocalUser.getUser().isLogin()) {
-                    if (mLiveMessage != null &&
-                            mLiveMessage.getTeacher() != null &&
-                            mLiveMessage.getTeacher().getTeacherAccountId() != 0) {
-                        sendLiveSpeak();
+                    if (mTeacher != null) {
+                        LiveInteractionFragment fragment = (LiveInteractionFragment)
+                                mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+                        fragment.showInputBox();
+                        mShowEditTextButton.setVisibility(View.GONE);
                     } else {
-                        ToastUtil.curt(R.string.live_time_is_not);
+                        ToastUtil.show(R.string.live_time_is_not);
                     }
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
@@ -265,24 +226,6 @@ public class LiveActivity extends BaseActivity {
                 break;
         }
     }
-
-    private void sendLiveSpeak() {
-        mLiveSpeak.setVisibility(View.GONE);
-        mVideoContainer.setVisibility(View.GONE);
-        mSpeakLayout.setVisibility(View.VISIBLE);
-
-
-        mSpeakEditText.setFocusable(true);
-        mSpeakEditText.setFocusableInTouchMode(true);
-        mSpeakEditText.requestFocus();
-        if (mSpeakEditText.isShown()) {
-            boolean b = mInputMethodManager.isActive(mSpeakEditText);
-            if (b) {
-                mInputMethodManager.showSoftInput(mSpeakEditText, InputMethodManager.SHOW_FORCED);
-            }
-        }
-    }
-
 
     private void getLastTeacherCommand() {
         if (mTeacher != null) {
@@ -306,17 +249,11 @@ public class LiveActivity extends BaseActivity {
         }
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         disconnectNettySocket();
-        View content = getActivity().findViewById(android.R.id.content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            content.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-        } else {
-            content.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
-        }
+        mKeyBoardHelper.onDestroy();
     }
 
     @Override
@@ -325,10 +262,6 @@ public class LiveActivity extends BaseActivity {
             if (mLivePlayer != null) {
                 mLivePlayer.fullScreen(false);
             }
-        } else if (mSpeakLayout.isShown() && mVideoContainer.getVisibility() == View.GONE) {
-            mVideoContainer.setVisibility(View.VISIBLE);
-            mSpeakLayout.setVisibility(View.GONE);
-            mLiveSpeak.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
@@ -397,15 +330,15 @@ public class LiveActivity extends BaseActivity {
     private void connectNettySocket() {
         if (mLiveMessage.getTeacher() != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
-            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
-            NettyClient.getInstance().start(teacherId, CookieManger.getInstance().getCookies());
+            mNettyClient.setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+            mNettyClient.start(teacherId, CookieManger.getInstance().getCookies());
         }
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
+        mNettyClient.addNettyHandler(mNettyHandler);
     }
 
     private void disconnectNettySocket() {
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mNettyClient.stop();
+        mNettyClient.removeNettyHandler(mNettyHandler);
     }
 
     private void initSlidingTabLayout() {
@@ -413,8 +346,34 @@ public class LiveActivity extends BaseActivity {
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(LiveActivity.this, android.R.color.transparent));
         mSlidingTabLayout.setPadding(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
                 getResources().getDisplayMetrics()));
-        mViewPager.setAdapter(new LivePageFragmentAdapter(getSupportFragmentManager()));
+        mLivePageFragmentAdapter = new LivePageFragmentAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mLivePageFragmentAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == LIVE_INTERACTION) {
+                    LiveInteractionFragment fragment = (LiveInteractionFragment)
+                            mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+                    if (fragment != null && !fragment.isInputBoxShowed()) {
+                        mShowEditTextButton.setVisibility(View.VISIBLE);
+                    }
+                } else if (position == TEACHER_ADVISE) {
+                    mShowEditTextButton.setVisibility(View.GONE);
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     private void initTitleBar() {
@@ -479,7 +438,12 @@ public class LiveActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
-            mLiveInteractionFragment.setLoginSuccess(true);
+            LiveInteractionFragment fragment = (LiveInteractionFragment)
+                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+            if (fragment != null) {
+                fragment.setLoginSuccess(true);
+            }
+
             disconnectNettySocket();
             if (mLiveMessage != null) {
                 connectNettySocket();
@@ -493,19 +457,31 @@ public class LiveActivity extends BaseActivity {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mTitleBar.setVisibility(View.GONE);
             mTeacherCommand.setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
             mVideoContainer.setLayoutParams(params);
-            mKeyBoardIsOpen = false;
+
+            if (mShowEditTextButton.isShown()) {
+                mShowEditTextButton.setVisibility(View.GONE);
+            }
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTitleBar.setVisibility(View.VISIBLE);
             mTeacherCommand.setVisibility(View.VISIBLE);
             int playerHeight = getResources().getDimensionPixelOffset(R.dimen.player_height);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
                     playerHeight);
             mVideoContainer.setLayoutParams(params);
+
+            LiveInteractionFragment fragment = (LiveInteractionFragment)
+                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+            if (fragment != null && !fragment.isInputBoxShowed()) {
+                mShowEditTextButton.setVisibility(View.VISIBLE);
+            }
+
+            // remove keyboard listener when click full screen before, add it now
+            mKeyBoardHelper.setOnKeyBoardStatusChangeListener(mOnKeyBoardStatusChangeListener);
         }
     }
 
@@ -543,7 +519,6 @@ public class LiveActivity extends BaseActivity {
                 }).fire();
     }
 
-
     private void requestServerIpAndPort(final ProductPkg productPkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
@@ -576,14 +551,24 @@ public class LiveActivity extends BaseActivity {
                 }).fire();
     }
 
+    @Override
+    public void onSendButtonClick(String message) {
+        mNettyClient.sendMessage(message);
+        LiveInteractionFragment fragment = (LiveInteractionFragment)
+                mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+        if (fragment != null) {
+            fragment.hideInputBox();
+        }
+        mShowEditTextButton.setVisibility(View.VISIBLE);
+    }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
         private FragmentManager mFragmentManager;
 
-        public LivePageFragmentAdapter(FragmentManager supportFragmentManager) {
-            super(supportFragmentManager);
-            this.mFragmentManager = supportFragmentManager;
+        public LivePageFragmentAdapter(FragmentManager fm) {
+            super(fm);
+            mFragmentManager = fm;
         }
 
         @Override
@@ -601,9 +586,9 @@ public class LiveActivity extends BaseActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return mLiveInteractionFragment;
+                    return LiveInteractionFragment.newInstance();
                 case 1:
-                    return mTeacherGuideFragment;
+                    return TeacherGuideFragment.newInstance();
             }
             return null;
         }
@@ -613,5 +598,8 @@ public class LiveActivity extends BaseActivity {
             return 2;
         }
 
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
+        }
     }
 }

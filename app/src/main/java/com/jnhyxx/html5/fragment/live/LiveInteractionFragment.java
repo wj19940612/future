@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,7 +33,9 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,6 +44,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
@@ -52,15 +58,22 @@ import static com.jnhyxx.html5.activity.LiveActivity.REQUEST_CODE_LOGIN;
 
 public class LiveInteractionFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
-    @BindView(R.id.listView)
-    ListView mListView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @BindView(R.id.listView)
+    ListView mListView;
     @BindView(R.id.empty)
     TextView mEmpty;
 
-    private Unbinder mBind;
+    @BindView(R.id.inputBox)
+    EditText mInputBox;
+    @BindView(R.id.sendButton)
+    TextView mSendButton;
+    @BindView(R.id.inputBoxArea)
+    LinearLayout mInputBoxArea;
 
+    private Unbinder mBind;
 
     private int mPage = 0;
     private int mPageSize = 0;
@@ -69,12 +82,21 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private HashSet<Long> mHashSet;
 
-
     private List<ChatData> mChatDataListInfo;
 
     private ArrayList<ChatData> mDataArrayList;
 
     private boolean isRefreshed;
+
+    private boolean mIsKeyboardOpened;
+
+    private InputMethodManager mInputMethodManager;
+
+    private OnSendButtonClickListener mOnSendButtonClickListener;
+
+    public interface OnSendButtonClickListener {
+        void onSendButtonClick(String message);
+    }
 
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
@@ -83,10 +105,21 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live, container, false);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof LiveInteractionFragment.OnSendButtonClickListener) {
+            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement LiveInteractionFragment.Callback");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_interaction, container, false);
         mBind = ButterKnife.bind(this, view);
         return view;
     }
@@ -94,22 +127,65 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mInputBox.removeTextChangedListener(mValidationWatcher);
         mBind.unbind();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mListView.setStackFromBottom(true);
+        mListView.setOnScrollListener(this);
+
+        mInputBox.addTextChangedListener(mValidationWatcher);
+
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
-        mListView.setOnScrollListener(this);
+
         getChatInfo();
         setOnRefresh();
     }
 
+    private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable editable) {
+            boolean enable = checkSendButtonEnable();
+            if (enable != mSendButton.isEnabled()) {
+                mSendButton.setEnabled(enable);
+            }
+        }
+    };
+
+    private boolean checkSendButtonEnable() {
+        String content = ViewUtil.getTextTrim(mInputBox);
+        if (!TextUtils.isEmpty(content)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void showInputBox() {
+        mInputBoxArea.setVisibility(View.VISIBLE);
+        mInputBox.requestFocus();
+        mInputMethodManager.showSoftInput(mInputBox, InputMethodManager.SHOW_FORCED);
+    }
+
+    public void hideInputBox() {
+        mInputBoxArea.setVisibility(View.GONE);
+        mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+    }
+
+    public boolean isInputBoxShowed() {
+        return mInputBoxArea.getVisibility() == View.VISIBLE;
+    }
+
+    public void setKeyboardOpened(boolean keyboardOpened) {
+        mIsKeyboardOpened = keyboardOpened;
+    }
 
     private void setOnRefresh() {
         mSwipeRefreshLayout.post(new Runnable() {
@@ -176,7 +252,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         API.Live.getLiveTalk(mTimeStamp, mPage, mPageSize)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<LiveHomeChatInfo>>() {
-
                                  @Override
                                  public void onReceive(Resp<LiveHomeChatInfo> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
@@ -270,19 +345,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING||scrollState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            mOnScrollListener.scroll(true);
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
+                || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+            if (mIsKeyboardOpened) {
+                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+            }
         }
-    }
-
-    private OnScrollListener mOnScrollListener;
-
-    public interface OnScrollListener {
-        void scroll(boolean isScroll);
-    }
-
-    public void setOnScrollListener(OnScrollListener scrollListener) {
-        mOnScrollListener = scrollListener;
     }
 
     @Override
@@ -290,6 +358,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         int topRowVerticalPosition =
                 (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+    }
+
+    @OnClick(R.id.sendButton)
+    public void onClick() {
+        if (mOnSendButtonClickListener != null) {
+            String message = ViewUtil.getTextTrim(mInputBox);
+            mOnSendButtonClickListener.onSendButtonClick(message);
+        }
+        mInputBox.setText("");
     }
 
     static class LiveChatInfoAdapter extends ArrayAdapter<ChatData> {

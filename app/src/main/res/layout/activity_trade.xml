@@ -211,18 +211,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/live"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/titleBar"
-        android:background="@drawable/btn_blue"
-        android:gravity="center"
-        android:text="@string/live"
-        android:textColor="@android:color/white"
-        android:textSize="17sp"/>
-
     <FrameLayout
         android:id="@+id/placeOrderContainer"
         android:layout_width="match_parent"

@@ -43,7 +43,7 @@
         android:paddingLeft="@dimen/common_margin"
         android:paddingRight="@dimen/common_margin"
         android:paddingTop="10dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"

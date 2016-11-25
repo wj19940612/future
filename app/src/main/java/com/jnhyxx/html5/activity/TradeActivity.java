@@ -110,9 +110,6 @@ public class TradeActivity extends BaseActivity implements
 
     @BindView(R.id.placeOrderContainer)
     FrameLayout mPlaceOrderContainer;
-    //直播按钮
-    @BindView(R.id.live)
-    TextView mLive;
 
     private SlidingMenu mMenu;
 
@@ -141,7 +138,7 @@ public class TradeActivity extends BaseActivity implements
                 mSellShortBtn.setText(getString(R.string.sell_short)
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
 
-                mHoldingOrderPresenter.setFullMarketData(data);
+                mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId(), mFundType);
             }
             updatePlaceOrderFragment(data);
         }
@@ -161,6 +158,7 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
+
         mUpdateRealTimeData = true;
 
         initData(getIntent());
@@ -186,7 +184,7 @@ public class TradeActivity extends BaseActivity implements
 
             @Override
             public void onOneKeyClosePosButtonClick() {
-                mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
+                mHoldingOrderPresenter.closeAllHoldingPositions(mProduct.getVarietyId(), mFundType);
             }
 
             @Override
@@ -355,7 +353,6 @@ public class TradeActivity extends BaseActivity implements
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
-        mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
@@ -372,15 +369,16 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
-        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mHoldingOrderPresenter.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mNettyHandler = null;
+        mHoldingOrderPresenter.onDestroy();
     }
 
     @Override
@@ -500,7 +498,7 @@ public class TradeActivity extends BaseActivity implements
         });
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.live})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -508,9 +506,6 @@ public class TradeActivity extends BaseActivity implements
                 break;
             case R.id.sellShortBtn:
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
-                break;
-            case R.id.live:
-                Launcher.with(TradeActivity.this, LiveActivity.class).execute();
                 break;
         }
     }

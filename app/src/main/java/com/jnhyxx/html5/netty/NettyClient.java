@@ -62,7 +62,7 @@ public class NettyClient {
         return mInstance;
     }
 
-    private NettyClient() {
+    public NettyClient() {
         this.mHandlerList = new ArrayList<>();
         this.mCallback = new NettyClientHandler.Callback() {
             @Override

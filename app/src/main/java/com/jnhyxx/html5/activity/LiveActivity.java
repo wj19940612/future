@@ -296,6 +296,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                         mTeacher = mLiveMessage.getTeacher();
                         mNotice = mLiveMessage.getNotice();
                         if (mTeacher != null) { // 在直播
+                            // TODO: 25/11/2016 设置老师头像
+//                            if (mLiveInteractionFragment != null) {
+//                                mLiveInteractionFragment.setTeacherInfo(mLiveMessage.getTeacher());
+//                            }
                             showLiveViews();
                             getLastTeacherCommand();
                         } else if (mNotice != null) { // 未直播,显示通告
@@ -323,7 +327,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         if (!TextUtils.isEmpty(active.getRtmp())) {
-            mLivePlayer.setVideoPath(active.getRtmp());
+            // TODO: 2016/11/23 测试数据
+//            mLivePlayer.setVideoPath(active.getRtmp());
+            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         }
     }
 

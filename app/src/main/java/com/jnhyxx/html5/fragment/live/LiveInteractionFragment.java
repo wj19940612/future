@@ -98,6 +98,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         void onSendButtonClick(String message);
     }
 
+    public interface OnScrollStateChangedListener {
+        void onScrollStateChanged();
+    }
+
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
         LiveInteractionFragment fragment = new LiveInteractionFragment();
@@ -177,10 +181,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void hideInputBox() {
         mInputBoxArea.setVisibility(View.GONE);
         mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
-    }
-
-    public boolean isInputBoxShowed() {
-        return mInputBoxArea.getVisibility() == View.VISIBLE;
     }
 
     public void setKeyboardOpened(boolean keyboardOpened) {
@@ -344,8 +344,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            if (mIsKeyboardOpened) {
-                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+            if (mIsKeyboardOpened ) {
+                hideInputBox();
             }
         }
     }

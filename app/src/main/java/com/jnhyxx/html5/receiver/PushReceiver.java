@@ -1,16 +1,33 @@
 package com.jnhyxx.html5.receiver;
 
+import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.MainActivity;
+import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
+import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.Launcher;
 
 public class PushReceiver extends BroadcastReceiver {
+
+    private static final String TAG = "PushReceiver";
+
+    public static final String PUSH_ACTION = "com.jnhyxx.html5.receiver.PushReceiver";
 
     /**
      * 应用未启动, 个推 service已经被唤醒,保存在该时间段内离线消息(此时 GetuiSdkDemoActivity.tLogView == null)
@@ -19,6 +36,8 @@ public class PushReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Log.d(TAG, "onReceive  接到新的push 消息" + intent.getAction() + " 数据" + intent.getExtras().toString());
         Bundle bundle = intent.getExtras();
         Log.d("GetuiSdkDemo", "onReceive() action=" + bundle.getInt("action"));
 
@@ -37,6 +56,35 @@ public class PushReceiver extends BroadcastReceiver {
 
                 if (payload != null) {
                     String data = new String(payload);
+                    Log.d(TAG, "===data  " + data);
+
+                    if (mainIsTopActivity(context)) {
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION));
+                        ToastUtil.curt("最上层是MainActivity");
+                    } else {
+                        Intent messageIntent = new Intent(context, MessageCenterListItemInfoActivity.class);
+                        SysMessage sysMessage = new SysMessage();
+                        sysMessage.setPushTopic("本地push测试数据");
+                        sysMessage.setPushMsg(data);
+                        sysMessage.setCreateTime(DateUtil.format(System.currentTimeMillis()));
+
+                        messageIntent.putExtra(Launcher.EX_PAYLOAD, sysMessage);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                        builder.setContentTitle("通知的头部");
+                        builder.setContentText("通知的内容");
+                        builder.setContentIntent(pendingIntent);
+                        builder.setWhen(System.currentTimeMillis());
+                        builder.setAutoCancel(true);
+                        builder.setSmallIcon(R.mipmap.ic_launcher);
+                        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+
+                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(R.string.app_name, builder.build());
+
+                    }
+
 
                     Log.d("GetuiSdkDemo", "receiver payload : " + data);
 
@@ -132,5 +180,14 @@ public class PushReceiver extends BroadcastReceiver {
             default:
                 break;
         }
+    }
+
+    private boolean mainIsTopActivity(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ComponentName topActivity = activityManager.getRunningTasks(1).get(0).topActivity;
+        Log.d(TAG, "上层的Activity " + topActivity.getClassName());
+        MainActivity mainActivity = new MainActivity();
+        Log.d(TAG, "MainActivity  " + mainActivity.getClass().getName());
+        return topActivity.getClassName().contains(mainActivity.getClass().getName());
     }
 }

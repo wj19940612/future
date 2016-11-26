@@ -42,6 +42,8 @@ public class SysMessage implements Serializable {
      * pushType : 1
      * text : false
      */
+
+
     /**
      * 一级渠道Id
      */
@@ -167,6 +169,69 @@ public class SysMessage implements Serializable {
         return isText;
     }
 
+    public int getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
+    }
+
+    public int getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(int operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public boolean isPass() {
+        return pass;
+    }
+
+    public void setPass(boolean pass) {
+        this.pass = pass;
+    }
+
+    public void setPushContent(String pushContent) {
+        this.pushContent = pushContent;
+    }
+
+    public int getPushStatus() {
+        return pushStatus;
+    }
+
+    public void setPushStatus(int pushStatus) {
+        this.pushStatus = pushStatus;
+    }
+
+    public void setPushTopic(String pushTopic) {
+        this.pushTopic = pushTopic;
+    }
+
+    public int getPushType() {
+        return pushType;
+    }
+
+    public void setPushType(int pushType) {
+        this.pushType = pushType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
     @Override
     public String toString() {
         return "SysTradeMessage{" +

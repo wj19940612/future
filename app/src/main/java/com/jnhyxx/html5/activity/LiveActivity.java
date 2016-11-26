@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -110,16 +108,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private NettyClient mNettyClient;
 
     private LivePageFragmentAdapter mLivePageFragmentAdapter;
+    private int mSelectedPage;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveOriginalData(String data) {
             Log.d(TAG, "onReceiveOriginalData: " + data);
 
-            LiveInteractionFragment fragment =
-                    (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-            if (fragment != null) {
-                fragment.setData(data);
+            if (getLiveInteractionFragment() != null) {
+                getLiveInteractionFragment().setData(data);
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -130,9 +127,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             }
 
             if (chatData.isOrder()) {
-                TeacherGuideFragment fragment1 = (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(TEACHER_ADVISE);
-                if (fragment1 != null) {
-                    fragment1.setData(chatData);
+                if (getTeacherGuideFragment() != null) {
+                    getTeacherGuideFragment().setData(chatData);
                 }
             }
         }
@@ -187,22 +183,27 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         @Override
         public void OnKeyBoardPop(int keyboardHeight) {
             mVideoContainer.setVisibility(View.GONE);
-
-            LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-            if (fragment != null) {
-                fragment.setKeyboardOpened(true);
+            if (getLiveInteractionFragment() != null) {
+                getLiveInteractionFragment().setKeyboardOpened(true);
             }
+            mShowEditTextButton.setVisibility(View.GONE);
         }
 
         @Override
         public void OnKeyBoardClose(int oldKeyboardHeight) {
             mVideoContainer.setVisibility(View.VISIBLE);
+            if (getLiveInteractionFragment() != null) {
+                getLiveInteractionFragment().setKeyboardOpened(false);
+            }
 
-            LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-            if (fragment != null) {
-                fragment.setKeyboardOpened(false);
+            if (mSelectedPage > 0 ||
+                    (getTeacherGuideFragment() != null && getTeacherGuideFragment().getUserVisibleHint())) {
+                mShowEditTextButton.setVisibility(View.GONE);
+            } else {
+                mShowEditTextButton.setVisibility(View.VISIBLE);
+                if (getLiveInteractionFragment() != null) {
+                    getLiveInteractionFragment().hideInputBox();
+                }
             }
         }
     };
@@ -213,10 +214,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             case R.id.showEditTextButton:
                 if (LocalUser.getUser().isLogin()) {
                     if (mTeacher != null) {
-                        LiveInteractionFragment fragment = (LiveInteractionFragment)
-                                mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-                        fragment.showInputBox();
-                        mShowEditTextButton.setVisibility(View.GONE);
+                        if (getLiveInteractionFragment() != null) {
+                            getLiveInteractionFragment().showInputBox();
+                        }
                     } else {
                         ToastUtil.show(R.string.live_time_is_not);
                     }
@@ -296,13 +296,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                         mTeacher = mLiveMessage.getTeacher();
                         mNotice = mLiveMessage.getNotice();
                         if (mTeacher != null) { // 在直播
-                            // TODO: 25/11/2016 设置老师头像
-                            if (mLivePageFragmentAdapter != null) {
-                                LiveInteractionFragment fragment =
-                                        (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-                                if (fragment != null) {
-                                    fragment.setTeacherInfo(mLiveMessage.getTeacher());
-                                }
+                            if (getLiveInteractionFragment() != null) {
+                                getLiveInteractionFragment().setTeacherInfo(mTeacher);
                             }
                             showLiveViews();
                             getLastTeacherCommand();
@@ -364,17 +359,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
             @Override
             public void onPageSelected(int position) {
+                mSelectedPage = position;
                 if (position == LIVE_INTERACTION) {
-                    LiveInteractionFragment fragment = (LiveInteractionFragment)
-                            mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-                    if (fragment != null && !fragment.isInputBoxShowed()) {
-                        mShowEditTextButton.setVisibility(View.VISIBLE);
-                    }
+                    mShowEditTextButton.setVisibility(View.VISIBLE);
                 } else if (position == TEACHER_ADVISE) {
                     mShowEditTextButton.setVisibility(View.GONE);
-                    InputMethodManager imm = (InputMethodManager)
-                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                    if (getLiveInteractionFragment() != null) {
+                        getLiveInteractionFragment().hideInputBox();
+                    }
                 }
             }
 
@@ -382,6 +374,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    private TeacherGuideFragment getTeacherGuideFragment() {
+        return (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(TEACHER_ADVISE);
+    }
+
+    private LiveInteractionFragment getLiveInteractionFragment() {
+        return (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
     }
 
     private void initTitleBar() {
@@ -482,9 +482,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                     playerHeight);
             mVideoContainer.setLayoutParams(params);
 
-            LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-            if (fragment != null && !fragment.isInputBoxShowed() && fragment.getUserVisibleHint()) {
+            if (getLiveInteractionFragment() != null
+                    && getLiveInteractionFragment().getUserVisibleHint()) {
                 mShowEditTextButton.setVisibility(View.VISIBLE);
             }
 
@@ -564,12 +563,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     @Override
     public void onSendButtonClick(String message) {
         mNettyClient.sendMessage(message);
-        LiveInteractionFragment fragment = (LiveInteractionFragment)
-                mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
-        if (fragment != null) {
-            fragment.hideInputBox();
+        if (getLiveInteractionFragment() != null) {
+            getLiveInteractionFragment().hideInputBox();
         }
-        mShowEditTextButton.setVisibility(View.VISIBLE);
     }
 
     private class LivePageFragmentAdapter extends FragmentPagerAdapter {

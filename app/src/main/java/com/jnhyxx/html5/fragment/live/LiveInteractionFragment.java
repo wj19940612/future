@@ -50,6 +50,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.android.volley.Request.Method.HEAD;
+
 
 /**
  * Created by ${wangJie} on 2016/11/8.
@@ -97,6 +99,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     public interface OnSendButtonClickListener {
         void onSendButtonClick(String message);
+    }
+
+    public interface OnScrollStateChangedListener {
+        void onScrollStateChanged();
     }
 
     public static LiveInteractionFragment newInstance() {
@@ -189,10 +195,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void hideInputBox() {
         mInputBoxArea.setVisibility(View.GONE);
         mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
-    }
-
-    public boolean isInputBoxShowed() {
-        return mInputBoxArea.getVisibility() == View.VISIBLE;
     }
 
     public void setKeyboardOpened(boolean keyboardOpened) {
@@ -356,8 +358,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            if (mIsKeyboardOpened) {
-//                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+            if (mIsKeyboardOpened ) {
                 hideInputBox();
             }
         }

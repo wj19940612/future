@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         void onSendButtonClick(String message);
     }
 
+    public interface OnScrollStateChangedListener {
+        void onScrollStateChanged();
+    }
+
     public static LiveInteractionFragment newInstance() {
         Bundle args = new Bundle();
         LiveInteractionFragment fragment = new LiveInteractionFragment();
@@ -173,15 +178,22 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mInputBoxArea.setVisibility(View.VISIBLE);
         mInputBox.requestFocus();
         mInputMethodManager.showSoftInput(mInputBox, InputMethodManager.SHOW_FORCED);
+        mInputBoxArea.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    hideInputBox();
+                    ToastUtil.curt("返回键");
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void hideInputBox() {
         mInputBoxArea.setVisibility(View.GONE);
         mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
-    }
-
-    public boolean isInputBoxShowed() {
-        return mInputBoxArea.getVisibility() == View.VISIBLE;
     }
 
     public void setKeyboardOpened(boolean keyboardOpened) {
@@ -345,8 +357,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            if (mIsKeyboardOpened) {
-                mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), 0);
+            if (mIsKeyboardOpened ) {
+                hideInputBox();
             }
         }
     }

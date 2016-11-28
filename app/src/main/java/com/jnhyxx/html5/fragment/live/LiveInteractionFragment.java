@@ -373,13 +373,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @OnClick(R.id.sendButton)
     public void onClick() {
         if (mOnSendButtonClickListener != null) {
-            String message = ViewUtil.getTextTrim(mInputBox).replaceAll("  ", "");
-//            try {
-//                message = new String(message.getBytes("UTF-8"), "GBK").replaceAll("\\?/", "").trim();
-////                message = new String(message.getBytes("GBK"), "UTF-8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
+            String message = ViewUtil.getTextTrim(mInputBox);
             mOnSendButtonClickListener.onSendButtonClick(message);
         }
         mInputBox.setText("");

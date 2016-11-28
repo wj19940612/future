@@ -116,13 +116,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             Log.d(TAG, "onReceiveOriginalData: " + data);
             if (getLiveInteractionFragment() != null) {
                 getLiveInteractionFragment().setData(data);
-//                try {
-//                    data = new String(data.getBytes("GBK"), "UTF-8");
-//                    getLiveInteractionFragment().setData(data);
-//                } catch (UnsupportedEncodingException e) {
-//                    getLiveInteractionFragment().setData(data);
-//                    e.printStackTrace();
-//                }
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -269,6 +262,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 mLivePlayer.fullScreen(false);
             }
         } else {
+            if (getLiveInteractionFragment() != null) {
+                getLiveInteractionFragment().hideInputBox();
+            }
             super.onBackPressed();
         }
     }
@@ -568,7 +564,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     @Override
     public void onSendButtonClick(String message) {
-        Log.d(TAG, " 发送数据 " + message);
         mNettyClient.sendMessage(message);
         if (getLiveInteractionFragment() != null) {
             getLiveInteractionFragment().hideInputBox();

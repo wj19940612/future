@@ -25,6 +25,7 @@ public class TeacherCommand extends LinearLayout {
 
     public interface OnClickListener {
         void onTeacherHeadClick();
+
         void onCloseButtonClick(ChatData teacherCommand);
     }
 
@@ -116,7 +117,7 @@ public class TeacherCommand extends LinearLayout {
             mChatData = teacherCommand;
             mTeacherCommandArea.setVisibility(VISIBLE);
             mCloseButton.setVisibility(VISIBLE);
-            mTeacherCommand.setText(teacherCommand.getMsg());
+            mTeacherCommand.setText(getContext().getString(R.string.live_teacher_order, teacherCommand.getMsg()));
             mTeacherCommand.setMovementMethod(new ScrollingMovementMethod());
 
             mHandler.postDelayed(new Runnable() {

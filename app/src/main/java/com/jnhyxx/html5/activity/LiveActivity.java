@@ -54,14 +54,13 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.jnhyxx.html5.R.id.teacherCommand;
 
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
@@ -87,7 +86,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     @BindView(R.id.publicNotice)
     TextView mPublicNotice;
 
-    @BindView(teacherCommand)
+    @BindView(R.id.teacherCommand)
     TeacherCommand mTeacherCommand;
     @BindView(R.id.dimBackground)
     RelativeLayout mDimBackground;
@@ -111,12 +110,19 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private int mSelectedPage;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
+
         @Override
         protected void onReceiveOriginalData(String data) {
-            Log.d(TAG, "onReceiveOriginalData: " + data);
 
+            Log.d(TAG, "onReceiveOriginalData: " + data);
             if (getLiveInteractionFragment() != null) {
-                getLiveInteractionFragment().setData(data);
+                try {
+                    data = new String(data.getBytes("GBK"), "UTF-8");
+                    getLiveInteractionFragment().setData(data);
+                } catch (UnsupportedEncodingException e) {
+                    getLiveInteractionFragment().setData(data);
+                    e.printStackTrace();
+                }
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -562,13 +568,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     @Override
     public void onSendButtonClick(String message) {
+        Log.d(TAG, " 发送数据 " + message);
         mNettyClient.sendMessage(message);
         if (getLiveInteractionFragment() != null) {
             getLiveInteractionFragment().hideInputBox();
         }
     }
 
-    private class LivePageFragmentAdapter extends FragmentPagerAdapter {
+    class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
         private FragmentManager mFragmentManager;
 

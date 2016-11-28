@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -176,6 +178,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mInputBoxArea.setVisibility(View.VISIBLE);
         mInputBox.requestFocus();
         mInputMethodManager.showSoftInput(mInputBox, InputMethodManager.SHOW_FORCED);
+        mInputBoxArea.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    hideInputBox();
+                    ToastUtil.curt("返回键");
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void hideInputBox() {
@@ -344,7 +357,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            if (mIsKeyboardOpened ) {
+            if (mIsKeyboardOpened) {
                 hideInputBox();
             }
         }
@@ -360,7 +373,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @OnClick(R.id.sendButton)
     public void onClick() {
         if (mOnSendButtonClickListener != null) {
-            String message = ViewUtil.getTextTrim(mInputBox);
+            String message = ViewUtil.getTextTrim(mInputBox).replaceAll("  ", "");
+            try {
+                message = new String(message.getBytes("UTF-8"), "GBK").replaceAll("\\?/", "").trim();
+//                message = new String(message.getBytes("GBK"), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             mOnSendButtonClickListener.onSendButtonClick(message);
         }
         mInputBox.setText("");

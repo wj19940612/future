@@ -41,7 +41,7 @@ public class PushReceiver extends BroadcastReceiver {
         Log.d(TAG, "onReceive  接到新的push 消息" + intent.getAction() + " 数据" + intent.getExtras().toString());
         Bundle bundle = intent.getExtras();
         Log.d("GetuiSdkDemo", "onReceive() action=" + bundle.getInt("action"));
-
+        ToastUtil.curt("onReceive  接到新的push 消息");
         switch (bundle.getInt(PushConsts.CMD_ACTION)) {
             case PushConsts.GET_MSG_DATA:
                 // 获取透传数据

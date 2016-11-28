@@ -110,14 +110,17 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private int mSelectedPage;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
+
         @Override
         protected void onReceiveOriginalData(String data) {
 
             Log.d(TAG, "onReceiveOriginalData: " + data);
             if (getLiveInteractionFragment() != null) {
                 try {
-                    getLiveInteractionFragment().setData(new String(data.getBytes("GBK"),"UTF-8"));
+                    data = new String(data.getBytes("GBK"), "UTF-8");
+                    getLiveInteractionFragment().setData(data);
                 } catch (UnsupportedEncodingException e) {
+                    getLiveInteractionFragment().setData(data);
                     e.printStackTrace();
                 }
             }
@@ -565,13 +568,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     @Override
     public void onSendButtonClick(String message) {
+        Log.d(TAG, " 发送数据 " + message);
         mNettyClient.sendMessage(message);
         if (getLiveInteractionFragment() != null) {
             getLiveInteractionFragment().hideInputBox();
         }
     }
 
-     class LivePageFragmentAdapter extends FragmentPagerAdapter {
+    class LivePageFragmentAdapter extends FragmentPagerAdapter {
 
         private FragmentManager mFragmentManager;
 

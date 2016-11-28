@@ -357,7 +357,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
                 || scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-            if (mIsKeyboardOpened ) {
+            if (mIsKeyboardOpened) {
                 hideInputBox();
             }
         }
@@ -373,15 +373,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @OnClick(R.id.sendButton)
     public void onClick() {
         if (mOnSendButtonClickListener != null) {
-            String message = ViewUtil.getTextTrim(mInputBox);
+            String message = ViewUtil.getTextTrim(mInputBox).replaceAll("  ", "");
             try {
-                message = new String(message.getBytes("UTF-8"), "GBK").replaceAll("/","");
+                message = new String(message.getBytes("UTF-8"), "GBK").replaceAll("\\?/", "").trim();
 //                message = new String(message.getBytes("GBK"), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-
-            Log.d("wangjieTest", "将要发送数据" + message);
             mOnSendButtonClickListener.onSendButtonClick(message);
         }
         mInputBox.setText("");

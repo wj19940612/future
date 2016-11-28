@@ -70,6 +70,8 @@ public class TradeActivity extends BaseActivity implements
         HoldingOrderPresenter.IHoldingOrderView {
 
     private static final int REQ_CODE_SIGN_IN = 1;
+    //闪电下单跳转登陆的请求码
+    private static final int REQ_CODE_SIGN_IN_LIGHTNING_ORDERS = 924;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -110,6 +112,9 @@ public class TradeActivity extends BaseActivity implements
 
     @BindView(R.id.placeOrderContainer)
     FrameLayout mPlaceOrderContainer;
+    //闪电下单按钮
+    @BindView(R.id.lightningOrders)
+    TextView mLightningOrders;
 
     private SlidingMenu mMenu;
 
@@ -225,6 +230,9 @@ public class TradeActivity extends BaseActivity implements
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
         }
+        if (requestCode == REQ_CODE_SIGN_IN_LIGHTNING_ORDERS && resultCode == RESULT_OK) {
+
+        }
     }
 
     private void updateTitleBar() {
@@ -286,6 +294,14 @@ public class TradeActivity extends BaseActivity implements
         NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+
+        // TODO: 2016/11/28 后台闪电下单状态，目前没有数据，后期删除
+        boolean lightningOrders = false;
+//        if () {
+//            mLightningOrders.setText(R.string.lightning_orders_close);
+//        } else {
+            mLightningOrders.setText(!LocalUser.getUser().isLogin() || lightningOrders ? R.string.lightning_orders_close : R.string.lightning_orders_open);
+//        }
     }
 
     private void updateChartView(FullMarketData data) {
@@ -496,7 +512,7 @@ public class TradeActivity extends BaseActivity implements
         });
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrders})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -504,6 +520,11 @@ public class TradeActivity extends BaseActivity implements
                 break;
             case R.id.sellShortBtn:
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
+                break;
+            case R.id.lightningOrders:
+                if (!LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
+                }
                 break;
         }
     }

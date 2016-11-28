@@ -651,6 +651,46 @@ public class API extends APIBase {
         public static API getMarketServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
         }
+
+        /**
+         * 获取闪电下单状态
+         *
+         * @param varietyId 品种id
+         * @param payType   支付方式  0：积分 1：现金
+         * @return
+         */
+        public static API getOrderAssetStore(int varietyId, int payType) {
+            return new API(GET, "/order/orderAssetsStore/getAssetsStore.do", null);
+        }
+
+        /**      闪电下单更新配置
+         *      URL  http://域名/order/orderAssetsStore/saveAndUpdate.do
+         * @param varietyId      品种id
+         * @param payType        支付方式   0：积分 1：现金
+         * @param assetsId       配资id
+         * @param handsNum       手数
+         * @param stopLossPrice  止损金额
+         * @param stopWinPrice   止盈金额
+         * @param marginMoney    保证金
+         * @param fees           手续费
+         * @param ratio          费率
+         * @return
+         */
+        public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,
+                                                       int handsNum, double stopLossPrice, double stopWinPrice,
+                                                       double marginMoney, double fees, double ratio) {
+            return new API(GET, "/order/orderAssetsStore/saveAndUpdate.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", payType)
+                            .put("assetsId", assetsId)
+                            .put("handsNum", handsNum)
+                            .put("stopLossPrice", stopLossPrice)
+                            .put("stopWinPrice", stopWinPrice)
+                            .put("marginMoney", marginMoney)
+                            .put("fees", fees)
+                            .put("ratio", ratio));
+        }
     }
 
     public static class Order {

@@ -47,6 +47,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
+import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
@@ -65,9 +66,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TradeActivity extends BaseActivity implements
-        PlaceOrderFragment.Callback,
-        AgreementFragment.Callback,
-        HoldingOrderPresenter.IHoldingOrderView {
+        PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
     private static final int REQ_CODE_SIGN_IN = 1;
 
@@ -138,7 +137,7 @@ public class TradeActivity extends BaseActivity implements
                 mSellShortBtn.setText(getString(R.string.sell_short)
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale()));
 
-                mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId(), mFundType);
+                mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
             }
             updatePlaceOrderFragment(data);
         }
@@ -184,7 +183,7 @@ public class TradeActivity extends BaseActivity implements
 
             @Override
             public void onOneKeyClosePosButtonClick() {
-                mHoldingOrderPresenter.closeAllHoldingPositions(mProduct.getVarietyId(), mFundType);
+                mHoldingOrderPresenter.closeAllHoldingPositions();
             }
 
             @Override
@@ -353,6 +352,7 @@ public class TradeActivity extends BaseActivity implements
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
+        mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
 
@@ -676,7 +676,6 @@ public class TradeActivity extends BaseActivity implements
         updateUsableMoneyScore(new LocalUser.Callback() {
             @Override
             public void onUpdateCompleted() {
-                Log.d("TAG", "onUpdateCompleted: ");
             }
         });
     }

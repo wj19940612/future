@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -62,26 +63,10 @@ public class PushReceiver extends BroadcastReceiver {
                         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION));
                         ToastUtil.curt("最上层是MainActivity");
                     } else {
-                        Intent messageIntent = new Intent(context, MessageCenterListItemInfoActivity.class);
-                        SysMessage sysMessage = new SysMessage();
-                        sysMessage.setPushTopic("本地push测试数据");
-                        sysMessage.setPushMsg(data);
-                        sysMessage.setCreateTime(DateUtil.format(System.currentTimeMillis()));
-
-                        messageIntent.putExtra(Launcher.EX_PAYLOAD, sysMessage);
+                        Intent messageIntent = setPendingIntent(context, data);
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                        builder.setContentTitle("通知的头部");
-                        builder.setContentText("通知的内容");
-                        builder.setContentIntent(pendingIntent);
-                        builder.setWhen(System.currentTimeMillis());
-                        builder.setAutoCancel(true);
-                        builder.setSmallIcon(R.mipmap.ic_launcher);
-                        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-
-                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.notify(R.string.app_name, builder.build());
+                        creatNotification(context, pendingIntent);
 
                     }
 
@@ -180,6 +165,31 @@ public class PushReceiver extends BroadcastReceiver {
             default:
                 break;
         }
+    }
+
+    private void creatNotification(Context context, PendingIntent pendingIntent) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle("通知的头部");
+        builder.setContentText("通知的内容");
+        builder.setContentIntent(pendingIntent);
+        builder.setWhen(System.currentTimeMillis());
+        builder.setAutoCancel(true);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(R.string.app_name, builder.build());
+    }
+
+    @NonNull
+    private Intent setPendingIntent(Context context, String data) {
+        Intent messageIntent = new Intent(context, MessageCenterListItemInfoActivity.class);
+        SysMessage sysMessage = new SysMessage();
+        sysMessage.setPushTopic("本地push测试数据");
+        sysMessage.setPushMsg(data);
+        sysMessage.setCreateTime(DateUtil.format(System.currentTimeMillis()));
+        messageIntent.putExtra(Launcher.EX_PAYLOAD, sysMessage);
+        return messageIntent;
     }
 
     private boolean mainIsTopActivity(Context context) {

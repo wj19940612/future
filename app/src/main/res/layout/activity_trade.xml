@@ -197,6 +197,12 @@
                 android:textSize="17sp"/>
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                tools:text="闪电\n未开启"/>
+
+            <TextView
                 android:id="@+id/sellShortBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

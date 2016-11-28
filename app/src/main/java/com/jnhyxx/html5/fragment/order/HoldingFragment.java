@@ -384,10 +384,14 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                                     FullMarketData data, final Callback callback) {
 
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
-                mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
-                        + product.getCurrencyUnit());
-                mStopLoss.setText(FinanceUtil.formatWithScale(item.getStopLoss(), product.getLossProfitScale())
-                        + product.getCurrencyUnit());
+                String stopProfit = FinanceUtil.formatWithScale(item.getStopWinMoney(), product.getPriceDecimalScale())
+                        + "  (" + FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
+                        + product.getCurrencyUnit() + ")";
+                mStopProfit.setText(stopProfit);
+                String stopLoss = FinanceUtil.formatWithScale(item.getStopLossMoney(), product.getPriceDecimalScale())
+                        + "  (" + FinanceUtil.formatWithScale(item.getStopLoss(), product.getLossProfitScale())
+                        + product.getCurrencyUnit() + ")";
+                mStopLoss.setText(stopLoss);
                 mHands.setText(item.getHandsNum() + "手");
                 mClosePositionButton.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -171,14 +171,15 @@ public class HomeListHeader extends FrameLayout {
 
     public void setHomeAdvertisement(List<Information> informationList) {
         filterEmptyInformation(informationList);
-
-        mPageIndicator.setCount(informationList.size());
-        if (mAdapter == null) {
-            mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
-            mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-            mViewPager.setAdapter(mAdapter);
-        } else {
-            mAdapter.setNewAdvertisements(informationList);
+        if (informationList.size() > 0) {
+            mPageIndicator.setCount(informationList.size());
+            if (mAdapter == null) {
+                mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
+                mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+                mViewPager.setAdapter(mAdapter);
+            } else {
+                mAdapter.setNewAdvertisements(informationList);
+            }
         }
     }
 

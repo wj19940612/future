@@ -59,7 +59,9 @@ android {
         origin {
             versionCode 9
             versionName '1.2.9'
-            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+//            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
+            minSdkVersion 21
         }
         yybd { // 原油宝典
             applicationId 'com.jnhyxx.yybd'

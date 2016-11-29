@@ -64,7 +64,18 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(PushReceiver.PUSH_ACTION)) {
-                ToastUtil.curt("接到push消息了");
+                final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushReceiver.KEY_PUSH_DATA);
+                if (sysMessage != null) {
+                    HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
+                            .setOnCheckDetailListener(new HomePopup.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
+                                            .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
+                                }
+                            }).show();
+                }
             }
         }
     };
@@ -195,7 +206,7 @@ public class MainActivity extends BaseActivity {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushReceiver.PUSH_ACTION));
-        requestHomePopup();
+//        requestHomePopup();
     }
 
     private void requestHomePopup() {

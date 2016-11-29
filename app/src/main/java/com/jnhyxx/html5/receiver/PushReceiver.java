@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
 import com.jnhyxx.html5.Preference;
@@ -21,7 +22,6 @@ import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.utils.ToastUtil;
-import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -29,6 +29,8 @@ public class PushReceiver extends BroadcastReceiver {
     private static final String TAG = "PushReceiver";
 
     public static final String PUSH_ACTION = "com.jnhyxx.html5.receiver.PushReceiver";
+
+    public static final String KEY_PUSH_DATA = "PUSH_DATA";
 
     /**
      * 应用未启动, 个推 service已经被唤醒,保存在该时间段内离线消息(此时 GetuiSdkDemoActivity.tLogView == null)
@@ -60,13 +62,14 @@ public class PushReceiver extends BroadcastReceiver {
                     Log.d(TAG, "===data  " + data);
 
                     if (mainIsTopActivity(context)) {
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION));
+                        SysMessage sysMessage = new Gson().fromJson(data, SysMessage.class);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION).putExtra(KEY_PUSH_DATA, sysMessage));
                         ToastUtil.curt("最上层是MainActivity");
                     } else {
                         Intent messageIntent = setPendingIntent(context, data);
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                        creatNotification(context, pendingIntent);
+                        createNotification(context, pendingIntent, data);
 
                     }
 
@@ -167,16 +170,16 @@ public class PushReceiver extends BroadcastReceiver {
         }
     }
 
-    private void creatNotification(Context context, PendingIntent pendingIntent) {
+    private void createNotification(Context context, PendingIntent pendingIntent, String data) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle("通知的头部");
-        builder.setContentText("通知的内容");
+        SysMessage sysMessage = new Gson().fromJson(data, SysMessage.class);
+        builder.setContentTitle(sysMessage.getPushTopic());
+        builder.setContentText(sysMessage.getPushContent());
         builder.setContentIntent(pendingIntent);
         builder.setWhen(System.currentTimeMillis());
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(R.string.app_name, builder.build());
     }
@@ -184,10 +187,7 @@ public class PushReceiver extends BroadcastReceiver {
     @NonNull
     private Intent setPendingIntent(Context context, String data) {
         Intent messageIntent = new Intent(context, MessageCenterListItemInfoActivity.class);
-        SysMessage sysMessage = new SysMessage();
-        sysMessage.setPushTopic("本地push测试数据");
-        sysMessage.setPushMsg(data);
-        sysMessage.setCreateTime(DateUtil.format(System.currentTimeMillis()));
+        SysMessage sysMessage = new Gson().fromJson(data, SysMessage.class);
         messageIntent.putExtra(Launcher.EX_PAYLOAD, sysMessage);
         return messageIntent;
     }

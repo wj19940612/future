@@ -659,21 +659,26 @@ public class API extends APIBase {
          * @param payType   支付方式  0：积分 1：现金
          * @return
          */
-        public static API getOrderAssetStore(int varietyId, int payType) {
-            return new API(GET, "/order/orderAssetsStore/getAssetsStore.do", null);
+        public static API getOrderAssetStoreStatus(int varietyId, int payType) {
+            return new API(GET, "/order/orderAssetsStore/getAssetsStore.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
         }
 
-        /**      闪电下单更新配置
-         *      URL  http://域名/order/orderAssetsStore/saveAndUpdate.do
-         * @param varietyId      品种id
-         * @param payType        支付方式   0：积分 1：现金
-         * @param assetsId       配资id
-         * @param handsNum       手数
-         * @param stopLossPrice  止损金额
-         * @param stopWinPrice   止盈金额
-         * @param marginMoney    保证金
-         * @param fees           手续费
-         * @param ratio          费率
+        /**
+         * 闪电下单更新配置
+         * URL  http://域名/order/orderAssetsStore/saveAndUpdate.do
+         *
+         * @param varietyId     品种id
+         * @param payType       支付方式   0：积分 1：现金
+         * @param assetsId      配资id
+         * @param handsNum      手数
+         * @param stopLossPrice 止损金额
+         * @param stopWinPrice  止盈金额
+         * @param marginMoney   保证金
+         * @param fees          手续费
+         * @param ratio         费率
          * @return
          */
         public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,

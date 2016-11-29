@@ -36,6 +36,7 @@ import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
@@ -46,6 +47,8 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.LightningOrdersSparseArray;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
@@ -63,6 +66,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.jnhyxx.html5.R.id.lightningOrders;
 
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback,
@@ -114,7 +119,7 @@ public class TradeActivity extends BaseActivity implements
     FrameLayout mPlaceOrderContainer;
     //闪电下单按钮
     @BindView(R.id.lightningOrders)
-    TextView mLightningOrders;
+    ImageView mLightningOrders;
 
     private SlidingMenu mMenu;
 
@@ -166,7 +171,6 @@ public class TradeActivity extends BaseActivity implements
         mUpdateRealTimeData = true;
 
         initData(getIntent());
-
         initSlidingMenu();
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +208,39 @@ public class TradeActivity extends BaseActivity implements
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
+
+        if (mProduct != null) {
+            API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
+                    .setTag(TAG)
+                    .setCallback(new Callback2<Resp<ProductLightningOrderStatus>, ProductLightningOrderStatus>() {
+                        @Override
+                        public void onRespSuccess(ProductLightningOrderStatus productLightningOrderStatus) {
+                            if (productLightningOrderStatus != null) {
+                                Log.d(TAG, "产品闪电下单状态  " + productLightningOrderStatus.toString());
+                                ProductLightningOrderStatus mLocalLightningOrder = (ProductLightningOrderStatus) LightningOrdersSparseArray.getInstance().get(mProduct.getVarietyId());
+                                Log.d(TAG, "本地的状态 " + mLocalLightningOrder.toString());
+                                boolean b = mLocalLightningOrder.compareDataWithWeb(productLightningOrderStatus);
+                                if (!b) {
+                                    showLightningOrderOverDue();
+                                }
+                                LightningOrdersSparseArray.getInstance().put(mProduct.getVarietyId(), productLightningOrderStatus);
+                            } else {
+                                ToastUtil.curt("您还没有设置闪电下单");
+                                mLightningOrders.setSelected(false);
+                            }
+                        }
+                    }).fire();
+
+        }
+
+
+    }
+
+    private void showLightningOrderOverDue() {
+        SmartDialog.with(getActivity(),
+                getString(R.string.lightning_orders_status_run_out))
+                .setPositive(R.string.ok)
+                .show();
     }
 
     private void openOrdersPage() {
@@ -294,14 +331,6 @@ public class TradeActivity extends BaseActivity implements
         NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
-
-        // TODO: 2016/11/28 后台闪电下单状态，目前没有数据，后期删除
-        boolean lightningOrders = false;
-//        if () {
-//            mLightningOrders.setText(R.string.lightning_orders_close);
-//        } else {
-        mLightningOrders.setText(!LocalUser.getUser().isLogin() || lightningOrders ? R.string.lightning_orders_close : R.string.lightning_orders_open);
-//        }
     }
 
     private void updateChartView(FullMarketData data) {
@@ -512,7 +541,7 @@ public class TradeActivity extends BaseActivity implements
         });
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrders})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, lightningOrders})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -521,7 +550,7 @@ public class TradeActivity extends BaseActivity implements
             case R.id.sellShortBtn:
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
-            case R.id.lightningOrders:
+            case lightningOrders:
                 if (!LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
                 }

@@ -300,7 +300,7 @@ public class TradeActivity extends BaseActivity implements
 //        if () {
 //            mLightningOrders.setText(R.string.lightning_orders_close);
 //        } else {
-            mLightningOrders.setText(!LocalUser.getUser().isLogin() || lightningOrders ? R.string.lightning_orders_close : R.string.lightning_orders_open);
+        mLightningOrders.setText(!LocalUser.getUser().isLogin() || lightningOrders ? R.string.lightning_orders_close : R.string.lightning_orders_open);
 //        }
     }
 

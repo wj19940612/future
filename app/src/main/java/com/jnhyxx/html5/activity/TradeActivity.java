@@ -30,6 +30,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
+import com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity;
 import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
@@ -61,6 +62,7 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -77,7 +79,9 @@ public class TradeActivity extends BaseActivity implements
     private static final int REQ_CODE_SIGN_IN = 1;
     //闪电下单跳转登陆的请求码
     private static final int REQ_CODE_SIGN_IN_LIGHTNING_ORDERS = 924;
-
+    //闪电下单界面的请求码
+    private static final int REQ_CODE_SET_LIGHTNING_ORSERS = 999;
+    
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.tradePageHeader)
@@ -153,6 +157,7 @@ public class TradeActivity extends BaseActivity implements
             updatePlaceOrderFragment(data);
         }
     };
+    private MarketServer mMarketServer;
 
     private void updatePlaceOrderFragment(FullMarketData data) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
@@ -209,6 +214,10 @@ public class TradeActivity extends BaseActivity implements
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
 
+        getLightningOrdersStatus();
+    }
+
+    private void getLightningOrdersStatus() {
         if (mProduct != null) {
             API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
                     .setTag(TAG)
@@ -232,8 +241,6 @@ public class TradeActivity extends BaseActivity implements
                     }).fire();
 
         }
-
-
     }
 
     private void showLightningOrderOverDue() {
@@ -327,12 +334,36 @@ public class TradeActivity extends BaseActivity implements
         mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
 
         List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
-        MarketServer marketServer = marketServers.get(0);
-        NettyClient.getInstance().setIpAndPort(marketServer.getIp(), marketServer.getPort());
+        mMarketServer = marketServers.get(0);
+        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }
 
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, lightningOrders})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buyLongBtn:
+                placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
+                break;
+            case R.id.sellShortBtn:
+                placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
+                break;
+            case lightningOrders:
+                if (!LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
+                }
+                
+                Launcher.with(getActivity(), SetLightningOrdersActivity.class)
+                        .putExtra(Product.EX_PRODUCT,mProduct)
+                        .putExtra(Product.EX_FUND_TYPE,mFundType)
+                        .putExtra(Product.EX_PRODUCT_LIST,new ArrayList<>(mProductList))
+                        .putExtra(MarketServer.EX_MARKET_SERVER,mMarketServer)
+                        .executeForResult(REQ_CODE_SET_LIGHTNING_ORSERS);
+                break;
+        }
+    }
+    
     private void updateChartView(FullMarketData data) {
         TrendView trendView = mChartContainer.getTrendView();
         if (trendView != null) {
@@ -540,24 +571,7 @@ public class TradeActivity extends BaseActivity implements
             }
         });
     }
-
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, lightningOrders})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.buyLongBtn:
-                placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
-                break;
-            case R.id.sellShortBtn:
-                placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
-                break;
-            case lightningOrders:
-                if (!LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
-                }
-                break;
-        }
-    }
-
+    
     private void placeOrder(int longOrShort) {
         if (!LocalUser.getUser().isLogin()) {
             Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);

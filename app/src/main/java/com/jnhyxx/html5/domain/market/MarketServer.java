@@ -3,7 +3,11 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MarketServer implements Parcelable {
+import java.io.Serializable;
+
+public class MarketServer implements Parcelable,Serializable {
+
+    private static final long serialVersionUID = 6042135448453948204L;
 
     public static final String EX_MARKET_SERVER = "marketServer";
 

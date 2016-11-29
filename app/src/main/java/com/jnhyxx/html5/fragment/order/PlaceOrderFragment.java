@@ -46,6 +46,8 @@ public class PlaceOrderFragment extends BaseFragment {
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
+    private static final String KEY_DATA_FROM_LIGHTNING_ORDER = "DATA_FROM_LIGHTNING_ORDER";
+
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
     @BindView(R.id.lastPrice)
@@ -81,6 +83,12 @@ public class PlaceOrderFragment extends BaseFragment {
     @BindView(R.id.marketOpenArea)
     RelativeLayout mMarketOpenArea;
 
+    //确定买涨或买跌及最新价的父容器
+    @BindView(R.id.tradeLayout)
+    LinearLayout mTradeLayout;
+    @BindView(R.id.spiltLine)
+    View mSpiltLine;
+
     private int mLongOrShort;
     private Product mProduct;
     private int mFundType;
@@ -89,6 +97,8 @@ public class PlaceOrderFragment extends BaseFragment {
     private FullMarketData mMarketData;
     private ExchangeStatus mExchangeStatus;
     private boolean mIsShowing;
+    //数据来自设置闪电下单界面
+    private boolean mIsFromLightningOrder;
 
     private Unbinder mBinder;
     private BlurEngine mBlurEngine;
@@ -100,6 +110,17 @@ public class PlaceOrderFragment extends BaseFragment {
         args.putInt(TYPE, longOrShort);
         args.putSerializable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static PlaceOrderFragment newInstance(int longOrShort, Product product, int fundType, boolean isFromLightningOrder) {
+        PlaceOrderFragment fragment = new PlaceOrderFragment();
+        Bundle args = new Bundle();
+        args.putInt(TYPE, longOrShort);
+        args.putSerializable(Product.EX_PRODUCT, product);
+        args.putInt(Product.EX_FUND_TYPE, fundType);
+        args.putBoolean(KEY_DATA_FROM_LIGHTNING_ORDER, isFromLightningOrder);
         fragment.setArguments(args);
         return fragment;
     }
@@ -122,6 +143,7 @@ public class PlaceOrderFragment extends BaseFragment {
             mLongOrShort = getArguments().getInt(TYPE, 0);
             mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
+            mIsFromLightningOrder = getArguments().getBoolean(KEY_DATA_FROM_LIGHTNING_ORDER, false);
         }
     }
 
@@ -271,6 +293,15 @@ public class PlaceOrderFragment extends BaseFragment {
         if (mProduct.isForeign()) {
             mRateAndMarketTime.setText(getString(R.string.currency_converter,
                     "1" + mProduct.getCurrencyUnit() + "=" + mProduct.getRatio() + Unit.YUAN));
+        }
+
+        if (mIsFromLightningOrder) {
+            mEmptyClickArea.setVisibility(View.GONE);
+            mMarketCloseText.setVisibility(View.GONE);
+            mMarketOpenArea.setVisibility(View.GONE);
+            mTradeLayout.setVisibility(View.GONE);
+            mSpiltLine.setVisibility(View.GONE);
+            return;
         }
 
         String marketTimeStr;

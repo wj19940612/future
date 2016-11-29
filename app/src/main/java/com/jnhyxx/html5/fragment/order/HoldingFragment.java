@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment.order;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -212,11 +213,25 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                         mPresenter.closePosition(order);
                         onHoldingPositionsCloseEventTriggered();
                     }
+
+                    @Override
+                    public void onSetStopProfitLossClick(HoldingOrder order) {
+                        showSetStopProfitFragment(order);
+                    }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
+        }
+    }
+
+    private void showSetStopProfitFragment(HoldingOrder order) {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment == null) {
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.fragmentContainer, SetStopProfitLossFragment.newInstance(mProduct, mFundType, order))
+                    .commit();
         }
     }
 
@@ -291,6 +306,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
         public interface Callback {
             void onItemClosePositionClick(HoldingOrder order);
+            void onSetStopProfitLossClick(HoldingOrder order);
         }
 
         private Context mContext;
@@ -374,6 +390,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             TextView mClosePositionButton;
             @BindView(R.id.orderStatus)
             TextView mOrderStatus;
+            @BindView(R.id.setStopLossStopProfit)
+            TextView mSetStopLossStopProfit;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -398,6 +416,14 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     public void onClick(View v) {
                         if (callback != null) {
                             callback.onItemClosePositionClick(item);
+                        }
+                    }
+                });
+                mSetStopLossStopProfit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback != null) {
+                            callback.onSetStopProfitLossClick(item);
                         }
                     }
                 });

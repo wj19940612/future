@@ -327,7 +327,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
-        if (!TextUtils.isEmpty(active.getRtmp())) {
+        if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
             mLivePlayer.setVideoPath(active.getRtmp());
         }
     }

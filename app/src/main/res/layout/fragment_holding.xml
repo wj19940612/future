@@ -105,9 +105,4 @@
             android:text="@string/one_key_close_position"
             android:textColor="@android:color/white"/>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </RelativeLayout>

@@ -81,4 +81,8 @@
     <declare-styleable name="SetHintTextSizeEditText">
         <attr name="hintTextSize" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="StopProfitLossPicker">
+        <attr name="pickerTitle" format="string|reference"/>
+    </declare-styleable>
 </resources>

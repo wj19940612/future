@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -568,7 +567,6 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
-        Log.d("TAG", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

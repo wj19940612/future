@@ -12,14 +12,18 @@ import android.support.v4.view.ViewPager;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.HoldingFragment;
+import com.jnhyxx.html5.fragment.order.SetStopProfitLossFragment;
 import com.jnhyxx.html5.fragment.order.SettlementFragment;
+import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends BaseActivity implements HoldingFragment.Callback {
+public class OrderActivity extends BaseActivity implements HoldingFragment.Callback,
+        SetStopProfitLossFragment.Callback {
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -51,10 +55,54 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        NettyClient.getInstance().start(mProduct.getContractsCode());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NettyClient.getInstance().stop();
+    }
+
+    @Override
     public void onHoldingPositionsCloseEventTriggered() {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);
+        }
+    }
+
+    @Override
+    public void onSetStopProfitLossClick(HoldingOrder order) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragmentContainer, SetStopProfitLossFragment.newInstance(mProduct, mFundType, order))
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onCloseFragmentTriggered() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
         }
     }
 

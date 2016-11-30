@@ -871,6 +871,32 @@ public class API extends APIBase {
                             .put("payType", payType)
                             .put("unwindPrice", unwindPrices));
         }
+
+        /**
+         * order/variety/getVarietyFloating.do 获取二次设置止盈止损的启动与否
+         *
+         * @param varietyId
+         * @return
+         */
+        public static API getStopProfitLossActive(int varietyId, int payType) {
+            return new API(GET, "/order/variety/getVarietyFloating.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
+        }
+
+        /**
+         * /order/order/getOrderVarietyPrice.do 获取二次设置止盈止损的配置
+         *
+         * @param showId
+         * @param payType
+         * @return
+         */
+        public static API getStopProfitLossConfig(String showId, int payType) {
+            return new API(GET, "/order/order/getOrderVarietyPrice.do", new ApiParams()
+                    .put("showId", showId)
+                    .put("payType", payType));
+        }
     }
 
     /**

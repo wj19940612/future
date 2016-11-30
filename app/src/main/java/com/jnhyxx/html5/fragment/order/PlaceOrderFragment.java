@@ -206,6 +206,7 @@ public class PlaceOrderFragment extends BaseFragment {
         mMarketData = data;
 
         if (mIsShowing || !isAdded()) return;
+
         updateMarketDataRelatedView();
         updateSubmittedOrder();
     }

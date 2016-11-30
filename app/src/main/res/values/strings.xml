@@ -203,11 +203,15 @@
     <string name="close_positions">平仓</string>
     <string name="stop_loss_price">止损价</string>
     <string name="stop_profit_price">止盈价</string>
+    <string name="stop_loss">止损</string>
+    <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>
     <string name="buying">买处理中</string>
     <string name="selling">卖处理中</string>
     <string name="set_stop_profit_stop_loss">设置止盈止损</string>
-    
+    <string name="confirm_setting">确认设置</string>
+    <string name="stop_range">( 范围 %1$s~%2$s )</string>
+
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>

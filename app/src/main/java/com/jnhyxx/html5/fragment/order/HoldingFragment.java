@@ -3,7 +3,6 @@ package com.jnhyxx.html5.fragment.order;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,10 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
+import com.jnhyxx.html5.domain.order.StopProfitLossActive;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.FontUtil;
@@ -43,6 +45,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
     public interface Callback {
         void onHoldingPositionsCloseEventTriggered();
+        void onSetStopProfitLossClick(HoldingOrder order);
     }
 
     @BindView(android.R.id.list)
@@ -66,6 +69,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
+    private boolean mShowStopProfitLoss;
 
     private HoldingOrderPresenter mPresenter;
     private Callback mCallback;
@@ -143,7 +147,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnBuyBtnClickListener");
+                    + " must implement HoldingFragment.Call");
         }
     }
 
@@ -173,13 +177,27 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         mPresenter.onResume();
         mPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
-        NettyClient.getInstance().start(mProduct.getContractsCode());
+        getStopProfitLossActive();
+    }
+
+    private void getStopProfitLossActive() {
+        API.Order.getStopProfitLossActive(mProduct.getVarietyId(), mFundType).setTag(TAG)
+                .setCallback(new com.jnhyxx.html5.net.Callback<Resp<StopProfitLossActive>>() {
+                    @Override
+                    public void onReceive(Resp<StopProfitLossActive> stopProfitLossConfigResp) {
+                        if (stopProfitLossConfigResp.isSuccess() && stopProfitLossConfigResp.hasData()) {
+                            mShowStopProfitLoss = stopProfitLossConfigResp.getData().isActive();
+                            if (mHoldingOrderAdapter != null) {
+                                mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
+                            }
+                        }
+                    }
+                }).fire();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mPresenter.onPause();
     }
@@ -216,22 +234,16 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
                     @Override
                     public void onSetStopProfitLossClick(HoldingOrder order) {
-                        showSetStopProfitFragment(order);
+                        if (mCallback != null) {
+                            mCallback.onSetStopProfitLossClick(order);
+                        }
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
-        }
-    }
-
-    private void showSetStopProfitFragment(HoldingOrder order) {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.fragmentContainer);
-        if (fragment == null) {
-            getChildFragmentManager().beginTransaction()
-                    .add(R.id.fragmentContainer, SetStopProfitLossFragment.newInstance(mProduct, mFundType, order))
-                    .commit();
+            mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
         }
     }
 
@@ -316,6 +328,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         private List<HoldingOrder> mHoldingOrderList;
         private FullMarketData mFullMarketData;
         private Callback mCallback;
+        private boolean mShowStopProfitLoss;
 
         public HoldingOrderAdapter(Context context, Product product, String fundUnit, List<HoldingOrder> holdingOrderList) {
             mContext = context;
@@ -326,6 +339,10 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
         public void setFullMarketData(FullMarketData fullMarketData) {
             mFullMarketData = fullMarketData;
+        }
+
+        public void setShowStopProfitLoss(boolean showStopProfitLoss) {
+            mShowStopProfitLoss = showStopProfitLoss;
         }
 
         public void setHoldingOrderList(List<HoldingOrder> holdingOrderList) {
@@ -363,8 +380,10 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position),
-                    mContext, mProduct, mFundUnit, mFullMarketData, mCallback);
+            viewHolder.bindingData((HoldingOrder) getItem(position), mContext,
+                    mProduct, mFundUnit,
+                    mFullMarketData, mShowStopProfitLoss,
+                    mCallback);
 
             return convertView;
         }
@@ -399,7 +418,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
             public void bindingData(final HoldingOrder item, Context context,
                                     Product product, String fundUnit,
-                                    FullMarketData data, final Callback callback) {
+                                    FullMarketData data, boolean showStopProfitLoss,
+                                    final Callback callback) {
 
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
                 String stopProfit = FinanceUtil.formatWithScale(item.getStopWinMoney(), product.getPriceDecimalScale())
@@ -447,6 +467,12 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     } else if (item.getOrderStatus() > HoldingOrder.ORDER_STATUS_HOLDING) {
                         mOrderStatus.setText(R.string.selling);
                     }
+                }
+
+                if (showStopProfitLoss) {
+                    mSetStopLossStopProfit.setVisibility(View.VISIBLE);
+                } else {
+                    mSetStopLossStopProfit.setVisibility(View.GONE);
                 }
 
                 // views will change

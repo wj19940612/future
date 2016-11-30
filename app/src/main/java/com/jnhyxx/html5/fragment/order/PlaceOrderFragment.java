@@ -46,8 +46,6 @@ public class PlaceOrderFragment extends BaseFragment {
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
-    private static final String KEY_DATA_FROM_LIGHTNING_ORDER = "DATA_FROM_LIGHTNING_ORDER";
-
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
     @BindView(R.id.lastPrice)

@@ -1,7 +1,5 @@
 package com.jnhyxx.html5.domain.market;
 
-import com.jnhyxx.html5.domain.local.SubmittedOrder;
-
 /**
  * Created by ${wangJie} on 2016/11/29.
  * 闪电下单状态
@@ -161,9 +159,5 @@ public class ProductLightningOrderStatus {
             return true;
         }
         return false;
-    }
-
-    public ProductLightningOrderStatus setSubmittedOrder(SubmittedOrder submittedOrder){
-        
     }
 }

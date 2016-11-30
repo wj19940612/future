@@ -204,6 +204,12 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
     }
 
+    public void setEnabled(boolean enabled) {
+        for (int i = 0; i < this.getChildCount(); i++) {
+            getChildAt(i).setEnabled(enabled);
+        }
+    }
+
     private void highLightFixedItem(int index) {
         getFixedItem(index).setSelected(true);
         int visualSize = Math.min(mNumberOfItems, mMaximum);

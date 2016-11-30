@@ -7,7 +7,7 @@ package com.jnhyxx.html5.domain.market;
 
 public class ProductLightningOrderStatus {
 
-    public static final int PAY_TYPE = 1;
+    public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
     /**
      * assetsId : 1

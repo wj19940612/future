@@ -81,7 +81,7 @@ public class TradeActivity extends BaseActivity implements
     private static final int REQ_CODE_SIGN_IN_LIGHTNING_ORDERS = 924;
     //闪电下单界面的请求码
     private static final int REQ_CODE_SET_LIGHTNING_ORSERS = 999;
-    
+
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.tradePageHeader)
@@ -277,6 +277,18 @@ public class TradeActivity extends BaseActivity implements
         if (requestCode == REQ_CODE_SIGN_IN_LIGHTNING_ORDERS && resultCode == RESULT_OK) {
 
         }
+        //打开闪电下单回调
+        if(requestCode==REQ_CODE_SET_LIGHTNING_ORSERS&&resultCode==SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER){
+
+        }
+        //关闭闪电下单回调
+        if(requestCode==REQ_CODE_SET_LIGHTNING_ORSERS&&resultCode==SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER){
+
+        }
+
+
+
+
     }
 
     private void updateTitleBar() {
@@ -353,17 +365,18 @@ public class TradeActivity extends BaseActivity implements
                 if (!LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
                 }
-                
+                // TODO: 2016/11/30 应根据闪电下单状态传入对应的状态值，目前写死
                 Launcher.with(getActivity(), SetLightningOrdersActivity.class)
-                        .putExtra(Product.EX_PRODUCT,mProduct)
-                        .putExtra(Product.EX_FUND_TYPE,mFundType)
-                        .putExtra(Product.EX_PRODUCT_LIST,new ArrayList<>(mProductList))
-                        .putExtra(MarketServer.EX_MARKET_SERVER,mMarketServer)
+                        .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, true)
+                        .putExtra(Product.EX_PRODUCT, mProduct)
+                        .putExtra(Product.EX_FUND_TYPE, mFundType)
+                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                        .putExtra(MarketServer.EX_MARKET_SERVER, mMarketServer)
                         .executeForResult(REQ_CODE_SET_LIGHTNING_ORSERS);
                 break;
         }
     }
-    
+
     private void updateChartView(FullMarketData data) {
         TrendView trendView = mChartContainer.getTrendView();
         if (trendView != null) {
@@ -571,7 +584,7 @@ public class TradeActivity extends BaseActivity implements
             }
         });
     }
-    
+
     private void placeOrder(int longOrShort) {
         if (!LocalUser.getUser().isLogin()) {
             Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);

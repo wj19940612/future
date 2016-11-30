@@ -276,6 +276,10 @@ public class FuturesFinancing {
         public boolean isDefault() {
             return false;
         }
+
+        public double getStopProfit() {
+            return stopProfit;
+        }
     }
 
     public static class StopLoss implements OrderConfigurationSelector.OrderConfiguration {

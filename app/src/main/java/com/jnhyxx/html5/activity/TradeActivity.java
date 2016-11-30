@@ -39,6 +39,7 @@ import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
+import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
@@ -48,7 +49,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.LightningOrdersSparseArray;
+import com.jnhyxx.html5.utils.LightningOrdersArrayMap;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
@@ -139,6 +140,8 @@ public class TradeActivity extends BaseActivity implements
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
+    boolean lightningOrderOpen;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -158,6 +161,7 @@ public class TradeActivity extends BaseActivity implements
         }
     };
     private MarketServer mMarketServer;
+    private ProductLightningOrderStatus mLocalLightningStatus;
 
     private void updatePlaceOrderFragment(FullMarketData data) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
@@ -215,31 +219,52 @@ public class TradeActivity extends BaseActivity implements
         updateExchangeStatusView(); // based on product
 
         getLightningOrdersStatus();
+        //获取期货配资方案
+
     }
 
     private void getLightningOrdersStatus() {
         if (mProduct != null) {
-            API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
-                    .setTag(TAG)
-                    .setCallback(new Callback2<Resp<ProductLightningOrderStatus>, ProductLightningOrderStatus>() {
-                        @Override
-                        public void onRespSuccess(ProductLightningOrderStatus productLightningOrderStatus) {
-                            if (productLightningOrderStatus != null) {
-                                Log.d(TAG, "产品闪电下单状态  " + productLightningOrderStatus.toString());
-                                ProductLightningOrderStatus mLocalLightningOrder = (ProductLightningOrderStatus) LightningOrdersSparseArray.getInstance().get(mProduct.getVarietyId());
-                                Log.d(TAG, "本地的状态 " + mLocalLightningOrder.toString());
-                                boolean b = mLocalLightningOrder.compareDataWithWeb(productLightningOrderStatus);
-                                if (!b) {
-                                    showLightningOrderOverDue();
+            mLocalLightningStatus = LightningOrdersArrayMap.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
+            if (mLocalLightningStatus != null) {
+                API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
+                        .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
+                            @Override
+                            public void onRespSuccess(FuturesFinancing futuresFinancing) {
+                                Log.d("wangjie ", " 配资方案 " + futuresFinancing.toString());
+                                if (mLocalLightningStatus != null && futuresFinancing != null) {
+                                    boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
+                                    if (b) {
+                                        lightningOrderOpen = true;
+                                        ToastUtil.curt("您的闪电下单正常");
+                                    } else {
+                                        showLightningOrderOverDue();
+                                    }
                                 }
-                                LightningOrdersSparseArray.getInstance().put(mProduct.getVarietyId(), productLightningOrderStatus);
-                            } else {
-                                ToastUtil.curt("您还没有设置闪电下单");
-                                mLightningOrders.setSelected(false);
                             }
-                        }
-                    }).fire();
-
+                        }).fire();
+            } else {
+                API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
+                        .setTag(TAG)
+                        .setCallback(new Callback2<Resp<ProductLightningOrderStatus>, ProductLightningOrderStatus>() {
+                            @Override
+                            public void onRespSuccess(ProductLightningOrderStatus productLightningOrderStatus) {
+                                if (productLightningOrderStatus != null) {
+                                    Log.d(TAG, "产品闪电下单状态  " + productLightningOrderStatus.toString());
+//                                ProductLightningOrderStatus mLocalLightningOrder = (ProductLightningOrderStatus) LightningOrdersSparseArray.getInstance().get(mProduct.getVarietyId());
+//                                Log.d(TAG, "本地的状态 " + mLocalLightningOrder.toString());
+//                                boolean b = mLocalLightningOrder.compareDataWithWeb(productLightningOrderStatus);
+//                                if (!b) {
+                                    showLightningOrderOverDue();
+//                                }
+//                                LightningOrdersSparseArray.getInstance().put(mProduct.getVarietyId(), productLightningOrderStatus);
+                                } else {
+                                    ToastUtil.curt("您还没有设置闪电下单");
+                                    mLightningOrders.setSelected(false);
+                                }
+                            }
+                        }).fire();
+            }
         }
     }
 
@@ -278,17 +303,13 @@ public class TradeActivity extends BaseActivity implements
 
         }
         //打开闪电下单回调
-        if(requestCode==REQ_CODE_SET_LIGHTNING_ORSERS&&resultCode==SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER){
-
+        if (requestCode == REQ_CODE_SET_LIGHTNING_ORSERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER) {
+            ToastUtil.curt(R.string.lightning_orders_open);
         }
         //关闭闪电下单回调
-        if(requestCode==REQ_CODE_SET_LIGHTNING_ORSERS&&resultCode==SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER){
-
+        if (requestCode == REQ_CODE_SET_LIGHTNING_ORSERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER) {
+            ToastUtil.curt(R.string.lightning_orders_close);
         }
-
-
-
-
     }
 
     private void updateTitleBar() {

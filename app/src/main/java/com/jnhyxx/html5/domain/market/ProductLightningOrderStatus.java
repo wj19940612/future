@@ -1,11 +1,18 @@
 package com.jnhyxx.html5.domain.market;
 
+import android.util.Log;
+
+import com.jnhyxx.html5.domain.order.FuturesFinancing;
+
+import java.util.List;
+
 /**
  * Created by ${wangJie} on 2016/11/29.
  * 闪电下单状态
  */
 
 public class ProductLightningOrderStatus {
+    private static final String TAG = "ProductLightningOrderSt";
 
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
@@ -145,18 +152,24 @@ public class ProductLightningOrderStatus {
                 '}';
     }
 
-    public boolean compareDataWithWeb(ProductLightningOrderStatus productLightningOrderStatus) {
-        if (productLightningOrderStatus == null) {
+    public boolean compareDataWithWeb(FuturesFinancing futuresFinancing) {
+        if (futuresFinancing.getAssets() == null && futuresFinancing.getAssets().isEmpty())
             return false;
-        }
-        if (productLightningOrderStatus.getFees() == getFees()
-                && productLightningOrderStatus.getAssetsId() == getAssetsId()
-                && productLightningOrderStatus.getHandsNum() == getHandsNum()
-                && productLightningOrderStatus.getMarginMoney() == getMarginMoney()
-                && productLightningOrderStatus.getRatio() == getRatio()
-                && productLightningOrderStatus.getStopLossPrice() == getStopLossPrice()
-                && productLightningOrderStatus.getStopWinPrice() == getStopWinPrice()) {
-            return true;
+        List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
+        if (futuresFinancing.getRatio() == getRatio()) {
+            for (int i = 0; i < assets.size(); i++) {
+                if (getAssetsId() == assets.get(i).getAssetsId()) {
+                    FuturesFinancing.AssetsBean assetsBean = assets.get(i);
+                    Log.d(TAG, "wangjie  assetsBean " + assetsBean.toString());
+                    if (assetsBean.getFees() == getFees() &&
+                            assetsBean.getStopLossBeat() == getStopLossPrice() &&
+                            assetsBean.getMarginBeat() == getMarginMoney() &&
+                            assetsBean.getHandsMultiple().contains(String.valueOf(getHandsNum())) &&
+                            assetsBean.getStopWinBeats().get(String.valueOf(getHandsNum())) == getStopWinPrice()) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }

@@ -25,6 +25,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.LightningOrdersArrayMap;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.jnhyxx.html5.view.TitleBar;
@@ -145,6 +146,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         if (jsonObjectResp.hasData() && jsonObjectResp.isSuccess()) {
                             //提交成功
                             ToastUtil.curt("提交成功");
+                            LightningOrdersArrayMap.getInstance().setLightningOrders(mProductLightningOrderStatus);
                         } else {
                             ToastUtil.curt(jsonObjectResp.getMsg());
                         }

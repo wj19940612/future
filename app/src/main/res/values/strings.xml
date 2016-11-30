@@ -445,7 +445,8 @@
     <string name="close">关  闭</string>
     <string name="restart_open">重新设置</string>
     <string name="lightning_orders_title">闪电下单</string>
-    <string name="lightning_orders_open">闪电已开启</string>
-    <string name="lightning_orders_close">闪电已关闭</string>
+    <string name="lightning_orders_open">闪电下单已开启</string>
+    <string name="lightning_orders_close">闪电下单已关闭</string>
     <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
+
 </resources>

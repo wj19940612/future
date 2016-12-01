@@ -12,5 +12,5 @@ public interface IHoldingOrderView<T> {
 
     void onSubmitHoldingOrderCompleted(T holdingOrder);
 
-    void onRiskControlTriggered();
+    void onRiskControlTriggered(String showIds);
 }

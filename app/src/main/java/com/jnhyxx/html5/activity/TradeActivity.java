@@ -702,7 +702,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onRiskControlTriggered() {
+    public void onRiskControlTriggered(String showIds) {
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

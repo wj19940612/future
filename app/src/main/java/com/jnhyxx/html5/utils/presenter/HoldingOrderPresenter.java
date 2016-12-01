@@ -27,6 +27,7 @@ public class HoldingOrderPresenter {
     private static final int QUERY_DATA = 1;
     private static final int RISK_CONTROL = 2;
     private static final int CLOSE_POSITION = 3;
+    private static final int UPDATE_ONLY = 4;
 
     private static class QueryJob {
         public int count;
@@ -97,9 +98,13 @@ public class HoldingOrderPresenter {
                         }
                     }
                 }
+
+                if (what == UPDATE_ONLY) {
+                    Log.d(TAG, "onRespSuccess: UPDATE_ONLY");
+                }
             }
         });
-        if (what == LOAD_DATA) {
+        if (what == LOAD_DATA || what == UPDATE_ONLY) {
             api.fireSync();
         } else {
             api.fire();
@@ -141,7 +146,6 @@ public class HoldingOrderPresenter {
         mHandler.removeMessages(0);
     }
 
-
     /**
      * 查询策略:
      * <p/>
@@ -177,13 +181,19 @@ public class HoldingOrderPresenter {
         mHandler.sendEmptyMessage(LOAD_DATA);
     }
 
+    public void updateHolingOrderListOnly() {
+        if (!LocalUser.getUser().isLogin()) return;
+
+        mHandler.sendEmptyMessage(UPDATE_ONLY);
+    }
+
     private FullMarketData mMarketData;
     private List<HoldingOrder> mHoldingOrderList;
 
     private IHoldingOrderView mIHoldingOrderView;
     private Handler mHandler;
     private QueryJob mQueryJob;
-    private volatile boolean mPause;
+    private boolean mPause;
 
     public void onResume() {
         mPause = false;
@@ -277,6 +287,7 @@ public class HoldingOrderPresenter {
         boolean hasHoldingOrders = false;
         double ratio = 0;
         boolean refresh = false;
+        StringBuilder touchRiskControlShowIds = new StringBuilder();
 
         if (marketData != null && mHoldingOrderList != null) {
             for (HoldingOrder holdingOrder : mHoldingOrderList) {
@@ -296,12 +307,17 @@ public class HoldingOrderPresenter {
                     diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
 
                     BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
-                    if (diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
+                    if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
                         refresh = true;
+                        holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                        touchRiskControlShowIds.append(holdingOrder.getShowId()).append(";");
                     }
-                    if (diff.compareTo(bigDecimalStopLoss) <= 0) {
+                    if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopLoss) <= 0) {
                         refresh = true;
+                        holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                        touchRiskControlShowIds.append(holdingOrder.getShowId()).append(";");
                     }
+
                     totalProfit = totalProfit.add(diff);
                 }
             }
@@ -313,7 +329,8 @@ public class HoldingOrderPresenter {
         if (refresh) { // 触及风控刷新
             Log.d(TAG, "触及风控刷新");
             mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1));
-            onRiskControlTriggered();
+            String showIds = touchRiskControlShowIds.deleteCharAt(touchRiskControlShowIds.length() - 1).toString();
+            onRiskControlTriggered(showIds);
         }
     }
 
@@ -341,9 +358,9 @@ public class HoldingOrderPresenter {
         }
     }
 
-    private void onRiskControlTriggered() {
+    private void onRiskControlTriggered(String showIds) {
         if (mIHoldingOrderView != null) {
-            mIHoldingOrderView.onRiskControlTriggered();
+            mIHoldingOrderView.onRiskControlTriggered(showIds);
         }
     }
 }

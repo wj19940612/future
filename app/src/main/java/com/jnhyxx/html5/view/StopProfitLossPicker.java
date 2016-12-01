@@ -3,6 +3,7 @@ package com.jnhyxx.html5.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -112,11 +113,11 @@ public class StopProfitLossPicker extends LinearLayout {
     }
 
     public double getPrice() {
-        if (mConfig.isStopLoss) {
-            return mNewStopLossPrice;
-        } else {
-            return mNewStopProfitPrice;
+        String price = mPrice.getText().toString();
+        if (!TextUtils.isEmpty(price)) {
+            return Double.valueOf(price).doubleValue();
         }
+        return 0;
     }
 
     private void onPlusButtonClick() {
@@ -170,19 +171,44 @@ public class StopProfitLossPicker extends LinearLayout {
     private void setStopLossPrice(double stopLossPrice) {
         mNewStopLossPrice = stopLossPrice;
         mPrice.setText(FinanceUtil.formatWithScale(mNewStopLossPrice, mConfig.priceScale));
-        // TODO: 01/12/2016 计算止损金额变化 
+        double diff = 0;
+        if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
+            diff = mConfig.stopLossPrice - mNewStopLossPrice;
+        } else {
+            diff = mNewStopLossPrice - mConfig.stopLossPrice;
+        }
+        if (diff < 0) {
+            mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+            mAmountChange.setText(FinanceUtil.formatWithScale(diff * mConfig.eachPointMoney, mConfig.lossProfitScale));
+        } else {
+            mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+            mAmountChange.setText("+" + FinanceUtil.formatWithScale(diff * mConfig.eachPointMoney, mConfig.lossProfitScale));
+        }
     }
 
     private void setStopProfitPrice(double stopProfitPrice) {
         mNewStopProfitPrice = stopProfitPrice;
         mPrice.setText(FinanceUtil.formatWithScale(mNewStopProfitPrice, mConfig.priceScale));
+        double diff = 0;
+        if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
+            diff = mNewStopProfitPrice - mConfig.stopProfitPrice;
+        } else {
+            diff = mConfig.stopProfitPrice - mNewStopProfitPrice;
+        }
+        if (diff < 0) {
+            mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+            mAmountChange.setText(FinanceUtil.formatWithScale(diff * mConfig.eachPointMoney, mConfig.lossProfitScale));
+        } else {
+            mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+            mAmountChange.setText("+" + FinanceUtil.formatWithScale(diff * mConfig.eachPointMoney, mConfig.lossProfitScale));
+        }
     }
 
     private void updateStopLossRange() {
         if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
             mStopLossDown = mConfig.stopLossPrice;
             mStopLossUp = mLastPrice - mConfig.stopLossPriceOffset;
-            if (mStopLossUp <= mStopLossDown) {
+            if (mStopLossUp < mStopLossDown) {
                 mStopLossUp = mStopLossDown;
             }
             mRange.setText(getResources().getString(R.string.stop_range,
@@ -197,8 +223,8 @@ public class StopProfitLossPicker extends LinearLayout {
         } else {
             mStopLossDown = mLastPrice + mConfig.stopLossPriceOffset;
             mStopLossUp = mConfig.stopLossPrice;
-            if (mStopLossDown >= mStopLossUp) {
-                mStopLossUp = mStopLossDown;
+            if (mStopLossDown > mStopLossUp) {
+                mStopLossDown = mStopLossUp;
             }
             mRange.setText(getResources().getString(R.string.stop_range,
                     FinanceUtil.formatWithScale(mStopLossDown, mConfig.priceScale),
@@ -216,6 +242,9 @@ public class StopProfitLossPicker extends LinearLayout {
         if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
             mStopProfitDown = mLastPrice + mConfig.stopProfitPriceOffset;
             mStopProfitUp = mConfig.highestStopProfitPrice;
+            if (mStopProfitDown > mStopProfitUp) {
+                mStopProfitDown = mStopProfitUp;
+            }
             mRange.setText(getResources().getString(R.string.stop_range,
                     FinanceUtil.formatWithScale(mStopProfitDown, mConfig.priceScale),
                     FinanceUtil.formatWithScale(mStopProfitUp, mConfig.priceScale)));
@@ -228,6 +257,9 @@ public class StopProfitLossPicker extends LinearLayout {
         } else {
             mStopProfitDown = mConfig.highestStopProfitPrice;
             mStopProfitUp = mLastPrice - mConfig.stopProfitPriceOffset;
+            if (mStopProfitUp < mStopProfitDown) {
+                mStopProfitUp = mStopProfitDown;
+            }
             mRange.setText(getResources().getString(R.string.stop_range,
                     FinanceUtil.formatWithScale(mStopProfitDown, mConfig.priceScale),
                     FinanceUtil.formatWithScale(mStopProfitUp, mConfig.priceScale)));

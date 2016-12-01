@@ -44,7 +44,7 @@ import static com.jnhyxx.html5.R.id.hands;
 public class HoldingFragment extends BaseFragment implements IHoldingOrderView<HoldingOrder> {
 
     public interface Callback {
-        void onHoldingPositionsCloseEventTriggered();
+        void onClosePositionEventTriggered(String showIds);
         void onSetStopProfitLossClick(HoldingOrder order);
     }
 
@@ -205,8 +205,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinder.unbind();
         mNettyHandler = null;
+        mBinder.unbind();
         mPresenter.onDestroy();
     }
 
@@ -229,7 +229,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mPresenter.closePosition(order);
-                        onHoldingPositionsCloseEventTriggered();
+                        onClosePositionEventTriggered(order.getShowId());
                     }
 
                     @Override
@@ -247,9 +247,9 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         }
     }
 
-    private void onHoldingPositionsCloseEventTriggered() {
+    private void onClosePositionEventTriggered(String showIds) {
         if (mCallback != null) {
-            mCallback.onHoldingPositionsCloseEventTriggered();
+            mCallback.onClosePositionEventTriggered(showIds);
         }
     }
 
@@ -304,14 +304,20 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     }
 
     @Override
-    public void onRiskControlTriggered() {
-        onHoldingPositionsCloseEventTriggered();
+    public void onRiskControlTriggered(String showIds) {
+        onClosePositionEventTriggered(showIds);
     }
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mPresenter.closeAllHoldingPositions();
-        onHoldingPositionsCloseEventTriggered();
+        onClosePositionEventTriggered("");
+    }
+
+    public void updateHoldingOrderList() {
+        if (mPresenter != null) {
+            mPresenter.updateHolingOrderListOnly();
+        }
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {

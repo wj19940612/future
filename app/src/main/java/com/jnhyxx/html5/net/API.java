@@ -897,6 +897,23 @@ public class API extends APIBase {
                     .put("showId", showId)
                     .put("payType", payType));
         }
+
+        /**
+         * /order/order/updateOrder.do 提交更新止盈止损
+         *
+         * @param showId
+         * @param payType
+         * @param loseMoney
+         * @param winMoney
+         * @return
+         */
+        public static API updateStopProfitLoss(String showId, int payType, double loseMoney, double winMoney) {
+            return new API("/order/order/updateOrder.do", new ApiParams()
+                    .put("showId", showId)
+                    .put("payType", payType)
+                    .put("loseMoney", loseMoney)
+                    .put("winMoney", winMoney));
+        }
     }
 
     /**

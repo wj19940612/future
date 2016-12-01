@@ -21,6 +21,7 @@ public class StopProfitLossConfig {
     private double beatFewPoints;
     private double stopLoseOffsetPoint;
     private double stopWinOffsetPoint;
+    private double downStopWinMoney;
     private double upStopWinMoney;
 
     public double getBeatFewPoints() {
@@ -46,12 +47,29 @@ public class StopProfitLossConfig {
     }
 
     /**
-     * 最高止盈价
+     * 买涨 最高止盈价
      *
      * @return
      */
     public double getUpStopWinMoney() {
         return upStopWinMoney;
+    }
+
+    /**
+     * 买跌 最高止盈价
+     *
+     * @return
+     */
+    public double getDownStopWinMoney() {
+        return downStopWinMoney;
+    }
+
+    public double getHighestStopProfitPrice(int buyOrSell) {
+        if (buyOrSell == AbsOrder.DIRECTION_LONG) {
+            return getUpStopWinMoney();
+        } else {
+            return getDownStopWinMoney();
+        }
     }
 
     @Override
@@ -60,6 +78,7 @@ public class StopProfitLossConfig {
                 "beatFewPoints=" + beatFewPoints +
                 ", stopLoseOffsetPoint=" + stopLoseOffsetPoint +
                 ", stopWinOffsetPoint=" + stopWinOffsetPoint +
+                ", downStopWinMoney=" + downStopWinMoney +
                 ", upStopWinMoney=" + upStopWinMoney +
                 '}';
     }

@@ -94,12 +94,18 @@ public class SetStopProfitLossFragment extends BaseFragment {
                 }
                 break;
             case R.id.confirmSetting:
+                double newStopLossPrice = mStopLossPicker.getPrice();
+                double newStopProfitPrice = mStopProfitPicker.getPrice();
+                if (mCallback != null) {
+                    mCallback.onSettingsConfirmed(mHoldingOrder, newStopLossPrice, newStopProfitPrice);
+                }
                 break;
         }
     }
 
     public interface Callback {
         void onCloseFragmentTriggered();
+        void onSettingsConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice);
     }
 
     private NettyHandler mNettyHandler = new NettyHandler() {
@@ -107,7 +113,7 @@ public class SetStopProfitLossFragment extends BaseFragment {
         protected void onReceiveData(FullMarketData data) {
             mMarketData = data;
 
-            if (mIsShowing) return;
+            if (mIsShowing || !isAdded()) return;
 
             updateLastPriceAndProfit();
             updatePricePickers();
@@ -218,6 +224,7 @@ public class SetStopProfitLossFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mNettyHandler = null;
         mBlurEngine.onDestroyView();
         mBinder.unbind();
     }
@@ -313,7 +320,7 @@ public class SetStopProfitLossFragment extends BaseFragment {
                 mHoldingOrder.getDirection(),
                 mStopProfitLossConfig.getBeatFewPoints(),
                 mHoldingOrder.getStopLossMoney(), mHoldingOrder.getStopWinMoney(),
-                mStopProfitLossConfig.getUpStopWinMoney(),
+                mStopProfitLossConfig.getHighestStopProfitPrice(mHoldingOrder.getDirection()),
                 mStopProfitLossConfig.getStopLoseOffsetPoint(), mStopProfitLossConfig.getStopWinOffsetPoint(),
                 mProduct.getEachPointMoney(),
                 mProduct.getPriceDecimalScale(),
@@ -324,11 +331,15 @@ public class SetStopProfitLossFragment extends BaseFragment {
                 mHoldingOrder.getDirection(),
                 mStopProfitLossConfig.getBeatFewPoints(),
                 mHoldingOrder.getStopLossMoney(), mHoldingOrder.getStopWinMoney(),
-                mStopProfitLossConfig.getUpStopWinMoney(),
+                mStopProfitLossConfig.getHighestStopProfitPrice(mHoldingOrder.getDirection()),
                 mStopProfitLossConfig.getStopLoseOffsetPoint(), mStopProfitLossConfig.getStopWinOffsetPoint(),
                 mProduct.getEachPointMoney(),
                 mProduct.getPriceDecimalScale(),
                 mProduct.getLossProfitScale()
         ));
+    }
+
+    public HoldingOrder getBeingSetOrder() {
+        return mHoldingOrder;
     }
 }

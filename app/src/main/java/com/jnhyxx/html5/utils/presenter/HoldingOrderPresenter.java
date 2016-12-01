@@ -66,7 +66,6 @@ public class HoldingOrderPresenter {
                         + ", query: " + mQueryJob.startQuery);
 
                 mHoldingOrderList = holdingOrderList;
-
                 onShowHoldingOrderList(holdingOrderList);
 
                 if (what == LOAD_DATA) {
@@ -182,8 +181,6 @@ public class HoldingOrderPresenter {
     }
 
     public void updateHolingOrderListOnly() {
-        if (!LocalUser.getUser().isLogin()) return;
-
         mHandler.sendEmptyMessage(UPDATE_ONLY);
     }
 
@@ -341,6 +338,8 @@ public class HoldingOrderPresenter {
     }
 
     private void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
+
+
         if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
         }

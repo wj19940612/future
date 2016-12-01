@@ -318,9 +318,10 @@ public class SetStopProfitLossFragment extends BaseFragment {
         mStopLossPicker.setConfig(new StopProfitLossPicker.Config(
                 true,
                 mHoldingOrder.getDirection(),
+                mHoldingOrder.getRealAvgPrice(),
                 mStopProfitLossConfig.getBeatFewPoints(),
                 mHoldingOrder.getStopLossMoney(), mHoldingOrder.getStopWinMoney(),
-                mStopProfitLossConfig.getHighestStopProfitPrice(mHoldingOrder.getDirection()),
+                mStopProfitLossConfig.getFirstStopLossPrice(), mStopProfitLossConfig.getHighestStopProfitPrice(),
                 mStopProfitLossConfig.getStopLoseOffsetPoint(), mStopProfitLossConfig.getStopWinOffsetPoint(),
                 mProduct.getEachPointMoney(),
                 mProduct.getPriceDecimalScale(),
@@ -329,9 +330,10 @@ public class SetStopProfitLossFragment extends BaseFragment {
         mStopProfitPicker.setConfig(new StopProfitLossPicker.Config(
                 false,
                 mHoldingOrder.getDirection(),
+                mHoldingOrder.getRealAvgPrice(),
                 mStopProfitLossConfig.getBeatFewPoints(),
                 mHoldingOrder.getStopLossMoney(), mHoldingOrder.getStopWinMoney(),
-                mStopProfitLossConfig.getHighestStopProfitPrice(mHoldingOrder.getDirection()),
+                mStopProfitLossConfig.getFirstStopLossPrice(), mStopProfitLossConfig.getHighestStopProfitPrice(),
                 mStopProfitLossConfig.getStopLoseOffsetPoint(), mStopProfitLossConfig.getStopWinOffsetPoint(),
                 mProduct.getEachPointMoney(),
                 mProduct.getPriceDecimalScale(),

@@ -475,7 +475,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     }
                 }
 
-                if (showStopProfitLoss) {
+                if (showStopProfitLoss && item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                     mSetStopLossStopProfit.setVisibility(View.VISIBLE);
                 } else {
                     mSetStopLossStopProfit.setVisibility(View.GONE);

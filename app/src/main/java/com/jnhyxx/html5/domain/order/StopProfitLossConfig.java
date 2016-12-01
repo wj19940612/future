@@ -3,26 +3,27 @@ package com.jnhyxx.html5.domain.order;
 public class StopProfitLossConfig {
 
 
+
     /**
-     * beatFewPoints : 0.1
-     * direction : 0
-     * downStopLoseMoney : 1220
-     * downStopWinMoney : 74053
-     * eachPointMoney : 100
-     * leaveBeatBanBuy : 1
-     * payType : 1
-     * stopLoseOffsetPoint : 0
-     * stopLossMoney : 1225.8
-     * stopWinMoney : 1209.1
-     * stopWinOffsetPoint : 0
-     * upStopWinMoney : 1179
+     limitStopLossMoney: 1170.5,
+     stopLoseOffsetPoint: 0.3,
+     upStopWinMoney: 1180.7,
+     stopLossMoney: 1170.5,
+     downStopLoseMoney: 1170.8,
+     payType: 1,
+     beatFewPoints: 0.1,
+     stopWinOffsetPoint: 0.2,
+     stopWinMoney: 1176.9,
+     limitStopWinMoney: 1180.9,
+     eachPointMoney: 100,
+     direction: 1
      */
 
     private double beatFewPoints;
     private double stopLoseOffsetPoint;
     private double stopWinOffsetPoint;
-    private double downStopWinMoney;
-    private double upStopWinMoney;
+    private double limitStopLossMoney; // 最初订单的止损
+    private double limitStopWinMoney; // 止盈的上限, 最高止盈价
 
     public double getBeatFewPoints() {
         return beatFewPoints;
@@ -47,29 +48,21 @@ public class StopProfitLossConfig {
     }
 
     /**
-     * 买涨 最高止盈价
+     * 最初订单的止损价
      *
      * @return
      */
-    public double getUpStopWinMoney() {
-        return upStopWinMoney;
+    public double getFirstStopLossPrice() {
+        return limitStopLossMoney;
     }
 
     /**
-     * 买跌 最高止盈价
+     * 止盈的上限, 最高止盈价
      *
      * @return
      */
-    public double getDownStopWinMoney() {
-        return downStopWinMoney;
-    }
-
-    public double getHighestStopProfitPrice(int buyOrSell) {
-        if (buyOrSell == AbsOrder.DIRECTION_LONG) {
-            return getUpStopWinMoney();
-        } else {
-            return getDownStopWinMoney();
-        }
+    public double getHighestStopProfitPrice() {
+        return limitStopWinMoney;
     }
 
     @Override
@@ -78,8 +71,8 @@ public class StopProfitLossConfig {
                 "beatFewPoints=" + beatFewPoints +
                 ", stopLoseOffsetPoint=" + stopLoseOffsetPoint +
                 ", stopWinOffsetPoint=" + stopWinOffsetPoint +
-                ", downStopWinMoney=" + downStopWinMoney +
-                ", upStopWinMoney=" + upStopWinMoney +
+                ", limitStopLossMoney=" + limitStopLossMoney +
+                ", limitStopWinMoney=" + limitStopWinMoney +
                 '}';
     }
 }

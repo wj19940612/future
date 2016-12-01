@@ -173,9 +173,9 @@ public class StopProfitLossPicker extends LinearLayout {
         mPrice.setText(FinanceUtil.formatWithScale(mNewStopLossPrice, mConfig.priceScale));
         double diff = 0;
         if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
-            diff = mConfig.stopLossPrice - mNewStopLossPrice;
+            diff = mNewStopLossPrice - mConfig.buyPrice;
         } else {
-            diff = mNewStopLossPrice - mConfig.stopLossPrice;
+            diff = mConfig.buyPrice - mNewStopLossPrice;
         }
         if (diff < 0) {
             mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
@@ -191,9 +191,9 @@ public class StopProfitLossPicker extends LinearLayout {
         mPrice.setText(FinanceUtil.formatWithScale(mNewStopProfitPrice, mConfig.priceScale));
         double diff = 0;
         if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
-            diff = mNewStopProfitPrice - mConfig.stopProfitPrice;
+            diff = mNewStopProfitPrice - mConfig.buyPrice;
         } else {
-            diff = mConfig.stopProfitPrice - mNewStopProfitPrice;
+            diff = mConfig.buyPrice - mNewStopProfitPrice;
         }
         if (diff < 0) {
             mAmountChange.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
@@ -206,7 +206,7 @@ public class StopProfitLossPicker extends LinearLayout {
 
     private void updateStopLossRange() {
         if (mConfig.buyOrSell == AbsOrder.DIRECTION_LONG) {
-            mStopLossDown = mConfig.stopLossPrice;
+            mStopLossDown = mConfig.firstStopLossPrice;
             mStopLossUp = mLastPrice - mConfig.stopLossPriceOffset;
             if (mStopLossUp < mStopLossDown) {
                 mStopLossUp = mStopLossDown;
@@ -215,22 +215,22 @@ public class StopProfitLossPicker extends LinearLayout {
                     FinanceUtil.formatWithScale(mStopLossDown, mConfig.priceScale),
                     FinanceUtil.formatWithScale(mStopLossUp, mConfig.priceScale)));
             if (mNewStopLossPrice == 0) { // 初始值
-                setStopLossPrice(mStopLossDown);
+                setStopLossPrice(mConfig.stopLossPrice);
             }
             if (mNewStopLossPrice > mStopLossUp) {
                 setStopLossPrice(mStopLossUp);
             }
         } else {
             mStopLossDown = mLastPrice + mConfig.stopLossPriceOffset;
-            mStopLossUp = mConfig.stopLossPrice;
+            mStopLossUp = mConfig.firstStopLossPrice;
             if (mStopLossDown > mStopLossUp) {
                 mStopLossDown = mStopLossUp;
             }
             mRange.setText(getResources().getString(R.string.stop_range,
                     FinanceUtil.formatWithScale(mStopLossDown, mConfig.priceScale),
                     FinanceUtil.formatWithScale(mStopLossUp, mConfig.priceScale)));
-            if (mNewStopLossPrice == 0) {
-                setStopLossPrice(mStopLossUp);
+            if (mNewStopLossPrice == 0) { // 初始值
+                setStopLossPrice(mConfig.stopProfitPrice);
             }
             if (mNewStopLossPrice < mStopLossDown) {
                 setStopLossPrice(mStopLossDown);
@@ -276,10 +276,12 @@ public class StopProfitLossPicker extends LinearLayout {
 
         private boolean isStopLoss;
         private int buyOrSell;
+        private double buyPrice;
         private double pointPerBeat; // 每次跳动多少个点
         private double stopLossPrice;
         private double stopProfitPrice;
         private double highestStopProfitPrice; // 最高止盈价
+        private double firstStopLossPrice; // 最初的止损价格
         private double stopLossPriceOffset;
         private double stopProfitPriceOffset;
         private double eachPointMoney; // 每个点多少钱
@@ -288,9 +290,10 @@ public class StopProfitLossPicker extends LinearLayout {
 
         public Config(boolean isStopLoss,
                       int buyOrSell,
+                      double buyPrice,
                       double pointPerBeat,
                       double stopLossPrice, double stopProfitPrice,
-                      double highestStopProfitPrice,
+                      double firstStopLossPrice, double highestStopProfitPrice,
                       double stopLossPriceOffset, double stopProfitPriceOffset,
                       double eachPointMoney,
                       int priceScale,
@@ -298,9 +301,11 @@ public class StopProfitLossPicker extends LinearLayout {
 
             this.isStopLoss = isStopLoss;
             this.buyOrSell = buyOrSell;
+            this.buyPrice = buyPrice;
             this.pointPerBeat = pointPerBeat;
             this.stopLossPrice = stopLossPrice;
             this.stopProfitPrice = stopProfitPrice;
+            this.firstStopLossPrice = firstStopLossPrice;
             this.highestStopProfitPrice = highestStopProfitPrice;
             this.stopLossPriceOffset = stopLossPriceOffset;
             this.stopProfitPriceOffset = stopProfitPriceOffset;

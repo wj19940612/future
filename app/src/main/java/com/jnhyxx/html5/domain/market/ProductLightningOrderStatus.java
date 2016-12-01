@@ -20,6 +20,9 @@ public class ProductLightningOrderStatus {
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
+    //表示闪电下单按钮打开同意协议的fragment的标志
+    public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
+
     /**
      * assetsId : 1
      * varietyId : 2
@@ -67,6 +70,10 @@ public class ProductLightningOrderStatus {
      * 费率
      */
     private double ratio;
+    /**
+     * 提交订单的时候的止盈点数
+     */
+    private int stopProfitPoint;
 
 
     public int getPayType() {
@@ -141,6 +148,14 @@ public class ProductLightningOrderStatus {
         this.ratio = ratio;
     }
 
+    public int getStopProfitPoint() {
+        return stopProfitPoint;
+    }
+
+    public void setStopProfitPoint(int stopProfitPoint) {
+        this.stopProfitPoint = stopProfitPoint;
+    }
+
     @Override
     public String toString() {
         return "ProductLightningOrderStatus{" +
@@ -153,6 +168,7 @@ public class ProductLightningOrderStatus {
                 ", marginMoney=" + marginMoney +
                 ", fees=" + fees +
                 ", ratio=" + ratio +
+                ", stopProfitPoint=" + stopProfitPoint +
                 '}';
     }
 
@@ -165,9 +181,9 @@ public class ProductLightningOrderStatus {
                 if (getAssetsId() == assets.get(i).getAssetsId()) {
                     FuturesFinancing.AssetsBean assetsBean = assets.get(i);
                     Log.d(TAG, "配资方案  assetsBean " + assetsBean.toString());
-                    if (assetsBean.getFees()*getHandsNum() == getFees() &&
+                    if (assetsBean.getFees() * getHandsNum() == getFees() &&
                             assetsBean.getStopLossBeat() == getStopLossPrice() &&
-                            assetsBean.getMarginBeat()*getHandsNum() == getMarginMoney() &&
+                            assetsBean.getMarginBeat() * getHandsNum() == getMarginMoney() &&
                             assetsBean.getHandsMultiple().contains(String.valueOf(getHandsNum())) &&
                             assetsBean.getStopWinBeats().containsValue(getStopWinPrice())) {
                         return true;

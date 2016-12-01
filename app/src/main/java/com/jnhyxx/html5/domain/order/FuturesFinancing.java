@@ -12,22 +12,6 @@ import java.util.Map;
 
 public class FuturesFinancing {
 
-    @Override
-    public String toString() {
-        return "FuturesFinancing{" +
-                "contractsCode='" + contractsCode + '\'' +
-                ", marginPoint=" + marginPoint +
-                ", sign='" + sign + '\'' +
-                ", marketPoint=" + marketPoint +
-                ", feesPoint=" + feesPoint +
-                ", varietyName='" + varietyName + '\'' +
-                ", eachPointMoney=" + eachPointMoney +
-                ", currencyUnit='" + currencyUnit + '\'' +
-                ", ratio=" + ratio +
-                ", assets=" + assets +
-                '}';
-    }
-
     /**
      * assets : [{"cvId":170,"marginBeat":332.5,"stopWinBeats":{"1":66.5,"5":332.5,"10":665},"fees":10,"marginBeatHands":{"1":50,"5":250,"10":500,"20":1000},"isDefault":0,"handsMultiple":["1","5","10","20"],"feesHands":{"1":10,"5":50,"10":100,"20":200},"stopLossBeat":199.5,"assetsId":10}]
      * contractsCode : GC1612
@@ -155,20 +139,6 @@ public class FuturesFinancing {
     }
 
     public static class AssetsBean {
-        @Override
-        public String toString() {
-            return "AssetsBean{" +
-                    "marginBeat=" + marginBeat +
-                    ", stopWinBeats=" + stopWinBeats +
-                    ", fees=" + fees +
-                    ", marginBeatHands=" + marginBeatHands +
-                    ", isDefault=" + isDefault +
-                    ", feesHands=" + feesHands +
-                    ", stopLossBeat=" + stopLossBeat +
-                    ", assetsId=" + assetsId +
-                    ", handsMultiple=" + handsMultiple +
-                    '}';
-        }
 
         private double marginBeat;
         private Map<String, Double> stopWinBeats;
@@ -236,14 +206,14 @@ public class FuturesFinancing {
             return handsMultiple;
         }
 
-//        @Override
-//        public String toString() {
-//            StringBuilder builder = new StringBuilder();
-//            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
-//                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-//            }
-//            return builder.toString();
-//        }
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+            return builder.toString();
+        }
     }
 
     public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration {
@@ -389,13 +359,13 @@ public class FuturesFinancing {
         return result;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        for (AssetsBean assetsBean : assets) {
-//            builder.append(assetsBean.getStopLossBeat()).append("\n")
-//                    .append(assetsBean.toString()).append("\n");
-//        }
-//        return builder.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (AssetsBean assetsBean : assets) {
+            builder.append(assetsBean.getStopLossBeat()).append("\n")
+                    .append(assetsBean.toString()).append("\n");
+        }
+        return builder.toString();
+    }
 }

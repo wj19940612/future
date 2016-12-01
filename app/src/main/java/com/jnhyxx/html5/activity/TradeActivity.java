@@ -142,6 +142,7 @@ public class TradeActivity extends BaseActivity implements
     boolean lightningOrderOpen;
 
     FullMarketData mFullMarketData;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -276,7 +277,6 @@ public class TradeActivity extends BaseActivity implements
                                     mLightningOrders.setSelected(true);
                                     lightningOrderOpen = true;
                                 } else {
-                                    ToastUtil.curt("您还没有设置闪电下单");
                                     mLightningOrders.setSelected(false);
                                 }
                             }
@@ -321,7 +321,7 @@ public class TradeActivity extends BaseActivity implements
             updateSignTradePagerHeader();
         }
         if (requestCode == REQ_CODE_SIGN_IN_LIGHTNING_ORDERS && resultCode == RESULT_OK) {
-            openSetLightningOrdersPage();
+            openLightningOrdersPage();
         }
         //打开闪电下单回调
         if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER) {
@@ -414,13 +414,27 @@ public class TradeActivity extends BaseActivity implements
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
             case R.id.lightningOrders:
-                if (!LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
-                    return;
-                }
-                openSetLightningOrdersPage();
+                openLightningOrdersPage();
                 break;
         }
+    }
+
+    private void openLightningOrdersPage() {
+        if (!LocalUser.getUser().isLogin()) {
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
+            return;
+        }
+        if (mFundType == Product.FUND_TYPE_CASH) {
+            String userPhone = LocalUser.getUser().getPhone();
+            if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
+                openSetLightningOrdersPage();
+            } else {
+                showAgreementFragment(ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE);
+            }
+        } else {
+            openSetLightningOrdersPage();
+        }
+        return;
     }
 
     //设置闪电下单买涨的提交单
@@ -434,7 +448,7 @@ public class TradeActivity extends BaseActivity implements
                 if (localLightningStatus != null) {
                     submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                     submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice() / 10));
+                    submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
                     submitOrder(submittedOrder);
                 }
             }
@@ -454,7 +468,7 @@ public class TradeActivity extends BaseActivity implements
                 if (localLightningStatus != null) {
                     submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                     submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice() / 10));
+                    submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
                     submitOrder(submittedOrder);
                 }
             }
@@ -817,6 +831,10 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
+        if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {
+            openLightningOrdersPage();
+            return;
+        }
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);

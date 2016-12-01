@@ -159,9 +159,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
-                            //提交成功
                             Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-                            ToastUtil.curt("提交成功");
+//                            ToastUtil.curt("提交成功");
                             LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
                             setResult(RESULT_CODE_OPEN_LIGHTNING_ORDER);
                             finish();
@@ -190,7 +189,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
             public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
                 if (configuration instanceof FuturesFinancing.StopProfit) {
                     FuturesFinancing.StopProfit stopProfit = (FuturesFinancing.StopProfit) configuration;
-//                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfitPoint());
+                    mProductLightningOrderStatus.setStopProfitPoint(stopProfit.getStopProfitPoint());
                     mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfit());
                 }
             }

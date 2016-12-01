@@ -13,7 +13,7 @@ public class SocketEncoder extends MessageToByteEncoder<String> {
 		if(TextUtils.isEmpty(msg)) {
 			return ;
 		}
-		byte[] message = msg.getBytes("GBK");
+		byte[] message = msg.getBytes("UTF-8");
 		out.writeInt(message.length);
 		out.writeBytes(message);
 	}

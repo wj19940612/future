@@ -71,8 +71,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.lightningOrders;
-
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback,
         AgreementFragment.Callback,
@@ -251,6 +249,7 @@ public class TradeActivity extends BaseActivity implements
                         .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                             @Override
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
+                                Log.d("TAG", "配资数据  " + futuresFinancing.toString());
                                 if (mLocalLightningStatus != null && futuresFinancing != null) {
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
@@ -414,7 +413,7 @@ public class TradeActivity extends BaseActivity implements
                 if (setLightningOrderSellShortSubmit()) return;
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
-            case lightningOrders:
+            case R.id.lightningOrders:
                 if (!LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
                     return;
@@ -455,7 +454,7 @@ public class TradeActivity extends BaseActivity implements
                 if (localLightningStatus != null) {
                     submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                     submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice()));
+                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice() / 10));
                     submitOrder(submittedOrder);
                 }
             }

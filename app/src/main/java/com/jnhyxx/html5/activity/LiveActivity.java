@@ -54,7 +54,6 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,13 +115,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
             Log.d(TAG, "onReceiveOriginalData: " + data);
             if (getLiveInteractionFragment() != null) {
-                try {
-                    data = new String(data.getBytes("GBK"), "UTF-8");
-                    getLiveInteractionFragment().setData(data);
-                } catch (UnsupportedEncodingException e) {
-                    getLiveInteractionFragment().setData(data);
-                    e.printStackTrace();
-                }
+                getLiveInteractionFragment().setData(data);
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
@@ -269,6 +262,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 mLivePlayer.fullScreen(false);
             }
         } else {
+            if (getLiveInteractionFragment() != null) {
+                getLiveInteractionFragment().hideInputBox();
+            }
             super.onBackPressed();
         }
     }
@@ -331,7 +327,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
-        if (!TextUtils.isEmpty(active.getRtmp())) {
+        if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
             mLivePlayer.setVideoPath(active.getRtmp());
         }
     }
@@ -568,7 +564,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     @Override
     public void onSendButtonClick(String message) {
-        Log.d(TAG, " 发送数据 " + message);
         mNettyClient.sendMessage(message);
         if (getLiveInteractionFragment() != null) {
             getLiveInteractionFragment().hideInputBox();

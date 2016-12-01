@@ -49,6 +49,17 @@ public class LocalLightningOrdersList {
         return null;
     }
 
+    public boolean clearLightningOrder(int varietyId, int psyType) {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (userInfo != null) {
+            String key = userInfo.getUserPhone() + varietyId + psyType;
+            if (data.containsKey(key)) {
+                data.remove(key);
+            }
+        }
+        return false;
+    }
+
     public void clear() {
         data.clear();
     }

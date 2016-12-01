@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -310,6 +311,10 @@ public class TradeActivity extends BaseActivity implements
         }
     }
 
+    private int px2dp(int dimension) {
+        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dimension, getResources().getDisplayMetrics()));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -324,6 +329,10 @@ public class TradeActivity extends BaseActivity implements
             ToastUtil.curt(R.string.lightning_orders_open);
             lightningOrderOpen = true;
             mLightningOrders.setSelected(true);
+            //动态调整边距，防止出现闪电下单后字体偏中间的情况
+            int dimension = px2dp(14);
+            mBuyLongBtn.setPadding(0, dimension, px2dp(20), dimension);
+            mSellShortBtn.setPadding(px2dp(20), dimension, 0, dimension);
         }
         //关闭闪电下单回调
         if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER) {
@@ -394,7 +403,7 @@ public class TradeActivity extends BaseActivity implements
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, lightningOrders})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrders})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -426,7 +435,7 @@ public class TradeActivity extends BaseActivity implements
                 if (localLightningStatus != null) {
                     submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                     submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice()));
+                    submittedOrder.setStopProfitPoint((int) (localLightningStatus.getStopWinPrice() / 10));
                     submitOrder(submittedOrder);
                 }
             }

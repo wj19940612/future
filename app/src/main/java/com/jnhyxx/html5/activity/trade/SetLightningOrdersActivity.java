@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.trade;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -190,7 +191,10 @@ public class SetLightningOrdersActivity extends BaseActivity {
             public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
                 if (configuration instanceof FuturesFinancing.StopProfit) {
                     FuturesFinancing.StopProfit stopProfit = (FuturesFinancing.StopProfit) configuration;
-                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfitPoint());
+//                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfitPoint());
+                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfit());
+
+
                 }
             }
         });

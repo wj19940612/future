@@ -16,6 +16,10 @@ public class ProductLightningOrderStatus {
 
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
+
+    public static final int TYPE_BUY_LONG = 1;
+    public static final int TYPE_SELL_SHORT = 0;
+
     /**
      * assetsId : 1
      * varietyId : 2
@@ -160,12 +164,12 @@ public class ProductLightningOrderStatus {
             for (int i = 0; i < assets.size(); i++) {
                 if (getAssetsId() == assets.get(i).getAssetsId()) {
                     FuturesFinancing.AssetsBean assetsBean = assets.get(i);
-                    Log.d(TAG, "wangjie  assetsBean " + assetsBean.toString());
-                    if (assetsBean.getFees() == getFees() &&
+                    Log.d(TAG, "配资方案  assetsBean " + assetsBean.toString());
+                    if (assetsBean.getFees()*getHandsNum() == getFees() &&
                             assetsBean.getStopLossBeat() == getStopLossPrice() &&
-                            assetsBean.getMarginBeat() == getMarginMoney() &&
+                            assetsBean.getMarginBeat()*getHandsNum() == getMarginMoney() &&
                             assetsBean.getHandsMultiple().contains(String.valueOf(getHandsNum())) &&
-                            assetsBean.getStopWinBeats().get(String.valueOf(getHandsNum())) == getStopWinPrice()) {
+                            assetsBean.getStopWinBeats().containsValue(getStopWinPrice())) {
                         return true;
                     }
                 }

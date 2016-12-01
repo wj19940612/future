@@ -21,11 +21,12 @@ import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.LightningOrdersArrayMap;
+import com.jnhyxx.html5.utils.LocalLightningOrdersList;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.jnhyxx.html5.view.TitleBar;
@@ -38,7 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.openLightningOrder;
 
 /**
  * 闪电下单配置界面
@@ -90,6 +90,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
         @Override
         protected void onReceiveData(FullMarketData data) {
             if (data != null) {
+
             }
         }
     };
@@ -111,15 +112,15 @@ public class SetLightningOrdersActivity extends BaseActivity {
         getExchangeTradeStatus();
     }
 
-    @OnClick({openLightningOrder, R.id.closeLightningOrder, R.id.restartLightningOrder})
+    @OnClick({R.id.openLightningOrder, R.id.closeLightningOrder, R.id.restartLightningOrder})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.openLightningOrder:
                 openLightningOrder();
                 break;
             case R.id.closeLightningOrder:
-                setResult(RESULT_CODE_CLOSE_LIGHTNING_ORDER);
-                onBackPressed();
+
+                removeLightningOrder();
                 break;
             case R.id.restartLightningOrder:
                 mTradeQuantitySelector.setEnabled(true);
@@ -130,6 +131,20 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 mOpenLightningOrder.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    private void removeLightningOrder() {
+        API.Market.removeOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
+                .setIndeterminate(this)
+                .setTag(TAG)
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        setResult(RESULT_CODE_CLOSE_LIGHTNING_ORDER);
+                        onBackPressed();
+                    }
+                })
+                .fire();
     }
 
     private void openLightningOrder() {
@@ -143,10 +158,13 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
-                        if (jsonObjectResp.hasData() && jsonObjectResp.isSuccess()) {
+                        if (jsonObjectResp.isSuccess()) {
                             //提交成功
+                            Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
                             ToastUtil.curt("提交成功");
-                            LightningOrdersArrayMap.getInstance().setLightningOrders(mProductLightningOrderStatus);
+                            LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
+                            setResult(RESULT_CODE_OPEN_LIGHTNING_ORDER);
+                            finish();
                         } else {
                             ToastUtil.curt(jsonObjectResp.getMsg());
                         }
@@ -172,7 +190,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
             public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
                 if (configuration instanceof FuturesFinancing.StopProfit) {
                     FuturesFinancing.StopProfit stopProfit = (FuturesFinancing.StopProfit) configuration;
-                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfit());
+                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfitPoint());
                 }
             }
         });

@@ -696,6 +696,18 @@ public class API extends APIBase {
                             .put("fees", fees)
                             .put("ratio", ratio));
         }
+
+        /**
+         *  删除闪电下单配置
+         * @param varietyId 品种id
+         * @param payType   支付方式  0：积分 1：现金
+         * @return
+         */
+        public static API removeOrderAssetStoreStatus(int varietyId, int payType) {
+            return new API("/order/orderAssetsStore/removeAssetsStore.do", new ApiParams()
+                    .put("varietyId", varietyId)
+                    .put("payType", payType));
+        }
     }
 
     public static class Order {

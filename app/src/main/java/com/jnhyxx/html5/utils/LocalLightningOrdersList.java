@@ -1,39 +1,39 @@
 package com.jnhyxx.html5.utils;
 
 
-import android.util.ArrayMap;
 import android.util.Log;
 
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 
+import java.util.HashMap;
+
 /**
  * Created by ${wangJie} on 2016/11/29.
  */
 
-public class LightningOrdersArrayMap {
-    private static final String TAG = "LightningOrdersArrayMap";
+public class LocalLightningOrdersList {
+    private static final String TAG = "LocalLightningOrders";
 
-    static ArrayMap<String, ProductLightningOrderStatus> data = new ArrayMap<>();
+    private static HashMap<String, ProductLightningOrderStatus> data = new HashMap<>();
 
-
-    private LightningOrdersArrayMap() {
+    private LocalLightningOrdersList() {
     }
 
     private static class Instance {
-        static LightningOrdersArrayMap sLightningOrdersArrayMap = new LightningOrdersArrayMap();
+        static LocalLightningOrdersList sLocalLightningOrdersList = new LocalLightningOrdersList();
     }
 
-    public static LightningOrdersArrayMap getInstance() {
-        return Instance.sLightningOrdersArrayMap;
+    public static LocalLightningOrdersList getInstance() {
+        return Instance.sLocalLightningOrdersList;
     }
 
     public void setLightningOrders(ProductLightningOrderStatus productLightningOrderStatus) {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo != null) {
             String key = userInfo.getUserPhone() + productLightningOrderStatus.getVarietyId() + productLightningOrderStatus.getPayType();
-            Log.d(TAG, "存入的key  " + key + " 闪电下单数据 " + productLightningOrderStatus);
+            Log.d(TAG, "存入的key  " + key + " 闪电下单数据 " + productLightningOrderStatus.toString());
             data.put(key, productLightningOrderStatus);
         }
     }
@@ -41,7 +41,7 @@ public class LightningOrdersArrayMap {
     public ProductLightningOrderStatus getLocalLightningStatus(int varietyId, int psyType) {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (userInfo != null) {
-            String key = userInfo.getUserPhone() + varietyId + varietyId;
+            String key = userInfo.getUserPhone() + varietyId + psyType;
             if (data.containsKey(key)) {
                 return data.get(key);
             }

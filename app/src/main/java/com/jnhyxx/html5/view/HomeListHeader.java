@@ -175,29 +175,29 @@ public class HomeListHeader extends FrameLayout {
 
     public void setHomeAdvertisement(List<Information> informationList) {
         filterEmptyInformation(informationList);
+        if (!informationList.isEmpty()) {
 
-        mPageIndicator.setCount(informationList.size());
-        if (mAdapter == null) {
-            mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
-            mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-            mViewPager.setAdapter(mAdapter);
-        } else {
-            mAdapter.setNewAdvertisements(informationList);
+            mPageIndicator.setCount(informationList.size());
+            if (mAdapter == null) {
+                mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
+                mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+                mViewPager.setAdapter(mAdapter);
+            } else {
+                mAdapter.setNewAdvertisements(informationList);
+            }
         }
     }
 
     private void filterEmptyInformation(List<Information> informationList) {
         List<Information> removeList = new ArrayList<>();
-        if (removeList.size() > 0) {
-            for (int i = 0; i < informationList.size(); i++) {
-                Information information = informationList.get(i);
-                if (TextUtils.isEmpty(information.getCover())) {
-                    removeList.add(information);
-                }
+        for (int i = 0; i < informationList.size(); i++) {
+            Information information = informationList.get(i);
+            if (TextUtils.isEmpty(information.getCover())) {
+                removeList.add(information);
             }
-            for (int i = 0; i < removeList.size(); i++) {
-                informationList.remove(removeList.get(i));
-            }
+        }
+        for (int i = 0; i < removeList.size(); i++) {
+            informationList.remove(removeList.get(i));
         }
     }
 

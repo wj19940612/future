@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class ServerIpPort implements Parcelable {
 
-    public static final String EX_IP_PORTS = "server";
+    public static final String EX_IP_PORT = "ip_port";
 
     /**
      * port : 8068

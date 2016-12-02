@@ -63,18 +63,17 @@ public class HoldingOrderPresenter {
                 Log.d(TAG, "getHoldingList finished: varietyId: " + mQueryJob.varietyId
                         + ", startQuery: " + mQueryJob.startQuery);
 
+                mHoldingOrderList = holdingOrderList;
+                onShowHoldingOrderList(holdingOrderList);
+
                 if (what == LOAD_DATA) {
                     Log.d(TAG, "onRespSuccess: LOAD_DATA");
-                    mHoldingOrderList = holdingOrderList;
-                    onShowHoldingOrderList(holdingOrderList);
                     setFullMarketData(mMarketData, mQueryJob.varietyId);
                     startQuery();
                 }
 
                 if (what == QUERY_DATA && mQueryJob.startQuery) {
                     Log.d(TAG, "onRespSuccess: QUERY_DATA: " + mQueryJob.count);
-                    mHoldingOrderList = holdingOrderList;
-                    onShowHoldingOrderList(holdingOrderList);
                     mQueryJob.count++;
                     query();
                 }
@@ -88,17 +87,14 @@ public class HoldingOrderPresenter {
                         for (String showId : showIds) {
                             if (showId.equals(order.getShowId())
                                     && order.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
-                                order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                                 refresh = true;
                             }
                         }
                     }
-                    mHoldingOrderList = holdingOrderList;
-                    onShowHoldingOrderList(holdingOrderList);
                     if (refresh) {
                         Log.d(TAG, "继续风控刷新");
                         Message message = mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrderIds);
-                        mHandler.sendMessageDelayed(message, 1 * 1000);
+                        mHandler.sendMessageDelayed(message, 2 * 1000);
                     } else {
                         if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
                             stopQuery();
@@ -111,8 +107,6 @@ public class HoldingOrderPresenter {
 
                 if (what == CLOSE_POSITION && varietyId == mQueryJob.varietyId) {
                     Log.d(TAG, "onRespSuccess: CLOSE_POSITION");
-                    mHoldingOrderList = holdingOrderList;
-                    onShowHoldingOrderList(holdingOrderList);
                     if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
                         stopQuery();
                         startQuery();

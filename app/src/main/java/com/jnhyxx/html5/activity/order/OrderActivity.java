@@ -56,7 +56,7 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
     }
 

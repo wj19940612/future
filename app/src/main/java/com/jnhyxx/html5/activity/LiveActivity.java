@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,7 +32,6 @@ import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
-import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
@@ -536,28 +534,13 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                     @Override
                     public void onRespSuccess(List<ServerIpPort> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(productPkg.getProduct(), marketServers);
+                            Launcher.with(LiveActivity.this, TradeActivity.class)
+                                    .putExtra(Product.EX_PRODUCT, productPkg.getProduct())
+                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                                    .putExtra(ServerIpPort.EX_IP_PORT, marketServers.get(0))
+                                    .execute();
                         }
-                    }
-                }).fire();
-    }
-
-    private void requestProductExchangeStatus(final Product product, final List<ServerIpPort> marketServers) {
-        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
-                .setTag(TAG)
-                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                    @Override
-                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        product.setExchangeStatus(exchangeStatus.isTradeable()
-                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(LiveActivity.this, TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(ServerIpPort.EX_IP_PORTS, new ArrayList<Parcelable>(marketServers))
-                                .execute();
                     }
                 }).fire();
     }

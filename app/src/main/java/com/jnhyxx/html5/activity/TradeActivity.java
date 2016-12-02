@@ -58,6 +58,7 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -115,7 +116,6 @@ public class TradeActivity extends BaseActivity implements
     private int mFundType;
     private String mFundUnit;
     private List<Product> mProductList;
-    private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
 
     private boolean mUpdateRealTimeData;
@@ -247,40 +247,34 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateExchangeStatusView() {
-        if (mExchangeStatus.getExchangeId() != mProduct.getExchangeId()) {
-            API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
-                    .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                        @Override
-                        public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                            mExchangeStatus = exchangeStatus;
-                            mProduct.setExchangeStatus(exchangeStatus.isTradeable()
-                                    ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-                            updateExchangeStatusView();
+        API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType())
+                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                    @Override
+                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mProduct.setExchangeStatus(exchangeStatus.isTradeable()
+                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
+                        if (exchangeStatus.isTradeable()) {
+                            mMarketCloseArea.setVisibility(View.GONE);
+                            mMarketOpenArea.setVisibility(View.VISIBLE);
+                            mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
+                                    exchangeStatus.getNextTime()));
+                        } else {
+                            mMarketCloseArea.setVisibility(View.VISIBLE);
+                            mMarketOpenArea.setVisibility(View.GONE);
+                            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
+                                    exchangeStatus.getNextTime()));
                         }
-                    }).fire();
-        } else {
-            if (mExchangeStatus.isTradeable()) {
-                mMarketCloseArea.setVisibility(View.GONE);
-                mMarketOpenArea.setVisibility(View.VISIBLE);
-                mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
-                        mExchangeStatus.getNextTime()));
-            } else {
-                mMarketCloseArea.setVisibility(View.VISIBLE);
-                mMarketOpenArea.setVisibility(View.GONE);
-                mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
-                        mExchangeStatus.getNextTime()));
-            }
-        }
+                    }
+                }).setTag(TAG).fireSync();
     }
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
+        //mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
+        mProductList = new ArrayList<>();
 
-        List<ServerIpPort> serverIpPorts = intent.getParcelableArrayListExtra(ServerIpPort.EX_IP_PORTS);
-        ServerIpPort serverIpPort = serverIpPorts.get(0);
+        ServerIpPort serverIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
         NettyClient.getInstance().setIpAndPort(serverIpPort.getIp(), serverIpPort.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
@@ -348,6 +342,7 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
+
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());

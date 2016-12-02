@@ -98,7 +98,7 @@ public class PlaceOrderFragment extends BaseFragment {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, longOrShort);
-        args.putSerializable(Product.EX_PRODUCT, product);
+        args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
         fragment.setArguments(args);
         return fragment;
@@ -120,7 +120,7 @@ public class PlaceOrderFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mLongOrShort = getArguments().getInt(TYPE, 0);
-            mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
+            mProduct = getArguments().getParcelable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
         }
     }

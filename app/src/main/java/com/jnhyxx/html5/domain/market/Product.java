@@ -3,9 +3,7 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class Product implements Serializable, Parcelable {
+public class Product implements Parcelable {
 
     public static final String EX_PRODUCT = "product";
     public static final String EX_FUND_TYPE = "fund";

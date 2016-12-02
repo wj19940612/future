@@ -4,11 +4,7 @@ import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.johnz.kutils.DateUtil;
 
-import java.io.Serializable;
-
-public class ExchangeStatus implements Serializable {
-
-    public static final String EX_EXCHANGE_STATUS = "exchangeStatus";
+public class ExchangeStatus {
 
     /**
      * exchangeId: 9

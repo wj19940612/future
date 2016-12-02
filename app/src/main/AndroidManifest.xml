@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.jnhyxx.html5"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jnhyxx.html5">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -23,8 +23,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <!--自定义权限解释:部分手机型号不能正常运行个推SDK，需添加自定义权限进行配置-->
+    <!-- 自定义权限解释:部分手机型号不能正常运行个推SDK，需添加自定义权限进行配置 -->
     <uses-permission android:name="getui.permission.GetuiService.com.jnhyxx.html5"/>
+
     <permission
         android:name="getui.permission.GetuiService.com.jnhyxx.html5"
         android:protectionLevel="normal"/>
@@ -189,6 +190,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".activity.account.IdeaFeedbackActivity">
+        </activity>
     </application>
 
 </manifest>

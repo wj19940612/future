@@ -438,4 +438,7 @@
 
     <!--直播 live-->
     <string name="live_right_title">交易</string>
+
+    <!--意见反馈-->
+    <string name="feedback_title">意见反馈</string>
 </resources>

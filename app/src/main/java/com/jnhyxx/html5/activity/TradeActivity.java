@@ -197,7 +197,6 @@ public class TradeActivity extends BaseActivity implements
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
         updateChartView(); // based on product
-        updateExchangeStatusView(); // based on product
     }
 
     private void openOrdersPage() {
@@ -348,6 +347,7 @@ public class TradeActivity extends BaseActivity implements
     protected void onPostResume() {
         super.onPostResume();
         updateQuestionMarker();
+        updateExchangeStatusView(); // based on product
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());

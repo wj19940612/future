@@ -230,7 +230,7 @@ public class StopProfitLossPicker extends LinearLayout {
                     FinanceUtil.formatWithScale(mStopLossDown, mConfig.priceScale),
                     FinanceUtil.formatWithScale(mStopLossUp, mConfig.priceScale)));
             if (mNewStopLossPrice == 0) { // 初始值
-                setStopLossPrice(mConfig.stopProfitPrice);
+                setStopLossPrice(mConfig.stopLossPrice);
             }
             if (mNewStopLossPrice < mStopLossDown) {
                 setStopLossPrice(mStopLossDown);

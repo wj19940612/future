@@ -441,4 +441,8 @@
 
     <!--意见反馈-->
     <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">请输入反馈意见</string>
+    <string name="feedback_user_phone">请输入QQ、微信或者手机号</string>
+    <string name="feedback_submit">提    交</string>
+    <string name="feedback_content_number">%1$d /200</string>
 </resources>

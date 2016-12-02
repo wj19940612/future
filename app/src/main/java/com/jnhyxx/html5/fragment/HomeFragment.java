@@ -155,7 +155,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
+        API.Market.getMarketServerIpAndPort()
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
                     public void onRespSuccess(List<ServerIpPort> serverIpPorts) {

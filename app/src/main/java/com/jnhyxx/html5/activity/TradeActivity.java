@@ -234,26 +234,23 @@ public class TradeActivity extends BaseActivity implements
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
-
         getLightningOrdersStatus();
     }
 
     private void getLightningOrdersStatus() {
         if (mProduct != null && LocalUser.getUser().isLogin()) {
-            ToastUtil.curt("登录了");
             mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
             if (mLocalLightningStatus != null) {
                 API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                         .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                             @Override
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
-                                Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                 if (mLocalLightningStatus != null && futuresFinancing != null) {
+                                    Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
                                     if (b) {
                                         lightningOrderOpen = true;
-                                        ToastUtil.curt("您的闪电下单正常");
                                         mLightningOrders.setSelected(true);
                                     } else {
                                         showLightningOrderOverDue();
@@ -323,7 +320,13 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
+            getLightningOrdersStatus();
         }
+        //token失效重新登录回调
+        if (requestCode == REQ_CODE_TOKEN_EXPIRED_LOGIN && resultCode == RESULT_OK) {
+            getLightningOrdersStatus();
+        }
+
         //打开闪电下单回调
         if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER) {
             ToastUtil.curt(R.string.lightning_orders_open);
@@ -549,7 +552,7 @@ public class TradeActivity extends BaseActivity implements
     protected void onPostResume() {
         super.onPostResume();
         updateQuestionMarker();
-        getLightningOrdersStatus();
+//        getLightningOrdersStatus();
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -835,18 +838,12 @@ public class TradeActivity extends BaseActivity implements
     public void onAgreeProtocolBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-
-
         if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {
-            if (fragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .remove(fragment)
-                        .commit();
-            }
+            hideFragmentOfContainer();
             openLightningOrdersPage();
             return;
         }
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))

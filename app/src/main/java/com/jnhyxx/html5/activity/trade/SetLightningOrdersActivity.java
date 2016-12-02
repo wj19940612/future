@@ -84,6 +84,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
 
     private boolean mLightningOrdersStatus;
+    //判断是否有期货配资
+    private boolean hasFuturesFinancing;
 
     private ProductLightningOrderStatus mProductLightningOrderStatus;
     private NettyHandler mNettyHandler = new NettyHandler() {
@@ -149,27 +151,31 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
     private void openLightningOrder() {
         Log.d(TAG, "提交的闪电下单配资 " + mProductLightningOrderStatus.toString());
-        API.Market.saveAndUpdateOrderAssetStore(mProductLightningOrderStatus.getVarietyId(), mProductLightningOrderStatus.getPayType(),
-                mProductLightningOrderStatus.getAssetsId(), mProductLightningOrderStatus.getHandsNum(),
-                mProductLightningOrderStatus.getStopLossPrice(), mProductLightningOrderStatus.getStopWinPrice(),
-                mProductLightningOrderStatus.getMarginMoney(), mProductLightningOrderStatus.getFees(), mProductLightningOrderStatus.getRatio())
-                .setIndeterminate(this)
-                .setTag(TAG)
-                .setCallback(new Callback<Resp<JsonObject>>() {
-                    @Override
-                    public void onReceive(Resp<JsonObject> jsonObjectResp) {
-                        if (jsonObjectResp.isSuccess()) {
-                            Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-                            ToastUtil.curt("提交成功");
-                            LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
-                            setResult(RESULT_CODE_OPEN_LIGHTNING_ORDER);
-                            finish();
-                        } else {
-                            ToastUtil.curt(jsonObjectResp.getMsg());
+        if (hasFuturesFinancing) {
+            API.Market.saveAndUpdateOrderAssetStore(mProductLightningOrderStatus.getVarietyId(), mProductLightningOrderStatus.getPayType(),
+                    mProductLightningOrderStatus.getAssetsId(), mProductLightningOrderStatus.getHandsNum(),
+                    mProductLightningOrderStatus.getStopLossPrice(), mProductLightningOrderStatus.getStopWinPrice(),
+                    mProductLightningOrderStatus.getMarginMoney(), mProductLightningOrderStatus.getFees(), mProductLightningOrderStatus.getRatio())
+                    .setIndeterminate(this)
+                    .setTag(TAG)
+                    .setCallback(new Callback<Resp<JsonObject>>() {
+                        @Override
+                        public void onReceive(Resp<JsonObject> jsonObjectResp) {
+                            if (jsonObjectResp.isSuccess()) {
+                                Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
+                                ToastUtil.curt("提交成功");
+                                LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
+                                setResult(RESULT_CODE_OPEN_LIGHTNING_ORDER);
+                                finish();
+                            } else {
+                                ToastUtil.curt(jsonObjectResp.getMsg());
+                            }
                         }
-                    }
-                })
-                .fire();
+                    })
+                    .fire();
+        } else {
+            ToastUtil.curt("产品配资不可为空");
+        }
     }
 
     private void getExchangeTradeStatus() {
@@ -202,9 +208,11 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
-                        if (mFuturesFinancing != null)
+                        if (mFuturesFinancing != null) {
+                            hasFuturesFinancing = true;
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
-                        updatePlaceOrderViews();
+                            updatePlaceOrderViews();
+                        }
                     }
                 }).fire();
     }

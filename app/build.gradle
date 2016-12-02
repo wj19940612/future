@@ -74,6 +74,58 @@ android {
                     PACKAGE_NAME    : applicationId
             ]
         }
+        hjqhtzw { // 黄金期货投资网
+            applicationId 'com.jnhyxx.app.hjqhtzw'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy1.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
+                    GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
+                    GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+        yytzqhb { // 原油投资期货宝
+            applicationId 'com.jnhyxx.app.yytzqhb'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy3.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "uDkOIdBlgD8FDqbCZ8DaE4",
+                    GETUI_APP_KEY   : "4aAkkoaEnU7e7BeyEsKld6",
+                    GETUI_APP_SECRET: "gvH8woAsRr6tzjzOIOirH6",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+        wptz { // 微盘投资
+            applicationId 'com.jnhyxx.app.wptz'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy2.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "RBuCXPrguZ6sLPblvr6Ql1",
+                    GETUI_APP_KEY   : "noLiE4TEba7nW7VzyiSry9",
+                    GETUI_APP_SECRET: "rFWsgW0Cm46u19SMh4aJH9",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+        gjsqhb { // 贵金属期货宝
+            applicationId 'com.jnhyxx.app.gjsqhb'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy4.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
+                    GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
+                    GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
     }
 
     dexOptions {
@@ -92,6 +144,11 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
+
+    hjqhtzwCompile project(path: ':umenglibrary', configuration: 'hjqhtzwRelease')
+    yytzqhbCompile project(path: ':umenglibrary', configuration: 'yytzqhbRelease')
+    wptzCompile project(path: ':umenglibrary', configuration: 'wptzRelease')
+    gjsqhbCompile project(path: ':umenglibrary', configuration: 'gjsqhbRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')

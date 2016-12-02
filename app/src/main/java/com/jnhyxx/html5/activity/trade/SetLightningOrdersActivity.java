@@ -154,7 +154,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
         if (hasFuturesFinancing) {
             API.Market.saveAndUpdateOrderAssetStore(mProductLightningOrderStatus.getVarietyId(), mProductLightningOrderStatus.getPayType(),
                     mProductLightningOrderStatus.getAssetsId(), mProductLightningOrderStatus.getHandsNum(),
-                    mProductLightningOrderStatus.getStopLossPrice(), mProductLightningOrderStatus.getStopWinPrice(),
+                    mProductLightningOrderStatus.getStopLossPrice(), mProductLightningOrderStatus.getStopWinPrice(), mProductLightningOrderStatus.getStopProfitPoint(),
                     mProductLightningOrderStatus.getMarginMoney(), mProductLightningOrderStatus.getFees(), mProductLightningOrderStatus.getRatio())
                     .setIndeterminate(this)
                     .setTag(TAG)

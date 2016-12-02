@@ -59,6 +59,11 @@ public class ProductLightningOrderStatus {
      */
     private double stopWinPrice;
     /**
+     * 提交订单的时候的止盈点数
+     */
+    private int stopProfitPoint;
+
+    /**
      * 保证金
      */
     private double marginMoney;
@@ -70,10 +75,6 @@ public class ProductLightningOrderStatus {
      * 费率
      */
     private double ratio;
-    /**
-     * 提交订单的时候的止盈点数
-     */
-    private int stopProfitPoint;
 
 
     public int getPayType() {
@@ -185,6 +186,7 @@ public class ProductLightningOrderStatus {
                             assetsBean.getStopLossBeat() == getStopLossPrice() &&
                             assetsBean.getMarginBeat() * getHandsNum() == getMarginMoney() &&
                             assetsBean.getHandsMultiple().contains(String.valueOf(getHandsNum())) &&
+
                             assetsBean.getStopWinBeats().containsValue(getStopWinPrice())) {
                         return true;
                     }

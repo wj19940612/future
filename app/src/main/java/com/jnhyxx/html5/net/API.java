@@ -682,7 +682,7 @@ public class API extends APIBase {
          * @return
          */
         public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,
-                                                       int handsNum, double stopLossPrice, double stopWinPrice,
+                                                       int handsNum, double stopLossPrice, double stopWinPrice, int stopProfitPoint,
                                                        double marginMoney, double fees, double ratio) {
             return new API("/order/orderAssetsStore/saveAndUpdate.do",
                     new ApiParams()
@@ -691,6 +691,7 @@ public class API extends APIBase {
                             .put("assetsId", assetsId)
                             .put("handsNum", handsNum)
                             .put("stopLossPrice", stopLossPrice)
+                            .put("stopProfitPoint", stopProfitPoint)
                             .put("stopWinPrice", stopWinPrice)
                             .put("marginMoney", marginMoney)
                             .put("fees", fees)
@@ -698,7 +699,8 @@ public class API extends APIBase {
         }
 
         /**
-         *  删除闪电下单配置
+         * 删除闪电下单配置
+         *
          * @param varietyId 品种id
          * @param payType   支付方式  0：积分 1：现金
          * @return

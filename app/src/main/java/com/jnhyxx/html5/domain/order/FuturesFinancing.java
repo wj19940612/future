@@ -206,30 +206,30 @@ public class FuturesFinancing {
             return handsMultiple;
         }
 
-//        @Override
-//        public String toString() {
-//            StringBuilder builder = new StringBuilder();
-//            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
-//                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-//            }
-//            return builder.toString();
-//        }
-
-
         @Override
         public String toString() {
-            return "AssetsBean{" +
-                    "marginBeat=" + marginBeat +
-                    ", stopWinBeats=" + stopWinBeats +
-                    ", fees=" + fees +
-                    ", marginBeatHands=" + marginBeatHands +
-                    ", isDefault=" + isDefault +
-                    ", feesHands=" + feesHands +
-                    ", stopLossBeat=" + stopLossBeat +
-                    ", assetsId=" + assetsId +
-                    ", handsMultiple=" + handsMultiple +
-                    '}';
+            StringBuilder builder = new StringBuilder();
+            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+            return builder.toString();
         }
+
+
+//        @Override
+//        public String toString() {
+//            return "AssetsBean{" +
+//                    "marginBeat=" + marginBeat +
+//                    ", stopWinBeats=" + stopWinBeats +
+//                    ", fees=" + fees +
+//                    ", marginBeatHands=" + marginBeatHands +
+//                    ", isDefault=" + isDefault +
+//                    ", feesHands=" + feesHands +
+//                    ", stopLossBeat=" + stopLossBeat +
+//                    ", assetsId=" + assetsId +
+//                    ", handsMultiple=" + handsMultiple +
+//                    '}';
+//        }
     }
 
     public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration {

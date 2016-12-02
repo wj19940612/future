@@ -206,13 +206,29 @@ public class FuturesFinancing {
             return handsMultiple;
         }
 
+//        @Override
+//        public String toString() {
+//            StringBuilder builder = new StringBuilder();
+//            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+//                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+//            }
+//            return builder.toString();
+//        }
+
+
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder();
-            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
-                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-            }
-            return builder.toString();
+            return "AssetsBean{" +
+                    "marginBeat=" + marginBeat +
+                    ", stopWinBeats=" + stopWinBeats +
+                    ", fees=" + fees +
+                    ", marginBeatHands=" + marginBeatHands +
+                    ", isDefault=" + isDefault +
+                    ", feesHands=" + feesHands +
+                    ", stopLossBeat=" + stopLossBeat +
+                    ", assetsId=" + assetsId +
+                    ", handsMultiple=" + handsMultiple +
+                    '}';
         }
     }
 
@@ -359,13 +375,30 @@ public class FuturesFinancing {
         return result;
     }
 
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        for (AssetsBean assetsBean : assets) {
+//            builder.append(assetsBean.getStopLossBeat()).append("\n")
+//                    .append(assetsBean.toString()).append("\n");
+//        }
+//        return builder.toString();
+//    }
+
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (AssetsBean assetsBean : assets) {
-            builder.append(assetsBean.getStopLossBeat()).append("\n")
-                    .append(assetsBean.toString()).append("\n");
-        }
-        return builder.toString();
+        return "FuturesFinancing{" +
+                "contractsCode='" + contractsCode + '\'' +
+                ", marginPoint=" + marginPoint +
+                ", sign='" + sign + '\'' +
+                ", marketPoint=" + marketPoint +
+                ", feesPoint=" + feesPoint +
+                ", varietyName='" + varietyName + '\'' +
+                ", eachPointMoney=" + eachPointMoney +
+                ", currencyUnit='" + currencyUnit + '\'' +
+                ", ratio=" + ratio +
+                ", assets=" + assets +
+                '}';
     }
 }

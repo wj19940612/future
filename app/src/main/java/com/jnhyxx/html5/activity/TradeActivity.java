@@ -271,6 +271,9 @@ public class TradeActivity extends BaseActivity implements
                         .setCallback(new Callback<Resp<ProductLightningOrderStatus>>() {
                             @Override
                             public void onReceive(Resp<ProductLightningOrderStatus> productLightningOrderStatusResp) {
+                                if (productLightningOrderStatusResp.isSuccess()) {
+                                    Log.d(TAG, "服务器产品下单状态" + productLightningOrderStatusResp.toString());
+                                }
                                 if (productLightningOrderStatusResp.isSuccess() && productLightningOrderStatusResp.hasData()) {
                                     Log.d(TAG, "服务器产品闪电下单状态  " + productLightningOrderStatusResp.getData().toString());
                                     LocalLightningOrdersList.getInstance().setLightningOrders(productLightningOrderStatusResp.getData());
@@ -831,13 +834,20 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreeProtocolBtnClick(int longOrShort) {
-        if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {
-            openLightningOrdersPage();
-            return;
-        }
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+
+
+        if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .remove(fragment)
+                        .commit();
+            }
+            openLightningOrdersPage();
+            return;
+        }
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))

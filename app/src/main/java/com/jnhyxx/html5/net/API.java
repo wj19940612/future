@@ -684,7 +684,7 @@ public class API extends APIBase {
         public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,
                                                        int handsNum, double stopLossPrice, double stopWinPrice,
                                                        double marginMoney, double fees, double ratio) {
-            return new API(GET, "/order/orderAssetsStore/saveAndUpdate.do",
+            return new API("/order/orderAssetsStore/saveAndUpdate.do",
                     new ApiParams()
                             .put("varietyId", varietyId)
                             .put("payType", payType)

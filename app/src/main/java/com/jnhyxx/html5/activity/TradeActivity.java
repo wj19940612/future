@@ -77,8 +77,6 @@ public class TradeActivity extends BaseActivity implements
         HoldingOrderPresenter.IHoldingOrderView {
 
     private static final int REQ_CODE_SIGN_IN = 1;
-    //闪电下单跳转登陆的请求码
-    private static final int REQ_CODE_SIGN_IN_LIGHTNING_ORDERS = 924;
     //闪电下单界面的请求码
     private static final int REQ_CODE_SET_LIGHTNING_ORDERS = 999;
 
@@ -238,19 +236,18 @@ public class TradeActivity extends BaseActivity implements
         updateExchangeStatusView(); // based on product
 
         getLightningOrdersStatus();
-        //获取期货配资方案
-
     }
 
     private void getLightningOrdersStatus() {
-        if (mProduct != null) {
+        if (mProduct != null && LocalUser.getUser().isLogin()) {
+            ToastUtil.curt("登录了");
             mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
             if (mLocalLightningStatus != null) {
                 API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                         .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                             @Override
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
-                                Log.d("TAG", "配资数据  " + futuresFinancing.toString());
+                                Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                 if (mLocalLightningStatus != null && futuresFinancing != null) {
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
@@ -266,26 +263,30 @@ public class TradeActivity extends BaseActivity implements
                             }
                         }).fire();
             } else {
-                API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
-                        .setTag(TAG)
-                        .setCallback(new Callback<Resp<ProductLightningOrderStatus>>() {
-                            @Override
-                            public void onReceive(Resp<ProductLightningOrderStatus> productLightningOrderStatusResp) {
-                                if (productLightningOrderStatusResp.isSuccess()) {
-                                    Log.d(TAG, "服务器产品下单状态" + productLightningOrderStatusResp.toString());
-                                }
-                                if (productLightningOrderStatusResp.isSuccess() && productLightningOrderStatusResp.hasData()) {
-                                    Log.d(TAG, "服务器产品闪电下单状态  " + productLightningOrderStatusResp.getData().toString());
-                                    LocalLightningOrdersList.getInstance().setLightningOrders(productLightningOrderStatusResp.getData());
-                                    mLightningOrders.setSelected(true);
-                                    lightningOrderOpen = true;
-                                } else {
-                                    mLightningOrders.setSelected(false);
-                                }
-                            }
-                        }).fire();
+                getWebOrderAssetStore();
             }
         }
+    }
+
+    private void getWebOrderAssetStore() {
+        API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
+                .setTag(TAG)
+                .setCallback(new Callback<Resp<ProductLightningOrderStatus>>() {
+                    @Override
+                    public void onReceive(Resp<ProductLightningOrderStatus> productLightningOrderStatusResp) {
+                        if (productLightningOrderStatusResp.isSuccess()) {
+                            Log.d("lightningOrder", "服务器产品下单状态" + productLightningOrderStatusResp.toString());
+                        }
+                        if (productLightningOrderStatusResp.isSuccess() && productLightningOrderStatusResp.hasData()) {
+                            Log.d("lightningOrder", "服务器产品闪电下单状态  " + productLightningOrderStatusResp.getData().toString());
+                            LocalLightningOrdersList.getInstance().setLightningOrders(productLightningOrderStatusResp.getData());
+                            mLightningOrders.setSelected(true);
+                            lightningOrderOpen = true;
+                        } else {
+                            mLightningOrders.setSelected(false);
+                        }
+                    }
+                }).fire();
     }
 
     private void showLightningOrderOverDue() {
@@ -322,9 +323,6 @@ public class TradeActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
-        }
-        if (requestCode == REQ_CODE_SIGN_IN_LIGHTNING_ORDERS && resultCode == RESULT_OK) {
-            openLightningOrdersPage();
         }
         //打开闪电下单回调
         if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER) {
@@ -424,7 +422,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void openLightningOrdersPage() {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN_LIGHTNING_ORDERS);
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
             return;
         }
         if (mFundType == Product.FUND_TYPE_CASH) {
@@ -551,6 +549,7 @@ public class TradeActivity extends BaseActivity implements
     protected void onPostResume() {
         super.onPostResume();
         updateQuestionMarker();
+        getLightningOrdersStatus();
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());

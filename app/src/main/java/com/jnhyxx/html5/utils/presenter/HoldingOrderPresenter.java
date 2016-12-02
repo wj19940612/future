@@ -47,54 +47,77 @@ public class HoldingOrderPresenter {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                getHoldingList(msg.what, msg.arg1);
+                getHoldingList(msg.what, msg.arg1, msg.obj);
             }
         };
         mQueryJob = new QueryJob();
     }
 
-    private void getHoldingList(final int what, final int arg1) {
+    private void getHoldingList(final int what, final int varietyId, final Object obj) {
         Log.d(TAG, "getHoldingList: varietyId: " + mQueryJob.varietyId);
-
         final API api = API.Order.getHoldingOrderList(mQueryJob.varietyId, mQueryJob.fundType);
         api.setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
             @Override
             public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
                 if (mPause) return;
-
                 Log.d(TAG, "getHoldingList finished: varietyId: " + mQueryJob.varietyId
-                        + ", query: " + mQueryJob.startQuery);
-
-                mHoldingOrderList = holdingOrderList;
-                onShowHoldingOrderList(holdingOrderList);
+                        + ", startQuery: " + mQueryJob.startQuery);
 
                 if (what == LOAD_DATA) {
                     Log.d(TAG, "onRespSuccess: LOAD_DATA");
+                    mHoldingOrderList = holdingOrderList;
+                    onShowHoldingOrderList(holdingOrderList);
                     setFullMarketData(mMarketData, mQueryJob.varietyId);
                     startQuery();
                 }
 
                 if (what == QUERY_DATA && mQueryJob.startQuery) {
                     Log.d(TAG, "onRespSuccess: QUERY_DATA: " + mQueryJob.count);
+                    mHoldingOrderList = holdingOrderList;
+                    onShowHoldingOrderList(holdingOrderList);
                     mQueryJob.count++;
                     query();
                 }
 
-                if (what == RISK_CONTROL || what == CLOSE_POSITION) {
-                    if (what == RISK_CONTROL) {
-                        Log.d(TAG, "onRespSuccess: RISK_CONTROL");
-                    } else {
-                        Log.d(TAG, "onRespSuccess: CLOSE_POSITION");
+                if (what == RISK_CONTROL && varietyId == mQueryJob.varietyId) {
+                    Log.d(TAG, "onRespSuccess: RISK_CONTROL");
+                    String closingOrderIds = (String) obj;
+                    String[] showIds = closingOrderIds.split(";");
+                    boolean refresh = false;
+                    for (HoldingOrder order : holdingOrderList) {
+                        for (String showId : showIds) {
+                            if (showId.equals(order.getShowId())
+                                    && order.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                                order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
+                                refresh = true;
+                            }
+                        }
                     }
+                    mHoldingOrderList = holdingOrderList;
+                    onShowHoldingOrderList(holdingOrderList);
+                    if (refresh) {
+                        Log.d(TAG, "继续风控刷新");
+                        Message message = mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrderIds);
+                        mHandler.sendMessageDelayed(message, 1 * 1000);
+                    } else {
+                        if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
+                            stopQuery();
+                            startQuery();
+                        } else if (!mQueryJob.startQuery) {
+                            startQuery();
+                        }
+                    }
+                }
+
+                if (what == CLOSE_POSITION && varietyId == mQueryJob.varietyId) {
+                    Log.d(TAG, "onRespSuccess: CLOSE_POSITION");
+                    mHoldingOrderList = holdingOrderList;
+                    onShowHoldingOrderList(holdingOrderList);
                     if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
                         stopQuery();
-                        if (arg1 == mQueryJob.varietyId) {
-                            startQuery();
-                        }
+                        startQuery();
                     } else if (!mQueryJob.startQuery) {
-                        if (arg1 == mQueryJob.varietyId) {
-                            startQuery();
-                        }
+                        startQuery();
                     }
                 }
 
@@ -103,7 +126,7 @@ public class HoldingOrderPresenter {
                 }
             }
         });
-        if (what == LOAD_DATA || what == UPDATE_ONLY) {
+        if (what == LOAD_DATA || what == UPDATE_ONLY || what == RISK_CONTROL) {
             api.fireSync();
         } else {
             api.fire();
@@ -142,7 +165,7 @@ public class HoldingOrderPresenter {
         Log.d(TAG, "stopQuery: ");
         mQueryJob.startQuery = false;
         mQueryJob.count = 0;
-        mHandler.removeMessages(0);
+        mHandler.removeMessages(QUERY_DATA);
     }
 
     /**
@@ -156,7 +179,7 @@ public class HoldingOrderPresenter {
     private void queryDelay() {
         if (mHandler == null) return;
 
-        Message message = mHandler.obtainMessage(QUERY_DATA, -1, -1);
+        Message message = mHandler.obtainMessage(QUERY_DATA, mQueryJob.varietyId, -1);
         if (mQueryJob.count == 0) {
             mHandler.sendMessage(message);
         } else if (mQueryJob.count < 10) {
@@ -284,7 +307,7 @@ public class HoldingOrderPresenter {
         boolean hasHoldingOrders = false;
         double ratio = 0;
         boolean refresh = false;
-        StringBuilder touchRiskControlShowIds = new StringBuilder();
+        StringBuilder closingOrderIds = new StringBuilder();
 
         if (marketData != null && mHoldingOrderList != null) {
             for (HoldingOrder holdingOrder : mHoldingOrderList) {
@@ -304,15 +327,16 @@ public class HoldingOrderPresenter {
                     diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
 
                     BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
-                    if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(new BigDecimal(holdingOrder.getStopWin())) >= 0) {
+                    BigDecimal bigDecimalStopProfit = new BigDecimal(holdingOrder.getStopWin());
+                    if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopProfit) >= 0) {
                         refresh = true;
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        touchRiskControlShowIds.append(holdingOrder.getShowId()).append(";");
+                        closingOrderIds.append(holdingOrder.getShowId()).append(";");
                     }
                     if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopLoss) <= 0) {
                         refresh = true;
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        touchRiskControlShowIds.append(holdingOrder.getShowId()).append(";");
+                        closingOrderIds.append(holdingOrder.getShowId()).append(";");
                     }
 
                     totalProfit = totalProfit.add(diff);
@@ -325,8 +349,8 @@ public class HoldingOrderPresenter {
 
         if (refresh) { // 触及风控刷新
             Log.d(TAG, "触及风控刷新");
-            mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1));
-            String showIds = touchRiskControlShowIds.deleteCharAt(touchRiskControlShowIds.length() - 1).toString();
+            String showIds = closingOrderIds.deleteCharAt(closingOrderIds.length() - 1).toString();
+            mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, showIds));
             onRiskControlTriggered(showIds);
         }
     }
@@ -338,8 +362,6 @@ public class HoldingOrderPresenter {
     }
 
     private void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
-
-
         if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
         }

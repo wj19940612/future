@@ -186,8 +186,8 @@ public class ProductLightningOrderStatus {
                             assetsBean.getStopLossBeat() == getStopLossPrice() &&
                             assetsBean.getMarginBeat() * getHandsNum() == getMarginMoney() &&
                             assetsBean.getHandsMultiple().contains(String.valueOf(getHandsNum())) &&
-
-                            assetsBean.getStopWinBeats().containsValue(getStopWinPrice())) {
+                            assetsBean.getStopWinBeats().containsKey(String.valueOf(getStopProfitPoint()))&&
+                            assetsBean.getStopWinBeats().get(String.valueOf(getStopProfitPoint()))==getStopWinPrice()) {
                         return true;
                     }
                 }

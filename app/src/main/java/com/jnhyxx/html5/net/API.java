@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
@@ -681,21 +682,25 @@ public class API extends APIBase {
          * @param ratio         费率
          * @return
          */
-        public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,
-                                                       int handsNum, double stopLossPrice, double stopWinPrice, int stopProfitPoint,
-                                                       double marginMoney, double fees, double ratio) {
+//        public static API saveAndUpdateOrderAssetStore(int varietyId, int payType, int assetsId,
+//                                                       int handsNum, double stopLossPrice, double stopWinPrice, int stopProfitPoint,
+//                                                       double marginMoney, double fees, double ratio) {
+//            return new API("/order/orderAssetsStore/saveAndUpdate.do",
+//                    new ApiParams()
+//                            .put("varietyId", varietyId)
+//                            .put("payType", payType)
+//                            .put("assetsId", assetsId)
+//                            .put("handsNum", handsNum)
+//                            .put("stopLossPrice", stopLossPrice)
+//                            .put("stopProfitPoint", stopProfitPoint)
+//                            .put("stopWinPrice", stopWinPrice)
+//                            .put("marginMoney", marginMoney)
+//                            .put("fees", fees)
+//                            .put("ratio", ratio));
+//        }
+        public static API saveAndUpdateOrderAssetStore(ProductLightningOrderStatus productLightningOrderStatus) {
             return new API("/order/orderAssetsStore/saveAndUpdate.do",
-                    new ApiParams()
-                            .put("varietyId", varietyId)
-                            .put("payType", payType)
-                            .put("assetsId", assetsId)
-                            .put("handsNum", handsNum)
-                            .put("stopLossPrice", stopLossPrice)
-                            .put("stopProfitPoint", stopProfitPoint)
-                            .put("stopWinPrice", stopWinPrice)
-                            .put("marginMoney", marginMoney)
-                            .put("fees", fees)
-                            .put("ratio", ratio));
+                    new ApiParams(ProductLightningOrderStatus.class, productLightningOrderStatus));
         }
 
         /**

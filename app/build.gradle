@@ -63,8 +63,8 @@ android {
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 6
-            versionName '1.1.2'
+            versionCode 7
+            versionName '1.1.3'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
@@ -73,19 +73,6 @@ android {
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
                     PACKAGE_NAME    : applicationId
             ]
-        }
-
-        ryt {
-            applicationIdSuffix '.ryt'
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://www.rytqh.com\"')
-        }
-        ycp {
-            applicationIdSuffix '.ycp'
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
         }
     }
 
@@ -105,9 +92,6 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
-
-    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
-    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')

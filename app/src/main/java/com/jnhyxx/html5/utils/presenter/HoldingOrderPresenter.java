@@ -240,6 +240,7 @@ public class HoldingOrderPresenter {
                 .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                     @Override
                     public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
+                        if (!mResume) return;
                         Log.d(TAG, "loadHoldingOrderList finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
                         if (varietyId == sVarietyId) {
 
@@ -251,7 +252,7 @@ public class HoldingOrderPresenter {
                             queryHoldingOrderListAndUpdate(varietyId, fundType);
                         }
                     }
-                }).fire();
+                }).fireSync();
     }
 
     /**
@@ -316,6 +317,7 @@ public class HoldingOrderPresenter {
                     .setCallback(new Callback2<Resp<List<HoldingOrder>>, List<HoldingOrder>>() {
                         @Override
                         public void onRespSuccess(List<HoldingOrder> holdingOrderList) {
+                            if (!mResume) return;
                             Log.d(TAG, "queryHoldingOrderListAndUpdate finished count: " + mCounter);
                             Log.d(TAG, "queryHoldingOrderListAndUpdate finished: varietyId: " + varietyId + ", sVarietyId: " + sVarietyId);
                             if (varietyId == sVarietyId) {

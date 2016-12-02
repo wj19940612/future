@@ -282,6 +282,7 @@
     <!--我的界面 Mine -->
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
+    <string name="user_feedback">用户反馈</string>
     <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s </string>
     <string name="mine_balance">余额 (元)</string>
@@ -444,5 +445,6 @@
     <string name="feedback_hint">请输入反馈意见</string>
     <string name="feedback_user_phone">请输入QQ、微信或者手机号</string>
     <string name="feedback_submit">提    交</string>
-    <string name="feedback_content_number">%1$d /200</string>
+    <string name="feedback_content_number"> %1$d/200</string>
+    <string name="feedback_submit_success">用户反馈提交成功</string>
 </resources>

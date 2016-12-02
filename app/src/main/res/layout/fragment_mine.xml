@@ -226,5 +226,15 @@
         app:rowText="@string/about_us"
         app:rowTextColor="@color/blackPrimary"/>
 
-    <include layout="@layout/split_line_gray_dark"/>
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/feedback"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        app:leftIcon="@drawable/ic_feedback"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/user_feedback"
+        app:rowTextColor="@color/blackPrimary"/>
+
 </LinearLayout>

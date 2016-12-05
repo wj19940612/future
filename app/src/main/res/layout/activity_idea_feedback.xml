@@ -53,6 +53,8 @@
             android:paddingBottom="12dp"
             android:paddingTop="10dp"
             android:text="@string/feedback_content_number"
+            android:textColor="@color/lucky"
+            android:textSize="11sp"
             android:visibility="visible"/>
 
         <EditText

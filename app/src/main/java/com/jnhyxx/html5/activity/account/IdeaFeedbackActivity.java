@@ -49,7 +49,7 @@ public class IdeaFeedbackActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idea_feedback);
         ButterKnife.bind(this);
-        mFeedbackContentNumber.setText(getString(R.string.feedback_content_number, 0));
+        mFeedbackContentNumber.setText(getString(R.string.feedback_content_number));
         mFeedbackContent.addTextChangedListener(mValidationWatcher);
         setKeyboardHelper();
     }
@@ -98,8 +98,8 @@ public class IdeaFeedbackActivity extends BaseActivity {
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-
-            mFeedbackContentNumber.setText(getString(R.string.feedback_content_number, editable.toString().length()));
+            String importabilityWords = String.valueOf(200 - editable.toString().length());
+            mFeedbackContentNumber.setText(importabilityWords);
 
             if (!TextUtils.isEmpty(editable.toString())) {
                 mFeedbackSubmit.setEnabled(true);

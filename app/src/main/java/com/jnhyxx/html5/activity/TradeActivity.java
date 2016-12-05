@@ -410,11 +410,11 @@ public class TradeActivity extends BaseActivity implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
-                if (setLightningOrderBuyLongSubmit()) return;
+                if (setLightningOrderSubmitOrder(ProductLightningOrderStatus.TYPE_BUY_LONG)) return;
                 placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
                 break;
             case R.id.sellShortBtn:
-                if (setLightningOrderSellShortSubmit()) return;
+                if (setLightningOrderSubmitOrder(ProductLightningOrderStatus.TYPE_SELL_SHORT)) return;
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
             case R.id.lightningOrders:
@@ -440,13 +440,13 @@ public class TradeActivity extends BaseActivity implements
         }
         return;
     }
-
-    //设置闪电下单买涨的提交单
-    private boolean setLightningOrderBuyLongSubmit() {
+    //设置闪电下单的提交单
+    private boolean setLightningOrderSubmitOrder(int buyType) {
         if (lightningOrderOpen) {
-            SubmittedOrder submittedOrder = new SubmittedOrder(mProduct.getVarietyId(), ProductLightningOrderStatus.TYPE_BUY_LONG);
+            SubmittedOrder submittedOrder = new SubmittedOrder(mProduct.getVarietyId(), buyType);
             if (mFullMarketData != null) {
-                submittedOrder.setOrderPrice(mFullMarketData.getAskPrice());
+                //如果是买涨 则最新买入价	为卖一价;反之如果是买跌，则为买一价
+                submittedOrder.setOrderPrice(buyType == ProductLightningOrderStatus.TYPE_BUY_LONG ? mFullMarketData.getAskPrice() : mFullMarketData.getAskPrice());
                 submittedOrder.setPayType(mFundType);
                 ProductLightningOrderStatus localLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
                 if (localLightningStatus != null) {
@@ -460,27 +460,6 @@ public class TradeActivity extends BaseActivity implements
         }
         return false;
     }
-
-    //设置闪电下单买跌的提交单
-    private boolean setLightningOrderSellShortSubmit() {
-        if (lightningOrderOpen) {
-            SubmittedOrder submittedOrder = new SubmittedOrder(mProduct.getVarietyId(), ProductLightningOrderStatus.TYPE_SELL_SHORT);
-            if (mFullMarketData != null) {
-                submittedOrder.setOrderPrice(mFullMarketData.getBidPrice());
-                submittedOrder.setPayType(mFundType);
-                ProductLightningOrderStatus localLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
-                if (localLightningStatus != null) {
-                    submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
-                    submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-                    submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
-                    submitOrder(submittedOrder);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
     private void openSetLightningOrdersPage() {
         Launcher.with(getActivity(), SetLightningOrdersActivity.class)
                 .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, lightningOrderOpen)
@@ -552,7 +531,6 @@ public class TradeActivity extends BaseActivity implements
     protected void onPostResume() {
         super.onPostResume();
         updateQuestionMarker();
-//        getLightningOrdersStatus();
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());

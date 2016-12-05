@@ -450,5 +450,6 @@
     <string name="lightning_orders_buy_long">闪电买涨</string>
     <string name="lightning_orders_buy_short">闪电买跌</string>
     <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
+    <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
 
 </resources>

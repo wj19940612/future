@@ -175,6 +175,18 @@
             tools:text="¥ 14620 "/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/openLightningOrderHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:background="@color/bluePrimary"
+        android:gravity="center"
+        android:paddingBottom="@dimen/common_margin"
+        android:text="@string/lightning_orders_open_hint"
+        android:textColor="@color/blueAssist"
+        android:textSize="@dimen/min_text_size"/>
+
     <LinearLayout
         android:id="@+id/lightningOrdersOpen"
         android:layout_width="match_parent"

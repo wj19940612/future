@@ -24,7 +24,7 @@ import com.jnhnxx.livevideo.LiveVideo;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
-import com.jnhyxx.html5.domain.live.ChatData;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LastTeacherCommand;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
@@ -119,15 +119,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             }
 
             LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-            ChatData chatData = new ChatData(liveSpeakInfo);
+            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
 
-            if (chatData.getChatType() == ChatData.CHAT_TYPE_TEACHER && chatData.isOrder()) {
-                mTeacherCommand.setTeacherCommand(chatData);
+            if (LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER && LiveHomeChatInfo.isOrder()) {
+                mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
             }
 
-            if (chatData.isOrder()) {
+            if (LiveHomeChatInfo.isOrder()) {
                 if (getTeacherGuideFragment() != null) {
-                    getTeacherGuideFragment().setData(chatData);
+                    getTeacherGuideFragment().setData(LiveHomeChatInfo);
                 }
             }
         }
@@ -147,7 +147,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             }
 
             @Override
-            public void onCloseButtonClick(ChatData teacherCommand) {
+            public void onCloseButtonClick(LiveHomeChatInfo teacherCommand) {
                 Preference.get().setThisLastTeacherCommandShowed(teacherCommand);
             }
         });
@@ -233,7 +233,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                     .setCallback(new Callback2<Resp<LastTeacherCommand>, LastTeacherCommand>() {
                         @Override
                         public void onRespSuccess(LastTeacherCommand lastTeacherCommand) {
-                            ChatData teacherCommand = lastTeacherCommand.getMsg();
+                            LiveHomeChatInfo teacherCommand = lastTeacherCommand.getMsg();
                             if (teacherCommand == null) return;
 
                             if (!Preference.get().hasShowedThisLastTeacherCommand(teacherCommand)) {

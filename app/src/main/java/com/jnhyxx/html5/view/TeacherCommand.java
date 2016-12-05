@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.live.ChatData;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.squareup.picasso.Picasso;
 
@@ -26,7 +26,7 @@ public class TeacherCommand extends LinearLayout {
     public interface OnClickListener {
         void onTeacherHeadClick();
 
-        void onCloseButtonClick(ChatData teacherCommand);
+        void onCloseButtonClick(LiveHomeChatInfo teacherCommand);
     }
 
     private ImageView mTeacherHead;
@@ -39,7 +39,7 @@ public class TeacherCommand extends LinearLayout {
     private Handler mHandler;
     private OnClickListener mListener;
 
-    private ChatData mChatData;
+    private LiveHomeChatInfo mLiveHomeChatInfo;
 
     public TeacherCommand(Context context) {
         super(context);
@@ -84,7 +84,7 @@ public class TeacherCommand extends LinearLayout {
             public void onClick(View v) {
                 closeTeacherCommand();
                 if (mListener != null) {
-                    mListener.onCloseButtonClick(mChatData);
+                    mListener.onCloseButtonClick(mLiveHomeChatInfo);
                 }
             }
         });
@@ -112,9 +112,9 @@ public class TeacherCommand extends LinearLayout {
         }
     }
 
-    public void setTeacherCommand(ChatData teacherCommand) {
+    public void setTeacherCommand(LiveHomeChatInfo teacherCommand) {
         if (teacherCommand != null && !TextUtils.isEmpty(teacherCommand.getMsg())) {
-            mChatData = teacherCommand;
+            mLiveHomeChatInfo = teacherCommand;
             mTeacherCommandArea.setVisibility(VISIBLE);
             mCloseButton.setVisibility(VISIBLE);
             mTeacherCommand.setText(getContext().getString(R.string.live_teacher_order, teacherCommand.getMsg()));

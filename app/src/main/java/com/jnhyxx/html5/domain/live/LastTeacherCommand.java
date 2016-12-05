@@ -2,10 +2,10 @@ package com.jnhyxx.html5.domain.live;
 
 public class LastTeacherCommand {
 
-    private ChatData msg;
+    private LiveHomeChatInfo msg;
     private LiveMessage.TeacherInfo teacher;
 
-    public ChatData getMsg() {
+    public LiveHomeChatInfo getMsg() {
         return msg;
     }
 

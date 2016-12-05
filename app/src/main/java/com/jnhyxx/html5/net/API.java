@@ -550,17 +550,17 @@ public class API extends APIBase {
 
         /**
          * 接口名：分页获取直播老师指导
-         * URL  http://域名/user/live/findTeacherMsg.do
+         * URL  http://域名/user/live/findTeacherMsgList.do
          *
-         * @param page      第几页
+         * @param offset      偏移量
          * @param pageSize
          * @param teacherId 老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
          * @return
          */
-        public static API getTeacherGuide(int page, int pageSize, int teacherId) {
-            return new API(GET, "/user/live/findTeacherMsg.do", new ApiParams()
-                    .put("page", page)
-                    .put("pageSize", pageSize)
+        public static API getTeacherGuide(int offset, int pageSize, int teacherId) {
+            return new API(GET, "/user/live/findTeacherMsgList.do", new ApiParams()
+                    .put("offset", offset)
+                    .put("size", pageSize)
                     .put("teacherId", teacherId));
         }
 
@@ -579,24 +579,16 @@ public class API extends APIBase {
 
         /**
          * 接口名：按条件查询
-         * URL  http://域名/user/live/queryPagingBy.do
+         * URL  http://域名/user/live/findChatList.do
          *
-         * @param timeStamp 最上面一条数据
-         * @param page
-         * @param pageSize
+         * @param offset    偏移量
+         * @param pageSize  每页请求数量
          * @return
          */
-        public static API getLiveTalk(long timeStamp, int page, int pageSize) {
-            if (timeStamp == 0) {
-                return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
-                        .put("timeStamp", null)
-                        .put("page", page)
-                        .put("pageSize", pageSize));
-            }
-            return new API(GET, "/user/live/queryPagingBy.do", new ApiParams()
-                    .put("timeStamp", timeStamp)
-                    .put("page", page)
-                    .put("pageSize", pageSize));
+        public static API getLiveTalk( int offset, int pageSize) {
+                return new API(GET, "/user/live/findChatList.do", new ApiParams()
+                        .put("offset", offset)
+                        .put("size", pageSize));
         }
     }
 

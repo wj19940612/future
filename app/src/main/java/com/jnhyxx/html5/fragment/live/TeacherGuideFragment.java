@@ -27,6 +27,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.DateUtil;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private ArrayList<LiveHomeChatInfo> mDataInfoList;
 
+    private boolean hasMoreData;
 
     public static TeacherGuideFragment newInstance() {
 
@@ -100,6 +102,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mListView.setOnScrollListener(this);
         getLiveMessage();
         initSwipeRefreshLayout();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPageOffset = 0;
     }
 
     private void getLiveMessage() {
@@ -159,13 +167,20 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageOffset++;
-                getTeacherGuideIfo();
-                if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (!hasMoreData) {
+                    mPageOffset++;
+                    getTeacherGuideIfo();
+                    if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+                    mListView.setStackFromBottom(false);
+                }else {
+                    ToastUtil.curt("没有更多的数据了");
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-                mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
-                mListView.setStackFromBottom(false);
             }
         });
     }
@@ -186,10 +201,20 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
                     @Override
                     public void onReceive(Resp<List<LiveHomeChatInfo>> listResp) {
-                        if (listResp.isSuccess() && listResp.hasData()) {
-                            mPageOffset = mPageOffset + mPageSize;
-                            mDataInfoList.addAll(0, listResp.getData());
-                            updateTeacherGuide(listResp.getData());
+                        if (listResp.isSuccess()) {
+                            if (listResp.hasData()) {
+                                mPageOffset = mPageOffset + mPageSize;
+                                mDataInfoList.addAll(0, listResp.getData());
+                                updateTeacherGuide(listResp.getData());
+                            }else {
+                                if (listResp.getData().size() < mPageSize) {
+                                    hasMoreData = true;
+                                    ToastUtil.curt("没有更多的数据了");
+                                    if (mSwipeRefreshLayout.isRefreshing()) {
+                                        mSwipeRefreshLayout.setRefreshing(false);
+                                    }
+                                }
+                            }
                         }
                     }
                 })

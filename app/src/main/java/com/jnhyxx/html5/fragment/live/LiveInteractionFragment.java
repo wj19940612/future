@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,7 +42,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -155,6 +155,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         setOnRefresh();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPageOffset = 0;
+    }
+
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
@@ -244,18 +250,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ToastUtil.curt("您被禁言，请稍后发言");
             }
             if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
-                if (liveSpeakInfo.isOwner() || !liveSpeakInfo.isSlience()) {
-                    LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
-                    if (LiveHomeChatInfo != null && mLiveChatInfoAdapter != null) {
-                        if (mHashSet.add(LiveHomeChatInfo.getCreateTime())) {
-                            mDataArrayList.add(LiveHomeChatInfo);
-                            if (DateUtil.isTimeBetweenFiveMin(LiveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
-                                LiveHomeChatInfo.setMoreThanFiveMin(true);
-                            }
-                            mLiveChatInfoAdapter.add(LiveHomeChatInfo);
-                            mLiveChatInfoAdapter.notifyDataSetChanged();
-
+                LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
+                if (LiveHomeChatInfo != null && mLiveChatInfoAdapter != null) {
+                    if (mHashSet.add(LiveHomeChatInfo.getCreateTime())) {
+                        mDataArrayList.add(LiveHomeChatInfo);
+                        if (DateUtil.isTimeBetweenFiveMin(LiveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
+                            LiveHomeChatInfo.setMoreThanFiveMin(true);
                         }
+                        mLiveChatInfoAdapter.add(LiveHomeChatInfo);
+                        mLiveChatInfoAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -273,23 +276,18 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                          if (liveHomeChatInfoResp.hasData()) {
                                              mPageOffset = mPageOffset + mPageSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
-
-                                             // 如果不是本人，则被屏蔽或者被禁言的部分看不到
-                                             Iterator<LiveHomeChatInfo> iterator = mLiveHomeChatInfoListInfo.iterator();
-                                             while (iterator.hasNext()) {
-                                                 LiveHomeChatInfo LiveHomeChatInfo = iterator.next();
-                                                 Log.d(TAG, "下载的数据" + LiveHomeChatInfo.toString() + "\n");
-                                                 if (!LiveHomeChatInfo.isOwner())
-                                                     if (!LiveHomeChatInfo.isNormalSpeak() || LiveHomeChatInfo.isDeleted()) {
-                                                         iterator.remove();
-                                                     }
+                                             for (LiveHomeChatInfo data : mLiveHomeChatInfoListInfo) {
+                                                 Log.d(TAG, "获取的聊天数据" + data);
                                              }
-
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
                                              updateCHatInfo(mDataArrayList);
                                          } else {
                                              if (mLiveHomeChatInfoListInfo.size() < mPageSize) {
                                                  isRefreshed = true;
+                                                 ToastUtil.curt("没有更多的数据了");
+                                                 if (mSwipeRefreshLayout.isRefreshing()) {
+                                                     mSwipeRefreshLayout.setRefreshing(false);
+                                                 }
                                              }
                                          }
                                      }
@@ -449,6 +447,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
 
+                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
+                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
+                format = format + "  " + relativeTimeSpanString2.toString();
+                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
+                    format = "刚刚";
+                }
+
                 if (item.isMoreThanFiveMin()) {
                     mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
                     mTimeBeforeHint.setText(formatTime);
@@ -459,7 +464,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();
-                    setChatUserStatus(item, context, teacherInfo);
+                    setChatUserStatus(item, context, teacherInfo, format);
                     mContent.setText(item.getMsg());
                     //普通游客发言
                 } else {
@@ -502,7 +507,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo) {
+            private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo, String format) {
                 String chatUser = "";
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
@@ -516,6 +521,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                 .transform(new CircleTransform()).into(mUserHeadImage);
                     }
                 }
+
                 mUserStatus.setText(chatUser);
             }
         }

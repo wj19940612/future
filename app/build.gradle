@@ -63,10 +63,10 @@ android {
 //            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
 //            minSdkVersion 21
         }
-        yybd { // 原油宝典
+        yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 3
-            versionName '1.0'
+            versionCode 6
+            versionName '1.1.2'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [

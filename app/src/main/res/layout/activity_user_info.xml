@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_user_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.userinfo.UserInfoActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/personal_info"/>
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:textColor="@color/blackPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/head_image"/>
+    </LinearLayout>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/messageCenter"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rowText="@string/message_center"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@android:color/white"/>
+</LinearLayout>

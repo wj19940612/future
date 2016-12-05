@@ -57,8 +57,8 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 9
-            versionName '1.2.9'
+            versionCode 16
+            versionName '1.2.16'
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 //            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
 //            minSdkVersion 21

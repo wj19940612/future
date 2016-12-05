@@ -151,6 +151,7 @@ public class TradeActivity extends BaseActivity implements
                 mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
                 updateChartView(data);
 
+                mHoldingOrderPresenter.setFullMarketData(data);
                 if (setBuyOrSellBtn(data)) return;
                 String buyLong = getString(R.string.buy_long)
                         + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
@@ -158,7 +159,6 @@ public class TradeActivity extends BaseActivity implements
                 String sellShort = getString(R.string.sell_short)
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
                 mSellShortBtn.setText(sellShort);
-                mHoldingOrderPresenter.setFullMarketData(data);
             }
             updatePlaceOrderFragment(data);
         }

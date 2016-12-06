@@ -23,7 +23,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.LocalLightningOrdersList;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -238,6 +237,12 @@ public class SetLightningOrdersActivity extends BaseActivity {
         });
     }
 
+    private void updatePlaceOrderViews() {
+        // 设置止损
+        mFuturesFinancing.sort();
+        mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
+    }
+
     private void setTradeQuantity() {
         mTradeQuantitySelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
             @Override
@@ -250,6 +255,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
             }
         });
     }
+
 
     private void initData(Intent intent) {
         mProduct = (Product) intent.getParcelableExtra(Product.EX_PRODUCT);
@@ -289,12 +295,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
             mCloseLightningOrder.setVisibility(View.GONE);
             mRestartLightningOrder.setVisibility(View.GONE);
         }
-    }
-
-    private void updatePlaceOrderViews() {
-        // 设置止损
-        mFuturesFinancing.sort();
-        mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
     }
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
@@ -356,16 +356,16 @@ public class SetLightningOrdersActivity extends BaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        NettyClient.getInstance().addNettyHandler(mNettyHandler);
-        NettyClient.getInstance().start(mProduct.getContractsCode());
+//        NettyClient.getInstance().addNettyHandler(mNettyHandler);
+//        NettyClient.getInstance().start(mProduct.getContractsCode());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+//        NettyClient.getInstance().stop();
+//        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     @Override

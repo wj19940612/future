@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,9 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -175,7 +178,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     }
                     mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
                     mListView.setStackFromBottom(false);
-                }else {
+                } else {
                     ToastUtil.curt("没有更多的数据了");
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -212,7 +215,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                         mSwipeRefreshLayout.setRefreshing(false);
                                     }
                                 }
-                            }else {
+                            } else {
                                 updateTeacherGuide(listResp.getData());
                             }
                         }
@@ -241,6 +244,9 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         if (mLiveTeacherGuideAdapter == null) {
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
             mListView.setAdapter(mLiveTeacherGuideAdapter);
+            if (mLiveMessage != null) {
+                mLiveTeacherGuideAdapter.setTeacherInfo(mLiveMessage.getTeacher());
+            }
         }
         mLiveTeacherGuideAdapter.clear();
         if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
@@ -271,10 +277,15 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     static class LiveTeacherGuideAdapter extends ArrayAdapter<LiveHomeChatInfo> {
         Context mContext;
+        LiveMessage.TeacherInfo mTeacherInfo;
 
         public LiveTeacherGuideAdapter(Context context) {
             super(context, 0);
             this.mContext = context;
+        }
+
+        public void setTeacherInfo(LiveMessage.TeacherInfo teacherInfo) {
+            this.mTeacherInfo = teacherInfo;
         }
 
         @NonNull
@@ -288,7 +299,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindDataWithView(getItem(position), position, mContext);
+            viewHolder.bindDataWithView(getItem(position), position, mContext, mTeacherInfo);
             return convertView;
         }
 
@@ -314,7 +325,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(LiveHomeChatInfo item, int position, Context context) {
+            public void bindDataWithView(LiveHomeChatInfo item, int position, Context context, LiveMessage.TeacherInfo teacherInfo) {
                 if (item == null) return;
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
@@ -339,6 +350,14 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
                 mUserStatus.setText(item.getName());
                 mContent.setText(item.getMsg());
+
+                if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
+                    Picasso.with(context).load(teacherInfo.getPictureUrl())
+                            .transform(new CircleTransform()).into(mUserHeadImage);
+                } else {
+                    Picasso.with(context).load(R.drawable.ic_live_pic_head)
+                            .transform(new CircleTransform()).into(mUserHeadImage);
+                }
             }
         }
     }

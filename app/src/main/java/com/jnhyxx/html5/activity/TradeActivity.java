@@ -61,6 +61,7 @@ import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -459,6 +460,10 @@ public class TradeActivity extends BaseActivity implements
                     @Override
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
                         KlineView klineView = mChartContainer.getKlineView();
+                        if (klineDataList.get(0).getTimeStamp() > klineDataList.get(1).getTimeStamp()) {
+                            Collections.reverse(klineDataList);
+                            // 第一条为最新的数据,反排
+                        }
                         if (klineView == null) return;
                         klineView.setDataList(klineDataList);
                     }

@@ -21,7 +21,7 @@ public class KlineViewData {
     private String time;
     private long timeStamp;
 
-    public double getClosePrice() {
+    public float getClosePrice() {
         return closePrice;
     }
 
@@ -53,7 +53,7 @@ public class KlineViewData {
         this.minPrice = minPrice;
     }
 
-    public double getOpenPrice() {
+    public float getOpenPrice() {
         return openPrice;
     }
 

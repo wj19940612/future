@@ -26,6 +26,7 @@ public abstract class ChartView extends View {
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
         BLUE("#358CF3"),
+        GREEN("#25D282"),
         RED("#FB4B55");
 
         private String value;
@@ -440,7 +441,7 @@ public abstract class ChartView extends View {
             return -1;
         }
 
-        int height = getBottomPartHeight() - 2 * (mFontHeight + mTextMargin);
+        int height = getBottomPartHeight();
         y = (indexesBaseLines[0] - y) /
                 (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
 

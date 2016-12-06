@@ -221,7 +221,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/btn_open_lightning_order"
+            android:background="@drawable/btn_restart_lightning_order"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/open"

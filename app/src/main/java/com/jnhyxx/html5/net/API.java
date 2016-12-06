@@ -927,6 +927,19 @@ public class API extends APIBase {
     }
 
     /**
+     * 获取 k 线数据
+     *
+     * @param varietyType
+     * @param type
+     * @return
+     */
+    public static API getKlineData(String varietyType, String type) {
+        return new API(GET, "/quota/candlestickData/getCandlesticKData.do",
+                new ApiParams()
+                        .put("contractsCode", varietyType));
+    }
+
+    /**
      * 获得《投资人与用户交易合作协议》网页 url
      *
      * @return

@@ -20,9 +20,12 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jnhyxx.chart.ChartSettings;
 import com.jnhyxx.chart.FlashView;
+import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.chart.domain.FlashViewData;
+import com.jnhyxx.chart.domain.KlineViewData;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -415,10 +418,25 @@ public class TradeActivity extends BaseActivity implements
         }
         marketDataView.clearData();
 
+        KlineView klineView = mChartContainer.getKlineView();
+        if (klineView == null) {
+            klineView = new KlineView(this);
+            mChartContainer.addKlineView(klineView);
+        }
+        klineView.clearData();
+        ChartSettings settings2 = new ChartSettings();
+        settings2.setBaseLines(mProduct.getBaseline());
+        settings2.setNumberScale(mProduct.getPriceDecimalScale());
+        settings2.setXAxis(40);
+        settings2.setIndexesEnable(true);
+        klineView.setSettings(settings2);
+
         mChartContainer.showTrendView();
 
         // request Trend Data
         requestTrendDataAndSet();
+        // request Kline Data
+        requestKlineDataAndSet();
     }
 
     private void requestTrendDataAndSet() {
@@ -431,7 +449,19 @@ public class TradeActivity extends BaseActivity implements
                         TrendView.Settings settings = trendView.getSettings();
                         trendView.setDataList(TrendView.Util.createDataList(s, settings.getOpenMarketTimes()));
                     }
-                }).fire();
+                }).fireSync();
+    }
+
+    private void requestKlineDataAndSet() {
+        API.getKlineData(mProduct.getVarietyType(), "")
+                .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
+                    @Override
+                    public void onRespSuccess(List<KlineViewData> klineDataList) {
+                        KlineView klineView = mChartContainer.getKlineView();
+                        if (klineView == null) return;
+                        klineView.setDataList(klineDataList);
+                    }
+                }).fireSync();
     }
 
     private void initSlidingMenu() {

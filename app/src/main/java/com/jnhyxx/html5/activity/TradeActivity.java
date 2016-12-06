@@ -333,7 +333,7 @@ public class TradeActivity extends BaseActivity implements
             lightningOrderOpen = true;
             mLightningOrders.setSelected(true);
             //动态调整边距，防止出现闪电下单后字体偏中间的情况
-            int dimension = px2dp(14);
+            int dimension = px2dp(13);
             mBuyLongBtn.setPadding(0, dimension, px2dp(20), dimension);
             mSellShortBtn.setPadding(px2dp(20), dimension, 0, dimension);
         }

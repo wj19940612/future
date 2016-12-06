@@ -162,7 +162,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
                                 Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-//                                ToastUtil.curt("提交成功");
                                 LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
                                 setResult(RESULT_CODE_OPEN_LIGHTNING_ORDER);
                                 finish();
@@ -257,7 +256,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-//        ServerIpPort mServerIpPort =  intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
+//        ServerIpPort mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
 //        if (mServerIpPort != null) {
 //            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
 //        }

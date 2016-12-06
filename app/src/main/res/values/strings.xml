@@ -276,6 +276,7 @@
     <string name="confirm_sell_short">确定买跌</string>
     <string name="today_position">今持仓</string>
     <string name="pre_position">昨持仓</string>
+    <string name="trade_closed_hint">已休市，请客官下次交易时\n间%1$s  再来吧</string>
 
     <!-- Trade page: agree trade protocol -->
     <string name="prompt_dear_user">尊敬的用户:

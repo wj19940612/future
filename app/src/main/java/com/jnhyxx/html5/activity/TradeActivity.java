@@ -141,6 +141,8 @@ public class TradeActivity extends BaseActivity implements
 
     private ServerIpPort mServerIpPort;
 
+    private ExchangeStatus mExchangeStatus;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -371,6 +373,7 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mExchangeStatus = exchangeStatus;
                         mProduct.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
                         if (exchangeStatus.isTradeable()) {
@@ -411,7 +414,8 @@ public class TradeActivity extends BaseActivity implements
                 placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
                 break;
             case R.id.sellShortBtn:
-                if (setLightningOrderSubmitOrder(ProductLightningOrderStatus.TYPE_SELL_SHORT)) return;
+                if (setLightningOrderSubmitOrder(ProductLightningOrderStatus.TYPE_SELL_SHORT))
+                    return;
                 placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 break;
             case R.id.lightningOrders:
@@ -437,6 +441,7 @@ public class TradeActivity extends BaseActivity implements
         }
         return;
     }
+
     //设置闪电下单的提交单
     private boolean setLightningOrderSubmitOrder(int buyType) {
         if (lightningOrderOpen) {
@@ -457,6 +462,7 @@ public class TradeActivity extends BaseActivity implements
         }
         return false;
     }
+
     private void openSetLightningOrdersPage() {
         Launcher.with(getActivity(), SetLightningOrdersActivity.class)
                 .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, lightningOrderOpen)
@@ -762,6 +768,16 @@ public class TradeActivity extends BaseActivity implements
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             showFundNotEnoughDialog(jsonObjectResp);
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_COLSED) {
+                            if (mExchangeStatus != null) {
+                                SmartDialog.with(getActivity(), getString(R.string.trade_closed_hint, mExchangeStatus.getNextTime()))
+                                        .setPositive(R.string.ok)
+                                        .show();
+                            } else {
+                                SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
+                                        .setPositive(R.string.ok)
+                                        .show();
+                            }
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)

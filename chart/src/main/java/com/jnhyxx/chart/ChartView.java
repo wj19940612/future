@@ -321,7 +321,7 @@ public abstract class ChartView extends View {
 
     protected abstract void calculateBaseLines(float[] baselines);
 
-    protected abstract void calculateIndexesBaseLines(float[] indexesBaseLines);
+    protected abstract void calculateIndexesBaseLines(long[] indexesBaseLines);
 
     /**
      * draw top baselines and bottom indexes baselines
@@ -341,7 +341,7 @@ public abstract class ChartView extends View {
      */
     protected abstract void drawBaseLines(boolean indexesEnable,
             float[] baselines, int left, int top, int width, int height,
-            float[] indexesBaseLines, int left2, int top2, int width2, int height2,
+            long[] indexesBaseLines, int left2, int top2, int width2, int height2,
             Canvas canvas);
 
     /**
@@ -433,9 +433,9 @@ public abstract class ChartView extends View {
         return y + getPaddingTop();
     }
 
-    protected float getIndexesChartY(float y) {
+    protected float getIndexesChartY(long y) {
         // When values beyond indexes baselines, eg. mv. return -1
-        float[] indexesBaseLines = mSettings.getIndexesBaseLines();
+        long[] indexesBaseLines = mSettings.getIndexesBaseLines();
         if (y > indexesBaseLines[0] || y < indexesBaseLines[indexesBaseLines.length - 1]) {
             return -1;
         }

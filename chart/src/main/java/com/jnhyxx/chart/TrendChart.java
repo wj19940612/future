@@ -174,14 +174,14 @@ public class TrendChart extends ChartView {
     }
 
     @Override
-    protected void calculateIndexesBaseLines(float[] indexesBaseLines) {
+    protected void calculateIndexesBaseLines(long[] indexesBaseLines) {
 
     }
 
     @Override
     protected void drawBaseLines(boolean indexesEnable,
                                  float[] baselines, int left, int top, int width, int height,
-                                 float[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                 long[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                  Canvas canvas) {
         if (baselines == null || baselines.length < 2) return;
 

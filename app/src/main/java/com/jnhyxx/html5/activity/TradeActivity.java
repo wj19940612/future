@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jnhyxx.chart.ChartSettings;
 import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
@@ -424,11 +423,13 @@ public class TradeActivity extends BaseActivity implements
             mChartContainer.addKlineView(klineView);
         }
         klineView.clearData();
-        ChartSettings settings2 = new ChartSettings();
-        settings2.setBaseLines(mProduct.getBaseline());
+        KlineView.Settings settings2 = new KlineView.Settings();
+        settings2.setBaseLines(mProduct.getBaseline() - 3);
+        settings2.setIndexesBaseLines(3);
         settings2.setNumberScale(mProduct.getPriceDecimalScale());
         settings2.setXAxis(40);
         settings2.setIndexesEnable(true);
+        settings2.setIndexesType(KlineView.Settings.INDEXES_VOL);
         klineView.setSettings(settings2);
 
         mChartContainer.showTrendView();

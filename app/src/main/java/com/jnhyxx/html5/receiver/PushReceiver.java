@@ -21,7 +21,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.msg.SysMessage;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.Launcher;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -43,7 +42,6 @@ public class PushReceiver extends BroadcastReceiver {
         Log.d(TAG, "onReceive  接到新的push 消息" + intent.getAction() + " 数据" + intent.getExtras().toString());
         Bundle bundle = intent.getExtras();
         Log.d("GetuiSdkDemo", "onReceive() action=" + bundle.getInt("action"));
-        ToastUtil.curt("onReceive  接到新的push 消息");
         switch (bundle.getInt(PushConsts.CMD_ACTION)) {
             case PushConsts.GET_MSG_DATA:
                 // 获取透传数据
@@ -64,11 +62,9 @@ public class PushReceiver extends BroadcastReceiver {
                     if (mainIsTopActivity(context)) {
                         SysMessage sysMessage = new Gson().fromJson(data, SysMessage.class);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION).putExtra(KEY_PUSH_DATA, sysMessage));
-                        ToastUtil.curt("最上层是MainActivity");
                     } else {
                         Intent messageIntent = setPendingIntent(context, data);
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
                         createNotification(context, pendingIntent, data);
 
                     }

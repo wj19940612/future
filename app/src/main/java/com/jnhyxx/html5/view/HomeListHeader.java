@@ -28,6 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class HomeListHeader extends FrameLayout {
 
     @OnClick({R.id.simulation, R.id.newerGuide, R.id.contactService})

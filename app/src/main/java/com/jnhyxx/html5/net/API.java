@@ -339,6 +339,16 @@ public class API extends APIBase {
         public static API getUserShortInfo() {
             return new API("/user/user/findUserInfo.do", null);
         }
+
+        public static API submitFeedBack(String content, String userId, String userName, String realName, String userPhone) {
+            return new API("/user/userFeedback/insert.do",
+                    new ApiParams()
+                            .put("content", content)
+                            .put("userId", userId)
+                            .put("userName", userName)
+                            .put("realName", realName)
+                            .put("userPhone", userPhone));
+        }
     }
 
     public static class Finance {

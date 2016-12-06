@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_idea_feedback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.IdeaFeedbackActivity">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.jnhyxx.html5.view.TitleBar
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backFeature="true"
+            app:titleText="@string/feedback_title"/>
+
+        <EditText
+            android:id="@+id/feedbackContent"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="@string/feedback_hint"
+            android:lineSpacingExtra="5dp"
+            android:maxLength="200"
+            android:minHeight="200dp"
+            android:textColorHint="@color/grayHint"
+            tools:text="卡积分卡数据库就卡是否看见啊是发撒健康还是发快结婚付款就是大海开了房间打扫房间快点撒发生"/>
+
+        <TextView
+            android:id="@+id/feedbackContentNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_line_division_center"
+            android:gravity="right"
+            android:paddingBottom="12dp"
+            android:paddingTop="10dp"
+            android:text="@string/feedback_content_number"
+            android:textColor="@color/lucky"
+            android:textSize="11sp"
+            android:visibility="visible"/>
+
+        <EditText
+            android:id="@+id/feedbackConnectWay"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_center"
+            android:digits="1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+            android:hint="@string/feedback_user_phone"
+            android:maxLength="20"
+            android:paddingTop="@dimen/common_margin"
+            android:textColorHint="@color/grayHint"/>
+
+        <TextView
+            android:id="@+id/feedbackSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/btn_primary"
+            android:clickable="true"
+            android:enabled="false"
+            android:gravity="center"
+            android:padding="@dimen/common_margin"
+            android:text="@string/feedback_submit"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

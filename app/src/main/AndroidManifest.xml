@@ -94,6 +94,9 @@
 
         <!-- account activity -->
         <activity
+            android:name=".activity.account.IdeaFeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.account.SignUpActivity"
             android:screenOrientation="portrait"/>
         <activity

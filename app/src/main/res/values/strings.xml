@@ -213,7 +213,7 @@
     <string name="stop_range">( 范围 %1$s~%2$s )</string>
     <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统止损（止盈）平仓</string>
     <string name="set_success">设置成功</string>
-    
+
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -289,6 +289,7 @@
     <!--我的界面 Mine -->
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
+    <string name="user_feedback">用户反馈</string>
     <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s </string>
     <string name="mine_balance">余额 (元)</string>
@@ -446,7 +447,6 @@
     <string name="live_right_title">交易</string>
 
 
-
     <!--闪电下单-->
     <string name="open">开  启</string>
     <string name="close">关  闭</string>
@@ -474,4 +474,11 @@
     <string name="there_is_no_chatting_record">暂无聊天记录</string>
     <string name="there_is_no_teacher_advise">暂无老师指导</string>
     <string name="live_teacher_order">老师指令:%1$s</string>
+    <!--意见反馈-->
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">请输入反馈意见</string>
+    <string name="feedback_user_phone">请输入QQ、微信或者手机号</string>
+    <string name="feedback_submit">提    交</string>
+    <string name="feedback_content_number">200</string>
+    <string name="feedback_submit_success">用户反馈提交成功</string>
 </resources>

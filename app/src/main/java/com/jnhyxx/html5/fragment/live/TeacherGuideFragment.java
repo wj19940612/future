@@ -206,14 +206,14 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                 mPageOffset = mPageOffset + mPageSize;
                                 mDataInfoList.addAll(0, listResp.getData());
                                 updateTeacherGuide(listResp.getData());
-                            }else {
                                 if (listResp.getData().size() < mPageSize) {
                                     hasMoreData = true;
-                                    ToastUtil.curt("没有更多的数据了");
                                     if (mSwipeRefreshLayout.isRefreshing()) {
                                         mSwipeRefreshLayout.setRefreshing(false);
                                     }
                                 }
+                            }else {
+                                updateTeacherGuide(listResp.getData());
                             }
                         }
                     }

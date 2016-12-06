@@ -281,14 +281,14 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                              }
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
                                              updateCHatInfo(mDataArrayList);
-                                         } else {
                                              if (mLiveHomeChatInfoListInfo.size() < mPageSize) {
                                                  isRefreshed = true;
-                                                 ToastUtil.curt("没有更多的数据了");
                                                  if (mSwipeRefreshLayout.isRefreshing()) {
                                                      mSwipeRefreshLayout.setRefreshing(false);
                                                  }
                                              }
+                                         } else {
+                                             updateCHatInfo(liveHomeChatInfoResp.getData());
                                          }
                                      }
                                  }

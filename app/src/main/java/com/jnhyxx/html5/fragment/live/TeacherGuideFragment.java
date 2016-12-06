@@ -19,15 +19,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.live.ChatData;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
-import com.jnhyxx.html5.domain.live.LiveTeacherGuideInfo;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.DateUtil;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private Unbinder mBind;
 
-    private int mPage = 0;
+    private int mPageOffset = 0;
     private int mPageSize;
 
     private HashSet<Long> mHashSet;
@@ -65,8 +65,9 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private LiveTeacherGuideAdapter mLiveTeacherGuideAdapter;
 
-    private ArrayList<ChatData> mDataInfoList;
+    private ArrayList<LiveHomeChatInfo> mDataInfoList;
 
+    private boolean hasMoreData;
 
     public static TeacherGuideFragment newInstance() {
 
@@ -103,6 +104,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         initSwipeRefreshLayout();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPageOffset = 0;
+    }
+
     private void getLiveMessage() {
         API.Live.getLiveMessage().setTag(TAG)
                 .setCallback(new Callback2<Resp<LiveMessage>, LiveMessage>() {
@@ -124,7 +131,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         if (isVisibleToUser
                 && isAdded()
                 && !getActivity().isFinishing()) {
-            mPage = 0;
+            mPageOffset = 0;
             if (mDataInfoList != null) {
                 mDataInfoList.clear();
             }
@@ -132,10 +139,11 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         }
     }
 
-    public void setData(ChatData data) {
+    public void setData(LiveHomeChatInfo data) {
         Log.d(TAG, "老师指令" + data.toString());
         if (data != null && mLiveTeacherGuideAdapter != null) {
             if (mHashSet.add(data.getCreateTime())) {
+                mPageOffset++;
                 mDataInfoList.add(data);
                 if (DateUtil.isTimeBetweenFiveMin(data.getCreateTime(), mDataInfoList.get(mDataInfoList.size() - 2).getCreateTime())) {
                     data.setMoreThanFiveMin(true);
@@ -159,13 +167,20 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPage++;
-                getTeacherGuideIfo();
-                if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (!hasMoreData) {
+                    mPageOffset++;
+                    getTeacherGuideIfo();
+                    if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+                    mListView.setStackFromBottom(false);
+                }else {
+                    ToastUtil.curt("没有更多的数据了");
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-                mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
-                mListView.setStackFromBottom(false);
             }
         });
     }
@@ -180,22 +195,33 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             return;
         }
 
-        API.Live.getTeacherGuide(mPage, mPageSize, mLiveMessage.getTeacher().getTeacherAccountId())
+        API.Live.getTeacherGuide(mPageOffset, mPageSize, mLiveMessage.getTeacher().getTeacherAccountId())
                 .setTag(TAG)
-                .setCallback(new Callback<Resp<LiveTeacherGuideInfo>>() {
+                .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
 
                     @Override
-                    public void onReceive(Resp<LiveTeacherGuideInfo> liveTeacherGuideInfoResp) {
-                        if (liveTeacherGuideInfoResp.isSuccess() && liveTeacherGuideInfoResp.hasData()) {
-                            mDataInfoList.addAll(0, liveTeacherGuideInfoResp.getData().getData());
-                            updateTeacherGuide(liveTeacherGuideInfoResp.getData().getData());
+                    public void onReceive(Resp<List<LiveHomeChatInfo>> listResp) {
+                        if (listResp.isSuccess()) {
+                            if (listResp.hasData()) {
+                                mPageOffset = mPageOffset + mPageSize;
+                                mDataInfoList.addAll(0, listResp.getData());
+                                updateTeacherGuide(listResp.getData());
+                            }else {
+                                if (listResp.getData().size() < mPageSize) {
+                                    hasMoreData = true;
+                                    ToastUtil.curt("没有更多的数据了");
+                                    if (mSwipeRefreshLayout.isRefreshing()) {
+                                        mSwipeRefreshLayout.setRefreshing(false);
+                                    }
+                                }
+                            }
                         }
                     }
                 })
                 .fire();
     }
 
-    private void updateTeacherGuide(List<ChatData> data) {
+    private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
             mEmpty.setText("老师暂未发出指令");
             mListView.setEmptyView(mEmpty);
@@ -207,10 +233,9 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         addListViewFootView(data);
     }
 
-    private void addListViewFootView(List<ChatData> data) {
+    private void addListViewFootView(List<LiveHomeChatInfo> data) {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
-//            mLiveTeacherGuideAdapter.clear();
         }
 
         if (mLiveTeacherGuideAdapter == null) {
@@ -244,7 +269,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
-    static class LiveTeacherGuideAdapter extends ArrayAdapter<ChatData> {
+    static class LiveTeacherGuideAdapter extends ArrayAdapter<LiveHomeChatInfo> {
         Context mContext;
 
         public LiveTeacherGuideAdapter(Context context) {
@@ -289,7 +314,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(ChatData item, int position, Context context) {
+            public void bindDataWithView(LiveHomeChatInfo item, int position, Context context) {
                 if (item == null) return;
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());

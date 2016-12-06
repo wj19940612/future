@@ -175,7 +175,7 @@ public class HomeListHeader extends FrameLayout {
 
     public void setHomeAdvertisement(List<Information> informationList) {
         filterEmptyInformation(informationList);
-        if (informationList.size() > 0) {
+        if (!informationList.isEmpty()) {
             mPageIndicator.setCount(informationList.size());
             if (mAdapter == null) {
                 mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);

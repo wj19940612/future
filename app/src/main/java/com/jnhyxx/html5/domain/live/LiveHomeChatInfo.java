@@ -1,7 +1,5 @@
 package com.jnhyxx.html5.domain.live;
 
-import java.util.List;
-
 /**
  * Created by ${wangJie} on 2016/11/10.
  * 直播滑动界面的聊天信息
@@ -10,82 +8,223 @@ import java.util.List;
 public class LiveHomeChatInfo {
 
     /**
-     * data : [{"chatType":1,"createTime":1478743189762,"deleted":false,"msg":"凯哥考到了没啊","name":"叶老师","normalSpeak":true,"once":true,"order":true,"text":true,"timeStamp":1478743189762,"topChannelId":12,"userId":139},{"chatType":1,"createTime":1478743194364,"deleted":false,"msg":"凯哥","name":"叶老师","normalSpeak":true,"once":true,"order":false,"text":true,"timeStamp":1478743194364,"topChannelId":12,"userId":139},{"address":"/125.120.84.157:62713","chatType":2,"createTime":1478743259824,"deleted":false,"msg":"1","name":"毛泽东","normalSpeak":true,"once":true,"text":true,"timeStamp":1478743259824,"topChannelId":12,"userId":181},{"address":"/125.120.84.157:62379","chatType":2,"createTime":1478743330039,"deleted":false,"msg":"888","name":"毛泽东","normalSpeak":true,"once":true,"text":true,"timeStamp":1478743330039,"topChannelId":12,"userId":181}]
-     * pageSize : 15
-     * resultCount : 4
-     * start : 0
-     * total : 1
+     * 聊天人的类型, 0代表管理员 1 代表老师 2 代表普通用户
      */
+    public static final int CHAT_TYPE_MANAGER = 0;
+    public static final int CHAT_TYPE_TEACHER = 1;
+    public static final int CHAT_TYPE_COMMON_USER = 2;
 
-    private int pageSize;
-    private int resultCount;
-    private int start;
-    private int total;
     /**
      * chatType : 1
      * createTime : 1478743189762
-     * deleted : false
+     * deleted : false false表示正常，true表示已屏蔽
      * msg : 凯哥考到了没啊
      * name : 叶老师
-     * normalSpeak : true
-     * once : true
-     * order : true
-     * text : true
+     * normalSpeak : true false表示已禁言，true表示正常
+     * once : true 是否是本次聊天
+     * order : true 是否是指令 true为指令
+     * text : true 是否文本
      * timeStamp : 1478743189762
      * topChannelId : 12
      * userId : 139
+     * ower: true 是否用户自己，true表示是他自己
+     * address : /36.24.138.187:51819
+     * id : 584509410cf2234cf93ff5e2
+     * updateTime : 1480919361910
      */
 
-    private List<ChatData> data;
+    private int chatType;
+    private long createTime;
+    private boolean deleted;
+    private String msg;
+    private String name;
+    private boolean normalSpeak;
+    private boolean once;
+    private boolean order;
+    private boolean text;
+    private int topChannelId;
+    private int userId;
+    private boolean owner;
+    private boolean isMoreThanFiveMin;
+    private String address;
+    private String id;
+    private long updateTime;
 
-    public int getPageSize() {
-        return pageSize;
+    public LiveHomeChatInfo() {
+
     }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+    public LiveHomeChatInfo(LiveSpeakInfo speakInfo) {
+        msg = speakInfo.getMsg();
+        owner = speakInfo.isOwner();
+        name = speakInfo.getName();
+        createTime = speakInfo.getTime();
+        text = speakInfo.isIsText();
+        order = speakInfo.isIsOrder();
+        chatType = speakInfo.getAccountType();
     }
 
-    public int getResultCount() {
-        return resultCount;
+    public int getChatType() {
+        return chatType;
     }
 
-    public void setResultCount(int resultCount) {
-        this.resultCount = resultCount;
+    public void setChatType(int chatType) {
+        this.chatType = chatType;
     }
 
-    public int getStart() {
-        return start;
+    public long getCreateTime() {
+        return createTime;
     }
 
-    public void setStart(int start) {
-        this.start = start;
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 
-    public int getTotal() {
-        return total;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
-    public List<ChatData> getData() {
-        return data;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setData(List<ChatData> data) {
-        this.data = data;
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isNormalSpeak() {
+        return normalSpeak;
+    }
+
+    public void setNormalSpeak(boolean normalSpeak) {
+        this.normalSpeak = normalSpeak;
+    }
+
+    public boolean isOnce() {
+        return once;
+    }
+
+    public void setOnce(boolean once) {
+        this.once = once;
+    }
+
+    public boolean isOrder() {
+        return order;
+    }
+
+    public void setOrder(boolean order) {
+        this.order = order;
+    }
+
+    public boolean isText() {
+        return text;
+    }
+
+    public void setText(boolean text) {
+        this.text = text;
+    }
+
+    public int getTopChannelId() {
+        return topChannelId;
+    }
+
+    public void setTopChannelId(int topChannelId) {
+        this.topChannelId = topChannelId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
+
+    public boolean isMoreThanFiveMin() {
+        return isMoreThanFiveMin;
+    }
+
+    public void setMoreThanFiveMin(boolean moreThanFiveMin) {
+        isMoreThanFiveMin = moreThanFiveMin;
+    }
+
+    public boolean isTeacherGuide() {
+        if (chatType == CHAT_TYPE_TEACHER) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isNormalUser() {
+        if (getChatType() == CHAT_TYPE_MANAGER || getChatType() == CHAT_TYPE_TEACHER) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
     public String toString() {
-        return "LiveHomeChatInfo{" +
-                "pageSize=" + pageSize +
-                ", resultCount=" + resultCount +
-                ", start=" + start +
-                ", total=" + total +
-                ", data=" + data +
+        return "ChatData{" +
+                "chatType=" + chatType +
+                ", createTime=" + createTime +
+                ", deleted=" + deleted +
+                ", msg='" + msg + '\'' +
+                ", name='" + name + '\'' +
+                ", normalSpeak=" + normalSpeak +
+                ", once=" + once +
+                ", order=" + order +
+                ", text=" + text +
+                ", topChannelId=" + topChannelId +
+                ", userId=" + userId +
+                ", owner=" + owner +
+                ", isMoreThanFiveMin=" + isMoreThanFiveMin +
+                ", address='" + address + '\'' +
+                ", id='" + id + '\'' +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

@@ -16,7 +16,6 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.net.API;
@@ -144,6 +143,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
+                        LocalLightningOrdersList.getInstance().clearLightningOrder(mProduct.getVarietyId(), mFundType);
                         setResult(RESULT_CODE_CLOSE_LIGHTNING_ORDER);
                         onBackPressed();
                     }
@@ -257,8 +257,10 @@ public class SetLightningOrdersActivity extends BaseActivity {
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-        ServerIpPort mMarketServer = (ServerIpPort) intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
-        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
+//        ServerIpPort mServerIpPort =  intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
+//        if (mServerIpPort != null) {
+//            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+//        }
 
         if (mProduct != null) {
             mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());

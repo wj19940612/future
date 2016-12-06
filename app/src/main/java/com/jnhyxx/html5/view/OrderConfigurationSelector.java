@@ -40,6 +40,8 @@ public class OrderConfigurationSelector extends LinearLayout {
 
     private PopupWindow mPopupWindow;
 
+    private boolean enabled = true;
+
     public interface OrderConfiguration {
         String getValue();
 
@@ -161,14 +163,21 @@ public class OrderConfigurationSelector extends LinearLayout {
             listView.setAdapter(adapter);
         }
 
+        int defaultIndex = getDefaultIndex();
+        selectItem(defaultIndex);
+    }
+
+    private int getDefaultIndex() {
         int defaultIndex = 0;
-        for (int i = 0; i < mOrderConfigurationList.size(); i++) {
-            if (mOrderConfigurationList.get(i).isDefault()) {
-                defaultIndex = i;
-                break;
+        if (mOrderConfigurationList != null && !mOrderConfigurationList.isEmpty()) {
+            for (int i = 0; i < mOrderConfigurationList.size(); i++) {
+                if (mOrderConfigurationList.get(i).isDefault()) {
+                    defaultIndex = i;
+                    break;
+                }
             }
         }
-        selectItem(defaultIndex);
+        return defaultIndex;
     }
 
     public void selectItem(int index) {
@@ -204,9 +213,30 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
     }
 
+    //改变组件的可点击时间
     public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (enabled) {
+            getFixedItem(0).setSelected(true);
+            getFixedItem(0).setBackgroundResource(R.drawable.bg_order_config_selector_item);
+        } else {
+            getFixedItem(0).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             getChildAt(i).setEnabled(enabled);
+            if (enabled) {
+                if (getChildAt(i) instanceof TextView) {
+                    ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+                }
+            } else {
+                if (getChildAt(i) instanceof TextView) {
+                    if (i == 0) {
+                        ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+                    } else {
+                        ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), R.color.lucky));
+                    }
+                }
+            }
         }
     }
 

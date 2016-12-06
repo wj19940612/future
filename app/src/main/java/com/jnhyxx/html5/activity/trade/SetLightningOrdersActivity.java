@@ -282,6 +282,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
             mRestartLightningOrder.setVisibility(View.VISIBLE);
             mOpenLightningOrderHint.setVisibility(View.GONE);
         } else {
+            mTradeQuantitySelector.setEnabled(true);
+            mTouchStopLossSelector.setEnabled(true);
+            mTouchStopProfitSelector.setEnabled(true);
 
             mOpenLightningOrder.setVisibility(View.VISIBLE);
             mCloseLightningOrder.setVisibility(View.GONE);

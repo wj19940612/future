@@ -391,8 +391,8 @@ public class TradeActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        //mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mProductList = new ArrayList<>();
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
+//        mProductList = new ArrayList<>();
 
 //        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
 //        mMarketServer = marketServers.get(0);

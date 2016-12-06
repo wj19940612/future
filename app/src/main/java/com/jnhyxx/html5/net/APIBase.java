@@ -17,6 +17,7 @@ import com.johnz.kutils.net.RequestManager;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class APIBase extends RequestManager {
@@ -88,7 +89,7 @@ public class APIBase extends RequestManager {
         synchronized (sCurrentUrls) {
             String url = createUrl();
 
-            if (sCurrentUrls.add(url)) {
+            if (sCurrentUrls.add(mTag + "#" + url)) {
                 createThenEnqueue(url);
             }
         }
@@ -155,10 +156,22 @@ public class APIBase extends RequestManager {
 
     private static class RequestFinishedListener implements ApiCallback.onFinishedListener {
 
-        public void onFinished(String url) {
+        public void onFinished(String tag, String url) {
             if (sCurrentUrls != null) {
                 if (BuildConfig.DEBUG) Log.d(TAG, "onFinished: " + url);
-                sCurrentUrls.remove(url);
+                sCurrentUrls.remove(tag + "#" + url);
+            }
+        }
+    }
+
+    public static void cancel(String tag) {
+        RequestManager.cancel(tag);
+        Iterator<String> iterator = sCurrentUrls.iterator();
+        while (iterator.hasNext()) {
+            String str = iterator.next();
+            if (str.startsWith(tag + "#")) {
+                Log.d(TAG, "cancel: " + str);
+                iterator.remove();
             }
         }
     }

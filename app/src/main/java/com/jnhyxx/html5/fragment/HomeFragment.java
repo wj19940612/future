@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -31,9 +30,8 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.ExchangeStatus;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
@@ -157,40 +155,19 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+        API.Market.getMarketServerIpAndPort()
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(pkg.getProduct(), marketServers);
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            Launcher.with(getActivity(), TradeActivity.class)
+                                    .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                                    .putExtra(ServerIpPort.EX_IP_PORT, serverIpPorts.get(0))
+                                    .execute();
                         }
-                    }
-                }).fire();
-    }
-
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
-//        Launcher.with(getActivity(), TradeActivity.class)
-//                .putExtra(Product.EX_PRODUCT, product)
-//                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
-//                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-//                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, new ExchangeStatus())
-//                .execute();
-
-        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType()).setTag(TAG)
-                .setIndeterminate(this)
-                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                    @Override
-                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        product.setExchangeStatus(exchangeStatus.isTradeable()
-                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(getActivity(), TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
-                                .execute();
                     }
                 }).fire();
     }

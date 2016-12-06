@@ -201,12 +201,19 @@
     <string name="there_is_no_holding_position_records">暂无持仓记录</string>
     <string name="there_is_no_settlements_records">暂无结算记录</string>
     <string name="close_positions">平仓</string>
+    <string name="stop_loss_price">止损价</string>
+    <string name="stop_profit_price">止盈价</string>
     <string name="stop_loss">止损</string>
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>
     <string name="buying">买处理中</string>
     <string name="selling">卖处理中</string>
-
+    <string name="set_stop_profit_stop_loss">设置止盈止损</string>
+    <string name="confirm_setting">确认设置</string>
+    <string name="stop_range">( 范围 %1$s~%2$s )</string>
+    <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统止损（止盈）平仓</string>
+    <string name="set_success">设置成功</string>
+    
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -435,9 +442,9 @@
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
 
-
     <!--直播 live-->
     <string name="live_right_title">交易</string>
+
 
 
     <!--闪电下单-->
@@ -452,4 +459,19 @@
     <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
     <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
 
+
+    <string name="live_program_dir">节目单</string>
+    <string name="live_interaction">互动</string>
+    <string name="live_teacher_guide">老师指导</string>
+    <string name="buffering">缓冲中</string>
+    <string name="live_teacher_good">擅长</string>
+    <string name="live_teacher_resume">简介</string>
+    <string name="live_type_manager">管理员</string>
+    <string name="live_type_teacher">老师</string>
+    <string name="live_type_mine">我</string>
+    <string name="live_time_is_not">非直播时间段，无法发言</string>
+    <string name="live_speak_send">发送</string>
+    <string name="there_is_no_chatting_record">暂无聊天记录</string>
+    <string name="there_is_no_teacher_advise">暂无老师指导</string>
+    <string name="live_teacher_order">老师指令:%1$s</string>
 </resources>

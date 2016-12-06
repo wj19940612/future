@@ -80,6 +80,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private int mTabViewTextViewId;
 
     private boolean mDistributeEvenly;
+    private float mPadding; // add by John
 
     private ViewPager mViewPager;
     private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
@@ -110,6 +111,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     public void setDistributeEvenly(boolean distributeEvenly) {
         mDistributeEvenly = distributeEvenly;
+    }
+
+    public void setPadding(float padding) {
+        mPadding = padding;
     }
 
     /**
@@ -213,6 +218,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
 
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
+        if (mPadding != 0) {
+            padding = (int) mPadding;
+        }
         textView.setPadding(padding, padding, padding, padding);
 
         return textView;

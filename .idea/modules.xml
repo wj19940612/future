@@ -8,6 +8,8 @@
       <module fileurl="file://$PROJECT_DIR$/chart/chart.iml" filepath="$PROJECT_DIR$/chart/chart.iml" />
       <module fileurl="file://$PROJECT_DIR$/hengyun.iml" filepath="$PROJECT_DIR$/hengyun.iml" />
       <module fileurl="file://$PROJECT_DIR$/kutils/kutils.iml" filepath="$PROJECT_DIR$/kutils/kutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/livevideo/livevideo.iml" filepath="$PROJECT_DIR$/livevideo/livevideo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/livevideo/livevideo.iml" filepath="$PROJECT_DIR$/livevideo/livevideo.iml" />
       <module fileurl="file://$PROJECT_DIR$/umenglibrary/umenglibrary.iml" filepath="$PROJECT_DIR$/umenglibrary/umenglibrary.iml" />
     </modules>
   </component>

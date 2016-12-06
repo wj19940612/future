@@ -42,6 +42,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     private TimerHandler mTimerHandler;
     private Progress mProgress;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -194,4 +195,6 @@ public class BaseActivity extends AppCompatActivity implements
                     }).fire();
         }
     }
+
+
 }

@@ -192,6 +192,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
 
         if (mTradeDetailAdapter == null) {
             mTradeDetailAdapter = new TradeDetailAdapter(getContext());
+            mList.setAdapter(mTradeDetailAdapter);
         }
 
         if (mSwipeRefreshLayout.isRefreshing()) {
@@ -203,7 +204,6 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 mTradeDetailAdapter.add(item);
             }
         }
-        mList.setAdapter(mTradeDetailAdapter);
         mTradeDetailAdapter.notifyDataSetChanged();
     }
 

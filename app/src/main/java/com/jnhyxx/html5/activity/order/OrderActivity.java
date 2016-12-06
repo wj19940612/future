@@ -8,18 +8,28 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.fragment.order.HoldingFragment;
+import com.jnhyxx.html5.fragment.order.SetStopProfitLossFragment;
 import com.jnhyxx.html5.fragment.order.SettlementFragment;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
+import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.SlidingTabLayout;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends BaseActivity implements HoldingFragment.Callback {
+public class OrderActivity extends BaseActivity implements HoldingFragment.Callback,
+        SetStopProfitLossFragment.Callback {
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -46,16 +56,93 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
     }
 
     @Override
-    public void onHoldingPositionsCloseEventTriggered() {
+    protected void onPostResume() {
+        super.onPostResume();
+        NettyClient.getInstance().start(mProduct.getContractsCode());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NettyClient.getInstance().stop();
+    }
+
+    @Override
+    public void onClosePositionEventTriggered(String showIds) {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);
         }
+
+        if (!TextUtils.isEmpty(showIds)) { // empty means close all. remember!!
+            Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+            if (fragmentById != null && fragmentById instanceof SetStopProfitLossFragment) {
+                HoldingOrder beingSetOrder = ((SetStopProfitLossFragment) fragmentById).getBeingSetOrder();
+                String[] showIdArray = showIds.split(";");
+                for (String showId : showIdArray) {
+                    if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
+                        onCloseFragmentTriggered();
+                        SmartDialog.single(getActivity(), getString(R.string.being_set_order_is_closed))
+                                .setPositive(R.string.ok)
+                                .show();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSetStopProfitLossClick(HoldingOrder order) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragmentContainer, SetStopProfitLossFragment.newInstance(mProduct, mFundType, order))
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onCloseFragmentTriggered() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onSettingsConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice) {
+        API.Order.updateStopProfitLoss(order.getShowId(), mFundType, newStopLossPrice, newStopProfitPrice)
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback1<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        onCloseFragmentTriggered();
+                        HoldingFragment fragment = (HoldingFragment) mOrderAdapter.getFragment(0);
+                        if (fragment != null) {
+                            fragment.updateHoldingOrderList();
+                        }
+                        ToastUtil.center(R.string.set_success, R.dimen.toast_offset);
+                    }
+                }).fire();
     }
 
     static class OrderAdapter extends FragmentPagerAdapter {

@@ -14,16 +14,13 @@ import android.webkit.WebView;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
-import com.jnhyxx.html5.activity.web.LiveActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
-import com.jnhyxx.html5.domain.live.LiveRoomInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
@@ -33,7 +30,6 @@ import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.net.CookieManger;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -127,7 +123,6 @@ public class MainActivity extends BaseActivity {
                 mBottomTabs.selectTab(position);
                 if (position == 1) {
                     openLivePage();
-
                 } else if (position >= 1) {
                     mViewPager.setCurrentItem(position - 1, false);
                 } else {
@@ -139,21 +134,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openLivePage() {
-        API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
-            @Override
-            public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
-                String liveId = "";
-                if (liveRoomInfoResp.getData() != null) {
-                    liveId = liveRoomInfoResp.getData().getActivityId();
-                }
-                Launcher.with(getActivity(), LiveActivity.class)
-                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveId))
-                        .putExtra(LiveActivity.EX_TITLE, getString(R.string.live))
-                        .putExtra(LiveActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                        .executeForResult(REQUEST_CODE_LIVE);
-
-            }
-        }).fire();
+        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQUEST_CODE_LIVE);
     }
 
     private void processIntent(Intent intent) {
@@ -238,7 +219,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LIVE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_LIVE) {
             mBottomTabs.selectTab(mTabPosition);
         }
     }

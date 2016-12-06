@@ -28,10 +28,13 @@ import butterknife.ButterKnife;
 import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
 
 public class MessageCenterListItemInfoActivity extends BaseActivity {
+
+
     @BindView(R.id.messageTitle)
     TextView mTvMessageTitle;
     @BindView(R.id.time)
     TextView mTvMessageTime;
+
     @BindView(R.id.webView)
     WebView mWebView;
     @BindView(R.id.progress)
@@ -51,9 +54,11 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
 
     private void initData() {
         Intent intent = getIntent();
+
         SysMessage mSysMessage = (SysMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mTvMessageTitle.setText(mSysMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
+
         if (mSysMessage.isText() || mSysMessage.getIsText()) {
             if (!TextUtils.isEmpty(mSysMessage.getHtmlLink())) {
                 setWebViewMargin();

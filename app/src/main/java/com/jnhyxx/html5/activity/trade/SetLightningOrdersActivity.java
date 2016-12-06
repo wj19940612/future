@@ -14,9 +14,9 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.FullMarketData;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.net.API;
@@ -253,11 +253,11 @@ public class SetLightningOrdersActivity extends BaseActivity {
     }
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = (Product) intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
         mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-        MarketServer mMarketServer = (MarketServer) intent.getSerializableExtra(MarketServer.EX_MARKET_SERVER);
+        ServerIpPort mMarketServer = (ServerIpPort) intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
         NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
 
         if (mProduct != null) {

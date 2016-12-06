@@ -165,5 +165,4 @@ public class UpgradeDialog extends AppCompatDialogFragment implements ActivityCo
         getDialog().getWindow().setLayout((int) (displayMetrics.widthPixels * scale),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
     }
-
 }

@@ -17,12 +17,16 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
+import com.jnhyxx.html5.domain.order.StopProfitLossActive;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
+import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 
@@ -37,11 +41,11 @@ import butterknife.Unbinder;
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
 
-public class HoldingFragment extends BaseFragment
-        implements HoldingOrderPresenter.IHoldingOrderView {
+public class HoldingFragment extends BaseFragment implements IHoldingOrderView<HoldingOrder> {
 
     public interface Callback {
-        void onHoldingPositionsCloseEventTriggered();
+        void onClosePositionEventTriggered(String showIds);
+        void onSetStopProfitLossClick(HoldingOrder order);
     }
 
     @BindView(android.R.id.list)
@@ -65,14 +69,15 @@ public class HoldingFragment extends BaseFragment
     private int mFundType;
     private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
+    private boolean mShowStopProfitLoss;
 
-    private HoldingOrderPresenter mHoldingOrderPresenter;
+    private HoldingOrderPresenter mPresenter;
     private Callback mCallback;
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
-            mHoldingOrderPresenter.setFullMarketData(data);
+            mPresenter.setFullMarketData(data, mProduct.getVarietyId());
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
             }
@@ -129,7 +134,7 @@ public class HoldingFragment extends BaseFragment
     public static HoldingFragment newInstance(Product product, int fundType) {
         HoldingFragment fragment = new HoldingFragment();
         Bundle args = new Bundle();
-        args.putSerializable(Product.EX_PRODUCT, product);
+        args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
         fragment.setArguments(args);
         return fragment;
@@ -142,7 +147,7 @@ public class HoldingFragment extends BaseFragment
             mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnBuyBtnClickListener");
+                    + " must implement HoldingFragment.Call");
         }
     }
 
@@ -150,10 +155,10 @@ public class HoldingFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mProduct = (Product) getArguments().getSerializable(Product.EX_PRODUCT);
+            mProduct = getArguments().getParcelable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
-            mHoldingOrderPresenter = new HoldingOrderPresenter(this);
+            mPresenter = new HoldingOrderPresenter(this);
         }
     }
 
@@ -167,27 +172,42 @@ public class HoldingFragment extends BaseFragment
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinder.unbind();
-        mNettyHandler = null;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        mHoldingOrderPresenter.onResume();
-        mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+        mPresenter.onResume();
+        mPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
-        NettyClient.getInstance().start(mProduct.getContractsCode());
+        getStopProfitLossActive();
+    }
+
+    private void getStopProfitLossActive() {
+        API.Order.getStopProfitLossActive(mProduct.getVarietyId(), mFundType).setTag(TAG)
+                .setCallback(new com.jnhyxx.html5.net.Callback<Resp<StopProfitLossActive>>() {
+                    @Override
+                    public void onReceive(Resp<StopProfitLossActive> stopProfitLossConfigResp) {
+                        if (stopProfitLossConfigResp.isSuccess() && stopProfitLossConfigResp.hasData()) {
+                            mShowStopProfitLoss = stopProfitLossConfigResp.getData().isActive();
+                            if (mHoldingOrderAdapter != null) {
+                                mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
+                            }
+                        }
+                    }
+                }).fire();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mHoldingOrderPresenter.onPause();
-        NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mPresenter.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mNettyHandler = null;
+        mBinder.unbind();
+        mPresenter.onDestroy();
     }
 
     @Override
@@ -208,20 +228,28 @@ public class HoldingFragment extends BaseFragment
                 mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
-                        mHoldingOrderPresenter.closePosition(mFundType, order);
-                        onHoldingPositionsCloseEventTriggered();
+                        mPresenter.closePosition(order);
+                        onClosePositionEventTriggered(order.getShowId());
+                    }
+
+                    @Override
+                    public void onSetStopProfitLossClick(HoldingOrder order) {
+                        if (mCallback != null) {
+                            mCallback.onSetStopProfitLossClick(order);
+                        }
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
+            mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
         }
     }
 
-    private void onHoldingPositionsCloseEventTriggered() {
+    private void onClosePositionEventTriggered(String showIds) {
         if (mCallback != null) {
-            mCallback.onHoldingPositionsCloseEventTriggered();
+            mCallback.onClosePositionEventTriggered(showIds);
         }
     }
 
@@ -262,28 +290,41 @@ public class HoldingFragment extends BaseFragment
                 getString(R.string.sell_order_submit_successfully) + "\n" + message)
                 .setPositive(R.string.ok)
                 .show();
+        if (mHoldingOrderAdapter != null) {
+            mHoldingOrderAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
         ToastUtil.center(R.string.sell_order_submit_successfully, R.dimen.toast_offset);
+        if (mHoldingOrderAdapter != null) {
+            mHoldingOrderAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void onRiskControlTriggered() {
-        onHoldingPositionsCloseEventTriggered();
+    public void onRiskControlTriggered(String showIds) {
+        onClosePositionEventTriggered(showIds);
     }
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
-        mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
-        onHoldingPositionsCloseEventTriggered();
+        mPresenter.closeAllHoldingPositions();
+        onClosePositionEventTriggered("");
+    }
+
+    public void updateHoldingOrderList() {
+        if (mPresenter != null) {
+            mPresenter.updateHolingOrderListOnly();
+        }
     }
 
     static class HoldingOrderAdapter extends BaseAdapter {
 
         public interface Callback {
             void onItemClosePositionClick(HoldingOrder order);
+            void onSetStopProfitLossClick(HoldingOrder order);
         }
 
         private Context mContext;
@@ -293,6 +334,7 @@ public class HoldingFragment extends BaseFragment
         private List<HoldingOrder> mHoldingOrderList;
         private FullMarketData mFullMarketData;
         private Callback mCallback;
+        private boolean mShowStopProfitLoss;
 
         public HoldingOrderAdapter(Context context, Product product, String fundUnit, List<HoldingOrder> holdingOrderList) {
             mContext = context;
@@ -303,6 +345,10 @@ public class HoldingFragment extends BaseFragment
 
         public void setFullMarketData(FullMarketData fullMarketData) {
             mFullMarketData = fullMarketData;
+        }
+
+        public void setShowStopProfitLoss(boolean showStopProfitLoss) {
+            mShowStopProfitLoss = showStopProfitLoss;
         }
 
         public void setHoldingOrderList(List<HoldingOrder> holdingOrderList) {
@@ -340,8 +386,10 @@ public class HoldingFragment extends BaseFragment
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindingData((HoldingOrder) getItem(position),
-                    mContext, mProduct, mFundUnit, mFullMarketData, mCallback);
+            viewHolder.bindingData((HoldingOrder) getItem(position), mContext,
+                    mProduct, mFundUnit,
+                    mFullMarketData, mShowStopProfitLoss,
+                    mCallback);
 
             return convertView;
         }
@@ -367,6 +415,8 @@ public class HoldingFragment extends BaseFragment
             TextView mClosePositionButton;
             @BindView(R.id.orderStatus)
             TextView mOrderStatus;
+            @BindView(R.id.setStopLossStopProfit)
+            TextView mSetStopLossStopProfit;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
@@ -374,19 +424,32 @@ public class HoldingFragment extends BaseFragment
 
             public void bindingData(final HoldingOrder item, Context context,
                                     Product product, String fundUnit,
-                                    FullMarketData data, final Callback callback) {
+                                    FullMarketData data, boolean showStopProfitLoss,
+                                    final Callback callback) {
 
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));
-                mStopProfit.setText(FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
-                        + product.getCurrencyUnit());
-                mStopLoss.setText(FinanceUtil.formatWithScale(item.getStopLoss(), product.getLossProfitScale())
-                        + product.getCurrencyUnit());
+                String stopProfit = FinanceUtil.formatWithScale(item.getStopWinMoney(), product.getPriceDecimalScale())
+                        + "  (" + FinanceUtil.formatWithScale(item.getStopWin(), product.getLossProfitScale())
+                        + product.getCurrencyUnit() + ")";
+                mStopProfit.setText(stopProfit);
+                String stopLoss = FinanceUtil.formatWithScale(item.getStopLossMoney(), product.getPriceDecimalScale())
+                        + "  (" + FinanceUtil.formatWithScale(item.getStopLoss(), product.getLossProfitScale())
+                        + product.getCurrencyUnit() + ")";
+                mStopLoss.setText(stopLoss);
                 mHands.setText(item.getHandsNum() + "手");
                 mClosePositionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (callback != null) {
                             callback.onItemClosePositionClick(item);
+                        }
+                    }
+                });
+                mSetStopLossStopProfit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback != null) {
+                            callback.onSetStopProfitLossClick(item);
                         }
                     }
                 });
@@ -410,6 +473,12 @@ public class HoldingFragment extends BaseFragment
                     } else if (item.getOrderStatus() > HoldingOrder.ORDER_STATUS_HOLDING) {
                         mOrderStatus.setText(R.string.selling);
                     }
+                }
+
+                if (showStopProfitLoss && item.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
+                    mSetStopLossStopProfit.setVisibility(View.VISIBLE);
+                } else {
+                    mSetStopLossStopProfit.setVisibility(View.GONE);
                 }
 
                 // views will change

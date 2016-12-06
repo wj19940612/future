@@ -36,9 +36,9 @@ import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -53,6 +53,7 @@ import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.LocalLightningOrdersList;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
+import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
@@ -72,9 +73,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TradeActivity extends BaseActivity implements
-        PlaceOrderFragment.Callback,
-        AgreementFragment.Callback,
-        HoldingOrderPresenter.IHoldingOrderView {
+        PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
     private static final int REQ_CODE_SIGN_IN = 1;
     //闪电下单界面的请求码
@@ -129,7 +128,6 @@ public class TradeActivity extends BaseActivity implements
     private int mFundType;
     private String mFundUnit;
     private List<Product> mProductList;
-    private ExchangeStatus mExchangeStatus;
     private AnimationDrawable mQuestionMark;
 
     private boolean mUpdateRealTimeData;
@@ -141,6 +139,8 @@ public class TradeActivity extends BaseActivity implements
 
     FullMarketData mFullMarketData;
 
+    private ServerIpPort mServerIpPort;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -151,7 +151,7 @@ public class TradeActivity extends BaseActivity implements
                 mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
                 updateChartView(data);
 
-                mHoldingOrderPresenter.setFullMarketData(data);
+                mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
                 if (setBuyOrSellBtn(data)) return;
                 String buyLong = getString(R.string.buy_long)
                         + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
@@ -177,7 +177,6 @@ public class TradeActivity extends BaseActivity implements
         return false;
     }
 
-    private MarketServer mMarketServer;
     private ProductLightningOrderStatus mLocalLightningStatus;
 
     private void updatePlaceOrderFragment(FullMarketData data) {
@@ -194,6 +193,7 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
+
         mUpdateRealTimeData = true;
 
         initData(getIntent());
@@ -218,7 +218,7 @@ public class TradeActivity extends BaseActivity implements
 
             @Override
             public void onOneKeyClosePosButtonClick() {
-                mHoldingOrderPresenter.closeAllHoldingPositions(mFundType);
+                mHoldingOrderPresenter.closeAllHoldingPositions();
             }
 
             @Override
@@ -361,47 +361,44 @@ public class TradeActivity extends BaseActivity implements
                 Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());
             }
         });
-        ImageView ruleIcon = (ImageView) view.findViewById(R.id.ruleIcon);
+        ImageView ruleIcon = (ImageView) view.findViewById(R.id.programmeArrow);
         mQuestionMark = (AnimationDrawable) ruleIcon.getBackground();
         updateQuestionMarker();
     }
 
     private void updateExchangeStatusView() {
-        if (mExchangeStatus.getExchangeId() != mProduct.getExchangeId()) {
-            API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
-                    .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                        @Override
-                        public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                            mExchangeStatus = exchangeStatus;
-                            mProduct.setExchangeStatus(exchangeStatus.isTradeable()
-                                    ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-                            updateExchangeStatusView();
+        API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType())
+                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
+                    @Override
+                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
+                        mProduct.setExchangeStatus(exchangeStatus.isTradeable()
+                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
+                        if (exchangeStatus.isTradeable()) {
+                            mMarketCloseArea.setVisibility(View.GONE);
+                            mMarketOpenArea.setVisibility(View.VISIBLE);
+                            mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
+                                    exchangeStatus.getNextTime()));
+                        } else {
+                            mMarketCloseArea.setVisibility(View.VISIBLE);
+                            mMarketOpenArea.setVisibility(View.GONE);
+                            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
+                                    exchangeStatus.getNextTime()));
                         }
-                    }).fire();
-        } else {
-            if (mExchangeStatus.isTradeable()) {
-                mMarketCloseArea.setVisibility(View.GONE);
-                mMarketOpenArea.setVisibility(View.VISIBLE);
-                mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
-                        mExchangeStatus.getNextTime()));
-            } else {
-                mMarketCloseArea.setVisibility(View.VISIBLE);
-                mMarketOpenArea.setVisibility(View.GONE);
-                mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
-                        mExchangeStatus.getNextTime()));
-            }
-        }
+                    }
+                }).setTag(TAG).fireSync();
     }
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mExchangeStatus = (ExchangeStatus) intent.getSerializableExtra(ExchangeStatus.EX_EXCHANGE_STATUS);
+        //mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
+        mProductList = new ArrayList<>();
 
-        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
-        mMarketServer = marketServers.get(0);
-        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
+//        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
+//        mMarketServer = marketServers.get(0);
+//        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
+        mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
+        NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
 
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }
@@ -466,7 +463,7 @@ public class TradeActivity extends BaseActivity implements
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
                 .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                .putExtra(MarketServer.EX_MARKET_SERVER, mMarketServer)
+                .putExtra(ServerIpPort.EX_IP_PORT, mServerIpPort)
                 .executeForResult(REQ_CODE_SET_LIGHTNING_ORDERS);
     }
 
@@ -531,6 +528,8 @@ public class TradeActivity extends BaseActivity implements
     protected void onPostResume() {
         super.onPostResume();
         updateQuestionMarker();
+        updateExchangeStatusView(); // based on product
+
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -551,15 +550,16 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
-        mHoldingOrderPresenter.onPause();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mHoldingOrderPresenter.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mNettyHandler = null;
+        mHoldingOrderPresenter.onDestroy();
     }
 
     @Override
@@ -737,7 +737,6 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
-        Log.d("TAG", "submitOrder: " + submittedOrder); // TODO: 9/20/16 delete
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
@@ -850,7 +849,6 @@ public class TradeActivity extends BaseActivity implements
         updateUsableMoneyScore(new LocalUser.Callback() {
             @Override
             public void onUpdateCompleted() {
-                Log.d("TAG", "onUpdateCompleted: ");
             }
         });
     }
@@ -879,7 +877,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onRiskControlTriggered() {
+    public void onRiskControlTriggered(String showIds) {
     }
 
     static class MenuAdapter extends ArrayAdapter<Product> {

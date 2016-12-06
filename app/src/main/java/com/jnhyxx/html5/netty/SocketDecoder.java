@@ -25,7 +25,7 @@ public class SocketDecoder extends ByteToMessageDecoder {
 			}
 			byte[] msg = new byte[length];
 			in.readBytes(msg);
-			out.add(new String(msg, "GBK"));
+			out.add(new String(msg, "UTF-8"));
 		}
 	}
 }

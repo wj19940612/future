@@ -46,6 +46,7 @@ import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
@@ -71,6 +72,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER;
 
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
@@ -236,7 +239,6 @@ public class TradeActivity extends BaseActivity implements
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
-        getLightningOrdersStatus();
     }
 
     private void getLightningOrdersStatus() {
@@ -293,6 +295,21 @@ public class TradeActivity extends BaseActivity implements
                 getString(R.string.lightning_orders_status_run_out))
                 .setPositive(R.string.ok)
                 .show();
+        removeLightningOrder();
+        lightningOrderOpen = false;
+    }
+
+    private void removeLightningOrder() {
+        API.Market.removeOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
+                .setIndeterminate(this)
+                .setTag(TAG)
+                .setCallback(new Callback1<Resp<JsonObject>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                        LocalLightningOrdersList.getInstance().clearLightningOrder(mProduct.getVarietyId(), mFundType);
+                    }
+                })
+                .fire();
     }
 
     private void openOrdersPage() {
@@ -340,7 +357,7 @@ public class TradeActivity extends BaseActivity implements
             mSellShortBtn.setPadding(px2dp(20), dimension, 0, dimension);
         }
         //关闭闪电下单回调
-        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER) {
+        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == RESULT_CODE_CLOSE_LIGHTNING_ORDER) {
             ToastUtil.curt(R.string.lightning_orders_close);
             mLightningOrders.setSelected(false);
             lightningOrderOpen = false;
@@ -535,7 +552,7 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
-
+        getLightningOrdersStatus();
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -652,8 +669,10 @@ public class TradeActivity extends BaseActivity implements
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-                    NettyClient.getInstance().start(mProduct.getContractsCode());
+                    getLightningOrdersStatus();
+                    lightningOrderOpen = false;
 
+                    NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
                 mUpdateRealTimeData = true;

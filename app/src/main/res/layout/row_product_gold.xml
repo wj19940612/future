@@ -72,7 +72,6 @@
             android:paddingRight="5dp"
             android:paddingTop="2dp"
             android:text="@string/holding_position"
-            android:maxLines="1"
             android:textColor="@color/redPrimary"
             android:textSize="9sp"
             android:visibility="gone"/>

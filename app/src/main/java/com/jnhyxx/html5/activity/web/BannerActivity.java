@@ -44,7 +44,7 @@ public class BannerActivity extends WebViewActivity {
 
     private void openWebView(String urlData) {
         String content = "";
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             getWebView().getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             content = INFO_HTML_META + "<body>" + "<br></br>" + mPureHtml + "</body>";
         } else {

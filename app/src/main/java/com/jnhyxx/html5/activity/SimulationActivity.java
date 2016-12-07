@@ -246,7 +246,7 @@ public class SimulationActivity extends BaseActivity {
                     mMarketOpenTime.setVisibility(View.GONE);
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
-                    
+
                     HomePositions.Position position = pkg.getPosition(); // Position status
                     if (position != null && position.getHandsNum() > 0) {
                         mHoldingPosition.setVisibility(View.VISIBLE);

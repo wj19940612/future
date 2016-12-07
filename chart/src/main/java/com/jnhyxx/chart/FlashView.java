@@ -50,7 +50,10 @@ public class FlashView extends ChartView {
             if (mMaxPoints > 0 && mPointList.size() >= mMaxPoints) {
                 int indexBeforeDelete = mPointList.size() - mMaxPoints + 1;
                 for (int i = 0; i < indexBeforeDelete; i++) {
-                    mPointList.remove(i);
+                    // TODO: 2016/12/7   java.lang.IndexOutOfBoundsException at java.util.LinkedList.remove(LinkedList.java:660) at com.jnhyxx.chart.FlashView.addData(FlashView.java:53) at
+                    if (i < mPointList.size() - 1) {
+                        mPointList.remove(i);
+                    }
                 }
             }
 

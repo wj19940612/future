@@ -417,6 +417,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             RelativeLayout mManagerLayout;
             @BindView(R.id.ivTeacherImage)
             ImageView mIvTeacherImage;
+            @BindView(R.id.llImageLayout)
+            LinearLayout mLlImageLayout;
 
             //自己发言的layout
             @BindView(R.id.userMineStatus)
@@ -489,15 +491,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     if (mContent.getVisibility() == View.GONE) {
                         mContent.setVisibility(View.VISIBLE);
                     }
-                    if (mIvTeacherImage.getVisibility() == View.VISIBLE)
-                        mIvTeacherImage.setVisibility(View.GONE);
+                    if (mLlImageLayout.getVisibility() == View.VISIBLE)
+                        mLlImageLayout.setVisibility(View.GONE);
                     mContent.setText(item.getMsg());
 
                 } else {
                     if (!TextUtils.isEmpty(item.getMsg())) {
-                        if (mContent.getVisibility() == View.VISIBLE || mIvTeacherImage.getVisibility() == View.GONE) {
+                        if (mContent.getVisibility() == View.VISIBLE || mLlImageLayout.getVisibility() == View.GONE) {
                             mContent.setVisibility(View.GONE);
-                            mIvTeacherImage.setVisibility(View.VISIBLE);
+                            mLlImageLayout.setVisibility(View.VISIBLE);
                         }
                         Picasso.with(context).load(item.getMsg()).into(mIvTeacherImage);
                     }
@@ -544,7 +546,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     }
                 }
 
-                mUserStatus.setText(chatUser );
+                mUserStatus.setText(chatUser);
             }
         }
     }

@@ -309,8 +309,13 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             @BindView(R.id.timeBeforeHintLayout)
             LinearLayout mTimeBeforeHintLayout;
 
+            //老师的图片
             @BindView(R.id.ivTeacherImage)
             ImageView mIvTeacherImage;
+            //老师图片父容器
+            @BindView(R.id.llImageLayout)
+            LinearLayout mLlImageLayout;
+
             @BindView(R.id.userStatus)
             TextView mUserStatus;
             @BindView(R.id.userHeadImage)
@@ -365,20 +370,17 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                         mContent.setVisibility(View.VISIBLE);
                     }
                     if (mIvTeacherImage.getVisibility() == View.VISIBLE)
-                        mIvTeacherImage.setVisibility(View.GONE);
+                        mLlImageLayout.setVisibility(View.GONE);
                     mContent.setText(item.getMsg());
 
                 } else {
                     Log.d("liveIn", "网址地址" + item.getMsg());
                     if (!TextUtils.isEmpty(item.getMsg())) {
-                        if (mContent.getVisibility() == View.VISIBLE || mIvTeacherImage.getVisibility() == View.GONE) {
+                        if (mContent.getVisibility() == View.VISIBLE || mLlImageLayout.getVisibility() == View.GONE) {
                             mContent.setVisibility(View.GONE);
-                            mIvTeacherImage.setVisibility(View.VISIBLE);
+                            mLlImageLayout.setVisibility(View.VISIBLE);
                         }
-
                         Picasso.with(context).load(item.getMsg()).into(mIvTeacherImage);
-//                            Picasso.with(context).load(item.getMsg())
-//                                    .transform(new CircleTransform()).into(mIvTeacherImage);
                     }
                 }
             }

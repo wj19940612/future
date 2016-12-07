@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -440,6 +441,8 @@ public abstract class ChartView extends View {
         if (y > indexesBaseLines[0] || y < indexesBaseLines[indexesBaseLines.length - 1]) {
             return -1;
         }
+
+        Log.d("TAG", "getIndexesChartY: long y: " + y);
 
         int height = getBottomPartHeight();
         y = (indexesBaseLines[0] - y) /

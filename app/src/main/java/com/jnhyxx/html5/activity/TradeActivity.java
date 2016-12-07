@@ -455,7 +455,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void requestKlineDataAndSet() {
-        API.getKlineData(mProduct.getVarietyType(), "")
+        API.getKlineData(mProduct.getContractsCode(), "")
                 .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     public void onRespSuccess(List<KlineViewData> klineDataList) {

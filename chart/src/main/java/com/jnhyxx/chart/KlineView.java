@@ -91,7 +91,7 @@ public class KlineView extends ChartView {
             mEnd = mStart + mLength;
             float max = Float.MIN_VALUE;
             float min = Float.MAX_VALUE;
-            mMaxVolume = Long.MAX_VALUE;
+            mMaxVolume = Long.MIN_VALUE;
             for (int i = mStart; i < mEnd; i++) {
                 KlineViewData data = mDataList.get(i);
                 if (max < data.getMaxPrice()) max = data.getMaxPrice();

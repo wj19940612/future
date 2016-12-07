@@ -37,7 +37,7 @@
             android:maxLength="200"
             android:minHeight="200dp"
             android:textColorHint="@color/grayHint"
-            tools:text="卡积分卡数据库就卡是否看见啊是发撒健康还是发快结婚付款就是大海开了房间打扫房间快点撒发生"/>
+            tools:text=""/>
 
         <TextView
             android:id="@+id/feedbackContentNumber"
@@ -54,7 +54,7 @@
             android:paddingTop="10dp"
             android:text="@string/feedback_content_number"
             android:textColor="@color/lucky"
-            android:textSize="11sp"
+            android:textSize="@dimen/min_text_size"
             android:visibility="visible"/>
 
         <EditText

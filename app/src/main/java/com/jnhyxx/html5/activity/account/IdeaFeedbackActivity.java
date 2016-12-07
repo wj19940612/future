@@ -18,8 +18,8 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.KeyBoardHelper;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CustomToast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,7 +125,7 @@ public class IdeaFeedbackActivity extends BaseActivity {
                 .setCallback(new Callback2<Resp<JsonObject>, JsonObject>() {
                     @Override
                     public void onRespSuccess(JsonObject jsonObject) {
-                        ToastUtil.curt(R.string.feedback_submit_success);
+                        CustomToast.getInstance().showText(getActivity(),R.string.feedback_submit_success);
                         finish();
                     }
                 })

@@ -291,7 +291,9 @@ public class HoldingOrderPresenter {
 
     public void clearData() {
         mMarketData = null;
-        mHoldingOrderList.clear();
+        if (mHoldingOrderList != null) {
+            mHoldingOrderList.clear();
+        }
     }
 
     public void setFullMarketData(FullMarketData marketData, int varietyId) {

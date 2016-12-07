@@ -60,7 +60,6 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -274,8 +273,7 @@ public class TradeActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        //mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mProductList = new ArrayList<>();
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
 
         ServerIpPort serverIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
         NettyClient.getInstance().setIpAndPort(serverIpPort.getIp(), serverIpPort.getPort());

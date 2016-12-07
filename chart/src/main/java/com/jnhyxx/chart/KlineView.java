@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 
 import com.jnhyxx.chart.domain.KlineViewData;
 
@@ -48,7 +49,7 @@ public class KlineView extends ChartView {
         mDateFormat = new SimpleDateFormat();
         mDate = new Date();
         mCandleWidth = dp2Px(CANDLES_WIDTH_DP);
-        mMovingAverages = new int[] {5, 10, 20};
+        mMovingAverages = new int[]{5, 10, 20};
     }
 
     public void setDataList(List<KlineViewData> dataList) {
@@ -183,7 +184,7 @@ public class KlineView extends ChartView {
                                     int left2, int top2, int width2, int height2, Canvas canvas) {
         for (int i = mStart; i < mEnd; i++) {
             KlineViewData data = mDataList.get(i);
-            float chartX = getChartX(i);
+            float chartX = getChartXOfScreen(i, data);
             drawCandle(chartX, data, canvas);
             drawIndexes(chartX, data, canvas);
         }
@@ -191,12 +192,12 @@ public class KlineView extends ChartView {
     }
 
     private void drawMovingAverageLines(Canvas canvas) {
-        for (int movingAverage: mMovingAverages) {
+        for (int movingAverage : mMovingAverages) {
             Path path = getPath();
             for (int i = mStart; i < mEnd; i++) {
                 int start = i - movingAverage + 1;
                 if (start < 0) continue;
-                float chartX = getChartX(i);
+                float chartX = getChartXOfScreen(i);
                 float chartY = getChartY(calculateMovingAverageValue(start, movingAverage));
                 if (path.isEmpty()) {
                     path.moveTo(chartX, chartY);
@@ -303,20 +304,38 @@ public class KlineView extends ChartView {
                 } else {
                     String displayTime = formatTimestamp(data.getTimeStamp());
                     float textWidth = sPaint.measureText(displayTime);
-                    float textX = getChartX(i) - textWidth / 2;
+                    float textX = getChartXOfScreen(i) - textWidth / 2;
                     canvas.drawText(displayTime, textX, textY, sPaint);
                 }
             }
         }
     }
 
+    private float getChartXOfScreen(int index) {
+        index = index - mStart; // visible index 0 ~ 39
+        return getChartX(index);
+    }
+
+    private float getChartXOfScreen(int index, KlineViewData data) {
+        index = index - mStart; // visible index 0 ~ 39
+        mVisibleList.put(index, data);
+        return getChartX(index);
+    }
+
     @Override
     protected float getChartX(int index) {
         float offset = super.getChartX(1) / 2;
-        index = index - mStart;
         float width = getWidth() - getPaddingLeft() - getPaddingRight() - mPriceAreaWidth;
         float chartX = getPaddingLeft() + index * width * 1.0f / mSettings.getXAxis();
         return chartX + offset;
+    }
+
+    @Override
+    protected int getIndexOfXAxis(float chartX) {
+        float offset = super.getChartX(1) / 2;
+        float width = getWidth() - getPaddingLeft() - getPaddingRight() - mPriceAreaWidth;
+        chartX = chartX - offset - getPaddingLeft();
+        return (int) (chartX * mSettings.getXAxis() / width);
     }
 
     private String formatTimestamp(long timestamp) {
@@ -329,7 +348,27 @@ public class KlineView extends ChartView {
     }
 
     public void clearData() {
+        setDataList(null);
+    }
 
+    @Override
+    protected void drawTouchLines(boolean indexesEnable, int touchIndex, int left, int top, int width, int height,
+                                  int left2, int top2, int width2, int height2, Canvas canvas) {
+
+    }
+
+    @Override
+    protected int calculateTouchIndex(MotionEvent e) {
+        float touchX = e.getX();
+        return getIndexOfXAxis(touchX);
+    }
+
+    @Override
+    protected boolean hasThisTouchIndex(int touchIndex) {
+        if (mVisibleList != null && mVisibleList.get(touchIndex) != null) {
+            return true;
+        }
+        return super.hasThisTouchIndex(touchIndex);
     }
 
     @Override

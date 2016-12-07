@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -322,6 +321,13 @@ public class TrendChart extends ChartView {
         return getIndexOfXAxis(touchX);
     }
 
+    @Override
+    protected int getIndexOfXAxis(float chartX) {
+        float width = getWidth() - getPaddingLeft() - getPaddingRight() - mPriceAreaWidth;
+        chartX = chartX - getPaddingLeft();
+        return (int) (chartX * mSettings.getXAxis() / width);
+    }
+
     private float getChartX(TrendViewData model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
         mVisibleList.put(indexOfXAxis, model);
@@ -366,9 +372,6 @@ public class TrendChart extends ChartView {
                                   int left, int top, int width, int height,
                                   int left2, int top2, int width2, int height2, Canvas canvas) {
         if (hasThisTouchIndex(touchIndex)) {
-
-            Log.d("TAG", "drawTouchLines: " + touchIndex);
-
             TrendViewData data = mVisibleList.get(touchIndex);
             float touchX = getChartX(touchIndex);
             float touchY = getChartY(data.getLastPrice());

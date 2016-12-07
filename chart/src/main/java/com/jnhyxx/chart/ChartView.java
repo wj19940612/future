@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -442,13 +441,12 @@ public abstract class ChartView extends View {
             return -1;
         }
 
-        Log.d("TAG", "getIndexesChartY: long y: " + y);
-
         int height = getBottomPartHeight();
-        y = (indexesBaseLines[0] - y) /
+
+        float chartY = (indexesBaseLines[0] - y) * 1.0f /
                 (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
 
-        return y + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
+        return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
     }
 
     protected float getChartX(int index) {

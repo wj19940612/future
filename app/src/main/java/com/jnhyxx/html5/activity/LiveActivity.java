@@ -123,7 +123,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
             }
 
-            if (LiveHomeChatInfo.isOrder()) {
+            if (LiveHomeChatInfo.isOrder()||LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                 if (getTeacherGuideFragment() != null) {
                     getTeacherGuideFragment().setData(LiveHomeChatInfo);
                 }

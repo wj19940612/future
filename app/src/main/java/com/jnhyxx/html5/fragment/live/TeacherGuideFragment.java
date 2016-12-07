@@ -171,7 +171,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             @Override
             public void onRefresh() {
                 if (!hasMoreData) {
-                    mPageOffset++;
+//                    mPageOffset++;
                     getTeacherGuideIfo();
                     if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
                         mSwipeRefreshLayout.setRefreshing(false);

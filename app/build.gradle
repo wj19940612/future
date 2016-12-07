@@ -74,7 +74,7 @@ android {
                     PACKAGE_NAME    : applicationId
             ]
         }
-        
+
         zy1 { // 钱猫投资宝
             applicationId 'com.trade163.zy1'
             versionCode 1

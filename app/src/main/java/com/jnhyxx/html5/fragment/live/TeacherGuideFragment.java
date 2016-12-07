@@ -250,11 +250,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         }
         mLiveTeacherGuideAdapter.clear();
         if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
-            int dataPosition = mDataInfoList.size() - 1;
+//            int dataPosition = mDataInfoList.size() - 1;
             for (int i = mDataInfoList.size(); i > 0; i--) {
-                if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(dataPosition).getCreateTime(), mDataInfoList.get(i - 1).getCreateTime())) {
-                    mDataInfoList.get(i).setMoreThanFiveMin(true);
-                    dataPosition = i - 1;
+                if (i == 2) break;
+                if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(i-1).getCreateTime(), mDataInfoList.get(i - 2).getCreateTime())) {
+                    mDataInfoList.get(i-1).setMoreThanFiveMin(true);
+//                    dataPosition = i - 1;
                 }
             }
             mLiveTeacherGuideAdapter.addAll(mDataInfoList);
@@ -347,9 +348,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);
                 }
-
+                setTeacherMsg(item, context);
                 mUserStatus.setText(item.getName());
-                mContent.setText(item.getMsg());
 
                 if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
                     Picasso.with(context).load(teacherInfo.getPictureUrl())
@@ -357,6 +357,30 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 } else {
                     Picasso.with(context).load(R.drawable.ic_live_pic_head)
                             .transform(new CircleTransform()).into(mUserHeadImage);
+                }
+            }
+
+            private void setTeacherMsg(LiveHomeChatInfo item, Context context) {
+                if (item.isText()) {
+                    if (mContent.getVisibility() == View.GONE) {
+                        mContent.setVisibility(View.VISIBLE);
+                    }
+                    if (mIvTeacherImage.getVisibility() == View.VISIBLE)
+                        mIvTeacherImage.setVisibility(View.GONE);
+                    mContent.setText(item.getMsg());
+
+                } else {
+                    Log.d("liveIn", "网址地址" + item.getMsg());
+                    if (!TextUtils.isEmpty(item.getMsg())) {
+                        if (mContent.getVisibility() == View.VISIBLE || mIvTeacherImage.getVisibility() == View.GONE) {
+                            mContent.setVisibility(View.GONE);
+                            mIvTeacherImage.setVisibility(View.VISIBLE);
+                        }
+
+                        Picasso.with(context).load(item.getMsg()).into(mIvTeacherImage);
+//                            Picasso.with(context).load(item.getMsg())
+//                                    .transform(new CircleTransform()).into(mIvTeacherImage);
+                    }
                 }
             }
         }

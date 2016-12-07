@@ -331,11 +331,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         mLiveChatInfoAdapter.clear();
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-            int dataPosition = mDataArrayList.size() - 1;
+//            int dataPosition = mDataArrayList.size() - 1;
             for (int i = mDataArrayList.size(); i > 0; i--) {
-                if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(dataPosition).getCreateTime(), mDataArrayList.get(i - 1).getCreateTime())) {
-                    mDataArrayList.get(i).setMoreThanFiveMin(true);
-                    dataPosition = i - 1;
+                if (i == 2) break;
+                if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(i - 1).getCreateTime(), mDataArrayList.get(i - 2).getCreateTime())) {
+                    mDataArrayList.get(i - 1).setMoreThanFiveMin(true);
+//                    dataPosition = i - 1;
                 }
             }
             mLiveChatInfoAdapter.addAll(mDataArrayList);
@@ -493,16 +494,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     mContent.setText(item.getMsg());
 
                 } else {
-                    Log.d("liveIn", "网址地址" + item.getMsg());
                     if (!TextUtils.isEmpty(item.getMsg())) {
                         if (mContent.getVisibility() == View.VISIBLE || mIvTeacherImage.getVisibility() == View.GONE) {
                             mContent.setVisibility(View.GONE);
                             mIvTeacherImage.setVisibility(View.VISIBLE);
                         }
-
                         Picasso.with(context).load(item.getMsg()).into(mIvTeacherImage);
-//                            Picasso.with(context).load(item.getMsg())
-//                                    .transform(new CircleTransform()).into(mIvTeacherImage);
                     }
                 }
             }
@@ -547,7 +544,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     }
                 }
 
-                mUserStatus.setText(chatUser);
+                mUserStatus.setText(chatUser );
             }
         }
     }

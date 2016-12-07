@@ -102,11 +102,12 @@
                 tools:text="我是管理员卡司法局阿喀琉斯解放路卡肥"/>
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/ivTeacherImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/ic_launcher"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 

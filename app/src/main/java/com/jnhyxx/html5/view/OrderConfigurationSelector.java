@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.jnhyxx.html5.R;
 import java.util.List;
 
 public class OrderConfigurationSelector extends LinearLayout {
+    private static final String TAG = "OrderConfigurationSelec";
 
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final int DEFAULT_ITEMS = 5;
@@ -41,6 +43,7 @@ public class OrderConfigurationSelector extends LinearLayout {
     private PopupWindow mPopupWindow;
 
     private boolean enabled = true;
+    private int mDefaultIndex;
 
     public interface OrderConfiguration {
         String getValue();
@@ -164,20 +167,21 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
 
         int defaultIndex = getDefaultIndex();
+        Log.d(TAG, "==被选择的索引" + defaultIndex);
         selectItem(defaultIndex);
     }
 
     private int getDefaultIndex() {
-        int defaultIndex = 0;
+        mDefaultIndex = 0;
         if (mOrderConfigurationList != null && !mOrderConfigurationList.isEmpty()) {
             for (int i = 0; i < mOrderConfigurationList.size(); i++) {
                 if (mOrderConfigurationList.get(i).isDefault()) {
-                    defaultIndex = i;
+                    mDefaultIndex = i;
                     break;
                 }
             }
         }
-        return defaultIndex;
+        return mDefaultIndex;
     }
 
     public void selectItem(int index) {
@@ -230,7 +234,7 @@ public class OrderConfigurationSelector extends LinearLayout {
                 }
             } else {
                 if (getChildAt(i) instanceof TextView) {
-                    if (i == 0) {
+                    if (i == mDefaultIndex) {
                         ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
                     } else {
                         ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), R.color.lucky));

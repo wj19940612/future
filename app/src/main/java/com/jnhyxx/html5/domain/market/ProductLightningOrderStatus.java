@@ -173,6 +173,11 @@ public class ProductLightningOrderStatus {
                 '}';
     }
 
+    /**
+     * 本地的闪电下单数据和产品的配资进行对比，如果不相同，则闪电下单失效
+     * @param futuresFinancing 产品配资方案
+     * @return
+     */
     public boolean compareDataWithWeb(FuturesFinancing futuresFinancing) {
         if (futuresFinancing.getAssets() == null && futuresFinancing.getAssets().isEmpty())
             return false;

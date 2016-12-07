@@ -309,7 +309,8 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             @BindView(R.id.timeBeforeHintLayout)
             LinearLayout mTimeBeforeHintLayout;
 
-
+            @BindView(R.id.ivTeacherImage)
+            ImageView mIvTeacherImage;
             @BindView(R.id.userStatus)
             TextView mUserStatus;
             @BindView(R.id.userHeadImage)
@@ -343,7 +344,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
                     format = "刚刚";
                 }
-
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);
                 }

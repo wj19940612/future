@@ -88,6 +88,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private boolean hasFuturesFinancing;
 
     private ProductLightningOrderStatus mProductLightningOrderStatus;
+    //本地存儲的闪电下单数据
+    private ProductLightningOrderStatus mLocalLightningStatus;
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -106,11 +108,11 @@ public class SetLightningOrdersActivity extends BaseActivity {
         mProductLightningOrderStatus = new ProductLightningOrderStatus();
         initData(getIntent());
         setTradeQuantity();
+        //获取期货配资方案
+        getFuturesFinancing();
         setTouchStopLoss();
         setTouchStopPro();
 
-        //获取期货配资方案
-        getFuturesFinancing();
         getExchangeTradeStatus();
     }
 
@@ -205,6 +207,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
+                        Log.d(TAG, "行情配資 " + futuresFinancing.toString());
                         if (mFuturesFinancing != null) {
                             hasFuturesFinancing = true;
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
@@ -240,7 +243,13 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private void updatePlaceOrderViews() {
         // 设置止损
         mFuturesFinancing.sort();
-        mTouchStopLossSelector.setOrderConfigurationList(mFuturesFinancing.getStopLossList(mProduct));
+        List<FuturesFinancing.StopLoss> stopLossList = mFuturesFinancing.getStopLossList(mProduct);
+        mTouchStopLossSelector.setOrderConfigurationList(stopLossList);
+        for (int i = 0; i < stopLossList.size(); i++) {
+            if (stopLossList.get(i).isDefault()) {
+                Log.d(TAG, "止損的索引 " + i);
+            }
+        }
     }
 
     private void setTradeQuantity() {
@@ -270,6 +279,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
         if (mProduct != null) {
             mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());
             mProductLightningOrderStatus.setPayType(mFundType);
+        }
+        if (mProduct != null) {
+            mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
         }
 
         setLayoutStatus();

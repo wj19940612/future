@@ -370,7 +370,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     static class LiveChatInfoAdapter extends ArrayAdapter<LiveHomeChatInfo> {
-
         private Context mContext;
         private LiveMessage.TeacherInfo mTeacherInfo;
 
@@ -415,6 +414,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             TextView mContent;
             @BindView(R.id.managerLayout)
             RelativeLayout mManagerLayout;
+            @BindView(R.id.ivTeacherImage)
+            ImageView mIvTeacherImage;
 
             //自己发言的layout
             @BindView(R.id.userMineStatus)
@@ -465,7 +466,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 if (!item.isNormalUser()) {
                     showManagerLayout();
                     setChatUserStatus(item, context, teacherInfo, format);
-                    mContent.setText(item.getMsg());
+                    setTeacherMsg(item, context);
                     //普通游客发言
                 } else {
                     //自己发的言
@@ -478,6 +479,30 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         showCommonUserLayout();
                         mCommonUserStatus.setText(item.getName());
                         mCommonUserContent.setText(item.getMsg());
+                    }
+                }
+            }
+
+            private void setTeacherMsg(LiveHomeChatInfo item, Context context) {
+                if (item.isText()) {
+                    if (mContent.getVisibility() == View.GONE) {
+                        mContent.setVisibility(View.VISIBLE);
+                    }
+                    if (mIvTeacherImage.getVisibility() == View.VISIBLE)
+                        mIvTeacherImage.setVisibility(View.GONE);
+                    mContent.setText(item.getMsg());
+
+                } else {
+                    Log.d("liveIn", "网址地址" + item.getMsg());
+                    if (!TextUtils.isEmpty(item.getMsg())) {
+                        if (mContent.getVisibility() == View.VISIBLE || mIvTeacherImage.getVisibility() == View.GONE) {
+                            mContent.setVisibility(View.GONE);
+                            mIvTeacherImage.setVisibility(View.VISIBLE);
+                        }
+
+                        Picasso.with(context).load(item.getMsg()).into(mIvTeacherImage);
+//                            Picasso.with(context).load(item.getMsg())
+//                                    .transform(new CircleTransform()).into(mIvTeacherImage);
                     }
                 }
             }

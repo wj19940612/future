@@ -412,11 +412,6 @@ public class TradeActivity extends BaseActivity implements
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-//        mProductList = new ArrayList<>();
-
-//        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
-//        mMarketServer = marketServers.get(0);
-//        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
         mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
         NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
 

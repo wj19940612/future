@@ -142,7 +142,7 @@ public class FuturesFinancing {
 
         private double marginBeat;
         private Map<String, Double> stopWinBeats;
-        private int fees;
+        private double fees;
         private Map<String, Double> marginBeatHands;
         private int isDefault;
         private Map<String, Double> feesHands;
@@ -170,11 +170,11 @@ public class FuturesFinancing {
             this.marginBeat = marginBeat;
         }
 
-        public int getFees() {
+        public double getFees() {
             return fees;
         }
 
-        public void setFees(int fees) {
+        public void setFees(double fees) {
             this.fees = fees;
         }
 

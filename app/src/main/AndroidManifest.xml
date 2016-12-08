@@ -23,12 +23,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <!-- 自定义权限解释:部分手机型号不能正常运行个推SDK，需添加自定义权限进行配置 -->
-    <uses-permission android:name="getui.permission.GetuiService.com.jnhyxx.html5"/>
-
-    <permission
-        android:name="getui.permission.GetuiService.com.jnhyxx.html5"
-        android:protectionLevel="normal"/>
     <!-- 网易云播: 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 

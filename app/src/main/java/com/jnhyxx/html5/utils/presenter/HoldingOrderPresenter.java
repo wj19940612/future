@@ -375,6 +375,7 @@ public class HoldingOrderPresenter {
         }
     }
 
+
     private void onRiskControlTriggered(String showIds) {
         if (mIHoldingOrderView != null) {
             mIHoldingOrderView.onRiskControlTriggered(showIds);

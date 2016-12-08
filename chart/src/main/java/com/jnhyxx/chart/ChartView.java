@@ -520,7 +520,7 @@ public abstract class ChartView extends View {
         return formatNumber(value, mSettings.getNumberScale());
     }
 
-    protected String formatNumber(float value, int numberScale) {
+    protected String formatNumber(double value, int numberScale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
 
         decimalFormat.setMaximumFractionDigits(numberScale);

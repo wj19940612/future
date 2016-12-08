@@ -69,6 +69,7 @@ import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -661,13 +662,17 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
-                        KlineView klineView = mChartContainer.getKlineView();
-                        if (klineDataList.get(0).getTimeStamp() > klineDataList.get(1).getTimeStamp()) {
-                            Collections.reverse(klineDataList);
-                            // 第一条为最新的数据,反排
+                        if (klineDataList != null && klineDataList.size() > 0) {
+                            KlineView klineView = mChartContainer.getKlineView();
+                            Collections.sort(klineDataList, new Comparator<KlineViewData>() {
+                                @Override
+                                public int compare(KlineViewData o1, KlineViewData o2) {
+                                    return (int) (o1.getTimeStamp() - o2.getTimeStamp());
+                                }
+                            });
+                            if (klineView == null) return;
+                            klineView.setDataList(klineDataList);
                         }
-                        if (klineView == null) return;
-                        klineView.setDataList(klineDataList);
                     }
                 }).fireSync();
     }

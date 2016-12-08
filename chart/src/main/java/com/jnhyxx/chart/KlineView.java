@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
@@ -168,7 +169,7 @@ public class KlineView extends ChartView {
                 canvas.drawPath(path, sPaint);
 
                 setDefaultTextPaint(sPaint);
-                String baseLineValue = formatNumber(indexesBaseLines[i]);
+                String baseLineValue = formatIndexesNumber(indexesBaseLines[i]);
                 float textWidth = sPaint.measureText(baseLineValue);
                 float x = left + width - mPriceAreaWidth + (mPriceAreaWidth - textWidth) / 2;
                 float y = topY - mTextMargin - mFontHeight / 2 + mOffset4CenterText;
@@ -177,6 +178,13 @@ public class KlineView extends ChartView {
                 topY += verticalInterval;
             }
         }
+    }
+
+    protected String formatIndexesNumber(long value) {
+        if (mSettings.getIndexesType() == Settings.INDEXES_VOL) {
+            formatNumber(value, 0);
+        }
+        return value + "";
     }
 
     @Override
@@ -349,6 +357,9 @@ public class KlineView extends ChartView {
 
     public void clearData() {
         setDataList(null);
+        mStart = 0;
+        mEnd = 0;
+        mLength = 0;
     }
 
     @Override

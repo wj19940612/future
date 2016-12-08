@@ -3,7 +3,11 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ServerIpPort implements Parcelable {
+
+
+public class ServerIpPort implements Parcelable{
+
+    private static final long serialVersionUID = -6174707126558118139L;
 
     public static final String EX_IP_PORT = "ip_port";
 

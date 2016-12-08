@@ -38,6 +38,15 @@ public class ChatData {
     private int userId;
     private boolean owner;
     private boolean isMoreThanFiveMin;
+    /**
+     * address : /36.24.138.187:51819
+     * id : 584509410cf2234cf93ff5e2
+     * updateTime : 1480919361910
+     */
+
+    private String address;
+    private String id;
+    private long updateTime;
 
     public ChatData(LiveSpeakInfo speakInfo) {
         msg = speakInfo.getMsg();
@@ -166,6 +175,30 @@ public class ChatData {
         return true;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
     @Override
     public String toString() {
         return "ChatData{" +
@@ -182,6 +215,9 @@ public class ChatData {
                 ", userId=" + userId +
                 ", owner=" + owner +
                 ", isMoreThanFiveMin=" + isMoreThanFiveMin +
+                ", address='" + address + '\'' +
+                ", id='" + id + '\'' +
+                ", updateTime=" + updateTime +
                 '}';
     }
 }

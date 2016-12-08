@@ -291,6 +291,8 @@ public class HoldingOrderPresenter {
 
     public void clearData() {
         mMarketData = null;
+        //出现空指针异常
+        if (mHoldingOrderList == null) return;
         mHoldingOrderList.clear();
     }
 
@@ -372,6 +374,7 @@ public class HoldingOrderPresenter {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
         }
     }
+
 
     private void onRiskControlTriggered(String showIds) {
         if (mIHoldingOrderView != null) {

@@ -50,7 +50,7 @@ public class FlashView extends ChartView {
             if (mMaxPoints > 0 && mPointList.size() >= mMaxPoints) {
                 int indexBeforeDelete = mPointList.size() - mMaxPoints + 1;
                 for (int i = 0; i < indexBeforeDelete; i++) {
-                    mPointList.remove(i);
+                    mPointList.remove(0);
                 }
             }
 

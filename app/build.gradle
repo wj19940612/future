@@ -57,16 +57,16 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 15
-            versionName '1.2.15'
+            versionCode 18
+            versionName '1.2.18'
             //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion 21
+//            minSdkVersion  21
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 6
-            versionName '1.1.2'
+            versionCode 8
+            versionName '1.1.4'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
@@ -77,17 +77,57 @@ android {
             ]
         }
 
-        ryt {
-            applicationIdSuffix '.ryt'
+        zy1 { // 钱猫投资宝
+            applicationId 'com.trade163.zy1'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://www.rytqh.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy1.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
+                    GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
+                    GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
-        ycp {
-            applicationIdSuffix '.ycp'
+        zy3 { // 金谷理财
+            applicationId 'com.trade163.zy3'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy3.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "uDkOIdBlgD8FDqbCZ8DaE4",
+                    GETUI_APP_KEY   : "4aAkkoaEnU7e7BeyEsKld6",
+                    GETUI_APP_SECRET: "gvH8woAsRr6tzjzOIOirH6",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+        zy2 { // 蓝鲸投资
+            applicationId 'com.trade163.zy2'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy2.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "RBuCXPrguZ6sLPblvr6Ql1",
+                    GETUI_APP_KEY   : "noLiE4TEba7nW7VzyiSry9",
+                    GETUI_APP_SECRET: "rFWsgW0Cm46u19SMh4aJH9",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+        zy4 { // 贵金属期货宝
+            applicationId 'com.trade163.zy4'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy4.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
+                    GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
+                    GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
     }
 
@@ -107,8 +147,15 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
-    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
-    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+
+//    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
+//    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+
+    zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
+    zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
+    zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
+    zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
+
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')

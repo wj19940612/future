@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.jnhyxx.html5"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jnhyxx.html5">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <!-- 网易云播: 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".App"
@@ -88,6 +88,9 @@
 
         <!-- account activity -->
         <activity
+            android:name=".activity.account.IdeaFeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activity.account.SignUpActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -123,6 +126,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.TradeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.trade.SetLightningOrdersActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.order.OrderDetailActivity"

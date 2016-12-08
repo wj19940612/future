@@ -178,6 +178,7 @@ public class PlaceOrderFragment extends BaseFragment {
             }
         });
 
+        //获取期货配资方案
         API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                 .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                     @Override

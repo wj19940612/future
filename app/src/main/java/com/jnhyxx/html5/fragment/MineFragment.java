@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
+import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
@@ -88,6 +89,8 @@ public class MineFragment extends BaseFragment {
     TitleBar mTitleBar;
     @BindView(R.id.headImage)
     CircularAnnulusImageView mHeadImage;
+    @BindView(R.id.feedback)
+    IconTextRow mFeedback;
 
     private Unbinder mBinder;
 
@@ -168,7 +171,7 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage, R.id.feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
@@ -201,6 +204,9 @@ public class MineFragment extends BaseFragment {
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).execute();
                 }
+                break;
+            case R.id.feedback:
+                Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
                 break;
         }
     }

@@ -213,7 +213,7 @@
     <string name="stop_range">( 范围 %1$s~%2$s )</string>
     <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统止损（止盈）平仓</string>
     <string name="set_success">设置成功</string>
-    
+
 
     <!-- Order detail page -->
     <string name="order_detail">订单详情</string>
@@ -276,6 +276,7 @@
     <string name="confirm_sell_short">确定买跌</string>
     <string name="today_position">今持仓</string>
     <string name="pre_position">昨持仓</string>
+    <string name="trade_closed_hint">已休市，请客官下次交易时\n间%1$s  再来吧</string>
 
     <!-- Trade page: agree trade protocol -->
     <string name="prompt_dear_user">尊敬的用户:
@@ -289,6 +290,7 @@
     <!--我的界面 Mine -->
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
+    <string name="user_feedback">用户反馈</string>
     <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s </string>
     <string name="mine_balance">余额 (元)</string>
@@ -444,6 +446,21 @@
 
     <!--直播 live-->
     <string name="live_right_title">交易</string>
+
+
+    <!--闪电下单-->
+    <string name="open">开  启</string>
+    <string name="close">关  闭</string>
+    <string name="restart_open">重新设置</string>
+    <string name="lightning_orders_title">闪电下单</string>
+    <string name="lightning_orders_open">闪电下单已开启</string>
+    <string name="lightning_orders_close">闪电下单已关闭</string>
+    <string name="lightning_orders_buy_long">闪电买涨</string>
+    <string name="lightning_orders_buy_short">闪电买跌</string>
+    <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
+    <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
+
+
     <string name="live_program_dir">节目单</string>
     <string name="live_interaction">互动</string>
     <string name="live_teacher_guide">老师指导</string>
@@ -458,4 +475,11 @@
     <string name="there_is_no_chatting_record">暂无聊天记录</string>
     <string name="there_is_no_teacher_advise">暂无老师指导</string>
     <string name="live_teacher_order">老师指令:%1$s</string>
+    <!--意见反馈-->
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
+    <string name="feedback_user_phone">请输入QQ、微信或者手机号</string>
+    <string name="feedback_submit">提    交</string>
+    <string name="feedback_content_number">200</string>
+    <string name="feedback_submit_success">感谢您的反馈</string>
 </resources>

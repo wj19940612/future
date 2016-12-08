@@ -28,6 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class HomeListHeader extends FrameLayout {
 
     @OnClick({R.id.simulation, R.id.newerGuide, R.id.contactService})
@@ -175,7 +177,7 @@ public class HomeListHeader extends FrameLayout {
 
     public void setHomeAdvertisement(List<Information> informationList) {
         filterEmptyInformation(informationList);
-        if (informationList.size() > 0) {
+        if (!informationList.isEmpty()) {
             mPageIndicator.setCount(informationList.size());
             if (mAdapter == null) {
                 mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);

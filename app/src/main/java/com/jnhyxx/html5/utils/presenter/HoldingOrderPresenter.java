@@ -88,6 +88,8 @@ public class HoldingOrderPresenter {
                             if (showId.equals(order.getShowId())
                                     && order.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                                 refresh = true;
+
+
                             }
                         }
                     }
@@ -374,6 +376,7 @@ public class HoldingOrderPresenter {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
         }
     }
+
 
     private void onRiskControlTriggered(String showIds) {
         if (mIHoldingOrderView != null) {

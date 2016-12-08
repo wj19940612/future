@@ -2,12 +2,15 @@ package com.jnhyxx.html5.activity;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
 
@@ -23,6 +26,7 @@ import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.receiver.PushReceiver;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -54,6 +58,27 @@ public class MainActivity extends BaseActivity {
     private int mTabPosition;
 
     private static final int REQUEST_CODE_LIVE = 770;
+
+    private BroadcastReceiver mPushBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(PushReceiver.PUSH_ACTION)) {
+                final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushReceiver.KEY_PUSH_DATA);
+                if (sysMessage != null) {
+                    HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
+                            .setOnCheckDetailListener(new HomePopup.OnClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
+                                            .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
+                                }
+                            }).show();
+                }
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,8 +204,8 @@ public class MainActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
-
-        requestHomePopup();
+        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushReceiver.PUSH_ACTION));
+//        requestHomePopup();
     }
 
     private void requestHomePopup() {
@@ -214,6 +239,7 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
+        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
     }
 
     @Override

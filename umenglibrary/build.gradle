@@ -23,15 +23,20 @@ android {
         origin {
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
         }
-        yybd {
+        yybd { // 原油宝典 -> 期货交易通
             manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
         }
-
-        ycp {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
+        zy1 { // 钱猫投资宝
+            manifestPlaceholders = [UMENG_APPKEY: "58412c94e88bad78e5000ae1"]
         }
-        ryt {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
+        zy3 { // 金谷理财
+            manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]
+        }
+        zy2 { // 蓝鲸投资
+            manifestPlaceholders = [UMENG_APPKEY: "58412f3dc62dca356d00113e"]
+        }
+        zy4 { // 贵金属期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58412feef29d9877880010db"]
         }
     }
 }

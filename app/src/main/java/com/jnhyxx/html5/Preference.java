@@ -3,7 +3,7 @@ package com.jnhyxx.html5;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.jnhyxx.html5.domain.live.ChatData;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 
 public class Preference {
@@ -135,7 +135,7 @@ public class Preference {
         getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getId()).apply();
     }
 
-    public boolean hasShowedThisLastTeacherCommand(ChatData teacherCommand) {
+    public boolean hasShowedThisLastTeacherCommand(LiveHomeChatInfo teacherCommand) {
         if (teacherCommand != null) {
             long timeStamp = mPrefs.getLong(Key.LAST_TEACHER_COMMAND, -1);
             if (teacherCommand.getCreateTime() == timeStamp) {
@@ -145,7 +145,7 @@ public class Preference {
         return false;
     }
 
-    public void setThisLastTeacherCommandShowed(ChatData teacherCommand) {
+    public void setThisLastTeacherCommandShowed(LiveHomeChatInfo teacherCommand) {
         if (teacherCommand.getMsg() != null) {
             getEditor().putLong(Key.LAST_TEACHER_COMMAND, teacherCommand.getCreateTime()).apply();
         }

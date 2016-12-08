@@ -38,7 +38,7 @@ public class FullMarketData {
 
     private double askPrice; // 卖一价
     private int askVolume; // 卖一量
-    private double bidPrice; // 买一量
+    private double bidPrice; // 买一价
     private int bidVolume; // 买一量
     private double highestPrice; //当日最高价
     private String instrumentId; // 合约代码

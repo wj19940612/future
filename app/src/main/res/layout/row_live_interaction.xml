@@ -79,8 +79,8 @@
                     android:id="@+id/userHeadImage"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:scaleType="centerCrop"
                     android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_live_pic_head"/>
             </LinearLayout>
 
@@ -98,8 +98,26 @@
                 android:background="@drawable/bg_live_manager"
                 android:padding="8dp"
                 android:textColor="@color/blackPrimary"
+                android:visibility="visible"
                 tools:text="我是管理员卡司法局阿喀琉斯解放路卡肥"/>
 
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/llImageLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_white"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivTeacherImage"
+                    android:layout_width="132dp"
+                    android:layout_height="87dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_launcher"
+                    android:visibility="visible"/>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

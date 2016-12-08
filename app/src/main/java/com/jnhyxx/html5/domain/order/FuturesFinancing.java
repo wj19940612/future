@@ -139,9 +139,10 @@ public class FuturesFinancing {
     }
 
     public static class AssetsBean {
+
         private double marginBeat;
         private Map<String, Double> stopWinBeats;
-        private int fees;
+        private double fees;
         private Map<String, Double> marginBeatHands;
         private int isDefault;
         private Map<String, Double> feesHands;
@@ -169,11 +170,11 @@ public class FuturesFinancing {
             this.marginBeat = marginBeat;
         }
 
-        public int getFees() {
+        public double getFees() {
             return fees;
         }
 
-        public void setFees(int fees) {
+        public void setFees(double fees) {
             this.fees = fees;
         }
 
@@ -205,13 +206,29 @@ public class FuturesFinancing {
             return handsMultiple;
         }
 
+//        @Override
+//        public String toString() {
+//            StringBuilder builder = new StringBuilder();
+//            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+//                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+//            }
+//            return builder.toString();
+//        }
+
+
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder();
-            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
-                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-            }
-            return builder.toString();
+            return "AssetsBean{" +
+                    "marginBeat=" + marginBeat +
+                    ", stopWinBeats=" + stopWinBeats +
+                    ", fees=" + fees +
+                    ", marginBeatHands=" + marginBeatHands +
+                    ", isDefault=" + isDefault +
+                    ", feesHands=" + feesHands +
+                    ", stopLossBeat=" + stopLossBeat +
+                    ", assetsId=" + assetsId +
+                    ", handsMultiple=" + handsMultiple +
+                    '}';
         }
     }
 
@@ -275,6 +292,10 @@ public class FuturesFinancing {
         @Override
         public boolean isDefault() {
             return false;
+        }
+
+        public double getStopProfit() {
+            return stopProfit;
         }
     }
 
@@ -354,13 +375,30 @@ public class FuturesFinancing {
         return result;
     }
 
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        for (AssetsBean assetsBean : assets) {
+//            builder.append(assetsBean.getStopLossBeat()).append("\n")
+//                    .append(assetsBean.toString()).append("\n");
+//        }
+//        return builder.toString();
+//    }
+
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (AssetsBean assetsBean : assets) {
-            builder.append(assetsBean.getStopLossBeat()).append("\n")
-                    .append(assetsBean.toString()).append("\n");
-        }
-        return builder.toString();
+        return "FuturesFinancing{" +
+                "contractsCode='" + contractsCode + '\'' +
+                ", marginPoint=" + marginPoint +
+                ", sign='" + sign + '\'' +
+                ", marketPoint=" + marketPoint +
+                ", feesPoint=" + feesPoint +
+                ", varietyName='" + varietyName + '\'' +
+                ", eachPointMoney=" + eachPointMoney +
+                ", currencyUnit='" + currencyUnit + '\'' +
+                ", ratio=" + ratio +
+                ", assets=" + assets +
+                '}';
     }
 }

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_lightning_orsers_set"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:rightVisible="true"
+        app:titleText="@string/lightning_orders_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bluePrimary"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp"
+                android:text="@string/trade_quantity"
+                android:textColor="#A8A8A8"/>
+
+            <com.jnhyxx.html5.view.OrderConfigurationSelector
+                android:id="@+id/tradeQuantitySelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                app:maximum="4"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/splitLineBlueLight"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="12dp"
+            android:text="@string/touch_stop_loss"
+            android:textColor="#A8A8A8"/>
+
+        <com.jnhyxx.html5.view.OrderConfigurationSelector
+            android:id="@+id/touchStopLossSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:maximum="5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="12dp"
+            android:text="@string/touch_stop_profit"
+            android:textColor="#A8A8A8"/>
+
+        <com.jnhyxx.html5.view.OrderConfigurationSelector
+            android:id="@+id/touchStopProfitSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:maximum="5"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/splitLineBlueLight"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="@string/margin"
+                android:textColor="#A8A8A8"/>
+
+            <TextView
+                android:id="@+id/margin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:textColor="@color/blueAssist"
+                android:textSize="12sp"
+                tools:text="HK$16000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="@string/trade_fee"
+                android:textColor="#A8A8A8"/>
+
+            <TextView
+                android:id="@+id/tradeFee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:textColor="@color/blueAssist"
+                android:textSize="12sp"
+                tools:text="HK$1000"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rateAndMarketTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_market_time_status"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textColor="#808080"
+        android:textSize="11sp"
+        tools:text="汇率换算: 1美元=6.8元, 持仓时间至凌晨5:00"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/bluePrimary"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/total_to_be_paid"
+            android:textColor="#A8A8A8"/>
+
+        <TextView
+            android:id="@+id/totalTobePaid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:textColor="@color/blueAssist"
+            android:textSize="16sp"
+            tools:text="¥ 14620 "/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/openLightningOrderHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:background="@color/bluePrimary"
+        android:gravity="center"
+        android:paddingBottom="@dimen/common_margin"
+        android:text="@string/lightning_orders_open_hint"
+        android:textColor="@color/blueAssist"
+        android:textSize="@dimen/min_text_size"/>
+
+    <LinearLayout
+        android:id="@+id/lightningOrdersOpen"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/closeLightningOrder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_close_lightning_order"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/close"
+            android:textColor="@android:color/white"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/restartLightningOrder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_restart_lightning_order"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/restart_open"
+            android:textColor="@android:color/white"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/openLightningOrder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_restart_lightning_order"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/open"
+            android:textColor="@android:color/white"
+            android:visibility="visible"/>
+    </LinearLayout>
+</LinearLayout>

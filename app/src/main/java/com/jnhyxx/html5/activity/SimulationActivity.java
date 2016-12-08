@@ -247,14 +247,16 @@ public class SimulationActivity extends BaseActivity {
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
 
-                    HomePositions.Position position = pkg.getPosition(); // Position status
-                    if (position != null && position.getHandsNum() > 0) {
-                        mHoldingPosition.setVisibility(View.VISIBLE);
-                        mNewTag.setVisibility(View.GONE);
-                        mHotIcon.setVisibility(View.GONE);
-                    } else {
-                        mHoldingPosition.setVisibility(View.GONE);
-                    }
+                }
+                HomePositions.Position position = pkg.getPosition(); // Position status
+                //如果休市，有持仓，则优先显示持仓提示
+                if (position != null && position.getHandsNum() > 0) {
+                    mMarketCloseText.setVisibility(View.GONE);
+                    mHoldingPosition.setVisibility(View.VISIBLE);
+                    mNewTag.setVisibility(View.GONE);
+                    mHotIcon.setVisibility(View.GONE);
+                } else {
+                    mHoldingPosition.setVisibility(View.GONE);
                 }
             }
 

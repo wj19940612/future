@@ -194,8 +194,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_red_primary"
                     android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:paddingTop="13dp"
                     android:text="@string/buy_long"
                     android:textColor="@android:color/white"
                     android:textSize="17sp"/>
@@ -207,8 +207,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_green_primary"
                     android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:paddingTop="13dp"
                     android:text="@string/sell_short"
                     android:textColor="@android:color/white"
                     android:textSize="17sp"/>

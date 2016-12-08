@@ -12,7 +12,6 @@ import com.johnz.kutils.net.ApiParams;
 
 import java.security.NoSuchAlgorithmException;
 
-import static android.R.attr.port;
 
 public class API extends APIBase {
     private static final String TAG = "API";
@@ -565,7 +564,7 @@ public class API extends APIBase {
          * 接口名：分页获取直播老师指导
          * URL  http://域名/user/live/findTeacherMsgList.do
          *
-         * @param offset      偏移量
+         * @param offset    偏移量
          * @param pageSize
          * @param teacherId 老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
          * @return
@@ -594,14 +593,14 @@ public class API extends APIBase {
          * 接口名：按条件查询
          * URL  http://域名/user/live/findChatList.do
          *
-         * @param offset    偏移量
-         * @param pageSize  每页请求数量
+         * @param offset   偏移量
+         * @param pageSize 每页请求数量
          * @return
          */
-        public static API getLiveTalk( int offset, int pageSize) {
-                return new API(GET, "/user/live/findChatList.do", new ApiParams()
-                        .put("offset", offset)
-                        .put("size", pageSize));
+        public static API getLiveTalk(int offset, int pageSize) {
+            return new API(GET, "/user/live/findChatList.do", new ApiParams()
+                    .put("offset", offset)
+                    .put("size", pageSize));
         }
     }
 

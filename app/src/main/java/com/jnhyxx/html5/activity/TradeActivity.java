@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,21 +65,20 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity.RESULT_CODE_CLOSE_LIGHTNING_ORDER;
-
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
     private static final int REQ_CODE_SIGN_IN = 1;
-    //闪电下单界面的请求码
-    private static final int REQ_CODE_SET_LIGHTNING_ORDERS = 999;
+    //闪电下单界面开启的请求码
+    private static final int REQ_CODE_OPEN_SET_LIGHTNING_ORDERS = 999;
+    //闪电下单界面关闭的请求码
+    private static final int REQ_CODE_CLOSE_SET_LIGHTNING_ORDER = 617;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -146,6 +144,11 @@ public class TradeActivity extends BaseActivity implements
 
     private ExchangeStatus mExchangeStatus;
 
+    private ProductLightningOrderStatus mLocalLightningStatus;
+
+    //产品配资
+    private FuturesFinancing mFuturesFinancing;
+
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -182,7 +185,6 @@ public class TradeActivity extends BaseActivity implements
         return false;
     }
 
-    private ProductLightningOrderStatus mLocalLightningStatus;
 
     private void updatePlaceOrderFragment(FullMarketData data) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
@@ -243,13 +245,16 @@ public class TradeActivity extends BaseActivity implements
 
     private void getLightningOrdersStatus() {
         if (mProduct != null && LocalUser.getUser().isLogin()) {
-            mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
+            String lightningOrderKey = getLocalLightningOrderStatus();
+            mLocalLightningStatus = Preference.get().getLightningOrderStatus(lightningOrderKey);
             if (mLocalLightningStatus != null) {
                 API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                         .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                             @Override
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
-                                if (mLocalLightningStatus != null && futuresFinancing != null) {
+                                if (futuresFinancing != null) {
+                                    futuresFinancing.setProductLightningOrderStatus(mLocalLightningStatus);
+                                    mFuturesFinancing = futuresFinancing;
                                     Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
@@ -267,6 +272,16 @@ public class TradeActivity extends BaseActivity implements
                 getWebOrderAssetStore();
             }
         }
+    }
+
+    //闪电下单本地配置的key
+    private String getLocalLightningOrderStatus() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(mProduct.getVarietyId());
+        stringBuilder.append(LocalUser.getUser().getPhone());
+        stringBuilder.append(mFundType);
+        Log.d(TAG, "本地闪电的key " + stringBuilder.toString());
+        return stringBuilder.toString();
     }
 
     private void getWebOrderAssetStore() {
@@ -330,9 +345,6 @@ public class TradeActivity extends BaseActivity implements
         }
     }
 
-    private int px2dp(int dimension) {
-        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dimension, getResources().getDisplayMetrics()));
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -347,17 +359,13 @@ public class TradeActivity extends BaseActivity implements
         }
 
         //打开闪电下单回调
-        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == SetLightningOrdersActivity.RESULT_CODE_OPEN_LIGHTNING_ORDER) {
+        if (requestCode == REQ_CODE_OPEN_SET_LIGHTNING_ORDERS && resultCode == RESULT_OK) {
             ToastUtil.curt(R.string.lightning_orders_open);
             lightningOrderOpen = true;
             mLightningOrders.setSelected(true);
-            //动态调整边距，防止出现闪电下单后字体偏中间的情况
-            int dimension = px2dp(14);
-            mBuyLongBtn.setPadding(0, dimension, px2dp(20), dimension);
-            mSellShortBtn.setPadding(px2dp(20), dimension, 0, dimension);
         }
         //关闭闪电下单回调
-        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDERS && resultCode == RESULT_CODE_CLOSE_LIGHTNING_ORDER) {
+        if (requestCode == REQ_CODE_CLOSE_SET_LIGHTNING_ORDER && resultCode == RESULT_OK) {
             ToastUtil.curt(R.string.lightning_orders_close);
             mLightningOrders.setSelected(false);
             lightningOrderOpen = false;
@@ -412,11 +420,6 @@ public class TradeActivity extends BaseActivity implements
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-//        mProductList = new ArrayList<>();
-
-//        List<MarketServer> marketServers = intent.getParcelableArrayListExtra(MarketServer.EX_MARKET_SERVER);
-//        mMarketServer = marketServers.get(0);
-//        NettyClient.getInstance().setIpAndPort(mMarketServer.getIp(), mMarketServer.getPort());
         mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
         NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
 
@@ -449,12 +452,12 @@ public class TradeActivity extends BaseActivity implements
         if (mFundType == Product.FUND_TYPE_CASH) {
             String userPhone = LocalUser.getUser().getPhone();
             if (Preference.get().hadShowTradeAgreement(userPhone, mProduct.getVarietyType())) {
-                openSetLightningOrdersPage();
+                openSetLightningOrdersPage(REQ_CODE_OPEN_SET_LIGHTNING_ORDERS);
             } else {
                 showAgreementFragment(ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE);
             }
         } else {
-            openSetLightningOrdersPage();
+            openSetLightningOrdersPage(REQ_CODE_OPEN_SET_LIGHTNING_ORDERS);
         }
         return;
     }
@@ -472,6 +475,7 @@ public class TradeActivity extends BaseActivity implements
                     submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                     submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
                     submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
+                    submittedOrder.setSubmitType(2);
                     submitOrder(submittedOrder);
                 }
             }
@@ -480,14 +484,13 @@ public class TradeActivity extends BaseActivity implements
         return false;
     }
 
-    private void openSetLightningOrdersPage() {
+    private void openSetLightningOrdersPage(int requestCode) {
         Launcher.with(getActivity(), SetLightningOrdersActivity.class)
-                .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, lightningOrderOpen)
+                .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, mLocalLightningStatus != null)
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
-                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                .putExtra(ServerIpPort.EX_IP_PORT, mServerIpPort)
-                .executeForResult(REQ_CODE_SET_LIGHTNING_ORDERS);
+                .putExtra(ProductLightningOrderStatus.KEY_WEB_PRODUCT_DEPLOY, mFuturesFinancing)
+                .executeForResult(requestCode);
     }
 
     private void updateChartView(FullMarketData data) {

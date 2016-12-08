@@ -1,16 +1,20 @@
 package com.jnhyxx.html5.domain.order;
 
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class FuturesFinancing {
+public class FuturesFinancing implements Serializable {
+
+    private static final long serialVersionUID = 6965103776496831586L;
 
     /**
      * assets : [{"cvId":170,"marginBeat":332.5,"stopWinBeats":{"1":66.5,"5":332.5,"10":665},"fees":10,"marginBeatHands":{"1":50,"5":250,"10":500,"20":1000},"isDefault":0,"handsMultiple":["1","5","10","20"],"feesHands":{"1":10,"5":50,"10":100,"20":200},"stopLossBeat":199.5,"assetsId":10}]
@@ -34,6 +38,7 @@ public class FuturesFinancing {
     private double eachPointMoney;
     private String currencyUnit;
     private double ratio;
+
     /**
      * cvId : 170
      * marginBeat : 332.5
@@ -46,6 +51,8 @@ public class FuturesFinancing {
      * stopLossBeat : 199.5
      * assetsId : 10
      */
+
+    private ProductLightningOrderStatus mProductLightningOrderStatus;
 
     private List<AssetsBean> assets;
 
@@ -129,6 +136,14 @@ public class FuturesFinancing {
         this.assets = assets;
     }
 
+    public ProductLightningOrderStatus getProductLightningOrderStatus() {
+        return mProductLightningOrderStatus;
+    }
+
+    public void setProductLightningOrderStatus(ProductLightningOrderStatus productLightningOrderStatus) {
+        mProductLightningOrderStatus = productLightningOrderStatus;
+    }
+
     public void sort() {
         Collections.sort(getAssets(), new Comparator<AssetsBean>() {
             @Override
@@ -138,7 +153,25 @@ public class FuturesFinancing {
         });
     }
 
-    public static class AssetsBean {
+
+    public List<StopLoss> getStopLossList(Product product) {
+        List<StopLoss> result = new ArrayList<>();
+        if (mProductLightningOrderStatus != null) {
+            for (AssetsBean assetsBean : assets) {
+                result.add(new StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean, mProductLightningOrderStatus));
+            }
+        } else {
+            for (AssetsBean assetsBean : assets) {
+                result.add(new StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean));
+            }
+        }
+
+        return result;
+    }
+
+    public static class AssetsBean implements Serializable {
+
+        private static final long serialVersionUID = -4065662713293187492L;
 
         private double marginBeat;
         private Map<String, Double> stopWinBeats;
@@ -232,10 +265,12 @@ public class FuturesFinancing {
         }
     }
 
-    public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration {
+    public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration, Serializable {
         private int quantity;
         private double fee; // rmb
         private double margin; // internal is rmb, foreign is not m
+
+        private int localHandNum;
 
         public int getQuantity() {
             return quantity;
@@ -245,6 +280,13 @@ public class FuturesFinancing {
             this.quantity = quantity;
             this.fee = fee;
             this.margin = margin;
+        }
+
+        public TradeQuantity(int quantity, double fee, double margin, int localHandNum) {
+            this.quantity = quantity;
+            this.fee = fee;
+            this.margin = margin;
+            this.localHandNum = localHandNum;
         }
 
         public double getFee() {
@@ -262,22 +304,36 @@ public class FuturesFinancing {
 
         @Override
         public boolean isDefault() {
+            if (localHandNum == quantity) {
+                return true;
+            }
             return false;
         }
     }
 
-    public static class StopProfit implements OrderConfigurationSelector.OrderConfiguration {
+    //止盈model
+    public static class StopProfit implements OrderConfigurationSelector.OrderConfiguration, Serializable {
 
         private int stopProfitPoint;
         private double stopProfit;
         private int profitLossScale;
         private String sign;
+        //本地的止盈数
+        private double localStopProfit;
 
         public StopProfit(int stopProfitPoint, double stopProfit, int profitLossScale, String sign) {
             this.stopProfitPoint = stopProfitPoint;
             this.stopProfit = stopProfit;
             this.profitLossScale = profitLossScale;
             this.sign = sign;
+        }
+
+        public StopProfit(int stopProfitPoint, double stopProfit, int profitLossScale, String sign, double localStopProfit) {
+            this.stopProfitPoint = stopProfitPoint;
+            this.stopProfit = stopProfit;
+            this.profitLossScale = profitLossScale;
+            this.sign = sign;
+            this.localStopProfit = localStopProfit;
         }
 
         public int getStopProfitPoint() {
@@ -291,6 +347,9 @@ public class FuturesFinancing {
 
         @Override
         public boolean isDefault() {
+            if (localStopProfit == stopProfit) {
+                return true;
+            }
             return false;
         }
 
@@ -299,16 +358,26 @@ public class FuturesFinancing {
         }
     }
 
-    public static class StopLoss implements OrderConfigurationSelector.OrderConfiguration {
+    //设置止损
+    public static class StopLoss implements OrderConfigurationSelector.OrderConfiguration, Serializable {
 
         private int profitLossScale;
         private String sign;
         private AssetsBean assetsBean;
 
+        private ProductLightningOrderStatus mProductLightningOrderStatus;
+
         public StopLoss(int profitLossScale, String sign, AssetsBean assetsBean) {
             this.profitLossScale = profitLossScale;
             this.sign = sign;
             this.assetsBean = assetsBean;
+        }
+
+        public StopLoss(int profitLossScale, String sign, AssetsBean assetsBean, ProductLightningOrderStatus productLightningOrderStatus) {
+            this.profitLossScale = profitLossScale;
+            this.sign = sign;
+            this.assetsBean = assetsBean;
+            this.mProductLightningOrderStatus = productLightningOrderStatus;
         }
 
         @Override
@@ -318,6 +387,9 @@ public class FuturesFinancing {
 
         @Override
         public boolean isDefault() {
+            if (mProductLightningOrderStatus != null && mProductLightningOrderStatus.getStopLossPrice() == assetsBean.getStopLossBeat()) {
+                return true;
+            }
             return assetsBean.getIsDefault() == 1;
         }
 
@@ -331,7 +403,13 @@ public class FuturesFinancing {
             for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
                 int stopProfitPoint = Integer.valueOf(entry.getKey()).intValue();
                 double stopProfit = entry.getValue().doubleValue();
-                result.add(new StopProfit(stopProfitPoint, stopProfit, profitLossScale, sign));
+                //闪电下单数据
+                if (mProductLightningOrderStatus != null) {
+                    result.add(new StopProfit(stopProfitPoint, stopProfit, profitLossScale, sign, mProductLightningOrderStatus.getStopWinPrice()));
+                } else {
+                    result.add(new StopProfit(stopProfitPoint, stopProfit, profitLossScale, sign));
+
+                }
             }
             Collections.sort(result, new Comparator<StopProfit>() {
                 @Override
@@ -355,7 +433,11 @@ public class FuturesFinancing {
                 if (margin != null) {
                     marginPrimary = margin.doubleValue();
                 }
-                result.add(new TradeQuantity(Integer.valueOf(hand).intValue(), feePrimary, marginPrimary));
+                if (mProductLightningOrderStatus != null) {
+                    result.add(new TradeQuantity(Integer.valueOf(hand).intValue(), feePrimary, marginPrimary, mProductLightningOrderStatus.getHandsNum()));
+                } else {
+                    result.add(new TradeQuantity(Integer.valueOf(hand).intValue(), feePrimary, marginPrimary));
+                }
             }
             Collections.sort(result, new Comparator<TradeQuantity>() {
                 @Override
@@ -367,13 +449,6 @@ public class FuturesFinancing {
         }
     }
 
-    public List<StopLoss> getStopLossList(Product product) {
-        List<StopLoss> result = new ArrayList<>();
-        for (AssetsBean assetsBean : assets) {
-            result.add(new StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean));
-        }
-        return result;
-    }
 
 //    @Override
 //    public String toString() {
@@ -398,6 +473,7 @@ public class FuturesFinancing {
                 ", eachPointMoney=" + eachPointMoney +
                 ", currencyUnit='" + currencyUnit + '\'' +
                 ", ratio=" + ratio +
+                ", mProductLightningOrderStatus=" + mProductLightningOrderStatus +
                 ", assets=" + assets +
                 '}';
     }

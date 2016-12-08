@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.domain.local;
 
-public class SubmittedOrder {
+
+public class SubmittedOrder{
 
     private int varietyId;
     private int payType;
@@ -9,6 +10,12 @@ public class SubmittedOrder {
     private int stopWinBeat; // should be stopWinPoint
     private double orderPrice; // should be lastPrice
     private int direction; // long - 1, short - 0
+
+    /**
+     * 1  普通下单
+     * 2  闪电下单
+     */
+    private int submitType = 1;
 
     public SubmittedOrder(int varietyId, int direction) {
         this.varietyId = varietyId;
@@ -39,6 +46,14 @@ public class SubmittedOrder {
         return direction;
     }
 
+    public int getSubmitType() {
+        return submitType;
+    }
+
+    public void setSubmitType(int submitType) {
+        this.submitType = submitType;
+    }
+
     @Override
     public String toString() {
         return "SubmittedOrder{" +
@@ -49,6 +64,7 @@ public class SubmittedOrder {
                 ", stopWinBeat=" + stopWinBeat +
                 ", orderPrice=" + orderPrice +
                 ", direction=" + direction +
+                ", submitType=" + submitType +
                 '}';
     }
 }

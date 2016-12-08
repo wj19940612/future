@@ -16,6 +16,8 @@ public class ProductLightningOrderStatus {
 
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
+    //服务端的产品配资数据
+    public static final String KEY_WEB_PRODUCT_DEPLOY = "WEB_PRODUCT_DEPLOY";
 
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
@@ -175,6 +177,7 @@ public class ProductLightningOrderStatus {
 
     /**
      * 本地的闪电下单数据和产品的配资进行对比，如果不相同，则闪电下单失效
+     *
      * @param futuresFinancing 产品配资方案
      * @return
      */

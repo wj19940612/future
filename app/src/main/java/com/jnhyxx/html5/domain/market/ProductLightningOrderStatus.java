@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,9 @@ import java.util.List;
  * 闪电下单状态
  */
 
-public class ProductLightningOrderStatus {
+public class ProductLightningOrderStatus implements Serializable {
+    private static final long serialVersionUID = -6950030646707014378L;
+
     private static final String TAG = "ProductLightningOrderSt";
 
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
@@ -24,6 +27,7 @@ public class ProductLightningOrderStatus {
 
     //表示闪电下单按钮打开同意协议的fragment的标志
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
+
 
     /**
      * assetsId : 1

@@ -56,6 +56,7 @@ public class MessageCenterListItemInfoActivity extends BaseActivity {
         Intent intent = getIntent();
 
         SysMessage mSysMessage = (SysMessage) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
+        if (mSysMessage == null) return;
         mTvMessageTitle.setText(mSysMessage.getPushTopic());
         mTvMessageTime.setText(DateUtil.format(mSysMessage.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm:ss"));
 

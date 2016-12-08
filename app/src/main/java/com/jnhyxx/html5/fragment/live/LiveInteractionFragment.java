@@ -535,6 +535,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 String chatUser = "";
                 if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
+                    Picasso.with(context).load(R.drawable.ic_live_pic_head)
+                            .transform(new CircleTransform()).into(mUserHeadImage);
                 } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
                     chatUser = item.getName();
                     if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
@@ -545,7 +547,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                 .transform(new CircleTransform()).into(mUserHeadImage);
                     }
                 }
-
                 mUserStatus.setText(chatUser);
             }
         }

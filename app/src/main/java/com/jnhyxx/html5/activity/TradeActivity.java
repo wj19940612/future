@@ -147,8 +147,6 @@ public class TradeActivity extends BaseActivity implements
 
     private ServerIpPort mServerIpPort;
 
-    private ExchangeStatus mExchangeStatus;
-
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -393,7 +391,6 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        mExchangeStatus = exchangeStatus;
                         mProduct.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
                         if (exchangeStatus.isTradeable()) {
@@ -820,16 +817,6 @@ public class TradeActivity extends BaseActivity implements
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             showFundNotEnoughDialog(jsonObjectResp);
-                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_COLSED) {
-                            if (mExchangeStatus != null) {
-                                SmartDialog.with(getActivity(), getString(R.string.trade_closed_hint, mExchangeStatus.getNextTime()))
-                                        .setPositive(R.string.ok)
-                                        .show();
-                            } else {
-                                SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-                                        .setPositive(R.string.ok)
-                                        .show();
-                            }
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
@@ -933,7 +920,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onSubmitAllHoldingPositionsCompleted(String message) {
+    public void onSubmitAllHoldingOrdersCompleted(String message) {
         SmartDialog.with(getActivity(),
                 getString(R.string.sell_order_submit_successfully) + "\n" + message)
                 .setPositive(R.string.ok)

@@ -44,8 +44,8 @@ import static com.jnhyxx.html5.R.id.hands;
 public class HoldingFragment extends BaseFragment implements IHoldingOrderView<HoldingOrder> {
 
     public interface Callback {
-        void onClosePositionEventTriggered(String showIds);
-        void onSetStopProfitLossClick(HoldingOrder order);
+        void onHoldingFragmentClosePositionEventTriggered(String showIds);
+        void onHoldingFragmentSetStopProfitLossClick(HoldingOrder order, FullMarketData marketData);
     }
 
     @BindView(android.R.id.list)
@@ -67,9 +67,10 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
     private Product mProduct;
     private int mFundType;
-    private HoldingOrderAdapter mHoldingOrderAdapter;
     private String mFundUnit;
     private boolean mShowStopProfitLoss;
+    private HoldingOrderAdapter mHoldingOrderAdapter;
+    private FullMarketData mMarketData;
 
     private HoldingOrderPresenter mPresenter;
     private Callback mCallback;
@@ -77,11 +78,11 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
+            mMarketData = data;
             mPresenter.setFullMarketData(data, mProduct.getVarietyId());
+
             if (mHoldingOrderAdapter != null) {
                 mHoldingOrderAdapter.setFullMarketData(data);
-            }
-            if (mHoldingOrderAdapter != null && mHoldingOrderAdapter.getCount() > 0) {
                 updateHoldingOrderVisibleItems(data);
             }
         }
@@ -146,8 +147,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         if (context instanceof Callback) {
             mCallback = (Callback) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement HoldingFragment.Call");
+            throw new RuntimeException(context.toString() + " must implement HoldingFragment.Call");
         }
     }
 
@@ -189,6 +189,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                             mShowStopProfitLoss = stopProfitLossConfigResp.getData().isActive();
                             if (mHoldingOrderAdapter != null) {
                                 mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
+                                mHoldingOrderAdapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -225,31 +226,31 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         if (holdingOrderList != null) {
             if (mHoldingOrderAdapter == null) {
                 mHoldingOrderAdapter = new HoldingOrderAdapter(getContext(), mProduct, mFundUnit, holdingOrderList);
+                mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
                 mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mPresenter.closePosition(order);
                         onClosePositionEventTriggered(order.getShowId());
                     }
-
                     @Override
                     public void onSetStopProfitLossClick(HoldingOrder order) {
                         if (mCallback != null) {
-                            mCallback.onSetStopProfitLossClick(order);
+                            mCallback.onHoldingFragmentSetStopProfitLossClick(order, mMarketData);
                         }
                     }
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
+                mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
-            mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
         }
     }
 
     private void onClosePositionEventTriggered(String showIds) {
         if (mCallback != null) {
-            mCallback.onClosePositionEventTriggered(showIds);
+            mCallback.onHoldingFragmentClosePositionEventTriggered(showIds);
         }
     }
 
@@ -285,7 +286,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     }
 
     @Override
-    public void onSubmitAllHoldingPositionsCompleted(String message) {
+    public void onSubmitAllHoldingOrdersCompleted(String message) {
         SmartDialog.with(getActivity(),
                 getString(R.string.sell_order_submit_successfully) + "\n" + message)
                 .setPositive(R.string.ok)
@@ -336,7 +337,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         private Callback mCallback;
         private boolean mShowStopProfitLoss;
 
-        public HoldingOrderAdapter(Context context, Product product, String fundUnit, List<HoldingOrder> holdingOrderList) {
+        public HoldingOrderAdapter(Context context, Product product,
+                                   String fundUnit, List<HoldingOrder> holdingOrderList) {
             mContext = context;
             mProduct = product;
             mFundUnit = fundUnit;
@@ -388,7 +390,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             }
             viewHolder.bindingData((HoldingOrder) getItem(position), mContext,
                     mProduct, mFundUnit,
-                    mFullMarketData, mShowStopProfitLoss,
+                    mFullMarketData,
+                    mShowStopProfitLoss,
                     mCallback);
 
             return convertView;
@@ -424,7 +427,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
             public void bindingData(final HoldingOrder item, Context context,
                                     Product product, String fundUnit,
-                                    FullMarketData data, boolean showStopProfitLoss,
+                                    final FullMarketData data,
+                                    boolean showStopProfitLoss,
                                     final Callback callback) {
 
                 mBuyPrice.setText(FinanceUtil.formatWithScale(item.getRealAvgPrice(), product.getPriceDecimalScale()));

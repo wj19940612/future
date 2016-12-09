@@ -1,8 +1,9 @@
 package com.jnhyxx.html5.domain.order;
 
-public class StopProfitLossConfig {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-
+public class StopProfitLossConfig implements Parcelable {
 
     /**
      limitStopLossMoney: 1170.5,
@@ -75,4 +76,41 @@ public class StopProfitLossConfig {
                 ", limitStopWinMoney=" + limitStopWinMoney +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.beatFewPoints);
+        dest.writeDouble(this.stopLoseOffsetPoint);
+        dest.writeDouble(this.stopWinOffsetPoint);
+        dest.writeDouble(this.limitStopLossMoney);
+        dest.writeDouble(this.limitStopWinMoney);
+    }
+
+    public StopProfitLossConfig() {
+    }
+
+    protected StopProfitLossConfig(Parcel in) {
+        this.beatFewPoints = in.readDouble();
+        this.stopLoseOffsetPoint = in.readDouble();
+        this.stopWinOffsetPoint = in.readDouble();
+        this.limitStopLossMoney = in.readDouble();
+        this.limitStopWinMoney = in.readDouble();
+    }
+
+    public static final Creator<StopProfitLossConfig> CREATOR = new Creator<StopProfitLossConfig>() {
+        @Override
+        public StopProfitLossConfig createFromParcel(Parcel source) {
+            return new StopProfitLossConfig(source);
+        }
+
+        @Override
+        public StopProfitLossConfig[] newArray(int size) {
+            return new StopProfitLossConfig[size];
+        }
+    };
 }

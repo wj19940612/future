@@ -18,9 +18,6 @@ import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
 import com.jnhyxx.html5.domain.order.StopProfitLossConfig;
 import com.jnhyxx.html5.fragment.BaseFragment;
-import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
-import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
@@ -36,7 +33,14 @@ import butterknife.Unbinder;
 
 public class SetStopProfitLossFragment extends BaseFragment {
 
+    public interface Callback {
+        void onSetStopProfitLossFragmentCloseTriggered();
+        void onSetStopProfitLossFragmentConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice);
+    }
+
     private static final String ORDER = "order";
+    private static final String MARKET_DATA = "marketData";
+    private static final String STOP_CONFIG = "stopConfig";
 
     @BindView(R.id.emptyClickArea)
     View mEmptyClickArea;
@@ -85,42 +89,37 @@ public class SetStopProfitLossFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.emptyClickArea:
                 if (mCallback != null) {
-                    mCallback.onCloseFragmentTriggered();
+                    mCallback.onSetStopProfitLossFragmentCloseTriggered();
                 }
                 break;
             case R.id.cancel:
                 if (mCallback != null) {
-                    mCallback.onCloseFragmentTriggered();
+                    mCallback.onSetStopProfitLossFragmentCloseTriggered();
                 }
                 break;
             case R.id.confirmSetting:
                 double newStopLossPrice = mStopLossPicker.getPrice();
                 double newStopProfitPrice = mStopProfitPicker.getPrice();
                 if (mCallback != null) {
-                    mCallback.onSettingsConfirmed(mHoldingOrder, newStopLossPrice, newStopProfitPrice);
+                    mCallback.onSetStopProfitLossFragmentConfirmed(mHoldingOrder, newStopLossPrice, newStopProfitPrice);
                 }
                 break;
         }
-    }
-
-    public interface Callback {
-        void onCloseFragmentTriggered();
-        void onSettingsConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice);
     }
 
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
             mMarketData = data;
-
-            if (mIsShowing || !isAdded()) return;
-
+            if (mIsShowing || !isVisible()) return;
             updateLastPriceAndProfit();
             updatePricePickers();
         }
     };
 
     private void updatePricePickers() {
+        if (mMarketData == null) return;
+
         if (mHoldingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
             mStopLossPicker.setLastPrice(mMarketData.getBidPrice());
             mStopProfitPicker.setLastPrice(mMarketData.getBidPrice());
@@ -166,12 +165,17 @@ public class SetStopProfitLossFragment extends BaseFragment {
         }
     }
 
-    public static SetStopProfitLossFragment newInstance(Product product, int fundType, HoldingOrder order) {
+    public static SetStopProfitLossFragment newInstance(Product product, int fundType,
+                                                        HoldingOrder order,
+                                                        FullMarketData marketData,
+                                                        StopProfitLossConfig stopProfitLossConfig) {
         SetStopProfitLossFragment fragment = new SetStopProfitLossFragment();
         Bundle args = new Bundle();
         args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
         args.putParcelable(ORDER, order);
+        args.putParcelable(MARKET_DATA, marketData);
+        args.putParcelable(STOP_CONFIG, stopProfitLossConfig);
         fragment.setArguments(args);
         return fragment;
     }
@@ -195,6 +199,8 @@ public class SetStopProfitLossFragment extends BaseFragment {
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
             mHoldingOrder = getArguments().getParcelable(ORDER);
+            mMarketData = getArguments().getParcelable(MARKET_DATA);
+            mStopProfitLossConfig = getArguments().getParcelable(STOP_CONFIG);
         }
     }
 
@@ -233,20 +239,10 @@ public class SetStopProfitLossFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initHoldingOrderViews();
+        initStopProfitLossPickers();
 
-        getStopProfitLossConfig();
-    }
-
-    private void getStopProfitLossConfig() {
-        API.Order.getStopProfitLossConfig(mHoldingOrder.getShowId(), mFundType).setTag(TAG)
-                .setCallback(new Callback2<Resp<StopProfitLossConfig>, StopProfitLossConfig>() {
-                    @Override
-                    public void onRespSuccess(StopProfitLossConfig stopProfitLossConfig) {
-                        mStopProfitLossConfig = stopProfitLossConfig;
-                        if (mIsShowing) return;
-                        updateStopProfitLossPickers();
-                    }
-                }).fire();
+        updatePricePickers();
+        updateLastPriceAndProfit();
     }
 
     private void initHoldingOrderViews() {
@@ -298,15 +294,6 @@ public class SetStopProfitLossFragment extends BaseFragment {
         @Override
         public void onAnimationEnd(Animation animation) {
             mIsShowing = false;
-
-            if (mMarketData != null) {
-                updateLastPriceAndProfit();
-                updatePricePickers();
-            }
-
-            if (mStopProfitLossConfig != null) {
-                updateStopProfitLossPickers();
-            }
         }
 
         @Override
@@ -314,7 +301,7 @@ public class SetStopProfitLossFragment extends BaseFragment {
         }
     }
 
-    private void updateStopProfitLossPickers() {
+    private void initStopProfitLossPickers() {
         mStopLossPicker.setConfig(new StopProfitLossPicker.Config(
                 true,
                 mHoldingOrder.getDirection(),

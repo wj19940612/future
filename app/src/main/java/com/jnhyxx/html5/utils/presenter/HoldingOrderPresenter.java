@@ -257,7 +257,7 @@ public class HoldingOrderPresenter {
                         @Override
                         protected void onRespSuccess(Resp<JsonObject> resp) {
                             setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING, mHoldingOrderList);
-                            onSubmitAllHoldingPositionsCompleted(resp.getMsg());
+                            onSubmitAllHoldingOrderCompleted(resp.getMsg());
                             mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION, mQueryJob.varietyId, -1));
                         }
                     }).fire();
@@ -365,9 +365,9 @@ public class HoldingOrderPresenter {
         }
     }
 
-    private void onSubmitAllHoldingPositionsCompleted(String message) {
+    private void onSubmitAllHoldingOrderCompleted(String message) {
         if (mIHoldingOrderView != null) {
-            mIHoldingOrderView.onSubmitAllHoldingPositionsCompleted(message);
+            mIHoldingOrderView.onSubmitAllHoldingOrdersCompleted(message);
         }
     }
 

@@ -42,6 +42,7 @@ public class OrderActivity extends BaseActivity implements
 
     private Product mProduct;
     private int mFundType;
+    private FullMarketData mMarketData;
     private OrderAdapter mOrderAdapter;
 
     @Override
@@ -54,7 +55,7 @@ public class OrderActivity extends BaseActivity implements
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(this, android.R.color.transparent));
-        mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType);
+        mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType, mMarketData);
         mViewPager.setAdapter(mOrderAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -62,6 +63,7 @@ public class OrderActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
+        mMarketData = intent.getParcelableExtra(FullMarketData.EX_MARKET_DATA);
     }
 
     @Override
@@ -166,14 +168,17 @@ public class OrderActivity extends BaseActivity implements
         private Context mContext;
         private Product mProduct;
         private int mFundType;
+        private FullMarketData mMarketData;
         private FragmentManager mFragmentManager;
 
-        public OrderAdapter(FragmentManager fm, Context context, Product product, int fundType) {
+        public OrderAdapter(FragmentManager fm, Context context,
+                            Product product, int fundType, FullMarketData marketData) {
             super(fm);
             mFragmentManager = fm;
             mContext = context;
             mProduct = product;
             mFundType = fundType;
+            mMarketData = marketData;
         }
 
         @Override
@@ -191,7 +196,7 @@ public class OrderActivity extends BaseActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return HoldingFragment.newInstance(mProduct, mFundType);
+                    return HoldingFragment.newInstance(mProduct, mFundType, mMarketData);
                 case 1:
                     return SettlementFragment.newInstance(mProduct, mFundType);
             }

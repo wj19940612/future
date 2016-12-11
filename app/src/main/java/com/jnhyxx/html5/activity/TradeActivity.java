@@ -166,7 +166,6 @@ public class TradeActivity extends BaseActivity implements
                         + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
                 mSellShortBtn.setText(sellShort);
             }
-            updatePlaceOrderFragment(data);
         }
     };
 
@@ -184,13 +183,6 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private ProductLightningOrderStatus mLocalLightningStatus;
-
-    private void updatePlaceOrderFragment(FullMarketData data) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-        if (fragment != null && fragment instanceof PlaceOrderFragment) {
-            ((PlaceOrderFragment) fragment).setMarketData(data);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,6 +309,7 @@ public class TradeActivity extends BaseActivity implements
         Launcher.with(getActivity(), OrderActivity.class)
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
+                .putExtra(FullMarketData.EX_MARKET_DATA, mFullMarketData)
                 .execute();
     }
 
@@ -765,7 +758,8 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .add(R.id.placeOrderContainer,
+                            PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType, mFullMarketData))
                     .commit();
         }
     }
@@ -879,7 +873,7 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType, mFullMarketData))
                     .commit();
         }
     }

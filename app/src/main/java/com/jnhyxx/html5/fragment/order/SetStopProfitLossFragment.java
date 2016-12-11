@@ -39,7 +39,6 @@ public class SetStopProfitLossFragment extends BaseFragment {
     }
 
     private static final String ORDER = "order";
-    private static final String MARKET_DATA = "marketData";
     private static final String STOP_CONFIG = "stopConfig";
 
     @BindView(R.id.emptyClickArea)
@@ -173,8 +172,8 @@ public class SetStopProfitLossFragment extends BaseFragment {
         Bundle args = new Bundle();
         args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
+        args.putParcelable(FullMarketData.EX_MARKET_DATA, marketData);
         args.putParcelable(ORDER, order);
-        args.putParcelable(MARKET_DATA, marketData);
         args.putParcelable(STOP_CONFIG, stopProfitLossConfig);
         fragment.setArguments(args);
         return fragment;
@@ -198,8 +197,8 @@ public class SetStopProfitLossFragment extends BaseFragment {
             mProduct = getArguments().getParcelable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+            mMarketData = getArguments().getParcelable(FullMarketData.EX_MARKET_DATA);
             mHoldingOrder = getArguments().getParcelable(ORDER);
-            mMarketData = getArguments().getParcelable(MARKET_DATA);
             mStopProfitLossConfig = getArguments().getParcelable(STOP_CONFIG);
         }
     }

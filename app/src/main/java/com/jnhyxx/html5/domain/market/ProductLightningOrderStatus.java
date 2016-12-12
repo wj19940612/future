@@ -5,6 +5,7 @@ import android.util.Log;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,6 +82,11 @@ public class ProductLightningOrderStatus implements Serializable {
      * 费率
      */
     private double ratio;
+
+    /**
+     * 产品配资
+     */
+    FuturesFinancing futuresFinancing;
 
 
     public int getPayType() {
@@ -163,6 +169,10 @@ public class ProductLightningOrderStatus implements Serializable {
         this.stopProfitPoint = stopProfitPoint;
     }
 
+    public void setFuturesFinancing(FuturesFinancing futuresFinancing) {
+        this.futuresFinancing = futuresFinancing;
+    }
+
     @Override
     public String toString() {
         return "ProductLightningOrderStatus{" +
@@ -172,10 +182,11 @@ public class ProductLightningOrderStatus implements Serializable {
                 ", handsNum=" + handsNum +
                 ", stopLossPrice=" + stopLossPrice +
                 ", stopWinPrice=" + stopWinPrice +
+                ", stopProfitPoint=" + stopProfitPoint +
                 ", marginMoney=" + marginMoney +
                 ", fees=" + fees +
                 ", ratio=" + ratio +
-                ", stopProfitPoint=" + stopProfitPoint +
+                ", futuresFinancing=" + futuresFinancing +
                 '}';
     }
 
@@ -208,4 +219,20 @@ public class ProductLightningOrderStatus implements Serializable {
         return false;
     }
 
+    public List<FuturesFinancing.StopLoss> getStopLossList(Product product) {
+        List<FuturesFinancing.StopLoss> result = new ArrayList<>();
+        if (futuresFinancing != null) {
+            for (FuturesFinancing.AssetsBean assetsBean : futuresFinancing.getAssets()) {
+                if (assetsBean.getStopLossBeat() == getStopLossPrice()) {
+                    //是否是默认手数
+                    assetsBean.setIsDefault(1);
+                }
+                FuturesFinancing.StopLoss stopLoss = new FuturesFinancing.StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean);
+
+                result.add(stopLoss);
+            }
+        }
+        return result;
+    }
+    
 }

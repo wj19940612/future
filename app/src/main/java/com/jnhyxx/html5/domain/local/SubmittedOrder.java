@@ -1,7 +1,11 @@
 package com.jnhyxx.html5.domain.local;
 
 
-public class SubmittedOrder{
+public class SubmittedOrder {
+
+    //普通下单
+    public static final int SUBMIT_TYPE_NORMAL = 1;
+    public static final int SUBMIT_TYPE_LIGHTNING_ORDER = 2;
 
     private int varietyId;
     private int payType;
@@ -17,9 +21,10 @@ public class SubmittedOrder{
      */
     private int submitType = 1;
 
-    public SubmittedOrder(int varietyId, int direction) {
+    public SubmittedOrder(int varietyId, int direction, int submitType) {
         this.varietyId = varietyId;
         this.direction = direction;
+        this.submitType = submitType;
     }
 
     public void setPayType(int payType) {

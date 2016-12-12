@@ -11,6 +11,8 @@ public class Resp<T> {
 
     // 资金不足
     public static final int CODE_FUND_NOT_ENOUGH = 702;
+    //闪电下单已失效
+    public static final int  CODE_LIGHTNING_ORDER_IS_RUN_OUT=703;
 
     private int code;
     private String msg;

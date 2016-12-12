@@ -137,7 +137,7 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mSubmittedOrder = new SubmittedOrder(mProduct.getVarietyId(), mLongOrShort);
+        mSubmittedOrder = new SubmittedOrder(mProduct.getVarietyId(), mLongOrShort, SubmittedOrder.SUBMIT_TYPE_NORMAL);
 
         mTradeQuantitySelector.setOnItemSelectedListener(new OrderConfigurationSelector.OnItemSelectedListener() {
             @Override

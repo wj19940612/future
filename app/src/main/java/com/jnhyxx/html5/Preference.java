@@ -161,9 +161,7 @@ public class Preference {
      * @param productLightningOrderStatus
      */
     public void setLightningOrderStatus(String lightningOrderKey, ProductLightningOrderStatus productLightningOrderStatus) {
-        if (productLightningOrderStatus != null) {
-            getEditor().putString(lightningOrderKey, new Gson().toJson(productLightningOrderStatus)).apply();
-        }
+        getEditor().putString(lightningOrderKey, new Gson().toJson(productLightningOrderStatus)).apply();
     }
 
     public ProductLightningOrderStatus getLightningOrderStatus(String lightningOrderKey) {
@@ -172,10 +170,5 @@ public class Preference {
             return new Gson().fromJson(lightningOrder, ProductLightningOrderStatus.class);
         }
         return null;
-    }
-
-    //产品是否开启
-    public boolean isLightningOrderOPen(String lightningOrderKey) {
-        return getLightningOrderStatus(lightningOrderKey) != null;
     }
 }

@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class FuturesFinancing implements Serializable {
 
-    private static final long serialVersionUID = 6965103776496831586L;
 
     /**
      * assets : [{"cvId":170,"marginBeat":332.5,"stopWinBeats":{"1":66.5,"5":332.5,"10":665},"fees":10,"marginBeatHands":{"1":50,"5":250,"10":500,"20":1000},"isDefault":0,"handsMultiple":["1","5","10","20"],"feesHands":{"1":10,"5":50,"10":100,"20":200},"stopLossBeat":199.5,"assetsId":10}]
@@ -321,6 +320,8 @@ public class FuturesFinancing implements Serializable {
         //本地的止盈数
         private double localStopProfit;
 
+        private boolean isDefault = false;
+
         public StopProfit(int stopProfitPoint, double stopProfit, int profitLossScale, String sign) {
             this.stopProfitPoint = stopProfitPoint;
             this.stopProfit = stopProfit;
@@ -350,7 +351,11 @@ public class FuturesFinancing implements Serializable {
             if (localStopProfit == stopProfit) {
                 return true;
             }
-            return false;
+            return isDefault;
+        }
+
+        public void setDefault(boolean aDefault) {
+            isDefault = aDefault;
         }
 
         public double getStopProfit() {
@@ -387,9 +392,6 @@ public class FuturesFinancing implements Serializable {
 
         @Override
         public boolean isDefault() {
-            if (mProductLightningOrderStatus != null && mProductLightningOrderStatus.getStopLossPrice() == assetsBean.getStopLossBeat()) {
-                return true;
-            }
             return assetsBean.getIsDefault() == 1;
         }
 

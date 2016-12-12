@@ -220,21 +220,19 @@ public class OrderConfigurationSelector extends LinearLayout {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
-
+            getFixedItem(mDefaultIndex).setSelected(true);
+            getFixedItem(mDefaultIndex).setBackgroundResource(R.drawable.bg_order_config_selector_item);
         } else {
-
+            getFixedItem(mDefaultIndex).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
         }
+
         for (int i = 0; i < this.getChildCount(); i++) {
             getChildAt(i).setEnabled(enabled);
             if (enabled) {
-                getFixedItem(mDefaultIndex).setSelected(true);
-                getFixedItem(mDefaultIndex).setBackgroundResource(R.drawable.bg_order_config_selector_item);
                 if (getChildAt(i) instanceof TextView) {
                     ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
                 }
             } else {
-                getFixedItem(mDefaultIndex).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
-
                 if (getChildAt(i) instanceof TextView) {
                     if (i == mDefaultIndex) {
                         ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));

@@ -85,7 +85,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
     private ProductLightningOrderStatus mProductLightningOrderStatus;
 
-    private FuturesFinancing mTradePageFuturesFinancing;
 
     private ProductLightningOrderStatus mLocalLightningStatus;
 
@@ -97,9 +96,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
         mProductLightningOrderStatus = new ProductLightningOrderStatus();
         initData(getIntent());
-        setTradeQuantity();
         //获取期货配资方案
         getFuturesFinancing();
+        setTradeQuantity();
         setTouchStopLoss();
         setTouchStopPro();
 
@@ -135,6 +134,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         LocalLightningOrdersList.getInstance().clearLightningOrder(mProduct.getVarietyId(), mFundType);
+                        Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), null);
                         setResult(RESULT_OK);
                         onBackPressed();
                     }
@@ -153,8 +153,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
                                 Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-//                                LocalLightningOrdersList.getInstance().setLightningOrders(mProductLightningOrderStatus);
-                                Preference.get().setLightningOrderStatus(getLocalLightningOrderStatus(), mProductLightningOrderStatus);
+                                Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), mProductLightningOrderStatus);
                                 setResult(RESULT_OK);
                                 finish();
                             } else {
@@ -168,7 +167,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
         }
     }
 
-    private String getLocalLightningOrderStatus() {
+    private String getLocalLightningOrderStatusKey() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(mProduct.getVarietyId());
         stringBuilder.append(LocalUser.getUser().getPhone());
@@ -208,11 +207,12 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
-                        Log.d(TAG, "行情配資 " + futuresFinancing.toString());
                         if (mFuturesFinancing != null) {
+                            ProductLightningOrderStatus lightningOrderStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
+                            futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
                             hasFuturesFinancing = true;
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
-//                            updatePlaceOrderViews();
+                            updatePlaceOrderViews();
                         }
                     }
                 }).fire();
@@ -244,13 +244,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private void updatePlaceOrderViews() {
         // 设置止损
         mFuturesFinancing.sort();
+        Log.d(TAG, "配资数据 " + mFuturesFinancing.toString());
         List<FuturesFinancing.StopLoss> stopLossList = mFuturesFinancing.getStopLossList(mProduct);
         mTouchStopLossSelector.setOrderConfigurationList(stopLossList);
-        for (int i = 0; i < stopLossList.size(); i++) {
-            if (stopLossList.get(i).isDefault()) {
-                Log.d(TAG, "止損的索引 " + i);
-            }
-        }
     }
 
     private void setTradeQuantity() {
@@ -271,32 +267,14 @@ public class SetLightningOrdersActivity extends BaseActivity {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
 
-        mTradePageFuturesFinancing = (FuturesFinancing) intent.getSerializableExtra(ProductLightningOrderStatus.KEY_WEB_PRODUCT_DEPLOY);
         mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
         setLayoutStatus();
 
-        if (mTradePageFuturesFinancing != null) {
-            mTradePageFuturesFinancing.sort();
-            List<FuturesFinancing.StopLoss> stopLossList = mTradePageFuturesFinancing.getStopLossList(mProduct);
-            mTouchStopLossSelector.setOrderConfigurationList(stopLossList);
+        mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
 
-            mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-
-            if (mProduct != null) {
-                mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());
-                mProductLightningOrderStatus.setPayType(mFundType);
-            }
-            if (mProduct != null) {
-                mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
-            }
-
-            // 设置止损
-            List<FuturesFinancing.StopLoss> stopProfitList = mTradePageFuturesFinancing.getStopLossList(mProduct);
-            mTouchStopProfitSelector.setOrderConfigurationList(stopProfitList);
-
-//            // 设置手数
-//            List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
-//            mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
+        if (mProduct != null) {
+            mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());
+            mProductLightningOrderStatus.setPayType(mFundType);
         }
     }
 

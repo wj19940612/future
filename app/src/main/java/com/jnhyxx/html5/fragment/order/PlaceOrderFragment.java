@@ -45,7 +45,7 @@ import butterknife.Unbinder;
 public class PlaceOrderFragment extends BaseFragment {
 
     public interface Callback {
-        void onConfirmBtnClick(SubmittedOrder submittedOrder);
+        void onPlaceOrderFragmentConfirmBtnClick(SubmittedOrder submittedOrder);
 
         void onPlaceOrderFragmentEmptyAreaClick();
 
@@ -389,7 +389,7 @@ public class PlaceOrderFragment extends BaseFragment {
                 break;
             case R.id.confirmButton:
                 if (mCallback != null) {
-                    mCallback.onConfirmBtnClick(mSubmittedOrder);
+                    mCallback.onPlaceOrderFragmentConfirmBtnClick(mSubmittedOrder);
                 }
                 break;
         }

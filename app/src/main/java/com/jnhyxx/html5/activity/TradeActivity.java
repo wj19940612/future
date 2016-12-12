@@ -841,7 +841,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
+    public void onPlaceOrderFragmentConfirmBtnClick(SubmittedOrder submittedOrder) {
         submittedOrder.setPayType(mFundType);
         submitOrder(submittedOrder);
     }
@@ -862,7 +862,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onAgreeProtocolBtnClick(int longOrShort) {
+    public void onAgreementFragmentAgreeBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {

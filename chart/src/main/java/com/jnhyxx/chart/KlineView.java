@@ -21,9 +21,9 @@ public class KlineView extends ChartView {
 
     private static final int CANDLES_WIDTH_DP = 6; //dp
 
-    private static final String MA_BLUE = "#3A8ADA";
-    private static final String MA_ORANGE = "#E46538";
-    private static final String MA_PURPLE = "#9A2D71";
+    private static final String MA_WHITE = "#E5E5E5";
+    private static final String MA_ORANGE = "#FFBB22";
+    private static final String MA_PURPLE = "#AA20AF";
 
     private List<KlineViewData> mDataList;
     private SparseArray<KlineViewData> mVisibleList;
@@ -75,7 +75,7 @@ public class KlineView extends ChartView {
         paint.setStrokeWidth(1);
         paint.setPathEffect(null);
         if (movingAverage == mMovingAverages[0]) {
-            paint.setColor(Color.parseColor(MA_BLUE));
+            paint.setColor(Color.parseColor(MA_WHITE));
         } else if (movingAverage == mMovingAverages[1]) {
             paint.setColor(Color.parseColor(MA_ORANGE));
         } else if (movingAverage == mMovingAverages[2]) {

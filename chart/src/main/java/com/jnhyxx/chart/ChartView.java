@@ -42,8 +42,8 @@ public abstract class ChartView extends View {
 
     private enum Action {
         NONE,
+        TOUCH,
         DRAG,
-        LONG_PRESS,
         ZOOM;
     }
 
@@ -56,8 +56,10 @@ public abstract class ChartView extends View {
     private static final float RATIO_OF_TOP = 0.73f;
 
     private static final int WHAT_LONG_PRESS = 1;
-    private static final int DELAY = 400;
-    private static final float CLICK_PIXELS = 2;
+    private static final int WHAT_ONE_CLICK = 2;
+    private static final int DELAY_LONG_PRESS = 400;
+    private static final int DELAY_ONE_CLICK = 100;
+    private static final float CLICK_PIXELS = 1;
 
     public static Paint sPaint;
     private Path mPath;
@@ -88,13 +90,14 @@ public abstract class ChartView extends View {
     private int mTouchIndex; // The position of cross when touch view
     private float mDownX;
     private float mDownY;
+    private Action mAction;
+    private long mElapsedTime;
 
     private float mTransactionX;
     private float mPreviousTransactionX;
     private float mStartX;
     private boolean mDragged;
     private boolean mTouched;
-    private Action mAction;
 
     public ChartView(Context context) {
         super(context);
@@ -148,10 +151,11 @@ public abstract class ChartView extends View {
 
         @Override
         public void handleMessage(Message msg) {
-            MotionEvent e = (MotionEvent) msg.obj;
-            mAction = Action.LONG_PRESS;
-            mTouchIndex = calculateTouchIndex(e);
-            redraw();
+            if (msg.what == WHAT_LONG_PRESS || msg.what == WHAT_ONE_CLICK) {
+                mAction = Action.TOUCH;
+                MotionEvent e = (MotionEvent) msg.obj;
+                drawTouchLine(e);
+            }
         }
     }
 
@@ -235,8 +239,13 @@ public abstract class ChartView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
-                mHandler.sendMessageDelayed(message, DELAY);
+                if (mAction == Action.NONE) {
+                    Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
+                    mHandler.sendMessageDelayed(message, DELAY_LONG_PRESS);
+                } else if (mAction == Action.TOUCH) {
+                    Message message = mHandler.obtainMessage(WHAT_ONE_CLICK, event);
+                    mHandler.sendMessageDelayed(message, DELAY_ONE_CLICK);
+                }
 
                 mDownX = event.getX();
                 mDownY = event.getY();
@@ -248,28 +257,37 @@ public abstract class ChartView extends View {
                 }
 
                 mHandler.removeMessages(WHAT_LONG_PRESS);
-                if (mAction == Action.LONG_PRESS) {
-                    int newTouchIndex = calculateTouchIndex(event);
-                    if (newTouchIndex != mTouchIndex) {
-                        if (hasThisTouchIndex(newTouchIndex)) {
-                            mTouchIndex = newTouchIndex;
-                            redraw();
-                            return true;
-                        }
-                    }
+                mHandler.removeMessages(WHAT_ONE_CLICK);
+                if (mAction == Action.TOUCH) {
+                    return drawTouchLine(event);
                 }
 
                 return false;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mHandler.removeMessages(WHAT_LONG_PRESS);
-                mAction = Action.NONE;
-                mTouchIndex = -1;
-                redraw();
+                if (mAction == Action.NONE && mHandler.hasMessages(WHAT_LONG_PRESS)) {
+                    mHandler.removeMessages(WHAT_LONG_PRESS);
+                } else if (mAction == Action.TOUCH && mHandler.hasMessages(WHAT_ONE_CLICK)) {
+                    mHandler.removeMessages(WHAT_ONE_CLICK);
+                    mAction = Action.NONE;
+                    mTouchIndex = -1;
+                    redraw();
+                }
                 return true;
         }
-
         return super.onTouchEvent(event);
+    }
+
+    private boolean drawTouchLine(MotionEvent event) {
+        int newTouchIndex = calculateTouchIndex(event);
+        if (newTouchIndex != mTouchIndex) {
+            if (hasThisTouchIndex(newTouchIndex)) {
+                mTouchIndex = newTouchIndex;
+                redraw();
+                return true;
+            }
+        }
+        return false;
     }
 
     protected boolean hasThisTouchIndex(int touchIndex) {
@@ -341,9 +359,9 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected abstract void drawBaseLines(boolean indexesEnable,
-            float[] baselines, int left, int top, int width, int height,
-            long[] indexesBaseLines, int left2, int top2, int width2, int height2,
-            Canvas canvas);
+                                          float[] baselines, int left, int top, int width, int height,
+                                          long[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                          Canvas canvas);
 
     /**
      * draw real time data

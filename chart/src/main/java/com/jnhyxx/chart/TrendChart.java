@@ -155,7 +155,7 @@ public class TrendChart extends ChartView {
                 max = new BigDecimal(min).add(new BigDecimal(limitUp)).floatValue();
             }
 
-            float pricePadding = mDataList.get(0).getLastPrice() * 0.0025f;
+            float pricePadding = (max - min) * 1.0f / (baselines.length - 1);
             /** expand max ~ min to not let trend line touch top and bottom **/
             max = max + pricePadding;
             min = min - pricePadding;

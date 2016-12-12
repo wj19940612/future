@@ -51,6 +51,7 @@ public class HoldingOrderPresenter {
             }
         };
         mQueryJob = new QueryJob();
+        mPause = true;
     }
 
     private void getHoldingList(final int what, final int varietyId, final Object obj) {
@@ -354,32 +355,32 @@ public class HoldingOrderPresenter {
     }
 
     private void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onShowTotalProfit(hasHoldingOrders, totalProfit, ratio);
         }
     }
 
     private void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
         }
     }
 
     private void onSubmitAllHoldingOrderCompleted(String message) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onSubmitAllHoldingOrdersCompleted(message);
         }
     }
 
     private void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
         }
     }
 
 
     private void onRiskControlTriggered(String showIds) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onRiskControlTriggered(showIds);
         }
     }

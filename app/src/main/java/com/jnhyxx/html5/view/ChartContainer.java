@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.chart.FlashView;
+import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.R;
 
@@ -21,6 +22,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     public static final int POS_TREND = 0;
     public static final int POS_FLASH = 1;
     public static final int POS_PLATE = 2;
+    public static final int POS_KLINE = 3;
 
     private LinearLayout mTabsLayout;
     private FrameLayout mContainer;
@@ -70,6 +72,13 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mContainer.addView(marketDataView, POS_PLATE, params);
     }
 
+    public void addKlineView(KlineView klineView) {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mContainer.addView(klineView, POS_KLINE, params);
+    }
+
     public TrendView getTrendView() {
         return (TrendView) mContainer.getChildAt(POS_TREND);
     }
@@ -80,6 +89,10 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
 
     public MarketDataView getMarketDataView() {
         return (MarketDataView) mContainer.getChildAt(POS_PLATE);
+    }
+
+    public KlineView getKlineView() {
+        return (KlineView) mContainer.getChildAt(POS_KLINE);
     }
 
     public void showTrendView() {
@@ -136,6 +149,11 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         marginLayoutParams.setMargins(paddingPx * 2, 0, 0, 0);
         mTabsLayout.addView(createTab(R.string.plate), POS_PLATE, marginLayoutParams);
 
+        marginLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        marginLayoutParams.setMargins(paddingPx * 2, 0, 0, 0);
+        mTabsLayout.addView(createTab(R.string.day_k_line), POS_KLINE, marginLayoutParams);
+
         addView(mTabsLayout, params);
     }
 
@@ -165,6 +183,9 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 break;
             case R.string.plate:
                 onTabClick(POS_PLATE);
+                break;
+            case R.string.day_k_line:
+                onTabClick(POS_KLINE);
                 break;
         }
     }

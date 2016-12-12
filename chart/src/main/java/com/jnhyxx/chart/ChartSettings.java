@@ -3,7 +3,7 @@ package com.jnhyxx.chart;
 public class ChartSettings {
 
     private float[] mBaseLines;
-    private float[] mIndexesBaseLines;
+    private long[] mIndexesBaseLines;
     private boolean mIndexesEnable;
     private int mNumberScale;
     private int mXAxis;
@@ -11,7 +11,7 @@ public class ChartSettings {
 
     public ChartSettings() {
         mBaseLines = new float[0];
-        mIndexesBaseLines = new float[0];
+        mIndexesBaseLines = new long[0];
         mIndexesEnable = false;
         mNumberScale = 2;
         mXAxis = 0;
@@ -41,7 +41,7 @@ public class ChartSettings {
         mBaseLines = new float[baseLines];
     }
 
-    public float[] getIndexesBaseLines() {
+    public long[] getIndexesBaseLines() {
         return mIndexesBaseLines;
     }
 
@@ -49,7 +49,7 @@ public class ChartSettings {
         if (indexesBaseLines < 2) {
             indexesBaseLines = 2;
         }
-        mIndexesBaseLines = new float[indexesBaseLines];
+        mIndexesBaseLines = new long[indexesBaseLines];
     }
 
     public boolean isIndexesEnable() {

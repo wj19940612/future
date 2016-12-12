@@ -12,13 +12,16 @@ import android.text.TextUtils;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
+import com.jnhyxx.html5.domain.order.StopProfitLossConfig;
 import com.jnhyxx.html5.fragment.order.HoldingFragment;
 import com.jnhyxx.html5.fragment.order.SetStopProfitLossFragment;
 import com.jnhyxx.html5.fragment.order.SettlementFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -28,7 +31,8 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends BaseActivity implements HoldingFragment.Callback,
+public class OrderActivity extends BaseActivity implements
+        HoldingFragment.Callback,
         SetStopProfitLossFragment.Callback {
 
     @BindView(R.id.slidingTabLayout)
@@ -73,7 +77,7 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
-    public void onClosePositionEventTriggered(String showIds) {
+    public void onHoldingFragmentClosePositionEventTriggered(String showIds) {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);
@@ -86,7 +90,7 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
                 String[] showIdArray = showIds.split(";");
                 for (String showId : showIdArray) {
                     if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
-                        onCloseFragmentTriggered();
+                        onSetStopProfitLossFragmentCloseTriggered();
                         SmartDialog.single(getActivity(), getString(R.string.being_set_order_is_closed))
                                 .setPositive(R.string.ok)
                                 .show();
@@ -97,11 +101,23 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
-    public void onSetStopProfitLossClick(HoldingOrder order) {
+    public void onHoldingFragmentSetStopProfitLossClick(final HoldingOrder order, final FullMarketData marketData) {
+        API.Order.getStopProfitLossConfig(order.getShowId(), mFundType).setTag(TAG)
+                .setCallback(new Callback2<Resp<StopProfitLossConfig>, StopProfitLossConfig>() {
+                    @Override
+                    public void onRespSuccess(StopProfitLossConfig stopProfitLossConfig) {
+                        showSetStopProfitLossFragment(order, marketData,stopProfitLossConfig);
+                    }
+                }).fire();
+    }
+
+    private void showSetStopProfitLossFragment(HoldingOrder order, FullMarketData marketData,
+                                               StopProfitLossConfig stopProfitLossConfig) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragmentContainer, SetStopProfitLossFragment.newInstance(mProduct, mFundType, order))
+                    .add(R.id.fragmentContainer, SetStopProfitLossFragment
+                            .newInstance(mProduct, mFundType, order, marketData, stopProfitLossConfig))
                     .commit();
         }
     }
@@ -119,7 +135,7 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
-    public void onCloseFragmentTriggered() {
+    public void onSetStopProfitLossFragmentCloseTriggered() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -129,13 +145,13 @@ public class OrderActivity extends BaseActivity implements HoldingFragment.Callb
     }
 
     @Override
-    public void onSettingsConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice) {
+    public void onSetStopProfitLossFragmentConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice) {
         API.Order.updateStopProfitLoss(order.getShowId(), mFundType, newStopLossPrice, newStopProfitPrice)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback1<Resp>() {
                     @Override
                     protected void onRespSuccess(Resp resp) {
-                        onCloseFragmentTriggered();
+                        onSetStopProfitLossFragmentCloseTriggered();
                         HoldingFragment fragment = (HoldingFragment) mOrderAdapter.getFragment(0);
                         if (fragment != null) {
                             fragment.updateHoldingOrderList();

@@ -26,6 +26,7 @@ public abstract class ChartView extends View {
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
         BLUE("#358CF3"),
+        GREEN("#25D282"),
         RED("#FB4B55");
 
         private String value;
@@ -321,7 +322,7 @@ public abstract class ChartView extends View {
 
     protected abstract void calculateBaseLines(float[] baselines);
 
-    protected abstract void calculateIndexesBaseLines(float[] indexesBaseLines);
+    protected abstract void calculateIndexesBaseLines(long[] indexesBaseLines);
 
     /**
      * draw top baselines and bottom indexes baselines
@@ -341,7 +342,7 @@ public abstract class ChartView extends View {
      */
     protected abstract void drawBaseLines(boolean indexesEnable,
             float[] baselines, int left, int top, int width, int height,
-            float[] indexesBaseLines, int left2, int top2, int width2, int height2,
+            long[] indexesBaseLines, int left2, int top2, int width2, int height2,
             Canvas canvas);
 
     /**
@@ -433,18 +434,19 @@ public abstract class ChartView extends View {
         return y + getPaddingTop();
     }
 
-    protected float getIndexesChartY(float y) {
+    protected float getIndexesChartY(long y) {
         // When values beyond indexes baselines, eg. mv. return -1
-        float[] indexesBaseLines = mSettings.getIndexesBaseLines();
+        long[] indexesBaseLines = mSettings.getIndexesBaseLines();
         if (y > indexesBaseLines[0] || y < indexesBaseLines[indexesBaseLines.length - 1]) {
             return -1;
         }
 
-        int height = getBottomPartHeight() - 2 * (mFontHeight + mTextMargin);
-        y = (indexesBaseLines[0] - y) /
+        int height = getBottomPartHeight();
+
+        float chartY = (indexesBaseLines[0] - y) * 1.0f /
                 (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
 
-        return y + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
+        return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
     }
 
     protected float getChartX(int index) {
@@ -518,7 +520,7 @@ public abstract class ChartView extends View {
         return formatNumber(value, mSettings.getNumberScale());
     }
 
-    protected String formatNumber(float value, int numberScale) {
+    protected String formatNumber(double value, int numberScale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
 
         decimalFormat.setMaximumFractionDigits(numberScale);

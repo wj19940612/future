@@ -11,8 +11,6 @@ public class Resp<T> {
 
     // 资金不足
     public static final int CODE_FUND_NOT_ENOUGH = 702;
-    //已经休市
-    public static final int CODE_FUND_COLSED = 701;
 
     private int code;
     private String msg;

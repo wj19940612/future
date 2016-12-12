@@ -22,8 +22,10 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.chart.FlashView;
+import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.chart.domain.FlashViewData;
+import com.jnhyxx.chart.domain.KlineViewData;
 import com.jnhyxx.chart.domain.TrendViewData;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -65,6 +67,9 @@ import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -398,7 +403,6 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
                     @Override
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        mExchangeStatus = exchangeStatus;
                         mProduct.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
                         if (exchangeStatus.isTradeable()) {
@@ -491,6 +495,7 @@ public class TradeActivity extends BaseActivity implements
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
                 .putExtra(ProductLightningOrderStatus.KEY_WEB_PRODUCT_DEPLOY, mFuturesFinancing)
                 .executeForResult(requestCode);
+
     }
 
     private void updateChartView(FullMarketData data) {
@@ -628,10 +633,27 @@ public class TradeActivity extends BaseActivity implements
         }
         marketDataView.clearData();
 
+        KlineView klineView = mChartContainer.getKlineView();
+        if (klineView == null) {
+            klineView = new KlineView(this);
+            mChartContainer.addKlineView(klineView);
+        }
+        klineView.clearData();
+        KlineView.Settings settings2 = new KlineView.Settings();
+        settings2.setBaseLines(mProduct.getBaseline() - 3);
+        settings2.setIndexesBaseLines(3);
+        settings2.setNumberScale(mProduct.getPriceDecimalScale());
+        settings2.setXAxis(40);
+        settings2.setIndexesEnable(true);
+        settings2.setIndexesType(KlineView.Settings.INDEXES_VOL);
+        klineView.setSettings(settings2);
+
         mChartContainer.showTrendView();
 
         // request Trend Data
         requestTrendDataAndSet();
+        // request Kline Data
+        requestKlineDataAndSet();
     }
 
     private void requestTrendDataAndSet() {
@@ -644,7 +666,27 @@ public class TradeActivity extends BaseActivity implements
                         TrendView.Settings settings = trendView.getSettings();
                         trendView.setDataList(TrendView.Util.createDataList(s, settings.getOpenMarketTimes()));
                     }
-                }).fire();
+                }).fireSync();
+    }
+
+    private void requestKlineDataAndSet() {
+        API.getKlineData(mProduct.getContractsCode(), "")
+                .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
+                    @Override
+                    public void onRespSuccess(List<KlineViewData> klineDataList) {
+                        if (klineDataList != null && klineDataList.size() > 0) {
+                            KlineView klineView = mChartContainer.getKlineView();
+                            Collections.sort(klineDataList, new Comparator<KlineViewData>() {
+                                @Override
+                                public int compare(KlineViewData o1, KlineViewData o2) {
+                                    return (int) (o1.getTimeStamp() - o2.getTimeStamp());
+                                }
+                            });
+                            if (klineView == null) return;
+                            klineView.setDataList(klineDataList);
+                        }
+                    }
+                }).fireSync();
     }
 
     private void initSlidingMenu() {
@@ -790,16 +832,6 @@ public class TradeActivity extends BaseActivity implements
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             showFundNotEnoughDialog(jsonObjectResp);
-                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_COLSED) {
-                            if (mExchangeStatus != null) {
-                                SmartDialog.with(getActivity(), getString(R.string.trade_closed_hint, mExchangeStatus.getNextTime()))
-                                        .setPositive(R.string.ok)
-                                        .show();
-                            } else {
-                                SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
-                                        .setPositive(R.string.ok)
-                                        .show();
-                            }
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)
@@ -903,7 +935,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onSubmitAllHoldingPositionsCompleted(String message) {
+    public void onSubmitAllHoldingOrdersCompleted(String message) {
         SmartDialog.with(getActivity(),
                 getString(R.string.sell_order_submit_successfully) + "\n" + message)
                 .setPositive(R.string.ok)

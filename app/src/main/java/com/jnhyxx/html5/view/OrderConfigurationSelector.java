@@ -43,7 +43,8 @@ public class OrderConfigurationSelector extends LinearLayout {
     private PopupWindow mPopupWindow;
 
     private boolean enabled = true;
-    private int mDefaultIndex;
+
+    private int mDefaultIndex = 0;
 
     public interface OrderConfiguration {
         String getValue();
@@ -166,13 +167,11 @@ public class OrderConfigurationSelector extends LinearLayout {
             listView.setAdapter(adapter);
         }
 
-        int defaultIndex = getDefaultIndex();
-        Log.d(TAG, "==被选择的索引" + defaultIndex);
-        selectItem(defaultIndex);
+        Log.d(TAG, "==被选择的索引" + getDefaultIndex());
+        selectItem(getDefaultIndex());
     }
 
     private int getDefaultIndex() {
-        mDefaultIndex = 0;
         if (mOrderConfigurationList != null && !mOrderConfigurationList.isEmpty()) {
             for (int i = 0; i < mOrderConfigurationList.size(); i++) {
                 if (mOrderConfigurationList.get(i).isDefault()) {
@@ -221,18 +220,21 @@ public class OrderConfigurationSelector extends LinearLayout {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
-            getFixedItem(0).setSelected(true);
-            getFixedItem(0).setBackgroundResource(R.drawable.bg_order_config_selector_item);
+
         } else {
-            getFixedItem(0).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
+
         }
         for (int i = 0; i < this.getChildCount(); i++) {
             getChildAt(i).setEnabled(enabled);
             if (enabled) {
+                getFixedItem(mDefaultIndex).setSelected(true);
+                getFixedItem(mDefaultIndex).setBackgroundResource(R.drawable.bg_order_config_selector_item);
                 if (getChildAt(i) instanceof TextView) {
                     ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
                 }
             } else {
+                getFixedItem(mDefaultIndex).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
+
                 if (getChildAt(i) instanceof TextView) {
                     if (i == mDefaultIndex) {
                         ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));

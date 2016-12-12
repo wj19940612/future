@@ -87,6 +87,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
     private FuturesFinancing mTradePageFuturesFinancing;
 
+    private ProductLightningOrderStatus mLocalLightningStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,7 +212,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         if (mFuturesFinancing != null) {
                             hasFuturesFinancing = true;
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
-                            updatePlaceOrderViews();
+//                            updatePlaceOrderViews();
                         }
                     }
                 }).fire();
@@ -266,8 +268,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
 
     private void initData(Intent intent) {
-        mProduct = (Product) intent.getParcelableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
+
         mTradePageFuturesFinancing = (FuturesFinancing) intent.getSerializableExtra(ProductLightningOrderStatus.KEY_WEB_PRODUCT_DEPLOY);
         mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
         setLayoutStatus();
@@ -276,15 +279,25 @@ public class SetLightningOrdersActivity extends BaseActivity {
             mTradePageFuturesFinancing.sort();
             List<FuturesFinancing.StopLoss> stopLossList = mTradePageFuturesFinancing.getStopLossList(mProduct);
             mTouchStopLossSelector.setOrderConfigurationList(stopLossList);
-        }
 
-//        // 设置止盈
-//        List<FuturesFinancing.StopLoss> stopProfitList = mTradePageFuturesFinancing.getStopLossList(mProduct);
-//        mTouchStopProfitSelector.setOrderConfigurationList(stopProfitList);
-//
-//        // 设置手数
-//        List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
-//        mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
+            mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
+
+            if (mProduct != null) {
+                mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());
+                mProductLightningOrderStatus.setPayType(mFundType);
+            }
+            if (mProduct != null) {
+                mLocalLightningStatus = LocalLightningOrdersList.getInstance().getLocalLightningStatus(mProduct.getVarietyId(), mFundType);
+            }
+
+            // 设置止损
+            List<FuturesFinancing.StopLoss> stopProfitList = mTradePageFuturesFinancing.getStopLossList(mProduct);
+            mTouchStopProfitSelector.setOrderConfigurationList(stopProfitList);
+
+//            // 设置手数
+//            List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
+//            mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
+        }
     }
 
     private void setLayoutStatus() {

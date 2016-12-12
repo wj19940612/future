@@ -88,6 +88,8 @@ public class HoldingOrderPresenter {
                             if (showId.equals(order.getShowId())
                                     && order.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                                 refresh = true;
+
+
                             }
                         }
                     }
@@ -255,7 +257,7 @@ public class HoldingOrderPresenter {
                         @Override
                         protected void onRespSuccess(Resp<JsonObject> resp) {
                             setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING, mHoldingOrderList);
-                            onSubmitAllHoldingPositionsCompleted(resp.getMsg());
+                            onSubmitAllHoldingOrderCompleted(resp.getMsg());
                             mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION, mQueryJob.varietyId, -1));
                         }
                     }).fire();
@@ -291,9 +293,9 @@ public class HoldingOrderPresenter {
 
     public void clearData() {
         mMarketData = null;
-        //出现空指针异常
-        if (mHoldingOrderList == null) return;
-        mHoldingOrderList.clear();
+        if (mHoldingOrderList != null) {
+            mHoldingOrderList.clear();
+        }
     }
 
     public void setFullMarketData(FullMarketData marketData, int varietyId) {
@@ -363,9 +365,9 @@ public class HoldingOrderPresenter {
         }
     }
 
-    private void onSubmitAllHoldingPositionsCompleted(String message) {
+    private void onSubmitAllHoldingOrderCompleted(String message) {
         if (mIHoldingOrderView != null) {
-            mIHoldingOrderView.onSubmitAllHoldingPositionsCompleted(message);
+            mIHoldingOrderView.onSubmitAllHoldingOrdersCompleted(message);
         }
     }
 

@@ -8,7 +8,7 @@ public interface IHoldingOrderView<T> {
 
     void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio);
 
-    void onSubmitAllHoldingPositionsCompleted(String message);
+    void onSubmitAllHoldingOrdersCompleted(String message);
 
     void onSubmitHoldingOrderCompleted(T holdingOrder);
 

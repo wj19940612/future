@@ -478,7 +478,7 @@
     <!--意见反馈-->
     <string name="feedback_title">意见反馈</string>
     <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
-    <string name="feedback_user_phone">请输入QQ、微信或者手机号</string>
+    <string name="feedback_user_phone">QQ、微信或手机号</string>
     <string name="feedback_submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>

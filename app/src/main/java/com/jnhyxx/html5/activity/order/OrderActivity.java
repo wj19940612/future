@@ -78,27 +78,12 @@ public class OrderActivity extends BaseActivity implements
         NettyClient.getInstance().stop();
     }
 
+
     @Override
-    public void onHoldingFragmentClosePositionEventTriggered(String showIds) {
+    public void onHoldingFragmentClosePositionEventTriggered() {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);
-        }
-
-        if (!TextUtils.isEmpty(showIds)) { // empty means close all. remember!!
-            Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-            if (fragmentById != null && fragmentById instanceof SetStopProfitLossFragment) {
-                HoldingOrder beingSetOrder = ((SetStopProfitLossFragment) fragmentById).getBeingSetOrder();
-                String[] showIdArray = showIds.split(";");
-                for (String showId : showIdArray) {
-                    if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
-                        onSetStopProfitLossFragmentCloseTriggered();
-                        SmartDialog.single(getActivity(), getString(R.string.being_set_order_is_closed))
-                                .setPositive(R.string.ok)
-                                .show();
-                    }
-                }
-            }
         }
     }
 
@@ -108,9 +93,34 @@ public class OrderActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<StopProfitLossConfig>, StopProfitLossConfig>() {
                     @Override
                     public void onRespSuccess(StopProfitLossConfig stopProfitLossConfig) {
-                        showSetStopProfitLossFragment(order, marketData,stopProfitLossConfig);
+                        showSetStopProfitLossFragment(order, marketData, stopProfitLossConfig);
                     }
                 }).fire();
+    }
+
+    @Override
+    public void onHoldingFragmentRiskControlTriggered(String orders, String orderSplit, String stopLossSplit) {
+        if (TextUtils.isEmpty(orders)) return;
+
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragmentById != null && fragmentById instanceof SetStopProfitLossFragment) {
+            HoldingOrder beingSetOrder = ((SetStopProfitLossFragment) fragmentById).getBeingSetOrder();
+            String[] closingOrders = orders.split(orderSplit);
+            for (String closingOrder : closingOrders) {
+                String[] splits = closingOrder.split(stopLossSplit);
+                String showId = splits[0];
+                boolean stopLoss = Integer.valueOf(splits[1]).intValue() == HoldingOrder.SELL_OUT_STOP_LOSS;
+                if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
+                    onSetStopProfitLossFragmentCloseTriggered();
+                    String message = stopLoss ?
+                            getString(R.string.being_set_order_is_closed, getString(R.string.stop_loss)) :
+                            getString(R.string.being_set_order_is_closed, getString(R.string.stop_profit));
+                    SmartDialog.single(getActivity(), message)
+                            .setPositive(R.string.ok)
+                            .show();
+                }
+            }
+        }
     }
 
     private void showSetStopProfitLossFragment(HoldingOrder order, FullMarketData marketData,

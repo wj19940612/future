@@ -35,6 +35,7 @@ public class SetStopProfitLossFragment extends BaseFragment {
 
     public interface Callback {
         void onSetStopProfitLossFragmentCloseTriggered();
+
         void onSetStopProfitLossFragmentConfirmed(HoldingOrder order, double newStopLossPrice, double newStopProfitPrice);
     }
 
@@ -229,9 +230,9 @@ public class SetStopProfitLossFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mNettyHandler = null;
         mBlurEngine.onDestroyView();
         mBinder.unbind();
+        mNettyHandler = null;
     }
 
     @Override

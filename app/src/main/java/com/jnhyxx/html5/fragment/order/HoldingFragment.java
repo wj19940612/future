@@ -40,12 +40,14 @@ import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
+import static com.jnhyxx.html5.R.id.stopLoss;
 
 public class HoldingFragment extends BaseFragment implements IHoldingOrderView<HoldingOrder> {
 
     public interface Callback {
-        void onHoldingFragmentClosePositionEventTriggered(String showIds);
+        void onHoldingFragmentClosePositionEventTriggered();
         void onHoldingFragmentSetStopProfitLossClick(HoldingOrder order, FullMarketData marketData);
+        void onHoldingFragmentRiskControlTriggered(String orders, String orderSplit, String stopLossSplit);
     }
 
     @BindView(android.R.id.list)
@@ -234,7 +236,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mPresenter.closePosition(order);
-                        onClosePositionEventTriggered(order.getShowId());
+                        onClosePositionEventTriggered();
                     }
                     @Override
                     public void onSetStopProfitLossClick(HoldingOrder order) {
@@ -250,9 +252,9 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         }
     }
 
-    private void onClosePositionEventTriggered(String showIds) {
+    private void onClosePositionEventTriggered() {
         if (mCallback != null) {
-            mCallback.onHoldingFragmentClosePositionEventTriggered(showIds);
+            mCallback.onHoldingFragmentClosePositionEventTriggered();
         }
     }
 
@@ -307,14 +309,17 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     }
 
     @Override
-    public void onRiskControlTriggered(String showIds) {
-        onClosePositionEventTriggered(showIds);
+    public void onRiskControlTriggered(String closingOrders, String orderSplit, String stopLossSplit) {
+        onClosePositionEventTriggered();
+        if (mCallback != null) {
+            mCallback.onHoldingFragmentRiskControlTriggered(closingOrders, orderSplit, stopLossSplit);
+        }
     }
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mPresenter.closeAllHoldingPositions();
-        onClosePositionEventTriggered("");
+        onClosePositionEventTriggered();
     }
 
     public void updateHoldingOrderList() {
@@ -415,7 +420,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             TextView mStopProfit;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(R.id.stopLoss)
+            @BindView(stopLoss)
             TextView mStopLoss;
             @BindView(R.id.closePositionButton)
             TextView mClosePositionButton;

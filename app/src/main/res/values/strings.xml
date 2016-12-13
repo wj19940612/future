@@ -211,7 +211,7 @@
     <string name="set_stop_profit_stop_loss">设置止盈止损</string>
     <string name="confirm_setting">确认设置</string>
     <string name="stop_range">( 范围 %1$s~%2$s )</string>
-    <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统止损（止盈）平仓</string>
+    <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统%1$s平仓</string>
     <string name="set_success">设置成功</string>
 
 

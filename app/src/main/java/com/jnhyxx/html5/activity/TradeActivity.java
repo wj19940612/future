@@ -926,8 +926,9 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onRiskControlTriggered(String showIds) {
+    public void onRiskControlTriggered(String closingOrders, String orderSplit, String stopLossSplit) {
     }
+
 
     static class MenuAdapter extends ArrayAdapter<Product> {
 

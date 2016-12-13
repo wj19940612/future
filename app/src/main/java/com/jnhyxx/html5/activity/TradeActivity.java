@@ -325,6 +325,7 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback<Resp<ProductLightningOrderStatus>>() {
                     @Override
                     public void onReceive(Resp<ProductLightningOrderStatus> productLightningOrderStatusResp) {
+
                         if (productLightningOrderStatusResp.isSuccess() && productLightningOrderStatusResp.hasData()) {
                             Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), productLightningOrderStatusResp.getData());
                             mIsLightningOpen = true;
@@ -526,7 +527,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void openSetLightningOrdersPage(int requestCode) {
         Launcher.with(getActivity(), SetLightningOrdersActivity.class)
-                .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, mLocalLightningStatus != null)
+                .putExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, isLightningOrderOpen())
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
                 .executeForResult(requestCode);
@@ -739,6 +740,7 @@ public class TradeActivity extends BaseActivity implements
 
                     getLightningOrdersStatus();
                     mIsLightningOpen = isLightningOrderOpen();
+                    mLightningOrders.setSelected(isLightningOrderOpen());
 
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;

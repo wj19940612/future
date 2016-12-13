@@ -86,9 +86,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
     private ProductLightningOrderStatus mProductLightningOrderStatus;
 
-
-    private ProductLightningOrderStatus mLocalLightningStatus;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +149,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
     }
 
     private void openLightningOrder() {
-        Log.d(TAG, "提交的闪电下单配资 " + mProductLightningOrderStatus.toString());
         if (hasFuturesFinancing) {
             API.Market.saveAndUpdateOrderAssetStore(mProductLightningOrderStatus)
                     .setIndeterminate(this)
@@ -181,7 +177,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
         stringBuilder.append(mProduct.getVarietyId());
         stringBuilder.append(LocalUser.getUser().getPhone());
         stringBuilder.append(mFundType);
-        Log.d(TAG, "本地闪电的key " + stringBuilder.toString());
         return stringBuilder.toString();
     }
 
@@ -291,7 +286,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private void updatePlaceOrderViews() {
         // 设置止损
         mFuturesFinancing.sort();
-        Log.d(TAG, "配资数据 " + mFuturesFinancing.toString());
         List<FuturesFinancing.StopLoss> stopLossList = mFuturesFinancing.getStopLossList(mProduct);
         mTouchStopLossSelector.setOrderConfigurationList(stopLossList);
     }

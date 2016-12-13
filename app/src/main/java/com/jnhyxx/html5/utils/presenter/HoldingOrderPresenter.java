@@ -165,6 +165,7 @@ public class HoldingOrderPresenter {
         mQueryJob.startQuery = false;
         mQueryJob.count = 0;
         mHandler.removeMessages(QUERY_DATA);
+        setFullMarketData(mMarketData, mQueryJob.varietyId);
     }
 
     /**

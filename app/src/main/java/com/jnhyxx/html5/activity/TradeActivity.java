@@ -329,7 +329,6 @@ public class TradeActivity extends BaseActivity implements
     private void showLightningOrderOverDue() {
         SmartDialog.with(getActivity(),
                 getString(R.string.lightning_orders_status_run_out))
-
                 .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {

@@ -44,7 +44,6 @@ public class OrderConfigurationSelector extends LinearLayout {
 
     private boolean enabled = true;
 
-    private int mDefaultIndex = 0;
 
     public interface OrderConfiguration {
         String getValue();
@@ -172,6 +171,7 @@ public class OrderConfigurationSelector extends LinearLayout {
     }
 
     private int getDefaultIndex() {
+        int mDefaultIndex = 0;
         if (mOrderConfigurationList != null && !mOrderConfigurationList.isEmpty()) {
             for (int i = 0; i < mOrderConfigurationList.size(); i++) {
                 if (mOrderConfigurationList.get(i).isDefault()) {
@@ -219,46 +219,60 @@ public class OrderConfigurationSelector extends LinearLayout {
     //改变组件的可点击时间
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if (enabled) {
-            getFixedItem(mDefaultIndex).setSelected(true);
-            getFixedItem(mDefaultIndex).setBackgroundResource(R.drawable.bg_order_config_selector_item);
-        } else {
-            getFixedItem(mDefaultIndex).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
-        }
+        int defaultIndex = getDefaultIndex();
+        highLightFixedItem(defaultIndex);
 
         for (int i = 0; i < this.getChildCount(); i++) {
             getChildAt(i).setEnabled(enabled);
+
             if (enabled) {
                 if (getChildAt(i) instanceof TextView) {
                     ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
                 }
             } else {
+
                 if (getChildAt(i) instanceof TextView) {
-                    if (i == mDefaultIndex) {
-                        ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
-                    } else {
-                        ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), R.color.lucky));
-                    }
+                    ((TextView) getChildAt(i)).setTextColor(ContextCompat.getColor(getContext(), R.color.lucky));
                 }
             }
         }
     }
 
     private void highLightFixedItem(int index) {
-        getFixedItem(index).setSelected(true);
+        if (enabled) {
+            TextView fixedItem = getFixedItem(index);
+            if (fixedItem != null) {
+                fixedItem.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+                fixedItem.setBackgroundResource(R.drawable.bg_order_config_selector_item);
+                fixedItem.setSelected(enabled);
+            }
+        } else {
+            TextView view = getFixedItem(index);
+            if (view != null) {
+                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDisable));
+            }
+        }
         int visualSize = Math.min(mNumberOfItems, mMaximum);
         if (index == 0) {
             getSplitLine(index + 1).setVisibility(INVISIBLE);
         } else if (index == visualSize - 1) {
             getSplitLine(index).setVisibility(INVISIBLE);
         } else {
-            getSplitLine(index).setVisibility(INVISIBLE);
-            getSplitLine(index + 1).setVisibility(INVISIBLE);
+            View splitLine = getSplitLine(index);
+            if (splitLine != null) {
+                splitLine.setVisibility(INVISIBLE);
+            }
+
+            View splitLine1 = getSplitLine(index + 1);
+            if (splitLine1 != null) {
+                splitLine1.setVisibility(INVISIBLE);
+            }
         }
     }
 
     private void unHighLightFixedItem(int index) {
-        getFixedItem(index).setSelected(false);
+        TextView fixedItem = getFixedItem(index);
+        fixedItem.setSelected(false);
         int visualSize = Math.min(mNumberOfItems, mMaximum);
         if (index == 0) {
             getSplitLine(index + 1).setVisibility(VISIBLE);

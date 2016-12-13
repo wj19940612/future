@@ -21,7 +21,7 @@ public class ProductLightningOrderStatus implements Serializable {
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
     //服务端的产品配资数据
-    public static final String KEY_WEB_PRODUCT_DEPLOY = "WEB_PRODUCT_DEPLOY";
+    public static final int RESULT_CODE_AGAIN_SETLIGHTNING_ORDER_ = 505;
 
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
@@ -29,6 +29,10 @@ public class ProductLightningOrderStatus implements Serializable {
     //表示闪电下单按钮打开同意协议的fragment的标志
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
 
+    //闪电下单打开的返回码
+    public static final int  RESULT_CODE_LIGHTNING_ORDER_OPEN= 452;
+    //闪电下单关闭的返回码
+    public static final int  RESULT_CODE_LIGHTNING_ORDER_CLOSE= 50000;
 
     /**
      * assetsId : 1

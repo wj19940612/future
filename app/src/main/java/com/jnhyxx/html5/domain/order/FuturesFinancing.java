@@ -392,6 +392,9 @@ public class FuturesFinancing implements Serializable {
 
         @Override
         public boolean isDefault() {
+            if (mProductLightningOrderStatus != null&&assetsBean.getStopLossBeat() == mProductLightningOrderStatus.getStopLossPrice()) {
+                return true;
+            }
             return assetsBean.getIsDefault() == 1;
         }
 

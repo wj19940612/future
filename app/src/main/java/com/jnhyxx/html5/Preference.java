@@ -3,7 +3,9 @@ package com.jnhyxx.html5;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
+import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 
 public class Preference {
@@ -22,6 +24,7 @@ public class Preference {
         String SERVICE_QQ = "serviceQQ";
         String SYS_MESSAGE_ID = "sys_message_id";
         String LAST_TEACHER_COMMAND = "last_teacher_command";
+
     }
 
     private static Preference sInstance;
@@ -124,15 +127,15 @@ public class Preference {
     }
 
     public boolean hasShowedThisSysMessage(SysMessage sysMessage) {
-        String sysMessageId = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
-        if (sysMessageId.equals(sysMessage.getId())) {
+        String sysMessageCreateTime = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
+        if (sysMessageCreateTime.equals(sysMessage.getCreateTime())) {
             return true;
         }
         return false;
     }
 
     public void setThisSysMessageShowed(SysMessage sysMessage) {
-        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getId()).apply();
+        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getCreateTime()).apply();
     }
 
     public boolean hasShowedThisLastTeacherCommand(LiveHomeChatInfo teacherCommand) {
@@ -149,5 +152,23 @@ public class Preference {
         if (teacherCommand.getMsg() != null) {
             getEditor().putLong(Key.LAST_TEACHER_COMMAND, teacherCommand.getCreateTime()).apply();
         }
+    }
+
+    /**
+     * 存储闪现下单数据
+     *
+     * @param lightningOrderKey           由产品varietyId+用户手机号码+支付方式组成
+     * @param productLightningOrderStatus
+     */
+    public void setLightningOrderStatus(String lightningOrderKey, ProductLightningOrderStatus productLightningOrderStatus) {
+        getEditor().putString(lightningOrderKey, new Gson().toJson(productLightningOrderStatus)).apply();
+    }
+
+    public ProductLightningOrderStatus getLightningOrderStatus(String lightningOrderKey) {
+        String lightningOrder = mPrefs.getString(lightningOrderKey, null);
+        if (lightningOrder != null) {
+            return new Gson().fromJson(lightningOrder, ProductLightningOrderStatus.class);
+        }
+        return null;
     }
 }

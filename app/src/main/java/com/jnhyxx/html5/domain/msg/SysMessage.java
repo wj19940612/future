@@ -9,11 +9,13 @@ public class SysMessage implements Serializable {
     private static final long serialVersionUID = 6769828919623446685L;
 
     /**
-     * 0,发送状态 0 待审和 1 已审核  2 待发送
+     * 0  push
+     * 1 弹窗
+     * 2 混合
      */
-    public static final int PUSH_STATUS_CHECK_PENDING = 0;
-    public static final int PUSH_STATUS_CHECK_PENDED = 1;
-    public static final int PUSH_STATUS_WAIT_SEND = 2;
+    public static final int PUSH_SYS_TYPE_PUSH = 0;
+    public static final int PUSH_SYS_TYPE_POPUP = 1;
+    public static final int PUSH_SYS_TYPE_MIX = 2;
 
     /**
      * 0代表 提现信息提示 1 代表订单 平仓 和 止赢止损
@@ -108,6 +110,15 @@ public class SysMessage implements Serializable {
      */
     private boolean success;
 
+    /**
+     * 系统消息种类
+     * 0  push
+     * 1 弹窗
+     * 2 混合
+     */
+    private int pushSendType;
+
+
     public String getCreateTime() {
         return createTime;
     }
@@ -147,6 +158,7 @@ public class SysMessage implements Serializable {
     public boolean isSuccess() {
         return success;
     }
+
     public String getPushMsg() {
         return pushMsg;
     }
@@ -230,6 +242,16 @@ public class SysMessage implements Serializable {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
+    public int getPushSendType() {
+        return pushSendType;
+    }
+
+    public void setPushSendType(int pushSendType) {
+        this.pushSendType = pushSendType;
+    }
+
+
     @Override
     public String toString() {
         return "SysTradeMessage{" +

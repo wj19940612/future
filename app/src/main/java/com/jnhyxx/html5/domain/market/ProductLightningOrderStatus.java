@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,17 +13,26 @@ import java.util.List;
  * 闪电下单状态
  */
 
-public class ProductLightningOrderStatus {
+public class ProductLightningOrderStatus implements Serializable {
+    private static final long serialVersionUID = -6950030646707014378L;
+
     private static final String TAG = "ProductLightningOrderSt";
 
     public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
 
+    //服务端的产品配资数据
+    public static final int RESULT_CODE_AGAIN_SETLIGHTNING_ORDER_ = 505;
 
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
     //表示闪电下单按钮打开同意协议的fragment的标志
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
+
+    //闪电下单打开的返回码
+    public static final int  RESULT_CODE_LIGHTNING_ORDER_OPEN= 452;
+    //闪电下单关闭的返回码
+    public static final int  RESULT_CODE_LIGHTNING_ORDER_CLOSE= 50000;
 
     /**
      * assetsId : 1
@@ -75,6 +86,11 @@ public class ProductLightningOrderStatus {
      * 费率
      */
     private double ratio;
+
+    /**
+     * 产品配资
+     */
+    FuturesFinancing futuresFinancing;
 
 
     public int getPayType() {
@@ -157,6 +173,10 @@ public class ProductLightningOrderStatus {
         this.stopProfitPoint = stopProfitPoint;
     }
 
+    public void setFuturesFinancing(FuturesFinancing futuresFinancing) {
+        this.futuresFinancing = futuresFinancing;
+    }
+
     @Override
     public String toString() {
         return "ProductLightningOrderStatus{" +
@@ -166,15 +186,17 @@ public class ProductLightningOrderStatus {
                 ", handsNum=" + handsNum +
                 ", stopLossPrice=" + stopLossPrice +
                 ", stopWinPrice=" + stopWinPrice +
+                ", stopProfitPoint=" + stopProfitPoint +
                 ", marginMoney=" + marginMoney +
                 ", fees=" + fees +
                 ", ratio=" + ratio +
-                ", stopProfitPoint=" + stopProfitPoint +
+                ", futuresFinancing=" + futuresFinancing +
                 '}';
     }
 
     /**
      * 本地的闪电下单数据和产品的配资进行对比，如果不相同，则闪电下单失效
+     *
      * @param futuresFinancing 产品配资方案
      * @return
      */
@@ -201,4 +223,20 @@ public class ProductLightningOrderStatus {
         return false;
     }
 
+    public List<FuturesFinancing.StopLoss> getStopLossList(Product product) {
+        List<FuturesFinancing.StopLoss> result = new ArrayList<>();
+        if (futuresFinancing != null) {
+            for (FuturesFinancing.AssetsBean assetsBean : futuresFinancing.getAssets()) {
+                if (assetsBean.getStopLossBeat() == getStopLossPrice()) {
+                    //是否是默认手数
+                    assetsBean.setIsDefault(1);
+                }
+                FuturesFinancing.StopLoss stopLoss = new FuturesFinancing.StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean);
+
+                result.add(stopLoss);
+            }
+        }
+        return result;
+    }
+    
 }

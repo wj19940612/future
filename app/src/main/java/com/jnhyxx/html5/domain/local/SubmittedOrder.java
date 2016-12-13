@@ -1,6 +1,11 @@
 package com.jnhyxx.html5.domain.local;
 
+
 public class SubmittedOrder {
+
+    //普通下单
+    public static final int SUBMIT_TYPE_NORMAL = 1;
+    public static final int SUBMIT_TYPE_LIGHTNING_ORDER = 2;
 
     private int varietyId;
     private int payType;
@@ -10,9 +15,16 @@ public class SubmittedOrder {
     private double orderPrice; // should be lastPrice
     private int direction; // long - 1, short - 0
 
-    public SubmittedOrder(int varietyId, int direction) {
+    /**
+     * 1  普通下单
+     * 2  闪电下单
+     */
+    private int submitType = 1;
+
+    public SubmittedOrder(int varietyId, int direction, int submitType) {
         this.varietyId = varietyId;
         this.direction = direction;
+        this.submitType = submitType;
     }
 
     public void setPayType(int payType) {
@@ -39,6 +51,14 @@ public class SubmittedOrder {
         return direction;
     }
 
+    public int getSubmitType() {
+        return submitType;
+    }
+
+    public void setSubmitType(int submitType) {
+        this.submitType = submitType;
+    }
+
     @Override
     public String toString() {
         return "SubmittedOrder{" +
@@ -49,6 +69,7 @@ public class SubmittedOrder {
                 ", stopWinBeat=" + stopWinBeat +
                 ", orderPrice=" + orderPrice +
                 ", direction=" + direction +
+                ", submitType=" + submitType +
                 '}';
     }
 }

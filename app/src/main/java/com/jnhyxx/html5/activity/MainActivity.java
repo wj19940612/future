@@ -34,7 +34,6 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
-import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 import java.net.URISyntaxException;
@@ -66,7 +65,6 @@ public class MainActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(PushReceiver.PUSH_ACTION)) {
                 final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushReceiver.KEY_PUSH_DATA);
-                Log.d(TAG, "消息推送 " + sysMessage.getCreateTime() + " 转换 " + DateUtil.format(Long.valueOf(sysMessage.getCreateTime())));
                 if (sysMessage != null && !Preference.get().hasShowedThisSysMessage(sysMessage)) {
                     HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                             .setOnCheckDetailListener(new HomePopup.OnClickListener() {

@@ -250,7 +250,7 @@
     <string name="kline_chart">日线图</string>
     <string name="flash_chart">闪电图</string>
     <string name="plate">盘口</string>
-    <string name="day_k_line">日K线</string>
+    <string name="day_k_line">日K</string>
     <string name="buy_long">买涨</string>
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>

@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.igexin.sdk.PushConsts;
 import com.igexin.sdk.PushManager;
 import com.jnhyxx.html5.Preference;
@@ -57,18 +58,19 @@ public class PushReceiver extends BroadcastReceiver {
 
                 if (payload != null) {
                     String data = new String(payload);
-                    Log.d(TAG, "===data  " + data);
-
-                    if (mainIsTopActivity(context)) {
+                    try {
+                        Log.d(TAG, "===data  " + data);
                         SysMessage sysMessage = new Gson().fromJson(data, SysMessage.class);
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION).putExtra(KEY_PUSH_DATA, sysMessage));
-                    } else {
-                        Intent messageIntent = setPendingIntent(context, data);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                        createNotification(context, pendingIntent, data);
-
+                        if (mainIsTopActivity(context) && sysMessage.getPushSendType() != SysMessage.PUSH_SYS_TYPE_PUSH) {
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(PUSH_ACTION).putExtra(KEY_PUSH_DATA, sysMessage));
+                        } else {
+                            Intent messageIntent = setPendingIntent(context, data);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, messageIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                            createNotification(context, pendingIntent, data);
+                        }
+                    } catch (JsonSyntaxException e) {
+                        Log.d(TAG, "  " + e.getCause());
                     }
-
 
                     Log.d("GetuiSdkDemo", "receiver payload : " + data);
 
@@ -172,7 +174,7 @@ public class PushReceiver extends BroadcastReceiver {
         builder.setContentTitle(sysMessage.getPushTopic());
         builder.setContentText(sysMessage.getPushContent());
         builder.setContentIntent(pendingIntent);
-        builder.setWhen(System.currentTimeMillis());
+        builder.setWhen(Long.valueOf(sysMessage.getCreateTime()));
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);

@@ -127,15 +127,15 @@ public class Preference {
     }
 
     public boolean hasShowedThisSysMessage(SysMessage sysMessage) {
-        String sysMessageId = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
-        if (sysMessageId.equals(sysMessage.getId())) {
+        String sysMessageCreateTime = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
+        if (sysMessageCreateTime.equals(sysMessage.getCreateTime())) {
             return true;
         }
         return false;
     }
 
     public void setThisSysMessageShowed(SysMessage sysMessage) {
-        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getId()).apply();
+        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getCreateTime()).apply();
     }
 
     public boolean hasShowedThisLastTeacherCommand(LiveHomeChatInfo teacherCommand) {

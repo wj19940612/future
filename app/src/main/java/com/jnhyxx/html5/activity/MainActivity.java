@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.jnhyxx.html5.Preference;
@@ -33,6 +34,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 import java.net.URISyntaxException;
@@ -64,7 +66,8 @@ public class MainActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(PushReceiver.PUSH_ACTION)) {
                 final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushReceiver.KEY_PUSH_DATA);
-                if (sysMessage != null) {
+                Log.d(TAG, "消息推送 " + sysMessage.getCreateTime() + " 转换 " + DateUtil.format(Long.valueOf(sysMessage.getCreateTime())));
+                if (sysMessage != null && !Preference.get().hasShowedThisSysMessage(sysMessage)) {
                     HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                             .setOnCheckDetailListener(new HomePopup.OnClickListener() {
                                 @Override
@@ -74,6 +77,7 @@ public class MainActivity extends BaseActivity {
                                             .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
                                 }
                             }).show();
+                    Preference.get().setThisSysMessageShowed(sysMessage);
                 }
             }
         }
@@ -205,7 +209,7 @@ public class MainActivity extends BaseActivity {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushReceiver.PUSH_ACTION));
-//        requestHomePopup();
+        requestHomePopup();
     }
 
     private void requestHomePopup() {
@@ -221,6 +225,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showSysMessageDialog(final SysMessage sysMessage) {
+        Log.d(TAG, "弹窗消息  " + sysMessage.getCreateTime());
         if (!Preference.get().hasShowedThisSysMessage(sysMessage)) {
             HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                     .setOnCheckDetailListener(new HomePopup.OnClickListener() {

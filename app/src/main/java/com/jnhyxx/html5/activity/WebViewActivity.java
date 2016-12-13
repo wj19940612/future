@@ -37,6 +37,7 @@ import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class WebViewActivity extends BaseActivity {
+
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
     public static String EX_RAW_COOKIE = "rawCookie";
@@ -52,8 +53,7 @@ public class WebViewActivity extends BaseActivity {
     Button mRefreshButton;
     @BindView(R.id.errorPage)
     LinearLayout mErrorPage;
-    @BindView(R.id.finishView)
-    View mView;
+
     private boolean mLoadSuccess;
     protected String mPageUrl;
     protected String mTitle;
@@ -73,10 +73,6 @@ public class WebViewActivity extends BaseActivity {
 
     public WebView getWebView() {
         return mWebView;
-    }
-
-    protected View getFinishView() {
-        return mView;
     }
 
     @Override
@@ -261,15 +257,16 @@ public class WebViewActivity extends BaseActivity {
                 mWebView.setVisibility(View.GONE);
                 mErrorPage.setVisibility(View.VISIBLE);
             }
-            if (isNotNeedNetTitle()) {
+            if (isNeedViewTitle()) {
+                String titleText = view.getTitle();
+                if (!TextUtils.isEmpty(titleText) && !url.contains(titleText)) {
+                    mTitle = titleText;
+                }
                 mTitleBar.setTitle(mTitle);
-                return;
+            } else {
+                mTitleBar.setTitle(mTitle);
             }
-            String titleText = view.getTitle();
-            if (!TextUtils.isEmpty(titleText) && !url.contains(titleText)) {
-                mTitle = titleText;
-            }
-            mTitleBar.setTitle(mTitle);
+
         }
 
         @Override
@@ -300,8 +297,8 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
-    protected boolean isNotNeedNetTitle() {
-        return false;
+    protected boolean isNeedViewTitle() {
+        return true;
     }
 
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {

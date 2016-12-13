@@ -534,6 +534,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                     @Override
                     public void onRespSuccess(List<ServerIpPort> marketServers) {
                         if (marketServers != null && marketServers.size() > 0) {
+                            if (getLiveInteractionFragment() != null) {
+                                getLiveInteractionFragment().hideInputBox();
+                            }
                             Launcher.with(LiveActivity.this, TradeActivity.class)
                                     .putExtra(Product.EX_PRODUCT, productPkg.getProduct())
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)

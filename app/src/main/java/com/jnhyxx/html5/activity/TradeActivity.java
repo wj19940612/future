@@ -280,7 +280,6 @@ public class TradeActivity extends BaseActivity implements
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
                                 if (futuresFinancing != null) {
                                     futuresFinancing.setProductLightningOrderStatus(mLocalLightningStatus);
-//                                    mFuturesFinancing = futuresFinancing;
                                     Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
@@ -835,7 +834,6 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void submitOrder(final SubmittedOrder submittedOrder) {
-        Log.d("SubmittedOrder", "提交的订单数据" + submittedOrder.toString());
         API.Order.submitOrder(submittedOrder).setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

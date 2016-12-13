@@ -68,7 +68,6 @@ import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -691,12 +690,7 @@ public class TradeActivity extends BaseActivity implements
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
                         if (klineDataList != null && klineDataList.size() > 0) {
                             KlineView klineView = mChartContainer.getKlineView();
-                            Collections.sort(klineDataList, new Comparator<KlineViewData>() {
-                                @Override
-                                public int compare(KlineViewData o1, KlineViewData o2) {
-                                    return (int) (o1.getTimeStamp() - o2.getTimeStamp());
-                                }
-                            });
+                            Collections.reverse(klineDataList);
                             if (klineView == null) return;
                             klineView.setDataList(klineDataList);
                         }

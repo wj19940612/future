@@ -22,6 +22,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -174,7 +175,7 @@ public class PushReceiver extends BroadcastReceiver {
         builder.setContentTitle(sysMessage.getPushTopic());
         builder.setContentText(sysMessage.getPushContent());
         builder.setContentIntent(pendingIntent);
-        builder.setWhen(Long.valueOf(sysMessage.getCreateTime()));
+        builder.setWhen(DateUtil.getStringToDate(sysMessage.getCreateTime()));
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);

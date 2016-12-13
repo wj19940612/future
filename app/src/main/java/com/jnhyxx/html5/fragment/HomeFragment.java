@@ -23,8 +23,8 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
+import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
 import com.jnhyxx.html5.activity.web.NewbieActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -86,10 +86,10 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onBannerClick(Information information) {
                 if (information.isH5Style()) {
-                    Launcher.with(getActivity(), WebViewActivity.class)
-                            .putExtra(WebViewActivity.EX_URL, information.getContent())
-                            .putExtra(WebViewActivity.EX_TITLE, information.getTitle())
-                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                    Launcher.with(getActivity(), HideTitleWebActivity.class)
+                            .putExtra(HideTitleWebActivity.EX_URL, information.getContent())
+                            .putExtra(HideTitleWebActivity.EX_TITLE, information.getTitle())
+                            .putExtra(HideTitleWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                             .execute();
                 } else {
                     Launcher.with(getActivity(), BannerActivity.class)

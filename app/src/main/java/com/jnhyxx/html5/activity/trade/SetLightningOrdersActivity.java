@@ -81,7 +81,9 @@ public class SetLightningOrdersActivity extends BaseActivity {
     //判断是否有期货配资
     private boolean hasFuturesFinancing;
 
+    //用来包装提交到服务器的闪电下单的类
     private LightningOrderAsset mLightningOrderAsset;
+    //本地缓存的闪电下单数据
     private LightningOrderAsset mLocalLightningOrderAsset;
 
     @Override
@@ -202,8 +204,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         if (mFuturesFinancing != null) {
                             mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(LightningOrderAsset.createLightningOrderKey(mProduct, mFundType));
                             hasFuturesFinancing = true;
-                            if (mLightningOrderAsset != null) {
-                                mLightningOrderAsset.setRatio(mFuturesFinancing.getRatio());
+                            mLightningOrderAsset.setRatio(mFuturesFinancing.getRatio());
+                            if (mLocalLightningOrderAsset != null) {
                                 boolean compareDataWithWeb = mLocalLightningOrderAsset.isValid(futuresFinancing);
                                 if (compareDataWithWeb) {
                                     updatePlaceOrderViews();

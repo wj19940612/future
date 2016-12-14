@@ -164,22 +164,27 @@ public class TradeActivity extends BaseActivity implements
 
     //根据普通下单或者闪电下单改变买涨买跌按钮文字
     private void updateBuyButtonsText(FullMarketData data) {
-        if (data == null) return;
-        if (mLightningOrderBtn.isSelected()) {
-            String lightningOrderBuyLong = getString(R.string.lightning_orders_buy_long)
-                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
-            mBuyLongBtn.setText(lightningOrderBuyLong);
-            String lightningOrderBuyShort = getString(R.string.lightning_orders_buy_short)
-                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
-            mSellShortBtn.setText(lightningOrderBuyShort);
-        } else {
-            String buyLong = getString(R.string.buy_long)
-                    + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
-            mBuyLongBtn.setText(buyLong);
-            String sellShort = getString(R.string.sell_short)
-                    + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
-            mSellShortBtn.setText(sellShort);
+        if (data != null) {
+            if (mLightningOrderBtn.isSelected()) {
+                String lightningOrderBuyLong = getString(R.string.lightning_orders_buy_long)
+                        + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
+                mBuyLongBtn.setText(lightningOrderBuyLong);
+                String lightningOrderBuyShort = getString(R.string.lightning_orders_buy_short)
+                        + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
+                mSellShortBtn.setText(lightningOrderBuyShort);
+            } else {
+                setNormalBuyButtonsText(data);
+            }
         }
+    }
+
+    private void setNormalBuyButtonsText(FullMarketData data) {
+        String buyLong = getString(R.string.buy_long)
+                + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
+        mBuyLongBtn.setText(buyLong);
+        String sellShort = getString(R.string.sell_short)
+                + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
+        mSellShortBtn.setText(sellShort);
     }
 
     @Override
@@ -662,10 +667,13 @@ public class TradeActivity extends BaseActivity implements
 
                     hideFragmentOfContainer();
                     updateChartView(); // based on product
-                    updateLightningOrderView(); // based on product
 
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+                    boolean isLightningOrderOpened = LightningOrderAsset.isLightningOrderOpened(mProduct, mFundType);
+                    enableLightningOrderView(isLightningOrderOpened);
+                    updateLightningOrderView(); // based on product
 
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;

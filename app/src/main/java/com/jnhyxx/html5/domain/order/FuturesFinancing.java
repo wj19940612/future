@@ -287,7 +287,6 @@ public class FuturesFinancing implements Serializable {
         private int profitLossScale;
         private String sign;
 
-
         public StopProfit(int stopProfitPoint, double stopProfit, int profitLossScale, String sign) {
             this.stopProfitPoint = stopProfitPoint;
             this.stopProfit = stopProfit;
@@ -320,7 +319,6 @@ public class FuturesFinancing implements Serializable {
         private int profitLossScale;
         private String sign;
         private AssetsBean assetsBean;
-
 
         public StopLoss(int profitLossScale, String sign, AssetsBean assetsBean) {
             this.profitLossScale = profitLossScale;

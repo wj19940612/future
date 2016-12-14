@@ -19,7 +19,13 @@ public class SubmittedOrder {
      * 1  普通下单
      * 2  闪电下单
      */
-    private int submitType = 1;
+    private int submitType;
+
+    public SubmittedOrder(int varietyId, int direction) {
+        this.varietyId = varietyId;
+        this.direction = direction;
+        this.submitType = SUBMIT_TYPE_NORMAL;
+    }
 
     public SubmittedOrder(int varietyId, int direction, int submitType) {
         this.varietyId = varietyId;

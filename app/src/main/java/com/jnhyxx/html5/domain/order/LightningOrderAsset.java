@@ -1,10 +1,14 @@
 package com.jnhyxx.html5.domain.order;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,15 +16,10 @@ import java.util.List;
  * 闪电下单状态
  */
 
-public class ProductLightningOrderStatus implements Serializable {
-    private static final long serialVersionUID = -6950030646707014378L;
+public class LightningOrderAsset {
 
     private static final String TAG = "ProductLightningOrderSt";
 
-    public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
-
-    //服务端的产品配资数据
-    public static final int RESULT_CODE_AGAIN_SETLIGHTNING_ORDER_ = 505;
 
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
@@ -194,7 +193,7 @@ public class ProductLightningOrderStatus implements Serializable {
      * @param futuresFinancing 产品配资方案
      * @return
      */
-    public boolean compareDataWithWeb(FuturesFinancing futuresFinancing) {
+    public boolean isValid(FuturesFinancing futuresFinancing) {
         if (futuresFinancing.getAssets() == null && futuresFinancing.getAssets().isEmpty())
             return false;
         List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
@@ -264,5 +263,63 @@ public class ProductLightningOrderStatus implements Serializable {
             }
         }
         return selectIndex;
+    }
+
+    /**
+     * 本地存储闪电下单数据
+     *
+     * @param lightningOrderKey
+     * @param lightningOrderAsset
+     */
+    public static void setLocalLightningOrder(String lightningOrderKey, LightningOrderAsset lightningOrderAsset) {
+        Preference.get().setLightningOrderAsset(lightningOrderKey, lightningOrderAsset);
+    }
+
+    /**
+     * 获取本地的闪电数据
+     *
+     * @param lightningOrderKey
+     * @return
+     */
+    public static LightningOrderAsset getLocalLightningOrderAsset(String lightningOrderKey) {
+        return Preference.get().getLightningOrderAsset(lightningOrderKey);
+    }
+
+    //判断产品闪电下单是否开启
+    public static boolean isLightningOrderOpen(String lightningOrderKey) {
+        return !TextUtils.isEmpty(lightningOrderKey) && getLocalLightningOrderAsset(lightningOrderKey) != null;
+    }
+
+    public static String createLightningOrderKey(Product product, int fundType) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(product.getVarietyId());
+        stringBuilder.append(LocalUser.getUser().getPhone());
+        stringBuilder.append(fundType);
+        return stringBuilder.toString();
+    }
+
+    public static SubmittedOrder getSubmittedOrder(Product product, int fundType, int buyType, FullMarketData fullMarketData) {
+
+        //        SubmittedOrder submittedOrder = new SubmittedOrder(mProduct.getVarietyId(), buyType, SubmittedOrder.SUBMIT_TYPE_LIGHTNING_ORDER);
+//        if (mFullMarketData != null) {
+//            //如果是买涨 则最新买入价	为卖一价;反之如果是买跌，则为买一价
+//            submittedOrder.setOrderPrice(buyType == LightningOrderAsset.TYPE_BUY_LONG ? mFullMarketData.getAskPrice() : mFullMarketData.getBidPrice());
+//            submittedOrder.setPayType(mFundType);
+//            LightningOrderAsset localLightningStatus = LocalLightningOrder.getLocalLightningOrderStatus(getLocalLightningOrderStatusKey());
+//            if (localLightningStatus != null) {
+//                submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
+//                submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
+//                submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
+//                submitOrder(submittedOrder);
+//            }
+//        }
+
+
+        // TODO: 14/12/2016 补全
+        return null;
+    }
+
+    public static boolean isLightningOrderOpened() {
+        return false;
     }
 }

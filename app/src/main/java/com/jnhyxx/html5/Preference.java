@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
-import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 
 public class Preference {
@@ -158,16 +158,16 @@ public class Preference {
      * 存储闪现下单数据
      *
      * @param lightningOrderKey           由产品varietyId+用户手机号码+支付方式组成
-     * @param productLightningOrderStatus
+     * @param lightningOrderAsset
      */
-    public void setLightningOrderStatus(String lightningOrderKey, ProductLightningOrderStatus productLightningOrderStatus) {
-        getEditor().putString(lightningOrderKey, new Gson().toJson(productLightningOrderStatus)).apply();
+    public void setLightningOrderAsset(String lightningOrderKey, LightningOrderAsset lightningOrderAsset) {
+        getEditor().putString(lightningOrderKey, new Gson().toJson(lightningOrderAsset)).commit();
     }
 
-    public ProductLightningOrderStatus getLightningOrderStatus(String lightningOrderKey) {
+    public LightningOrderAsset getLightningOrderAsset(String lightningOrderKey) {
         String lightningOrder = mPrefs.getString(lightningOrderKey, null);
         if (lightningOrder != null) {
-            return new Gson().fromJson(lightningOrder, ProductLightningOrderStatus.class);
+            return new Gson().fromJson(lightningOrder, LightningOrderAsset.class);
         }
         return null;
     }

@@ -20,8 +20,8 @@ import com.jnhyxx.html5.fragment.order.HoldingFragment;
 import com.jnhyxx.html5.fragment.order.SetStopProfitLossFragment;
 import com.jnhyxx.html5.fragment.order.SettlementFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -90,10 +90,17 @@ public class OrderActivity extends BaseActivity implements
     @Override
     public void onHoldingFragmentSetStopProfitLossClick(final HoldingOrder order, final FullMarketData marketData) {
         API.Order.getStopProfitLossConfig(order.getShowId(), mFundType).setTag(TAG)
-                .setCallback(new Callback2<Resp<StopProfitLossConfig>, StopProfitLossConfig>() {
+                .setCallback(new Callback<Resp<StopProfitLossConfig>>() {
                     @Override
-                    public void onRespSuccess(StopProfitLossConfig stopProfitLossConfig) {
-                        showSetStopProfitLossFragment(order, marketData, stopProfitLossConfig);
+                    public void onReceive(Resp<StopProfitLossConfig> stopProfitLossConfigResp) {
+                        if (stopProfitLossConfigResp.isSuccess()) {
+                            StopProfitLossConfig stopProfitLossConfig = stopProfitLossConfigResp.getData();
+                            showSetStopProfitLossFragment(order, marketData, stopProfitLossConfig);
+                        } else {
+                            SmartDialog.with(getActivity(), stopProfitLossConfigResp.getMsg())
+                                    .setPositive(R.string.ok)
+                                    .show();
+                        }
                     }
                 }).fire();
     }

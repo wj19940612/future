@@ -114,6 +114,12 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                 }
                 diff = diff.multiply(eachPointMoney);
 
+                // 异常单收益计算恢复为 0
+                if (holdingOrder.getOrderStatus() < HoldingOrder.ORDER_STATUS_HOLDING ||
+                        holdingOrder.getOrderStatus() > HoldingOrder.ORDER_STATUS_CLOSING) {
+                    diff = new BigDecimal(0);
+                }
+
                 String lossProfitStr;
                 String lossProfitRmbStr;
                 double diffRmb = diff.multiply(new BigDecimal(ratio)).doubleValue();
@@ -508,6 +514,12 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                         diff = FinanceUtil.subtraction(item.getRealAvgPrice(), data.getAskPrice());
                     }
                     diff = diff.multiply(eachPointMoney);
+
+                    // 异常单收益计算恢复为 0
+                    if (item.getOrderStatus() < HoldingOrder.ORDER_STATUS_HOLDING ||
+                            item.getOrderStatus() > HoldingOrder.ORDER_STATUS_CLOSING) {
+                        diff = new BigDecimal(0);
+                    }
 
                     String lossProfitStr;
                     String lossProfitRmbStr;

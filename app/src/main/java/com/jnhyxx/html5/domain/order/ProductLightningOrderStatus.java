@@ -28,11 +28,6 @@ public class ProductLightningOrderStatus implements Serializable {
     //表示闪电下单按钮打开同意协议的fragment的标志
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
 
-    //闪电下单打开的返回码
-    public static final int RESULT_CODE_LIGHTNING_ORDER_OPEN = 452;
-    //闪电下单关闭的返回码
-    public static final int RESULT_CODE_LIGHTNING_ORDER_CLOSE = 50000;
-
     /**
      * assetsId : 1
      * varietyId : 2
@@ -244,7 +239,11 @@ public class ProductLightningOrderStatus implements Serializable {
             //获取止损集合
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
             List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(getSelectStopLossIndex()).getTradeQuantityList();
-            for (int i = 0; i < tradeQuantityList.size(); i++) {
+            for (int i = 0; i < tradeQuantityList.size(); i++) {//                    if (stopProfitList.get(j).getStopProfit() == getStopWinPrice()) {
+//                        Log.d(TAG, " j " + j + " " + stopProfitList.get(j).getStopProfit());
+//                        selectIndex = j;
+//                        isGetSelect = true;
+//                        break;
                 if (tradeQuantityList.get(i).getQuantity() == getHandsNum()) {
                     defaultIndex = i;
                     break;

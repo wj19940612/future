@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,15 +34,16 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity;
 import com.jnhyxx.html5.constans.Unit;
+import com.jnhyxx.html5.domain.local.LocalLightningOrder;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.fragment.order.AgreementFragment;
 import com.jnhyxx.html5.fragment.order.PlaceOrderFragment;
 import com.jnhyxx.html5.net.API;
@@ -263,14 +263,13 @@ public class TradeActivity extends BaseActivity implements
     private void getLightningOrdersStatus() {
         if (mProduct != null && LocalUser.getUser().isLogin()) {
             String lightningOrderKey = getLocalLightningOrderStatusKey();
-            mLocalLightningStatus = Preference.get().getLightningOrderStatus(lightningOrderKey);
+            mLocalLightningStatus = LocalLightningOrder.getLocalLightningOrderStatus(lightningOrderKey);
             if (mLocalLightningStatus != null) {
                 API.Order.getFuturesFinancing(mProduct.getVarietyId(), mFundType).setTag(TAG)
                         .setCallback(new Callback2<Resp<FuturesFinancing>, FuturesFinancing>() {
                             @Override
                             public void onRespSuccess(FuturesFinancing futuresFinancing) {
                                 if (futuresFinancing != null) {
-                                    futuresFinancing.setProductLightningOrderStatus(mLocalLightningStatus);
                                     Log.d("lightningOrder", "配资数据  " + futuresFinancing.toString());
                                     //本地闪电下单与服务器的比对
                                     boolean b = mLocalLightningStatus.compareDataWithWeb(futuresFinancing);
@@ -296,7 +295,6 @@ public class TradeActivity extends BaseActivity implements
             stringBuilder.append(mProduct.getVarietyId());
             stringBuilder.append(LocalUser.getUser().getPhone());
             stringBuilder.append(mFundType);
-            Log.d(TAG, "本地闪电的key " + stringBuilder.toString());
             return stringBuilder.toString();
         }
         return " ";
@@ -304,10 +302,7 @@ public class TradeActivity extends BaseActivity implements
 
     //判断产品的闪电下单是否开启
     public boolean isLightningOrderOpen() {
-        if (!TextUtils.isEmpty(getLocalLightningOrderStatusKey()) && Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey()) != null) {
-            return true;
-        }
-        return false;
+        return LocalLightningOrder.isLightningOrderOpen(getLocalLightningOrderStatusKey());
     }
 
     private void getWebOrderAssetStore() {
@@ -318,7 +313,7 @@ public class TradeActivity extends BaseActivity implements
                     public void onReceive(Resp<ProductLightningOrderStatus> productLightningOrderStatusResp) {
 
                         if (productLightningOrderStatusResp.isSuccess() && productLightningOrderStatusResp.hasData()) {
-                            Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), productLightningOrderStatusResp.getData());
+                            LocalLightningOrder.getLocalLightningOrder().setLightningOrder(getLocalLightningOrderStatusKey(), productLightningOrderStatusResp.getData());
                             mIsLightningOpen = true;
                             mLightningOrders.setSelected(true);
                         }
@@ -346,7 +341,7 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), null);
+                        LocalLightningOrder.getLocalLightningOrder().setLightningOrder(getLocalLightningOrderStatusKey(), null);
                         mIsLightningOpen = false;
                         ToastUtil.curt(R.string.lightning_orders_close);
                         mLightningOrders.setSelected(false);
@@ -388,18 +383,11 @@ public class TradeActivity extends BaseActivity implements
         if (requestCode == REQ_CODE_TOKEN_EXPIRED_LOGIN && resultCode == RESULT_OK) {
             getLightningOrdersStatus();
         }
-
-        //打开闪电下单回调
-        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDER_PAGE && resultCode == ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_OPEN) {
-            ToastUtil.curt(R.string.lightning_orders_open);
-            mLightningOrders.setSelected(true);
-            mIsLightningOpen = true;
-        }
-        //关闭闪电下单回调
-        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDER_PAGE && resultCode == ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_CLOSE) {
-            ToastUtil.curt(R.string.lightning_orders_close);
-            mLightningOrders.setSelected(false);
-            mIsLightningOpen = false;
+        //闪电下单回调
+        if (requestCode == REQ_CODE_SET_LIGHTNING_ORDER_PAGE && resultCode == RESULT_OK) {
+            ToastUtil.curt(isLightningOrderOpen() ? R.string.lightning_orders_open : R.string.lightning_orders_close);
+            mLightningOrders.setSelected(isLightningOrderOpen());
+            mIsLightningOpen = isLightningOrderOpen();
         }
 
     }
@@ -506,7 +494,7 @@ public class TradeActivity extends BaseActivity implements
             //如果是买涨 则最新买入价	为卖一价;反之如果是买跌，则为买一价
             submittedOrder.setOrderPrice(buyType == ProductLightningOrderStatus.TYPE_BUY_LONG ? mFullMarketData.getAskPrice() : mFullMarketData.getBidPrice());
             submittedOrder.setPayType(mFundType);
-            ProductLightningOrderStatus localLightningStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
+            ProductLightningOrderStatus localLightningStatus = LocalLightningOrder.getLocalLightningOrderStatus(getLocalLightningOrderStatusKey());
             if (localLightningStatus != null) {
                 submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
                 submittedOrder.setHandsNum(localLightningStatus.getHandsNum());

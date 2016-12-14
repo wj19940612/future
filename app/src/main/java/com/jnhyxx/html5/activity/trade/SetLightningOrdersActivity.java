@@ -11,15 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
-import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.constans.Unit;
+import com.jnhyxx.html5.domain.local.LocalLightningOrder;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -139,8 +139,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), null);
-                        setResult(ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_CLOSE);
+                        LocalLightningOrder.getLocalLightningOrder().setLightningOrder(getLocalLightningOrderStatusKey(), null);
+                        setResult(RESULT_OK);
                         if (!isFuturesFinChanged) {
                             onBackPressed();
                         }
@@ -159,8 +159,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
                                 Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-                                Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), mProductLightningOrderStatus);
-                                setResult(ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_OPEN);
+                                LocalLightningOrder.getLocalLightningOrder().setLightningOrder(getLocalLightningOrderStatusKey(), mProductLightningOrderStatus);
+                                setResult(RESULT_OK);
                                 finish();
                             } else {
                                 ToastUtil.curt(jsonObjectResp.getMsg());
@@ -213,7 +213,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
                         if (mFuturesFinancing != null) {
-                            mLightningOrderStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
+                            mLightningOrderStatus = LocalLightningOrder.getLocalLightningOrderStatus(getLocalLightningOrderStatusKey());
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
                             hasFuturesFinancing = true;
                             if (mLightningOrderStatus != null) {

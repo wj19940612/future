@@ -164,6 +164,7 @@ public class TradeActivity extends BaseActivity implements
 
     //根据普通下单或者闪电下单改变买涨买跌按钮文字
     private void updateBuyButtonsText(FullMarketData data) {
+        if (data == null) return;
         if (mLightningOrderBtn.isSelected()) {
             String lightningOrderBuyLong = getString(R.string.lightning_orders_buy_long)
                     + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
@@ -350,7 +351,7 @@ public class TradeActivity extends BaseActivity implements
         }
         //闪电下单回调
         if (requestCode == REQ_CODE_SET_LIGHTNING_ORDER_PAGE && resultCode == RESULT_OK) {
-            boolean isLightningOrderOpened = LightningOrderAsset.isLightningOrderOpened();
+            boolean isLightningOrderOpened = LightningOrderAsset.isLightningOrderOpened(mProduct, mFundType);
             enableLightningOrderView(isLightningOrderOpened);
             ToastUtil.curt(isLightningOrderOpened ? R.string.lightning_orders_open : R.string.lightning_orders_close);
         }

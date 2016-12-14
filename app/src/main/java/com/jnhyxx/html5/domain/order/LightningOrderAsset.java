@@ -80,11 +80,6 @@ public class LightningOrderAsset {
      */
     private double ratio;
 
-    /**
-     * 产品配资
-     */
-    FuturesFinancing futuresFinancing;
-
 
     public int getPayType() {
         return payType;
@@ -166,13 +161,10 @@ public class LightningOrderAsset {
         this.stopProfitPoint = stopProfitPoint;
     }
 
-    public void setFuturesFinancing(FuturesFinancing futuresFinancing) {
-        this.futuresFinancing = futuresFinancing;
-    }
 
     @Override
     public String toString() {
-        return "ProductLightningOrderStatus{" +
+        return "LightningOrderAsset{" +
                 "payType=" + payType +
                 ", assetsId=" + assetsId +
                 ", varietyId=" + varietyId +
@@ -183,7 +175,6 @@ public class LightningOrderAsset {
                 ", marginMoney=" + marginMoney +
                 ", fees=" + fees +
                 ", ratio=" + ratio +
-                ", futuresFinancing=" + futuresFinancing +
                 '}';
     }
 
@@ -217,7 +208,7 @@ public class LightningOrderAsset {
     }
 
     //获取止损的选择索引
-    public int getSelectStopLossIndex() {
+    public int getSelectStopLossIndex(FuturesFinancing futuresFinancing) {
         int stopLossIndex = 0;
         if (futuresFinancing != null && !futuresFinancing.getAssets().isEmpty()) {
             List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
@@ -232,12 +223,12 @@ public class LightningOrderAsset {
     }
 
     //获取被选择的手数
-    public int getSelectHandNum(Product product) {
+    public int getSelectHandNum(Product product, FuturesFinancing futuresFinancing) {
         int defaultIndex = 0;
         if (futuresFinancing != null) {
             //获取止损集合
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
-            List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(getSelectStopLossIndex()).getTradeQuantityList();
+            List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(getSelectStopLossIndex(futuresFinancing)).getTradeQuantityList();
             for (int i = 0; i < tradeQuantityList.size(); i++) {//
                 if (tradeQuantityList.get(i).getQuantity() == getHandsNum()) {
                     defaultIndex = i;
@@ -249,11 +240,11 @@ public class LightningOrderAsset {
     }
 
     //获取被选择的止盈数据
-    public int getSelectStopProfit(Product product) {
+    public int getSelectStopProfit(Product product, FuturesFinancing futuresFinancing) {
         int selectIndex = 0;
         if (futuresFinancing != null) {
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
-            List<FuturesFinancing.StopProfit> stopProfitList = stopLossList.get(getSelectStopLossIndex()).getStopProfitList();
+            List<FuturesFinancing.StopProfit> stopProfitList = stopLossList.get(getSelectStopLossIndex(futuresFinancing)).getStopProfitList();
             for (int i = 0; i < stopProfitList.size(); i++) {
                 if (stopProfitList.get(i).getStopProfit() == getStopWinPrice()) {
                     Log.d(TAG, " i " + i + " " + stopProfitList.get(i).getStopProfit());
@@ -285,10 +276,6 @@ public class LightningOrderAsset {
         return Preference.get().getLightningOrderAsset(lightningOrderKey);
     }
 
-    //判断产品闪电下单是否开启
-    public static boolean isLightningOrderOpen(String lightningOrderKey) {
-        return !TextUtils.isEmpty(lightningOrderKey) && getLocalLightningOrderAsset(lightningOrderKey) != null;
-    }
 
     public static String createLightningOrderKey(Product product, int fundType) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -299,27 +286,27 @@ public class LightningOrderAsset {
     }
 
     public static SubmittedOrder getSubmittedOrder(Product product, int fundType, int buyType, FullMarketData fullMarketData) {
-
-        //        SubmittedOrder submittedOrder = new SubmittedOrder(mProduct.getVarietyId(), buyType, SubmittedOrder.SUBMIT_TYPE_LIGHTNING_ORDER);
-//        if (mFullMarketData != null) {
-//            //如果是买涨 则最新买入价	为卖一价;反之如果是买跌，则为买一价
-//            submittedOrder.setOrderPrice(buyType == LightningOrderAsset.TYPE_BUY_LONG ? mFullMarketData.getAskPrice() : mFullMarketData.getBidPrice());
-//            submittedOrder.setPayType(mFundType);
-//            LightningOrderAsset localLightningStatus = LocalLightningOrder.getLocalLightningOrderStatus(getLocalLightningOrderStatusKey());
-//            if (localLightningStatus != null) {
-//                submittedOrder.setAssetsId(localLightningStatus.getAssetsId());
-//                submittedOrder.setHandsNum(localLightningStatus.getHandsNum());
-//                submittedOrder.setStopProfitPoint(localLightningStatus.getStopProfitPoint());
-//                submitOrder(submittedOrder);
-//            }
-//        }
-
-
-        // TODO: 14/12/2016 补全
-        return null;
+        SubmittedOrder submittedOrder = new SubmittedOrder(product.getVarietyId(), buyType, SubmittedOrder.SUBMIT_TYPE_LIGHTNING_ORDER);
+        if (fullMarketData != null) {
+            submittedOrder.setOrderPrice(buyType == TYPE_BUY_LONG ? fullMarketData.getAskPrice() : fullMarketData.getBidPrice());
+        }
+        submittedOrder.setPayType(fundType);
+        LightningOrderAsset localLightningOrderAsset = getLocalLightningOrderAsset(createLightningOrderKey(product, fundType));
+        submittedOrder.setAssetsId(localLightningOrderAsset.getAssetsId());
+        submittedOrder.setHandsNum(localLightningOrderAsset.getHandsNum());
+        submittedOrder.setStopProfitPoint(localLightningOrderAsset.getStopProfitPoint());
+        return submittedOrder;
     }
 
-    public static boolean isLightningOrderOpened() {
-        return false;
+    /**
+     * 判断闪电下单是否开启
+     *
+     * @param product  产品
+     * @param fundType 支付方式
+     * @return
+     */
+    public static boolean isLightningOrderOpened(Product product, int fundType) {
+        String lightningOrderKey = createLightningOrderKey(product, fundType);
+        return !TextUtils.isEmpty(lightningOrderKey) && getLocalLightningOrderAsset(lightningOrderKey) != null;
     }
 }

@@ -406,6 +406,7 @@
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="install_alipay_first">请先安装支付宝</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>

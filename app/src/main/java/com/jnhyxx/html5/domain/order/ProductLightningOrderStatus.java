@@ -1,11 +1,10 @@
-package com.jnhyxx.html5.domain.market;
+package com.jnhyxx.html5.domain.order;
 
 import android.util.Log;
 
-import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.domain.market.Product;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,9 +29,9 @@ public class ProductLightningOrderStatus implements Serializable {
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
 
     //闪电下单打开的返回码
-    public static final int  RESULT_CODE_LIGHTNING_ORDER_OPEN= 452;
+    public static final int RESULT_CODE_LIGHTNING_ORDER_OPEN = 452;
     //闪电下单关闭的返回码
-    public static final int  RESULT_CODE_LIGHTNING_ORDER_CLOSE= 50000;
+    public static final int RESULT_CODE_LIGHTNING_ORDER_CLOSE = 50000;
 
     /**
      * assetsId : 1
@@ -223,20 +222,57 @@ public class ProductLightningOrderStatus implements Serializable {
         return false;
     }
 
-    public List<FuturesFinancing.StopLoss> getStopLossList(Product product) {
-        List<FuturesFinancing.StopLoss> result = new ArrayList<>();
-        if (futuresFinancing != null) {
-            for (FuturesFinancing.AssetsBean assetsBean : futuresFinancing.getAssets()) {
-                if (assetsBean.getStopLossBeat() == getStopLossPrice()) {
-                    //是否是默认手数
-                    assetsBean.setIsDefault(1);
+    //获取止损的选择索引
+    public int getSelectStopLossIndex() {
+        int stopLossIndex = 0;
+        if (futuresFinancing != null && !futuresFinancing.getAssets().isEmpty()) {
+            List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
+            for (int i = 0; i < assets.size(); i++) {
+                if (assets.get(i).getStopLossBeat() == getStopLossPrice()) {
+                    stopLossIndex = i;
+                    break;
                 }
-                FuturesFinancing.StopLoss stopLoss = new FuturesFinancing.StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean);
-
-                result.add(stopLoss);
             }
         }
-        return result;
+        return stopLossIndex;
     }
-    
+
+    //获取被选择的手数
+    public int getSelectHandNum(Product product) {
+        int defaultIndex = 0;
+        if (futuresFinancing != null && !futuresFinancing.getAssets().isEmpty()) {
+            //获取止损集合
+            List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
+            for (int i = 0; i < stopLossList.size(); i++) {
+                //获取止损手数集合
+                List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(i).getTradeQuantityList();
+                for (int j = 0; j < tradeQuantityList.size(); j++) {
+                    if (tradeQuantityList.get(j).getQuantity() == getHandsNum()) {
+                        defaultIndex = j;
+                        break;
+                    }
+                }
+            }
+        }
+        return defaultIndex;
+    }
+
+    //获取被选择的止盈数据
+    public int getSelectStopProfit(Product product) {
+        int selectIndex = 0;
+        if (futuresFinancing != null) {
+            List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
+            for (int i = 0; i < stopLossList.size(); i++) {
+                List<FuturesFinancing.StopProfit> stopProfitList = stopLossList.get(i).getStopProfitList();
+                for (int j = 0; j < stopProfitList.size(); j++) {
+                    if (stopProfitList.get(j).getStopProfit() == getStopWinPrice()) {
+                        Log.d(TAG," j "+j +" "+stopProfitList.get(j).getStopProfit());
+                        selectIndex = j;
+                        break;
+                    }
+                }
+            }
+        }
+        return selectIndex;
+    }
 }

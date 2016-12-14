@@ -6,7 +6,7 @@ import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 

@@ -17,7 +17,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.net.API;
@@ -218,9 +218,22 @@ public class SetLightningOrdersActivity extends BaseActivity {
                             if (lightningOrderStatus != null) {
                                 boolean compareDataWithWeb = lightningOrderStatus.compareDataWithWeb(futuresFinancing);
                                 if (compareDataWithWeb) {
-                                    futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
+//                                    futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
                                     updatePlaceOrderViews();
+
+                                    lightningOrderStatus.setFuturesFinancing(futuresFinancing);
+                                    //选择的手数
                                     setLayoutStatus();
+
+                                    int selectHandNum = lightningOrderStatus.getSelectHandNum(mProduct);
+                                    mTradeQuantitySelector.selectItem(selectHandNum);
+                                    int selectStopProfit = lightningOrderStatus.getSelectStopProfit(mProduct);
+                                    mTouchStopProfitSelector.selectItem(selectStopProfit);
+                                    int selectStopLossIndex = lightningOrderStatus.getSelectStopLossIndex();
+                                    mTouchStopLossSelector.selectItem(selectStopLossIndex);
+
+                                    Log.d(TAG, " 选择手数 " + selectHandNum + " 选择止盈 " + selectStopProfit + " 选择止损 " + selectStopLossIndex);
+
                                 } else {
                                     showLightningOrderOverDue();
                                 }

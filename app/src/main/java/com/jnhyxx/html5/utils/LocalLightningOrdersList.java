@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 
 import java.util.HashMap;
 

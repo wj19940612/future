@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.domain.order;
 
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 

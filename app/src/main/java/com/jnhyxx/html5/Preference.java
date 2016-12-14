@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 
 public class Preference {

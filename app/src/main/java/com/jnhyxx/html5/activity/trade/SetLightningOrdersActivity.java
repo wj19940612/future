@@ -158,7 +158,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         @Override
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
-                                Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
                                 LocalLightningOrder.getLocalLightningOrder().setLightningOrder(getLocalLightningOrderStatusKey(), mProductLightningOrderStatus);
                                 setResult(RESULT_OK);
                                 finish();
@@ -219,10 +218,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                             if (mLightningOrderStatus != null) {
                                 boolean compareDataWithWeb = mLightningOrderStatus.compareDataWithWeb(futuresFinancing);
                                 if (compareDataWithWeb) {
-//                                    futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
                                     updatePlaceOrderViews();
                                     mLightningOrderStatus.setFuturesFinancing(futuresFinancing);
-                                    //选择的手数
                                     int selectStopLossIndex = mLightningOrderStatus.getSelectStopLossIndex();
                                     mTouchStopLossSelector.selectItem(selectStopLossIndex);
                                     setLayoutStatus();

@@ -239,11 +239,7 @@ public class ProductLightningOrderStatus implements Serializable {
             //获取止损集合
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
             List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(getSelectStopLossIndex()).getTradeQuantityList();
-            for (int i = 0; i < tradeQuantityList.size(); i++) {//                    if (stopProfitList.get(j).getStopProfit() == getStopWinPrice()) {
-//                        Log.d(TAG, " j " + j + " " + stopProfitList.get(j).getStopProfit());
-//                        selectIndex = j;
-//                        isGetSelect = true;
-//                        break;
+            for (int i = 0; i < tradeQuantityList.size(); i++) {//
                 if (tradeQuantityList.get(i).getQuantity() == getHandsNum()) {
                     defaultIndex = i;
                     break;

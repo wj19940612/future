@@ -240,6 +240,7 @@ public class ProductLightningOrderStatus implements Serializable {
     //获取被选择的手数
     public int getSelectHandNum(Product product) {
         int defaultIndex = 0;
+        boolean isGetSelect = false;
         if (futuresFinancing != null && !futuresFinancing.getAssets().isEmpty()) {
             //获取止损集合
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
@@ -249,8 +250,12 @@ public class ProductLightningOrderStatus implements Serializable {
                 for (int j = 0; j < tradeQuantityList.size(); j++) {
                     if (tradeQuantityList.get(j).getQuantity() == getHandsNum()) {
                         defaultIndex = j;
+                        isGetSelect = true;
                         break;
                     }
+                }
+                if (isGetSelect) {
+                    break;
                 }
             }
         }
@@ -260,17 +265,20 @@ public class ProductLightningOrderStatus implements Serializable {
     //获取被选择的止盈数据
     public int getSelectStopProfit(Product product) {
         int selectIndex = 0;
+        boolean isGetSelect = false;
         if (futuresFinancing != null) {
             List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
             for (int i = 0; i < stopLossList.size(); i++) {
                 List<FuturesFinancing.StopProfit> stopProfitList = stopLossList.get(i).getStopProfitList();
                 for (int j = 0; j < stopProfitList.size(); j++) {
                     if (stopProfitList.get(j).getStopProfit() == getStopWinPrice()) {
-                        Log.d(TAG," j "+j +" "+stopProfitList.get(j).getStopProfit());
+                        Log.d(TAG, " j " + j + " " + stopProfitList.get(j).getStopProfit());
                         selectIndex = j;
+                        isGetSelect = true;
                         break;
                     }
                 }
+                if (isGetSelect) break;
             }
         }
         return selectIndex;

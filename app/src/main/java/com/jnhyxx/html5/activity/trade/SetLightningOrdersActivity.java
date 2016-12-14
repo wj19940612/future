@@ -85,6 +85,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private boolean hasFuturesFinancing;
 
     private ProductLightningOrderStatus mProductLightningOrderStatus;
+    private ProductLightningOrderStatus mLightningOrderStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,27 +213,21 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
                         if (mFuturesFinancing != null) {
-                            ProductLightningOrderStatus lightningOrderStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
+                            mLightningOrderStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
                             mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
                             hasFuturesFinancing = true;
-                            if (lightningOrderStatus != null) {
-                                boolean compareDataWithWeb = lightningOrderStatus.compareDataWithWeb(futuresFinancing);
+                            if (mLightningOrderStatus != null) {
+                                boolean compareDataWithWeb = mLightningOrderStatus.compareDataWithWeb(futuresFinancing);
                                 if (compareDataWithWeb) {
 //                                    futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
                                     updatePlaceOrderViews();
-
-                                    lightningOrderStatus.setFuturesFinancing(futuresFinancing);
+                                    mLightningOrderStatus.setFuturesFinancing(futuresFinancing);
                                     //选择的手数
+                                    int selectStopLossIndex = mLightningOrderStatus.getSelectStopLossIndex();
+                                    mTouchStopLossSelector.selectItem(selectStopLossIndex);
                                     setLayoutStatus();
 
-                                    int selectHandNum = lightningOrderStatus.getSelectHandNum(mProduct);
-                                    mTradeQuantitySelector.selectItem(selectHandNum);
-                                    int selectStopProfit = lightningOrderStatus.getSelectStopProfit(mProduct);
-                                    mTouchStopProfitSelector.selectItem(selectStopProfit);
-                                    int selectStopLossIndex = lightningOrderStatus.getSelectStopLossIndex();
-                                    mTouchStopLossSelector.selectItem(selectStopLossIndex);
-
-                                    Log.d(TAG, " 选择手数 " + selectHandNum + " 选择止盈 " + selectStopProfit + " 选择止损 " + selectStopLossIndex);
+                                    Log.d(TAG, "选择止损 " + selectStopLossIndex);
 
                                 } else {
                                     showLightningOrderOverDue();
@@ -288,6 +283,14 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     // 设置手数
                     List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
                     mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
+
+                    if (mLightningOrderStatus != null) {
+                        int selectHandNum = mLightningOrderStatus.getSelectHandNum(mProduct);
+                        mTradeQuantitySelector.selectItem(selectHandNum);
+                        int selectStopProfit = mLightningOrderStatus.getSelectStopProfit(mProduct);
+                        mTouchStopProfitSelector.selectItem(selectStopProfit);
+                        Log.d(TAG, " 选择手数 " + selectHandNum + " 选择止盈 " + selectStopProfit);
+                    }
 
                     mProductLightningOrderStatus.setAssetsId(stopLoss.getAssetsBean().getAssetsId());
                     mProductLightningOrderStatus.setStopLossPrice(((FuturesFinancing.StopLoss) configuration).getAssetsBean().getStopLossBeat());

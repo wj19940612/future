@@ -26,6 +26,8 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.netty.NettyClient;
+import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
@@ -41,6 +43,16 @@ import butterknife.Unbinder;
 
 
 public class PlaceOrderFragment extends BaseFragment {
+
+    public interface Callback {
+        void onPlaceOrderFragmentConfirmBtnClick(SubmittedOrder submittedOrder);
+
+        void onPlaceOrderFragmentEmptyAreaClick();
+
+        void onPlaceOrderFragmentShow();
+
+        void onPlaceOrderFragmentExited();
+    }
 
     private static final String TYPE = "longOrShort";
     public static final int TYPE_BUY_LONG = 1;
@@ -94,12 +106,24 @@ public class PlaceOrderFragment extends BaseFragment {
     private BlurEngine mBlurEngine;
     private Callback mCallback;
 
-    public static PlaceOrderFragment newInstance(int longOrShort, Product product, int fundType) {
+    private NettyHandler mNettyHandler = new NettyHandler() {
+        @Override
+        protected void onReceiveData(FullMarketData data) {
+            mMarketData = data;
+            if (mIsShowing || !isVisible()) return;
+            updateMarketDataRelatedView();
+            updateSubmittedOrder();
+        }
+    };
+
+    public static PlaceOrderFragment newInstance(int longOrShort, Product product, int fundType,
+                                                 FullMarketData marketData) {
         PlaceOrderFragment fragment = new PlaceOrderFragment();
         Bundle args = new Bundle();
         args.putInt(TYPE, longOrShort);
         args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
+        args.putParcelable(FullMarketData.EX_MARKET_DATA, marketData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,7 +135,7 @@ public class PlaceOrderFragment extends BaseFragment {
             mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnBuyBtnClickListener");
+                    + " must implement PlaceOrderFragment.Callback");
         }
     }
 
@@ -122,6 +146,7 @@ public class PlaceOrderFragment extends BaseFragment {
             mLongOrShort = getArguments().getInt(TYPE, 0);
             mProduct = getArguments().getParcelable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
+            mMarketData = getArguments().getParcelable(FullMarketData.EX_MARKET_DATA);
         }
     }
 
@@ -200,17 +225,11 @@ public class PlaceOrderFragment extends BaseFragment {
                     }
                 }).fire();
 
+        updateMarketDataRelatedView();
+        updateSubmittedOrder();
         updateBuyAskPriceBgAndConfirmBtn();
     }
 
-    public void setMarketData(FullMarketData data) {
-        mMarketData = data;
-
-        if (mIsShowing || !isAdded()) return;
-
-        updateMarketDataRelatedView();
-        updateSubmittedOrder();
-    }
 
     private void updateSubmittedOrder() {
         if (mSubmittedOrder != null && mMarketData != null) {
@@ -223,11 +242,13 @@ public class PlaceOrderFragment extends BaseFragment {
     }
 
     private void updateMarketDataRelatedView() {
-        mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
-        updateLastPriceView(mMarketData);
-        mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
-                FinanceUtil.formatWithScale(mMarketData.getAskPrice(), mProduct.getPriceDecimalScale()) :
-                FinanceUtil.formatWithScale(mMarketData.getBidPrice(), mProduct.getPriceDecimalScale()));
+        if (mMarketData != null) {
+            mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
+            updateLastPriceView(mMarketData);
+            mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
+                    FinanceUtil.formatWithScale(mMarketData.getAskPrice(), mProduct.getPriceDecimalScale()) :
+                    FinanceUtil.formatWithScale(mMarketData.getBidPrice(), mProduct.getPriceDecimalScale()));
+        }
     }
 
     private void updateLastPriceView(FullMarketData data) {
@@ -267,6 +288,13 @@ public class PlaceOrderFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mBlurEngine.onResume();
+        NettyClient.getInstance().addNettyHandler(mNettyHandler);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
     }
 
     private void updateRateAndMarketTimeView() {
@@ -361,20 +389,10 @@ public class PlaceOrderFragment extends BaseFragment {
                 break;
             case R.id.confirmButton:
                 if (mCallback != null) {
-                    mCallback.onConfirmBtnClick(mSubmittedOrder);
+                    mCallback.onPlaceOrderFragmentConfirmBtnClick(mSubmittedOrder);
                 }
                 break;
         }
-    }
-
-    public interface Callback {
-        void onConfirmBtnClick(SubmittedOrder submittedOrder);
-
-        void onPlaceOrderFragmentEmptyAreaClick();
-
-        void onPlaceOrderFragmentShow();
-
-        void onPlaceOrderFragmentExited();
     }
 
     @Override
@@ -405,9 +423,6 @@ public class PlaceOrderFragment extends BaseFragment {
         public void onAnimationEnd(Animation animation) {
             mIsShowing = false;
 
-            if (mMarketData != null) {
-                setMarketData(mMarketData);
-            }
             if (mFuturesFinancing != null) {
                 updatePlaceOrderViews();
             }

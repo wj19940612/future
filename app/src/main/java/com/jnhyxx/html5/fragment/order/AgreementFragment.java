@@ -58,14 +58,14 @@ public class AgreementFragment extends BaseFragment {
                 break;
             case R.id.readAndAgreeSign:
                 if (mCallback != null) {
-                    mCallback.onAgreeProtocolBtnClick(mLongOrShort);
+                    mCallback.onAgreementFragmentAgreeBtnClick(mLongOrShort);
                 }
                 break;
         }
     }
 
     public interface Callback {
-        void onAgreeProtocolBtnClick(int longOrShort);
+        void onAgreementFragmentAgreeBtnClick(int longOrShort);
         void onAgreementFragmentEmptyAreaClick();
         void onAgreementFragmentShow();
         void onAgreementFragmentExited();

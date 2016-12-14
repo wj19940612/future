@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class FullMarketData implements Parcelable {
 
+    public static final String EX_MARKET_DATA = "marketData";
 
     /**
      * askPrice : 45.14

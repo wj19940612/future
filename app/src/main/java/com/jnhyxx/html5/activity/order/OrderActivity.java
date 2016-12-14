@@ -42,6 +42,7 @@ public class OrderActivity extends BaseActivity implements
 
     private Product mProduct;
     private int mFundType;
+    private FullMarketData mMarketData;
     private OrderAdapter mOrderAdapter;
 
     @Override
@@ -54,7 +55,7 @@ public class OrderActivity extends BaseActivity implements
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(this, android.R.color.transparent));
-        mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType);
+        mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType, mMarketData);
         mViewPager.setAdapter(mOrderAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -62,6 +63,7 @@ public class OrderActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
+        mMarketData = intent.getParcelableExtra(FullMarketData.EX_MARKET_DATA);
     }
 
     @Override
@@ -76,27 +78,12 @@ public class OrderActivity extends BaseActivity implements
         NettyClient.getInstance().stop();
     }
 
+
     @Override
-    public void onHoldingFragmentClosePositionEventTriggered(String showIds) {
+    public void onHoldingFragmentClosePositionEventTriggered() {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);
         if (fragment != null) {
             fragment.setHoldingFragmentClosedPositions(true);
-        }
-
-        if (!TextUtils.isEmpty(showIds)) { // empty means close all. remember!!
-            Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-            if (fragmentById != null && fragmentById instanceof SetStopProfitLossFragment) {
-                HoldingOrder beingSetOrder = ((SetStopProfitLossFragment) fragmentById).getBeingSetOrder();
-                String[] showIdArray = showIds.split(";");
-                for (String showId : showIdArray) {
-                    if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
-                        onSetStopProfitLossFragmentCloseTriggered();
-                        SmartDialog.single(getActivity(), getString(R.string.being_set_order_is_closed))
-                                .setPositive(R.string.ok)
-                                .show();
-                    }
-                }
-            }
         }
     }
 
@@ -106,9 +93,34 @@ public class OrderActivity extends BaseActivity implements
                 .setCallback(new Callback2<Resp<StopProfitLossConfig>, StopProfitLossConfig>() {
                     @Override
                     public void onRespSuccess(StopProfitLossConfig stopProfitLossConfig) {
-                        showSetStopProfitLossFragment(order, marketData,stopProfitLossConfig);
+                        showSetStopProfitLossFragment(order, marketData, stopProfitLossConfig);
                     }
                 }).fire();
+    }
+
+    @Override
+    public void onHoldingFragmentRiskControlTriggered(String orders, String orderSplit, String stopLossSplit) {
+        if (TextUtils.isEmpty(orders)) return;
+
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (fragmentById != null && fragmentById instanceof SetStopProfitLossFragment) {
+            HoldingOrder beingSetOrder = ((SetStopProfitLossFragment) fragmentById).getBeingSetOrder();
+            String[] closingOrders = orders.split(orderSplit);
+            for (String closingOrder : closingOrders) {
+                String[] splits = closingOrder.split(stopLossSplit);
+                String showId = splits[0];
+                boolean stopLoss = Integer.valueOf(splits[1]).intValue() == HoldingOrder.SELL_OUT_STOP_LOSS;
+                if (!TextUtils.isEmpty(showId) && showId.equals(beingSetOrder.getShowId())) {
+                    onSetStopProfitLossFragmentCloseTriggered();
+                    String message = stopLoss ?
+                            getString(R.string.being_set_order_is_closed, getString(R.string.stop_loss)) :
+                            getString(R.string.being_set_order_is_closed, getString(R.string.stop_profit));
+                    SmartDialog.single(getActivity(), message)
+                            .setPositive(R.string.ok)
+                            .show();
+                }
+            }
+        }
     }
 
     private void showSetStopProfitLossFragment(HoldingOrder order, FullMarketData marketData,
@@ -166,14 +178,17 @@ public class OrderActivity extends BaseActivity implements
         private Context mContext;
         private Product mProduct;
         private int mFundType;
+        private FullMarketData mMarketData;
         private FragmentManager mFragmentManager;
 
-        public OrderAdapter(FragmentManager fm, Context context, Product product, int fundType) {
+        public OrderAdapter(FragmentManager fm, Context context,
+                            Product product, int fundType, FullMarketData marketData) {
             super(fm);
             mFragmentManager = fm;
             mContext = context;
             mProduct = product;
             mFundType = fundType;
+            mMarketData = marketData;
         }
 
         @Override
@@ -191,7 +206,7 @@ public class OrderActivity extends BaseActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return HoldingFragment.newInstance(mProduct, mFundType);
+                    return HoldingFragment.newInstance(mProduct, mFundType, mMarketData);
                 case 1:
                     return SettlementFragment.newInstance(mProduct, mFundType);
             }

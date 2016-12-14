@@ -17,17 +17,10 @@ public class API extends APIBase {
     private static final String TAG = "API";
     private static final int GET = Request.Method.GET;
 
-    public static final String TELE = "tele";
-    public static final String CODE = "code";
-    public static final String AUTH_CODE = "authCode";
-    public static final String PASSWORD = "password";
-    public static final String SIGN = "sign";
     public static final String TOKEN = "token";
     public static final String PAGE_NO = "pageNo";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TYPE = "type";
-    public static final String FUND_TYPE = "fundType";
-    public static final String FUTURES_TYPE = "futuresType";
     public static final String VERSION = "version";
 
     private API(String uri, ApiParams apiParams) {
@@ -373,26 +366,15 @@ public class API extends APIBase {
          * @return
          */
         public static String depositByBankApply(double money) {
-            return depositByBankApply() + "&money=" + money;
+            return getHost() + "/user/finance/deposit.do?&money=" + money;
         }
 
-        public static String depositByBankApply() {
-            return getHost() + "/user/finance/deposit.do?";
-        }
-
-
-//        /**
-//         * 接口名：用户充值(微信充值)
-//         * URL  http://域名/user/finance/depositByWeChat.do
-//         *
-//         * @param money
-//         * @return
-//         */
-//        public static API depositByWeChartApply(double money) {
-//            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
-//        }
-
-
+        /**
+         * 微信充值
+         *
+         * @param money
+         * @return
+         */
         public static String depositByWeChartApply(double money) {
             return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;
         }
@@ -402,16 +384,8 @@ public class API extends APIBase {
          * URL  http://域名/user/finance/depositByAlipay.do
          *
          * @param money
-         * @param platform 客户端平台（0：ios;1安卓
          * @return
          */
-        public static API depositByAliPay(double money, int platform) {
-            return new API("/user/finance/depositByAlipay.do",
-                    new ApiParams()
-                            .put("money", money)
-                            .put("platform", platform));
-        }
-
         public static String depositByAliPay(double money) {
             return getHost() + "/user/finance/depositByAlipay.do?" + "platform=" + SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID + "&money=" + money;
         }
@@ -988,7 +962,7 @@ public class API extends APIBase {
      * @return
      */
     public static String getCooperationAgreementUrl() {
-        return getHost() + "/agreement/tradeAndCost.html";
+        return getHost() + "/activity/Article.html?type=3&nohead=1";
     }
 
     /**
@@ -997,39 +971,38 @@ public class API extends APIBase {
      * @return
      */
     public static String getRiskNoticesUrl() {
-        return getHost() + "/agreement/risk.html";
+        return getHost() + "/activity/Article.html?type=4&nohead=1";
     }
 
     /**
      * 获取 交易规则 url
      *
-     * @param varietyType
+     * @param varietyId
      * @return
      */
-    public static String getTradeRule(String varietyType) {
-        return getHost() + "/activity/" + varietyType + "TradeRule.html";
+    public static String getTradeRule(int varietyId) {
+        return getHost() + "/activity/Article.html?type=2&varietyId=" + varietyId + "&nohead=1";
     }
 
     /**
      * 推广赚钱 url
      */
     public static String getPromotePage() {
-        return getHost() + "/mine/extension.html";
+        return getHost() + "/mine/extension.html?nohead=1";
     }
 
     /**
      * 推广赚钱 我的用户 url
      */
     public static String getPromoteMyUsers() {
-        return getHost() + "/mine/users.html";
+        return getHost() + "/mine/users.html?nohead=1";
     }
 
     /**
      * 注册界面的服务协议网址
-     * //服务协议的接口
      */
     public static String getRegisterServiceProtocol() {
-        return getHost() + "/xieyi/agreement.html";
+        return getHost() + "/activity/Article.html?type=5&nohead=1";
     }
 
     public static String getServiceQQ(String serviceQQ) {
@@ -1051,14 +1024,6 @@ public class API extends APIBase {
      * @return
      */
     public static String getNewbieUrl() {
-        return getHost() + "/newtrader.html";
-    }
-
-    public static String getLivePageLoginUrl() {
-        return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
-    }
-
-    public static String getLivePageShutUpHtmlUrl() {
-        return getHost() + "/zhibo/liveRules.html";
+        return getHost() + "/newtrader.html?nohead=1";
     }
 }

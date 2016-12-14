@@ -21,6 +21,9 @@ import java.util.List;
 
 public class HoldingOrderPresenter {
 
+    public static final String SPLIT_STOP_LOSS = "#risk_control#";
+    public static final String SPLIT_ORDERS = ";";
+
     private static final String TAG = "VolleyHttp";
 
     private static final int LOAD_DATA = 0;
@@ -51,6 +54,7 @@ public class HoldingOrderPresenter {
             }
         };
         mQueryJob = new QueryJob();
+        mPause = true;
     }
 
     private void getHoldingList(final int what, final int varietyId, final Object obj) {
@@ -80,22 +84,21 @@ public class HoldingOrderPresenter {
 
                 if (what == RISK_CONTROL && varietyId == mQueryJob.varietyId) {
                     Log.d(TAG, "onRespSuccess: RISK_CONTROL");
-                    String closingOrderIds = (String) obj;
-                    String[] showIds = closingOrderIds.split(";");
+                    String closingOrders = (String) obj;
+                    String[] orders = closingOrders.split(SPLIT_ORDERS);
                     boolean refresh = false;
                     for (HoldingOrder order : holdingOrderList) {
-                        for (String showId : showIds) {
+                        for (String showId : orders) {
+                            showId = showId.split(SPLIT_STOP_LOSS)[0];
                             if (showId.equals(order.getShowId())
                                     && order.getOrderStatus() == HoldingOrder.ORDER_STATUS_HOLDING) {
                                 refresh = true;
-
-
                             }
                         }
                     }
                     if (refresh) {
                         Log.d(TAG, "继续风控刷新");
-                        Message message = mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrderIds);
+                        Message message = mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrders);
                         mHandler.sendMessageDelayed(message, 2 * 1000);
                     } else {
                         if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
@@ -162,6 +165,7 @@ public class HoldingOrderPresenter {
         mQueryJob.startQuery = false;
         mQueryJob.count = 0;
         mHandler.removeMessages(QUERY_DATA);
+        setFullMarketData(mMarketData, mQueryJob.varietyId);
     }
 
     /**
@@ -305,7 +309,7 @@ public class HoldingOrderPresenter {
         boolean hasHoldingOrders = false;
         double ratio = 0;
         boolean refresh = false;
-        StringBuilder closingOrderIds = new StringBuilder();
+        StringBuilder closingOrders = new StringBuilder();
 
         if (marketData != null && mHoldingOrderList != null) {
             for (HoldingOrder holdingOrder : mHoldingOrderList) {
@@ -314,7 +318,6 @@ public class HoldingOrderPresenter {
                     // 持仓中、卖处理中的订单
                     hasHoldingOrders = true;
                     ratio = holdingOrder.getRatio();
-
                     BigDecimal eachPointMoney = new BigDecimal(holdingOrder.getEachPointMoney());
                     BigDecimal diff;
                     if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
@@ -329,12 +332,16 @@ public class HoldingOrderPresenter {
                     if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopProfit) >= 0) {
                         refresh = true;
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        closingOrderIds.append(holdingOrder.getShowId()).append(";");
+                        closingOrders.append(holdingOrder.getShowId())
+                                .append(SPLIT_STOP_LOSS).append(HoldingOrder.SELL_OUT_STOP_PROFIT)
+                                .append(SPLIT_ORDERS);
                     }
                     if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopLoss) <= 0) {
                         refresh = true;
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
-                        closingOrderIds.append(holdingOrder.getShowId()).append(";");
+                        closingOrders.append(holdingOrder.getShowId())
+                                .append(SPLIT_STOP_LOSS).append(HoldingOrder.SELL_OUT_STOP_LOSS)
+                                .append(SPLIT_ORDERS);
                     }
 
                     totalProfit = totalProfit.add(diff);
@@ -347,40 +354,39 @@ public class HoldingOrderPresenter {
 
         if (refresh) { // 触及风控刷新
             Log.d(TAG, "触及风控刷新");
-            String showIds = closingOrderIds.deleteCharAt(closingOrderIds.length() - 1).toString();
-            mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, showIds));
-            onRiskControlTriggered(showIds);
+            String closingOrdersStr = closingOrders.deleteCharAt(closingOrders.length() - 1).toString();
+            mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrdersStr));
+            onRiskControlTriggered(closingOrdersStr);
         }
     }
 
     private void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onShowTotalProfit(hasHoldingOrders, totalProfit, ratio);
         }
     }
 
     private void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onShowHoldingOrderList(holdingOrderList);
         }
     }
 
     private void onSubmitAllHoldingOrderCompleted(String message) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onSubmitAllHoldingOrdersCompleted(message);
         }
     }
 
     private void onSubmitHoldingOrderCompleted(HoldingOrder holdingOrder) {
-        if (mIHoldingOrderView != null) {
+        if (mIHoldingOrderView != null && !mPause) {
             mIHoldingOrderView.onSubmitHoldingOrderCompleted(holdingOrder);
         }
     }
 
-
-    private void onRiskControlTriggered(String showIds) {
-        if (mIHoldingOrderView != null) {
-            mIHoldingOrderView.onRiskControlTriggered(showIds);
+    private void onRiskControlTriggered(String closingOrders) {
+        if (mIHoldingOrderView != null && !mPause) {
+            mIHoldingOrderView.onRiskControlTriggered(closingOrders, SPLIT_ORDERS, SPLIT_STOP_LOSS);
         }
     }
 }

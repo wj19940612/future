@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 public class Product implements Parcelable {
 
-    private static final long serialVersionUID = 8237579466405029376L;
-
     public static final String EX_PRODUCT = "product";
     public static final String EX_FUND_TYPE = "fund";
     public static final String EX_PRODUCT_LIST = "productList";

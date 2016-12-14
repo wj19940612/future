@@ -40,12 +40,14 @@ import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.buyOrSell;
 import static com.jnhyxx.html5.R.id.hands;
+import static com.jnhyxx.html5.R.id.stopLoss;
 
 public class HoldingFragment extends BaseFragment implements IHoldingOrderView<HoldingOrder> {
 
     public interface Callback {
-        void onHoldingFragmentClosePositionEventTriggered(String showIds);
+        void onHoldingFragmentClosePositionEventTriggered();
         void onHoldingFragmentSetStopProfitLossClick(HoldingOrder order, FullMarketData marketData);
+        void onHoldingFragmentRiskControlTriggered(String orders, String orderSplit, String stopLossSplit);
     }
 
     @BindView(android.R.id.list)
@@ -80,9 +82,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         protected void onReceiveData(FullMarketData data) {
             mMarketData = data;
             mPresenter.setFullMarketData(data, mProduct.getVarietyId());
-
             if (mHoldingOrderAdapter != null) {
-                mHoldingOrderAdapter.setFullMarketData(data);
+                mHoldingOrderAdapter.setMarketData(data);
                 updateHoldingOrderVisibleItems(data);
             }
         }
@@ -132,11 +133,12 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         }
     }
 
-    public static HoldingFragment newInstance(Product product, int fundType) {
+    public static HoldingFragment newInstance(Product product, int fundType, FullMarketData marketData) {
         HoldingFragment fragment = new HoldingFragment();
         Bundle args = new Bundle();
         args.putParcelable(Product.EX_PRODUCT, product);
         args.putInt(Product.EX_FUND_TYPE, fundType);
+        args.putParcelable(FullMarketData.EX_MARKET_DATA, marketData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -147,7 +149,8 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         if (context instanceof Callback) {
             mCallback = (Callback) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement HoldingFragment.Call");
+            throw new RuntimeException(context.toString() +
+                    " must implement HoldingFragment.Callback");
         }
     }
 
@@ -158,7 +161,9 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             mProduct = getArguments().getParcelable(Product.EX_PRODUCT);
             mFundType = getArguments().getInt(Product.EX_FUND_TYPE);
             mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+            mMarketData = getArguments().getParcelable(FullMarketData.EX_MARKET_DATA);
             mPresenter = new HoldingOrderPresenter(this);
+            mPresenter.setFullMarketData(mMarketData, mProduct.getVarietyId());
         }
     }
 
@@ -169,6 +174,15 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         View view = inflater.inflate(R.layout.fragment_holding, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FontUtil.setTt0173MFont(mTotalProfit);
+        mList.setEmptyView(mEmpty);
+        mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
+                mProduct.getCurrencyUnit()));
     }
 
     @Override
@@ -206,32 +220,23 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mNettyHandler = null;
         mBinder.unbind();
         mPresenter.onDestroy();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        FontUtil.setTt0173MFont(mTotalProfit);
-
-        mList.setEmptyView(mEmpty);
-        mTotalProfitAndUnit.setText(getString(R.string.holding_position_total_profit_and_unit,
-                mProduct.getCurrencyUnit()));
+        mNettyHandler = null;
     }
 
     @Override
     public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
         if (holdingOrderList != null) {
             if (mHoldingOrderAdapter == null) {
-                mHoldingOrderAdapter = new HoldingOrderAdapter(getContext(), mProduct, mFundUnit, holdingOrderList);
+                mHoldingOrderAdapter = new HoldingOrderAdapter(
+                        getActivity(), mProduct, mFundUnit, holdingOrderList, mMarketData);
                 mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
                 mHoldingOrderAdapter.setCallback(new HoldingOrderAdapter.Callback() {
                     @Override
                     public void onItemClosePositionClick(HoldingOrder order) {
                         mPresenter.closePosition(order);
-                        onClosePositionEventTriggered(order.getShowId());
+                        onClosePositionEventTriggered();
                     }
                     @Override
                     public void onSetStopProfitLossClick(HoldingOrder order) {
@@ -242,15 +247,14 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                 });
                 mList.setAdapter(mHoldingOrderAdapter);
             } else {
-                mHoldingOrderAdapter.setShowStopProfitLoss(mShowStopProfitLoss);
                 mHoldingOrderAdapter.setHoldingOrderList(holdingOrderList);
             }
         }
     }
 
-    private void onClosePositionEventTriggered(String showIds) {
+    private void onClosePositionEventTriggered() {
         if (mCallback != null) {
-            mCallback.onHoldingFragmentClosePositionEventTriggered(showIds);
+            mCallback.onHoldingFragmentClosePositionEventTriggered();
         }
     }
 
@@ -305,14 +309,17 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     }
 
     @Override
-    public void onRiskControlTriggered(String showIds) {
-        onClosePositionEventTriggered(showIds);
+    public void onRiskControlTriggered(String closingOrders, String orderSplit, String stopLossSplit) {
+        onClosePositionEventTriggered();
+        if (mCallback != null) {
+            mCallback.onHoldingFragmentRiskControlTriggered(closingOrders, orderSplit, stopLossSplit);
+        }
     }
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
         mPresenter.closeAllHoldingPositions();
-        onClosePositionEventTriggered("");
+        onClosePositionEventTriggered();
     }
 
     public void updateHoldingOrderList() {
@@ -331,22 +338,23 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
         private Context mContext;
         private Product mProduct;
         private String mFundUnit;
-
         private List<HoldingOrder> mHoldingOrderList;
-        private FullMarketData mFullMarketData;
+        private FullMarketData mMarketData;
+
         private Callback mCallback;
         private boolean mShowStopProfitLoss;
 
         public HoldingOrderAdapter(Context context, Product product,
-                                   String fundUnit, List<HoldingOrder> holdingOrderList) {
+                                   String fundUnit, List<HoldingOrder> holdingOrderList, FullMarketData marketData) {
             mContext = context;
             mProduct = product;
             mFundUnit = fundUnit;
             mHoldingOrderList = holdingOrderList;
+            mMarketData = marketData;
         }
 
-        public void setFullMarketData(FullMarketData fullMarketData) {
-            mFullMarketData = fullMarketData;
+        public void setMarketData(FullMarketData marketData) {
+            mMarketData = marketData;
         }
 
         public void setShowStopProfitLoss(boolean showStopProfitLoss) {
@@ -390,7 +398,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             }
             viewHolder.bindingData((HoldingOrder) getItem(position), mContext,
                     mProduct, mFundUnit,
-                    mFullMarketData,
+                    mMarketData,
                     mShowStopProfitLoss,
                     mCallback);
 
@@ -412,7 +420,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             TextView mStopProfit;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(R.id.stopLoss)
+            @BindView(stopLoss)
             TextView mStopLoss;
             @BindView(R.id.closePositionButton)
             TextView mClosePositionButton;

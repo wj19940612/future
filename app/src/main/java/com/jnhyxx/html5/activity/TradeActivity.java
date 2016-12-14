@@ -68,7 +68,6 @@ import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -167,7 +166,6 @@ public class TradeActivity extends BaseActivity implements
 
                 changeBuyBtnText(data);
             }
-            updatePlaceOrderFragment(data);
         }
     };
 
@@ -193,13 +191,6 @@ public class TradeActivity extends BaseActivity implements
         String sellShort = getString(R.string.sell_short)
                 + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
         mSellShortBtn.setText(sellShort);
-    }
-
-    private void updatePlaceOrderFragment(FullMarketData data) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-        if (fragment != null && fragment instanceof PlaceOrderFragment) {
-            ((PlaceOrderFragment) fragment).setMarketData(data);
-        }
     }
 
     @Override
@@ -338,7 +329,6 @@ public class TradeActivity extends BaseActivity implements
     private void showLightningOrderOverDue() {
         SmartDialog.with(getActivity(),
                 getString(R.string.lightning_orders_status_run_out))
-
                 .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
@@ -371,6 +361,7 @@ public class TradeActivity extends BaseActivity implements
         Launcher.with(getActivity(), OrderActivity.class)
                 .putExtra(Product.EX_PRODUCT, mProduct)
                 .putExtra(Product.EX_FUND_TYPE, mFundType)
+                .putExtra(FullMarketData.EX_MARKET_DATA, mFullMarketData)
                 .execute();
     }
 
@@ -424,7 +415,7 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyType()))
+                        .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyId()))
                         .execute();
                 Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());
             }
@@ -700,12 +691,7 @@ public class TradeActivity extends BaseActivity implements
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
                         if (klineDataList != null && klineDataList.size() > 0) {
                             KlineView klineView = mChartContainer.getKlineView();
-                            Collections.sort(klineDataList, new Comparator<KlineViewData>() {
-                                @Override
-                                public int compare(KlineViewData o1, KlineViewData o2) {
-                                    return (int) (o1.getTimeStamp() - o2.getTimeStamp());
-                                }
-                            });
+                            Collections.reverse(klineDataList);
                             if (klineView == null) return;
                             klineView.setDataList(klineDataList);
                         }
@@ -805,7 +791,8 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .add(R.id.placeOrderContainer,
+                            PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType, mFullMarketData))
                     .commit();
         }
     }
@@ -889,7 +876,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onConfirmBtnClick(SubmittedOrder submittedOrder) {
+    public void onPlaceOrderFragmentConfirmBtnClick(SubmittedOrder submittedOrder) {
         submittedOrder.setPayType(mFundType);
         submitOrder(submittedOrder);
     }
@@ -910,7 +897,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onAgreeProtocolBtnClick(int longOrShort) {
+    public void onAgreementFragmentAgreeBtnClick(int longOrShort) {
         String userPhone = LocalUser.getUser().getPhone();
         Preference.get().setTradeAgreementShowed(userPhone, mProduct.getVarietyType());
         if (longOrShort == ProductLightningOrderStatus.TAG_OPEN_ARRGE_FRAGMENT_PAGE) {
@@ -921,7 +908,7 @@ public class TradeActivity extends BaseActivity implements
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType))
+                    .replace(R.id.placeOrderContainer, PlaceOrderFragment.newInstance(longOrShort, mProduct, mFundType, mFullMarketData))
                     .commit();
         }
     }
@@ -974,8 +961,9 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onRiskControlTriggered(String showIds) {
+    public void onRiskControlTriggered(String closingOrders, String orderSplit, String stopLossSplit) {
     }
+
 
     static class MenuAdapter extends ArrayAdapter<Product> {
 

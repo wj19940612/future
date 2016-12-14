@@ -68,7 +68,7 @@ public class MarketDataView extends FrameLayout {
                     ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume())
                     : NO_DATA);
             mTotalAmount.setText(marketData.getTurnover() != 0
-                    ? FinanceUtil.addUnitWhenBeyondHundredMillion(marketData.getTurnover())
+                    ? FinanceUtil.addUnit(marketData.getTurnover())
                     : NO_DATA);
 
             mRisingLimit.setText(getPrice(marketData.getUpLimitPrice(), priceScale));
@@ -89,7 +89,7 @@ public class MarketDataView extends FrameLayout {
                     ? FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume())
                     : NO_DATA);
             mTotalAmount.setText(marketData.getTurnover() != 0
-                    ? FinanceUtil.addUnitWhenBeyondHundredMillion(marketData.getTurnover())
+                    ? FinanceUtil.addUnit(marketData.getTurnover())
                     : NO_DATA);
 
             mRisingLimit.setText(getPrice(marketData.getUpLimitPrice(), priceScale));

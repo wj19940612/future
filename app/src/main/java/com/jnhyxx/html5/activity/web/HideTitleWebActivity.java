@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity;
+package com.jnhyxx.html5.activity.web;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 
 import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
@@ -36,7 +37,7 @@ import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
-public class WebViewActivity extends BaseActivity {
+public class HideTitleWebActivity extends BaseActivity {
 
     public static final String EX_URL = "url";
     public static final String EX_TITLE = "title";
@@ -78,7 +79,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_webview);
+        setContentView(R.layout.activity_hide_title_web);
         ButterKnife.bind(this);
 
         mNetworkChangeReceiver = new NetworkReceiver();
@@ -341,5 +342,4 @@ public class WebViewActivity extends BaseActivity {
             }
         }
     }
-
 }

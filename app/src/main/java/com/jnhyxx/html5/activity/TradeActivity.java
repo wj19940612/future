@@ -585,11 +585,9 @@ public class TradeActivity extends BaseActivity implements
         }
         klineView.clearData();
         KlineView.Settings settings2 = new KlineView.Settings();
-        settings2.setBaseLines(mProduct.getBaseline() - 3);
-        settings2.setIndexesBaseLines(3);
+        settings2.setBaseLines(mProduct.getBaseline());
         settings2.setNumberScale(mProduct.getPriceDecimalScale());
         settings2.setXAxis(40);
-        settings2.setIndexesEnable(true);
         settings2.setIndexesType(KlineView.Settings.INDEXES_VOL);
         klineView.setSettings(settings2);
 

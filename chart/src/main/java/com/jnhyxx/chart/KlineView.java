@@ -193,7 +193,9 @@ public class KlineView extends ChartView {
             KlineViewData data = mDataList.get(i);
             float chartX = getChartXOfScreen(i, data);
             drawCandle(chartX, data, canvas);
-            drawIndexes(chartX, data, canvas);
+            if (indexesEnable) {
+                drawIndexes(chartX, data, canvas);
+            }
         }
         drawMovingAverageLines(canvas);
     }

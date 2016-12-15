@@ -471,8 +471,8 @@
     <string name="lightning_orders_title">闪电下单</string>
     <string name="lightning_orders_open">闪电下单已开启</string>
     <string name="lightning_orders_close">闪电下单已关闭</string>
-    <string name="lightning_orders_buy_long">闪电买涨</string>
-    <string name="lightning_orders_buy_short">闪电买跌</string>
+    <string name="lightning_buy_long">闪电买涨</string>
+    <string name="lightning_buy_short">闪电买跌</string>
     <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
     <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
 

@@ -6,7 +6,7 @@ import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
@@ -712,9 +712,9 @@ public class API extends APIBase {
          * @return
          */
 
-        public static API saveAndUpdateOrderAssetStore(ProductLightningOrderStatus productLightningOrderStatus) {
+        public static API saveAndUpdateOrderAssetStore(LightningOrderAsset lightningOrderAsset) {
             return new API("/order/orderAssetsStore/saveAndUpdate.do",
-                    new ApiParams(ProductLightningOrderStatus.class, productLightningOrderStatus));
+                    new ApiParams(LightningOrderAsset.class, lightningOrderAsset));
         }
 
         /**

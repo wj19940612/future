@@ -11,15 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
-import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.constans.Unit;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ProductLightningOrderStatus;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -80,11 +78,13 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private ExchangeStatus mExchangeStatus;
 
 
-    private boolean mLightningOrdersStatus;
     //判断是否有期货配资
     private boolean hasFuturesFinancing;
 
-    private ProductLightningOrderStatus mProductLightningOrderStatus;
+    //用来包装提交到服务器的闪电下单的类
+    private LightningOrderAsset mLightningOrderAsset;
+    //本地缓存的闪电下单数据
+    private LightningOrderAsset mLocalLightningOrderAsset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
         setContentView(R.layout.activity_lightning_orsers_set);
         ButterKnife.bind(this);
 
-        mProductLightningOrderStatus = new ProductLightningOrderStatus();
+        mLightningOrderAsset = new LightningOrderAsset();
         initData(getIntent());
         //获取期货配资方案
         getFuturesFinancing();
@@ -138,8 +138,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), null);
-                        setResult(ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_CLOSE);
+                        LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, null);
+                        setResult(RESULT_OK);
                         if (!isFuturesFinChanged) {
                             onBackPressed();
                         }
@@ -150,16 +150,15 @@ public class SetLightningOrdersActivity extends BaseActivity {
 
     private void openLightningOrder() {
         if (hasFuturesFinancing) {
-            API.Market.saveAndUpdateOrderAssetStore(mProductLightningOrderStatus)
+            API.Market.saveAndUpdateOrderAssetStore(mLightningOrderAsset)
                     .setIndeterminate(this)
                     .setTag(TAG)
                     .setCallback(new Callback<Resp<JsonObject>>() {
                         @Override
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
-                                Log.d(TAG, "将要存入的数据 " + mProductLightningOrderStatus.toString());
-                                Preference.get().setLightningOrderStatus(getLocalLightningOrderStatusKey(), mProductLightningOrderStatus);
-                                setResult(ProductLightningOrderStatus.RESULT_CODE_LIGHTNING_ORDER_OPEN);
+                                LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, mLightningOrderAsset);
+                                setResult(RESULT_OK);
                                 finish();
                             } else {
                                 ToastUtil.curt(jsonObjectResp.getMsg());
@@ -171,15 +170,6 @@ public class SetLightningOrdersActivity extends BaseActivity {
             ToastUtil.curt("产品配资不可为空");
         }
     }
-
-    private String getLocalLightningOrderStatusKey() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(mProduct.getVarietyId());
-        stringBuilder.append(LocalUser.getUser().getPhone());
-        stringBuilder.append(mFundType);
-        return stringBuilder.toString();
-    }
-
 
     private void getExchangeTradeStatus() {
         API.Order.getExchangeTradeStatus(mProduct.getExchangeId(), mProduct.getVarietyType()).setTag(TAG)
@@ -198,8 +188,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
             public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
                 if (configuration instanceof FuturesFinancing.StopProfit) {
                     FuturesFinancing.StopProfit stopProfit = (FuturesFinancing.StopProfit) configuration;
-                    mProductLightningOrderStatus.setStopProfitPoint(stopProfit.getStopProfitPoint());
-                    mProductLightningOrderStatus.setStopWinPrice(stopProfit.getStopProfit());
+                    mLightningOrderAsset.setStopProfitPoint(stopProfit.getStopProfitPoint());
+                    mLightningOrderAsset.setStopWinPrice(stopProfit.getStopProfit());
                 }
             }
         });
@@ -212,17 +202,18 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
                         if (mFuturesFinancing != null) {
-                            ProductLightningOrderStatus lightningOrderStatus = Preference.get().getLightningOrderStatus(getLocalLightningOrderStatusKey());
-                            mProductLightningOrderStatus.setRatio(mFuturesFinancing.getRatio());
+                            mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(mProduct, mFundType);
                             hasFuturesFinancing = true;
-                            if (lightningOrderStatus != null) {
-                                boolean compareDataWithWeb = lightningOrderStatus.compareDataWithWeb(futuresFinancing);
+                            mLightningOrderAsset.setRatio(mFuturesFinancing.getRatio());
+                            if (mLocalLightningOrderAsset != null) {
+                                boolean compareDataWithWeb = mLocalLightningOrderAsset.isValid(futuresFinancing);
                                 if (compareDataWithWeb) {
-                                    futuresFinancing.setProductLightningOrderStatus(lightningOrderStatus);
                                     updatePlaceOrderViews();
+                                    int selectStopLossIndex = mLocalLightningOrderAsset.getSelectStopLossIndex(futuresFinancing);
+                                    mTouchStopLossSelector.selectItem(selectStopLossIndex);
                                     setLayoutStatus();
                                 } else {
-                                    showLightningOrderOverDue();
+                                    showLightningOrderInvalidDialog();
                                 }
                             } else {
                                 updatePlaceOrderViews();
@@ -234,7 +225,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
     }
 
 
-    private void showLightningOrderOverDue() {
+    private void showLightningOrderInvalidDialog() {
         SmartDialog.with(getActivity(),
                 getString(R.string.lightning_orders_status_run_out))
 
@@ -276,8 +267,16 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLoss.getTradeQuantityList();
                     mTradeQuantitySelector.setOrderConfigurationList(tradeQuantityList);
 
-                    mProductLightningOrderStatus.setAssetsId(stopLoss.getAssetsBean().getAssetsId());
-                    mProductLightningOrderStatus.setStopLossPrice(((FuturesFinancing.StopLoss) configuration).getAssetsBean().getStopLossBeat());
+                    if (mLocalLightningOrderAsset != null) {
+                        int selectHandNum = mLocalLightningOrderAsset.getSelectHandNum(mProduct, mFuturesFinancing);
+                        mTradeQuantitySelector.selectItem(selectHandNum);
+                        int selectStopProfit = mLocalLightningOrderAsset.getSelectStopProfit(mProduct, mFuturesFinancing);
+                        mTouchStopProfitSelector.selectItem(selectStopProfit);
+                        Log.d(TAG, " 选择手数 " + selectHandNum + " 选择止盈 " + selectStopProfit);
+                    }
+
+                    mLightningOrderAsset.setAssetsId(stopLoss.getAssetsBean().getAssetsId());
+                    mLightningOrderAsset.setStopLossPrice(((FuturesFinancing.StopLoss) configuration).getAssetsBean().getStopLossBeat());
                 }
             }
         });
@@ -296,7 +295,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
             public void onItemSelected(OrderConfigurationSelector.OrderConfiguration configuration, int position) {
                 if (configuration instanceof FuturesFinancing.TradeQuantity) {
                     FuturesFinancing.TradeQuantity tradeQuantity = (FuturesFinancing.TradeQuantity) configuration;
-                    mProductLightningOrderStatus.setHandsNum(tradeQuantity.getQuantity());
+                    mLightningOrderAsset.setHandsNum(tradeQuantity.getQuantity());
                     updateMarginTradeFeeAndTotal(tradeQuantity);
                 }
             }
@@ -307,19 +306,13 @@ public class SetLightningOrdersActivity extends BaseActivity {
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-
-        mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-        mLightningOrdersStatus = intent.getBooleanExtra(ProductLightningOrderStatus.KEY_LIGHTNING_ORDER_IS_OPEN, false);
-
-        if (mProduct != null) {
-            mProductLightningOrderStatus.setVarietyId(mProduct.getVarietyId());
-            mProductLightningOrderStatus.setPayType(mFundType);
-        }
+        mLightningOrderAsset.setVarietyId(mProduct.getVarietyId());
+        mLightningOrderAsset.setPayType(mFundType);
     }
 
     private void setLayoutStatus() {
         //如果是开启状态
-        if (mLightningOrdersStatus) {
+        if (LightningOrderAsset.isLightningOrderOpened(mProduct, mFundType)) {
             mTradeQuantitySelector.setEnabled(false);
             mTouchStopLossSelector.setEnabled(false);
             mTouchStopProfitSelector.setEnabled(false);
@@ -339,8 +332,8 @@ public class SetLightningOrdersActivity extends BaseActivity {
         String tradeFeeWithSign = mProduct.getSign() + tradeQuantity.getFee();
         String totalWithSign = mProduct.getSign() + (tradeQuantity.getMargin() + tradeQuantity.getFee());
         mMargin.setText(marginWithSign);
-        mProductLightningOrderStatus.setMarginMoney(tradeQuantity.getMargin());
-        mProductLightningOrderStatus.setFees(tradeQuantity.getFee());
+        mLightningOrderAsset.setMarginMoney(tradeQuantity.getMargin());
+        mLightningOrderAsset.setFees(tradeQuantity.getFee());
         mTradeFee.setText(tradeFeeWithSign);
         mTotalTobePaid.setText(totalWithSign);
 

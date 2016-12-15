@@ -185,8 +185,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/lightningOrders"
-                android:layout_alignTop="@+id/lightningOrders"
+                android:layout_alignBottom="@+id/lightningOrderBtn"
+                android:layout_alignTop="@+id/lightningOrderBtn"
                 android:orientation="horizontal">
 
                 <TextView
@@ -215,7 +215,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/lightningOrders"
+                android:id="@+id/lightningOrderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

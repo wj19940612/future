@@ -109,6 +109,7 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
+
     protected void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);

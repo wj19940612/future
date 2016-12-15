@@ -28,4 +28,10 @@ public class PaymentActivity extends WebViewActivity {
         }
         return super.onShouldOverrideUrlLoading(view, url);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 }

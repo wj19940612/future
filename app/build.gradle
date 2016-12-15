@@ -57,16 +57,16 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 23
-            versionName '1.2.23'
+            versionCode 24
+            versionName '1.2.24'
             //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-            minSdkVersion  21
+            //minSdkVersion  21
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 9
-            versionName '1.1.5'
+            versionCode 10
+            versionName '1.1.6'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [

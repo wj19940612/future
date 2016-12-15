@@ -1,121 +1,63 @@
 package com.jnhyxx.html5;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
-import com.jnhyxx.html5.activity.MainActivity;
-import com.jnhyxx.html5.activity.PopupDialogActivity;
-import com.jnhyxx.html5.net.RequestManager;
-import com.jnhyxx.html5.utils.NotificationUtil;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.DeviceInfoUtil;
 import com.jnhyxx.umenglibrary.UmengLib;
-import com.johnz.kutils.Launcher;
+import com.johnz.kutils.net.CookieManger;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
-import com.umeng.message.UmengMessageHandler;
-import com.umeng.message.UmengNotificationClickHandler;
-import com.umeng.message.entity.UMessage;
-import com.wo.main.WP_App;
 
-import java.util.Map;
-
-public class App extends Application {
-
+public class App extends MultiDexApplication {
+    private static final String TAG = "App";
     private static Context sContext;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         sContext = this;
+        API.init(sContext.getCacheDir());
+        CookieManger.getInstance().init(sContext.getFilesDir());
 
-        if (Variant.isApp1()) {
-            try {
-                WP_App.on_AppInit(getApplicationContext(), BuildConfig.DEBUG);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        UmengLib.init(sContext);
+
+        MobclickAgent.setDebugMode(true);
+
+        if (!BuildConfig.DEBUG) {
+            handleUncaughtException();
         }
 
-        RequestManager.init(sContext);
-        UmengLib.init(sContext);
-        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
-        MobclickAgent.setCatchUncaughtExceptions(!BuildConfig.DEBUG);
-        initPushHandlers();
-        handleUncaughtException();
+        String deviceInfo = DeviceInfoUtil.getDeviceInfo(this);
+        Log.d(TAG, "设备信息" + deviceInfo);
     }
 
     private void handleUncaughtException() {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
+                MobclickAgent.reportError(App.getAppContext(), ex);
+                MobclickAgent.onKillProcess(App.getAppContext());
                 Preference.get().setForeground(false);
+                /**
+                 * 如果开发者调用Process.kill或者System.exit之类的方法杀死进程，请务必在此之前调用MobclickAgent.onKillProcess(Context context)方法，用来保存统计数据。
+                 */
                 System.exit(1);
+
             }
         });
-    }
-
-    private void initPushHandlers() {
-        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-
-            @Override
-            public void dealWithNotificationMessage(Context context, final UMessage uMessage) {
-                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.extra);
-                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.after_open);
-                Log.d("TEST", "dealWithNotificationMessage: " + uMessage.display_type);
-                final Map<String, String> extra = uMessage.extra;
-                if (NotificationUtil.isImportant(extra)) {
-                    if (Preference.get().isForeground()) {
-                        Log.d("TEST", "dealWithNotificationMessage: " + "important message");
-                        UTrack.getInstance(sContext).trackMsgClick(uMessage); // Record click event
-                        showPopupDialog(context, uMessage, extra);
-                        return;
-                    }
-                }
-                super.dealWithNotificationMessage(context, uMessage);
-            }
-        };
-        PushAgent.getInstance(sContext).setMessageHandler(messageHandler);
-
-        UmengNotificationClickHandler clickHandler = new UmengNotificationClickHandler() {
-            @Override
-            public void openActivity(Context context, UMessage uMessage) {
-                final Map<String, String> extra = uMessage.extra;
-                final String messageType = NotificationUtil.getMessageType(extra);
-                final String messageId = NotificationUtil.getMessageId(extra);
-                Log.d("TEST", "openActivity: " + uMessage.activity);
-                Launcher.with(context, MainActivity.class)
-                        .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                            @Override
-                            public void preExecute(Intent intent) {
-                                intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
-                                        .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
-                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                        }).execute();
-            }
-        };
-        PushAgent.getInstance(sContext).setNotificationClickHandler(clickHandler);
-    }
-
-    private void showPopupDialog(Context context, final UMessage uMessage, Map<String, String> extra) {
-        final String messageId = NotificationUtil.getMessageId(extra);
-        final String messageType = NotificationUtil.getMessageType(extra);
-        Launcher.with(context, PopupDialogActivity.class)
-                .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                    @Override
-                    public void preExecute(Intent intent) {
-                        intent.putExtra(NotificationUtil.KEY_MESSAGE_ID, messageId)
-                                .putExtra(NotificationUtil.KEY_MESSAGE_TYPE, messageType)
-                                .putExtra(PopupDialogActivity.TITLE, uMessage.title)
-                                .putExtra(PopupDialogActivity.MESSAGE, uMessage.text)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    }
-                }).execute();
     }
 
     public static Context getAppContext() {
         return sContext;
     }
+
 }

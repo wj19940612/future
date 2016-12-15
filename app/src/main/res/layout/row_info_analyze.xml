@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_ten"
+        android:paddingRight="@dimen/padding_ten"
+        android:paddingTop="@dimen/padding_ten">
+
+        <TextView
+            android:id="@+id/summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lineSpacingExtra="15dp"
+            android:maxLines="3"
+            android:text="摘要原油连续从四小时走势图来看，布林带整体依旧向下运行，上、中、下三轨一致下行，K线价格自中轨处承压下行，并跌穿下轨(40美元大关)，但随后受下轨支撑强势反弹，目前价格在..."
+            android:textColor="@color/blackPrimary"/>
+
+        <TextView
+            android:id="@+id/createDate"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_line_division_center"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorDisable"
+            android:textSize="@dimen/min_text_size"
+            tools:text="@string/time"/>
+    </LinearLayout>
+</LinearLayout>

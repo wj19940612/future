@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.order.OrderDetailActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/order_detail"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0A1A2C"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingTop="22dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lossProfitUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="12sp"
+                        tools:text="@string/settlement_loss_profit_unit"/>
+
+                    <TextView
+                        android:id="@+id/tradeType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/bg_red_primary"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:minHeight="20dp"
+                        android:minWidth="40dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        tools:text="买涨"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lossProfit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textColor="#CCCCCC"
+                        android:textSize="36sp"
+                        tools:text="+20"/>
+
+                    <TextView
+                        android:id="@+id/lossProfitRmb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="#CCCCCC"
+                        android:textSize="14sp"
+                        tools:text="(132元)"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@drawable/zigzag_tooth_line"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/contract_info"
+                android:textColor="#666666"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/trade_variety"/>
+
+                <TextView
+                    android:id="@+id/tradeVariety"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="CL609"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/trade_quantity"/>
+
+                <TextView
+                    android:id="@+id/tradeQuantity"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="1手"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/trade_fee"/>
+
+                <TextView
+                    android:id="@+id/tradeFee"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="180美元"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/margin"/>
+
+                <TextView
+                    android:id="@+id/margin"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="180美元"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/splitLineGrayLight"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/order_info"
+                android:textColor="#666666"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/buy_price"/>
+
+                <TextView
+                    android:id="@+id/buyPrice"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="42.05"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/buy_type"/>
+
+                <TextView
+                    android:id="@+id/buyType"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="市价买入"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/buy_time"/>
+
+                <TextView
+                    android:id="@+id/buyTime"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="2016/07/29 04:58:00"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/sell_price"/>
+
+                <TextView
+                    android:id="@+id/sellPrice"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="42.05"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/sell_type"/>
+
+                <TextView
+                    android:id="@+id/sellType"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="市价卖出"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/sell_time"/>
+
+                <TextView
+                    android:id="@+id/sellTime"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="2016/07/29 04:58:00"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/OrderDetailItemTitle"
+                    android:text="@string/order_id"/>
+
+                <TextView
+                    android:id="@+id/orderId"
+                    style="@style/OrderDetailItemContent"
+                    tools:text="15612313123"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

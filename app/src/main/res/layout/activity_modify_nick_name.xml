@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_modify_nick_name"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.setting.ModifyNickNameActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/modify_nick_name_title"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile"
+            android:gravity="center_vertical|bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="@color/lucky"
+                style="@style/InputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="50dp"
+                android:text="@string/modify_nick_name"/>
+
+            <EditText
+                android:id="@+id/nickname"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/modify_nick_name_hint"
+                android:maxLength="10"/>
+        </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFailTvWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:paddingTop="@dimen/common_margin"
+        android:text="@string/modify_nick_name_warn"
+        android:textColor="@color/redPrimary"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/confirmButton"
+        style="@style/PrimaryBigButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:text="@string/ok_has_space"/>
+</LinearLayout>

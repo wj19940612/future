@@ -33,10 +33,10 @@
                 <corners android:radius="5dip"/>
                 <gradient
                     android:angle="270"
-                    android:centerColor="#DE4A4A"
+                    android:centerColor="@color/blueAssist"
                     android:centerY="0.75"
-                    android:endColor="#DE4A4A"
-                    android:startColor="#DE4A4A"/>
+                    android:endColor="@color/blueAssist"
+                    android:startColor="@color/blueAssist"/>
             </shape>
         </clip>
     </item>

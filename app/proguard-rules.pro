@@ -53,68 +53,38 @@
 ## Attributes
 -keepattributes SourceFile,LineNumberTable,Signature,InnerClasses
 
-# Jar: via sdk v1
--keep class com.wo.**{*;}
--keep public class org.eclipse.paho.**{*;}
-
 # Picasso
 -dontwarn com.squareup.okhttp.**
 
-# This is the content of 'proguard-android-optimize.txt':
-#
-#-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
-#-optimizationpasses 5
-#-allowaccessmodification
-#-dontpreverify
-#
-#-dontusemixedcaseclassnames
-#-dontskipnonpubliclibraryclasses
-#-verbose
-#
-#-keepattributes *Annotation*
-#-keep public class com.google.vending.licensing.ILicensingService
-#-keep public class com.android.vending.licensing.ILicensingService
-#
-#-keepclasseswithmembernames class * {
-#    native <methods>;
-#}
-#
-#-keepclassmembers public class * extends android.view.View {
-#   void set*(***);
-#   *** get*();
-#}
-#
-#-keepclassmembers class * extends android.app.Activity {
-#   public void *(android.view.View);
-#}
-#
-#-keepclassmembers enum * {
-#    public static **[] values();
-#    public static ** valueOf(java.lang.String);
-#}
-#
-#-keepclassmembers class * implements android.os.Parcelable {
-#  public static final android.os.Parcelable$Creator CREATOR;
-#}
-#
-#-keepclassmembers class **.R$* {
-#    public static <fields>;
-#}
-#
-#-dontwarn android.support.**
-#
-#-keep class android.support.annotation.Keep
-#
-#-keep @android.support.annotation.Keep class * {*;}
-#
-#-keepclasseswithmembers class * {
-#    @android.support.annotation.Keep <methods>;
-#}
-#
-#-keepclasseswithmembers class * {
-#    @android.support.annotation.Keep <fields>;
-#}
-#
-#-keepclasseswithmembers class * {
-#    @android.support.annotation.Keep <init>(...);
-#}
+# Netty
+# ignore netty lib warning
+-dontwarn io.netty.**
+
+# netty 4.0
+-keep class io.netty.** {
+    *;
+}
+-keep interface io.netty.** {
+    *;
+}
+
+# Slf4j for android
+-keep class org.slf4j.** {
+    *;
+}
+-keep interface org.slf4j.** {
+    *;
+}
+
+# Jzlib
+-keep class com.jcraft.jzlib.** {
+    *;
+}
+-keep interface com.jcraft.jzlib.** {
+    *;
+}
+
+# SlidingMenu
+-dontwarn com.jeremyfeinstein.slidingmenu.lib.**
+-keep class com.jeremyfeinstein.slidingmenu.lib.** { *; }
+>>>>>>> native

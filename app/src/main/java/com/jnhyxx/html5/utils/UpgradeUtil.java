@@ -3,7 +3,7 @@ package com.jnhyxx.html5.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.jnhyxx.html5.net.Api;
+import com.jnhyxx.html5.net.APIBase;
 import com.johnz.kutils.AppInfo;
 import com.umeng.onlineconfig.OnlineConfigAgent;
 
@@ -57,7 +57,7 @@ public class UpgradeUtil {
 
     private static boolean hasNewVersionCode(Context context) {
         String domain = getDomain(context);
-        if (domain.equals(Api.HOST)) {
+        if (domain.equals(APIBase.getHost())) {
             String newVersion = getVersionCode(context);
             String currentVersion = AppInfo.getVersionName(context);
             if (newVersion.compareTo(currentVersion) > 0) {

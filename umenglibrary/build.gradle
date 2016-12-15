@@ -21,37 +21,22 @@ android {
 
     productFlavors {
         origin {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
-                                    UMENG_MESSAGE_SECRET: "773b7ed07325d5cbf84e2fe0c691a312",
-                                    UMENG_CHANNEL: "http://www.jnhyxx.com"]
+            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
         }
-        microil {
-            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12",
-                                    UMENG_MESSAGE_SECRET: "6b118415f8454750cf92fa27dff753df",
-                                    UMENG_CHANNEL: "http://wp7.jnhyxx.com"]
+        yybd { // 原油宝典 -> 期货交易通
+            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
         }
-        tst {
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
-                                    UMENG_MESSAGE_SECRET: "773b7ed07325d5cbf84e2fe0c691a312",
-                                    UMENG_CHANNEL: "http://139.129.205.244"]
+        zy1 { // 钱猫投资宝
+            manifestPlaceholders = [UMENG_APPKEY: "58412c94e88bad78e5000ae1"]
         }
-        ycp {
-            // todo add miss configuration
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
-                                    UMENG_MESSAGE_SECRET: "",
-                                    UMENG_CHANNEL: ""]
+        zy3 { // 金谷理财
+            manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]
         }
-        ryt {
-            // todo add miss configuration
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
-                                    UMENG_MESSAGE_SECRET: "",
-                                    UMENG_CHANNEL: ""]
+        zy2 { // 蓝鲸投资
+            manifestPlaceholders = [UMENG_APPKEY: "58412f3dc62dca356d00113e"]
         }
-        hyjr {
-            // todo add miss configuration
-            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e",
-                                    UMENG_MESSAGE_SECRET: "",
-                                    UMENG_CHANNEL: ""]
+        zy4 { // 贵金属期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58412feef29d9877880010db"]
         }
     }
 }

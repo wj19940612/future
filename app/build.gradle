@@ -1,15 +1,33 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'com.neenbedankt.android-apt'
+
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.jnhyxx.html5"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        buildConfigField('String', 'API_HOST', '\"http://www.jnhyxx.com\"')
+
+        renderscriptTargetApi 22
+        renderscriptSupportModeEnabled true
+
+        multiDexEnabled true
+
+        // the ndk and manifest configs are for getui
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
+        }
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
+                GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
+                GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
+                PACKAGE_NAME    : applicationId
+        ]
     }
 
     java.util.Properties properties = new Properties();
@@ -17,15 +35,15 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(properties.get('keystroe_storeFile'))
-            storePassword properties.get('keystroe_storePassword')
-            keyAlias properties.get('keystroe_keyAlias')
-            keyPassword properties.get('keystroe_keyPassword')
+            storeFile file(properties.get('keystore_storeFile'))
+            storePassword properties.get('keystore_storePassword')
+            keyAlias properties.get('keystore_keyAlias')
+            keyPassword properties.get('keystore_keyPassword')
         }
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
             signingConfig signingConfigs.release
         }
@@ -39,64 +57,118 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 6
-            versionName '1.2.1'
+            versionCode 9
+            versionName '1.2.9'
+            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
         }
-        app1 {
-            versionCode 7
-            versionName '1.2.2'
-        }
-        microil {
-            applicationId 'com.jnhyxx.microil'
-            versionCode 2
-            versionName '1.0.2'
-            buildConfigField('String', 'API_HOST', '\"http://wp7.jnhyxx.com\"')
-        }
-        tst {
-            applicationId 'com.jnhyxx.test'
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://139.129.205.244\"')
+        yybd { // 原油宝典 -> 期货交易通
+            applicationId 'com.jnhyxx.yybd'
+            versionCode 8
+            versionName '1.1.4'
+            buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
+                    GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
+                    GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
 
-        ryt {
-            applicationIdSuffix '.ryt'
+        zy1 { // 钱猫投资宝
+            applicationId 'com.trade163.zy1'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://www.rytqh.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy1.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
+                    GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
+                    GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
-        ycp {
-            applicationIdSuffix '.ycp'
+        zy3 { // 金谷理财
+            applicationId 'com.trade163.zy3'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://ycp.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy3.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "uDkOIdBlgD8FDqbCZ8DaE4",
+                    GETUI_APP_KEY   : "4aAkkoaEnU7e7BeyEsKld6",
+                    GETUI_APP_SECRET: "gvH8woAsRr6tzjzOIOirH6",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
-        hyjr {
-            applicationIdSuffix '.hyjr'
+        zy2 { // 蓝鲸投资
+            applicationId 'com.trade163.zy2'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://hyjr.jnhyxx.com/\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy2.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "RBuCXPrguZ6sLPblvr6Ql1",
+                    GETUI_APP_KEY   : "noLiE4TEba7nW7VzyiSry9",
+                    GETUI_APP_SECRET: "rFWsgW0Cm46u19SMh4aJH9",
+                    PACKAGE_NAME    : applicationId
+            ]
         }
+        zy4 { // 贵金属期货宝
+            applicationId 'com.trade163.zy4'
+            versionCode 2
+            versionName '1.1'
+            buildConfigField('String', 'API_HOST', '\"http://zy6.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
+                    GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
+                    GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
+                    PACKAGE_NAME    : applicationId
+            ]
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize '4g'
+    }
+
+    packagingOptions {
+        exclude "META-INF/INDEX.LIST" // will not include INDEX file
+        exclude "META-INF/io.netty.versions.properties"
+        // for getui
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
+    originCompile project(path: ':umenglibrary', configuration: 'originRelease')
+    yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
+
+    zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
+    zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
+    zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
+    zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
+
+    compile project(':SlidingMenu')
+    compile project(':kutils')
+    compile project(':chart')
+    compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.volley:volley:1.0.0'
-    app1Compile files('libs/via_sdk_v1.jar')
-    provided files('libs/via_sdk_v1.jar')
-    compile project(':kutils')
-
-    microilCompile project(path: ':umenglibrary', configuration: 'microilRelease')
-    originCompile project(path: ':umenglibrary', configuration: 'originRelease')
-    app1Compile project(path: ':umenglibrary', configuration: 'originRelease')
-    tstCompile project(path: ':umenglibrary', configuration: 'tstRelease')
-    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
-    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-    hyjrCompile project(path: ':umenglibrary', configuration: 'hyjrRelease')
-
-    compile project(':PushSDK')
+    compile 'com.jakewharton:butterknife:8.0.1'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+    compile 'com.android.support:cardview-v7:24.2.0'
+    compile 'com.android.support:multidex:1.0.0'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile files('libs/netty-buffer-4.1.5.final.jar')
+    compile files('libs/netty-codec-4.1.5.final.jar')
+    compile files('libs/netty-common-4.1.5.final.jar')
+    compile files('libs/netty-transport-4.1.5.final.jar')
+    compile files('libs/netty-resolver-4.1.5.final.jar')
+    compile 'com.getui:sdk:2.9.3.0'
 }

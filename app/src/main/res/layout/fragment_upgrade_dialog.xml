@@ -1,56 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="32dp">
+    android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/dialogHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dialog_header_upgrade"/>
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/dialogHeader"
+            android:layout_alignTop="@+id/dialogHeader"
+            android:layout_marginTop="30dp"
+            android:padding="@dimen/common_margin"
+            android:src="@drawable/ic_close_popup"/>
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/discovery_new_version"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/upgradeLog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="10"
-        android:minHeight="180dp"
-        android:paddingBottom="20dp"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:paddingTop="20dp"
-        android:scrollbars="vertical|none"
-        android:text="@string/app_name"/>
+        <TextView
+            android:id="@+id/titleVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:text="@string/version_upgrade"
+            android:textColor="@color/blackPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/upgradeLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:lineSpacingExtra="10dp"
+            android:maxLines="4"
+            android:minHeight="100dp"
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:scrollbars="vertical|none"
+            android:textColor="@color/blackPrimary"
+            tools:text="更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log更新log"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/downloadInstall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_download_install"
+        android:background="@drawable/btn_dialog_single_assist_blue"
         android:clickable="true"
         android:gravity="center_horizontal"
         android:padding="12dp"
-        android:text="@string/download_and_install"
+        android:text="@string/upgrade_now"
         android:textColor="@android:color/white"
         android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/upgradeLater"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:text="@string/upgrade_later"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:visibility="invisible"/>
 </LinearLayout>

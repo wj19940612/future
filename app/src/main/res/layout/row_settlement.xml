@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <View
+        android:id="@+id/splitBlock"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_pressable"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/sellYearMonthDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lucky"
+                android:textSize="10sp"
+                tools:text="2016/07/28"/>
+
+            <TextView
+                android:id="@+id/sellHourMin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/lucky"
+                tools:text="10:24"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.7dp"
+            android:layout_height="match_parent"
+            android:background="@color/splitLineGrayLight"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.77"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tradeType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/bg_red_primary"
+                android:gravity="center"
+                android:minHeight="22dp"
+                android:minWidth="40dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tools:text="买涨"/>
+
+            <TextView
+                android:id="@+id/sellType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_toRightOf="@id/tradeType"
+                android:textColor="@color/lucky"
+                tools:text="市价卖出"/>
+
+            <TextView
+                android:id="@+id/lossProfit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="right"
+                android:lineSpacingExtra="3dp"
+                tools:text="+20美元\n(0.00)"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

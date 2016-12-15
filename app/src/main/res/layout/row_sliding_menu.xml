@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_menu_row"
+              android:orientation="horizontal"
+              android:paddingBottom="16dp"
+              android:paddingLeft="12dp"
+              android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:maxLines="1"
+        tools:text="美原油"/>
+
+    <TextView
+        android:id="@+id/productCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@android:color/white"
+        android:maxLines="1"
+        android:textSize="12sp"
+        tools:text="CL1609"/>
+</LinearLayout>

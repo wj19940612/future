@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.ModifyPwdActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/find_password"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile">
+
+            <EditText
+                android:id="@+id/newPassword"
+                style="@style/SignEditText.Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_lock"
+                android:drawablePadding="@dimen/padding_ten"
+                android:hint="@string/hine_please_input_new_password"
+                android:textColorHint="@color/grayHint"/>
+
+            <ImageView
+                android:id="@+id/showFirstPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/btn_show_password"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/modifyPasswordWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_compile">
+
+        <EditText
+            android:id="@+id/confirmPassword"
+            style="@style/SignEditText.Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/ic_lock"
+            android:drawablePadding="@dimen/padding_ten"
+            android:hint="@string/please_repeat_new_password"
+            android:textColorHint="@color/grayHint"/>
+
+        <ImageView
+            android:id="@+id/showSecondPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:src="@drawable/btn_show_password"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/confirmButton"
+        style="@style/PrimaryBigButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/ok_has_space"/>
+</LinearLayout>

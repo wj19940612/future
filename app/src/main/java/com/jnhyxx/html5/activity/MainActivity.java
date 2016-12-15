@@ -1,182 +1,182 @@
 package com.jnhyxx.html5.activity;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
-import com.jnhyxx.html5.AppJs;
-import com.jnhyxx.html5.BuildConfig;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.Variant;
-import com.jnhyxx.html5.fragment.UpgradeDialog;
-import com.jnhyxx.html5.net.Api;
+import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
+import com.jnhyxx.html5.activity.web.LiveActivity;
+import com.jnhyxx.html5.domain.ChannelServiceInfo;
+import com.jnhyxx.html5.domain.live.LiveRoomInfo;
+import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.jnhyxx.html5.fragment.HomeFragment;
+import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.MineFragment;
+import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
+import com.jnhyxx.html5.view.BottomTabs;
+import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
-import com.wo.main.WP_JS_Main;
+import com.johnz.kutils.net.CookieManger;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
-import static com.jnhyxx.html5.utils.Network.isNetworkAvailable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String TAG = "TEST";
+    @BindView(R.id.bottomTabs)
+    BottomTabs mBottomTabs;
+    @BindView(R.id.viewPager)
+    ViewPager mViewPager;
 
-    private ProgressBar mProgressBar;
-    private WebView mWebView;
-    private LinearLayout mErrorPage;
-    private Button mRefreshButton;
+    private MainFragmentsAdapter mMainFragmentsAdapter;
 
     private BroadcastReceiver mNetworkChangeReceiver;
 
-    private WebHandler mHandler;
-    private boolean mLoadSuccess;
-    private String mPageUrl;
+    private int mTabPosition;
 
-    private static class WebHandler extends Handler {
-
-        private Context mContext;
-
-        public WebHandler(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-
-        }
-    }
-
-    private class WebVClient extends WebViewClient {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.d(TAG, " url = " + url);
-            if (url.contains("qr.alipay.com")) {
-                openAlipay(view, url);
-                return true;
-            }
-
-            if (url.startsWith("mqqwpa:")) {
-                openQQChat(view, url);
-                return true;
-            }
-            return super.shouldOverrideUrlLoading(view, url);
-        }
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-            Log.d(TAG, "onPageStarted: " + url);
-
-            mLoadSuccess = true;
-            mPageUrl = url;
-
-            if (!isNetworkAvailable()) {
-                mLoadSuccess = false;
-                mWebView.stopLoading();
-            }
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            Log.d(TAG, "onPageFinished: " + url);
-
-            if (mLoadSuccess) {
-                mWebView.setVisibility(View.VISIBLE);
-                mErrorPage.setVisibility(View.GONE);
-            } else {
-                mWebView.setVisibility(View.GONE);
-                mErrorPage.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-            super.onReceivedError(view, request, error);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Log.d(TAG, "onReceivedError: >= M");
-                String requestUrl = request.getUrl().toString();
-                if (mPageUrl.equalsIgnoreCase(requestUrl) && error.getErrorCode() <= ERROR_UNKNOWN) {
-                    mLoadSuccess = false;
-                }
-            }
-        }
-
-        @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            super.onReceivedError(view, errorCode, description, failingUrl);
-            Log.d(TAG, "onReceivedError: ");
-            if (mPageUrl.equalsIgnoreCase(failingUrl) && errorCode <= ERROR_UNKNOWN) {
-                mLoadSuccess = false;
-            }
-        }
-    }
+    private static final int REQUEST_CODE_LIVE = 770;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-        initListener();
+        ButterKnife.bind(this);
+
         checkVersion();
-        initPush();
+
+        initView();
+
         processIntent(getIntent());
 
-        mHandler = new WebHandler(this);
         mNetworkChangeReceiver = new NetworkReceiver();
-        mLoadSuccess = true;
+
+        getServiceInfo();
+    }
+
+    private void getServiceInfo() {
+        API.User.getChannelByDomain()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<ChannelServiceInfo>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<ChannelServiceInfo> resp) {
+                        Preference preference = Preference.get();
+                        preference.setServiceQQ(resp.getData().getQq());
+                        preference.setServicePhone(resp.getData().getPhone());
+                    }
+                }).fire();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewPager.clearOnPageChangeListeners();
+    }
+
+    private void initView() {
+        mMainFragmentsAdapter = new MainFragmentsAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mMainFragmentsAdapter);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position >= 1) {
+                    mTabPosition = position + 1;
+                    mBottomTabs.selectTab(mTabPosition);
+                } else {
+                    mTabPosition = position;
+                    mBottomTabs.selectTab(mTabPosition);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        mViewPager.setCurrentItem(0);
+        mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
+            @Override
+            public void onTabClick(int position) {
+                mBottomTabs.selectTab(position);
+                if (position == 1) {
+                    openLivePage();
+
+                } else if (position >= 1) {
+                    mViewPager.setCurrentItem(position - 1, false);
+                } else {
+                    mViewPager.setCurrentItem(position, false);
+                }
+
+            }
+        });
+    }
+
+    private void openLivePage() {
+        API.Live.getLiveRoomId().setTag(TAG).setCallback(new Callback<Resp<LiveRoomInfo>>() {
+            @Override
+            public void onReceive(Resp<LiveRoomInfo> liveRoomInfoResp) {
+                String liveId = "";
+                if (liveRoomInfoResp.getData() != null) {
+                    liveId = liveRoomInfoResp.getData().getActivityId();
+                }
+                Launcher.with(getActivity(), LiveActivity.class)
+                        .putExtra(LiveActivity.EX_URL, API.Live.getH5LiveHtmlUrl(liveId))
+                        .putExtra(LiveActivity.EX_TITLE, getString(R.string.live))
+                        .putExtra(LiveActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .executeForResult(REQUEST_CODE_LIVE);
+
+            }
+        }).fire();
     }
 
     private void processIntent(Intent intent) {
         final String messageId = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_ID);
-        if (!TextUtils.isEmpty(messageId)) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mWebView.loadUrl(Api.getMessageDetail(messageId));
-                }
-            });
-            return;
-        }
-
-        final String messageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
-        if (!TextUtils.isEmpty(messageType)) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mWebView.loadUrl(Api.getMessageList(messageType));
-                }
-            });
-        }
+//        if (!TextUtils.isEmpty(messageId)) {
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mWebView.loadUrl(APIBase.getMessageDetail(messageId));
+//                }
+//            });
+//            return;
+//        }
+//
+//        final String messageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
+//        if (!TextUtils.isEmpty(messageType)) {
+//            mHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mWebView.loadUrl(APIBase.getMessageList(messageType));
+//                }
+//            });
+//        }
     }
 
     @Override
@@ -184,21 +184,6 @@ public class MainActivity extends BaseActivity {
         super.onNewIntent(intent);
         processIntent(intent);
     }
-
-    private void initPush() {
-        PushAgent pushAgent = PushAgent.getInstance(this);
-        pushAgent.setDebugMode(BuildConfig.DEBUG);
-        pushAgent.setMessageChannel(Api.HOST);
-        pushAgent.setResourcePackageName("com.jnhyxx.html5");
-        pushAgent.enable(mIUmengRegisterCallback);
-    }
-
-    private IUmengRegisterCallback mIUmengRegisterCallback = new IUmengRegisterCallback() {
-        @Override
-        public void onRegistered(String s) {
-            Log.d(TAG, "onRegistered: " + s);
-        }
-    };
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -209,39 +194,39 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void initListener() {
-        mWebView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                WebView.HitTestResult result = mWebView.getHitTestResult();
-                if (result != null) {
-                    int type = result.getType();
-                    Log.d(TAG, "onLongClick: " + type);
-                    if (type == WebView.HitTestResult.IMAGE_TYPE) {
-                        showSaveImageDialog(result);
-                    }
-                }
-                return false;
-            }
-        });
-    }
-
-    private void showSaveImageDialog(WebView.HitTestResult result) {
-        final String imageUrl = result.getExtra();
-        Launcher.with(this, SaveImageActivity.class)
-                .setPreExecuteListener(new Launcher.PreExecuteListener() {
-                    @Override
-                    public void preExecute(Intent intent) {
-                        intent.putExtra(SaveImageActivity.EXTRA_IMAGE_URL, imageUrl);
-                    }
-                })
-                .execute();
-    }
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
+
+        requestHomePopup();
+    }
+
+    private void requestHomePopup() {
+        API.Message.getHomePopup().setTag(TAG)
+                .setCallback(new Callback1<Resp<List<SysMessage>>>() {
+                    @Override
+                    protected void onRespSuccess(Resp<List<SysMessage>> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            showSysMessageDialog(resp.getData().get(0));
+                        }
+                    }
+                }).fire();
+    }
+
+    private void showSysMessageDialog(final SysMessage sysMessage) {
+        if (!Preference.get().hasShowedThisSysMessage(sysMessage)) {
+            HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
+                    .setOnCheckDetailListener(new HomePopup.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                            Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
+                                    .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
+                        }
+                    }).show();
+            Preference.get().setThisSysMessageShowed(sysMessage);
+        }
     }
 
     @Override
@@ -250,68 +235,12 @@ public class MainActivity extends BaseActivity {
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
     }
 
-    private void initView() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        mErrorPage = (LinearLayout) findViewById(R.id.errorPage);
-        mWebView = (WebView) findViewById(R.id.webView);
-
-        mRefreshButton = (Button) findViewById(R.id.refreshButton);
-        mRefreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWebView.reload();
-            }
-        });
-
-        // init webSettings
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webSettings.setUserAgentString(webSettings.getUserAgentString()
-                + " ###" + getString(R.string.android_web_agent) + "/1.0");
-        //mWebView.getSettings().setAppCacheEnabled(true);
-        webSettings.setAppCachePath(getExternalCacheDir().getPath());
-        webSettings.setAllowFileAccess(true);
-
-        // performance improve
-        webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        webSettings.setEnableSmoothTransition(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setUseWideViewPort(true);
-
-        mWebView.clearHistory();
-        mWebView.clearCache(true);
-        mWebView.clearFormData();
-        mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
-        if (Build.VERSION.SDK_INT >= 19) {
-            mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else {
-            mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_LIVE && resultCode == RESULT_OK) {
+            mBottomTabs.selectTab(mTabPosition);
         }
-
-        if (Variant.isApp1()) {
-            WP_JS_Main wpJsMain = new WP_JS_Main(mWebView);
-            mWebView.addJavascriptInterface(wpJsMain, "VIA_SDK");
-        }
-
-        mWebView.setWebViewClient(new WebVClient());
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-                if (newProgress == 100) {
-                    mProgressBar.setVisibility(View.GONE);
-                } else {
-                    if (mProgressBar.getVisibility() == View.GONE) {
-                        mProgressBar.setVisibility(View.VISIBLE);
-                    }
-                    mProgressBar.setProgress(newProgress);
-                }
-            }
-        });
-        mWebView.loadUrl(Api.getMainUrl());
     }
 
     private void openQQChat(WebView webView, String url) {
@@ -329,13 +258,6 @@ public class MainActivity extends BaseActivity {
         while (webView.canGoBack()) {
             webView.goBack();
         }
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl(Api.getMainUrl());
-            }
-        }, 200);
     }
 
     private void openAlipay(WebView webView, String url) {
@@ -347,55 +269,40 @@ public class MainActivity extends BaseActivity {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
-        while (webView.canGoBack()) {
-            webView.goBack();
-        }
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWebView.loadUrl(Api.getMime());
-            }
-        }, 200);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mWebView != null) {
-            mWebView.destroy();
-            mWebView = null;
-        }
-        cleanCookie();
-        super.onDestroy();
-
-        mHandler.removeCallbacksAndMessages(null);
-    }
-
-    private void cleanCookie() {
-        CookieSyncManager.createInstance(this.getApplicationContext());
-        CookieManager.getInstance().removeAllCookie();
-        CookieSyncManager.getInstance().sync();
     }
 
     private class NetworkReceiver extends Network.NetworkChangeReceiver {
 
         @Override
         protected void onNetworkChanged(int availableNetworkType) {
-            if (availableNetworkType > Network.NET_NONE && !mLoadSuccess) {
-                if (mWebView != null) {
-                    mWebView.reload();
-                }
+            if (availableNetworkType > Network.NET_NONE) {
+
             }
+        }
+    }
+
+    private class MainFragmentsAdapter extends FragmentPagerAdapter {
+
+        public MainFragmentsAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new HomeFragment();
+                case 1:
+                    return new InfoFragment();
+                case 2:
+                    return new MineFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
         }
     }
 }

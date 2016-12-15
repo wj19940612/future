@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <View
+        android:id="@+id/splitBlock"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/dateYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12/12"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/dateHour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dateYear"
+                android:gravity="left"
+                android:paddingTop="4dp"
+                android:textColor="@color/lucky"
+                tools:text="08:18"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.7dp"
+            android:layout_height="match_parent"
+            android:background="@color/splitLineGrayLight"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.77"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tradeDetailDataType"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/bg_buy_volume"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tools:text="啦啦啦"/>
+
+            <TextView
+                android:id="@+id/dateTypeDetail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/tradeDetailDataType"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="@color/lucky"
+                android:textSize="13sp"
+                tools:text="返还(DAX1612)"/>
+
+            <TextView
+                android:id="@+id/tradeDetailGrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="14sp"
+                tools:text="(125122.00元)"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

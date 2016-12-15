@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -77,10 +76,6 @@ public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
     private static final int REQ_CODE_SIGN_IN = 1;
-    //闪电下单界面开启的请求码
-    private static final int REQ_CODE_OPEN_SET_LIGHTNING_ORDERS = 999;
-    //闪电下单界面关闭的请求码
-    private static final int REQ_CODE_CLOSE_SET_LIGHTNING_ORDER = 617;
 
     private static final int REQ_CODE_SET_LIGHTNING_ORDER_PAGE = 10000;
 
@@ -121,9 +116,6 @@ public class TradeActivity extends BaseActivity implements
     @BindView(R.id.marketOpenArea)
     LinearLayout mMarketOpenArea;
 
-    @BindView(R.id.placeOrderContainer)
-    FrameLayout mPlaceOrderContainer;
-    //闪电下单按钮
     @BindView(R.id.lightningOrderBtn)
     ImageView mLightningOrderBtn;
 
@@ -154,9 +146,7 @@ public class TradeActivity extends BaseActivity implements
                 updateLastPriceView(data);
                 mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
                 updateChartView(data);
-
                 mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
-
                 updateBuyButtonsText(data);
             }
         }
@@ -164,27 +154,26 @@ public class TradeActivity extends BaseActivity implements
 
     //根据普通下单或者闪电下单改变买涨买跌按钮文字
     private void updateBuyButtonsText(FullMarketData data) {
-        if (data != null) {
-            if (mLightningOrderBtn.isSelected()) {
-                String lightningOrderBuyLong = getString(R.string.lightning_orders_buy_long)
-                        + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
-                mBuyLongBtn.setText(lightningOrderBuyLong);
-                String lightningOrderBuyShort = getString(R.string.lightning_orders_buy_short)
-                        + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
-                mSellShortBtn.setText(lightningOrderBuyShort);
-            } else {
-                setNormalBuyButtonsText(data);
-            }
+        if (mLightningOrderBtn.isSelected()) {
+            String lightningOrderBuyLong = getString(R.string.lightning_buy_long) + getFormattedPrice(data, true);
+            mBuyLongBtn.setText(lightningOrderBuyLong);
+            String lightningOrderBuyShort = getString(R.string.lightning_buy_short) + getFormattedPrice(data, false);
+            mSellShortBtn.setText(lightningOrderBuyShort);
+        } else {
+            String buyLong = getString(R.string.buy_long) + getFormattedPrice(data, true);
+            mBuyLongBtn.setText(buyLong);
+            String sellShort = getString(R.string.sell_short) + getFormattedPrice(data, false);
+            mSellShortBtn.setText(sellShort);
         }
     }
 
-    private void setNormalBuyButtonsText(FullMarketData data) {
-        String buyLong = getString(R.string.buy_long)
-                + FinanceUtil.formatWithScale(data.getAskPrice(), mProduct.getPriceDecimalScale());
-        mBuyLongBtn.setText(buyLong);
-        String sellShort = getString(R.string.sell_short)
-                + FinanceUtil.formatWithScale(data.getBidPrice(), mProduct.getPriceDecimalScale());
-        mSellShortBtn.setText(sellShort);
+    private String getFormattedPrice(FullMarketData marketData, boolean askPrice) {
+        if (marketData == null) return "";
+        if (askPrice) {
+            return FinanceUtil.formatWithScale(marketData.getAskPrice(), mProduct.getPriceDecimalScale());
+        } else {
+            return FinanceUtil.formatWithScale(marketData.getBidPrice(), mProduct.getPriceDecimalScale());
+        }
     }
 
     @Override
@@ -194,7 +183,6 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
-
         mUpdateRealTimeData = true;
 
         initData(getIntent());
@@ -243,7 +231,7 @@ public class TradeActivity extends BaseActivity implements
             String lightningOrderKey = LightningOrderAsset.createLightningOrderKey(mProduct, mFundType);
             mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(lightningOrderKey);
             if (mLocalLightningOrderAsset != null) {
-                mLightningOrderBtn.setSelected(true);
+                enableLightningOrderView(true);
                 compareWithWebCache();
             } else {
                 getLightningOrderWebCache();
@@ -317,7 +305,7 @@ public class TradeActivity extends BaseActivity implements
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        Log.d(TAG, "onRespSuccess: " + "remove lightning order cache success");
+                        Log.d(TAG, "removeLightningOrder: " + "remove web cache success");
                     }
                 })
                 .fire();
@@ -551,8 +539,8 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mNettyHandler = null;
         mHoldingOrderPresenter.onDestroy();
+        mNettyHandler = null;
     }
 
     @Override
@@ -671,8 +659,6 @@ public class TradeActivity extends BaseActivity implements
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-                    boolean isLightningOrderOpened = LightningOrderAsset.isLightningOrderOpened(mProduct, mFundType);
-                    enableLightningOrderView(isLightningOrderOpened);
                     updateLightningOrderView(); // based on product
 
                     NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -791,8 +777,10 @@ public class TradeActivity extends BaseActivity implements
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             showFundNotEnoughDialog(jsonObjectResp);
-                        } else if (jsonObjectResp.getCode() == Resp.CODE_LIGHTNING_ORDER_IS_RUN_OUT) {
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_LIGHTNING_ORDER_INVALID) {
+                            enableLightningOrderView(false);
                             showLightningOrderInvalidDialog();
+                            removeLightningOrder();
                         } else {
                             SmartDialog.with(getActivity(), jsonObjectResp.getMsg())
                                     .setPositive(R.string.ok)

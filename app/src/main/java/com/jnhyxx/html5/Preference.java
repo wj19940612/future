@@ -165,9 +165,9 @@ public class Preference {
     }
 
     public LightningOrderAsset getLightningOrderAsset(String lightningOrderKey) {
-        String lightningOrder = mPrefs.getString(lightningOrderKey, null);
-        if (lightningOrder != null) {
-            return new Gson().fromJson(lightningOrder, LightningOrderAsset.class);
+        String lightningOrderJson = mPrefs.getString(lightningOrderKey, null);
+        if (lightningOrderJson != null) {
+            return new Gson().fromJson(lightningOrderJson, LightningOrderAsset.class);
         }
         return null;
     }

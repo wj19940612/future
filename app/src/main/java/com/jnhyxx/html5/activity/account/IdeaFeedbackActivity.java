@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -34,8 +33,6 @@ public class IdeaFeedbackActivity extends BaseActivity {
     @BindView(R.id.feedbackContentNumber)
     TextView mFeedbackContentNumber;
 
-    @BindView(R.id.topLayout)
-    LinearLayout mTopLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +46,10 @@ public class IdeaFeedbackActivity extends BaseActivity {
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            String importAbilityWords = String.valueOf(200 - editable.toString().length());
+            String importAbilityWords = String.valueOf(200 - editable.toString().trim().length());
             mFeedbackContentNumber.setText(importAbilityWords);
 
-            if (!TextUtils.isEmpty(editable.toString())) {
+            if (!TextUtils.isEmpty(editable.toString().trim())) {
                 mFeedbackSubmit.setEnabled(true);
             } else {
                 mFeedbackSubmit.setEnabled(false);
@@ -72,11 +69,19 @@ public class IdeaFeedbackActivity extends BaseActivity {
                 realName = userInfo.getRealName();
             }
         }
-        API.User.submitFeedBack(mFeedbackContent.getText().toString(), null, userName, realName, mFeedbackConnectWay.getText().toString())
+
+        String feedBackContent = mFeedbackContent.getText().toString().trim();
+
+        if (TextUtils.isEmpty(feedBackContent)) return;
+        submitFeedBack(userName, realName, feedBackContent);
+    }
+
+    private void submitFeedBack(String userName, String realName, String feedBackContent) {
+        API.User.submitFeedBack(feedBackContent, null, userName, realName, mFeedbackConnectWay.getText().toString())
                 .setCallback(new Callback2<Resp<JsonObject>, JsonObject>() {
                     @Override
                     public void onRespSuccess(JsonObject jsonObject) {
-                        CustomToast.getInstance().showText(getActivity(),R.string.feedback_submit_success);
+                        CustomToast.getInstance().showText(getActivity(), R.string.feedback_submit_success);
                         finish();
                     }
                 })
@@ -90,5 +95,4 @@ public class IdeaFeedbackActivity extends BaseActivity {
         super.onDestroy();
         mFeedbackContent.removeTextChangedListener(mValidationWatcher);
     }
-
 }

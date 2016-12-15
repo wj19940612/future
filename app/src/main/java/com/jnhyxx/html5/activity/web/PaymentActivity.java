@@ -40,7 +40,6 @@ public class PaymentActivity extends WebViewActivity {
     @Override
     public void onBackPressed() {
         finish();
-        super.onBackPressed();
     }
 
     private void openAlipay(WebView webView, String url) {

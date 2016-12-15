@@ -230,6 +230,7 @@ public class TradeActivity extends BaseActivity implements
                 enableLightningOrderView(true);
                 compareWithWebCache();
             } else {
+                enableLightningOrderView(false);
                 getLightningOrderWebCache();
             }
         }

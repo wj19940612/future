@@ -287,6 +287,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                                      mSwipeRefreshLayout.setRefreshing(false);
                                                  }
                                              }
+                                             if (mPageOffset > 10) {
+                                                 mListView.setSelection(mPageSize-1);
+                                             }
                                          } else {
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                          }

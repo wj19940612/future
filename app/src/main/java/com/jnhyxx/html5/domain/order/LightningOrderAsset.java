@@ -1,11 +1,13 @@
-package com.jnhyxx.html5.domain.market;
+package com.jnhyxx.html5.domain.order;
 
 import android.util.Log;
 
-import com.jnhyxx.html5.domain.order.FuturesFinancing;
+import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.market.FullMarketData;
+import com.jnhyxx.html5.domain.market.Product;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,26 +15,16 @@ import java.util.List;
  * 闪电下单状态
  */
 
-public class ProductLightningOrderStatus implements Serializable {
-    private static final long serialVersionUID = -6950030646707014378L;
+public class LightningOrderAsset {
 
     private static final String TAG = "ProductLightningOrderSt";
 
-    public static final String KEY_LIGHTNING_ORDER_IS_OPEN = "KEY_LIGHTNING_ORDER_IS_OPEN";
-
-    //服务端的产品配资数据
-    public static final int RESULT_CODE_AGAIN_SETLIGHTNING_ORDER_ = 505;
 
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
     //表示闪电下单按钮打开同意协议的fragment的标志
     public static final int TAG_OPEN_ARRGE_FRAGMENT_PAGE = 333;
-
-    //闪电下单打开的返回码
-    public static final int  RESULT_CODE_LIGHTNING_ORDER_OPEN= 452;
-    //闪电下单关闭的返回码
-    public static final int  RESULT_CODE_LIGHTNING_ORDER_CLOSE= 50000;
 
     /**
      * assetsId : 1
@@ -86,11 +78,6 @@ public class ProductLightningOrderStatus implements Serializable {
      * 费率
      */
     private double ratio;
-
-    /**
-     * 产品配资
-     */
-    FuturesFinancing futuresFinancing;
 
 
     public int getPayType() {
@@ -173,13 +160,10 @@ public class ProductLightningOrderStatus implements Serializable {
         this.stopProfitPoint = stopProfitPoint;
     }
 
-    public void setFuturesFinancing(FuturesFinancing futuresFinancing) {
-        this.futuresFinancing = futuresFinancing;
-    }
 
     @Override
     public String toString() {
-        return "ProductLightningOrderStatus{" +
+        return "LightningOrderAsset{" +
                 "payType=" + payType +
                 ", assetsId=" + assetsId +
                 ", varietyId=" + varietyId +
@@ -190,7 +174,6 @@ public class ProductLightningOrderStatus implements Serializable {
                 ", marginMoney=" + marginMoney +
                 ", fees=" + fees +
                 ", ratio=" + ratio +
-                ", futuresFinancing=" + futuresFinancing +
                 '}';
     }
 
@@ -200,7 +183,7 @@ public class ProductLightningOrderStatus implements Serializable {
      * @param futuresFinancing 产品配资方案
      * @return
      */
-    public boolean compareDataWithWeb(FuturesFinancing futuresFinancing) {
+    public boolean isValid(FuturesFinancing futuresFinancing) {
         if (futuresFinancing.getAssets() == null && futuresFinancing.getAssets().isEmpty())
             return false;
         List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
@@ -223,20 +206,105 @@ public class ProductLightningOrderStatus implements Serializable {
         return false;
     }
 
-    public List<FuturesFinancing.StopLoss> getStopLossList(Product product) {
-        List<FuturesFinancing.StopLoss> result = new ArrayList<>();
-        if (futuresFinancing != null) {
-            for (FuturesFinancing.AssetsBean assetsBean : futuresFinancing.getAssets()) {
-                if (assetsBean.getStopLossBeat() == getStopLossPrice()) {
-                    //是否是默认手数
-                    assetsBean.setIsDefault(1);
+    //获取止损的选择索引
+    public int getSelectStopLossIndex(FuturesFinancing futuresFinancing) {
+        int stopLossIndex = 0;
+        if (futuresFinancing != null && !futuresFinancing.getAssets().isEmpty()) {
+            List<FuturesFinancing.AssetsBean> assets = futuresFinancing.getAssets();
+            for (int i = 0; i < assets.size(); i++) {
+                if (assets.get(i).getStopLossBeat() == getStopLossPrice()) {
+                    stopLossIndex = i;
+                    break;
                 }
-                FuturesFinancing.StopLoss stopLoss = new FuturesFinancing.StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean);
-
-                result.add(stopLoss);
             }
         }
-        return result;
+        return stopLossIndex;
     }
-    
+
+    //获取被选择的手数
+    public int getSelectHandNum(Product product, FuturesFinancing futuresFinancing) {
+        int defaultIndex = 0;
+        if (futuresFinancing != null) {
+            //获取止损集合
+            List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
+            List<FuturesFinancing.TradeQuantity> tradeQuantityList = stopLossList.get(getSelectStopLossIndex(futuresFinancing)).getTradeQuantityList();
+            for (int i = 0; i < tradeQuantityList.size(); i++) {//
+                if (tradeQuantityList.get(i).getQuantity() == getHandsNum()) {
+                    defaultIndex = i;
+                    break;
+                }
+            }
+        }
+        return defaultIndex;
+    }
+
+    //获取被选择的止盈数据
+    public int getSelectStopProfit(Product product, FuturesFinancing futuresFinancing) {
+        int selectIndex = 0;
+        if (futuresFinancing != null) {
+            List<FuturesFinancing.StopLoss> stopLossList = futuresFinancing.getStopLossList(product);
+            List<FuturesFinancing.StopProfit> stopProfitList = stopLossList.get(getSelectStopLossIndex(futuresFinancing)).getStopProfitList();
+            for (int i = 0; i < stopProfitList.size(); i++) {
+                if (stopProfitList.get(i).getStopProfit() == getStopWinPrice()) {
+                    Log.d(TAG, " i " + i + " " + stopProfitList.get(i).getStopProfit());
+                    selectIndex = i;
+                    break;
+                }
+            }
+        }
+        return selectIndex;
+    }
+
+    /**
+     * 本地存储闪电下单数据
+     * @param product
+     * @param fundType
+     * @param lightningOrderAsset
+     */
+    public static void setLocalLightningOrder(Product product, int fundType, LightningOrderAsset lightningOrderAsset) {
+        String lightningOrderKey = createLightningOrderKey(product, fundType);
+        Preference.get().setLightningOrderAsset(lightningOrderKey, lightningOrderAsset);
+    }
+
+    /**
+     * 获取本地的闪电数据
+     * @param product
+     * @param fundType
+     * @return
+     */
+    public static LightningOrderAsset getLocalLightningOrderAsset(Product product, int fundType) {
+        String lightningOrderKey = createLightningOrderKey(product, fundType);
+        return Preference.get().getLightningOrderAsset(lightningOrderKey);
+    }
+
+    private static String createLightningOrderKey(Product product, int fundType) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(product.getVarietyId());
+        stringBuilder.append(LocalUser.getUser().getPhone());
+        stringBuilder.append(fundType);
+        return stringBuilder.toString();
+    }
+
+    public SubmittedOrder getSubmittedOrder(Product product, int fundType, int buyType, FullMarketData fullMarketData) {
+        SubmittedOrder submittedOrder = new SubmittedOrder(product.getVarietyId(), buyType, SubmittedOrder.SUBMIT_TYPE_LIGHTNING_ORDER);
+        if (fullMarketData != null) {
+            submittedOrder.setOrderPrice(buyType == TYPE_BUY_LONG ? fullMarketData.getAskPrice() : fullMarketData.getBidPrice());
+        }
+        submittedOrder.setPayType(fundType);
+        submittedOrder.setAssetsId(getAssetsId());
+        submittedOrder.setHandsNum(getHandsNum());
+        submittedOrder.setStopProfitPoint(getStopProfitPoint());
+        return submittedOrder;
+    }
+
+    /**
+     * 判断闪电下单是否开启
+     *
+     * @param product  产品
+     * @param fundType 支付方式
+     * @return
+     */
+    public static boolean isLightningOrderOpened(Product product, int fundType) {
+        return getLocalLightningOrderAsset(product, fundType) != null;
+    }
 }

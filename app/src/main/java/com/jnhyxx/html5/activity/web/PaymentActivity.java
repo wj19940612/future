@@ -37,6 +37,12 @@ public class PaymentActivity extends WebViewActivity {
         return super.onShouldOverrideUrlLoading(view, url);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
+
     private void openAlipay(WebView webView, String url) {
         try {
             Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
@@ -49,5 +55,4 @@ public class PaymentActivity extends WebViewActivity {
             e.printStackTrace();
         }
     }
-
 }

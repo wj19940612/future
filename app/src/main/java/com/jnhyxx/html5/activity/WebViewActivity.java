@@ -109,6 +109,7 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
+
     protected void initData(Intent intent) {
         mTitle = intent.getStringExtra(EX_TITLE);
         mPageUrl = intent.getStringExtra(EX_URL);
@@ -137,7 +138,7 @@ public class WebViewActivity extends BaseActivity {
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         webSettings.setUserAgentString(webSettings.getUserAgentString()
                 + " ###" + getString(R.string.android_web_agent) + "/1.0");
-        //mWebView.getSettings().setAppCacheEnabled(true);
+        //mWebView.getSettings().setAppCacheEnabled(true);l
         webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);
 

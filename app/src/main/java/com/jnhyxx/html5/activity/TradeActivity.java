@@ -355,6 +355,7 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, mProduct.getVarietyName() + getString(R.string.play_rule))
                         .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyId()))
                         .execute();
                 Preference.get().setTradeRuleClicked(LocalUser.getUser().getPhone(), mProduct.getVarietyType());

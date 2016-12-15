@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.domain.order;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.jnhyxx.html5.Preference;
@@ -258,26 +257,27 @@ public class LightningOrderAsset {
 
     /**
      * 本地存储闪电下单数据
-     *
-     * @param lightningOrderKey
+     * @param product
+     * @param fundType
      * @param lightningOrderAsset
      */
-    public static void setLocalLightningOrder(String lightningOrderKey, LightningOrderAsset lightningOrderAsset) {
+    public static void setLocalLightningOrder(Product product, int fundType, LightningOrderAsset lightningOrderAsset) {
+        String lightningOrderKey = createLightningOrderKey(product, fundType);
         Preference.get().setLightningOrderAsset(lightningOrderKey, lightningOrderAsset);
     }
 
     /**
      * 获取本地的闪电数据
-     *
-     * @param lightningOrderKey
+     * @param product
+     * @param fundType
      * @return
      */
-    public static LightningOrderAsset getLocalLightningOrderAsset(String lightningOrderKey) {
+    public static LightningOrderAsset getLocalLightningOrderAsset(Product product, int fundType) {
+        String lightningOrderKey = createLightningOrderKey(product, fundType);
         return Preference.get().getLightningOrderAsset(lightningOrderKey);
     }
 
-
-    public static String createLightningOrderKey(Product product, int fundType) {
+    private static String createLightningOrderKey(Product product, int fundType) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(product.getVarietyId());
         stringBuilder.append(LocalUser.getUser().getPhone());
@@ -285,16 +285,15 @@ public class LightningOrderAsset {
         return stringBuilder.toString();
     }
 
-    public static SubmittedOrder getSubmittedOrder(Product product, int fundType, int buyType, FullMarketData fullMarketData) {
+    public SubmittedOrder getSubmittedOrder(Product product, int fundType, int buyType, FullMarketData fullMarketData) {
         SubmittedOrder submittedOrder = new SubmittedOrder(product.getVarietyId(), buyType, SubmittedOrder.SUBMIT_TYPE_LIGHTNING_ORDER);
         if (fullMarketData != null) {
             submittedOrder.setOrderPrice(buyType == TYPE_BUY_LONG ? fullMarketData.getAskPrice() : fullMarketData.getBidPrice());
         }
         submittedOrder.setPayType(fundType);
-        LightningOrderAsset localLightningOrderAsset = getLocalLightningOrderAsset(createLightningOrderKey(product, fundType));
-        submittedOrder.setAssetsId(localLightningOrderAsset.getAssetsId());
-        submittedOrder.setHandsNum(localLightningOrderAsset.getHandsNum());
-        submittedOrder.setStopProfitPoint(localLightningOrderAsset.getStopProfitPoint());
+        submittedOrder.setAssetsId(getAssetsId());
+        submittedOrder.setHandsNum(getHandsNum());
+        submittedOrder.setStopProfitPoint(getStopProfitPoint());
         return submittedOrder;
     }
 
@@ -306,7 +305,6 @@ public class LightningOrderAsset {
      * @return
      */
     public static boolean isLightningOrderOpened(Product product, int fundType) {
-        String lightningOrderKey = createLightningOrderKey(product, fundType);
-        return !TextUtils.isEmpty(lightningOrderKey) && getLocalLightningOrderAsset(lightningOrderKey) != null;
+        return getLocalLightningOrderAsset(product, fundType) != null;
     }
 }

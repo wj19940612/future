@@ -138,7 +138,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
                     protected void onRespSuccess(Resp<JsonObject> resp) {
-                        LightningOrderAsset.setLocalLightningOrder(LightningOrderAsset.createLightningOrderKey(mProduct, mFundType), null);
+                        LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, null);
                         setResult(RESULT_OK);
                         if (!isFuturesFinChanged) {
                             onBackPressed();
@@ -157,7 +157,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                         @Override
                         public void onReceive(Resp<JsonObject> jsonObjectResp) {
                             if (jsonObjectResp.isSuccess()) {
-                                LightningOrderAsset.setLocalLightningOrder(LightningOrderAsset.createLightningOrderKey(mProduct, mFundType), mLightningOrderAsset);
+                                LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, mLightningOrderAsset);
                                 setResult(RESULT_OK);
                                 finish();
                             } else {
@@ -202,7 +202,7 @@ public class SetLightningOrdersActivity extends BaseActivity {
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         mFuturesFinancing = futuresFinancing;
                         if (mFuturesFinancing != null) {
-                            mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(LightningOrderAsset.createLightningOrderKey(mProduct, mFundType));
+                            mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(mProduct, mFundType);
                             hasFuturesFinancing = true;
                             mLightningOrderAsset.setRatio(mFuturesFinancing.getRatio());
                             if (mLocalLightningOrderAsset != null) {

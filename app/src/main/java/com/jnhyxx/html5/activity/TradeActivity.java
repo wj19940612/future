@@ -135,8 +135,6 @@ public class TradeActivity extends BaseActivity implements
     private FullMarketData mFullMarketData;
     private ServerIpPort mServerIpPort;
 
-    private LightningOrderAsset mLocalLightningOrderAsset;
-
     private NettyHandler mNettyHandler = new NettyHandler() {
         @Override
         protected void onReceiveData(FullMarketData data) {
@@ -228,9 +226,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void updateLightningOrderView() {
         if (LocalUser.getUser().isLogin()) {
-            String lightningOrderKey = LightningOrderAsset.createLightningOrderKey(mProduct, mFundType);
-            mLocalLightningOrderAsset = LightningOrderAsset.getLocalLightningOrderAsset(lightningOrderKey);
-            if (mLocalLightningOrderAsset != null) {
+            if (LightningOrderAsset.isLightningOrderOpened(mProduct, mFundType)) {
                 enableLightningOrderView(true);
                 compareWithWebCache();
             } else {
@@ -245,8 +241,7 @@ public class TradeActivity extends BaseActivity implements
                     @Override
                     public void onRespSuccess(LightningOrderAsset lightningOrderAsset) {
                         if (lightningOrderAsset != null) {
-                            String lightningOrderKey = LightningOrderAsset.createLightningOrderKey(mProduct, mFundType);
-                            LightningOrderAsset.setLocalLightningOrder(lightningOrderKey, lightningOrderAsset);
+                            LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, lightningOrderAsset);
                             updateLightningOrderView();
                         }
                     }
@@ -259,7 +254,8 @@ public class TradeActivity extends BaseActivity implements
                     @Override
                     public void onRespSuccess(FuturesFinancing futuresFinancing) {
                         if (futuresFinancing != null) {
-                            boolean isValid = mLocalLightningOrderAsset.isValid(futuresFinancing);
+                            LightningOrderAsset orderAsset = LightningOrderAsset.getLocalLightningOrderAsset(mProduct, mFundType);
+                            boolean isValid = orderAsset.isValid(futuresFinancing);
                             if (isValid) {
                                 enableLightningOrderView(true);
                             } else {
@@ -297,9 +293,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void removeLightningOrder() {
-        String lightningOrderKey = LightningOrderAsset.createLightningOrderKey(mProduct, mFundType);
-        LightningOrderAsset.setLocalLightningOrder(lightningOrderKey, null);
-        mLocalLightningOrderAsset = null;
+        LightningOrderAsset.setLocalLightningOrder(mProduct, mFundType, null);
         API.Market.removeOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback1<Resp<JsonObject>>() {
@@ -447,8 +441,8 @@ public class TradeActivity extends BaseActivity implements
 
     //设置闪电下单的提交单
     private void placeLightningOrder(int buyType) {
-        SubmittedOrder submittedOrder = LightningOrderAsset.getSubmittedOrder(mProduct, mFundType,
-                buyType, mFullMarketData);
+        LightningOrderAsset orderAsset = LightningOrderAsset.getLocalLightningOrderAsset(mProduct, mFundType);
+        SubmittedOrder submittedOrder = orderAsset.getSubmittedOrder(mProduct, mFundType, buyType, mFullMarketData);
         submitOrder(submittedOrder);
     }
 

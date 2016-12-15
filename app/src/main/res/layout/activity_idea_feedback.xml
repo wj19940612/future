@@ -10,85 +10,75 @@
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.account.IdeaFeedbackActivity">
 
-    <LinearLayout
-        android:id="@+id/topLayout"
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:backFeature="true"
+        app:titleText="@string/feedback_title"/>
 
-        <com.jnhyxx.html5.view.TitleBar
-            android:id="@+id/titleBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:backFeature="true"
-            app:titleText="@string/feedback_title"/>
-
-        <EditText
-            android:id="@+id/feedbackContent"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:layout_marginTop="10dp"
-            android:background="@null"
-            android:gravity="left"
-            android:hint="@string/feedback_hint"
-            android:lineSpacingExtra="5dp"
-            android:maxLength="200"
-            android:minHeight="200dp"
-            android:textColorHint="@color/grayHint"
-            tools:text=""/>
-
-        <TextView
-            android:id="@+id/feedbackContentNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_line_division_center"
-            android:gravity="right"
-            android:paddingBottom="12dp"
-            android:paddingTop="10dp"
-            android:text="@string/feedback_content_number"
-            android:textColor="@color/lucky"
-            android:textSize="12sp"
-            android:visibility="visible"/>
-
-        <EditText
-            android:id="@+id/feedbackConnectWay"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_line_division_center"
-            android:hint="@string/feedback_user_phone"
-            android:maxLength="30"
-            android:paddingTop="@dimen/common_margin"
-            android:textColorHint="@color/grayHint"/>
-
-        <TextView
-            android:id="@+id/feedbackSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/btn_primary"
-            android:clickable="true"
-            android:enabled="false"
-            android:gravity="center"
-            android:padding="@dimen/common_margin"
-            android:text="@string/feedback_submit"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/emptyLayout"
+    <EditText
+        android:id="@+id/feedbackContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="180dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:gravity="left"
+        android:hint="@string/feedback_hint"
+        android:lineSpacingExtra="5dp"
+        android:maxLength="200"
+        android:minHeight="200dp"
+        android:paddingBottom="10dp"
+        android:textColorHint="@color/grayHint"
+        android:textSize="14sp"
+        tools:text=""/>
+
+    <TextView
+        android:id="@+id/feedbackContentNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_center"
+        android:gravity="right"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/feedback_content_number"
+        android:textColor="@color/lucky"
+        android:textSize="12sp"
+        android:visibility="visible"/>
+
+    <EditText
+        android:id="@+id/feedbackConnectWay"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_center"
+        android:hint="@string/feedback_user_phone"
+        android:maxLength="30"
+        android:paddingTop="@dimen/common_margin"
+        android:textColorHint="@color/grayHint"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/feedbackSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_primary"
+        android:clickable="true"
+        android:enabled="false"
+        android:gravity="center"
+        android:padding="@dimen/common_margin"
+        android:text="@string/feedback_submit"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
 </LinearLayout>

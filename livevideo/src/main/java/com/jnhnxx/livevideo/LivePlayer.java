@@ -283,8 +283,6 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         if (mPlayer != null) {
             long position = mPlayer.getCurrentPosition();
             long duration = mPlayer.getDuration();
-            Log.d(TAG, "updatePlayerController: pos: " + position + ", dur: " + duration);
-
             if (duration > 0) {
                 mEndTime.setText(stringForTime(duration));
             } else {

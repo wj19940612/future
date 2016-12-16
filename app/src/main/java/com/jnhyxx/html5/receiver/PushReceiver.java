@@ -7,9 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -177,6 +180,10 @@ public class PushReceiver extends BroadcastReceiver {
         builder.setContentIntent(pendingIntent);
         builder.setWhen(DateUtil.getStringToDate(sysMessage.getCreateTime()));
         builder.setAutoCancel(true);
+
+        BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+        Bitmap bitmap = drawable.getBitmap();
+        builder.setLargeIcon(bitmap);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

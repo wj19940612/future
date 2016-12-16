@@ -9,10 +9,4 @@ public interface IPlayerController {
     boolean isShowing();
 
     void enable(boolean enable);
-
-    void mute(boolean mute);
-
-    void start(boolean start);
-
-    void fullScreen(boolean full);
 }

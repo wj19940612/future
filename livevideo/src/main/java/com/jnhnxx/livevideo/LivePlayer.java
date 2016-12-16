@@ -1,68 +1,110 @@
 package com.jnhnxx.livevideo;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
-import android.graphics.Rect;
-import android.graphics.SurfaceTexture;
-import android.net.Uri;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
-import android.view.TextureView;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
-import com.netease.neliveplayer.NELivePlayer;
-import com.netease.neliveplayer.NEMediaPlayer;
+import java.util.Locale;
 
-import java.io.IOException;
+public class LivePlayer extends RelativeLayout implements IPlayerController, IPlayer {
 
-public class LivePlayer extends TextureView implements
-        TextureView.SurfaceTextureListener, ILivePlayer {
+    private static final String TAG = "LivePlayer";
 
-    private static final String TAG = "LiveVideoView";
+    private static final int sDefaultTimeout = 3000; // 3000ms;
+    private static final int FADE_OUT = 1;
+    private static final int SHOW = 2;
 
-    private static final int IDLE = 0;
-    private static final int INITIALIZED = 1;
-    private static final int PREPARING = 2;
-    private static final int PREPARED = 3;
-    private static final int STARTED = 4;
-    private static final int PAUSED = 5;
-    private static final int ERROR = -1;
+    private Player mPlayer;
 
-    private Uri mUri;
+    private boolean mShowing;
 
-    private int mVideoWidth;
-    private int mVideoHeight;
-    private int mPixelSarNum;
-    private int mPixelSarDen;
-    private int mSurfaceWidth;
-    private int mSurfaceHeight;
-
-    private SurfaceTexture mSurfaceTexture;
-    private NELivePlayer mMediaPlayer;
-    private IPlayerController mPlayerController;
     private View mBufferingView;
+    private View mController;
+    private ImageView mPauseButton;
+    private ImageView mSetPlayerScaleButton;
+    private ImageView mMuteButton;
+    private ProgressBar mProgress;
+    private TextView mEndTime;
+    private TextView mCurrentTime;
 
-    private ResourceReleaseReceiver mReceiver; //接收资源释放成功的通知
+    private OnScaleButtonClickListener mOnScaleButtonClickListener;
 
-    // assist log
-    private String mLogPath = null;
-    private int mLogLevel = 0;
+    @Override
+    public void start() {
+        mPlayer.start();
+        mPauseButton.setImageResource(R.drawable.media_controller_stop);
+    }
 
-    // state
-    private int mCurState;
-    private boolean mMute;
-    private boolean mFullScreen;
+    @Override
+    public void stop() {
+        mPlayer.stop();
+        mPauseButton.setImageResource(R.drawable.media_controller_start);
+    }
+
+    @Override
+    public boolean isStarted() {
+        return mPlayer.isStarted();
+    }
+
+    @Override
+    public long getDuration() {
+        return mPlayer.getDuration();
+    }
+
+    @Override
+    public long getCurrentPosition() {
+        return mPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return mPlayer.getBufferPercentage();
+    }
+
+    @Override
+    public void setMute(boolean mute) {
+        mPlayer.setMute(mute);
+        if (mute) {
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
+        } else {
+            mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+        }
+    }
+
+    @Override
+    public boolean isMute() {
+        return mPlayer.isMute();
+    }
+
+    @Override
+    public void setFullScreen(boolean fullScreen) {
+        mPlayer.setFullScreen(fullScreen);
+        if (fullScreen) {
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale);
+        } else {
+            mSetPlayerScaleButton.setImageResource(R.drawable.media_controller_scale_full);
+        }
+    }
+
+    @Override
+    public boolean isFullScreen() {
+        return mPlayer.isFullScreen();
+    }
+
+    public interface OnScaleButtonClickListener {
+        void onClick(boolean fullscreen);
+    }
 
     public LivePlayer(Context context) {
         super(context);
@@ -75,451 +117,262 @@ public class LivePlayer extends TextureView implements
     }
 
     private void init() {
-        mVideoWidth = 0;
-        mVideoHeight = 0;
-        mPixelSarNum = 0;
-        mPixelSarDen = 0;
-        setSurfaceTextureListener(this);
-        registerBroadcast();
-        mCurState = IDLE;
+        mPlayer = new Player(getContext());
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(CENTER_IN_PARENT);
+        addView(mPlayer, params);
 
-        setOnClickListener(new OnClickListener() {
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mBufferingView = createBufferingView();
+        mBufferingView.setVisibility(GONE);
+        addView(mBufferingView, params);
+
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(40));
+        params.addRule(ALIGN_PARENT_BOTTOM);
+        mController = createController();
+        mController.setVisibility(GONE);
+        addView(mController, params);
+
+        mPlayer.setPlayerController(this);
+        mPlayer.setBufferingView(mBufferingView);
+    }
+
+    private int dp2px(float dp) {
+        return (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    private View createBufferingView() {
+        return LayoutInflater.from(getContext()).inflate(R.layout.player_buffering, null);
+    }
+
+    private View createController() {
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.player_controller, null);
+        mPauseButton = (ImageView) v.findViewById(R.id.media_controller_play_pause); //播放暂停按钮
+        mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayerController.isShowing()) {
-                    mPlayerController.hide();
+                if (isStarted()) {
+                    stop();
                 } else {
-                    mPlayerController.show();
+                    start();
                 }
             }
         });
-    }
 
-    private void registerBroadcast() {
-        unregisterBroadcast();
-        mReceiver = new ResourceReleaseReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(NEMediaPlayer.NELP_RELEASE_SUCCESS);
-        getContext().registerReceiver(mReceiver, filter);
-    }
+        mSetPlayerScaleButton = (ImageView) v.findViewById(R.id.video_player_scale);  //画面显示模式按钮
+        mSetPlayerScaleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFullScreen()) {
+                    if (mOnScaleButtonClickListener != null) {
+                        mOnScaleButtonClickListener.onClick(false);
+                    }
+                    setFullScreen(false);
+                } else {
+                    if (mOnScaleButtonClickListener != null) {
+                        mOnScaleButtonClickListener.onClick(true);
+                    }
+                    setFullScreen(true);
+                }
+            }
+        });
 
-    private void unregisterBroadcast() {
-        if (mReceiver != null) {
-            getContext().unregisterReceiver(mReceiver);
-            mReceiver = null;
+        mMuteButton = (ImageView) v.findViewById(R.id.video_player_mute);  //静音按钮
+        mMuteButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMute()) {
+                    setMute(false);
+                } else {
+                    setMute(true);
+                }
+            }
+        });
+
+        mProgress = (SeekBar) v.findViewById(R.id.media_controller_seekbar);  //进度条
+        if (mProgress != null) {
+            if (mProgress instanceof SeekBar) {
+                SeekBar seeker = (SeekBar) mProgress;
+                seeker.setOnSeekBarChangeListener(mSeekListener);
+                seeker.setThumbOffset(1);
+            }
+            mProgress.setMax(1000);
         }
+        mProgress.setEnabled(false);
+
+        mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
+        mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
+
+        return v;
     }
 
     public void setVideoPath(String path) { //设置视频文件路径
-        setVideoURI(Uri.parse(path));
+        mPlayer.setVideoPath(path);
     }
 
-    public void setVideoURI(Uri uri) {
-        mUri = uri;
-        mCurState = PAUSED;
-        if (mPlayerController != null) {
-            mPlayerController.enable(true);
-            mPlayerController.show();
-        }
-    }
-
-    public void setPlayerController(IPlayerController controller) {
-        mPlayerController = controller;
-    }
-
-    public void setBufferingView(View bufferingView) {
-        mBufferingView = bufferingView;
+    public void setOnScaleButtonClickListener(OnScaleButtonClickListener onScaleButtonClickListener) {
+        mOnScaleButtonClickListener = onScaleButtonClickListener;
     }
 
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG, "onSurfaceTextureAvailable: w: " + width + " h: " + height);
-        mSurfaceTexture = surface;
-        mSurfaceWidth = width;
-        mSurfaceHeight = height;
+    public void show() {
+        show(sDefaultTimeout);
     }
 
-    @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG, "onSurfaceTextureSizeChanged: w: " + width + " h: " + height);
-        mSurfaceWidth = width;
-        mSurfaceHeight = height;
-        scalePlayerBasedOnVideoSize();
-    }
+    private void show(int timeout) {
+        if (!mShowing) {
+            mShowing = true;
+            mHandler.sendEmptyMessage(SHOW);
 
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        Log.d(TAG, "onSurfaceTextureDestroyed: ");
-        releaseResource();
-        return false;
-    }
-
-    @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        Log.d(TAG, "onSurfaceTextureUpdated: ");
-    }
-
-    private void openVideo() {
-        if (mUri == null || mSurfaceTexture == null) {
-            return;
-        }
-
-        // Tell the music playback service to stop
-        Intent i = new Intent("com.android.music.musicservicecommand");
-        i.putExtra("command", "stop");
-        getContext().sendBroadcast(i);
-
-        releaseResource();
-
-        try {
-            NEMediaPlayer neMediaPlayer = null;
-            if (mUri != null) {
-                neMediaPlayer = new NEMediaPlayer();
+            if (timeout != 0) {
+                mHandler.removeMessages(FADE_OUT);
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(FADE_OUT), timeout);
             }
-            mMediaPlayer = neMediaPlayer;
-            getLogPath();
-            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
-            mMediaPlayer.setBufferStrategy(0); // 设置缓冲策略，0为直播低延时，1为点播抗抖动
-            mMediaPlayer.setHardwareDecoder(true); //设置是否开启硬件解码，0为软解，1为硬解, TextureView 只支持硬件解码
-            mMediaPlayer.setOnPreparedListener(mPreparedListener);
-            mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
-            mMediaPlayer.setOnCompletionListener(mCompletionListener);
-            mMediaPlayer.setOnErrorListener(mErrorListener);
-            mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
-            mMediaPlayer.setOnInfoListener(mInfoListener);
-            // mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener); 只用于点播
-            mMediaPlayer.setOnVideoParseErrorListener(mVideoParseErrorListener);
-            if (mUri != null) {
-                //设置播放地址，返回0正常，返回-1则说明地址非法，需要使用网易视频云官方生成的地址
-                int ret = mMediaPlayer.setDataSource(mUri.toString());
-                if (ret < 0) { // 地址非法，请输入网易视频云官方地址！
-                    releaseResource();
-                    return;
-                }
-                mCurState = INITIALIZED;
-            }
-            mMediaPlayer.setSurface(new Surface(mSurfaceTexture));
-            mMediaPlayer.setScreenOnWhilePlaying(true);
-            mMediaPlayer.prepareAsync(getContext()); //初始化视频文件
-            mCurState = PREPARING;
-
-        } catch (IOException ex) {
-            Log.e(TAG, "Unable to open content: " + mUri, ex);
-            mErrorListener.onError(mMediaPlayer, -1, 0);
-            return;
-        } catch (IllegalArgumentException ex) {
-            Log.e(TAG, "Unable to open content: " + mUri, ex);
-            mErrorListener.onError(mMediaPlayer, -1, 0);
-            return;
         }
     }
 
-    public void releaseResource() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.reset();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-            mCurState = IDLE;
+    @Override
+    public void hide() {
+        if (mShowing) {
+            mHandler.removeMessages(SHOW);
+            mController.setVisibility(GONE);
+            mShowing = false;
         }
     }
 
-    private NELivePlayer.OnVideoParseErrorListener mVideoParseErrorListener = new NELivePlayer.OnVideoParseErrorListener() {
-        public void onVideoParseError(NELivePlayer mp) {
-            Toast.makeText(getContext(), "错误: 视频解析异常", Toast.LENGTH_LONG).show();
+    @Override
+    public void enable(boolean enable) {
+        if (mPauseButton != null) {
+            mPauseButton.setEnabled(enable);
         }
-    };
+        if (mSetPlayerScaleButton != null) {
+            mSetPlayerScaleButton.setEnabled(enable);
+        }
+        if (mMuteButton != null) {
+            mMuteButton.setEnabled(enable);
+        }
+    }
 
-    private NELivePlayer.OnInfoListener mInfoListener = new NELivePlayer.OnInfoListener() {
-        /**
-         * 在缓冲开始、缓冲结束时调用，可以在该函数内添加处理逻辑
-         * @param mp 播放器实例
-         * @param what info类型
-         * @param extra 附加信息
-         */
+    private Handler mHandler = new Handler() {
         @Override
-        public boolean onInfo(NELivePlayer mp, int what, int extra) {
-            Log.d(TAG, "onInfo: " + what + ", " + extra);
-            if (mMediaPlayer != null) {
-                if (what == NELivePlayer.NELP_BUFFERING_START) {
-                    Log.d(TAG, "onInfo: NELP_BUFFERING_START");
-                    if (mBufferingView != null) {
-                        mBufferingView.setVisibility(View.VISIBLE);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case FADE_OUT:
+                    hide();
+                    break;
+                case SHOW:
+                    if (mShowing) {
+                        updatePlayerController();
+                        sendEmptyMessageDelayed(SHOW, 1000);
                     }
-                } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-                    Log.d(TAG, "onInfo: NELP_BUFFERING_END");
-                    if (mBufferingView != null) {
-                        mBufferingView.setVisibility(View.GONE);
-                    }
-                } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-                    Log.d(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
-                } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
-                    Log.d(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
-                }
-            }
-            return true;
-        }
-    };
-
-    private NELivePlayer.OnBufferingUpdateListener mBufferingUpdateListener = new NELivePlayer.OnBufferingUpdateListener() {
-        /**
-         * 网络视频流缓冲发生变化时调用，可以在该函数内添加处理逻辑
-         * @param  mp 播放器实例
-         * @param  percent 缓冲百分比
-         */
-        @Override
-        public void onBufferingUpdate(NELivePlayer mp, int percent) {
-            Log.d(TAG, "onBufferingUpdate: " + percent);
-        }
-    };
-
-    private NELivePlayer.OnCompletionListener mCompletionListener = new NELivePlayer.OnCompletionListener() {
-        /**
-         * 播放完成后调用，可以在该函数内添加处理逻辑
-         * @param  mp 播放器实例
-         */
-        @Override
-        public void onCompletion(NELivePlayer mp) {
-            Log.d(TAG, "onCompletion");
-            Toast.makeText(getContext(), "直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
-            /**
-             * 对于点播文件或本地文件，播放结束后会触发该回调。
-             * 对于直播来说，播放器无法判断直播是否结束，只能通过业务服务器来进行通知。
-             * 若主播推流结束，播放器可能会读取不到数据超时退出，进入 onError 回调。
-             */
-        }
-    };
-
-    private NELivePlayer.OnErrorListener mErrorListener = new NELivePlayer.OnErrorListener() {
-        /**
-         * 播放发生错误时调用，可以在该函数内添加处理逻辑
-         * @param mp 播放器实例
-         * @param what 错误类型
-         * @param extra 附加信息
-         */
-        @Override
-        public boolean onError(NELivePlayer mp, int what, int extra) {
-            Log.d(TAG, "Error: " + what + " ," + extra);
-            mCurState = ERROR;
-            if (mPlayerController != null) {
-                mPlayerController.hide();
-            }
-
-            Toast.makeText(getContext(), "直播已经结束,请稍后再试", Toast.LENGTH_LONG).show();
-
-            return true;
-        }
-    };
-
-    private NELivePlayer.OnVideoSizeChangedListener mSizeChangedListener = new NELivePlayer.OnVideoSizeChangedListener() {
-
-        /**
-         * 视频大小发生变化时调用，可以在该函数内添加处理逻辑
-         * @param  mp 播放器实例
-         * @param  width 视频宽度
-         * @param  height 视频高度
-         * @param  sarNum 像素宽高比的分子
-         * @param  sarDen 像素宽高比的分母
-         */
-        @Override
-        public void onVideoSizeChanged(NELivePlayer mp, int width, int height,
-                                       int sarNum, int sarDen) {
-            Log.d(TAG, "onVideoSizeChanged: " + width + " x " + height);
-            mVideoWidth = width;
-            mVideoHeight = height;
-            mPixelSarNum = sarNum;
-            mPixelSarDen = sarDen;
-            if (mVideoWidth != 0 && mVideoHeight != 0) {
-                scalePlayerBasedOnVideoSize();
+                    break;
             }
         }
     };
 
-    private NELivePlayer.OnPreparedListener mPreparedListener = new NELivePlayer.OnPreparedListener() {
-
-        /**
-         * 预处理完成后调用，可以在该函数内添加处理逻辑
-         * @param  mp 播放器实例
-         */
-        @Override
-        public void onPrepared(NELivePlayer mp) {
-            mCurState = PREPARED;
-
-            mVideoWidth = mp.getVideoWidth();
-            mVideoHeight = mp.getVideoHeight();
-
-            Log.d(TAG, "onPrepared: videoWidth: " + mVideoWidth + ", videoHeight: " + mVideoHeight);
-
-            if (mVideoWidth != 0 && mVideoHeight != 0) {
-                scalePlayerBasedOnVideoSize();
-
-
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.start();
-                    mMediaPlayer.setMute(mMute);
-                    mCurState = STARTED;
-                }
-            }
-
-        } // onPrepared
-    };
-
-    //获取日志文件路径
-    public void getLogPath() {
-        try {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                mLogPath = Environment.getExternalStorageDirectory() + "/log/";
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "an error occured while writing file...", e);
+    private void updatePlayerController() {
+        if (mController.getVisibility() != VISIBLE) {
+            mController.setVisibility(VISIBLE);
         }
+        updateTimes();
     }
 
-    @Override
-    public void start() {
-        if (isStopped()) {
-            openVideo();
-        }
-    }
-
-    @Override
-    public void stop() {
-        if (isStarted()) {
-            if (mMediaPlayer != null) {
-                mMediaPlayer.pause();
-            }
-            mCurState = PAUSED;
-        }
-    }
-
-    private boolean isPrepared() {
-        return mCurState >= PREPARED;
-    }
-
-    @Override
-    public boolean isStopped() {
-        return mCurState == PAUSED;
-    }
-
-    @Override
-    public boolean isStarted() {
-        return mCurState == STARTED;
-    }
-
-    @Override
-    public long getDuration() {
-        if (mMediaPlayer != null && isPrepared()) {
-            return mMediaPlayer.getDuration();
-        }
-        return 0;
-    }
-
-    @Override
-    public long getCurrentPosition() {
-        if (mMediaPlayer != null && isPrepared()) {
-            return mMediaPlayer.getCurrentPosition();
-        }
-        return 0;
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return 0;
-    }
-
-    @Override
-    public void setMute(boolean mute) {
-        if (mMediaPlayer != null) {
-            mMute = mute;
-            mMediaPlayer.setMute(mMute);
-        }
-    }
-
-    @Override
-    public boolean isMute() {
-        return mMute;
-    }
-
-    @Override
-    public void setFullScreen(boolean fullScreen) {
-        Context context = getContext();
-        if (context instanceof Activity) {
-            Activity activity = (Activity) context;
-            mFullScreen = fullScreen;
-            if (mFullScreen) {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                scalePlayerBasedOnVideoSize();
+    private void updateTimes() {
+        if (mPlayer != null) {
+            long position = mPlayer.getCurrentPosition();
+            long duration = mPlayer.getDuration();
+            if (duration > 0) {
+                mEndTime.setText(stringForTime(duration));
             } else {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                scalePlayerBasedOnVideoSize();
+                mEndTime.setText("--:--:--");
             }
-        }
 
+            mCurrentTime.setText(stringForTime(position));
+        }
+    }
+
+    private static String stringForTime(long position) {
+        int totalSeconds = (int) ((position / 1000.0) + 0.5);
+
+        int seconds = totalSeconds % 60;
+        int minutes = (totalSeconds / 60) % 60;
+        int hours = totalSeconds / 3600;
+
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds).toString();
     }
 
     @Override
-    public boolean isFullScreen() {
-        return mFullScreen;
+    public boolean isShowing() {
+        return mShowing;
     }
 
-    /**
-     * 资源释放成功通知的消息接收器类
-     */
-    private class ResourceReleaseReceiver extends BroadcastReceiver {
+    private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(NEMediaPlayer.NELP_RELEASE_SUCCESS)) {
-                Log.d(TAG, NEMediaPlayer.NELP_RELEASE_SUCCESS);
-                unregisterBroadcast(); // 接收到消息后反注册监听器
-            }
+        public void onStartTrackingTouch(SeekBar bar) {
+//            show(3600000);
+//            mDragging = true;
+//
+//            mHandler.removeMessages(SHOW);
         }
-    }
 
-    private void scalePlayerBasedOnVideoSize() {
-        if (mVideoWidth > 0 && mVideoHeight > 0) {
-            float aspectRatio = mVideoWidth * 1.0f / mVideoHeight;
-            if (mPixelSarNum > 0 && mPixelSarDen > 0) {
-                aspectRatio = aspectRatio * mPixelSarNum / mPixelSarDen;
-            }
-
-            if (mFullScreen) {
-                int[] size = new int[2];
-                getScreenSize(size);
-                mSurfaceWidth = size[0];
-                mSurfaceHeight = size[1];
-                Log.d(TAG, "scalePlayerBasedOnVideoSize: screenW: " + size[0] + ", screenH: " + size[1]);
-            }
-            float viewAspectRation = mSurfaceWidth * 1.0f / mSurfaceHeight;
-            Log.d(TAG, "scalePlayerBasedOnVideoSize: viewAspectRation: " + viewAspectRation + ", aspectRatio: " + aspectRatio);
-            if (viewAspectRation < aspectRatio) {
-                mSurfaceHeight = (int) (mSurfaceWidth / aspectRatio);
-            } else {
-                mSurfaceWidth = (int) (mSurfaceHeight * aspectRatio);
-            }
-            Log.d(TAG, "scalePlayerBasedOnVideoSize: mSurW: " + mSurfaceWidth + ", mSurH: " + mSurfaceHeight);
-
-            ViewGroup.LayoutParams params = getLayoutParams();
-            params.width = mSurfaceWidth;
-            params.height = mSurfaceHeight;
-
-            Log.d(TAG, "scalePlayerBasedOnVideoSize: params.width: " + params.width + ", params.height: " + params.height);
-
-            setLayoutParams(params);
+        @Override
+        public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+//            if (mPlayer.getMediaType().equals("livestream")) {
+//                return;
+//            }
+//
+//            if (!fromuser)
+//                return;
+//
+//            final long newposition = (mDuration * progress) / 1000;
+//            String time = stringForTime(newposition);
+//            if (mInstantSeeking) {
+//                mHandler.removeCallbacks(lastRunnable);
+//                lastRunnable = new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mPlayer.seekTo(newposition);
+//                    }
+//                };
+//                mHandler.postDelayed(lastRunnable, 200);
+//            }
+//
+//            if (mCurrentTime != null)
+//                mCurrentTime.setText(time);
         }
-    }
 
-    private void getScreenSize(int[] size) {
-        int winWidth;
-        int winHeight;
-        Rect rect = new Rect();
-        this.getWindowVisibleDisplayFrame(rect);//获取状态栏高度
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay(); //获取屏幕分辨率
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        winWidth = metrics.widthPixels;
-        winHeight = metrics.heightPixels - rect.top;
-        size[0] = winWidth;
-        size[1] = winHeight;
-    }
-
+        @Override
+        public void onStopTrackingTouch(SeekBar bar) {
+//            if (mPlayer.getMediaType().equals("livestream")) {
+//                AlertDialog alertDialog;
+//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+//                alertDialogBuilder.setTitle("注意");
+//                alertDialogBuilder.setMessage("直播不支持seek操作");
+//                alertDialogBuilder.setCancelable(false)
+//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                ;
+//                            }
+//                        });
+//                alertDialog = alertDialogBuilder.create();
+//                alertDialog.show();
+//                mProgress.setProgress(0);
+//                //return;
+//            }
+//            if (!mPlayer.getMediaType().equals("livestream")) {
+//                if (!mInstantSeeking)
+//                    mPlayer.seekTo((mDuration * bar.getProgress()) / 1000);
+//            }
+//
+//            show(sDefaultTimeout);
+//            mHandler.removeMessages(SHOW);
+//            mDragging = false;
+//            mHandler.sendEmptyMessageDelayed(SHOW, 1000);
+        }
+    };
 }

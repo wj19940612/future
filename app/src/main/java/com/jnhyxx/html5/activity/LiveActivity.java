@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.jnhnxx.livevideo.LiveVideo;
+import com.jnhnxx.livevideo.LivePlayer;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
@@ -74,7 +74,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     TitleBar mTitleBar;
 
     @BindView(R.id.liveVideo)
-    LiveVideo mLivePlayer;
+    LivePlayer mLivePlayer;
     @BindView(R.id.videoContainer)
     RelativeLayout mVideoContainer;
 
@@ -150,7 +150,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             }
         });
 
-        mLivePlayer.setOnScaleButtonClickListener(new LiveVideo.OnScaleButtonClickListener() {
+        mLivePlayer.setOnScaleButtonClickListener(new LivePlayer.OnScaleButtonClickListener() {
             @Override
             public void onClick(boolean fullscreen) {
                 if (fullscreen) {
@@ -169,10 +169,25 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         getChattingIpPort();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mLivePlayer.isStarted()) {
+            mLivePlayer.stop();
+        }
+    }
+
     private void initKeyboardHelper() {
         mKeyBoardHelper = new KeyBoardHelper(this);
         mKeyBoardHelper.onCreate();
         mKeyBoardHelper.setOnKeyBoardStatusChangeListener(mOnKeyBoardStatusChangeListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disconnectNettySocket();
+        mKeyBoardHelper.onDestroy();
     }
 
     private KeyBoardHelper.OnKeyBoardStatusChangeListener mOnKeyBoardStatusChangeListener
@@ -247,17 +262,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        disconnectNettySocket();
-        mKeyBoardHelper.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (mLivePlayer != null) {
-                mLivePlayer.fullScreen(false);
+                mLivePlayer.setFullScreen(false);
             }
         } else {
             if (getLiveInteractionFragment() != null) {

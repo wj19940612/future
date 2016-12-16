@@ -33,7 +33,7 @@
             android:layout_height="@dimen/player_height"
             android:background="@android:color/black">
 
-            <com.jnhnxx.livevideo.LiveVideo
+            <com.jnhnxx.livevideo.LivePlayer
                 android:id="@+id/liveVideo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

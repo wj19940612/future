@@ -165,6 +165,12 @@
     <string name="system_message">系统消息</string>
     <string name="trade_remind">交易提醒</string>
 
+
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取  消</string>
+
+
     <!-- 修改密码 Modify password-->
     <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
 
@@ -484,4 +490,6 @@
     <string name="feedback_submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>
+
+
 </resources>

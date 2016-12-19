@@ -142,6 +142,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         mListView.setStackFromBottom(true);
+
         mListView.setOnScrollListener(this);
 
         mInputBox.addTextChangedListener(mValidationWatcher);

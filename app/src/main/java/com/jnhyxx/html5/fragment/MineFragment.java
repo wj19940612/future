@@ -25,6 +25,7 @@ import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -199,11 +200,13 @@ public class MineFragment extends BaseFragment {
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:
-                if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), SettingsActivity.class).execute();
-                } else {
-                    Launcher.with(getActivity(), SignInActivity.class).execute();
-                }
+//                if (LocalUser.getUser().isLogin()) {
+//                    Launcher.with(getActivity(), SettingsActivity.class).execute();
+//                } else {
+//                    Launcher.with(getActivity(), SignInActivity.class).execute();
+//                }
+
+                UploadUserImageDialogFragment.newInstance().show(getFragmentManager());
                 break;
             case R.id.feedback:
                 Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();

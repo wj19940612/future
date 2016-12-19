@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -154,7 +155,7 @@ public abstract class ChartView extends View {
             if (msg.what == WHAT_LONG_PRESS || msg.what == WHAT_ONE_CLICK) {
                 mAction = Action.TOUCH;
                 MotionEvent e = (MotionEvent) msg.obj;
-                drawTouchLine(e);
+                drawTouchLines(e);
             }
         }
     }
@@ -259,7 +260,7 @@ public abstract class ChartView extends View {
                 mHandler.removeMessages(WHAT_LONG_PRESS);
                 mHandler.removeMessages(WHAT_ONE_CLICK);
                 if (mAction == Action.TOUCH) {
-                    return drawTouchLine(event);
+                    return drawTouchLines(event);
                 }
 
                 return false;
@@ -270,22 +271,22 @@ public abstract class ChartView extends View {
                 } else if (mAction == Action.TOUCH && mHandler.hasMessages(WHAT_ONE_CLICK)) {
                     mHandler.removeMessages(WHAT_ONE_CLICK);
                     mAction = Action.NONE;
-                    mTouchIndex = -1;
-                    redraw();
+                    if (mTouchIndex != -1) {
+                        mTouchIndex = -1;
+                        redraw();
+                    }
                 }
                 return true;
         }
         return super.onTouchEvent(event);
     }
 
-    private boolean drawTouchLine(MotionEvent event) {
+    private boolean drawTouchLines(MotionEvent event) {
         int newTouchIndex = calculateTouchIndex(event);
-        if (newTouchIndex != mTouchIndex) {
-            if (hasThisTouchIndex(newTouchIndex)) {
-                mTouchIndex = newTouchIndex;
-                redraw();
-                return true;
-            }
+        if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
+            mTouchIndex = newTouchIndex;
+            redraw();
+            return true;
         }
         return false;
     }

@@ -48,4 +48,13 @@ public class TrendViewData {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public boolean isSameData(TrendViewData data) {
+        if (this.contractId.equals(data.getContractId())
+                && this.lastPrice == data.getLastPrice()
+                && this.date.equals(data.getDate())) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -40,50 +41,50 @@ public class TrendChart extends ChartView {
         mVisibleList = new SparseArray<>();
     }
 
-    private void setDashLinePaint(Paint paint) {
+    protected void setDashLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(new DashPathEffect(new float[]{8, 3}, 1));
     }
 
-    private void setUnstablePricePaint(Paint paint) {
+    protected void setUnstablePricePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.WHITE.get()));
         paint.setTextSize(mBigFontSize);
         paint.setPathEffect(null);
     }
 
-    private void setUnstablePriceBgPaint(Paint paint) {
+    protected void setUnstablePriceBgPaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.BLUE.get()));
         paint.setStyle(Paint.Style.FILL);
         paint.setPathEffect(null);
     }
 
-    private void setRealTimeLinePaint(Paint paint) {
+    protected void setRealTimeLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.BLUE.get()));
         paint.setStrokeWidth(1);
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(null);
     }
 
-    private void setRealTimeFillPaint(Paint paint) {
+    protected void setRealTimeFillPaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.FILL.get()));
         paint.setStyle(Paint.Style.FILL);
         paint.setAlpha(51);
     }
 
-    private void setTouchLineTextPaint(Paint paint) {
+    protected void setTouchLineTextPaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.WHITE.get()));
         paint.setTextSize(mBigFontSize);
         paint.setPathEffect(null);
     }
 
-    private void setRedRectBgPaint(Paint paint) {
+    protected void setRedRectBgPaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.RED.get()));
         paint.setStyle(Paint.Style.FILL);
         paint.setPathEffect(null);
     }
 
-    private void setRedTouchLinePaint(Paint paint) {
+    protected void setRedTouchLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartView.ChartColor.RED.get()));
         paint.setStyle(Paint.Style.STROKE);
         paint.setPathEffect(null);
@@ -98,11 +99,19 @@ public class TrendChart extends ChartView {
         return mDataList;
     }
 
+    public void setVisibleList(SparseArray<TrendViewData> visibleList) {
+        mVisibleList = visibleList;
+    }
+
     public SparseArray<TrendViewData> getVisibleList() {
         return mVisibleList;
     }
 
     public void setUnstableData(TrendViewData unstableData) {
+        if (mUnstableData != null && mUnstableData.isSameData(unstableData)) {
+            return;
+        }
+
         mUnstableData = unstableData;
 
         ViewGroup viewGroup = (ViewGroup) getParent();
@@ -123,6 +132,14 @@ public class TrendChart extends ChartView {
     @Override
     public TrendView.Settings getSettings() {
         return mSettings;
+    }
+
+    public void setPriceAreaWidth(float priceAreaWidth) {
+        mPriceAreaWidth = priceAreaWidth;
+    }
+
+    public float getPriceAreaWidth() {
+        return mPriceAreaWidth;
     }
 
     @Override
@@ -359,13 +376,13 @@ public class TrendChart extends ChartView {
         return index;
     }
 
-    @Override
-    protected boolean hasThisTouchIndex(int touchIndex) {
-        if (mVisibleList != null && mVisibleList.get(touchIndex) != null) {
-            return true;
-        }
-        return super.hasThisTouchIndex(touchIndex);
-    }
+//    @Override
+//    protected boolean hasThisTouchIndex(int touchIndex) {
+//        if (mVisibleList != null && mVisibleList.get(touchIndex) != null) {
+//            return true;
+//        }
+//        return super.hasThisTouchIndex(touchIndex);
+//    }
 
     @Override
     protected void drawTouchLines(boolean indexesEnable, int touchIndex,
@@ -421,5 +438,11 @@ public class TrendChart extends ChartView {
             setTouchLineTextPaint(sPaint);
             canvas.drawText(price, priceX, priceY, sPaint);
         }
+    }
+
+    @Override
+    protected void redraw() {
+        Log.d("TAG", "redraw: " + getClass().getSimpleName() + ", data.LastPrice: " + (mUnstableData != null? mUnstableData.getLastPrice() : "null"));
+        super.redraw();
     }
 }

@@ -118,8 +118,8 @@ android {
         }
         zy4 { // 贵金属期货宝
             applicationId 'com.trade163.zy4'
-            versionCode 2
-            versionName '1.1'
+            versionCode 3
+            versionName '1.2'
             buildConfigField('String', 'API_HOST', '\"http://zy6.trade163.com\"')
 
             manifestPlaceholders = [

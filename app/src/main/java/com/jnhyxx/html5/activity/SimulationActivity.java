@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,9 +18,8 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.ExchangeStatus;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -87,32 +85,17 @@ public class SimulationActivity extends BaseActivity {
 
     private void requestServerIpAndPort(final ProductPkg pkg) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(pkg.getProduct(), marketServers);
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            Launcher.with(getActivity(), TradeActivity.class)
+                                    .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
+                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                                    .putExtra(ServerIpPort.EX_IP_PORT, serverIpPorts.get(0))
+                                    .execute();
                         }
-                    }
-                }).fire();
-    }
-
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
-        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                    @Override
-                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        product.setExchangeStatus(exchangeStatus.isTradeable()
-                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(getActivity(), TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
-                                .execute();
                     }
                 }).fire();
     }
@@ -263,9 +246,12 @@ public class SimulationActivity extends BaseActivity {
                     mMarketOpenTime.setVisibility(View.GONE);
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
+
                 }
                 HomePositions.Position position = pkg.getPosition(); // Position status
+                //如果休市，有持仓，则优先显示持仓提示
                 if (position != null && position.getHandsNum() > 0) {
+                    mMarketCloseText.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.VISIBLE);
                     mNewTag.setVisibility(View.GONE);
                     mHotIcon.setVisibility(View.GONE);

@@ -173,7 +173,7 @@ public class DownloadService extends Service {
                 Log.i(TAG, "processDownloadStatus: pending");
                 break;
             case DownloadManager.STATUS_PAUSED:
-                Log.i(TAG, "processDownloadStatus: pause");
+                Log.i(TAG, "processDownloadStatus: stop");
                 break;
             case DownloadManager.STATUS_RUNNING:
                 Log.i(TAG, "processDownloadStatus: running");

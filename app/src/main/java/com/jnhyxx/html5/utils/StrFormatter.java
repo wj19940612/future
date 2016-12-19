@@ -1,11 +1,15 @@
 package com.jnhyxx.html5.utils;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.johnz.kutils.DateUtil;
 
 /**
  * 工具类: 格式化字符串
  */
 public class StrFormatter {
+    private static final String TAG = "StrFormatter";
 
     /**
      * 格式化手机号 为 *** **** ****
@@ -91,4 +95,37 @@ public class StrFormatter {
         }
         return "";
     }
+
+    /**
+     * 资讯直播的时间调整
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getTimeHint(String createTime) {
+        if (!TextUtils.isEmpty(createTime)) {
+            String serverTime = DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "HH:mm").replace(":", "");
+            String localTime = DateUtil.format(System.currentTimeMillis(), "HH:mm").replace(":", "");
+
+            if (!TextUtils.isEmpty(serverTime)) {
+                if (serverTime.equalsIgnoreCase(localTime)) {
+                    return "刚刚";
+                } else if (localTime.compareTo(serverTime) >= 0) {
+                    Long serverTimeNum = Long.valueOf(serverTime);
+                    Long localTimeNum = Long.valueOf(localTime);
+                    Long timeDifference = localTimeNum - serverTimeNum;
+                    Log.d(TAG, "系统时间  " + serverTime + "本地时间  " + localTime + "时间差  " + timeDifference);
+                    if (0 <= timeDifference && timeDifference < 60) {
+                        return timeDifference % 60 < 1 ? "刚刚" : timeDifference % 60 + "分钟前";
+                    } else if (timeDifference >= 60) {
+                        return timeDifference / 60 + "小时前";
+                    } else {
+                        return DateUtil.format(createTime, DateUtil.DEFAULT_FORMAT, "HH:mm");
+                    }
+                }
+            }
+        }
+        return createTime;
+    }
+
 }

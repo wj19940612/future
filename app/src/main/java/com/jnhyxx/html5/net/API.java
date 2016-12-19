@@ -6,26 +6,21 @@ import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
 import java.security.NoSuchAlgorithmException;
 
+
 public class API extends APIBase {
     private static final String TAG = "API";
     private static final int GET = Request.Method.GET;
 
-    public static final String TELE = "tele";
-    public static final String CODE = "code";
-    public static final String AUTH_CODE = "authCode";
-    public static final String PASSWORD = "password";
-    public static final String SIGN = "sign";
     public static final String TOKEN = "token";
     public static final String PAGE_NO = "pageNo";
     public static final String PAGE_SIZE = "pageSize";
     public static final String TYPE = "type";
-    public static final String FUND_TYPE = "fundType";
-    public static final String FUTURES_TYPE = "futuresType";
     public static final String VERSION = "version";
 
     private API(String uri, ApiParams apiParams) {
@@ -336,6 +331,16 @@ public class API extends APIBase {
         public static API getUserShortInfo() {
             return new API("/user/user/findUserInfo.do", null);
         }
+
+        public static API submitFeedBack(String content, String userId, String userName, String realName, String userPhone) {
+            return new API("/user/userFeedback/insert.do",
+                    new ApiParams()
+                            .put("content", content)
+                            .put("userId", userId)
+                            .put("userName", userName)
+                            .put("realName", realName)
+                            .put("userPhone", userPhone));
+        }
     }
 
     public static class Finance {
@@ -361,26 +366,15 @@ public class API extends APIBase {
          * @return
          */
         public static String depositByBankApply(double money) {
-            return depositByBankApply() + "&money=" + money;
+            return getHost() + "/user/finance/deposit.do?&money=" + money;
         }
 
-        public static String depositByBankApply() {
-            return getHost() + "/user/finance/deposit.do?";
-        }
-
-
-//        /**
-//         * 接口名：用户充值(微信充值)
-//         * URL  http://域名/user/finance/depositByWeChat.do
-//         *
-//         * @param money
-//         * @return
-//         */
-//        public static API depositByWeChartApply(double money) {
-//            return new API("/user/finance/depositByWeChat.do", new ApiParams().put("money", money));
-//        }
-
-
+        /**
+         * 微信充值
+         *
+         * @param money
+         * @return
+         */
         public static String depositByWeChartApply(double money) {
             return getHost() + "/user/finance/depositByWeChat.do?" + "&money=" + money;
         }
@@ -390,16 +384,8 @@ public class API extends APIBase {
          * URL  http://域名/user/finance/depositByAlipay.do
          *
          * @param money
-         * @param platform 客户端平台（0：ios;1安卓
          * @return
          */
-        public static API depositByAliPay(double money, int platform) {
-            return new API("/user/finance/depositByAlipay.do",
-                    new ApiParams()
-                            .put("money", money)
-                            .put("platform", platform));
-        }
-
         public static String depositByAliPay(double money) {
             return getHost() + "/user/finance/depositByAlipay.do?" + "platform=" + SupportApplyWay.ALI_PAY_DEPOSIT_ANDROID + "&money=" + money;
         }
@@ -539,20 +525,56 @@ public class API extends APIBase {
     public static class Live {
 
         /**
-         * http://newtest.jnhyxx.com:8080/user/live/getActivity.do
+         * 接口名：一大块，获取直播的节目单，直播的老师信息及头像，直播公告
+         * URL  http://域名/user/live/getLiveMessage.do
          *
          * @return
          */
-        public static API getLiveRoomId() {
-            return new API("/user/live/getActivity.do", new ApiParams());
+        public static API getLiveMessage() {
+            return new API(GET, "/user/live/getLiveMessage.do", null);
         }
 
         /**
-         * @param liveRoomId
+         * 接口名：分页获取直播老师指导
+         * URL  http://域名/user/live/findTeacherMsgList.do
+         *
+         * @param offset    偏移量
+         * @param pageSize
+         * @param teacherId 老师有两个id，一个是老师介绍等信息的主键，一个是创建老师登录账户的id
          * @return
          */
-        public static String getH5LiveHtmlUrl(String liveRoomId) {
-            return getHost() + "/zhibo/live.html?liveId=" + liveRoomId;
+        public static API getTeacherGuide(int offset, int pageSize, int teacherId) {
+            return new API(GET, "/user/live/findTeacherMsgList.do", new ApiParams()
+                    .put("offset", offset)
+                    .put("size", pageSize)
+                    .put("teacherId", teacherId));
+        }
+
+        /**
+         * 获取最后一条老师指导
+         *
+         * @param teacherAccountId
+         * @return
+         */
+        public static API getLastTeacherGuide(int teacherAccountId) {
+            return new API(GET, "/user/live/findFirstTeacherMsg.do",
+                    new ApiParams()
+                            .put("teacherId", teacherAccountId));
+        }
+
+
+        /**
+         * 接口名：按条件查询
+         * URL  http://域名/user/live/findChatList.do
+         *
+         * @param offset   偏移量
+         * @param pageSize 每页请求数量
+         * @return
+         */
+        public static API getLiveTalk(int offset, int pageSize) {
+            return new API(GET, "/user/live/findChatList.do", new ApiParams()
+                    .put("offset", offset)
+                    .put("size", pageSize));
         }
     }
 
@@ -610,7 +632,9 @@ public class API extends APIBase {
          * @return
          */
         public static API findNewsByUrl(String url) {
-            return new API(GET, "/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
+            return new API(GET, "/user/news/findNewsByUrl.do",
+                    new ApiParams()
+                            .put("url", url));
         }
 
         /**
@@ -620,6 +644,21 @@ public class API extends APIBase {
          */
         public static API getHomePopup() {
             return new API(GET, "/user/news/getPopPush.do", null);
+        }
+
+        //资讯直播的大图网址
+        public static String getMessageLiveInfoUrl() {
+            return "https://res.6006.com/jin10/";
+        }
+
+        //资讯直播中星星的网址
+        public static String getMessageLiveStarUrl(String star) {
+            return "https://res.6006.com/assets/ext/news/" + star + ".png";
+        }
+
+        //资讯直播组织的图标  https://res.6006.com/jin10/flag/法国.png
+        public static String getOrganizeMarkUrl(String markUrl) {
+            return getMessageLiveInfoUrl() + "/flag/" + markUrl + ".png";
         }
     }
 
@@ -650,6 +689,56 @@ public class API extends APIBase {
          */
         public static API getMarketServerIpAndPort() {
             return new API(GET, "/quota/quota/getAllIpPortByCode.do", null);
+        }
+
+        /**
+         * 获取闪电下单状态
+         *
+         * @param varietyId 品种id
+         * @param payType   支付方式  0：积分 1：现金
+         * @return
+         */
+        public static API getOrderAssetStoreStatus(int varietyId, int payType) {
+            return new API(GET, "/order/orderAssetsStore/getAssetsStore.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
+        }
+
+        /**
+         * 闪电下单更新配置
+         * URL  http://域名/order/orderAssetsStore/saveAndUpdate.do
+         *
+         * @return
+         */
+
+        public static API saveAndUpdateOrderAssetStore(LightningOrderAsset lightningOrderAsset) {
+            return new API("/order/orderAssetsStore/saveAndUpdate.do",
+                    new ApiParams(LightningOrderAsset.class, lightningOrderAsset));
+        }
+
+        /**
+         * 删除闪电下单配置
+         *
+         * @param varietyId 品种id
+         * @param payType   支付方式  0：积分 1：现金
+         * @return
+         */
+        public static API removeOrderAssetStoreStatus(int varietyId, int payType) {
+            return new API("/order/orderAssetsStore/removeAssetsStore.do", new ApiParams()
+                    .put("varietyId", varietyId)
+                    .put("payType", payType));
+        }
+
+        /* *
+         /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
+         *
+         * @return
+         */
+        public static API getChattingServerIpAndPort() {
+            return new API(GET, "/quota/quota/getAllIpPortByCode.do",
+                    new ApiParams()
+                            .put("type", "chatApp"));
         }
     }
 
@@ -799,6 +888,49 @@ public class API extends APIBase {
                             .put("payType", payType)
                             .put("unwindPrice", unwindPrices));
         }
+
+        /**
+         * order/variety/getVarietyFloating.do 获取二次设置止盈止损的启动与否
+         *
+         * @param varietyId
+         * @return
+         */
+        public static API getStopProfitLossActive(int varietyId, int payType) {
+            return new API(GET, "/order/variety/getVarietyFloating.do",
+                    new ApiParams()
+                            .put("varietyId", varietyId)
+                            .put("payType", payType));
+        }
+
+        /**
+         * /order/order/getOrderVarietyPrice.do 获取二次设置止盈止损的配置
+         *
+         * @param showId
+         * @param payType
+         * @return
+         */
+        public static API getStopProfitLossConfig(String showId, int payType) {
+            return new API(GET, "/order/order/getOrderVarietyPrice.do", new ApiParams()
+                    .put("showId", showId)
+                    .put("payType", payType));
+        }
+
+        /**
+         * /order/order/updateOrder.do 提交更新止盈止损
+         *
+         * @param showId
+         * @param payType
+         * @param loseMoney
+         * @param winMoney
+         * @return
+         */
+        public static API updateStopProfitLoss(String showId, int payType, double loseMoney, double winMoney) {
+            return new API("/order/order/updateOrder.do", new ApiParams()
+                    .put("showId", showId)
+                    .put("payType", payType)
+                    .put("loseMoney", loseMoney)
+                    .put("winMoney", winMoney));
+        }
     }
 
     /**
@@ -812,12 +944,25 @@ public class API extends APIBase {
     }
 
     /**
+     * 获取 k 线数据
+     *
+     * @param varietyType
+     * @param type
+     * @return
+     */
+    public static API getKlineData(String varietyType, String type) {
+        return new API(GET, "/quotaData/candlestickData/getCandlesticKData.do",
+                new ApiParams()
+                        .put("contractsCode", varietyType));
+    }
+
+    /**
      * 获得《投资人与用户交易合作协议》网页 url
      *
      * @return
      */
     public static String getCooperationAgreementUrl() {
-        return getHost() + "/agreement/tradeAndCost.html";
+        return getHost() + "/activity/Article.html?type=3&nohead=1";
     }
 
     /**
@@ -826,39 +971,38 @@ public class API extends APIBase {
      * @return
      */
     public static String getRiskNoticesUrl() {
-        return getHost() + "/agreement/risk.html";
+        return getHost() + "/activity/Article.html?type=4&nohead=1";
     }
 
     /**
      * 获取 交易规则 url
      *
-     * @param varietyType
+     * @param varietyId
      * @return
      */
-    public static String getTradeRule(String varietyType) {
-        return getHost() + "/activity/" + varietyType + "TradeRule.html";
+    public static String getTradeRule(int varietyId) {
+        return getHost() + "/activity/Article.html?type=2&varietyId=" + varietyId + "&nohead=1";
     }
 
     /**
      * 推广赚钱 url
      */
     public static String getPromotePage() {
-        return getHost() + "/mine/extension.html";
+        return getHost() + "/mine/extension.html?nohead=1";
     }
 
     /**
      * 推广赚钱 我的用户 url
      */
     public static String getPromoteMyUsers() {
-        return getHost() + "/mine/users.html";
+        return getHost() + "/mine/users.html?nohead=1";
     }
 
     /**
      * 注册界面的服务协议网址
-     * //服务协议的接口
      */
     public static String getRegisterServiceProtocol() {
-        return getHost() + "/xieyi/agreement.html";
+        return getHost() + "/activity/Article.html?type=5&nohead=1";
     }
 
     public static String getServiceQQ(String serviceQQ) {
@@ -880,14 +1024,6 @@ public class API extends APIBase {
      * @return
      */
     public static String getNewbieUrl() {
-        return getHost() + "/newtrader.html";
-    }
-
-    public static String getLoginUrl() {
-        return getHost() + "/user/login.html?callBack=/zhibo/live.html?r=login";
-    }
-
-    public static String getShutUpHtmlUrl() {
-        return getHost() + "/zhibo/liveRules.html";
+        return getHost() + "/newtrader.html?nohead=1";
     }
 }

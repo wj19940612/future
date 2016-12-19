@@ -39,7 +39,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String addUnitWhenBeyondTenThousand(double value) {
-        if (value > 10000) {
+        if (value > 10000 || value < -10000) {
             return formatWithThousandsSeparatorAndUnit(value, UNIT_WANG);
         }
         return formatWithThousandsSeparator(value);
@@ -51,7 +51,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String addUnitWhenBeyondHundredThousand(double value) {
-        if (value > 100000) {
+        if (value > 100000 || value < -100000) {
             return formatWithThousandsSeparatorAndUnit(value, UNIT_WANG);
         }
         return formatWithThousandsSeparator(value);
@@ -63,7 +63,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String addUnitWhenBeyondMillion(double value) {
-        if (value > 1000000) {
+        if (value > 1000000 || value < -1000000) {
             return formatWithThousandsSeparatorAndUnit(value, UNIT_WANG);
         }
         return formatWithThousandsSeparator(value);
@@ -75,8 +75,17 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String addUnitWhenBeyondHundredMillion(double value) {
-        if (value > 100000000) {
+        if (value > 100000000 || value < -100000000) {
             return formatWithThousandsSeparatorAndUnit(value, UNIT_YI);
+        }
+        return formatWithThousandsSeparator(value);
+    }
+
+    public static String addUnit(double value) {
+        if (value > 100000000 || value < -100000000) {
+            return formatWithThousandsSeparatorAndUnit(value, UNIT_YI);
+        } else if (value > 10000 || value < -10000) {
+            return formatWithThousandsSeparatorAndUnit(value, UNIT_WANG);
         }
         return formatWithThousandsSeparator(value);
     }

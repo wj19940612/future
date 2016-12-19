@@ -9,11 +9,13 @@ public class SysMessage implements Serializable {
     private static final long serialVersionUID = 6769828919623446685L;
 
     /**
-     * 0,发送状态 0 待审和 1 已审核  2 待发送
+     * 0  push
+     * 1 弹窗
+     * 2 混合
      */
-    public static final int PUSH_STATUS_CHECK_PENDING = 0;
-    public static final int PUSH_STATUS_CHECK_PENDED = 1;
-    public static final int PUSH_STATUS_WAIT_SEND = 2;
+    public static final int PUSH_SYS_TYPE_PUSH = 0;
+    public static final int PUSH_SYS_TYPE_POPUP = 1;
+    public static final int PUSH_SYS_TYPE_MIX = 2;
 
     /**
      * 0代表 提现信息提示 1 代表订单 平仓 和 止赢止损
@@ -42,6 +44,8 @@ public class SysMessage implements Serializable {
      * pushType : 1
      * text : false
      */
+
+
     /**
      * 一级渠道Id
      */
@@ -74,7 +78,6 @@ public class SysMessage implements Serializable {
      */
     private String pushContent;
 
-
     /**
      * ,咨询详情(test为true时候 这个文本有值)
      */
@@ -106,6 +109,15 @@ public class SysMessage implements Serializable {
      * true 表示 成功 消息 false表示 是失败消息 显示在交易提醒中的图标
      */
     private boolean success;
+
+    /**
+     * 系统消息种类
+     * 0  push
+     * 1 弹窗
+     * 2 混合
+     */
+    private int pushSendType;
+
 
     public String getCreateTime() {
         return createTime;
@@ -166,6 +178,79 @@ public class SysMessage implements Serializable {
     public boolean getIsText() {
         return isText;
     }
+
+    public int getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
+    }
+
+    public int getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(int operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public boolean isPass() {
+        return pass;
+    }
+
+    public void setPass(boolean pass) {
+        this.pass = pass;
+    }
+
+    public void setPushContent(String pushContent) {
+        this.pushContent = pushContent;
+    }
+
+    public int getPushStatus() {
+        return pushStatus;
+    }
+
+    public void setPushStatus(int pushStatus) {
+        this.pushStatus = pushStatus;
+    }
+
+    public void setPushTopic(String pushTopic) {
+        this.pushTopic = pushTopic;
+    }
+
+    public int getPushType() {
+        return pushType;
+    }
+
+    public void setPushType(int pushType) {
+        this.pushType = pushType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public int getPushSendType() {
+        return pushSendType;
+    }
+
+    public void setPushSendType(int pushSendType) {
+        this.pushSendType = pushSendType;
+    }
+
 
     @Override
     public String toString() {

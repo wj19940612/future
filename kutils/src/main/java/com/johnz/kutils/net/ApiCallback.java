@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 public abstract class ApiCallback<T> implements Response.Listener<T>, Response.ErrorListener {
 
     public interface onFinishedListener {
-        void onFinished(String url);
+        void onFinished(String tag, String url);
     }
 
     private String mUrl;
@@ -53,7 +53,7 @@ public abstract class ApiCallback<T> implements Response.Listener<T>, Response.E
 
     public void onFinish() {
         if (mOnFinishedListener != null) {
-            mOnFinishedListener.onFinished(mUrl);
+            mOnFinishedListener.onFinished(mTag, mUrl);
         }
 
         if (mIndeterminate != null) {

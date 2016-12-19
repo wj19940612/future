@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_price_picker"
+        android:orientation="horizontal"
+        android:padding="0.5dp">
+
+        <ImageView
+            android:id="@+id/minusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_price_picker_minus"
+            android:gravity="center"
+            android:padding="@dimen/common_margin"
+            android:src="@drawable/btn_minus"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:minWidth="145dp"
+            android:textColor="@color/blackPrimary"
+            android:textSize="15sp"
+            tools:text="545685.22"/>
+
+        <ImageView
+            android:id="@+id/plusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_price_picker_plus"
+            android:gravity="center"
+            android:padding="@dimen/common_margin"
+            android:src="@drawable/btn_add"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/amountChange"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|right"
+        android:textColor="@color/redPrimary"
+        tools:text="+112312.88"/>
+</LinearLayout>

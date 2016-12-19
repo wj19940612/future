@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.Information;
@@ -151,15 +150,9 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webSettings.setUserAgentString(webSettings.getUserAgentString()
-                + " ###" + getString(R.string.android_web_agent) + "/1.0");
-        //mWebView.getSettings().setAppCacheEnabled(true);
-        webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);
 
         // performance improve
-        webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        webSettings.setEnableSmoothTransition(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setUseWideViewPort(true);
 
@@ -176,9 +169,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mWebView.clearCache(true);
         mWebView.clearFormData();
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        mWebView.addJavascriptInterface(new AppJs(this), "AppJs");
 
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT > 19) {
             mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else {
             mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);

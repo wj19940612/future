@@ -123,16 +123,16 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.cancel(TAG);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser && isAdded() && !isLoad) {
-            requestMessageList();
-            isLoad = true;
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        if (isVisibleToUser && isAdded() && !isLoad) {
+//            requestMessageList();
+//            isLoad = true;
+//        }
+//        super.setUserVisibleHint(isVisibleToUser);
+//    }
 
-    private void requestMessageList() {
+    public void requestMessageList() {
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)

@@ -3,9 +3,7 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class Product implements Serializable, Parcelable {
+public class Product implements Parcelable {
 
     public static final String EX_PRODUCT = "product";
     public static final String EX_FUND_TYPE = "fund";
@@ -24,9 +22,8 @@ public class Product implements Serializable, Parcelable {
     private static final int IS_DOMESTIC = 1;
 
 
-
     //美原油品种id
-    public static  int US_CRUDE_ID = 10;
+    public static int US_CRUDE_ID = 10;
     /**
      * displayMarketTimes : 06:00;07:00;04:58
      * decimalScale : 0.2

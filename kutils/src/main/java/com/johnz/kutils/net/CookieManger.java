@@ -30,6 +30,8 @@ public class CookieManger {
     }
 
     /**
+     * rawCookie:
+     *
      * token1="NzF4aGpldmJhcHRmd3NleHZucWJudm1ocWU4NQ=="; Version=1; Path=/
      * token2="NzQ5ZjAxMjE0ZjQzZWE4ZjI3NGIyYzkyNTIzYmY0MWQ="; Version=1; Path=/
      */
@@ -45,9 +47,17 @@ public class CookieManger {
     }
 
     public String getRawCookie() {
+        if (TextUtils.isEmpty(mRawCookie)) {
+            mRawCookie = getRawCookies();
+        }
         return mRawCookie;
     }
 
+    /**
+     * processed Cookie:
+     *
+     * @return eg. token1="NzF4aGpldmJhcHRmd3NleHZucWJudm1ocWU4NQ=="; token2="NzQ5ZjAxMjE0ZjQzZWE4ZjI3NGIyYzkyNTIzYmY0MWQ="
+     */
     public String getCookies() {
         StringBuilder builder = new StringBuilder();
 
@@ -61,7 +71,7 @@ public class CookieManger {
                 builder.append(getToken(cookies[i])).append("; ");
             }
             if (builder.length() > 0) {
-                builder.delete(builder.length() - 2, builder.length() - 1);
+                builder.delete(builder.length() - 2, builder.length());
             }
         }
         return builder.toString();

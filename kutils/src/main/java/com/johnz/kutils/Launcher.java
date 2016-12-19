@@ -36,6 +36,11 @@ public class Launcher {
         return this;
     }
 
+    public Launcher putExtra(String key, Parcelable parcelable) {
+        mIntent.putExtra(key, parcelable);
+        return this;
+    }
+
     public Launcher putExtra(String key, int value) {
         mIntent.putExtra(key, value);
         return this;
@@ -51,6 +56,12 @@ public class Launcher {
         return this;
     }
 
+    /**
+     * @deprecated 为了提高速度 使用 putExtra(String key, Parcelable parcelable)
+     * @param key
+     * @param data
+     * @return
+     */
     public Launcher putExtra(String key, Serializable data) {
         mIntent.putExtra(key, data);
         return this;

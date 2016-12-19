@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -234,7 +235,11 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
             public void bindingData(Information item, Context context) {
                 String time = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 mCreateDate.setText(time);
-                mSummary.setText(item.getSummary());
+                if (!TextUtils.isEmpty(item.getTitle())) {
+                    mSummary.setText(item.getTitle());
+                } else if (!TextUtils.isEmpty(item.getSummary())) {
+                    mSummary.setText(item.getSummary());
+                }
             }
         }
     }

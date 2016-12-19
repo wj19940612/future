@@ -42,8 +42,10 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
     private double realAvgPrice;
     private double realMarketVal;
     private String showId;
-    private double stopLossPrice;
+    private double stopLossPrice; //止损金额
+    private double stopLossMoney; //止损价格
     private double stopWinPrice;
+    private double stopWinMoney;
 
     /**
      * 平仓价      （人民币）
@@ -162,6 +164,14 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.unwindAvgPrice = unwindAvgPrice;
     }
 
+    public double getStopLossMoney() {
+        return stopLossMoney;
+    }
+
+    public double getStopWinMoney() {
+        return stopWinMoney;
+    }
+
     @Override
     public String toString() {
         return "HoldingOrder{" +
@@ -201,7 +211,9 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         dest.writeDouble(this.realMarketVal);
         dest.writeString(this.showId);
         dest.writeDouble(this.stopLossPrice);
+        dest.writeDouble(this.stopLossMoney);
         dest.writeDouble(this.stopWinPrice);
+        dest.writeDouble(this.stopWinMoney);
         dest.writeDouble(this.unwindAvgPrice);
     }
 
@@ -221,7 +233,9 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
         this.realMarketVal = in.readDouble();
         this.showId = in.readString();
         this.stopLossPrice = in.readDouble();
+        this.stopLossMoney = in.readDouble();
         this.stopWinPrice = in.readDouble();
+        this.stopWinMoney = in.readDouble();
         this.unwindAvgPrice = in.readDouble();
     }
 

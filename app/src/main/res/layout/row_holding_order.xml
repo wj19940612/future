@@ -12,32 +12,23 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:paddingBottom="14dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:paddingTop="@dimen/common_margin">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/buyOrSell"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:textColor="@color/redPrimary"
+            tools:text="买涨"/>
 
-            <TextView
-                android:id="@+id/buyOrSell"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/redPrimary"
-                tools:text="买涨"/>
-
-            <TextView
-                android:id="@+id/hands"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/redPrimary"
-                tools:text="1手"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/hands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/redPrimary"
+            tools:text="1手"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -69,26 +60,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:background="@color/splitLineGrayLight"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:paddingBottom="16dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="14dp">
+        android:paddingTop="@dimen/common_margin">
 
         <LinearLayout
-            android:id="@+id/firstLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -123,7 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stop_profit"
+                    android:text="@string/stop_profit_price"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -140,7 +118,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/firstLine"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -174,7 +152,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/stop_loss"
+                    android:text="@string/stop_loss_price"
                     android:textSize="11sp"/>
 
                 <TextView
@@ -188,30 +166,54 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/closePositionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/btn_close_position"
-            android:gravity="center_vertical"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp"
-            android:text="@string/close_positions"
-            android:textColor="@color/blueAssist"
-            android:visibility="gone"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/splitLineGrayLight"/>
 
-        <TextView
-            android:id="@+id/orderStatus"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            tools:text="@string/buying"
-            android:textColor="@color/colorDisable"/>
-    </RelativeLayout>
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/setStopLossStopProfit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/btn_blue_inverse"
+                android:gravity="center"
+                android:minHeight="28dp"
+                android:minWidth="110dp"
+                android:text="@string/set_stop_profit_stop_loss"
+                android:textColor="@color/blueAssist"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/closePositionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_blue"
+                android:gravity="center"
+                android:minHeight="28dp"
+                android:minWidth="60dp"
+                android:text="@string/close_positions"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/orderStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorDisable"
+                android:visibility="gone"
+                tools:text="@string/buying"/>
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

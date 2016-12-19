@@ -4,13 +4,15 @@ import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class FuturesFinancing {
+public class FuturesFinancing implements Serializable {
+
 
     /**
      * assets : [{"cvId":170,"marginBeat":332.5,"stopWinBeats":{"1":66.5,"5":332.5,"10":665},"fees":10,"marginBeatHands":{"1":50,"5":250,"10":500,"20":1000},"isDefault":0,"handsMultiple":["1","5","10","20"],"feesHands":{"1":10,"5":50,"10":100,"20":200},"stopLossBeat":199.5,"assetsId":10}]
@@ -34,6 +36,7 @@ public class FuturesFinancing {
     private double eachPointMoney;
     private String currencyUnit;
     private double ratio;
+
     /**
      * cvId : 170
      * marginBeat : 332.5
@@ -46,7 +49,6 @@ public class FuturesFinancing {
      * stopLossBeat : 199.5
      * assetsId : 10
      */
-
     private List<AssetsBean> assets;
 
     public String getContractsCode() {
@@ -138,7 +140,19 @@ public class FuturesFinancing {
         });
     }
 
-    public static class AssetsBean {
+
+    public List<StopLoss> getStopLossList(Product product) {
+        List<StopLoss> result = new ArrayList<>();
+        for (AssetsBean assetsBean : assets) {
+            result.add(new StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean));
+        }
+        return result;
+    }
+
+    public static class AssetsBean implements Serializable {
+
+        private static final long serialVersionUID = -4065662713293187492L;
+
         private double marginBeat;
         private Map<String, Double> stopWinBeats;
         private double fees;
@@ -205,17 +219,33 @@ public class FuturesFinancing {
             return handsMultiple;
         }
 
+//        @Override
+//        public String toString() {
+//            StringBuilder builder = new StringBuilder();
+//            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
+//                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+//            }
+//            return builder.toString();
+//        }
+
+
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder();
-            for (Map.Entry<String, Double> entry : stopWinBeats.entrySet()) {
-                builder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
-            }
-            return builder.toString();
+            return "AssetsBean{" +
+                    "marginBeat=" + marginBeat +
+                    ", stopWinBeats=" + stopWinBeats +
+                    ", fees=" + fees +
+                    ", marginBeatHands=" + marginBeatHands +
+                    ", isDefault=" + isDefault +
+                    ", feesHands=" + feesHands +
+                    ", stopLossBeat=" + stopLossBeat +
+                    ", assetsId=" + assetsId +
+                    ", handsMultiple=" + handsMultiple +
+                    '}';
         }
     }
 
-    public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration {
+    public static class TradeQuantity implements OrderConfigurationSelector.OrderConfiguration, Serializable {
         private int quantity;
         private double fee; // rmb
         private double margin; // internal is rmb, foreign is not m
@@ -249,7 +279,8 @@ public class FuturesFinancing {
         }
     }
 
-    public static class StopProfit implements OrderConfigurationSelector.OrderConfiguration {
+    //止盈model
+    public static class StopProfit implements OrderConfigurationSelector.OrderConfiguration, Serializable {
 
         private int stopProfitPoint;
         private double stopProfit;
@@ -276,9 +307,14 @@ public class FuturesFinancing {
         public boolean isDefault() {
             return false;
         }
+
+        public double getStopProfit() {
+            return stopProfit;
+        }
     }
 
-    public static class StopLoss implements OrderConfigurationSelector.OrderConfiguration {
+    //设置止损
+    public static class StopLoss implements OrderConfigurationSelector.OrderConfiguration, Serializable {
 
         private int profitLossScale;
         private String sign;
@@ -346,21 +382,31 @@ public class FuturesFinancing {
         }
     }
 
-    public List<StopLoss> getStopLossList(Product product) {
-        List<StopLoss> result = new ArrayList<>();
-        for (AssetsBean assetsBean : assets) {
-            result.add(new StopLoss(product.getLossProfitScale(), product.getSign(), assetsBean));
-        }
-        return result;
-    }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        for (AssetsBean assetsBean : assets) {
+//            builder.append(assetsBean.getStopLossBeat()).append("\n")
+//                    .append(assetsBean.toString()).append("\n");
+//        }
+//        return builder.toString();
+//    }
+
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (AssetsBean assetsBean : assets) {
-            builder.append(assetsBean.getStopLossBeat()).append("\n")
-                    .append(assetsBean.toString()).append("\n");
-        }
-        return builder.toString();
+        return "FuturesFinancing{" +
+                "contractsCode='" + contractsCode + '\'' +
+                ", marginPoint=" + marginPoint +
+                ", sign='" + sign + '\'' +
+                ", marketPoint=" + marketPoint +
+                ", feesPoint=" + feesPoint +
+                ", varietyName='" + varietyName + '\'' +
+                ", eachPointMoney=" + eachPointMoney +
+                ", currencyUnit='" + currencyUnit + '\'' +
+                ", ratio=" + ratio +
+                ", assets=" + assets +
+                '}';
     }
 }

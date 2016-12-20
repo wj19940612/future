@@ -3,6 +3,7 @@ package com.jnhyxx.html5.fragment.dialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
@@ -120,13 +122,6 @@ public class UploadUserImageDialogFragment extends DialogFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.takePhoneFromCamera:
-//                Log.d(TAG, "文件是否存在 " + mFile.exists() + "文件地址 " + mFile.getPath());
-//                Uri uri = Uri.fromFile(mFile);
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//                startActivityForResult(intent, REQ_CODE_TAKE_PHONE_FROM_CAMERA);
-
                 Intent openCameraIntent = new Intent(
                         MediaStore.ACTION_IMAGE_CAPTURE);
                 mUri = Uri.fromFile(new File(Environment
@@ -136,6 +131,10 @@ public class UploadUserImageDialogFragment extends DialogFragment {
                 startActivityForResult(openCameraIntent, REQ_CODE_TAKE_PHONE_FROM_CAMERA);
                 break;
             case R.id.takePhoneFromPhone:
+                Intent openAlbumIntent = new Intent(
+                        Intent.ACTION_GET_CONTENT);
+                openAlbumIntent.setType("image/*");
+                startActivityForResult(openAlbumIntent, REQ_CODE_TAKE_PHONE_FROM_PHONES);
                 break;
             case R.id.takePhoneCancel:
                 this.dismiss();
@@ -162,34 +161,22 @@ public class UploadUserImageDialogFragment extends DialogFragment {
 
                         Log.d(TAG, "uri " + mUri);
                         cropImage(mUri);
-
-
-//                            Bitmap bitmap = data.getParcelableExtra("data");
-//                            if (bitmap != null) {
-//                                mTest.setImageBitmap(bitmap);
-//                            }
-////                        Uri uri = data.getData();
-//                            if (mFile != null){
-//                                Uri uri = Uri.fromFile(mFile);
-//                                if (uri != null) {
-//                                    Log.d(TAG, "uri " + uri.toString());
-//                                    cropImage(uri);
-//                                }
-//                            }
-//                            Uri parcelableExtra = data.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
-//                            Log.d(TAG, "获取的uri " + parcelableExtra);
-
-//                    }
                     } else {
                         ToastUtil.curt("sd卡不可使用");
                     }
                     break;
 
                 case REQ_CODE_CROP_IMAGE:
-                    
-                    Bitmap cropBitmap = data.getParcelableExtra("data");
-                    if (cropBitmap != null) {
-                        mTest.setImageBitmap(cropBitmap);
+                    Bundle extras = data.getExtras();
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        try {
+                            FileInputStream fileInputStream = new FileInputStream(uri.getPath());
+                            Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                            mTest.setImageBitmap(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
 

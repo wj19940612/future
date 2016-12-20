@@ -64,7 +64,6 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.Collections;
 import java.util.List;
@@ -295,19 +294,12 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(TAG);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
         NettyClient.getInstance().stop();
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
         mHoldingOrderPresenter.onPause();
-        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override

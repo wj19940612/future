@@ -14,7 +14,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.ExpandableLayout;
 import com.johnz.kutils.AppInfo;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,18 +44,6 @@ public class AboutUsActivity extends BaseActivity {
         servicePhone = servicePhone.substring(0, 3) + "-" + servicePhone.substring(3, 7) + "-" + servicePhone.substring(7, servicePhone.length());
         mServicePhone.setText(servicePhone);
         mSerViceQQ.setText(Preference.get().getServiceQQ());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(TAG);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(TAG);
     }
 
     private void initData() {

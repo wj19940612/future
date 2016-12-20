@@ -114,6 +114,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart(TAG);
     }
 
     @Override
@@ -123,6 +124,7 @@ public class BaseActivity extends AppCompatActivity implements
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(mReceiver);
         MobclickAgent.onPause(this);
+        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override
@@ -189,6 +191,7 @@ public class BaseActivity extends AppCompatActivity implements
                                 callback.onUpdateCompleted();
                             }
                         }
+
                         @Override
                         public void onReceive(Resp<UserInfo> userInfoResp) {
                         }

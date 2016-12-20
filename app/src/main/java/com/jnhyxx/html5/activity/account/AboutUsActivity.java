@@ -14,6 +14,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.ExpandableLayout;
 import com.johnz.kutils.AppInfo;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +47,17 @@ public class AboutUsActivity extends BaseActivity {
         mSerViceQQ.setText(Preference.get().getServiceQQ());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
+    }
 
     private void initData() {
         String versionName = AppInfo.getVersionName(getApplicationContext());

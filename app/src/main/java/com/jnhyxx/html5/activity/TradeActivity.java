@@ -64,6 +64,7 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Collections;
 import java.util.List;
@@ -291,6 +292,29 @@ public class TradeActivity extends BaseActivity implements
                 getString(R.string.lightning_orders_status_run_out))
                 .setPositive(R.string.ok)
                 .show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScheduleJob();
+        NettyClient.getInstance().stop();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mHoldingOrderPresenter.onPause();
+        MobclickAgent.onPageEnd(TAG);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHoldingOrderPresenter.onDestroy();
+        mNettyHandler = null;
     }
 
     private void removeLightningOrder() {
@@ -521,22 +545,6 @@ public class TradeActivity extends BaseActivity implements
         } else {
             mQuestionMark.start();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopScheduleJob();
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
-        mHoldingOrderPresenter.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHoldingOrderPresenter.onDestroy();
-        mNettyHandler = null;
     }
 
     @Override

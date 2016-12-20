@@ -27,6 +27,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
@@ -167,19 +168,56 @@ public class UploadUserImageDialogFragment extends DialogFragment {
                     break;
 
                 case REQ_CODE_CROP_IMAGE:
-                    Bundle extras = data.getExtras();
                     Uri uri = data.getData();
+                    FileInputStream fileInputStream = null;
                     if (uri != null) {
                         try {
-                            FileInputStream fileInputStream = new FileInputStream(uri.getPath());
+                            fileInputStream = new FileInputStream(uri.getPath());
                             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
                             mTest.setImageBitmap(bitmap);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
+                        } finally {
+                            if (fileInputStream != null) {
+                                try {
+                                    fileInputStream.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }
                     break;
-
+                case REQ_CODE_TAKE_PHONE_FROM_PHONES:
+                    Bitmap bitmap = data.getParcelableExtra("data");
+                    Uri data1 = data.getData();
+                    if (data1 != null) {
+                        Log.d(TAG, "相册的地址 " + data1.getPath());
+                    }
+                    if (bitmap != null) {
+                        mTest.setImageBitmap(bitmap);
+                    } else {
+                        Uri phoneUri = data.getData();
+                        FileInputStream phoneFileInputStream = null;
+                        if (phoneUri != null) {
+                            try {
+                                phoneFileInputStream = new FileInputStream(phoneUri.getPath());
+                                bitmap = BitmapFactory.decodeStream(phoneFileInputStream);
+                                mTest.setImageBitmap(bitmap);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (phoneFileInputStream != null) {
+                                    try {
+                                        phoneFileInputStream.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
 

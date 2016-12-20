@@ -58,8 +58,9 @@
 
     <ImageView
         android:id="@+id/test"
+        android:scaleType="centerInside"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="200dp"
         android:background="@android:color/holo_green_dark"/>
 
 </LinearLayout>

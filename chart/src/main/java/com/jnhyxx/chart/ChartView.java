@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -211,6 +210,13 @@ public abstract class ChartView extends View {
                 left, top2, width, getBottomPartHeight(),
                 canvas);
 
+        if (shouldDrawUnstableData()) {
+            drawUnstableData(mSettings.isIndexesEnable(),
+                    left, top, width, topPartHeight,
+                    left, top2, width, getBottomPartHeight(),
+                    canvas);
+        }
+
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
@@ -292,6 +298,10 @@ public abstract class ChartView extends View {
     }
 
     protected boolean hasThisTouchIndex(int touchIndex) {
+        return false;
+    }
+
+    protected boolean shouldDrawUnstableData() {
         return false;
     }
 
@@ -382,6 +392,28 @@ public abstract class ChartView extends View {
                                              int left, int top, int width, int height,
                                              int left2, int top2, int width2, int height2,
                                              Canvas canvas);
+
+    /**
+     * draw real unstable data
+     *
+     * @param indexesEnable
+     * @param left
+     * @param top
+     * @param width
+     * @param topPartHeight
+     * @param left2
+     * @param top2
+     * @param width1
+     * @param bottomPartHeight
+     * @param canvas
+     */
+    protected void drawUnstableData(boolean indexesEnable,
+                                             int left, int top, int width, int topPartHeight,
+                                             int left2, int top2, int width1, int bottomPartHeight,
+                                             Canvas canvas) {
+
+    }
+
 
     /**
      * draw time line

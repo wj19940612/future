@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -119,7 +118,15 @@ public class TrendChart extends ChartView {
             return;
         }
 
-        redraw();
+        if (shouldDrawUnstableData()) {
+            redraw();
+        } else if (mSettings != null) { // When unstable data > top || < bottom, still redraw
+            float[] baseLines = mSettings.getBaseLines();
+            if (mUnstableData.getLastPrice() > baseLines[0]
+                    || mUnstableData.getLastPrice() < baseLines[baseLines.length - 1]) {
+                redraw();
+            }
+        }
     }
 
     @Override
@@ -266,11 +273,11 @@ public class TrendChart extends ChartView {
                 }
             }
 
-            if (mUnstableData != null && mDataList.size() > 0) {
-                chartX = getChartX(mUnstableData);
-                chartY = getChartY(mUnstableData.getLastPrice());
-                path.lineTo(chartX, chartY);
-            }
+//            if (mUnstableData != null && mDataList.size() > 0) {
+//                chartX = getChartX(mUnstableData);
+//                chartY = getChartY(mUnstableData.getLastPrice());
+//                path.lineTo(chartX, chartY);
+//            }
 
             setRealTimeLinePaint(sPaint);
             canvas.drawPath(path, sPaint);
@@ -281,34 +288,55 @@ public class TrendChart extends ChartView {
             path.lineTo(firstChartX, top + height);
             path.close();
             canvas.drawPath(path, sPaint);
-
-            if (mUnstableData != null) {
-                // dash line
-                path = getPath();
-                path.moveTo(chartX, chartY);
-                path.lineTo(left + width - mPriceAreaWidth, chartY);
-                setDashLinePaint(sPaint);
-                canvas.drawPath(path, sPaint);
-
-                // unstable price
-                setUnstablePricePaint(sPaint);
-                String unstablePrice = formatNumber(mUnstableData.getLastPrice());
-                float priceWidth = sPaint.measureText(unstablePrice);
-                float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
-                float priceX = left + width - priceMargin - priceWidth;
-                RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterBigText, priceWidth);
-                //// the center of rect is connected to dashLine
-                //// add offset and let the bottom of rect connect to dashLine
-                float rectHeight = blueRect.height();
-                blueRect.top -= rectHeight / 2;
-                blueRect.bottom -= rectHeight / 2;
-                setUnstablePriceBgPaint(sPaint);
-                canvas.drawRoundRect(blueRect, 2, 2, sPaint);
-                float priceY = chartY - rectHeight / 2 + mOffset4CenterBigText;
-                setUnstablePricePaint(sPaint);
-                canvas.drawText(unstablePrice, priceX, priceY, sPaint);
-            }
         }
+    }
+
+    @Override
+    protected void drawUnstableData(boolean indexesEnable,
+                                    int left, int top, int width, int topPartHeight,
+                                    int left2, int top2, int width1, int bottomPartHeight,
+                                    Canvas canvas) {
+        if (mDataList != null && mDataList.size() > 0 && mUnstableData != null) {
+            // last point connect to unstable point
+            Path path = getPath();
+            TrendViewData lastData = mDataList.get(mDataList.size() - 1);
+            path.moveTo(getChartX(lastData), getChartY(lastData.getLastPrice()));
+            float chartX = getChartX(mUnstableData);
+            float chartY = getChartY(mUnstableData.getLastPrice());
+            path.lineTo(chartX, chartY);
+            setRealTimeLinePaint(sPaint);
+            canvas.drawPath(path, sPaint);
+
+            // dash line
+            path = getPath();
+            path.moveTo(chartX, chartY);
+            path.lineTo(left + width - mPriceAreaWidth, chartY);
+            setDashLinePaint(sPaint);
+            canvas.drawPath(path, sPaint);
+
+            // unstable price
+            setUnstablePricePaint(sPaint);
+            String unstablePrice = formatNumber(mUnstableData.getLastPrice());
+            float priceWidth = sPaint.measureText(unstablePrice);
+            float priceMargin = (mPriceAreaWidth - priceWidth) / 2;
+            float priceX = left + width - priceMargin - priceWidth;
+            RectF blueRect = getBigFontBgRectF(priceX, chartY + mOffset4CenterBigText, priceWidth);
+            //// the center of rect is connected to dashLine
+            //// add offset and let the bottom of rect connect to dashLine
+            float rectHeight = blueRect.height();
+            blueRect.top -= rectHeight / 2;
+            blueRect.bottom -= rectHeight / 2;
+            setUnstablePriceBgPaint(sPaint);
+            canvas.drawRoundRect(blueRect, 2, 2, sPaint);
+            float priceY = chartY - rectHeight / 2 + mOffset4CenterBigText;
+            setUnstablePricePaint(sPaint);
+            canvas.drawText(unstablePrice, priceX, priceY, sPaint);
+        }
+    }
+
+    @Override
+    protected boolean shouldDrawUnstableData() {
+        return false;
     }
 
     @Override
@@ -345,7 +373,7 @@ public class TrendChart extends ChartView {
         return (int) (chartX * mSettings.getXAxis() / width);
     }
 
-    private float getChartX(TrendViewData model) {
+    protected float getChartX(TrendViewData model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
         mVisibleList.put(indexOfXAxis, model);
         return getChartX(indexOfXAxis);
@@ -438,11 +466,5 @@ public class TrendChart extends ChartView {
             setTouchLineTextPaint(sPaint);
             canvas.drawText(price, priceX, priceY, sPaint);
         }
-    }
-
-    @Override
-    protected void redraw() {
-        Log.d("TAG", "redraw: " + getClass().getSimpleName() + ", data.LastPrice: " + (mUnstableData != null? mUnstableData.getLastPrice() : "null"));
-        super.redraw();
     }
 }

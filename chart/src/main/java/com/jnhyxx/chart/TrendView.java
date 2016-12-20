@@ -19,6 +19,7 @@ public class TrendView extends FrameLayout {
 
     private TrendChart mChart;
     private TouchView mTouchView;
+    private TwinkleView mTwinkleView;
 
     public TrendView(Context context) {
         super(context);
@@ -35,13 +36,18 @@ public class TrendView extends FrameLayout {
         addView(mChart, 0, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
+        mTwinkleView = new TwinkleView(getContext(), mChart);
+        addView(mTwinkleView, 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
         mTouchView = new TouchView(getContext(), mChart);
-        addView(mTouchView, 1, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        addView(mTouchView, 2, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     public void setSettings(Settings settings) {
         mChart.setSettings(settings);
+        mTwinkleView.setSettings(settings);
         mTouchView.setSettings(settings);
     }
 
@@ -51,10 +57,12 @@ public class TrendView extends FrameLayout {
 
     public void setDataList(List<TrendViewData> dataList) {
         mChart.setDataList(dataList);
+        mTwinkleView.setDataList(dataList);
     }
 
     public void setUnstableData(TrendViewData unstableData) {
         mChart.setUnstableData(unstableData);
+        mTwinkleView.setUnstableData(unstableData);
     }
 
     public List<TrendViewData> getDataList() {

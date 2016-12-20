@@ -274,6 +274,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
+                                            if(liveHomeChatInfoResp.getData().size()<6){
+                                                mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+                                                mListView.setStackFromBottom(false);
+                                            }
                                              mPageOffset = mPageOffset + mPageSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
                                              for (LiveHomeChatInfo data : mLiveHomeChatInfoListInfo) {

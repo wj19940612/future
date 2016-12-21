@@ -9,6 +9,10 @@ public class Product implements Parcelable {
     public static final String EX_FUND_TYPE = "fund";
     public static final String EX_PRODUCT_LIST = "productList";
 
+    /**
+     * 1  实盘
+     * 0  金币，模拟交易
+     */
     public static final int FUND_TYPE_CASH = 1;
     public static final int FUND_TYPE_SIMULATION = 0;
 

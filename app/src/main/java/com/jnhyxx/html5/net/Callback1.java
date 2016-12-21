@@ -9,6 +9,14 @@ import com.jnhyxx.html5.utils.ToastUtil;
  */
 public abstract class Callback1<T> extends Callback<T> {
 
+    public Callback1(boolean errorVisible) {
+        super(errorVisible);
+    }
+
+    public Callback1() {
+        super();
+    }
+
     @Override
     public void onReceive(T t) {
         if (t instanceof Resp) {

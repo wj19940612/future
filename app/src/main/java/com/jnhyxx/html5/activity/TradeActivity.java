@@ -78,6 +78,7 @@ public class TradeActivity extends BaseActivity implements
     private static final int REQ_CODE_SIGN_IN = 1;
 
     private static final int REQ_CODE_SET_LIGHTNING_ORDER_PAGE = 10000;
+    private static final int REQ_CODE_LIVE = 321;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -232,7 +233,12 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void switchToLivePage() {
-
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
+        }
     }
 
     private void updateLightningOrderView() {
@@ -249,7 +255,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void getLightningOrderWebCache() {
         API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType).setTag(TAG)
-                .setCallback(new Callback2<Resp<LightningOrderAsset>, LightningOrderAsset>() {
+                .setCallback(new Callback2<Resp<LightningOrderAsset>, LightningOrderAsset>(false) {
                     @Override
                     public void onRespSuccess(LightningOrderAsset lightningOrderAsset) {
                         if (lightningOrderAsset != null) {

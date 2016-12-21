@@ -11,6 +11,14 @@ import com.johnz.kutils.net.NullResponseError;
  */
 public abstract class Callback2<T, D> extends Callback<T> {
 
+    public Callback2(boolean errorVisible) {
+        super(errorVisible);
+    }
+
+    public Callback2() {
+        super();
+    }
+
     @Override
     public void onReceive(T t) {
         if (t instanceof Resp) {

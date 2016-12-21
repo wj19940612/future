@@ -60,9 +60,10 @@ import butterknife.OnClick;
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
     public static final int REQUEST_CODE_LOGIN = 583;
+    private static final int REQ_CODE_TRADE = 123;
 
-    private static final int LIVE_INTERACTION = 0;
-    private static final int TEACHER_ADVISE = 1;
+    private static final int POS_LIVE_INTERACTION = 0;
+    private static final int POS_TEACHER_ADVISE = 1;
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -365,9 +366,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             @Override
             public void onPageSelected(int position) {
                 mSelectedPage = position;
-                if (position == LIVE_INTERACTION) {
+                if (position == POS_LIVE_INTERACTION) {
                     mShowEditTextButton.setVisibility(View.VISIBLE);
-                } else if (position == TEACHER_ADVISE) {
+                } else if (position == POS_TEACHER_ADVISE) {
                     mShowEditTextButton.setVisibility(View.GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
@@ -382,18 +383,18 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private TeacherGuideFragment getTeacherGuideFragment() {
-        return (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(TEACHER_ADVISE);
+        return (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(POS_TEACHER_ADVISE);
     }
 
     private LiveInteractionFragment getLiveInteractionFragment() {
-        return (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+        return (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
     }
 
     private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPositions();
+                switchToTradePage();
             }
         });
         View customView = mTitleBar.getCustomView();
@@ -437,7 +438,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
             LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+                    mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
             if (fragment != null) {
                 fragment.setLoginSuccess(true);
             }
@@ -522,16 +523,24 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                             if (getLiveInteractionFragment() != null) {
                                 getLiveInteractionFragment().hideInputBox();
                             }
-
-                            Launcher.with(LiveActivity.this, TradeActivity.class)
+                            Launcher.with(getActivity(), TradeActivity.class)
                                     .putExtra(Product.EX_PRODUCT, product)
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                     .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                     .putExtra(ServerIpPort.EX_IP_PORT, marketServers.get(0))
-                                    .execute();
+                                    .executeForResult(REQ_CODE_TRADE);
                         }
                     }
                 }).fire();
+    }
+
+    private void switchToTradePage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(TradeActivity.class.getName())) {
+            finish();
+        } else {
+            requestPositions();
+        }
     }
 
     @Override

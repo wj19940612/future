@@ -77,9 +77,9 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     private HoldingOrderPresenter mPresenter;
     private Callback mCallback;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mMarketData = data;
             mPresenter.setFullMarketData(data, mProduct.getVarietyId());
             if (mHoldingOrderAdapter != null) {

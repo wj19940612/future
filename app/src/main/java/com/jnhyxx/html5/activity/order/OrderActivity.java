@@ -23,7 +23,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
@@ -65,19 +64,6 @@ public class OrderActivity extends BaseActivity implements
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mMarketData = intent.getParcelableExtra(FullMarketData.EX_MARKET_DATA);
     }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        NettyClient.getInstance().start(mProduct.getContractsCode());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        NettyClient.getInstance().stop();
-    }
-
 
     @Override
     public void onHoldingFragmentClosePositionEventTriggered() {

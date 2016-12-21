@@ -26,6 +26,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
 
+    private static final String TAG = "NettyClient";
+
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
     private Channel mChannel;
@@ -67,12 +69,12 @@ public class NettyClient {
         this.mCallback = new NettyClientHandler.Callback() {
             @Override
             public void onChannelActive(ChannelHandlerContext ctx) {
-                Log.d("TAG", "onChannelActive: ");
+                Log.d(TAG, "onChannelActive: ");
             }
 
             @Override
             public void onChannelInActive(ChannelHandlerContext ctx) {
-                Log.d("TAG", "onChannelInActive: ");
+                Log.d(TAG, "onChannelInActive: ");
                 ctx.channel().eventLoop().schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -84,12 +86,12 @@ public class NettyClient {
             @Override
             public void onReceiveData(String data) {
                 onReceiveOriginalData(data);
-                handleRealTimeQuotaData(data);
+                //processOriginalData(data);
             }
 
             @Override
             public void onError(ChannelHandlerContext ctx, Throwable cause) {
-                Log.d("TAG", "onError: ");
+                Log.d(TAG, "onError: ");
             }
         };
     }
@@ -97,12 +99,12 @@ public class NettyClient {
     private void onReceiveOriginalData(String data) {
         for (int i = 0; i < mHandlerList.size(); i++) {
             Handler handler = mHandlerList.get(i);
-            Message message = handler.obtainMessage(NettyHandler.WHAT_ORIGINAL, data);
+            Message message = handler.obtainMessage(NettyHandler.WHAT_DATA, data);
             handler.sendMessage(message);
         }
     }
 
-    private void handleRealTimeQuotaData(String data) {
+    private void processOriginalData(String data) {
         try {
             if (data.indexOf("lastPrice") == -1) return;
 
@@ -111,6 +113,7 @@ public class NettyClient {
             if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) {
                 return;
             }
+
             if (mMarketConn != null) {
                 onReceiveSingleData(marketData);
             }
@@ -196,7 +199,7 @@ public class NettyClient {
                     }
 
                     if (mChattingConn != null) {
-                        Log.d("TAG", "operationComplete: " + mChattingConn.toJson());
+                        Log.d(TAG, "operationComplete: " + mChattingConn.toJson());
                         mChannel.writeAndFlush(mChattingConn.toJson());
                     }
                 } else {
@@ -225,7 +228,7 @@ public class NettyClient {
         }
         if (mChannel != null) {
             ChannelFuture future = mChannel.close();
-            Log.d("TAG", "stop: " + future.toString());
+            Log.d(TAG, "stop: " + future.toString());
         }
 
     }

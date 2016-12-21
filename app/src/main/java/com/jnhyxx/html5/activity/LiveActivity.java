@@ -106,6 +106,11 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private NettyHandler mNettyHandler = new NettyHandler() {
 
         @Override
+        public void onReceiveData(Object data) {
+
+        }
+
+        @Override
         protected void onReceiveOriginalData(String data) {
 
             Log.d(TAG, "onReceiveOriginalData: " + data);

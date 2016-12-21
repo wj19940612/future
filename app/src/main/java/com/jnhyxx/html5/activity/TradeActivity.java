@@ -134,9 +134,9 @@ public class TradeActivity extends BaseActivity implements
     private FullMarketData mFullMarketData;
     private ServerIpPort mServerIpPort;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
             if (mUpdateRealTimeData) {
                 updateFourMainPrices(data);
@@ -178,6 +178,7 @@ public class TradeActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
+
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
         mUpdateRealTimeData = true;
@@ -228,6 +229,22 @@ public class TradeActivity extends BaseActivity implements
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
+
+        requestServerIpAndPort();
+    }
+
+    private void requestServerIpAndPort() {
+        API.Market.getMarketServerIpAndPort().setTag(TAG)
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
+                    @Override
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
+                            mServerIpPort = serverIpPorts.get(0);
+                            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+                            NettyClient.getInstance().start(mProduct.getContractsCode());
+                        }
+                    }
+                }).fireSync();
     }
 
     private void switchToLivePage() {
@@ -296,9 +313,37 @@ public class TradeActivity extends BaseActivity implements
         updateExchangeStatusView(); // based on product
         startScheduleJob(60 * 1000, 60 * 1000);
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
-        NettyClient.getInstance().start(mProduct.getContractsCode());
         mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScheduleJob();
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        mHoldingOrderPresenter.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHoldingOrderPresenter.onDestroy();
+        mNettyHandler = null;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
+            NettyClient.getInstance().stop();
+        }
     }
 
     private void showLightningOrderInvalidDialog() {
@@ -407,11 +452,8 @@ public class TradeActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
-        NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
-
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn})
@@ -536,22 +578,6 @@ public class TradeActivity extends BaseActivity implements
         } else {
             mQuestionMark.start();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopScheduleJob();
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
-        mHoldingOrderPresenter.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHoldingOrderPresenter.onDestroy();
-        mNettyHandler = null;
     }
 
     @Override
@@ -745,18 +771,6 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        } else {
-            super.onBackPressed();
         }
     }
 

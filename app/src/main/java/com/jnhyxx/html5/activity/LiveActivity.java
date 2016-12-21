@@ -59,7 +59,6 @@ import butterknife.OnClick;
 
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
-    public static final int REQUEST_CODE_LOGIN = 583;
     private static final int REQ_CODE_TRADE = 123;
 
     private static final int POS_LIVE_INTERACTION = 0;
@@ -231,7 +230,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                         ToastUtil.show(R.string.live_time_is_not);
                     }
                 } else {
-                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
+                    Launcher.with(getActivity(), SignInActivity.class)
+                            .executeForResult(REQ_CODE_LOGIN);
                 }
                 break;
         }
@@ -436,7 +436,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             LiveInteractionFragment fragment = (LiveInteractionFragment)
                     mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
             if (fragment != null) {

@@ -75,8 +75,6 @@ import butterknife.OnClick;
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
-    private static final int REQ_CODE_SIGN_IN = 1;
-
     private static final int REQ_CODE_SET_LIGHTNING_ORDER_PAGE = 10000;
     private static final int REQ_CODE_LIVE = 321;
 
@@ -196,7 +194,7 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onSignInButtonClick() {
                 Launcher.with(getActivity(), SignInActivity.class)
-                        .executeForResult(REQ_CODE_SIGN_IN);
+                        .executeForResult(REQ_CODE_LOGIN);
             }
 
             @Override
@@ -346,7 +344,7 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
             updateLightningOrderView();
         }
@@ -442,7 +440,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void openLightningOrdersPage() {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
             return;
         }
 
@@ -706,7 +704,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void placeOrder(int longOrShort) {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
             return;
         }
 

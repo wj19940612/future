@@ -30,10 +30,12 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -137,6 +139,7 @@ public class SettlementFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 final SettledOrder settledOrder = (SettledOrder) adapterView.getItemAtPosition(position);
                 if (settledOrder != null) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ORDER_CLEANING_DETAILS);
                     API.Order.getOrderDetail(settledOrder.getShowId(), mFundType).setTag(TAG)
                             .setCallback(new Callback2<Resp<OrderDetail>, OrderDetail>() {
                                 @Override

@@ -175,7 +175,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mLivePlayer.setOnPlayClickListener(new LivePlayer.OnPlayClickListener() {
             @Override
             public void onClick(boolean isPlay) {
-                // TODO: 2016/12/21 播放统计未添加 
+                // TODO: 2016/12/21 播放统计未添加
                 Log.d("wangjieTest", "视频是否开始播放 " + isPlay);
             }
         });

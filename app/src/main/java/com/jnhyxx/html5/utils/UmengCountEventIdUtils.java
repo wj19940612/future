@@ -241,13 +241,13 @@ public class UmengCountEventIdUtils {
     //buy1300,闪电买涨买跌,0
     public static final String LIGHTNING_BUY_RISE_OR_BUY_DROP = "buy1300";
     //buy1400,闪电下单开启入口,0
-    public static final String LIGHNING_OPEN_DOOR = "buy1400";
+    public static final String LIGHTNING_OPEN_DOOR = "buy1400";
     //buy1401,开启闪电下单,0
     public static final String OPEN_LIGHTNING_ORDERS = "buy1401";
     //buy1500,闪电下单关闭入口,0
-    public static final String LIGHNING_COLSE_DOOR = "buy1500";
+    public static final String LIGHTNING_CLOSE_DOOR = "buy1500";
     //buy1501,关闭闪电下单,0
-    public static final String COLSE_LIGHTNING_ORDERS = "buy1501";
+    public static final String ClOSE_LIGHTNING_ORDERS = "buy1501";
     //buy1502,重新设置闪电下单,0
     public static final String RESTART_SET_LIGHTNING_ORDERS = "buy1502";
 

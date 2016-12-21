@@ -151,7 +151,8 @@ public class HomeFragment extends BaseFragment {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
                     requestServerIpAndPort(pkg);
-                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH));
+                    // TODO: 2016/12/21 只需传入环境和eventId，后面产品名可去掉
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH),pkg.getProduct().getVarietyName());
                 }
             }
         });

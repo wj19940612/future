@@ -120,9 +120,9 @@ public class UmengCountEventIdUtils {
     //home0100,banner,0
     public static final String BANNER = "home0100";
     //home0200,模拟操盘,0
-    public static final String SIMULATION_TRDER = "home0200";
+    public static final String SIMULATION_TRADE = "home0200";
     //home0202,模拟操盘页金币商城,0
-    public static final String SIMULATION_TRDER_GOLD_SHOP = "home0202";
+    public static final String SIMULATION_TRADE_GOLD_SHOP = "home0202";
     //home0300,首页新手引导,0
     public static final String HOME_PAGE_NEWBIE_GUIDE = "home0300";
     //home0400首页联系客服,0
@@ -163,48 +163,42 @@ public class UmengCountEventIdUtils {
     public static final String FUND_TYPE_CASH = "product";
     public static final String FUND_TYPE_SIMULATION = "gold";
 
-    /**
-     * 01外盘02内盘
-     */
-    public static final String DOMESTIC = "02";
-    public static final String INTERNATIONAL = "01";
 
-
-    public static String getProdectUmengEventId(Product product, int fundType) {
+    public static String getProductUmengEventId(Product product, int fundType) {
         StringBuilder mProduct = new StringBuilder();
         mProduct.append(fundType == Product.FUND_TYPE_CASH ? FUND_TYPE_CASH : FUND_TYPE_SIMULATION);
-        mProduct.append(product.isDomestic() ? DOMESTIC : INTERNATIONAL);
-        mProduct.append(product.getVarietyId());
+        mProduct.append(product.isDomestic() ? 1 : 0);
+        mProduct.append(String.valueOf(product.getVarietyId()));
         return mProduct.toString();
     }
 
     /**
      * buy0200,玩法规则,0
-     buy0300,交易页右侧选择品种,0
-     buy0500,交易页持仓总盈亏,0
-     buy0600,交易页一键平仓,0
-     buy0700,订单,0
-     buy0701,订单持仓,0
-     buy07011,设置止盈止损,0
-     buy070111,设置止盈止损取消,0
-     buy070112,设置止盈止损确认设置,0
-     buy07012,订单持仓一键平仓,0
-     buy0702,订单结算,0
-     buy0703,订单结算列表,0
-     buy0800,分时图,0
-     buy0801,分时图盘面,0
-     buy0900,闪电图,0
-     buy1000,盘口,0
-     buy1100,日K,0
-     buy1200,买涨买跌,0
-     buy1201,确定买涨买跌,0
-     buy1300,闪电买涨买跌,0
-     buy1400,闪电下单开启入口,0
-     buy1401,开启闪电下单,0
-     buy1500,闪电下单关闭入口,0
-     buy1501,关闭闪电下单,0
-     buy1502,重新设置闪电下单,0
-     buy1503,闪电下单关闭入口（开启）,0
+     * buy0300,交易页右侧选择品种,0
+     * buy0500,交易页持仓总盈亏,0
+     * buy0600,交易页一键平仓,0
+     * buy0700,订单,0
+     * buy0701,订单持仓,0
+     * buy07011,设置止盈止损,0
+     * buy070111,设置止盈止损取消,0
+     * buy070112,设置止盈止损确认设置,0
+     * buy07012,订单持仓一键平仓,0
+     * buy0702,订单结算,0
+     * buy0703,订单结算列表,0
+     * buy0800,分时图,0
+     * buy0801,分时图盘面,0
+     * buy0900,闪电图,0
+     * buy1000,盘口,0
+     * buy1100,日K,0
+     * buy1200,买涨买跌,0
+     * buy1201,确定买涨买跌,0
+     * buy1300,闪电买涨买跌,0
+     * buy1400,闪电下单开启入口,0
+     * buy1401,开启闪电下单,0
+     * buy1500,闪电下单关闭入口,0
+     * buy1501,关闭闪电下单,0
+     * buy1502,重新设置闪电下单,0
+     * buy1503,闪电下单关闭入口（开启）,0
      */
     //buy0200,玩法规则,0
     public static final String GAME_RULES = "buy0200";
@@ -259,16 +253,16 @@ public class UmengCountEventIdUtils {
 
     /**
      * live0100,节目单,0
-     live0200,直播页交易,0
-     live0300,老师头像,0
-     live0400,直播页播放,0
-     live0500,直播页全屏,0
-     live0600,静音,0
-     live0700,互动,0
-     live0800,老师指导,0
-     live0900,点击用户头像,0
-     live1000,发言,0
-     live1001,发送,0
+     * live0200,直播页交易,0
+     * live0300,老师头像,0
+     * live0400,直播页播放,0
+     * live0500,直播页全屏,0
+     * live0600,静音,0
+     * live0700,互动,0
+     * live0800,老师指导,0
+     * live0900,点击用户头像,0
+     * live1000,发言,0
+     * live1001,发送,0
      */
     //live0100,节目单,0
     public static final String PROGRAMME = "live0100";
@@ -279,7 +273,7 @@ public class UmengCountEventIdUtils {
     //live0400,直播页播放,0
     public static final String LIVE_PLAY = "live0400";
     //live0500,直播页全屏,0
-    public static final String LIVE_FULL = "live0500";
+    public static final String LIVE_FULL_SCREEN = "live0500";
     //live0600,静音,0
     public static final String LIVE_MUTE = "live0600";
     //live0700,互动,0
@@ -294,12 +288,12 @@ public class UmengCountEventIdUtils {
     public static final String SEND_SPEAK = "live1001";
 
     /**
-     *   news0100,资讯,0
-     news0200,行情分析详情,0
-     news0300,行情资讯详情,0
+     * news0100,资讯,0
+     * news0200,行情分析详情,0
+     * news0300,行情资讯详情,0
      */
     //news0200,行情分析详情,0
-    public static final String MARKET_ANALYZE_DETAILS="news0200";
+    public static final String MARKET_ANALYZE_DETAILS = "news0200";
     //news0300
-    public static final String MARKET_MESSAGE_DETAILS="news0300";
+    public static final String MARKET_MESSAGE_DETAILS = "news0300";
 }

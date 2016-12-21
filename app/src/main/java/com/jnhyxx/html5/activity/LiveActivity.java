@@ -44,6 +44,7 @@ import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
@@ -51,6 +52,7 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +125,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
             }
 
-            if (LiveHomeChatInfo.isOrder()||LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
+            if (LiveHomeChatInfo.isOrder() || LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                 if (getTeacherGuideFragment() != null) {
                     getTeacherGuideFragment().setData(LiveHomeChatInfo);
                 }
@@ -141,6 +143,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
             public void onTeacherHeadClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TEACHER_IMAGE);
                 showTeacherInfoDialog();
             }
 
@@ -155,7 +158,25 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             public void onClick(boolean fullscreen) {
                 if (fullscreen) {
                     mKeyBoardHelper.setOnKeyBoardStatusChangeListener(null);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_FULL_SCREEN);
                 }
+            }
+        });
+
+        mLivePlayer.setOnMuteButtonClickListener(new LivePlayer.OnMuteButtonClickListener() {
+            @Override
+            public void onClick(boolean isMute) {
+                Log.d("wangjieTest", "静音按钮被点击 " + isMute);
+                // TODO: 2016/12/21 暂不清楚要提交什么 
+//                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_MUTE);
+            }
+        });
+
+        mLivePlayer.setOnPlayClickListener(new LivePlayer.OnPlayClickListener() {
+            @Override
+            public void onClick(boolean isPlay) {
+                // TODO: 2016/12/21 播放统计未添加 
+                Log.d("wangjieTest", "视频是否开始播放 " + isPlay);
             }
         });
 
@@ -224,6 +245,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showEditTextButton:
+                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
                     if (mTeacher != null) {
                         if (getLiveInteractionFragment() != null) {
@@ -369,8 +391,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             public void onPageSelected(int position) {
                 mSelectedPage = position;
                 if (position == LIVE_INTERACTION) {
+                    MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.LIVE_INTERACT);
                     mShowEditTextButton.setVisibility(View.VISIBLE);
                 } else if (position == TEACHER_ADVISE) {
+                    MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.TEACHER_GUIDE);
                     mShowEditTextButton.setVisibility(View.GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
@@ -396,6 +420,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TRADE);
                 openTradePage();
             }
         });
@@ -404,6 +429,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PROGRAMME);
                 showLiveProgramme();
             }
         });

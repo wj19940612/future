@@ -26,8 +26,10 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,7 @@ public class SimulationActivity extends BaseActivity {
                 ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
                     requestServerIpAndPort(pkg);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_SIMULATION));
                 }
             }
         });
@@ -154,6 +157,7 @@ public class SimulationActivity extends BaseActivity {
 
     @OnClick(R.id.goldStoreButton)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE_GOLD_SHOP);
         ToastUtil.show(R.string.coming_soon);
     }
 

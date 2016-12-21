@@ -39,11 +39,13 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +94,7 @@ public class HomeFragment extends BaseFragment {
                             .putExtra(HideTitleWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                             .execute();
                 } else {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BANNER);
                     Launcher.with(getActivity(), BannerActivity.class)
                             .putExtra(BannerActivity.EX_HTML, information.getContent())
                             .putExtra(BannerActivity.EX_TITLE, information.getTitle())
@@ -102,6 +105,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSimulationClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE);
                 API.Market.getProductList().setTag(TAG)
                         .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                             @Override
@@ -116,6 +120,7 @@ public class HomeFragment extends BaseFragment {
             //新手引导
             @Override
             public void onNewerGuideClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
                 Launcher.with(getActivity(), NewbieActivity.class)
                         .putExtra(NewbieActivity.EX_URL, API.getNewbieUrl())
                         .putExtra(NewbieActivity.EX_TITLE, getString(R.string.newbie_title))
@@ -125,6 +130,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onContactService() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -145,6 +151,7 @@ public class HomeFragment extends BaseFragment {
                 ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
                 if (pkg != null) {
                     requestServerIpAndPort(pkg);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH));
                 }
             }
         });

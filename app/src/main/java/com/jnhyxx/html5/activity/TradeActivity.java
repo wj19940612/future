@@ -217,11 +217,22 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
 
+        mChartContainer.setOnLiveEnterClickListener(new ChartContainer.OnLiveEnterClickListener() {
+            @Override
+            public void onClick() {
+                switchToLivePage();
+            }
+        });
+
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
+    }
+
+    private void switchToLivePage() {
+
     }
 
     private void updateLightningOrderView() {

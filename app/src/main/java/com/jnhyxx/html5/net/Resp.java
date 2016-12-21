@@ -43,6 +43,10 @@ public class Resp<T> {
         return code == 503;
     }
 
+    /**
+     * Check if data is null (null or empty if data is a list)
+     * @return true if has data
+     */
     public boolean hasData() {
         if (data != null && data instanceof List) {
             return ((List) data).size() > 0;

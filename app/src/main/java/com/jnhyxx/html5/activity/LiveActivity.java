@@ -396,7 +396,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTradePage();
+                switchToTradePage();
             }
         });
         View customView = mTitleBar.getCustomView();
@@ -424,9 +424,23 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         }
     }
 
-    private void openTradePage() {
-        //获取用户持仓数据
-        requestUserPositions();
+    private void switchToTradePage() {
+        API.Order.getHomePositions().setTag(TAG)
+                .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
+                    @Override
+                    public void onRespSuccess(HomePositions homePositions) {
+
+                    }
+
+                    @Override
+                    protected void onRespSuccess(Resp<HomePositions> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            HomePositions positions = resp.getData();
+                            boolean userHasPositions = ifUserHasPositions(positions);
+                            requestProductList(userHasPositions, positions);
+                        }
+                    }
+                }).fire();
     }
 
     private boolean ifUserHasPositions(HomePositions homePositions) {
@@ -437,17 +451,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private void requestUserPositions() {
-        API.Order.getHomePositions().setTag(TAG)
-                .setCallback(new Callback1<Resp<HomePositions>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<HomePositions> resp) {
-                        if (resp.isSuccess() && resp.hasData()) {
-                            HomePositions mHomePositions = resp.getData();
-                            boolean userHasPositions = ifUserHasPositions(mHomePositions);
-                            requestProductList(userHasPositions, mHomePositions);
-                        }
-                    }
-                }).fire();
+
     }
 
     @Override

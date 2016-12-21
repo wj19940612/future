@@ -2,6 +2,11 @@ package com.jnhyxx.html5.net;
 
 import com.jnhyxx.html5.utils.ToastUtil;
 
+/**
+ * 只在成功的时候（Resp's code = 200）时回调解析出 Resp
+ *
+ * @param <T> Type of Resp
+ */
 public abstract class Callback1<T> extends Callback<T> {
 
     @Override

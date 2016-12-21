@@ -23,12 +23,11 @@ import com.jnhnxx.livevideo.LivePlayer;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
-import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LastTeacherCommand;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
@@ -37,7 +36,6 @@ import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
@@ -94,7 +92,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private LiveProgrammeList mProgrammeList;
     private KeyBoardHelper mKeyBoardHelper;
 
-    private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
 
     private LiveMessage mLiveMessage;
@@ -123,7 +120,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
             }
 
-            if (LiveHomeChatInfo.isOrder()||LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
+            if (LiveHomeChatInfo.isOrder() || LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                 if (getTeacherGuideFragment() != null) {
                     getTeacherGuideFragment().setData(LiveHomeChatInfo);
                 }
@@ -396,7 +393,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToTradePage();
+                requestPositions();
             }
         });
         View customView = mTitleBar.getCustomView();
@@ -424,34 +421,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         }
     }
 
-    private void switchToTradePage() {
-        API.Order.getHomePositions().setTag(TAG)
+    private void requestPositions() {
+        API.Order.getHomePositions()
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                     @Override
                     public void onRespSuccess(HomePositions homePositions) {
-
-                    }
-
-                    @Override
-                    protected void onRespSuccess(Resp<HomePositions> resp) {
-                        if (resp.isSuccess() && resp.hasData()) {
-                            HomePositions positions = resp.getData();
-                            boolean userHasPositions = ifUserHasPositions(positions);
-                            requestProductList(userHasPositions, positions);
-                        }
+                        requestProductList(homePositions);
                     }
                 }).fire();
-    }
-
-    private boolean ifUserHasPositions(HomePositions homePositions) {
-        if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-    private void requestUserPositions() {
-
     }
 
     @Override
@@ -504,53 +482,49 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         }
     }
 
-    private void requestProductList(final boolean hasPositions, final HomePositions homePositions) {
-        API.Market.getProductList().setTag(TAG)
+    private void requestProductList(final HomePositions homePositions) {
+        API.Market.getProductList()
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products, null, null);
-
-                        if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
-                            // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
-                            int enterPageProductId = 1;
-                            if (hasPositions) {
-                                if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
-                                    String varietyType = homePositions.getCashOpS().get(homePositions.getCashOpS().size() - 1).getVarietyType();
-                                    for (int i = 0; i < mProductPkgList.size(); i++) {
-                                        if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
-                                            enterPageProductId = i;
-                                            break;
-                                        }
-                                    }
-                                }
-                            } else {
-                                for (int i = 0; i < mProductPkgList.size(); i++) {
-                                    if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
-                                        enterPageProductId = i;
-                                        break;
-                                    }
+                        List<HomePositions.CashOpSBean> cashOpSBeanList = homePositions.getCashOpS();
+                        Product enterProduct = null;
+                        if (cashOpSBeanList != null && cashOpSBeanList.size() > 0) { // has cash positions
+                            HomePositions.CashOpSBean cashOpSBean = cashOpSBeanList.get(0);
+                            for (Product product : mProductList) {
+                                if (product.getVarietyType().equals(cashOpSBean.getVarietyType())) {
+                                    enterProduct = product;
+                                    break;
                                 }
                             }
-                            ProductPkg productPkg = mProductPkgList.get(enterPageProductId);
-                            requestServerIpAndPort(productPkg);
+                        } else {
+                            for (Product product: mProductList) {
+                                if (product.getVarietyId() == Product.ID_US_CRUDE) {
+                                    enterProduct = product;
+                                }
+                            }
+                        }
+                        if (enterProduct != null) {
+                            requestServerIpAndPort(enterProduct);
                         }
                     }
                 }).fire();
     }
 
-    private void requestServerIpAndPort(final ProductPkg productPkg) {
+    private void requestServerIpAndPort(final Product product) {
         API.Market.getMarketServerIpAndPort().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
                     @Override
                     public void onRespSuccess(List<ServerIpPort> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
+                        if (marketServers.size() > 0) {
                             if (getLiveInteractionFragment() != null) {
                                 getLiveInteractionFragment().hideInputBox();
                             }
+
                             Launcher.with(LiveActivity.this, TradeActivity.class)
-                                    .putExtra(Product.EX_PRODUCT, productPkg.getProduct())
+                                    .putExtra(Product.EX_PRODUCT, product)
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                     .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                                     .putExtra(ServerIpPort.EX_IP_PORT, marketServers.get(0))

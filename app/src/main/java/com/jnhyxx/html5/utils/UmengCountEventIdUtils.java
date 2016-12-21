@@ -97,7 +97,7 @@ public class UmengCountEventIdUtils {
     // me1202,管理团队,0
     public static final String MANAGE_TEAM = "me1202";
     //me1203,企业文化,0
-    public static final String COMPANY_PHILOSOPHY = "me1203";
+    public static final String COMPANY_CULTURE = "me1203";
     //me1204,合作案例,0
     public static final String SHOW_CASE = "me1204";
     //me1205,联系电话,0

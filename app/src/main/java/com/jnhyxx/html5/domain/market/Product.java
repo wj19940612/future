@@ -57,6 +57,7 @@ public class Product implements Parcelable {
     private double flashChartPriceInterval;
     private String varietyType;
     private int baseline;
+    // 1 国内品种  0 国际品种
     private int isDomestic;
     private int tags;
     private int exchangeId;

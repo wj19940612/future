@@ -140,7 +140,9 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
 
     private void updateInfoList(List<Information> messageLists) {
         if (messageLists == null || messageLists.isEmpty()) {
-            mListView.setEmptyView(mEmptyView);
+            if (mEmptyView != null) {
+                mListView.setEmptyView(mEmptyView);
+            }
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }

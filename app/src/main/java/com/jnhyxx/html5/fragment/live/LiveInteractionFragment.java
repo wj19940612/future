@@ -149,8 +149,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
-        mListView.setTranscriptMode(isStackFromBottom ? ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL : ListView.TRANSCRIPT_MODE_DISABLED);
-        mListView.setStackFromBottom(true);
+        mListView.setStackFromBottom(isStackFromBottom);
+        if (isStackFromBottom) {
+            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        } else {
+            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+        }
     }
 
     @Override
@@ -216,6 +220,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @Override
             public void onRefresh() {
                 getChatInfo();
+                setLiveViewStackFromBottom(false);
                 if (!Network.isNetworkAvailable()) {
                     stopRefreshAnimation();
                 }
@@ -248,8 +253,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             if (mLiveChatInfoAdapter != null) {
                 if (mHashSet.add(LiveHomeChatInfo.getCreateTime())) {
                     mDataArrayList.add(LiveHomeChatInfo);
-                    if (DateUtil.isTimeBetweenFiveMin(LiveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
-                        LiveHomeChatInfo.setMoreThanFiveMin(true);
+                    if (mDataArrayList.size() > 2) {
+                        if (DateUtil.isTimeBetweenFiveMin(LiveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
+                            LiveHomeChatInfo.setMoreThanFiveMin(true);
+                        }
                     }
                     mLiveChatInfoAdapter.add(LiveHomeChatInfo);
                     mLiveChatInfoAdapter.notifyDataSetChanged();
@@ -267,9 +274,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
+
                                              if (liveHomeChatInfoResp.getData().size() < 6) {
                                                  setLiveViewStackFromBottom(false);
                                              }
+
                                              mPageOffset = mPageOffset + mPageSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
@@ -281,7 +290,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                              ToastUtil.curt(R.string.now_is_not_has_more_data);
                                              stopRefreshAnimation();
                                          }
-                                     }else {
+                                     } else {
                                          stopRefreshAnimation();
                                      }
                                  }
@@ -310,10 +319,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private void updateCHatInfo(final List<LiveHomeChatInfo> liveHomeChatInfoList) {
         if (liveHomeChatInfoList == null || liveHomeChatInfoList.isEmpty()) {
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                return;
-            }
+            stopRefreshAnimation();
             return;
         }
         stopRefreshAnimation();

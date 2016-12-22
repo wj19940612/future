@@ -70,8 +70,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private ArrayList<LiveHomeChatInfo> mDataInfoList;
 
-    private boolean hasMoreData;
-
     public static TeacherGuideFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -97,8 +95,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        mListView.setStackFromBottom(true);
+        setLiveViewStackFromBottom(true);
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataInfoList = new ArrayList<>();
@@ -141,13 +138,24 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         }
     }
 
+    private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
+        mListView.setStackFromBottom(isStackFromBottom);
+        if (isStackFromBottom) {
+            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        } else {
+            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
+        }
+    }
+
     public void setData(LiveHomeChatInfo data) {
         if (data != null && mLiveTeacherGuideAdapter != null) {
             if (mHashSet.add(data.getCreateTime())) {
                 mPageOffset++;
                 mDataInfoList.add(data);
-                if (DateUtil.isTimeBetweenFiveMin(data.getCreateTime(), mDataInfoList.get(mDataInfoList.size() - 2).getCreateTime())) {
-                    data.setMoreThanFiveMin(true);
+                if (mDataInfoList.size() > 2) {
+                    if (DateUtil.isTimeBetweenFiveMin(data.getCreateTime(), mDataInfoList.get(mDataInfoList.size() - 2).getCreateTime())) {
+                        data.setMoreThanFiveMin(true);
+                    }
                 }
                 mLiveTeacherGuideAdapter.add(data);
                 mLiveTeacherGuideAdapter.notifyDataSetChanged();
@@ -161,23 +169,18 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                if (!Network.isNetworkAvailable()) {
+                    stopRefreshAnimation();
+                }
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!hasMoreData) {
-                    getTeacherGuideIfo();
-                    if (!mSwipeRefreshLayout.isRefreshing() && Network.isNetworkAvailable()) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                    mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
-                    mListView.setStackFromBottom(false);
-                } else {
-                    ToastUtil.curt(R.string.now_is_not_has_more_data);
-                    if (mSwipeRefreshLayout.isRefreshing()) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
+                getTeacherGuideIfo();
+                setLiveViewStackFromBottom(false);
+                if (!Network.isNetworkAvailable()) {
+                    stopRefreshAnimation();
                 }
             }
         });
@@ -187,12 +190,9 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
             mEmpty.setText(R.string.there_is_no_teacher_advise);
             mListView.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            stopRefreshAnimation();
             return;
         }
-
         API.Live.getTeacherGuide(mPageOffset, mPageSize, mLiveMessage.getTeacher().getTeacherAccountId())
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
@@ -201,18 +201,20 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     public void onReceive(Resp<List<LiveHomeChatInfo>> listResp) {
                         if (listResp.isSuccess()) {
                             if (listResp.hasData()) {
+
+                                if (listResp.getData().size() < 6) {
+                                    setLiveViewStackFromBottom(false);
+                                }
+
                                 mPageOffset = mPageOffset + mPageSize;
                                 mDataInfoList.addAll(0, listResp.getData());
                                 updateTeacherGuide(listResp.getData());
-                                if (listResp.getData().size() < mPageSize) {
-                                    hasMoreData = true;
-                                    if (mSwipeRefreshLayout.isRefreshing()) {
-                                        mSwipeRefreshLayout.setRefreshing(false);
-                                    }
-                                }
                             } else {
-                                updateTeacherGuide(listResp.getData());
+                                ToastUtil.curt(R.string.now_is_not_has_more_data);
+                                stopRefreshAnimation();
                             }
+                        } else {
+                            updateTeacherGuide(listResp.getData());
                         }
                     }
                 })
@@ -221,20 +223,15 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
-            mEmpty.setText("老师暂未发出指令");
             mListView.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            stopRefreshAnimation();
             return;
         }
         addListViewFootView(data);
     }
 
     private void addListViewFootView(List<LiveHomeChatInfo> data) {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+        stopRefreshAnimation();
 
         if (mLiveTeacherGuideAdapter == null) {
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
@@ -244,23 +241,31 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             }
         }
         mLiveTeacherGuideAdapter.clear();
+        getTalkTimeIsThanFiveMinute();
+        mLiveTeacherGuideAdapter.notifyDataSetChanged();
+    }
+
+    //判断谈话时间是否超过5分钟，如果超过，出现分割线
+    private void getTalkTimeIsThanFiveMinute() {
         if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
-//            int dataPosition = mDataInfoList.size() - 1;
             for (int i = mDataInfoList.size(); i > 0; i--) {
-                if (i == 2) break;
-                if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(i-1).getCreateTime(), mDataInfoList.get(i - 2).getCreateTime())) {
-                    mDataInfoList.get(i-1).setMoreThanFiveMin(true);
-//                    dataPosition = i - 1;
+                if (i < 3) break;
+                if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(i - 1).getCreateTime(), mDataInfoList.get(i - 2).getCreateTime())) {
+                    mDataInfoList.get(i - 1).setMoreThanFiveMin(true);
                 }
             }
             mLiveTeacherGuideAdapter.addAll(mDataInfoList);
         }
-        mLiveTeacherGuideAdapter.notifyDataSetChanged();
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
 
     }
 

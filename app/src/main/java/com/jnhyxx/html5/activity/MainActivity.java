@@ -31,10 +31,12 @@ import com.jnhyxx.html5.receiver.PushReceiver;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.NotificationUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -57,6 +59,9 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver mNetworkChangeReceiver;
 
     private int mTabPosition;
+
+    //资讯tab的position,用来友盟记录第点击次数
+    private static final int TAB_MESSAGE = 1;
 
     private static final int REQUEST_CODE_LIVE = 770;
 
@@ -130,6 +135,9 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if (position == TAB_MESSAGE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MESSAGE);
+                }
                 if (position >= 1) {
                     mTabPosition = position + 1;
                     mBottomTabs.selectTab(mTabPosition);

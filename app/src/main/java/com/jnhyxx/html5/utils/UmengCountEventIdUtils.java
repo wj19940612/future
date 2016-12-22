@@ -153,8 +153,8 @@ public class UmengCountEventIdUtils {
      * product0204,内盘螺纹钢,0
      * product0205,内盘白糖,0
      * <p>
-     * {备注说明：金币和实盘命名规则，gold指金币，product指实盘品种，
-     * 数字前两位区分内外盘（01外盘02内盘），后两位区分品种，例如：0105指外盘德指，0205指内盘白糖}
+     {备注说明：金币和实盘命名规则，gold指金币，product指实盘品种，
+     数字前两位区分内外盘（00外盘01内盘），后两位区分品种代码)}
      */
 
     /**
@@ -163,12 +163,14 @@ public class UmengCountEventIdUtils {
     public static final String FUND_TYPE_CASH = "product";
     public static final String FUND_TYPE_SIMULATION = "gold";
 
+    public static final String DOMESTIC = "01";
+    public static final String INTERNATIONAL = "00";
 
     public static String getProductUmengEventId(Product product, int fundType) {
         StringBuilder mProduct = new StringBuilder();
         mProduct.append(fundType == Product.FUND_TYPE_CASH ? FUND_TYPE_CASH : FUND_TYPE_SIMULATION);
-        mProduct.append(product.isDomestic() ? 1 : 0);
-        mProduct.append(String.valueOf(product.getVarietyId()));
+        mProduct.append(product.isDomestic() ? DOMESTIC : INTERNATIONAL);
+        mProduct.append(product.getVarietyType());
         return mProduct.toString();
     }
 
@@ -288,12 +290,23 @@ public class UmengCountEventIdUtils {
     public static final String SEND_SPEAK = "live1001";
 
     /**
-     * news0100,资讯,0
-     * news0200,行情分析详情,0
-     * news0300,行情资讯详情,0
+     * news0100,资讯直播,0              （杨 不做）
+     * news0200,行情分析,0              （杨  不做）
+     * news0201,行情分析详情,0
+     * news0300,行情资讯,0                （杨 不做）
+     * news0301,行情资讯详情,0
+     * news0400,资讯tab,0
      */
-    //news0200,行情分析详情,0
-    public static final String MARKET_ANALYZE_DETAILS = "news0200";
-    //news0300
-    public static final String MARKET_MESSAGE_DETAILS = "news0300";
+    //news0100,资讯直播,0
+    public static final String MESSAGE_LIVE = "news0100";
+    //news0200,行情分析,0
+    public static final String MARKET_ANALYZE = "news0200";
+    //news0201,行情分析详情,0
+    public static final String MARKET_ANALYZE_DETAILS = "news0201";
+    //news0300,行情资讯,0
+    public static final String MARKET_MESSAGE= "news0300";
+    //news0301,行情资讯详情,0
+    public static final String MARKET_MESSAGE_DETAILS = "news0301";
+    //news0400,资讯tab,0
+    public static final String TAB_MESSAGE = "news0400";
 }

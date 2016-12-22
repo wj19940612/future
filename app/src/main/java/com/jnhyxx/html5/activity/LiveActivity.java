@@ -156,9 +156,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mLivePlayer.setOnScaleButtonClickListener(new LivePlayer.OnScaleButtonClickListener() {
             @Override
             public void onClick(boolean fullscreen) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_FULL_SCREEN);
                 if (fullscreen) {
                     mKeyBoardHelper.setOnKeyBoardStatusChangeListener(null);
-                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_FULL_SCREEN);
                 }
             }
         });
@@ -166,17 +166,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mLivePlayer.setOnMuteButtonClickListener(new LivePlayer.OnMuteButtonClickListener() {
             @Override
             public void onClick(boolean isMute) {
-                Log.d("wangjieTest", "静音按钮被点击 " + isMute);
-                // TODO: 2016/12/21 暂不清楚要提交什么 
-//                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_MUTE);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_MUTE);
             }
         });
 
         mLivePlayer.setOnPlayClickListener(new LivePlayer.OnPlayClickListener() {
             @Override
             public void onClick(boolean isPlay) {
-                // TODO: 2016/12/21 播放统计未添加
-                Log.d("wangjieTest", "视频是否开始播放 " + isPlay);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_PLAY);
             }
         });
 
@@ -245,7 +242,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showEditTextButton:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.SPEAK);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
                     if (mTeacher != null) {
                         if (getLiveInteractionFragment() != null) {
@@ -391,10 +388,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             public void onPageSelected(int position) {
                 mSelectedPage = position;
                 if (position == LIVE_INTERACTION) {
-                    MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.LIVE_INTERACT);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_INTERACT);
                     mShowEditTextButton.setVisibility(View.VISIBLE);
                 } else if (position == TEACHER_ADVISE) {
-                    MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.TEACHER_GUIDE);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TEACHER_GUIDE);
                     mShowEditTextButton.setVisibility(View.GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();

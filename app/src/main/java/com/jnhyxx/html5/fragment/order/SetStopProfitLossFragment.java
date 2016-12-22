@@ -107,9 +107,9 @@ public class SetStopProfitLossFragment extends BaseFragment {
         }
     }
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mMarketData = data;
             if (mIsShowing || !isVisible()) return;
             updateLastPriceAndProfit();

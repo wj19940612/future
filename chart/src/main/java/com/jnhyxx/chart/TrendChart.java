@@ -89,6 +89,13 @@ public class TrendChart extends ChartView {
         paint.setPathEffect(null);
     }
 
+    public void clearData() {
+        mDataList = null;
+        mUnstableData = null;
+        mVisibleList.clear();
+        redraw();
+    }
+
     public void setDataList(List<TrendViewData> dataList) {
         mDataList = dataList;
         redraw();
@@ -107,7 +114,8 @@ public class TrendChart extends ChartView {
     }
 
     public void setUnstableData(TrendViewData unstableData) {
-        if (mUnstableData != null && mUnstableData.isSameData(unstableData)) {
+        if (mUnstableData != null && unstableData != null
+                && mUnstableData.isSameData(unstableData)) {
             return;
         }
 
@@ -120,7 +128,7 @@ public class TrendChart extends ChartView {
 
         if (shouldDrawUnstableData()) {
             redraw();
-        } else if (mSettings != null) { // When unstable data > top || < bottom, still redraw
+        } else if (mSettings != null && mUnstableData != null) { // When unstable data > top || < bottom, still redraw
             float[] baseLines = mSettings.getBaseLines();
             if (mUnstableData.getLastPrice() > baseLines[0]
                     || mUnstableData.getLastPrice() < baseLines[baseLines.length - 1]) {

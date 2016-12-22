@@ -37,7 +37,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -132,11 +131,10 @@ public class TradeActivity extends BaseActivity implements
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private FullMarketData mFullMarketData;
-    private ServerIpPort mServerIpPort;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
             if (mUpdateRealTimeData) {
                 updateFourMainPrices(data);
@@ -294,11 +292,44 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
+
         startScheduleJob(60 * 1000, 60 * 1000);
+
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
+
         mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScheduleJob();
+
+        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        NettyClient.getInstance().stop();
+
+        mHoldingOrderPresenter.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHoldingOrderPresenter.onDestroy();
+        mNettyHandler = null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void showLightningOrderInvalidDialog() {
@@ -407,11 +438,8 @@ public class TradeActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
-        NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
-
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn})
@@ -539,22 +567,6 @@ public class TradeActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        stopScheduleJob();
-        NettyClient.getInstance().stop();
-        NettyClient.getInstance().removeNettyHandler(mNettyHandler);
-        mHoldingOrderPresenter.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHoldingOrderPresenter.onDestroy();
-        mNettyHandler = null;
-    }
-
-    @Override
     public void onTimeUp(int count) {
         requestTrendDataAndSet();
     }
@@ -668,8 +680,6 @@ public class TradeActivity extends BaseActivity implements
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-                    updateLightningOrderView(); // based on product
-
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
@@ -696,6 +706,7 @@ public class TradeActivity extends BaseActivity implements
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product
                         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
+                        updateLightningOrderView(); // based on product
                     }
                 }
             }
@@ -745,18 +756,6 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        } else {
-            super.onBackPressed();
         }
     }
 

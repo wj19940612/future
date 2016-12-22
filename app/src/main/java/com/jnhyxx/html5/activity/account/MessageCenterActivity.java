@@ -31,8 +31,6 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
     ViewPager mViewPager;
     private MessagePagesAdapter mMessagePagesAdapter;
 
-    private static final int REQ_CODE_LOGIN = 1050;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +41,6 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
         mViewPager.setCurrentItem(0, false);
         mMessagePagesAdapter = new MessagePagesAdapter(getSupportFragmentManager(), MessageCenterActivity.this);
         mViewPager.setAdapter(mMessagePagesAdapter);
-
 
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setDividerColors(ContextCompat.getColor(MessageCenterActivity.this, android.R.color.transparent));

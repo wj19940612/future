@@ -3,14 +3,13 @@ package com.jnhyxx.chart;
 import android.content.Context;
 import android.graphics.Canvas;
 
-public class TouchView extends TrendChart {
+public class TwinkleView extends TrendChart {
 
     private TrendChart mTrendChart;
 
-    public TouchView(Context context, TrendChart chart) {
+    public TwinkleView(Context context, TrendChart chart) {
         super(context);
         mTrendChart = chart;
-        setVisibleList(mTrendChart.getVisibleList());
     }
 
     @Override
@@ -37,22 +36,12 @@ public class TouchView extends TrendChart {
     }
 
     @Override
-    protected void drawUnstableData(boolean indexesEnable,
-                                    int left, int top, int width, int topPartHeight,
-                                    int left2, int top2, int width1, int bottomPartHeight,
-                                    Canvas canvas) {
-
+    protected boolean shouldDrawUnstableData() {
+        return true;
     }
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
     }
 
-    @Override
-    protected boolean hasThisTouchIndex(int touchIndex) {
-        if (getVisibleList() != null && getVisibleList().get(touchIndex) != null) {
-            return true;
-        }
-        return super.hasThisTouchIndex(touchIndex);
-    }
 }

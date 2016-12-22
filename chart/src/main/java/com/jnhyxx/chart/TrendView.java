@@ -70,8 +70,9 @@ public class TrendView extends FrameLayout {
     }
 
     public void clearData() {
-        setDataList(null);
-        setUnstableData(null);
+        mChart.clearData();
+        mTouchView.clearData();
+        mTwinkleView.clearData();
     }
 
     public static class Util {

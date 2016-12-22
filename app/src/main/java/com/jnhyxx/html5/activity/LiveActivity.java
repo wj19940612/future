@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jnhnxx.livevideo.LivePlayer;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -103,23 +101,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private LivePageFragmentAdapter mLivePageFragmentAdapter;
     private int mSelectedPage;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<LiveSpeakInfo>() {
 
         @Override
-        public void onReceiveData(Object data) {
-
-        }
-
-        @Override
-        protected void onReceiveOriginalData(String data) {
-
-            Log.d(TAG, "onReceiveOriginalData: " + data);
+        public void onReceiveData(LiveSpeakInfo data) {
             if (getLiveInteractionFragment() != null) {
                 getLiveInteractionFragment().setData(data);
             }
 
-            LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
+            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(data);
 
             if (LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER && LiveHomeChatInfo.isOrder()) {
                 mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
@@ -344,7 +334,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private void connectNettySocket() {
         if (mLiveMessage.getTeacher() != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
-            mNettyClient.setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+            mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
             mNettyClient.start(teacherId, CookieManger.getInstance().getCookies());
         }
         mNettyClient.addNettyHandler(mNettyHandler);
@@ -513,26 +503,14 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                             }
                         }
                         if (enterProduct != null) {
-                            requestServerIpAndPort(enterProduct);
-                        }
-                    }
-                }).fire();
-    }
-
-    private void requestServerIpAndPort(final Product product) {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
-                    @Override
-                    public void onRespSuccess(List<ServerIpPort> marketServers) {
-                        if (marketServers.size() > 0) {
                             if (getLiveInteractionFragment() != null) {
                                 getLiveInteractionFragment().hideInputBox();
                             }
+
                             Launcher.with(getActivity(), TradeActivity.class)
-                                    .putExtra(Product.EX_PRODUCT, product)
+                                    .putExtra(Product.EX_PRODUCT, enterProduct)
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
                                     .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                    .putExtra(ServerIpPort.EX_IP_PORT, marketServers.get(0))
                                     .executeForResult(REQ_CODE_TRADE);
                         }
                     }

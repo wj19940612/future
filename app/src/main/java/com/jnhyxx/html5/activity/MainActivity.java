@@ -13,12 +13,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.webkit.WebView;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
@@ -29,14 +29,11 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.receiver.PushReceiver;
 import com.jnhyxx.html5.utils.Network;
-import com.jnhyxx.html5.utils.NotificationUtil;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
     private int mTabPosition;
 
-    private static final int REQUEST_CODE_LIVE = 770;
+    private static final int REQ_CODE_LIVE = 770;
 
     private BroadcastReceiver mPushBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -92,11 +89,11 @@ public class MainActivity extends BaseActivity {
 
         initView();
 
-        processIntent(getIntent());
-
         mNetworkChangeReceiver = new NetworkReceiver();
 
         getServiceInfo();
+
+        ServerIpPort.requestMarketServerIpAndPort(null);
     }
 
     private void getServiceInfo() {
@@ -161,36 +158,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openLivePage() {
-        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQUEST_CODE_LIVE);
-    }
-
-    private void processIntent(Intent intent) {
-        final String messageId = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_ID);
-//        if (!TextUtils.isEmpty(messageId)) {
-//            mHandler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mWebView.loadUrl(APIBase.getMessageDetail(messageId));
-//                }
-//            });
-//            return;
-//        }
-//
-//        final String messageType = intent.getStringExtra(NotificationUtil.KEY_MESSAGE_TYPE);
-//        if (!TextUtils.isEmpty(messageType)) {
-//            mHandler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mWebView.loadUrl(APIBase.getMessageList(messageType));
-//                }
-//            });
-//        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        processIntent(intent);
+        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
     }
 
     private void checkVersion() {
@@ -248,36 +216,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LIVE) {
+        if (requestCode == REQ_CODE_LIVE) {
             mBottomTabs.selectTab(mTabPosition);
-        }
-    }
-
-    private void openQQChat(WebView webView, String url) {
-        try {
-            Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                ToastUtil.show(R.string.install_qq_first);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        while (webView.canGoBack()) {
-            webView.goBack();
-        }
-    }
-
-    private void openAlipay(WebView webView, String url) {
-        try {
-            Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 

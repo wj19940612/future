@@ -2,14 +2,18 @@ package com.jnhyxx.html5.domain.market;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Resp;
 
+import java.util.List;
 
-public class ServerIpPort implements Parcelable{
-
-    private static final long serialVersionUID = -6174707126558118139L;
-
-    public static final String EX_IP_PORT = "ip_port";
+public class ServerIpPort implements Parcelable {
 
     /**
      * port : 8068
@@ -20,6 +24,9 @@ public class ServerIpPort implements Parcelable{
     private String ip;
 
     public String getPort() {
+        if (TextUtils.isEmpty(port)) {
+            port = "0";
+        }
         return port;
     }
 
@@ -35,6 +42,10 @@ public class ServerIpPort implements Parcelable{
         this.ip = ip;
     }
 
+    public boolean isValid() {
+        return !TextUtils.isEmpty(ip) && !TextUtils.isEmpty(port);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -44,9 +55,6 @@ public class ServerIpPort implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.port);
         dest.writeString(this.ip);
-    }
-
-    public ServerIpPort() {
     }
 
     protected ServerIpPort(Parcel in) {
@@ -65,4 +73,44 @@ public class ServerIpPort implements Parcelable{
             return new ServerIpPort[size];
         }
     };
+
+    public static void saveMarketServerIpPort(ServerIpPort ipPort) {
+        String ipPortStr = new Gson().toJson(ipPort);
+        Preference.get().setMarketServerIpPort(ipPortStr);
+    }
+
+    public static ServerIpPort getMarketServerIpPort() {
+        String ipPortStr = Preference.get().getMarketServerIpPort();
+        if (!TextUtils.isEmpty(ipPortStr)) {
+            return new Gson().fromJson(ipPortStr, ServerIpPort.class);
+        }
+        return null;
+    }
+
+    public static void requestMarketServerIpAndPort(@Nullable final Callback callback) {
+        API.Market.getMarketServerIpAndPort()
+                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
+                    @Override
+                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
+                        if (serverIpPorts.size() > 0) {
+                            saveMarketServerIpPort(serverIpPorts.get(0));
+                            if (callback != null) {
+                                callback.onSuccess(serverIpPorts.get(0));
+                            }
+                        }
+                    }
+                }).fireSync();
+    }
+
+    public interface Callback {
+        void onSuccess(ServerIpPort ipPort);
+    }
+
+    @Override
+    public String toString() {
+        return "ServerIpPort{" +
+                "port='" + port + '\'' +
+                ", ip='" + ip + '\'' +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.$Gson$Types;
 
 import java.lang.reflect.ParameterizedType;
@@ -19,9 +20,6 @@ public abstract class NettyHandler<T> extends Handler {
     protected void onError(String message) {
     }
 
-    protected void onReceiveOriginalData(String data) {
-    }
-
     @Override
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
@@ -31,10 +29,12 @@ public abstract class NettyHandler<T> extends Handler {
                 break;
             case WHAT_DATA:
                 String originalData = (String) msg.obj;
-                onReceiveOriginalData(originalData);
-
-                T result = new Gson().fromJson(originalData, getGenericType());
-                onReceiveData(result);
+                try {
+                    T result = new Gson().fromJson(originalData, getGenericType());
+                    onReceiveData(result);
+                } catch (JsonSyntaxException e) {
+                    onError(e.getMessage());
+                }
                 break;
         }
     }

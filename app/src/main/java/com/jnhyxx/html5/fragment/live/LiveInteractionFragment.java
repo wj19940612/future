@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -236,10 +235,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mTeacherInfo = teacherInfo;
     }
 
-    public void setData(String data) {
-        Log.d(TAG, "新数据" + data);
-        LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-
+    public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
             mPageOffset++;
             if (liveSpeakInfo.isOwner()) {

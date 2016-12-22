@@ -241,7 +241,6 @@ public abstract class ChartView extends View {
         return super.dispatchTouchEvent(event);
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {

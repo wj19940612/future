@@ -37,7 +37,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -132,7 +131,6 @@ public class TradeActivity extends BaseActivity implements
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private FullMarketData mFullMarketData;
-    private ServerIpPort mServerIpPort;
 
     private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
@@ -178,7 +176,6 @@ public class TradeActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
         ButterKnife.bind(this);
-
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
         mUpdateRealTimeData = true;
@@ -229,22 +226,6 @@ public class TradeActivity extends BaseActivity implements
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
-
-        requestServerIpAndPort();
-    }
-
-    private void requestServerIpAndPort() {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
-                    @Override
-                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
-                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
-                            mServerIpPort = serverIpPorts.get(0);
-                            NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
-                            NettyClient.getInstance().start(mProduct.getContractsCode());
-                        }
-                    }
-                }).fireSync();
     }
 
     private void switchToLivePage() {
@@ -311,8 +292,12 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
+
         startScheduleJob(60 * 1000, 60 * 1000);
+
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
+        NettyClient.getInstance().start(mProduct.getContractsCode());
+
         mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
     }
@@ -321,7 +306,10 @@ public class TradeActivity extends BaseActivity implements
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
+
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        NettyClient.getInstance().stop();
+
         mHoldingOrderPresenter.onPause();
     }
 
@@ -332,7 +320,6 @@ public class TradeActivity extends BaseActivity implements
         mNettyHandler = null;
     }
 
-
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
@@ -342,7 +329,6 @@ public class TradeActivity extends BaseActivity implements
                     .commit();
         } else {
             super.onBackPressed();
-            NettyClient.getInstance().stop();
         }
     }
 
@@ -694,8 +680,6 @@ public class TradeActivity extends BaseActivity implements
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-                    updateLightningOrderView(); // based on product
-
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
@@ -722,6 +706,7 @@ public class TradeActivity extends BaseActivity implements
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product
                         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
+                        updateLightningOrderView(); // based on product
                     }
                 }
             }

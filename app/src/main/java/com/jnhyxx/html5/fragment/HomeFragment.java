@@ -32,7 +32,6 @@ import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
@@ -158,16 +157,16 @@ public class HomeFragment extends BaseFragment {
         requestProductMarketList();
     }
 
-    private void requestOrderReport() {
-        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
-            @Override
-            public void onReceive(Resp<OrderReport> orderReportResp) {
-                if (orderReportResp.isSuccess()) {
-                    mHomeListHeader.setOrderReport(orderReportResp.getData());
-                }
-            }
-        }).setTag(TAG).fire();
-    }
+//    private void requestOrderReport() {
+//        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
+//            @Override
+//            public void onReceive(Resp<OrderReport> orderReportResp) {
+//                if (orderReportResp.isSuccess()) {
+//                    mHomeListHeader.setOrderReport(orderReportResp.getData());
+//                }
+//            }
+//        }).setTag(TAG).fire();
+//    }
 
     @Override
     public void onTimeUp(int count) {

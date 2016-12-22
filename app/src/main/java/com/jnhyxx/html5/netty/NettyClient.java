@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 
 import java.util.ArrayList;
@@ -33,15 +35,14 @@ public class NettyClient {
 
     private String mHost;
     private Integer mPort;
+    private boolean mClosed;
 
     private MarketConn mMarketConn;
     private ChattingConn mChattingConn;
 
-    private boolean mClosed;
-
     private NettyClientHandler.Callback mCallback;
-
     private List<NettyHandler> mHandlerList;
+    private QuotaDataFilter mQuotaDataFilter;
 
     private static NettyClient mInstance;
 
@@ -73,7 +74,8 @@ public class NettyClient {
 
             @Override
             public void onReceiveData(String data) {
-                onReceiveOriginalData(data);
+                //Log.d(TAG, "onReceiveData: " + data);
+                processOriginalData(data);
             }
 
             @Override
@@ -83,7 +85,17 @@ public class NettyClient {
         };
     }
 
-    private void onReceiveOriginalData(String data) {
+    private void processOriginalData(String data) {
+        if (mMarketConn != null) {
+            try {
+                FullMarketData marketData = new Gson().fromJson(data, FullMarketData.class);
+                if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) return;
+            } catch (JsonSyntaxException e) {
+                onError(e.getMessage());
+                return;
+            }
+        }
+
         for (int i = 0; i < mHandlerList.size(); i++) {
             Handler handler = mHandlerList.get(i);
             Message message = handler.obtainMessage(NettyHandler.WHAT_DATA, data);
@@ -136,6 +148,7 @@ public class NettyClient {
     public void start(String contractCode) {
         mClosed = false;
         mMarketConn = new MarketConn(contractCode);
+        mQuotaDataFilter = new DefaultQuotaDataFilter(contractCode);
 
         mWorkerGroup = new NioEventLoopGroup();
         mBootstrap = new Bootstrap()
@@ -254,6 +267,30 @@ public class NettyClient {
 
         public String toJson() {
             return new Gson().toJson(this);
+        }
+    }
+
+    public interface QuotaDataFilter {
+        /**
+         * Filter quota data
+         *
+         * @param data
+         * @return if the data need to be filtered return true, false otherwise
+         */
+        boolean filter(FullMarketData data);
+    }
+
+    private static class DefaultQuotaDataFilter implements QuotaDataFilter {
+
+        private String mContractCode;
+
+        public DefaultQuotaDataFilter(String contractCode) {
+            mContractCode = contractCode;
+        }
+
+        @Override
+        public boolean filter(FullMarketData data) {
+            return !data.getInstrumentId().equalsIgnoreCase(mContractCode);
         }
     }
 }

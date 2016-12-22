@@ -338,12 +338,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         mLiveChatInfoAdapter.clear();
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-//            int dataPosition = mDataArrayList.size() - 1;
             for (int i = mDataArrayList.size(); i > 0; i--) {
-                if (i == 2) break;
+                if (i <3) break;
                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(i - 1).getCreateTime(), mDataArrayList.get(i - 2).getCreateTime())) {
                     mDataArrayList.get(i - 1).setMoreThanFiveMin(true);
-//                    dataPosition = i - 1;
                 }
             }
             mLiveChatInfoAdapter.addAll(mDataArrayList);

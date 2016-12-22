@@ -119,7 +119,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                  @Override
                                  public void onRespSuccess(LiveMessage liveMessage) {
                                      mLiveMessage = liveMessage;
-                                     Log.d(TAG, "直播单数据" + mLiveMessage);
                                      getTeacherGuideIfo();
 
                                  }
@@ -143,7 +142,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     }
 
     public void setData(LiveHomeChatInfo data) {
-        Log.d(TAG, "老师指令" + data.toString());
         if (data != null && mLiveTeacherGuideAdapter != null) {
             if (mHashSet.add(data.getCreateTime())) {
                 mPageOffset++;
@@ -153,9 +151,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 }
                 mLiveTeacherGuideAdapter.add(data);
                 mLiveTeacherGuideAdapter.notifyDataSetChanged();
-                // TODO: 2016/11/15 自动跑到ListView的最后一个item
-//                            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-//                            mListView.setStackFromBottom(true);
+
             }
         }
     }
@@ -178,7 +174,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
                     mListView.setStackFromBottom(false);
                 } else {
-                    ToastUtil.curt("没有更多的数据了");
+                    ToastUtil.curt(R.string.now_is_not_has_more_data);
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

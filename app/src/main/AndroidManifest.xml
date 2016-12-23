@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.jnhyxx.html5"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jnhyxx.html5">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -25,6 +25,14 @@
 
     <!-- 网易云播: 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- iBeancon功能所需权限 -->;
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- 个推3.0电子围栏功能所需权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:name=".App"
@@ -186,18 +194,18 @@
             android:configChanges="keyboard|screenSize|orientation"
             android:screenOrientation="portrait"/>
 
-        <!-- Receiver for getui push -->
-        <receiver
-            android:name=".receiver.PushReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}"/>
-            </intent-filter>
-        </receiver>
-
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
+        <!-- 用户自定义服务继承自GTIntentService,作为SDK与APP桥梁服务,用来接收各种消息和命令回复-->
+        <service android:name=".service.PushIntentService"/>
+
+        <!--push service 配置SDK核心服务 -->
+        <service
+            android:name=".service.PushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushService"/>
     </application>
 
 </manifest>

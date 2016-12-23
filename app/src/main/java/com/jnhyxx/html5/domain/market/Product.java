@@ -20,7 +20,6 @@ public class Product implements Parcelable {
     public static final int TAG_NONE = 0;
 
     private static final int IS_DOMESTIC = 1;
-
     public static final String VARIETY_TYPE_US_CRUDE = "CL";
     /**
      * displayMarketTimes : 06:00;07:00;04:58

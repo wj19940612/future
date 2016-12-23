@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -52,9 +51,8 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_record);
         ButterKnife.bind(this);
-
-
-        mSize = 15;
+        mWithdrawRecordList.setEmptyView(mEmpty);
+        mSize = 10;
         mOffset = 0;
         mSet = new HashSet<>();
         getWithdrawRecordList();
@@ -68,9 +66,6 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
 
                     @Override
                     public void onRespSuccess(List<WithdrawRecord> withdrawRecords) {
-                        for (int i = 0; i < withdrawRecords.size(); i++) {
-                            Log.d(TAG, "提现记录 " + withdrawRecords.get(i).toString() + "\n");
-                        }
                         updateInfoList(withdrawRecords);
 
                     }
@@ -78,9 +73,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
-        if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
-//            mEmpty.setVisibility(View.VISIBLE);
-            mWithdrawRecordList.setEmptyView(mEmpty);
+        if (withdrawRecordList == null) {
             return;
         }
         if (mFooter == null) {
@@ -93,7 +86,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOffset++;
+                    mOffset += mSize;
                     getWithdrawRecordList();
                 }
             });
@@ -179,7 +172,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleDateMonth.setVisibility(View.GONE);
                     mSaleDateHour.setText(time.substring(0, time.indexOf(" ")));
                 }
-                mSaleGetMoney.setText(context.getString(R.string.withdraw_record_number,FinanceUtil.formatWithScale(item.getMoney())));
+                mSaleGetMoney.setText(context.getString(R.string.withdraw_record_number, FinanceUtil.formatWithScale(item.getMoney())));
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.common_success);

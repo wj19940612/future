@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <ListView
+            android:visibility="gone"
             android:background="@android:color/white"
             android:id="@+id/listView"
             android:layout_width="match_parent"
@@ -29,7 +30,7 @@
             android:paddingTop="60dp"
             android:textColor="@color/emptyViewColor"
             android:textSize="20sp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="@string/there_is_no_teacher_advise"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

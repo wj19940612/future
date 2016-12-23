@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,13 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
@@ -90,9 +89,14 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (mEmptyView != null) {
+            mListView.setEmptyView(mEmptyView);
+        }
         mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
+
+
         mListView.setDivider(null);
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
@@ -102,9 +106,6 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
                 mOffset = 0;
                 mSet.clear();
                 requestInfoList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
         requestInfoList();
@@ -124,27 +125,29 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
                     @Override
                     public void onReceive(Resp<List<Information>> listResp) {
                         if (listResp.isSuccess()) {
-                            for (int i = 0; i < listResp.getData().size(); i++) {
-                                Log.d(TAG, "type是 " + mType + "   资讯获取的数据 " + listResp.getData().get(i) + "\n");
-                            }
                             updateInfoList(listResp.getData());
                         } else {
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
+                            stopRefreshAnimation();
                         }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 }).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void updateInfoList(List<Information> messageLists) {
-        if (messageLists == null || messageLists.isEmpty()) {
-            if (mEmptyView != null) {
-                mListView.setEmptyView(mEmptyView);
-            }
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+        if (messageLists == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -193,7 +196,6 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
         Information information = (Information) parent.getAdapter().getItem(position);
         if (information != null) {
             Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, information).execute();
-            Log.d(TAG, "详情信息" + information.toString());
         }
     }
 

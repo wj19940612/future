@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,6 +20,7 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
@@ -46,6 +48,13 @@ public class RechargeActivity extends BaseActivity {
     @BindView(R.id.weChartPay)
     RelativeLayout mWeChartPay;
 
+    @BindView(R.id.showLayout)
+    LinearLayout mShowLayout;
+    @BindView(R.id.keyHideLayout)
+    LinearLayout mKeyHideLayout;
+
+    private KeyBoardHelper mKeyBoardHelper;
+    private int bottomHeight;
 
     private final int APPLY_LIMIT = 10000;
 
@@ -62,6 +71,11 @@ public class RechargeActivity extends BaseActivity {
 
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
+        getSupportApplyWay();
+        setKeyboardHelper();
+    }
+
+    private void getSupportApplyWay() {
         API.Finance.getSupportApplyWay()
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -73,6 +87,44 @@ public class RechargeActivity extends BaseActivity {
 
                 }).fire();
     }
+
+    private void setKeyboardHelper() {
+        mKeyBoardHelper = new KeyBoardHelper(this);
+        mKeyBoardHelper.onCreate();
+        mKeyBoardHelper.setOnKeyBoardStatusChangeListener(onKeyBoardStatusChangeListener);
+        mKeyHideLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomHeight = mKeyHideLayout.getHeight();
+            }
+        });
+    }
+
+    private KeyBoardHelper.OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener = new KeyBoardHelper.OnKeyBoardStatusChangeListener() {
+
+        @Override
+        public void OnKeyBoardPop(int keyboardHeight) {
+            final int height = keyboardHeight;
+            if (bottomHeight < height) {
+                int offset = bottomHeight - height;
+                final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mShowLayout
+                        .getLayoutParams();
+                lp.topMargin = offset;
+                mShowLayout.setLayoutParams(lp);
+            }
+        }
+
+        @Override
+        public void OnKeyBoardClose(int oldKeyboardHeight) {
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mShowLayout
+                    .getLayoutParams();
+            if (lp.topMargin != 0) {
+                lp.topMargin = 0;
+                mShowLayout.setLayoutParams(lp);
+            }
+
+        }
+    };
 
     private void updateView(SupportApplyWay supportApplyWay) {
         if (supportApplyWay.isBank()) {

@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -28,7 +29,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.squareup.picasso.Picasso;
@@ -95,6 +95,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mListView.setEmptyView(mEmpty);
         setLiveViewStackFromBottom(true);
         mPageSize = 10;
         mHashSet = new HashSet<>();
@@ -179,17 +180,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             public void onRefresh() {
                 getTeacherGuideIfo();
                 setLiveViewStackFromBottom(false);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
     }
 
     private void getTeacherGuideIfo() {
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
-            mEmpty.setText(R.string.there_is_no_teacher_advise);
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }
@@ -213,12 +209,17 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                     mListView.setSelection(mPageSize - 1);
                                 }
                             } else {
-                                ToastUtil.curt(R.string.now_is_not_has_more_data);
                                 stopRefreshAnimation();
                             }
                         } else {
                             updateTeacherGuide(listResp.getData());
                         }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 })
                 .fire();
@@ -226,7 +227,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

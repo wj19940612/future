@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,12 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
@@ -118,6 +117,9 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
+        mEmpty.setText(R.string.now_is_not_has_score_detail);
+        mList.setEmptyView(mEmpty);
+
         mSet = new HashSet<>();
         mList.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -126,9 +128,6 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 mOffset = 0;
                 mSet.clear();
                 getTradeInfoList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
         getTradeInfoList();
@@ -142,26 +141,29 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                     public void onReceive(Resp<List<TradeDetail>> listResp) {
                         if (listResp.isSuccess()) {
                             mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
                             setAdapter(mTradeDetailList);
                         } else {
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
+                            stopRefreshAnimation();
                         }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 }).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
-        if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
-            mEmpty.setText("暂无金币明细");
-            mList.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+        if (mTradeDetailLists == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -176,7 +178,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
 //                    mOffset++;
-                    mOffset = mOffset + 10;
+                    mOffset = mOffset + mSize;
                     getTradeInfoList();
                 }
             });

@@ -119,7 +119,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mEmpty.setText("暂无资金明细");
+        mEmpty.setText(R.string.now_is_not_has_fund_detail);
         mList.setEmptyView(mEmpty);
 
         mOffset = 0;

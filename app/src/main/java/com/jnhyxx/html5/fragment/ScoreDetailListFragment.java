@@ -117,7 +117,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
-        mEmpty.setText("暂无金币明细");
+        mEmpty.setText(R.string.now_is_not_has_score_detail);
         mList.setEmptyView(mEmpty);
 
         mSet = new HashSet<>();

@@ -89,7 +89,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mEmpty.setText("暂无交易提醒");
+        mEmpty.setText(R.string.now_is_not_has_trade_remind);
         mListView.setEmptyView(mEmpty);
 
         mPageNo = 0;

@@ -94,7 +94,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mEmpty.setText("暂无系统消息");
+        mEmpty.setText(R.string.now_is_not_has_system_message);
         mListView.setEmptyView(mEmpty);
 
         mPageNo = 0;

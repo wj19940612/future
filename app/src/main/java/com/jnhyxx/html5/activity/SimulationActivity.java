@@ -71,7 +71,6 @@ public class SimulationActivity extends BaseActivity {
             public void onItemOneClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
-//                    requestServerIpAndPort(pkg);
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_SIMULATION));
                     Launcher.with(getActivity(), TradeActivity.class)
                             .putExtra(Product.EX_PRODUCT, pkg.getProduct())

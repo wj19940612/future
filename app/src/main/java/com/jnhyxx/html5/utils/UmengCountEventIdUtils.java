@@ -304,9 +304,22 @@ public class UmengCountEventIdUtils {
     //news0201,行情分析详情,0
     public static final String MARKET_ANALYZE_DETAILS = "news0201";
     //news0300,行情资讯,0
-    public static final String MARKET_MESSAGE= "news0300";
+    public static final String MARKET_MESSAGE = "news0300";
     //news0301,行情资讯详情,0
     public static final String MARKET_MESSAGE_DETAILS = "news0301";
+
+    /**
+     * live1100,直播tab,0                   （新增）
+     * news0400,资讯tab,0                   （新增）
+     * me1400,我的tab,0                        (新增）
+     * home0500,首页tab,0                    （新增）
+     */
     //news0400,资讯tab,0
     public static final String TAB_MESSAGE = "news0400";
+    //live1100,直播tab,0
+    public static final String TAB_LIVE = "live1100";
+    //me1400,我的tab,0
+    public static final String TAB_MINE="me1400";
+    //home0500,首页tab,0
+    public static final String TAB_HOME="home0500";
 }

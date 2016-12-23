@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+import com.umeng.analytics.MobclickAgent;
 
 public class BottomTabs extends LinearLayout {
 
@@ -25,6 +27,8 @@ public class BottomTabs extends LinearLayout {
     private int mInterval;
 
     private OnTabClickListener mOnTabClickListener;
+
+    private int live_tab_index = 1;
 
     public interface OnTabClickListener {
         void onTabClick(int position);
@@ -89,6 +93,9 @@ public class BottomTabs extends LinearLayout {
         if (index < 0 || index >= mLength) return;
         unSelectAll();
         getChildAt(index).setSelected(true);
+        if (index ==live_tab_index){
+            MobclickAgent.onEvent(getContext(), UmengCountEventIdUtils.TAB_LIVE);
+        }
     }
 
     public void setOnTabClickListener(OnTabClickListener listener) {

@@ -188,7 +188,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void getTeacherGuideIfo() {
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
-            mEmpty.setText(R.string.there_is_no_teacher_advise);
             mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;

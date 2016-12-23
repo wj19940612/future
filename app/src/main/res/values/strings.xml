@@ -462,7 +462,7 @@
     <string name="live_time_is_not">非直播时间段，无法发言</string>
     <string name="live_speak_send">发送</string>
     <string name="there_is_no_chatting_record">暂无聊天记录</string>
-    <string name="there_is_no_teacher_advise">老师暂未发出指令</string>
+    <string name="there_is_no_teacher_advise">暂无老师指导</string>
     <string name="live_teacher_order">老师指令:%1$s</string>
     <string name="now_is_not_has_more_data">暂无更多的数据了</string>
 

@@ -90,6 +90,9 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (mEmptyView != null) {
+            mListView.setEmptyView(mEmptyView);
+        }
         mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
@@ -146,9 +149,6 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
 
     private void updateInfoList(List<Information> messageLists) {
         if (messageLists == null) {
-            if (mEmptyView != null) {
-                mListView.setEmptyView(mEmptyView);
-            }
             stopRefreshAnimation();
             return;
         }

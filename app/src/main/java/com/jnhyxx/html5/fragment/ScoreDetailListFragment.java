@@ -118,6 +118,9 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mOffset = 0;
+        mEmpty.setText("暂无金币明细");
+        mList.setEmptyView(mEmpty);
+
         mSet = new HashSet<>();
         mList.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -164,8 +167,6 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null) {
-            mEmpty.setText("暂无金币明细");
-            mList.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

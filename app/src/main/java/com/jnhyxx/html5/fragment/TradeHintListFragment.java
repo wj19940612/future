@@ -90,6 +90,8 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmpty.setText("暂无交易提醒");
+        mListView.setEmptyView(mEmpty);
         mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
@@ -154,8 +156,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
     private void updateMessageList(List<SysMessage> sysMessages) {
         if (sysMessages == null) {
-            mEmpty.setText("暂无交易提醒");
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

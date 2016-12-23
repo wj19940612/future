@@ -95,6 +95,8 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmpty.setText("暂无系统消息");
+        mListView.setEmptyView(mEmpty);
         mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
@@ -163,8 +165,6 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
 
     private void updateMessageList(List<SysMessage> sysMessages) {
         if (sysMessages == null) {
-            mEmpty.setText("暂无系统消息");
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

@@ -120,6 +120,9 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmpty.setText("暂无资金明细");
+        mList.setEmptyView(mEmpty);
+
         mOffset = 0;
         mSet = new HashSet<>();
         mList.setOnScrollListener(this);
@@ -167,8 +170,6 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
         if (mTradeDetailLists == null) {
-            mEmpty.setText("暂无资金明细");
-            mList.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

@@ -52,7 +52,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
 
 
     private int mType;
-    private int mPageNo;
+    private int mOffset;
     private int mPageSize;
 
     private NewsListAdapter mNewsListAdapter;
@@ -87,16 +87,18 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPageNo = 0;
+        mListView.setEmptyView(mEmptyView);
+        mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
+
         mListView.setDivider(null);
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageNo = 0;
+                mOffset = 0;
                 mSet.clear();
                 requestInfoList();
                 if (!Network.isNetworkAvailable()) {
@@ -114,7 +116,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     }
 
     private void requestInfoList() {
-        API.Message.findNewsList(mType, mPageNo, mPageSize)
+        API.Message.findNewsList(mType, mOffset, mPageSize)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<List<Information>>>() {
                     @Override
@@ -137,7 +139,6 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
 
     private void updateInfoList(List<Information> messageLists) {
         if (messageLists == null) {
-            mListView.setEmptyView(mEmptyView);
             stopRefreshAnimation();
             return;
         }
@@ -152,7 +153,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPageNo+=mPageSize;
+                    mOffset +=mPageSize;
                     requestInfoList();
                 }
             });

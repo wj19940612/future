@@ -95,6 +95,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mListView.setEmptyView(mEmpty);
         setLiveViewStackFromBottom(true);
         mPageSize = 10;
         mHashSet = new HashSet<>();
@@ -188,7 +189,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void getTeacherGuideIfo() {
         if (mLiveMessage == null || mLiveMessage.getTeacher() == null) {
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }
@@ -230,7 +230,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
-            mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();
             return;
         }

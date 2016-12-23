@@ -72,6 +72,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mListView.setEmptyView(mEmptyView);
         mListView.setDivider(null);
         mListView.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -178,7 +179,6 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
     private void setAdapter(ArrayList<ArrayList<String>> infoLiveMessageList) {
         if (infoLiveMessageList == null ) {
-            mListView.setEmptyView(mEmptyView);
             return;
         }
         if (mInfoLiveMessageAdapter == null) {

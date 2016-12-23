@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.order.OrderDetailActivity;
 import com.jnhyxx.html5.constans.Unit;
@@ -29,7 +30,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
@@ -159,9 +159,6 @@ public class SettlementFragment extends BaseFragment {
                 mPageNo = 1;
                 mSet.clear();
                 requestSettlementOrderList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
 
@@ -180,6 +177,14 @@ public class SettlementFragment extends BaseFragment {
                             if (mSwipeRefreshLayout.isRefreshing()) {
                                 mSwipeRefreshLayout.setRefreshing(false);
                             }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        if (mSwipeRefreshLayout.isRefreshing()) {
+                            mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
                 }).setTag(TAG).fire();

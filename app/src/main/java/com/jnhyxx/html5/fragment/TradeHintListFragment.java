@@ -264,7 +264,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
             private void setTradeStatus(SysMessage item) {
                 if (item.isTradeStatus()) {
-                    // TODO: 2016/10/10 是提现信息的显示
                     if (item.isSuccess()) {
                         setSuccessImage();
                     } else {

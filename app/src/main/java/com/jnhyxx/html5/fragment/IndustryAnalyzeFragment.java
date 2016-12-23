@@ -41,10 +41,7 @@ import butterknife.Unbinder;
 
 public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
-    private static final String TAG = "PriceAnalyzeFragment";
-
     private static final String TYPE = "fragmentType";
-
 
     @BindView(R.id.listView)
     ListView mListView;

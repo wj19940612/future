@@ -37,10 +37,7 @@ import butterknife.Unbinder;
 
 public class IndustryMessageFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
-    private static final String TAG = "InfoListFragment";
-
     private static final String TYPE = "fragmentType";
-
 
     @BindView(R.id.listView)
     ListView mListView;

@@ -34,6 +34,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     public static final int REQ_CODE_BASE = 8;
     public static final int REQ_CODE_TOKEN_EXPIRED_LOGIN = 800;
+    public static final int REQ_CODE_LOGIN = 108;
 
     public static final String ACTION_TOKEN_EXPIRED = "com.jnhyxx.app.TOKEN_EXPIRED";
     public static final String EX_TOKEN_EXPIRED_MESSAGE = "com.jnhyxx.app.TOKEN_EXPIRED_MESSAGE";

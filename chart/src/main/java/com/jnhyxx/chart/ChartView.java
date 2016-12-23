@@ -154,7 +154,7 @@ public abstract class ChartView extends View {
             if (msg.what == WHAT_LONG_PRESS || msg.what == WHAT_ONE_CLICK) {
                 mAction = Action.TOUCH;
                 MotionEvent e = (MotionEvent) msg.obj;
-                drawTouchLine(e);
+                drawTouchLines(e);
             }
         }
     }
@@ -210,6 +210,13 @@ public abstract class ChartView extends View {
                 left, top2, width, getBottomPartHeight(),
                 canvas);
 
+        if (shouldDrawUnstableData()) {
+            drawUnstableData(mSettings.isIndexesEnable(),
+                    left, top, width, topPartHeight,
+                    left, top2, width, getBottomPartHeight(),
+                    canvas);
+        }
+
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
@@ -233,7 +240,6 @@ public abstract class ChartView extends View {
         }
         return super.dispatchTouchEvent(event);
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -259,7 +265,7 @@ public abstract class ChartView extends View {
                 mHandler.removeMessages(WHAT_LONG_PRESS);
                 mHandler.removeMessages(WHAT_ONE_CLICK);
                 if (mAction == Action.TOUCH) {
-                    return drawTouchLine(event);
+                    return drawTouchLines(event);
                 }
 
                 return false;
@@ -270,27 +276,31 @@ public abstract class ChartView extends View {
                 } else if (mAction == Action.TOUCH && mHandler.hasMessages(WHAT_ONE_CLICK)) {
                     mHandler.removeMessages(WHAT_ONE_CLICK);
                     mAction = Action.NONE;
-                    mTouchIndex = -1;
-                    redraw();
+                    if (mTouchIndex != -1) {
+                        mTouchIndex = -1;
+                        redraw();
+                    }
                 }
                 return true;
         }
         return super.onTouchEvent(event);
     }
 
-    private boolean drawTouchLine(MotionEvent event) {
+    private boolean drawTouchLines(MotionEvent event) {
         int newTouchIndex = calculateTouchIndex(event);
-        if (newTouchIndex != mTouchIndex) {
-            if (hasThisTouchIndex(newTouchIndex)) {
-                mTouchIndex = newTouchIndex;
-                redraw();
-                return true;
-            }
+        if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
+            mTouchIndex = newTouchIndex;
+            redraw();
+            return true;
         }
         return false;
     }
 
     protected boolean hasThisTouchIndex(int touchIndex) {
+        return false;
+    }
+
+    protected boolean shouldDrawUnstableData() {
         return false;
     }
 
@@ -381,6 +391,28 @@ public abstract class ChartView extends View {
                                              int left, int top, int width, int height,
                                              int left2, int top2, int width2, int height2,
                                              Canvas canvas);
+
+    /**
+     * draw real unstable data
+     *
+     * @param indexesEnable
+     * @param left
+     * @param top
+     * @param width
+     * @param topPartHeight
+     * @param left2
+     * @param top2
+     * @param width1
+     * @param bottomPartHeight
+     * @param canvas
+     */
+    protected void drawUnstableData(boolean indexesEnable,
+                                             int left, int top, int width, int topPartHeight,
+                                             int left2, int top2, int width1, int bottomPartHeight,
+                                             Canvas canvas) {
+
+    }
+
 
     /**
      * draw time line

@@ -37,7 +37,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.FuturesFinancing;
 import com.jnhyxx.html5.domain.order.HoldingOrder;
@@ -77,9 +76,8 @@ import butterknife.OnClick;
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
-    private static final int REQ_CODE_SIGN_IN = 1;
-
     private static final int REQ_CODE_SET_LIGHTNING_ORDER_PAGE = 10000;
+    private static final int REQ_CODE_LIVE = 321;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -135,11 +133,10 @@ public class TradeActivity extends BaseActivity implements
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private FullMarketData mFullMarketData;
-    private ServerIpPort mServerIpPort;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
             if (mUpdateRealTimeData) {
                 updateFourMainPrices(data);
@@ -197,7 +194,7 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onSignInButtonClick() {
                 Launcher.with(getActivity(), SignInActivity.class)
-                        .executeForResult(REQ_CODE_SIGN_IN);
+                        .executeForResult(REQ_CODE_LOGIN);
             }
 
             @Override
@@ -222,11 +219,27 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
 
+        mChartContainer.setOnLiveEnterClickListener(new ChartContainer.OnLiveEnterClickListener() {
+            @Override
+            public void onClick() {
+                switchToLivePage();
+            }
+        });
+
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
+    }
+
+    private void switchToLivePage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
+            finish();
+        } else {
+            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
+        }
     }
 
     private void updateLightningOrderView() {
@@ -243,7 +256,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void getLightningOrderWebCache() {
         API.Market.getOrderAssetStoreStatus(mProduct.getVarietyId(), mFundType).setTag(TAG)
-                .setCallback(new Callback2<Resp<LightningOrderAsset>, LightningOrderAsset>() {
+                .setCallback(new Callback2<Resp<LightningOrderAsset>, LightningOrderAsset>(false) {
                     @Override
                     public void onRespSuccess(LightningOrderAsset lightningOrderAsset) {
                         if (lightningOrderAsset != null) {
@@ -284,26 +297,24 @@ public class TradeActivity extends BaseActivity implements
         super.onPostResume();
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
+
         startScheduleJob(60 * 1000, 60 * 1000);
+
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
+
         mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-    }
-
-    private void showLightningOrderInvalidDialog() {
-        SmartDialog.with(getActivity(),
-                getString(R.string.lightning_orders_status_run_out))
-                .setPositive(R.string.ok)
-                .show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopScheduleJob();
-        NettyClient.getInstance().stop();
+
         NettyClient.getInstance().removeNettyHandler(mNettyHandler);
+        NettyClient.getInstance().stop();
+
         mHoldingOrderPresenter.onPause();
     }
 
@@ -312,6 +323,24 @@ public class TradeActivity extends BaseActivity implements
         super.onDestroy();
         mHoldingOrderPresenter.onDestroy();
         mNettyHandler = null;
+    }
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showLightningOrderInvalidDialog() {
+        SmartDialog.with(getActivity(),
+                getString(R.string.lightning_orders_status_run_out))
+                .setPositive(R.string.ok)
+                .show();
     }
 
     private void removeLightningOrder() {
@@ -350,7 +379,7 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_SIGN_IN && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             updateSignTradePagerHeader();
             updateLightningOrderView();
         }
@@ -414,11 +443,8 @@ public class TradeActivity extends BaseActivity implements
     private void initData(Intent intent) {
         mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
-        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
-        mServerIpPort = intent.getParcelableExtra(ServerIpPort.EX_IP_PORT);
-        NettyClient.getInstance().setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
-
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
+        mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn})
@@ -452,7 +478,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void openLightningOrdersPage() {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
             return;
         }
 
@@ -664,8 +690,6 @@ public class TradeActivity extends BaseActivity implements
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
 
-                    updateLightningOrderView(); // based on product
-
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
@@ -693,6 +717,7 @@ public class TradeActivity extends BaseActivity implements
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product
                         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
+                        updateLightningOrderView(); // based on product
                     }
                 }
             }
@@ -701,7 +726,7 @@ public class TradeActivity extends BaseActivity implements
 
     private void placeOrder(int longOrShort) {
         if (!LocalUser.getUser().isLogin()) {
-            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_SIGN_IN);
+            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
             return;
         }
 
@@ -742,18 +767,6 @@ public class TradeActivity extends BaseActivity implements
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        } else {
-            super.onBackPressed();
         }
     }
 

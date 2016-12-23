@@ -24,10 +24,8 @@ public class Product implements Parcelable {
     public static final int TAG_NONE = 0;
 
     private static final int IS_DOMESTIC = 1;
-
-
     //美原油品种id
-    public static int US_CRUDE_ID = 10;
+    public static final int ID_US_CRUDE = 10;
     /**
      * displayMarketTimes : 06:00;07:00;04:58
      * decimalScale : 0.2

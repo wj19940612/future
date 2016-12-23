@@ -105,7 +105,6 @@ public class OrderActivity extends BaseActivity implements
         NettyClient.getInstance().stop();
     }
 
-
     @Override
     public void onHoldingFragmentClosePositionEventTriggered() {
         SettlementFragment fragment = (SettlementFragment) mOrderAdapter.getFragment(1);

@@ -108,9 +108,9 @@ public class PlaceOrderFragment extends BaseFragment {
     private BlurEngine mBlurEngine;
     private Callback mCallback;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mMarketData = data;
             if (mIsShowing || !isVisible()) return;
             updateMarketDataRelatedView();

@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
-import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 
 public class Preference {
 
@@ -24,7 +24,7 @@ public class Preference {
         String SERVICE_QQ = "serviceQQ";
         String SYS_MESSAGE_ID = "sys_message_id";
         String LAST_TEACHER_COMMAND = "last_teacher_command";
-
+        String SERVER_IP_PORT = "server_ip_port";
     }
 
     private static Preference sInstance;
@@ -170,5 +170,13 @@ public class Preference {
             return new Gson().fromJson(lightningOrderJson, LightningOrderAsset.class);
         }
         return null;
+    }
+
+    public void setMarketServerIpPort(String serverIpPort) {
+        getEditor().putString(Key.SERVER_IP_PORT, serverIpPort).apply();
+    }
+
+    public String getMarketServerIpPort() {
+        return mPrefs.getString(Key.SERVER_IP_PORT, null);
     }
 }

@@ -40,7 +40,8 @@
 
 
     <!-- API -->
-    <string name="api_error_null">服务器返回空数据</string>
+    <string name="api_error_null">服务器空数据</string>
+    <string name="api_error_null_1">服务器空数据(1)</string>
     <string name="api_error_timeout">网络请求超时</string>
     <string name="api_error_network">网络异常</string>
     <string name="api_error_parse">数据解析异常</string>

@@ -31,13 +31,12 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.OnItemOneClickListener;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
@@ -145,14 +144,18 @@ public class HomeFragment extends BaseFragment {
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mList.setOnItemClickListener(new OnItemOneClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
+            public void onItemOneClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
-                    requestServerIpAndPort(pkg);
-                    // TODO: 2016/12/21 只需传入环境和eventId，后面产品名可去掉
-                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH),pkg.getProduct().getVarietyName());
+//                    requestServerIpAndPort(pkg);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH));
+                    Launcher.with(getActivity(), TradeActivity.class)
+                            .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                            .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                            .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                            .execute();
                 }
             }
         });
@@ -162,34 +165,16 @@ public class HomeFragment extends BaseFragment {
         requestProductMarketList();
     }
 
-    private void requestServerIpAndPort(final ProductPkg pkg) {
-        API.Market.getMarketServerIpAndPort()
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
-                    @Override
-                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
-                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
-                            Launcher.with(getActivity(), TradeActivity.class)
-                                    .putExtra(Product.EX_PRODUCT, pkg.getProduct())
-                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                    .putExtra(ServerIpPort.EX_IP_PORT, serverIpPorts.get(0))
-                                    .execute();
-                        }
-                    }
-                }).fire();
-    }
-
-    private void requestOrderReport() {
-        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
-            @Override
-            public void onReceive(Resp<OrderReport> orderReportResp) {
-                if (orderReportResp.isSuccess()) {
-                    mHomeListHeader.setOrderReport(orderReportResp.getData());
-                }
-            }
-        }).setTag(TAG).fire();
-    }
+//    private void requestOrderReport() {
+//        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
+//            @Override
+//            public void onReceive(Resp<OrderReport> orderReportResp) {
+//                if (orderReportResp.isSuccess()) {
+//                    mHomeListHeader.setOrderReport(orderReportResp.getData());
+//                }
+//            }
+//        }).setTag(TAG).fire();
+//    }
 
     @Override
     public void onTimeUp(int count) {

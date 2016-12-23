@@ -28,7 +28,6 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.squareup.picasso.Picasso;
@@ -212,7 +211,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                     mListView.setSelection(mPageSize - 1);
                                 }
                             } else {
-                                ToastUtil.curt(R.string.now_is_not_has_more_data);
                                 stopRefreshAnimation();
                             }
                         } else {

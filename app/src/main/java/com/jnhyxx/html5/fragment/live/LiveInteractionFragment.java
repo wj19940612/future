@@ -285,7 +285,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                                  mListView.setSelection(mPageSize - 1);
                                              }
                                          } else {
-                                             ToastUtil.curt(R.string.now_is_not_has_more_data);
                                              stopRefreshAnimation();
                                          }
                                      } else {

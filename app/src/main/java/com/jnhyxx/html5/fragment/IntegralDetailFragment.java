@@ -134,7 +134,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOffset++;
+                    mOffset+=mSize;
                     getTradeInfoList();
                 }
             });

@@ -181,7 +181,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
 //                    mOffset++;
-                    mOffset = mOffset + 10;
+                    mOffset = mOffset + mSize;
                     getTradeInfoList();
                 }
             });

@@ -152,7 +152,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPageNo++;
+                    mPageNo+=mPageSize;
                     requestInfoList();
                 }
             });

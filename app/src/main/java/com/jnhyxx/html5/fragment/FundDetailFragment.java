@@ -184,7 +184,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
 //                    mOffset++;
-                    mOffset = mOffset + 10;
+                    mOffset = mOffset +mSize;
                     getTradeInfoList();
                 }
             });

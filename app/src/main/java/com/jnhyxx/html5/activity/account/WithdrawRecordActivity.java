@@ -53,7 +53,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
         ButterKnife.bind(this);
 
 
-        mSize = 15;
+        mSize = 10;
         mOffset = 0;
         mSet = new HashSet<>();
         getWithdrawRecordList();
@@ -75,7 +75,6 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
         if (withdrawRecordList == null) {
-//            mEmpty.setVisibility(View.VISIBLE);
             mWithdrawRecordList.setEmptyView(mEmpty);
             return;
         }
@@ -89,7 +88,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
             mFooter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOffset++;
+                    mOffset += mSize;
                     getWithdrawRecordList();
                 }
             });
@@ -175,7 +174,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleDateMonth.setVisibility(View.GONE);
                     mSaleDateHour.setText(time.substring(0, time.indexOf(" ")));
                 }
-                mSaleGetMoney.setText(context.getString(R.string.withdraw_record_number,FinanceUtil.formatWithScale(item.getMoney())));
+                mSaleGetMoney.setText(context.getString(R.string.withdraw_record_number, FinanceUtil.formatWithScale(item.getMoney())));
                 if (item.getStatus() == WithdrawRecord.WITHDRAW_RECHARGE_SUCCESS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_green_primary);
                     mSaleStatus.setText(R.string.common_success);

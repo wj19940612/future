@@ -23,7 +23,6 @@ import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
@@ -129,9 +128,6 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 mOffset = 0;
                 mSet.clear();
                 getTradeInfoList();
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
         getTradeInfoList();

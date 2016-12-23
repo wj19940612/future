@@ -180,9 +180,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             public void onRefresh() {
                 getTeacherGuideIfo();
                 setLiveViewStackFromBottom(false);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
     }

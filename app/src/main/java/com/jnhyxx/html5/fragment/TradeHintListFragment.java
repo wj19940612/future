@@ -23,7 +23,6 @@ import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
@@ -92,9 +91,11 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         super.onActivityCreated(savedInstanceState);
         mEmpty.setText("暂无交易提醒");
         mListView.setEmptyView(mEmpty);
+
         mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
+
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
         mListView.setDivider(null);
@@ -104,10 +105,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 mPageNo = 0;
                 mSet.clear();
                 requestMessageList();
-
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
         requestMessageList();

@@ -24,7 +24,6 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 
@@ -101,9 +100,6 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 mOffset = 0;
                 mSet.clear();
                 requestInfoList();
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
         requestInfoList();

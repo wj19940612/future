@@ -24,7 +24,6 @@ import com.jnhyxx.html5.domain.account.TradeDetail;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.RemarkHandleUtil;
 import com.jnhyxx.html5.utils.TradeDetailRemarkUtil;
 import com.johnz.kutils.DateUtil;
@@ -132,9 +131,6 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 mOffset = 0;
                 mSet.clear();
                 getTradeInfoList();
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
         getTradeInfoList();
@@ -184,7 +180,6 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-//                    mOffset++;
                     mOffset = mOffset +mSize;
                     getTradeInfoList();
                 }

@@ -31,7 +31,6 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
@@ -211,9 +210,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
+
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -221,9 +218,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             public void onRefresh() {
                 getChatInfo();
                 setLiveViewStackFromBottom(false);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
     }

@@ -162,7 +162,7 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     }
 
     private void updateMessageList(List<SysMessage> sysMessages) {
-        if (sysMessages == null || sysMessages.isEmpty()) {
+        if (sysMessages == null) {
             mEmpty.setText("暂无系统消息");
             mListView.setEmptyView(mEmpty);
             stopRefreshAnimation();

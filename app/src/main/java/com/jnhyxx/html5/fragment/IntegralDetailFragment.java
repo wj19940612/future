@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -115,9 +114,6 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
                     public void onReceive(Resp<List<TradeDetail>> listResp) {
 
                         mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                        for (int i = 0; i < mTradeDetailList.size(); i++) {
-                            Log.d(TAG, "积分明细查询结果" + mTradeDetailList.get(i).toString());
-                        }
                         setAdapter(mTradeDetailList);
                     }
                 }).fire();
@@ -125,7 +121,7 @@ public class IntegralDetailFragment extends ListFragment implements ApiIndetermi
     }
 
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
-        if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+        if (mTradeDetailLists == null) {
             return;
         }
         if (mFooter == null) {

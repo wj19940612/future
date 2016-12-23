@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -68,9 +67,6 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
 
                     @Override
                     public void onRespSuccess(List<WithdrawRecord> withdrawRecords) {
-                        for (int i = 0; i < withdrawRecords.size(); i++) {
-                            Log.d(TAG, "提现记录 " + withdrawRecords.get(i).toString() + "\n");
-                        }
                         updateInfoList(withdrawRecords);
 
                     }
@@ -78,7 +74,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
-        if (withdrawRecordList == null || withdrawRecordList.isEmpty()) {
+        if (withdrawRecordList == null) {
 //            mEmpty.setVisibility(View.VISIBLE);
             mWithdrawRecordList.setEmptyView(mEmpty);
             return;

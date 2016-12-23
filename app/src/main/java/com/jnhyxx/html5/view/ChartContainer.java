@@ -177,8 +177,14 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_live_enter, 0);
         view.setCompoundDrawablePadding(paddingPx / 3);
         view.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
-        view.setId(R.string.live);
-        view.setOnClickListener(this);
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnLiveEnterClickListener != null) {
+                    mOnLiveEnterClickListener.onClick();
+                }
+            }
+        });
         return view;
     }
 
@@ -210,11 +216,6 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 break;
             case R.string.day_k_line:
                 onTabClick(POS_KLINE);
-                break;
-            case R.string.live:
-                if (mOnLiveEnterClickListener != null) {
-                    mOnLiveEnterClickListener.onClick();
-                }
                 break;
         }
     }

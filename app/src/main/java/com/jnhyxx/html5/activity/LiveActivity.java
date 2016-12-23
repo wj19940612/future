@@ -496,8 +496,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                                 }
                             }
                         } else {
-                            for (Product product: mProductList) {
-                                if (product.getVarietyId() == Product.ID_US_CRUDE) {
+                            for (Product product : mProductList) {
+                                if (product.getVarietyType().equalsIgnoreCase(Product.VARIETYTYPE_US_CRUDE)) {
                                     enterProduct = product;
                                 }
                             }

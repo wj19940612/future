@@ -1,10 +1,14 @@
 package com.jnhnxx.livevideo;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -118,6 +123,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private void init() {
         mPlayer = new Player(getContext());
+
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(CENTER_IN_PARENT);
@@ -134,13 +140,44 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mController = createController();
         mController.setVisibility(GONE);
         addView(mController, params);
-
         mPlayer.setPlayerController(this);
         mPlayer.setBufferingView(mBufferingView);
+
+
+        ImageView bigStartButton = createBigStartButton();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setBackground(new ColorDrawable(Color.RED));
+        }
+    }
+
+    private ImageView createBigStartButton() {
+//        mPauseButton.setImageResource(R.drawable.media_controller_stop);
+//        mPauseButton.setImageResource(R.drawable.media_controller_start);
+
+        final ImageView imageView = new ImageView(getContext());
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_launcher);
+        imageView.setImageDrawable(drawable);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(imageView, layoutParams);
+        imageView.setClickable(true);
+        imageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "点击了图片", Toast.LENGTH_SHORT).show();
+                mPlayer.setBufferingView(mBufferingView);
+                if (mPlayer.isStarted()) {
+                    imageView.setVisibility(GONE);
+                }
+            }
+        });
+        return imageView;
     }
 
     private int dp2px(float dp) {
-        return (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private View createBufferingView() {

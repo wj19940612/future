@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
+            android:background="@android:color/white"
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,6 +30,6 @@
             android:textColor="@color/emptyViewColor"
             android:textSize="20sp"
             android:visibility="gone"
-            tools:text="@string/there_is_no_teacher_advise"/>
+            android:text="@string/there_is_no_teacher_advise"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

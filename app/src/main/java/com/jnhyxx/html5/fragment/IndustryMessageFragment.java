@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
@@ -98,8 +99,8 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 mPageNo = 0;
                 mSet.clear();
                 requestInfoList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (!Network.isNetworkAvailable()) {
+                    stopRefreshAnimation();
                 }
             }
         });
@@ -119,25 +120,25 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                     @Override
                     public void onReceive(Resp<List<Information>> listResp) {
                         if (listResp.isSuccess()) {
-                            for (int i = 0; i < listResp.getData().size(); i++) {
-                                Log.d(TAG, "type是 " + mType + "   资讯获取的数据 " + listResp.getData().get(i) + "\n");
-                            }
                             updateInfoList(listResp.getData());
                         } else {
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
+                            stopRefreshAnimation();
                         }
+
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 }).fire();
     }
 
     private void updateInfoList(List<Information> messageLists) {
-        if (messageLists == null || messageLists.isEmpty()) {
+        if (messageLists == null) {
             mListView.setEmptyView(mEmptyView);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -179,6 +180,12 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
         }
         mListView.setAdapter(mNewsListAdapter);
         mNewsListAdapter.notifyDataSetChanged();
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

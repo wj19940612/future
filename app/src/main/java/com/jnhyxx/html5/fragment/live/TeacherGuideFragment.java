@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -216,6 +217,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                         } else {
                             updateTeacherGuide(listResp.getData());
                         }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 })
                 .fire();

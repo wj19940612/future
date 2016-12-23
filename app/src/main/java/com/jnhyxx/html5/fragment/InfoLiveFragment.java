@@ -113,8 +113,8 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     @Override
     public void onRefresh() {
         getInfoLiveData();
-        if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
+        if (!Network.isNetworkAvailable() ) {
+            stopRefreshAnimation();
         }
     }
 
@@ -133,14 +133,18 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                                      if (resp.isSuccess() && resp.hasData()) {
                                          getInfoLiveData(resp);
                                      } else {
-                                         if (mSwipeRefreshLayout.isRefreshing()) {
-                                             mSwipeRefreshLayout.setRefreshing(false);
-                                         }
+                                         stopRefreshAnimation();
                                      }
                                  }
                              }
 
                 ).fire();
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private void getInfoLiveData(Resp resp) {
@@ -173,7 +177,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     }
 
     private void setAdapter(ArrayList<ArrayList<String>> infoLiveMessageList) {
-        if (infoLiveMessageList == null || infoLiveMessageList.isEmpty()) {
+        if (infoLiveMessageList == null ) {
             mListView.setEmptyView(mEmptyView);
             return;
         }

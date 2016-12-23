@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.net.API;
@@ -103,8 +103,8 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 mSet.clear();
                 requestMessageList();
 
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (!Network.isNetworkAvailable()) {
+                    stopRefreshAnimation();
                 }
             }
         });
@@ -123,15 +123,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.cancel(TAG);
     }
 
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        if (isVisibleToUser && isAdded() && !isLoad) {
-//            requestMessageList();
-//            isLoad = true;
-//        }
-//        super.setUserVisibleHint(isVisibleToUser);
-//    }
-
     public void requestMessageList() {
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
@@ -141,26 +132,31 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                                  public void onReceive(Resp<List<SysMessage>> listResp) {
                                      if (listResp.isSuccess()) {
                                          updateMessageList(listResp.getData());
-                                         for (int i = 0; i < listResp.getData().size(); i++) {
-                                             Log.d(TAG, "交易提醒数据" + listResp.getData().get(i) + "\n");
-                                         }
                                      } else {
-                                         if (mSwipeRefreshLayout.isRefreshing()) {
-                                             mSwipeRefreshLayout.setRefreshing(false);
-                                         }
+                                         stopRefreshAnimation();
                                      }
+                                 }
+
+                                 @Override
+                                 public void onFailure(VolleyError volleyError) {
+                                     super.onFailure(volleyError);
+                                     stopRefreshAnimation();
                                  }
                              }
                 ).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void updateMessageList(List<SysMessage> sysMessages) {
-        if (sysMessages == null || sysMessages.isEmpty()) {
+        if (sysMessages == null) {
             mEmpty.setText("暂无交易提醒");
             mListView.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {

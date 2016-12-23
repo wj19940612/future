@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.account.TradeDetail;
@@ -129,8 +129,8 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 mOffset = 0;
                 mSet.clear();
                 getTradeInfoList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (!Network.isNetworkAvailable()) {
+                    stopRefreshAnimation();
                 }
             }
         });
@@ -145,26 +145,31 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                     public void onReceive(Resp<List<TradeDetail>> listResp) {
                         if (listResp.isSuccess()) {
                             mTradeDetailList = (ArrayList<TradeDetail>) listResp.getData();
-                            for (int i = 0; i < mTradeDetailList.size(); i++) {
-                                Log.d(TAG, "交易明细查询结果" + mTradeDetailList.get(i).toString());
-                            }
                             setAdapter(mTradeDetailList);
                         } else {
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
+                            stopRefreshAnimation();
                         }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 }).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void setAdapter(ArrayList<TradeDetail> mTradeDetailLists) {
-        if (mTradeDetailLists == null || mTradeDetailLists.isEmpty()) {
+        if (mTradeDetailLists == null) {
             mEmpty.setText("暂无资金明细");
             mList.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {

@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -290,6 +291,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                      } else {
                                          stopRefreshAnimation();
                                      }
+                                 }
+
+                                 @Override
+                                 public void onFailure(VolleyError volleyError) {
+                                     super.onFailure(volleyError);
+                                     stopRefreshAnimation();
                                  }
                              }
                 ).fire();

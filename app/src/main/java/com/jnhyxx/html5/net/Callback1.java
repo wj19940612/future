@@ -28,7 +28,7 @@ public abstract class Callback1<T> extends Callback<T> {
         }
     }
 
-    private void onErrorMessageShow(String msg) {
+    protected void onErrorMessageShow(String msg) {
         if (getErrorVisible()) {
             ToastUtil.show(msg);
         }

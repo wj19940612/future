@@ -54,9 +54,8 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
     private int mType;
-    private int mPageNo;
+    private int mOffset;
     private int mPageSize;
 
     private NewsListAdapter mNewsListAdapter;
@@ -91,7 +90,7 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPageNo = 0;
+        mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
         mListView.setDivider(null);
@@ -100,7 +99,7 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageNo = 0;
+                mOffset = 0;
                 mSet.clear();
                 requestInfoList();
                 if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
@@ -118,7 +117,7 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     }
 
     private void requestInfoList() {
-        API.Message.findNewsList(mType, mPageNo, mPageSize)
+        API.Message.findNewsList(mType, mOffset, mPageSize)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<List<Information>>>() {
@@ -159,7 +158,7 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPageNo++;
+                    mOffset += mPageSize;
                     requestInfoList();
                 }
             });

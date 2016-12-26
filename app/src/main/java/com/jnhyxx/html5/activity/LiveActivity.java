@@ -57,8 +57,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.android.volley.Request.Method.HEAD;
-
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
     private static final int REQ_CODE_TRADE = 123;
@@ -348,9 +346,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
-            // TODO: 2016/12/26 测试的网址
-            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
-//            mLivePlayer.setVideoPath(active.getRtmp());
+            mLivePlayer.setVideoPath(active.getRtmp());
         }
     }
 

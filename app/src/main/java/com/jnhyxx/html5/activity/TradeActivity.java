@@ -214,6 +214,7 @@ public class TradeActivity extends BaseActivity implements
         mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
         mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
 
+        mChartContainer.setLiveEnterVisible(mFundType == Product.FUND_TYPE_CASH);
         mChartContainer.setOnLiveEnterClickListener(new ChartContainer.OnLiveEnterClickListener() {
             @Override
             public void onClick() {

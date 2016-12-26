@@ -30,7 +30,6 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.receiver.PushReceiver;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
@@ -161,6 +160,9 @@ public class MainActivity extends BaseActivity {
         mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
             public void onTabClick(int position) {
+                if (position == BottomTabs.live_tab_index) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
+                }
                 mBottomTabs.selectTab(position);
                 if (position == 1) {
                     openLivePage();

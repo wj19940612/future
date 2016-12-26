@@ -47,12 +47,14 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public void start() {
         mPlayer.start();
         mPauseButton.setImageResource(R.drawable.media_controller_stop);
+        setBackgroundColor(android.R.color.black);
     }
 
     @Override
     public void stop() {
         mPlayer.stop();
         mPauseButton.setImageResource(R.drawable.media_controller_start);
+        setBackgroundResource(R.drawable.bg_live_not_has_content);
     }
 
     @Override
@@ -141,6 +143,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.setPlayerController(this);
         mPlayer.setBufferingView(mBufferingView);
 
+        setBackgroundResource(R.drawable.bg_live_not_has_content);
 
         mBigVideoSwitch = createBigStartButton();
         if (mBigVideoSwitch != null) {
@@ -150,16 +153,12 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
                 mBigVideoSwitch.setVisibility(VISIBLE);
             }
         }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            setBackground(new ColorDrawable(Color.RED));
-//        }
     }
 
     private ImageView createBigStartButton() {
         mBigVideoSwitch = new ImageView(getContext());
         mBigVideoSwitch.setScaleType(ImageView.ScaleType.CENTER);
-        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_launcher);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_live_stop_screen_center);
         mBigVideoSwitch.setImageDrawable(drawable);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);

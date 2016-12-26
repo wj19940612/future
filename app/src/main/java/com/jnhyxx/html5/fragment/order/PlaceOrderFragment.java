@@ -29,10 +29,12 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.StrUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -388,6 +390,7 @@ public class PlaceOrderFragment extends BaseFragment {
                 }
                 break;
             case R.id.confirmButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BUY_RISE_OR_BUY_DROP_CONFIRM);
                 if (mCallback != null) {
                     mCallback.onPlaceOrderFragmentConfirmBtnClick(mSubmittedOrder);
                 }

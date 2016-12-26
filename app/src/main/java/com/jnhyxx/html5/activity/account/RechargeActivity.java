@@ -19,11 +19,15 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,12 +129,15 @@ public class RechargeActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nextStepButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE_SUBMIT);
                 doNextStepButtonClick();
                 break;
             case R.id.bankCardPay:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_BANK_CARD);
                 selectPayMethod(0);
                 break;
             case R.id.aliPayPay:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_ALIPAY);
                 selectPayMethod(1);
                 break;
             case R.id.weChartPay:

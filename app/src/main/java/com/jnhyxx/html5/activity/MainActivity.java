@@ -29,10 +29,13 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.receiver.PushReceiver;
 import com.jnhyxx.html5.utils.Network;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
 import com.jnhyxx.html5.view.dialog.HomePopup;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -54,6 +57,12 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver mNetworkChangeReceiver;
 
     private int mTabPosition;
+    //首页tab的position
+    private static final int TAB_HOME = 0;
+    //资讯tab的position,用来友盟记录第点击次数
+    private static final int TAB_MESSAGE = 1;
+    //我的tab
+    private static final int TAB_MINE = 2;
 
     private static final int REQ_CODE_LIVE = 770;
 
@@ -127,6 +136,14 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if (position == TAB_HOME) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_HOME);
+                } else if (position == TAB_MESSAGE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MESSAGE);
+                } else if (position == TAB_MINE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MINE);
+                }
+
                 if (position >= 1) {
                     mTabPosition = position + 1;
                     mBottomTabs.selectTab(mTabPosition);

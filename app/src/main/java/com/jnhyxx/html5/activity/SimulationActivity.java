@@ -26,8 +26,10 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,7 @@ public class SimulationActivity extends BaseActivity {
             public void onItemOneClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_SIMULATION));
                     Launcher.with(getActivity(), TradeActivity.class)
                             .putExtra(Product.EX_PRODUCT, pkg.getProduct())
                             .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
@@ -141,6 +144,7 @@ public class SimulationActivity extends BaseActivity {
 
     @OnClick(R.id.goldStoreButton)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE_GOLD_SHOP);
         ToastUtil.show(R.string.coming_soon);
     }
 

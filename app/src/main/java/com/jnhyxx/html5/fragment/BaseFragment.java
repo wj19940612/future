@@ -12,6 +12,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.TimerHandler;
 import com.johnz.kutils.net.ApiIndeterminate;
+import com.umeng.analytics.MobclickAgent;
 
 public class BaseFragment extends Fragment implements
         ApiIndeterminate, TimerHandler.TimerCallback {
@@ -23,6 +24,18 @@ public class BaseFragment extends Fragment implements
     public void onAttach(Context context) {
         super.onAttach(context);
         TAG = this.getClass().getSimpleName();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override

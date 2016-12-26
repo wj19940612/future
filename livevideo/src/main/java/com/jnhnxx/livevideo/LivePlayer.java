@@ -11,9 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -35,8 +33,6 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private ImageView mPauseButton;
     private ImageView mSetPlayerScaleButton;
     private ImageView mMuteButton;
-    private ProgressBar mProgress;
-    private TextView mEndTime;
     private TextView mCurrentTime;
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
@@ -232,18 +228,6 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             }
         });
 
-        mProgress = (SeekBar) v.findViewById(R.id.media_controller_seekbar);  //进度条
-        if (mProgress != null) {
-            if (mProgress instanceof SeekBar) {
-                SeekBar seeker = (SeekBar) mProgress;
-                seeker.setOnSeekBarChangeListener(mSeekListener);
-                seeker.setThumbOffset(1);
-            }
-            mProgress.setMax(1000);
-        }
-        mProgress.setEnabled(false);
-
-        mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
 
         return v;
@@ -323,13 +307,6 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private void updateTimes() {
         if (mPlayer != null) {
             long position = mPlayer.getCurrentPosition();
-            long duration = mPlayer.getDuration();
-            if (duration > 0) {
-                mEndTime.setText(stringForTime(duration));
-            } else {
-                mEndTime.setText("--:--:--");
-            }
-
             mCurrentTime.setText(stringForTime(position));
         }
     }
@@ -348,72 +325,4 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public boolean isShowing() {
         return mShowing;
     }
-
-    private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
-
-        @Override
-        public void onStartTrackingTouch(SeekBar bar) {
-//            show(3600000);
-//            mDragging = true;
-//
-//            mHandler.removeMessages(SHOW);
-        }
-
-        @Override
-        public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
-//            if (mPlayer.getMediaType().equals("livestream")) {
-//                return;
-//            }
-//
-//            if (!fromuser)
-//                return;
-//
-//            final long newposition = (mDuration * progress) / 1000;
-//            String time = stringForTime(newposition);
-//            if (mInstantSeeking) {
-//                mHandler.removeCallbacks(lastRunnable);
-//                lastRunnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mPlayer.seekTo(newposition);
-//                    }
-//                };
-//                mHandler.postDelayed(lastRunnable, 200);
-//            }
-//
-//            if (mCurrentTime != null)
-//                mCurrentTime.setText(time);
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar bar) {
-//            if (mPlayer.getMediaType().equals("livestream")) {
-//                AlertDialog alertDialog;
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-//                alertDialogBuilder.setTitle("注意");
-//                alertDialogBuilder.setMessage("直播不支持seek操作");
-//                alertDialogBuilder.setCancelable(false)
-//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ;
-//                            }
-//                        });
-//                alertDialog = alertDialogBuilder.create();
-//                alertDialog.show();
-//                mProgress.setProgress(0);
-//                //return;
-//            }
-//            if (!mPlayer.getMediaType().equals("livestream")) {
-//                if (!mInstantSeeking)
-//                    mPlayer.seekTo((mDuration * bar.getProgress()) / 1000);
-//            }
-//
-//            show(sDefaultTimeout);
-//            mHandler.removeMessages(SHOW);
-//            mDragging = false;
-//            mHandler.sendEmptyMessageDelayed(SHOW, 1000);
-        }
-    };
 }

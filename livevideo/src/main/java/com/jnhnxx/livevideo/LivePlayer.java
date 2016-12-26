@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,8 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private TextView mCurrentTime;
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
+    private OnMuteButtonClickListener mOnMuteButtonClickListener;
+    private OnPlayClickListener mOnPlayClickListener;
 
     @Override
     public void start() {
@@ -106,6 +107,16 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         void onClick(boolean fullscreen);
     }
 
+    //静音按钮监听
+    public interface OnMuteButtonClickListener {
+        void onClick(boolean isMute);
+    }
+
+    //播放按钮的监听
+    public interface OnPlayClickListener {
+        void onClick(boolean isPlay);
+    }
+
     public LivePlayer(Context context) {
         super(context);
         init();
@@ -140,7 +151,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     }
 
     private int dp2px(float dp) {
-        return (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private View createBufferingView() {
@@ -153,6 +164,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOnPlayClickListener != null) {
+                    mOnPlayClickListener.onClick(isStarted());
+                }
                 if (isStarted()) {
                     stop();
                 } else {
@@ -183,6 +197,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOnMuteButtonClickListener != null) {
+                    mOnMuteButtonClickListener.onClick(isMute());
+                }
                 if (isMute()) {
                     setMute(false);
                 } else {
@@ -215,6 +232,15 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public void setOnScaleButtonClickListener(OnScaleButtonClickListener onScaleButtonClickListener) {
         mOnScaleButtonClickListener = onScaleButtonClickListener;
     }
+
+    public void setOnMuteButtonClickListener(OnMuteButtonClickListener onMuteButtonClickListener) {
+        this.mOnMuteButtonClickListener = onMuteButtonClickListener;
+    }
+
+    public void setOnPlayClickListener(OnPlayClickListener onPlayClickListener) {
+        this.mOnPlayClickListener = onPlayClickListener;
+    }
+
 
     @Override
     public void show() {

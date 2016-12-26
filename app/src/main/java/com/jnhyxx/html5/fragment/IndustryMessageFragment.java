@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,8 +23,10 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -186,8 +187,8 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Information information = (Information) parent.getAdapter().getItem(position);
         if (information != null) {
+            MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MARKET_MESSAGE_DETAILS);
             Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, information).execute();
-            Log.d(TAG, "详情信息" + information.toString());
         }
     }
 

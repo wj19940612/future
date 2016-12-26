@@ -15,9 +15,11 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,15 +121,19 @@ public class SettingsActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nickname:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.NICK_NAME);
                 openModifyNicknamePage();
                 break;
             case R.id.realNameVerity:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REAL_NAME);
                 Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bandingBankcard:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BIND_BANK);
                 bindingBankcard();
                 break;
             case R.id.logoutButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGOUT);
                 logout();
                 break;
         }

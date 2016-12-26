@@ -22,6 +22,10 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         void onClick();
     }
 
+    public interface OnTabClickListener {
+        void onClick(int tabId);
+    }
+
     private static final int PADDING_IN_DP = 12;
 
     public static final int POS_TREND = 0;
@@ -33,6 +37,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private RelativeLayout mTabsLayout;
     private FrameLayout mContainer;
     private OnLiveEnterClickListener mOnLiveEnterClickListener;
+    private OnTabClickListener mOnTabClickListener;
 
     public ChartContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -109,6 +114,11 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     public void setOnLiveEnterClickListener(OnLiveEnterClickListener onLiveEnterClickListener) {
         mOnLiveEnterClickListener = onLiveEnterClickListener;
     }
+
+    public void setOnTabClickListener(OnTabClickListener onTabClickListener) {
+        mOnTabClickListener = onTabClickListener;
+    }
+
 
 //    private void initPopupWindow() {
 //        //View popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window_kline, null);
@@ -201,15 +211,27 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         switch (v.getId()) {
             case R.string.trend_chart:
                 onTabClick(POS_TREND);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_TREND);
+                }
                 break;
             case R.string.flash_chart:
                 onTabClick(POS_FLASH);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_FLASH);
+                }
                 break;
             case R.string.plate:
                 onTabClick(POS_PLATE);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_PLATE);
+                }
                 break;
             case R.string.day_k_line:
                 onTabClick(POS_KLINE);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_KLINE);
+                }
                 break;
             case R.string.live:
                 if (mOnLiveEnterClickListener != null) {

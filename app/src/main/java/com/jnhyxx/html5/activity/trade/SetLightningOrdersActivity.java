@@ -24,11 +24,13 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.StrUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -109,12 +111,15 @@ public class SetLightningOrdersActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.openLightningOrder:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.OPEN_LIGHTNING_ORDERS);
                 openLightningOrder();
                 break;
             case R.id.closeLightningOrder:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ClOSE_LIGHTNING_ORDERS);
                 removeLightningOrder(false);
                 break;
             case R.id.restartLightningOrder:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RESTART_SET_LIGHTNING_ORDERS);
                 againShowOpenBtn();
                 break;
         }

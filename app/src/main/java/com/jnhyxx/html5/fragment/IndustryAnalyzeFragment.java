@@ -246,10 +246,10 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
             public void bindingData(Information item, Context context) {
                 String time = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm");
                 mCreateDate.setText(time);
-                if (!TextUtils.isEmpty(item.getTitle())) {
-                    mSummary.setText(item.getTitle());
-                } else if (!TextUtils.isEmpty(item.getSummary())) {
+                if (!TextUtils.isEmpty(item.getSummary())) {
                     mSummary.setText(item.getSummary());
+                } else if (!TextUtils.isEmpty(item.getTitle())) {
+                    mSummary.setText(item.getTitle());
                 }
             }
         }

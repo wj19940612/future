@@ -1,10 +1,7 @@
 package com.jnhnxx.livevideo;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -146,11 +143,11 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.setBufferingView(mBufferingView);
 
 
-        ImageView bigStartButton = createBigStartButton();
+//        mBigVideoSwitch = createBigStartButton();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            setBackground(new ColorDrawable(Color.RED));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            setBackground(new ColorDrawable(Color.RED));
+//        }
     }
 
     private ImageView createBigStartButton() {

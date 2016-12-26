@@ -328,8 +328,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
             // TODO: 2016/12/26 测试的网址
-//            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
-            mLivePlayer.setVideoPath(active.getRtmp());
+            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
+//            mLivePlayer.setVideoPath(active.getRtmp());
         }
     }
 

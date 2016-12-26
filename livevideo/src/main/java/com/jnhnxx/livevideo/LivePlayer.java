@@ -166,6 +166,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         addView(mScreenCenterVideoControl, layoutParams);
 
         setBackgroundResource(R.drawable.bg_live_not_has_content);
+        mPlayer.setEnabled(false);
     }
 
     //播放器中间的视屏控制开关
@@ -283,7 +284,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     @Override
     public void hide() {
-        if (mShowing ) {
+        if (mShowing) {
             mHandler.removeMessages(SHOW);
             mController.setVisibility(GONE);
             mShowing = false;

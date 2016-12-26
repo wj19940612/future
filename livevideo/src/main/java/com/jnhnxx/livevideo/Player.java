@@ -76,6 +76,7 @@ public class Player extends TextureView implements
         setSurfaceTextureListener(this);
 
         registerBroadcast();
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,10 +111,6 @@ public class Player extends TextureView implements
     public void setVideoURI(Uri uri) {
         mUri = uri;
         Log.d(TAG, "setVideoURI: " + uri);
-        if (mPlayerController != null) {
-//            mPlayerController.enable(true);
-//            mPlayerController.show();
-        }
     }
 
     public void setPlayerController(IPlayerController controller) {

@@ -26,7 +26,7 @@ public class BottomTabs extends LinearLayout {
 
     private OnTabClickListener mOnTabClickListener;
 
-    public static final int TAB_LIVE_INDEX = 1;
+    public static final int TAB_INDEX_LIVE = 1;
 
     public interface OnTabClickListener {
         void onTabClick(int position);

@@ -16,12 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
@@ -94,9 +94,13 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmpty.setText(R.string.now_is_not_has_system_message);
+        mListView.setEmptyView(mEmpty);
+
         mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
+
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
         mListView.setDivider(null);
@@ -106,9 +110,6 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
                 mSet.clear();
                 mPageNo = 0;
                 requestMessageList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
         requestMessageList();
@@ -140,23 +141,29 @@ public class MsgListFragment extends BaseFragment implements AdapterView.OnItemC
                                              Log.d(TAG, "系统消息中心数据" + listResp.getData().get(i).toString());
                                          }
                                      } else {
-                                         if (mSwipeRefreshLayout.isRefreshing()) {
-                                             mSwipeRefreshLayout.setRefreshing(false);
-                                         }
+                                         stopRefreshAnimation();
                                      }
+                                 }
+
+                                 @Override
+                                 public void onFailure(VolleyError volleyError) {
+                                     super.onFailure(volleyError);
+                                     stopRefreshAnimation();
                                  }
                              }
 
                 ).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void updateMessageList(List<SysMessage> sysMessages) {
-        if (sysMessages == null || sysMessages.isEmpty()) {
-            mEmpty.setText("暂无系统消息");
-            mListView.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+        if (sysMessages == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {

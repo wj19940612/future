@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,13 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
@@ -39,10 +38,7 @@ import butterknife.Unbinder;
 
 public class IndustryMessageFragment extends BaseFragment implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
-    private static final String TAG = "InfoListFragment";
-
     private static final String TYPE = "fragmentType";
-
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -53,7 +49,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
 
 
     private int mType;
-    private int mPageNo;
+    private int mOffset;
     private int mPageSize;
 
     private NewsListAdapter mNewsListAdapter;
@@ -88,21 +84,20 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPageNo = 0;
+        mListView.setEmptyView(mEmptyView);
+        mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
+
         mListView.setDivider(null);
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageNo = 0;
+                mOffset = 0;
                 mSet.clear();
                 requestInfoList();
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
         requestInfoList();
@@ -115,31 +110,30 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
     }
 
     private void requestInfoList() {
-        API.Message.findNewsList(mType, mPageNo, mPageSize)
+        API.Message.findNewsList(mType, mOffset, mPageSize)
                 .setTag(TAG)
                 .setCallback(new Callback<Resp<List<Information>>>() {
                     @Override
                     public void onReceive(Resp<List<Information>> listResp) {
                         if (listResp.isSuccess()) {
-                            for (int i = 0; i < listResp.getData().size(); i++) {
-                                Log.d(TAG, "type是 " + mType + "   资讯获取的数据 " + listResp.getData().get(i) + "\n");
-                            }
                             updateInfoList(listResp.getData());
                         } else {
-                            if (mSwipeRefreshLayout.isRefreshing()) {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
+                            stopRefreshAnimation();
                         }
+
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 }).fire();
     }
 
     private void updateInfoList(List<Information> messageLists) {
-        if (messageLists == null || messageLists.isEmpty()) {
-            mListView.setEmptyView(mEmptyView);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+        if (messageLists == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -153,7 +147,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mPageNo++;
+                    mOffset +=mPageSize;
                     requestInfoList();
                 }
             });
@@ -181,6 +175,12 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
         }
         mListView.setAdapter(mNewsListAdapter);
         mNewsListAdapter.notifyDataSetChanged();
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

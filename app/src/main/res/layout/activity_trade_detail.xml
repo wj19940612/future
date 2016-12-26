@@ -45,14 +45,14 @@
                 android:id="@+id/remainTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/account_trade_detail_margin_remain"
                 android:textColor="@color/colorDisable"/>
 
             <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/remainNumber"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/remainTitle"
                 android:gravity="bottom"
                 android:maxLines="1"
@@ -75,21 +75,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:padding="15dp"
-            android:paddingLeft="@dimen/common_margin">
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/blockedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/money_frozen"
                 android:textColor="@color/colorDisable"/>
 
             <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/blockedNumber"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/blockedTitle"
                 android:gravity="bottom"
                 android:maxLines="1"

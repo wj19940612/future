@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
@@ -9,10 +9,10 @@
               tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
 
     <LinearLayout
-        android:id="@+id/showLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
+
 
         <com.jnhyxx.html5.view.TitleBar
             android:layout_width="match_parent"
@@ -219,13 +219,6 @@
                 android:text="@string/next_step"/>
 
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/keyHideLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -250,4 +243,5 @@
             android:textColor="@color/colorDisable"
             android:textSize="12sp"/>
     </LinearLayout>
-</LinearLayout>
+
+</ScrollView>

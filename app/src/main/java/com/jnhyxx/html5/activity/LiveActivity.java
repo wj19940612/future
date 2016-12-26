@@ -412,6 +412,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (getLiveInteractionFragment() != null) {
+                    getLiveInteractionFragment().hideInputBox();
+                }
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TRADE);
                 switchToTradePage();
             }
@@ -528,10 +531,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                             }
                         }
                         if (enterProduct != null) {
-                            if (getLiveInteractionFragment() != null) {
-                                getLiveInteractionFragment().hideInputBox();
-                            }
-
                             Launcher.with(getActivity(), TradeActivity.class)
                                     .putExtra(Product.EX_PRODUCT, enterProduct)
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)

@@ -10,12 +10,10 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,7 +27,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
@@ -80,13 +77,6 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.clearPhoneNumButton)
     ImageView mClearPhoneNumButton;
 
-    @BindView(R.id.showLayout)
-    LinearLayout mShowLayout;
-    @BindView(R.id.keyHideLayout)
-    TextView mKeyHideLayout;
-    private int bottomHeight;
-    private KeyBoardHelper mKeyBoardHelper;
-
 
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
@@ -113,52 +103,11 @@ public class SignUpActivity extends BaseActivity {
                 activeButtons();
             }
         });
-        setKeyboardHelper();
     }
-
-    private void setKeyboardHelper() {
-        mKeyBoardHelper = new KeyBoardHelper(this);
-        mKeyBoardHelper.onCreate();
-        mKeyBoardHelper.setOnKeyBoardStatusChangeListener(onKeyBoardStatusChangeListener);
-        mKeyHideLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                bottomHeight = mKeyHideLayout.getHeight();
-            }
-        });
-    }
-
-    private KeyBoardHelper.OnKeyBoardStatusChangeListener onKeyBoardStatusChangeListener = new KeyBoardHelper.OnKeyBoardStatusChangeListener() {
-
-        @Override
-        public void OnKeyBoardPop(int keyboardHeight) {
-            final int height = keyboardHeight;
-            if (bottomHeight < height) {
-                int offset = bottomHeight - height;
-                final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mShowLayout
-                        .getLayoutParams();
-                lp.topMargin = offset;
-                mShowLayout.setLayoutParams(lp);
-            }
-
-        }
-
-        @Override
-        public void OnKeyBoardClose(int oldKeyboardHeight) {
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mShowLayout
-                    .getLayoutParams();
-            if (lp.topMargin != 0) {
-                lp.topMargin = 0;
-                mShowLayout.setLayoutParams(lp);
-            }
-
-        }
-    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mKeyBoardHelper.onDestroy();
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mRegisterAuthCode.removeTextChangedListener(mValidationWatcher);
         mPassword.removeTextChangedListener(mValidationWatcher);

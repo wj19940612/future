@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -143,7 +142,14 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.setBufferingView(mBufferingView);
 
 
-//        mBigVideoSwitch = createBigStartButton();
+        mBigVideoSwitch = createBigStartButton();
+        if (mBigVideoSwitch != null) {
+            if (mPlayer.isStarted()) {
+                mBigVideoSwitch.setVisibility(GONE);
+            } else {
+                mBigVideoSwitch.setVisibility(VISIBLE);
+            }
+        }
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 //            setBackground(new ColorDrawable(Color.RED));
@@ -162,10 +168,11 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mBigVideoSwitch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "点击了图片", Toast.LENGTH_SHORT).show();
-                mPlayer.setBufferingView(mBufferingView);
-                if (mPlayer.isStarted()) {
+                if (!mPlayer.isStarted()) {
+                    start();
                     mBigVideoSwitch.setVisibility(GONE);
+                } else {
+                    stop();
                 }
             }
         });

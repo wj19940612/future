@@ -225,12 +225,35 @@ public class TradeActivity extends BaseActivity implements
                 switchToLivePage();
             }
         });
+        mChartContainer.setOnTabClickListener(new ChartContainer.OnTabClickListener() {
+            @Override
+            public void onClick(int tabId) {
+                chartOnclick(tabId);
+            }
+        });
 
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
+    }
+
+    private void chartOnclick(int tabId) {
+        switch (tabId) {
+            case ChartContainer.POS_TREND:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TIME_SHARDED);
+                break;
+            case ChartContainer.POS_FLASH:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIGHTNING);
+                break;
+            case ChartContainer.POS_PLATE:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HANDICAP);
+                break;
+            case ChartContainer.POS_KLINE:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.DAY_K);
+                break;
+        }
     }
 
     private void switchToLivePage() {
@@ -324,6 +347,7 @@ public class TradeActivity extends BaseActivity implements
         mHoldingOrderPresenter.onDestroy();
         mNettyHandler = null;
     }
+
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.placeOrderContainer);

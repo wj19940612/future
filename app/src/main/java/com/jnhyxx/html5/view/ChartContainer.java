@@ -15,13 +15,15 @@ import com.jnhyxx.chart.FlashView;
 import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-import com.umeng.analytics.MobclickAgent;
 
 public class ChartContainer extends LinearLayout implements View.OnClickListener {
 
     public interface OnLiveEnterClickListener {
         void onClick();
+    }
+
+    public interface OnTabClickListener {
+        void onClick(int tabId);
     }
 
     private static final int PADDING_IN_DP = 12;
@@ -35,6 +37,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private RelativeLayout mTabsLayout;
     private FrameLayout mContainer;
     private OnLiveEnterClickListener mOnLiveEnterClickListener;
+    private OnTabClickListener mOnTabClickListener;
 
     public ChartContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -111,6 +114,11 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     public void setOnLiveEnterClickListener(OnLiveEnterClickListener onLiveEnterClickListener) {
         mOnLiveEnterClickListener = onLiveEnterClickListener;
     }
+
+    public void setOnTabClickListener(OnTabClickListener onTabClickListener) {
+        mOnTabClickListener = onTabClickListener;
+    }
+
 
 //    private void initPopupWindow() {
 //        //View popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window_kline, null);
@@ -203,19 +211,27 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         switch (v.getId()) {
             case R.string.trend_chart:
                 onTabClick(POS_TREND);
-                MobclickAgent.onEvent(getContext(), UmengCountEventIdUtils.TIME_SHARDED);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_TREND);
+                }
                 break;
             case R.string.flash_chart:
                 onTabClick(POS_FLASH);
-                MobclickAgent.onEvent(getContext(), UmengCountEventIdUtils.LIGHTNING);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_FLASH);
+                }
                 break;
             case R.string.plate:
                 onTabClick(POS_PLATE);
-                MobclickAgent.onEvent(getContext(), UmengCountEventIdUtils.HANDICAP);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_PLATE);
+                }
                 break;
             case R.string.day_k_line:
                 onTabClick(POS_KLINE);
-                MobclickAgent.onEvent(getContext(), UmengCountEventIdUtils.DAY_K);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_KLINE);
+                }
                 break;
             case R.string.live:
                 if (mOnLiveEnterClickListener != null) {

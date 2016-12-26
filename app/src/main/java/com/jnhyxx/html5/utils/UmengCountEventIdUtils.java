@@ -167,11 +167,11 @@ public class UmengCountEventIdUtils {
     public static final String INTERNATIONAL = "00";
 
     public static String getProductUmengEventId(Product product, int fundType) {
-        StringBuilder mProduct = new StringBuilder();
-        mProduct.append(fundType == Product.FUND_TYPE_CASH ? FUND_TYPE_CASH : FUND_TYPE_SIMULATION);
-        mProduct.append(product.isDomestic() ? DOMESTIC : INTERNATIONAL);
-        mProduct.append(product.getVarietyType());
-        return mProduct.toString();
+        StringBuilder productEventId = new StringBuilder();
+        productEventId.append(fundType == Product.FUND_TYPE_CASH ? FUND_TYPE_CASH : FUND_TYPE_SIMULATION);
+        productEventId.append(product.isDomestic() ? DOMESTIC : INTERNATIONAL);
+        productEventId.append(product.getVarietyType());
+        return productEventId.toString();
     }
 
     /**

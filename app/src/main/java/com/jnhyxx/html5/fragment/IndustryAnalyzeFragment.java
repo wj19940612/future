@@ -192,7 +192,6 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
         Information information = (Information) parent.getAdapter().getItem(position);
         if (information != null) {
             Launcher.with(getActivity(), TradeAnalyzeDetailsActivity.class).putExtra(Launcher.EX_PAYLOAD, information).execute();
-            Log.d(TAG, "详情信息" + information.toString());
         }
     }
 

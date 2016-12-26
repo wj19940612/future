@@ -37,7 +37,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
 
-    private ImageView mBigVideoSwitch;
+    private ImageView mScreenCenterVideoControl;
 
     @Override
     public void start() {
@@ -141,37 +141,38 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
         setBackgroundResource(R.drawable.bg_live_not_has_content);
 
-        mBigVideoSwitch = createBigStartButton();
-        if (mBigVideoSwitch != null) {
+        mScreenCenterVideoControl = createScreenCenterVideoControlView();
+        if (mScreenCenterVideoControl != null) {
             if (mPlayer.isStarted()) {
-                mBigVideoSwitch.setVisibility(GONE);
+                mScreenCenterVideoControl.setVisibility(GONE);
             } else {
-                mBigVideoSwitch.setVisibility(VISIBLE);
+                mScreenCenterVideoControl.setVisibility(VISIBLE);
             }
         }
     }
 
-    private ImageView createBigStartButton() {
-        mBigVideoSwitch = new ImageView(getContext());
-        mBigVideoSwitch.setScaleType(ImageView.ScaleType.CENTER);
+    //播放器中间的视屏控制开关
+    private ImageView createScreenCenterVideoControlView() {
+        mScreenCenterVideoControl = new ImageView(getContext());
+        mScreenCenterVideoControl.setScaleType(ImageView.ScaleType.CENTER);
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_live_stop_screen_center);
-        mBigVideoSwitch.setImageDrawable(drawable);
+        mScreenCenterVideoControl.setImageDrawable(drawable);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        addView(mBigVideoSwitch, layoutParams);
-        mBigVideoSwitch.setClickable(true);
-        mBigVideoSwitch.setOnClickListener(new OnClickListener() {
+        addView(mScreenCenterVideoControl, layoutParams);
+        mScreenCenterVideoControl.setClickable(true);
+        mScreenCenterVideoControl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mPlayer.isStarted()) {
                     start();
-                    mBigVideoSwitch.setVisibility(GONE);
+                    mScreenCenterVideoControl.setVisibility(GONE);
                 } else {
                     stop();
                 }
             }
         });
-        return mBigVideoSwitch;
+        return mScreenCenterVideoControl;
     }
 
     private int dp2px(float dp) {
@@ -190,10 +191,10 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             public void onClick(View v) {
                 if (isStarted()) {
                     stop();
-                    mBigVideoSwitch.setVisibility(VISIBLE);
+                    mScreenCenterVideoControl.setVisibility(VISIBLE);
                 } else {
                     start();
-                    mBigVideoSwitch.setVisibility(GONE);
+                    mScreenCenterVideoControl.setVisibility(GONE);
                 }
             }
         });

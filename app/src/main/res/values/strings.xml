@@ -79,7 +79,9 @@
     <string name="sign_up_free_has_space">注    册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
+    <string name="now_is_not_has_fund_detail">暂无资金明细</string>
     <string name="score_detail">金币明细</string>
+    <string name="now_is_not_has_score_detail">暂无金币明细</string>
     <string name="personal_info">个人信息</string>
     <string name="paid_to_promote">推广赚钱</string>
     <string name="phone_number">手机号</string>
@@ -164,7 +166,9 @@
     <string name="click_to_load_more">点击加载更多</string>
     <string name="there_is_no_message_for_now">暂无任何消息</string>
     <string name="system_message">系统消息</string>
+    <string name="now_is_not_has_system_message">暂无系统消息</string>
     <string name="trade_remind">交易提醒</string>
+    <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
 
     <!-- 修改密码 Modify password-->
     <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
@@ -465,7 +469,6 @@
     <string name="there_is_no_teacher_advise">暂无老师指导</string>
     <string name="live_teacher_order">老师指令:%1$s</string>
 
-
     <!--闪电下单-->
     <string name="open">开  启</string>
     <string name="close">关  闭</string>
@@ -485,4 +488,5 @@
     <string name="feedback_submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>
+
 </resources>

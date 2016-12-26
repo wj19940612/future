@@ -36,6 +36,8 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private TextView mCurrentTime;
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
+    private OnMuteButtonClickListener mOnMuteButtonClickListener;
+    private OnPlayClickListener mOnPlayClickListener;
 
     private ImageView mScreenCenterVideoControl;
 
@@ -105,6 +107,16 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     public interface OnScaleButtonClickListener {
         void onClick(boolean fullscreen);
+    }
+
+    //静音按钮监听
+    public interface OnMuteButtonClickListener {
+        void onClick(boolean isMute);
+    }
+
+    //播放按钮的监听
+    public interface OnPlayClickListener {
+        void onClick(boolean isPlay);
     }
 
     public LivePlayer(Context context) {
@@ -189,6 +201,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOnPlayClickListener != null) {
+                    mOnPlayClickListener.onClick(isStarted());
+                }
                 if (isStarted()) {
                     stop();
                     mScreenCenterVideoControl.setVisibility(VISIBLE);
@@ -221,6 +236,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOnMuteButtonClickListener != null) {
+                    mOnMuteButtonClickListener.onClick(isMute());
+                }
                 if (isMute()) {
                     setMute(false);
                 } else {
@@ -241,6 +259,15 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public void setOnScaleButtonClickListener(OnScaleButtonClickListener onScaleButtonClickListener) {
         mOnScaleButtonClickListener = onScaleButtonClickListener;
     }
+
+    public void setOnMuteButtonClickListener(OnMuteButtonClickListener onMuteButtonClickListener) {
+        this.mOnMuteButtonClickListener = onMuteButtonClickListener;
+    }
+
+    public void setOnPlayClickListener(OnPlayClickListener onPlayClickListener) {
+        this.mOnPlayClickListener = onPlayClickListener;
+    }
+
 
     @Override
     public void show() {

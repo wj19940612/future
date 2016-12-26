@@ -116,9 +116,6 @@
             android:name=".activity.account.RechargeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.FundDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.account.MessageCenterActivity"
             android:screenOrientation="portrait"/>
         <activity

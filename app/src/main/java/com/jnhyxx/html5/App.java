@@ -31,6 +31,10 @@ public class App extends MultiDexApplication {
         UmengLib.init(sContext);
 
         MobclickAgent.setDebugMode(true);
+        /**
+         * 禁止友盟的默认统计方式，可以统计fragment
+         */
+        MobclickAgent.openActivityDurationTrack(false);
 
         if (!BuildConfig.DEBUG) {
             handleUncaughtException();

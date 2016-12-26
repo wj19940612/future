@@ -21,8 +21,10 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.BlurEngine;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.StopProfitLossPicker;
 import com.johnz.kutils.FinanceUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.math.BigDecimal;
 
@@ -96,8 +98,10 @@ public class SetStopProfitLossFragment extends BaseFragment {
                 if (mCallback != null) {
                     mCallback.onSetStopProfitLossFragmentCloseTriggered();
                 }
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET_STOP_PROFIT_STOP_LOSS_CANCEL);
                 break;
             case R.id.confirmSetting:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET_STOP_PROFIT_STOP_LOSS_OK);
                 double newStopLossPrice = mStopLossPicker.getPrice();
                 double newStopProfitPrice = mStopProfitPicker.getPrice();
                 if (mCallback != null) {

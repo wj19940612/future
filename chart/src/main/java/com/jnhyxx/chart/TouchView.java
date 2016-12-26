@@ -2,6 +2,7 @@ package com.jnhyxx.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 public class TouchView extends TrendChart {
 
@@ -49,10 +50,24 @@ public class TouchView extends TrendChart {
     }
 
     @Override
+    protected int calculateTouchIndex(MotionEvent e) {
+        int touchIndex = super.calculateTouchIndex(e);
+        if (getVisibleList() != null && getVisibleList().size() > 0) {
+            touchIndex = Math.min(touchIndex, getVisibleList().size() - 1);
+        }
+        return touchIndex;
+    }
+
+    @Override
     protected boolean hasThisTouchIndex(int touchIndex) {
         if (getVisibleList() != null && getVisibleList().get(touchIndex) != null) {
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
+    }
+
+    @Override
+    protected boolean shouldDrawTouchLines() {
+        return true;
     }
 }

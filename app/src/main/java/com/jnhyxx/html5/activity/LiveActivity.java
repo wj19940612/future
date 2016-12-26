@@ -40,6 +40,7 @@ import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
@@ -47,6 +48,7 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.android.volley.Request.Method.HEAD;
 
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
@@ -133,6 +137,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
             public void onTeacherHeadClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TEACHER_IMAGE);
                 showTeacherInfoDialog();
             }
 
@@ -145,9 +150,24 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mLivePlayer.setOnScaleButtonClickListener(new LivePlayer.OnScaleButtonClickListener() {
             @Override
             public void onClick(boolean fullscreen) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_FULL_SCREEN);
                 if (fullscreen) {
                     mKeyBoardHelper.setOnKeyBoardStatusChangeListener(null);
                 }
+            }
+        });
+
+        mLivePlayer.setOnMuteButtonClickListener(new LivePlayer.OnMuteButtonClickListener() {
+            @Override
+            public void onClick(boolean isMute) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_MUTE);
+            }
+        });
+
+        mLivePlayer.setOnPlayClickListener(new LivePlayer.OnPlayClickListener() {
+            @Override
+            public void onClick(boolean isPlay) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_PLAY);
             }
         });
 
@@ -216,6 +236,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showEditTextButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
                     if (mTeacher != null) {
                         if (getLiveInteractionFragment() != null) {
@@ -364,8 +385,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             public void onPageSelected(int position) {
                 mSelectedPage = position;
                 if (position == POS_LIVE_INTERACTION) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_INTERACT);
                     mShowEditTextButton.setVisibility(View.VISIBLE);
                 } else if (position == POS_TEACHER_ADVISE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TEACHER_GUIDE);
                     mShowEditTextButton.setVisibility(View.GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
@@ -391,6 +414,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (getLiveInteractionFragment() != null) {
+                    getLiveInteractionFragment().hideInputBox();
+                }
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TRADE);
                 switchToTradePage();
             }
         });
@@ -399,6 +426,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PROGRAMME);
                 showLiveProgramme();
             }
         });
@@ -499,16 +527,12 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                             }
                         } else {
                             for (Product product : mProductList) {
-                                if (product.getVarietyId() == Product.ID_US_CRUDE) {
+                                if (product.getVarietyType().equalsIgnoreCase(Product.VARIETY_TYPE_US_CRUDE)) {
                                     enterProduct = product;
                                 }
                             }
                         }
                         if (enterProduct != null) {
-                            if (getLiveInteractionFragment() != null) {
-                                getLiveInteractionFragment().hideInputBox();
-                            }
-
                             Launcher.with(getActivity(), TradeActivity.class)
                                     .putExtra(Product.EX_PRODUCT, enterProduct)
                                     .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)

@@ -22,6 +22,10 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         void onClick();
     }
 
+    public interface OnTabClickListener {
+        void onClick(int tabId);
+    }
+
     private static final int PADDING_IN_DP = 12;
 
     public static final int POS_TREND = 0;
@@ -33,6 +37,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private RelativeLayout mTabsLayout;
     private FrameLayout mContainer;
     private OnLiveEnterClickListener mOnLiveEnterClickListener;
+    private OnTabClickListener mOnTabClickListener;
 
     public ChartContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -110,6 +115,11 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mOnLiveEnterClickListener = onLiveEnterClickListener;
     }
 
+    public void setOnTabClickListener(OnTabClickListener onTabClickListener) {
+        mOnTabClickListener = onTabClickListener;
+    }
+
+
 //    private void initPopupWindow() {
 //        //View popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window_kline, null);
 //        LinearLayout popupViewGroup = (LinearLayout) popupView;
@@ -167,6 +177,13 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         addView(mTabsLayout, params);
     }
 
+    public void setLiveEnterVisible(boolean visible) {
+        View liveEnter = mTabsLayout.getChildAt(POS_LIVE_ENTER);
+        if (liveEnter != null) {
+            liveEnter.setVisibility(visible ? VISIBLE : GONE);
+        }
+    }
+
     private View createLiveEnter() {
         int paddingPx = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());
@@ -177,8 +194,15 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_live_enter, 0);
         view.setCompoundDrawablePadding(paddingPx / 3);
         view.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
-        view.setId(R.string.live);
-        view.setOnClickListener(this);
+        view.setVisibility(GONE);
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnLiveEnterClickListener != null) {
+                    mOnLiveEnterClickListener.onClick();
+                }
+            }
+        });
         return view;
     }
 
@@ -201,19 +225,26 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         switch (v.getId()) {
             case R.string.trend_chart:
                 onTabClick(POS_TREND);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_TREND);
+                }
                 break;
             case R.string.flash_chart:
                 onTabClick(POS_FLASH);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_FLASH);
+                }
                 break;
             case R.string.plate:
                 onTabClick(POS_PLATE);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_PLATE);
+                }
                 break;
             case R.string.day_k_line:
                 onTabClick(POS_KLINE);
-                break;
-            case R.string.live:
-                if (mOnLiveEnterClickListener != null) {
-                    mOnLiveEnterClickListener.onClick();
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_KLINE);
                 }
                 break;
         }

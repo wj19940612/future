@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.SlidingTabLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +29,13 @@ public class InfoFragment extends BaseFragment {
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
     private Unbinder mBinder;
+
+    /**
+     * 资讯直播 行情分析 行业资讯的tab position
+     */
+    private static final int MESSAGE_LIVE = 0;
+    private static final int MARKET_ANALYZE = 1;
+    private static final int MARKET_MESSAGE = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +53,28 @@ public class InfoFragment extends BaseFragment {
         mViewPager.setAdapter(new InfoPagersAdapter(getChildFragmentManager(), getActivity()));
         mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == MESSAGE_LIVE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MESSAGE_LIVE);
+                } else if (position == MARKET_ANALYZE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MARKET_ANALYZE);
+                } else if (position == MARKET_MESSAGE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MARKET_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     static class InfoPagersAdapter extends FragmentPagerAdapter {

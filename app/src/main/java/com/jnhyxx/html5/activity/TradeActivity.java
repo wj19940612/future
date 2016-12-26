@@ -51,6 +51,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
@@ -63,6 +64,7 @@ import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.StrUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Collections;
 import java.util.List;
@@ -197,16 +199,19 @@ public class TradeActivity extends BaseActivity implements
 
             @Override
             public void onOrderListButtonClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ORDER);
                 openOrdersPage();
             }
 
             @Override
             public void onOneKeyClosePosButtonClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TRADE_ONE_KEY_CLOSE_OUT);
                 mHoldingOrderPresenter.closeAllHoldingPositions();
             }
 
             @Override
             public void onProfitAreaClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TRADE_POSITIONS_STATUS);
                 openOrdersPage();
             }
         });
@@ -221,6 +226,25 @@ public class TradeActivity extends BaseActivity implements
                 switchToLivePage();
             }
         });
+        mChartContainer.setOnTabClickListener(new ChartContainer.OnTabClickListener() {
+            @Override
+            public void onClick(int tabId) {
+                switch (tabId) {
+                    case ChartContainer.POS_TREND:
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TIME_SHARDED);
+                        break;
+                    case ChartContainer.POS_FLASH:
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIGHTNING);
+                        break;
+                    case ChartContainer.POS_PLATE:
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HANDICAP);
+                        break;
+                    case ChartContainer.POS_KLINE:
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.DAY_K);
+                        break;
+                }
+            }
+        });
 
         updateTitleBar(); // based on product
         updateSignTradePagerHeader();
@@ -228,6 +252,7 @@ public class TradeActivity extends BaseActivity implements
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
     }
+
 
     private void switchToLivePage() {
         if (getCallingActivity() != null
@@ -402,6 +427,7 @@ public class TradeActivity extends BaseActivity implements
         productRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.GAME_RULES);
                 Launcher.with(getActivity(), WebViewActivity.class)
                         .putExtra(WebViewActivity.EX_TITLE, mProduct.getVarietyName() + getString(R.string.play_rule))
                         .putExtra(WebViewActivity.EX_URL, API.getTradeRule(mProduct.getVarietyId()))
@@ -448,20 +474,25 @@ public class TradeActivity extends BaseActivity implements
         switch (view.getId()) {
             case R.id.buyLongBtn:
                 if (mLightningOrderBtn.isSelected()) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIGHTNING_BUY_RISE_OR_BUY_DROP);
                     placeLightningOrder(LightningOrderAsset.TYPE_BUY_LONG);
                 } else {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BUY_RISE_OR_BUY_DROP);
                     placeOrder(PlaceOrderFragment.TYPE_BUY_LONG);
                 }
 
                 break;
             case R.id.sellShortBtn:
                 if (mLightningOrderBtn.isSelected()) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIGHTNING_BUY_RISE_OR_BUY_DROP);
                     placeLightningOrder(LightningOrderAsset.TYPE_SELL_SHORT);
                 } else {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BUY_RISE_OR_BUY_DROP);
                     placeOrder(PlaceOrderFragment.TYPE_SELL_SHORT);
                 }
                 break;
             case R.id.lightningOrderBtn:
+                MobclickAgent.onEvent(getActivity(), mLightningOrderBtn.isSelected() ? UmengCountEventIdUtils.LIGHTNING_OPEN_DOOR : UmengCountEventIdUtils.LIGHTNING_CLOSE_DOOR);
                 openLightningOrdersPage();
                 break;
         }
@@ -695,6 +726,7 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Product product = (Product) adapterView.getItemAtPosition(position);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MENU_SELECT_PRODUCT);
                 if (product != null) {
                     if (product.getVarietyId() == mProduct.getVarietyId()) {
                         mProductChanged = false;

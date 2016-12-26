@@ -703,6 +703,7 @@ public class TradeActivity extends BaseActivity implements
                         mProduct = product;
                         mProductChanged = true;
                         mMenu.toggle();
+                        mFullMarketData = null;
 
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product

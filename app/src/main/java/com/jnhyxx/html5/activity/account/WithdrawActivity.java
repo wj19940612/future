@@ -20,12 +20,14 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,6 +90,7 @@ public class WithdrawActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_RECORD);
                 Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
             }
         });
@@ -138,6 +141,7 @@ public class WithdrawActivity extends BaseActivity {
     void doConfirmButtonClick() {
         String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
         if (!TextUtils.isEmpty(withdrawAmount)) {
+            MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_OK);
             final double amount = Double.valueOf(withdrawAmount);
             API.Finance.withdraw(amount)
                     .setTag(TAG).setIndeterminate(this)

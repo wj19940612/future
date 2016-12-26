@@ -16,9 +16,11 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.MsgListFragment;
 import com.jnhyxx.html5.fragment.TradeHintListFragment;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +57,7 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TRADE_HINT);
                     if (!LocalUser.getUser().isLogin()) {
                         SmartDialog.with(getActivity(), getString(R.string.no_login))
                                 .setCancelableOnTouchOutside(false)
@@ -74,6 +77,8 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
                                     }
                                 }).show();
                     }
+                }else {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SYSTEM_MESSAGE);
                 }
             }
 
@@ -140,6 +145,7 @@ public class MessageCenterActivity extends BaseActivity implements MsgListFragme
 
     @Override
     public void onMsgItemClick(SysMessage sysMessage) {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SYSTEM_MESSAGE_DETAILS);
         Launcher.with(getActivity(), MessageCenterListItemInfoActivity.class)
                 .putExtra(Launcher.EX_PAYLOAD, sysMessage).execute();
     }

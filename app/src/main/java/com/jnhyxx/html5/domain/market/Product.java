@@ -9,6 +9,10 @@ public class Product implements Parcelable {
     public static final String EX_FUND_TYPE = "fund";
     public static final String EX_PRODUCT_LIST = "productList";
 
+    /**
+     * 1  实盘
+     * 0  金币，模拟交易
+     */
     public static final int FUND_TYPE_CASH = 1;
     public static final int FUND_TYPE_SIMULATION = 0;
 
@@ -50,6 +54,7 @@ public class Product implements Parcelable {
     private double flashChartPriceInterval;
     private String varietyType;
     private int baseline;
+    // 1 国内品种  0 国际品种
     private int isDomestic;
     private int tags;
     private int exchangeId;

@@ -32,11 +32,13 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -367,6 +369,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     @OnClick(R.id.sendButton)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SEND_SPEAK);
         if (mOnSendButtonClickListener != null) {
             String message = ViewUtil.getTextTrim(mInputBox);
             mOnSendButtonClickListener.onSendButtonClick(message);

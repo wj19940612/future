@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity {
         mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
             public void onTabClick(int position) {
-                if (position == BottomTabs.live_tab_index) {
+                if (position == BottomTabs.TAB_LIVE_INDEX) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);

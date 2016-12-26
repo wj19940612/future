@@ -228,7 +228,7 @@ public class TradeActivity extends BaseActivity implements
         mChartContainer.setOnTabClickListener(new ChartContainer.OnTabClickListener() {
             @Override
             public void onClick(int tabId) {
-                chartOnclick(tabId);
+                setChartTabOnclick(tabId);
             }
         });
 
@@ -239,7 +239,7 @@ public class TradeActivity extends BaseActivity implements
         updateLightningOrderView(); // based on product
     }
 
-    private void chartOnclick(int tabId) {
+    private void setChartTabOnclick(int tabId) {
         switch (tabId) {
             case ChartContainer.POS_TREND:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TIME_SHARDED);

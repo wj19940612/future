@@ -1,10 +1,9 @@
 package com.jnhnxx.livevideo;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -45,7 +44,13 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public void start() {
         mPlayer.start();
         mPauseButton.setImageResource(R.drawable.media_controller_stop);
-        setBackgroundColor(android.R.color.black);
+        mScreenCenterVideoControl.setVisibility(GONE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setBackground(null);
+        } else {
+            setBackgroundColor(android.R.color.black);
+        }
+        mPlayer.setEnabled(true);
     }
 
     @Override
@@ -53,6 +58,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.stop();
         mPauseButton.setImageResource(R.drawable.media_controller_start);
         setBackgroundResource(R.drawable.bg_live_not_has_content);
+        mScreenCenterVideoControl.setVisibility(VISIBLE);
+        mPlayer.setEnabled(false);
+        hide();
     }
 
     @Override
@@ -151,36 +159,25 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.setPlayerController(this);
         mPlayer.setBufferingView(mBufferingView);
 
-        setBackgroundResource(R.drawable.bg_live_not_has_content);
 
         mScreenCenterVideoControl = createScreenCenterVideoControlView();
-        if (mScreenCenterVideoControl != null) {
-            if (mPlayer.isStarted()) {
-                mScreenCenterVideoControl.setVisibility(GONE);
-            } else {
-                mScreenCenterVideoControl.setVisibility(VISIBLE);
-            }
-        }
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(mScreenCenterVideoControl, layoutParams);
+
+        setBackgroundResource(R.drawable.bg_live_not_has_content);
     }
 
     //播放器中间的视屏控制开关
     private ImageView createScreenCenterVideoControlView() {
         mScreenCenterVideoControl = new ImageView(getContext());
         mScreenCenterVideoControl.setScaleType(ImageView.ScaleType.CENTER);
-        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_live_stop_screen_center);
-        mScreenCenterVideoControl.setImageDrawable(drawable);
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        addView(mScreenCenterVideoControl, layoutParams);
-        mScreenCenterVideoControl.setClickable(true);
+        mScreenCenterVideoControl.setImageResource(R.drawable.ic_live_stop_screen_center);
         mScreenCenterVideoControl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mPlayer.isStarted()) {
                     start();
-                    mScreenCenterVideoControl.setVisibility(GONE);
-                } else {
-                    stop();
                 }
             }
         });
@@ -206,10 +203,8 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
                 }
                 if (isStarted()) {
                     stop();
-                    mScreenCenterVideoControl.setVisibility(VISIBLE);
                 } else {
                     start();
-                    mScreenCenterVideoControl.setVisibility(GONE);
                 }
             }
         });
@@ -288,7 +283,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     @Override
     public void hide() {
-        if (mShowing) {
+        if (mShowing ) {
             mHandler.removeMessages(SHOW);
             mController.setVisibility(GONE);
             mShowing = false;

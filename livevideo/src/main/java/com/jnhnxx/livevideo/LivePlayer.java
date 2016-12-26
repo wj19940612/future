@@ -45,6 +45,8 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
 
+    private ImageView mBigVideoSwitch;
+
     @Override
     public void start() {
         mPlayer.start();
@@ -152,28 +154,25 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     }
 
     private ImageView createBigStartButton() {
-//        mPauseButton.setImageResource(R.drawable.media_controller_stop);
-//        mPauseButton.setImageResource(R.drawable.media_controller_start);
-
-        final ImageView imageView = new ImageView(getContext());
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        mBigVideoSwitch = new ImageView(getContext());
+        mBigVideoSwitch.setScaleType(ImageView.ScaleType.CENTER);
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_launcher);
-        imageView.setImageDrawable(drawable);
+        mBigVideoSwitch.setImageDrawable(drawable);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        addView(imageView, layoutParams);
-        imageView.setClickable(true);
-        imageView.setOnClickListener(new OnClickListener() {
+        addView(mBigVideoSwitch, layoutParams);
+        mBigVideoSwitch.setClickable(true);
+        mBigVideoSwitch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "点击了图片", Toast.LENGTH_SHORT).show();
                 mPlayer.setBufferingView(mBufferingView);
                 if (mPlayer.isStarted()) {
-                    imageView.setVisibility(GONE);
+                    mBigVideoSwitch.setVisibility(GONE);
                 }
             }
         });
-        return imageView;
+        return mBigVideoSwitch;
     }
 
     private int dp2px(float dp) {
@@ -192,8 +191,10 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             public void onClick(View v) {
                 if (isStarted()) {
                     stop();
+                    mBigVideoSwitch.setVisibility(VISIBLE);
                 } else {
                     start();
+                    mBigVideoSwitch.setVisibility(GONE);
                 }
             }
         });

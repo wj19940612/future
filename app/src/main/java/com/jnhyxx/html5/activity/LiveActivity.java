@@ -513,7 +513,10 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        List<HomePositions.CashOpSBean> cashOpSBeanList = homePositions.getCashOpS();
+                        List<HomePositions.CashOpSBean> cashOpSBeanList = null;
+                        if (homePositions != null) {
+                            cashOpSBeanList = homePositions.getCashOpS();
+                        }
                         Product enterProduct = null;
                         if (cashOpSBeanList != null && cashOpSBeanList.size() > 0) { // has cash positions
                             HomePositions.CashOpSBean cashOpSBean = cashOpSBeanList.get(0);
@@ -546,7 +549,11 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 && getCallingActivity().getClassName().equals(TradeActivity.class.getName())) {
             finish();
         } else {
-            requestPositions();
+            if (LocalUser.getUser().isLogin()) {
+                requestPositions();
+            } else {
+                requestProductList(null);
+            }
         }
     }
 

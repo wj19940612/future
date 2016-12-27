@@ -1,15 +1,15 @@
 package com.jnhnxx.livevideo;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,7 +19,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private static final String TAG = "LivePlayer";
 
-    private static final int sDefaultTimeout = 3000; // 3000ms;
+    private static final int DEFAULT_TIMEOUT = 3500; // 3000ms;
     private static final int FADE_OUT = 1;
     private static final int SHOW = 2;
 
@@ -38,29 +38,20 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private OnMuteButtonClickListener mOnMuteButtonClickListener;
     private OnPlayClickListener mOnPlayClickListener;
 
-    private ImageView mScreenCenterVideoControl;
+    private LinearLayout mCenterPauseView;
 
     @Override
     public void start() {
         mPlayer.start();
         mPauseButton.setImageResource(R.drawable.media_controller_stop);
-        mScreenCenterVideoControl.setVisibility(GONE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            setBackground(null);
-        } else {
-            setBackgroundColor(android.R.color.black);
-        }
-        mPlayer.setEnabled(true);
+        mCenterPauseView.setVisibility(GONE);
     }
 
     @Override
     public void stop() {
         mPlayer.stop();
         mPauseButton.setImageResource(R.drawable.media_controller_start);
-        setBackgroundResource(R.drawable.bg_live_not_has_content);
-        mScreenCenterVideoControl.setVisibility(VISIBLE);
-        mPlayer.setEnabled(false);
-        hide();
+        mCenterPauseView.setVisibility(VISIBLE);
     }
 
     @Override
@@ -151,42 +142,38 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mBufferingView.setVisibility(GONE);
         addView(mBufferingView, params);
 
-        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(40));
+        mCenterPauseView = createPauseView();
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(mCenterPauseView, params);
+
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(ALIGN_PARENT_BOTTOM);
         mController = createController();
         mController.setVisibility(GONE);
         addView(mController, params);
+
         mPlayer.setPlayerController(this);
         mPlayer.setBufferingView(mBufferingView);
-
-
-        mScreenCenterVideoControl = createScreenCenterVideoControlView();
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        addView(mScreenCenterVideoControl, layoutParams);
-
-        setBackgroundResource(R.drawable.bg_live_not_has_content);
-        mPlayer.setEnabled(false);
     }
 
-    //播放器中间的视屏控制开关
-    private ImageView createScreenCenterVideoControlView() {
-        mScreenCenterVideoControl = new ImageView(getContext());
-        mScreenCenterVideoControl.setScaleType(ImageView.ScaleType.CENTER);
-        mScreenCenterVideoControl.setImageResource(R.drawable.ic_live_stop_screen_center);
-        mScreenCenterVideoControl.setOnClickListener(new OnClickListener() {
+    private LinearLayout createPauseView() {
+        LinearLayout pauseView = new LinearLayout(getContext());
+        ImageView startButton = new ImageView(getContext());
+        startButton.setScaleType(ImageView.ScaleType.CENTER);
+        startButton.setImageResource(R.drawable.ic_live_stop_screen_center);
+        startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mPlayer.isStarted()) {
-                    start();
-                }
+                start();
             }
         });
-        return mScreenCenterVideoControl;
-    }
-
-    private int dp2px(float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        pauseView.setGravity(Gravity.CENTER);
+        pauseView.setBackgroundResource(R.drawable.bg_player_paused);
+        pauseView.addView(startButton);
+        return pauseView;
     }
 
     private View createBufferingView() {
@@ -199,13 +186,16 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnPlayClickListener != null) {
-                    mOnPlayClickListener.onClick(isStarted());
-                }
                 if (isStarted()) {
                     stop();
+                    if (mOnPlayClickListener != null) {
+                        mOnPlayClickListener.onClick(false);
+                    }
                 } else {
                     start();
+                    if (mOnPlayClickListener != null) {
+                        mOnPlayClickListener.onClick(true);
+                    }
                 }
             }
         });
@@ -215,15 +205,15 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             @Override
             public void onClick(View v) {
                 if (isFullScreen()) {
+                    setFullScreen(false);
                     if (mOnScaleButtonClickListener != null) {
                         mOnScaleButtonClickListener.onClick(false);
                     }
-                    setFullScreen(false);
                 } else {
+                    setFullScreen(true);
                     if (mOnScaleButtonClickListener != null) {
                         mOnScaleButtonClickListener.onClick(true);
                     }
-                    setFullScreen(true);
                 }
             }
         });
@@ -232,13 +222,16 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnMuteButtonClickListener != null) {
-                    mOnMuteButtonClickListener.onClick(isMute());
-                }
                 if (isMute()) {
                     setMute(false);
+                    if (mOnMuteButtonClickListener != null) {
+                        mOnMuteButtonClickListener.onClick(false);
+                    }
                 } else {
                     setMute(true);
+                    if (mOnMuteButtonClickListener != null) {
+                        mOnMuteButtonClickListener.onClick(true);
+                    }
                 }
             }
         });
@@ -264,10 +257,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         this.mOnPlayClickListener = onPlayClickListener;
     }
 
-
     @Override
     public void show() {
-        show(sDefaultTimeout);
+        show(DEFAULT_TIMEOUT);
     }
 
     private void show(int timeout) {
@@ -331,11 +323,11 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private void updateTimes() {
         if (mPlayer != null) {
             long position = mPlayer.getCurrentPosition();
-            mCurrentTime.setText(stringForTime(position));
+            mCurrentTime.setText(formatPosition2Time(position));
         }
     }
 
-    private static String stringForTime(long position) {
+    private static String formatPosition2Time(long position) {
         int totalSeconds = (int) ((position / 1000.0) + 0.5);
 
         int seconds = totalSeconds % 60;

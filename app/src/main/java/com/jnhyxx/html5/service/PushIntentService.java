@@ -10,12 +10,10 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -43,7 +41,7 @@ import com.johnz.kutils.Launcher;
  */
 public class PushIntentService extends GTIntentService {
 
-    private static final String TAG = "GetuiSdkDemo";
+    private static final String TAG = "PushIntentService";
 
     public static final String PUSH_ACTION = "com.jnhyxx.html5.service.PushIntentService";
 
@@ -201,12 +199,14 @@ public class PushIntentService extends GTIntentService {
         builder.setContentTitle(sysMessage.getPushTopic());
         builder.setContentText(sysMessage.getPushContent());
         builder.setContentIntent(pendingIntent);
-        builder.setWhen(DateUtil.getStringToDate(sysMessage.getCreateTime()));
+        if (!TextUtils.isEmpty(sysMessage.getCreateTime())) {
+            builder.setWhen(DateUtil.getStringToDate(sysMessage.getCreateTime()));
+        }
         builder.setAutoCancel(true);
 
-        BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
-        Bitmap bitmap = drawable.getBitmap();
-        builder.setLargeIcon(bitmap);
+//        BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+//        Bitmap bitmap = drawable.getBitmap();
+//        builder.setLargeIcon(bitmap);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

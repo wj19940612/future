@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:src="@drawable/media_controller_mute_on"/>
-
     <ImageView
         android:id="@+id/video_player_scale"
         android:layout_width="wrap_content"

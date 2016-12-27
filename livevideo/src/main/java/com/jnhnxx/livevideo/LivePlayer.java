@@ -81,6 +81,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             mMuteButton.setImageResource(R.drawable.media_controller_mute_off);
         } else {
             mMuteButton.setImageResource(R.drawable.media_controller_mute_on);
+
         }
     }
 

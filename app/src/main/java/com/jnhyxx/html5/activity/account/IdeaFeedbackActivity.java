@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -81,9 +80,9 @@ public class IdeaFeedbackActivity extends BaseActivity {
     private void submitFeedBack(String userName, String realName, String feedBackContent) {
         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK_SUBMIT);
         API.User.submitFeedBack(feedBackContent, null, userName, realName, mFeedbackConnectWay.getText().toString())
-                .setCallback(new Callback2<Resp<JsonObject>, JsonObject>() {
+                .setCallback(new Callback2<Resp<Object>, Object>() {
                     @Override
-                    public void onRespSuccess(JsonObject jsonObject) {
+                    public void onRespSuccess(Object jsonObject) {
                         CustomToast.getInstance().showText(getActivity(), R.string.feedback_submit_success);
                         finish();
                     }

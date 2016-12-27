@@ -31,7 +31,8 @@
             android:id="@+id/videoContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/player_height"
-            android:background="@android:color/black">
+            android:background="@android:color/black"
+            android:keepScreenOn="true">
 
             <com.jnhnxx.livevideo.LivePlayer
                 android:id="@+id/liveVideo"

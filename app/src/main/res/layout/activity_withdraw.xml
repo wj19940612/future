@@ -130,19 +130,14 @@
             android:textColor="@color/redPrimary"
             android:textSize="12sp"/>
 
-        <ScrollView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="8dp"
-                android:paddingLeft="@dimen/common_margin"
-                android:paddingRight="@dimen/common_margin"
-                android:text="@string/prompt_withdraw"
-                android:textColor="@color/colorDisable"
-                android:textSize="12sp"/>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="8dp"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:text="@string/prompt_withdraw"
+            android:textColor="@color/colorDisable"
+            android:textSize="12sp"/>
     </LinearLayout>
 </ScrollView>

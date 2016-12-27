@@ -15,8 +15,10 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CustomToast;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +79,7 @@ public class IdeaFeedbackActivity extends BaseActivity {
     }
 
     private void submitFeedBack(String userName, String realName, String feedBackContent) {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK_SUBMIT);
         API.User.submitFeedBack(feedBackContent, null, userName, realName, mFeedbackConnectWay.getText().toString())
                 .setCallback(new Callback2<Resp<JsonObject>, JsonObject>() {
                     @Override

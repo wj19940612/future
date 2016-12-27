@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
+    android:background="@android:color/transparent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
@@ -47,7 +47,6 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:background="@android:color/white"
         android:id="@+id/managerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -123,7 +122,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:background="@android:color/white"
         android:id="@+id/commonUserLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -179,7 +177,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:background="@android:color/white"
         android:id="@+id/userMineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

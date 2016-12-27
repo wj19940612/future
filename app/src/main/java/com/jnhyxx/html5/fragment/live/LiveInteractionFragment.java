@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
@@ -30,13 +31,14 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -210,9 +212,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
+
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -220,9 +220,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             public void onRefresh() {
                 getChatInfo();
                 setLiveViewStackFromBottom(false);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
     }
@@ -285,12 +282,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                                  mListView.setSelection(mPageSize - 1);
                                              }
                                          } else {
-                                             ToastUtil.curt(R.string.now_is_not_has_more_data);
                                              stopRefreshAnimation();
                                          }
                                      } else {
                                          stopRefreshAnimation();
                                      }
+                                 }
+
+                                 @Override
+                                 public void onFailure(VolleyError volleyError) {
+                                     super.onFailure(volleyError);
+                                     stopRefreshAnimation();
                                  }
                              }
                 ).fire();
@@ -367,6 +369,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     @OnClick(R.id.sendButton)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SEND_SPEAK);
         if (mOnSendButtonClickListener != null) {
             String message = ViewUtil.getTextTrim(mInputBox);
             mOnSendButtonClickListener.onSendButtonClick(message);

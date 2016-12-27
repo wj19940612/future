@@ -7,7 +7,9 @@ import android.view.View;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 public class PaidToPromoteActivity extends WebViewActivity {
 
@@ -20,6 +22,7 @@ public class PaidToPromoteActivity extends WebViewActivity {
             @Override
             public void onClick(View v) {
                 openMyUsersPage();
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MINE_USER);
             }
         });
     }

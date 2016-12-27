@@ -154,7 +154,7 @@ public abstract class ChartView extends View {
             if (msg.what == WHAT_LONG_PRESS || msg.what == WHAT_ONE_CLICK) {
                 mAction = Action.TOUCH;
                 MotionEvent e = (MotionEvent) msg.obj;
-                drawTouchLines(e);
+                triggerTouchLinesRedraw(e);
             }
         }
     }
@@ -220,12 +220,14 @@ public abstract class ChartView extends View {
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
-            drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
-                    left, top, width, topPartHeight,
-                    left, top2, width, getBottomPartHeight(),
-                    canvas);
+            if (shouldDrawTouchLines()) {
+                drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
+                        left, top, width, topPartHeight,
+                        left, top2, width, getBottomPartHeight(),
+                        canvas);
 
-            onTouchLinesAppear(mTouchIndex);
+                onTouchLinesAppear(mTouchIndex);
+            }
         } else {
             onTouchLinesDisappear();
         }
@@ -265,7 +267,7 @@ public abstract class ChartView extends View {
                 mHandler.removeMessages(WHAT_LONG_PRESS);
                 mHandler.removeMessages(WHAT_ONE_CLICK);
                 if (mAction == Action.TOUCH) {
-                    return drawTouchLines(event);
+                    return triggerTouchLinesRedraw(event);
                 }
 
                 return false;
@@ -286,12 +288,14 @@ public abstract class ChartView extends View {
         return super.onTouchEvent(event);
     }
 
-    private boolean drawTouchLines(MotionEvent event) {
-        int newTouchIndex = calculateTouchIndex(event);
-        if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
-            mTouchIndex = newTouchIndex;
-            redraw();
-            return true;
+    private boolean triggerTouchLinesRedraw(MotionEvent event) {
+        if (shouldDrawTouchLines()) {
+            int newTouchIndex = calculateTouchIndex(event);
+            if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
+                mTouchIndex = newTouchIndex;
+                redraw();
+                return true;
+            }
         }
         return false;
     }
@@ -301,6 +305,10 @@ public abstract class ChartView extends View {
     }
 
     protected boolean shouldDrawUnstableData() {
+        return false;
+    }
+
+    protected boolean shouldDrawTouchLines() {
         return false;
     }
 

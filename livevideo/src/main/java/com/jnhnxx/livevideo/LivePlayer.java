@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -20,7 +19,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private static final String TAG = "LivePlayer";
 
-    private static final int sDefaultTimeout = 3000; // 3000ms;
+    private static final int DEFAULT_TIMEOUT = 3500; // 3000ms;
     private static final int FADE_OUT = 1;
     private static final int SHOW = 2;
 
@@ -33,24 +32,26 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private ImageView mPauseButton;
     private ImageView mSetPlayerScaleButton;
     private ImageView mMuteButton;
-    private ProgressBar mProgress;
-    private TextView mEndTime;
     private TextView mCurrentTime;
 
     private OnScaleButtonClickListener mOnScaleButtonClickListener;
     private OnMuteButtonClickListener mOnMuteButtonClickListener;
     private OnPlayClickListener mOnPlayClickListener;
 
+    private LinearLayout mCenterPauseView;
+
     @Override
     public void start() {
         mPlayer.start();
         mPauseButton.setImageResource(R.drawable.media_controller_stop);
+        mCenterPauseView.setVisibility(GONE);
     }
 
     @Override
     public void stop() {
         mPlayer.stop();
         mPauseButton.setImageResource(R.drawable.media_controller_start);
+        mCenterPauseView.setVisibility(VISIBLE);
     }
 
     @Override
@@ -129,6 +130,7 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
 
     private void init() {
         mPlayer = new Player(getContext());
+
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(CENTER_IN_PARENT);
@@ -140,7 +142,14 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mBufferingView.setVisibility(GONE);
         addView(mBufferingView, params);
 
-        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(40));
+        mCenterPauseView = createPauseView();
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        addView(mCenterPauseView, params);
+
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(ALIGN_PARENT_BOTTOM);
         mController = createController();
         mController.setVisibility(GONE);
@@ -150,8 +159,21 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPlayer.setBufferingView(mBufferingView);
     }
 
-    private int dp2px(float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    private LinearLayout createPauseView() {
+        LinearLayout pauseView = new LinearLayout(getContext());
+        ImageView startButton = new ImageView(getContext());
+        startButton.setScaleType(ImageView.ScaleType.CENTER);
+        startButton.setImageResource(R.drawable.ic_live_stop_screen_center);
+        startButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                start();
+            }
+        });
+        pauseView.setGravity(Gravity.CENTER);
+        pauseView.setBackgroundResource(R.drawable.bg_player_paused);
+        pauseView.addView(startButton);
+        return pauseView;
     }
 
     private View createBufferingView() {
@@ -164,13 +186,16 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnPlayClickListener != null) {
-                    mOnPlayClickListener.onClick(isStarted());
-                }
                 if (isStarted()) {
                     stop();
+                    if (mOnPlayClickListener != null) {
+                        mOnPlayClickListener.onClick(false);
+                    }
                 } else {
                     start();
+                    if (mOnPlayClickListener != null) {
+                        mOnPlayClickListener.onClick(true);
+                    }
                 }
             }
         });
@@ -180,15 +205,15 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
             @Override
             public void onClick(View v) {
                 if (isFullScreen()) {
+                    setFullScreen(false);
                     if (mOnScaleButtonClickListener != null) {
                         mOnScaleButtonClickListener.onClick(false);
                     }
-                    setFullScreen(false);
                 } else {
+                    setFullScreen(true);
                     if (mOnScaleButtonClickListener != null) {
                         mOnScaleButtonClickListener.onClick(true);
                     }
-                    setFullScreen(true);
                 }
             }
         });
@@ -197,29 +222,20 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         mMuteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mOnMuteButtonClickListener != null) {
-                    mOnMuteButtonClickListener.onClick(isMute());
-                }
                 if (isMute()) {
                     setMute(false);
+                    if (mOnMuteButtonClickListener != null) {
+                        mOnMuteButtonClickListener.onClick(false);
+                    }
                 } else {
                     setMute(true);
+                    if (mOnMuteButtonClickListener != null) {
+                        mOnMuteButtonClickListener.onClick(true);
+                    }
                 }
             }
         });
 
-        mProgress = (SeekBar) v.findViewById(R.id.media_controller_seekbar);  //进度条
-        if (mProgress != null) {
-            if (mProgress instanceof SeekBar) {
-                SeekBar seeker = (SeekBar) mProgress;
-                seeker.setOnSeekBarChangeListener(mSeekListener);
-                seeker.setThumbOffset(1);
-            }
-            mProgress.setMax(1000);
-        }
-        mProgress.setEnabled(false);
-
-        mEndTime = (TextView) v.findViewById(R.id.media_controller_time_total); //总时长
         mCurrentTime = (TextView) v.findViewById(R.id.media_controller_time_current); //当前播放位置
 
         return v;
@@ -241,10 +257,9 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
         this.mOnPlayClickListener = onPlayClickListener;
     }
 
-
     @Override
     public void show() {
-        show(sDefaultTimeout);
+        show(DEFAULT_TIMEOUT);
     }
 
     private void show(int timeout) {
@@ -308,18 +323,11 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     private void updateTimes() {
         if (mPlayer != null) {
             long position = mPlayer.getCurrentPosition();
-            long duration = mPlayer.getDuration();
-            if (duration > 0) {
-                mEndTime.setText(stringForTime(duration));
-            } else {
-                mEndTime.setText("--:--:--");
-            }
-
-            mCurrentTime.setText(stringForTime(position));
+            mCurrentTime.setText(formatPosition2Time(position));
         }
     }
 
-    private static String stringForTime(long position) {
+    private static String formatPosition2Time(long position) {
         int totalSeconds = (int) ((position / 1000.0) + 0.5);
 
         int seconds = totalSeconds % 60;
@@ -333,72 +341,4 @@ public class LivePlayer extends RelativeLayout implements IPlayerController, IPl
     public boolean isShowing() {
         return mShowing;
     }
-
-    private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
-
-        @Override
-        public void onStartTrackingTouch(SeekBar bar) {
-//            show(3600000);
-//            mDragging = true;
-//
-//            mHandler.removeMessages(SHOW);
-        }
-
-        @Override
-        public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
-//            if (mPlayer.getMediaType().equals("livestream")) {
-//                return;
-//            }
-//
-//            if (!fromuser)
-//                return;
-//
-//            final long newposition = (mDuration * progress) / 1000;
-//            String time = stringForTime(newposition);
-//            if (mInstantSeeking) {
-//                mHandler.removeCallbacks(lastRunnable);
-//                lastRunnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mPlayer.seekTo(newposition);
-//                    }
-//                };
-//                mHandler.postDelayed(lastRunnable, 200);
-//            }
-//
-//            if (mCurrentTime != null)
-//                mCurrentTime.setText(time);
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar bar) {
-//            if (mPlayer.getMediaType().equals("livestream")) {
-//                AlertDialog alertDialog;
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-//                alertDialogBuilder.setTitle("注意");
-//                alertDialogBuilder.setMessage("直播不支持seek操作");
-//                alertDialogBuilder.setCancelable(false)
-//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                ;
-//                            }
-//                        });
-//                alertDialog = alertDialogBuilder.create();
-//                alertDialog.show();
-//                mProgress.setProgress(0);
-//                //return;
-//            }
-//            if (!mPlayer.getMediaType().equals("livestream")) {
-//                if (!mInstantSeeking)
-//                    mPlayer.seekTo((mDuration * bar.getProgress()) / 1000);
-//            }
-//
-//            show(sDefaultTimeout);
-//            mHandler.removeMessages(SHOW);
-//            mDragging = false;
-//            mHandler.sendEmptyMessageDelayed(SHOW, 1000);
-        }
-    };
 }

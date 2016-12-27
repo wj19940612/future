@@ -25,6 +25,7 @@ import com.igexin.sdk.message.FeedbackCmdMessage;
 import com.igexin.sdk.message.GTCmdMessage;
 import com.igexin.sdk.message.GTTransmitMessage;
 import com.igexin.sdk.message.SetTagCmdMessage;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.MainActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
@@ -91,12 +92,15 @@ public class PushIntentService extends GTIntentService {
     @Override
     public void onReceiveClientId(Context context, String clientid) {
         Log.e(TAG, "onReceiveClientId -> " + "clientid = " + clientid);
-
+        // 获取ClientID(CID)
+        // 第三方应用需要将CID上传到第三方服务器，并且将当前用户帐号和CID进行关联，以便日后通过用户帐号查找CID进行消息推送
+        Preference.get().setPushClientId(clientid);
     }
 
     @Override
     public void onReceiveOnlineState(Context context, boolean online) {
         Log.d(TAG, "onReceiveOnlineState -> " + (online ? "online" : "offline"));
+
     }
 
     @Override

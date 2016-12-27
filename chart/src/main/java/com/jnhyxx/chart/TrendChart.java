@@ -23,6 +23,8 @@ public class TrendChart extends ChartView {
     private List<TrendViewData> mDataList;
     private TrendViewData mUnstableData;
     private SparseArray<TrendViewData> mVisibleList;
+    private int mFirstVisibleIndex;
+    private int mLastVisibleIndex;
 
     private TrendView.Settings mSettings;
 
@@ -38,6 +40,8 @@ public class TrendChart extends ChartView {
 
     public void init() {
         mVisibleList = new SparseArray<>();
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
     }
 
     protected void setDashLinePaint(Paint paint) {
@@ -383,8 +387,22 @@ public class TrendChart extends ChartView {
 
     protected float getChartX(TrendViewData model) {
         int indexOfXAxis = getIndexFromDate(model.getHHmm());
+        updateFirstLastVisibleIndex(indexOfXAxis);
         mVisibleList.put(indexOfXAxis, model);
         return getChartX(indexOfXAxis);
+    }
+
+    private void updateFirstLastVisibleIndex(int indexOfXAxis) {
+        mFirstVisibleIndex = Math.min(indexOfXAxis, mFirstVisibleIndex);
+        mLastVisibleIndex = Math.max(indexOfXAxis, mLastVisibleIndex);
+    }
+
+    public int getFirstVisibleIndex() {
+        return mFirstVisibleIndex;
+    }
+
+    public int getLastVisibleIndex() {
+        return mLastVisibleIndex;
     }
 
     @Override

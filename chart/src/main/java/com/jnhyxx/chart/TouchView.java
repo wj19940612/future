@@ -53,7 +53,8 @@ public class TouchView extends TrendChart {
     protected int calculateTouchIndex(MotionEvent e) {
         int touchIndex = super.calculateTouchIndex(e);
         if (getVisibleList() != null && getVisibleList().size() > 0) {
-            touchIndex = Math.min(touchIndex, getVisibleList().size() - 1);
+            touchIndex = Math.max(touchIndex, mTrendChart.getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, mTrendChart.getLastVisibleIndex());
         }
         return touchIndex;
     }

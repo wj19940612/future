@@ -160,13 +160,34 @@
 
     <declare-styleable name="AutofitTextView">
         <!-- Minimum size of the text. -->
-        <attr name="minTextSize" format="dimension" />
+        <attr name="minTextSize" format="dimension"/>
         <!-- Amount of precision used to calculate the correct text size to fit within its
         bounds. Lower precision is more precise and takes more time. -->
-        <attr name="precision" format="float" />
+        <attr name="precision" format="float"/>
         <!-- Defines whether to automatically resize text to fit to the view's bounds. -->
-        <attr name="sizeToFit" format="boolean" />
+        <attr name="sizeToFit" format="boolean"/>
         <!-- Max view width that cannot beyond this -->
-        <attr name="maxViewWidth" format="dimension" />
+        <attr name="maxViewWidth" format="dimension"/>
     </declare-styleable>
+
+
+    //头像上传的dialogFragment的them
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/BottomDialogStyle</item>
+    </style>
+
+    //对话框弹出动画
+
+    <style name="BottomDialogStyle" parent="Animation.AppCompat.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
 </resources>

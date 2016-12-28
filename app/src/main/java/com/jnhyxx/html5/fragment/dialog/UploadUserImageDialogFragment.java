@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,12 +24,12 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.ImageUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,9 +69,8 @@ public class UploadUserImageDialogFragment extends DialogFragment {
     ImageView mTest;
 
     private Unbinder mBind;
-    private File mFile;
     private Uri mUri;
-    private FileInputStream mFileInputStream;
+
 
     public UploadUserImageDialogFragment() {
 
@@ -86,8 +86,7 @@ public class UploadUserImageDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_MinWidth);
-//        setupDialog(this.getDialog(), STYLE_NO_TITLE);
+        setStyle(STYLE_NO_TITLE, R.style.AlertDialogStyle);
     }
 
     @Nullable
@@ -109,13 +108,10 @@ public class UploadUserImageDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         Dialog dialog = getDialog();
         Window window = dialog.getWindow();
-        if (window != null) {
-            window.setGravity(Gravity.BOTTOM);
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        }
-
-        String filePath = SimpleDateFormat.getDateTimeInstance().format(System.currentTimeMillis()) + ".jpg";
-        mFile = new File(Environment.getExternalStorageDirectory(), filePath);
+        window.setGravity(Gravity.BOTTOM);
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
 
@@ -155,11 +151,6 @@ public class UploadUserImageDialogFragment extends DialogFragment {
             switch (requestCode) {
                 case REQ_CODE_TAKE_PHONE_FROM_CAMERA:
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-
-                        String format = SimpleDateFormat.getInstance().format(System.currentTimeMillis());
-                        String format1 = SimpleDateFormat.getDateTimeInstance().format(System.currentTimeMillis());
-                        Log.d(TAG, "文件名  " + format + " " + format1);
-
                         Log.d(TAG, "uri " + mUri);
                         cropImage(mUri);
                     } else {
@@ -174,6 +165,7 @@ public class UploadUserImageDialogFragment extends DialogFragment {
                         try {
                             fileInputStream = new FileInputStream(uri.getPath());
                             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                            Log.d(TAG, "裁剪的bitmap大小" + ImageUtil.getBitmapSize(bitmap));
                             mTest.setImageBitmap(bitmap);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

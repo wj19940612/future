@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -79,7 +80,7 @@ public class ImageUtil {
         return file;
     }
 
-    private File createFile(File root, String fileName) {
+    public File createFile(File root, String fileName) {
         int lastIndexOfSeparator = fileName.lastIndexOf(File.separator);
         if (lastIndexOfSeparator != -1) {
             String subDir = fileName.substring(0, lastIndexOfSeparator);
@@ -97,5 +98,17 @@ public class ImageUtil {
         } else {
             return new File(root, fileName);
         }
+    }
+
+    //计算bitmap大小
+    public static int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        }
+        // 在低版本中用一行的字节x高度
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
     }
 }

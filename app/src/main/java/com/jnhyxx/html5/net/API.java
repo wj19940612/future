@@ -10,6 +10,7 @@ import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -340,6 +341,20 @@ public class API extends APIBase {
                             .put("userName", userName)
                             .put("realName", realName)
                             .put("userPhone", userPhone));
+        }
+
+
+        /**
+         * 接口名：修改用户头像信息
+         * URL  http://域名/user/user/updatePic.do
+         *
+         * @param
+         * @return
+         */
+
+        public static API updateUserHeadImage(File file) {
+            return new API("/user/user/updatePic.do",
+                    new ApiParams());
         }
     }
 

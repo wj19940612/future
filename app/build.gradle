@@ -65,8 +65,8 @@ android {
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 14
-            versionName '1.2.2'
+            versionCode 15
+            versionName '1.2.5'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [

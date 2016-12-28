@@ -97,6 +97,8 @@ public class TrendChart extends ChartView {
         mDataList = null;
         mUnstableData = null;
         mVisibleList.clear();
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
         redraw();
     }
 

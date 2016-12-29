@@ -204,6 +204,15 @@ public class OrderConfigurationSelector extends LinearLayout {
         }
     }
 
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        for (int i = 0; i < this.getChildCount(); i++) {
+            getChildAt(i).setEnabled(enabled);
+        }
+    }
+
     private void highLightFixedItem(int index) {
         getFixedItem(index).setSelected(true);
         int visualSize = Math.min(mNumberOfItems, mMaximum);
@@ -212,13 +221,21 @@ public class OrderConfigurationSelector extends LinearLayout {
         } else if (index == visualSize - 1) {
             getSplitLine(index).setVisibility(INVISIBLE);
         } else {
-            getSplitLine(index).setVisibility(INVISIBLE);
-            getSplitLine(index + 1).setVisibility(INVISIBLE);
+            View splitLine = getSplitLine(index);
+            if (splitLine != null) {
+                splitLine.setVisibility(INVISIBLE);
+            }
+
+            View splitLine1 = getSplitLine(index + 1);
+            if (splitLine1 != null) {
+                splitLine1.setVisibility(INVISIBLE);
+            }
         }
     }
 
     private void unHighLightFixedItem(int index) {
-        getFixedItem(index).setSelected(false);
+        TextView fixedItem = getFixedItem(index);
+        fixedItem.setSelected(false);
         int visualSize = Math.min(mNumberOfItems, mMaximum);
         if (index == 0) {
             getSplitLine(index + 1).setVisibility(VISIBLE);
@@ -275,7 +292,7 @@ public class OrderConfigurationSelector extends LinearLayout {
         TextView textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
         textView.setOnClickListener(mHideItemClickListener);
-        textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+        textView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.text_order_config_selector_item));
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);
         textView.setTag(KEY_POSITION, position);
         textView.setHeight(height);
@@ -288,7 +305,7 @@ public class OrderConfigurationSelector extends LinearLayout {
         TextView textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
         textView.setOnClickListener(mListener);
-        textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
+        textView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.text_order_config_selector_item));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);
         textView.setTag(KEY_POSITION, position);
@@ -300,7 +317,7 @@ public class OrderConfigurationSelector extends LinearLayout {
 
     private View createSplitLine() {
         View view = new View(getContext());
-        view.setBackgroundResource(android.R.color.white);
+        view.setBackgroundResource(R.drawable.bg_order_config_selector_split_line);
         int splineLineWith = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.7f,
                 getResources().getDisplayMetrics());
         LayoutParams params = new LayoutParams(splineLineWith, ViewGroup.LayoutParams.MATCH_PARENT);

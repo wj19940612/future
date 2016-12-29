@@ -1,8 +1,11 @@
 package com.jnhyxx.html5.domain.market;
 
-public class FullMarketData {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+public class FullMarketData implements Parcelable {
 
+    public static final String EX_MARKET_DATA = "marketData";
 
     /**
      * askPrice : 45.14
@@ -38,7 +41,7 @@ public class FullMarketData {
 
     private double askPrice; // 卖一价
     private int askVolume; // 卖一量
-    private double bidPrice; // 买一量
+    private double bidPrice; // 买一价
     private int bidVolume; // 买一量
     private double highestPrice; //当日最高价
     private String instrumentId; // 合约代码
@@ -171,4 +174,83 @@ public class FullMarketData {
                 ", prePositionVolume=" + prePositionVolume +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.askPrice);
+        dest.writeInt(this.askVolume);
+        dest.writeDouble(this.bidPrice);
+        dest.writeInt(this.bidVolume);
+        dest.writeDouble(this.highestPrice);
+        dest.writeString(this.instrumentId);
+        dest.writeDouble(this.lastPrice);
+        dest.writeDouble(this.lowestPrice);
+        dest.writeDouble(this.openPrice);
+        dest.writeDouble(this.preClsPrice);
+        dest.writeDouble(this.preSetPrice);
+        dest.writeDouble(this.settlePrice);
+        dest.writeString(this.tradeDay);
+        dest.writeDouble(this.upDropPrice);
+        dest.writeDouble(this.upDropSpeed);
+        dest.writeLong(this.upTime);
+        dest.writeLong(this.positionVolume);
+        dest.writeLong(this.prePositionVolume);
+        dest.writeDouble(this.downLimitPrice);
+        dest.writeDouble(this.upLimitPrice);
+        dest.writeString(this.exchangeId);
+        dest.writeLong(this.openInterest);
+        dest.writeLong(this.preOpenInterest);
+        dest.writeDouble(this.turnover);
+        dest.writeString(this.upTimeFormat);
+        dest.writeLong(this.volume);
+    }
+
+    public FullMarketData() {
+    }
+
+    protected FullMarketData(Parcel in) {
+        this.askPrice = in.readDouble();
+        this.askVolume = in.readInt();
+        this.bidPrice = in.readDouble();
+        this.bidVolume = in.readInt();
+        this.highestPrice = in.readDouble();
+        this.instrumentId = in.readString();
+        this.lastPrice = in.readDouble();
+        this.lowestPrice = in.readDouble();
+        this.openPrice = in.readDouble();
+        this.preClsPrice = in.readDouble();
+        this.preSetPrice = in.readDouble();
+        this.settlePrice = in.readDouble();
+        this.tradeDay = in.readString();
+        this.upDropPrice = in.readDouble();
+        this.upDropSpeed = in.readDouble();
+        this.upTime = in.readLong();
+        this.positionVolume = in.readLong();
+        this.prePositionVolume = in.readLong();
+        this.downLimitPrice = in.readDouble();
+        this.upLimitPrice = in.readDouble();
+        this.exchangeId = in.readString();
+        this.openInterest = in.readLong();
+        this.preOpenInterest = in.readLong();
+        this.turnover = in.readDouble();
+        this.upTimeFormat = in.readString();
+        this.volume = in.readLong();
+    }
+
+    public static final Creator<FullMarketData> CREATOR = new Creator<FullMarketData>() {
+        @Override
+        public FullMarketData createFromParcel(Parcel source) {
+            return new FullMarketData(source);
+        }
+
+        @Override
+        public FullMarketData[] newArray(int size) {
+            return new FullMarketData[size];
+        }
+    };
 }

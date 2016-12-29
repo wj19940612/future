@@ -5,9 +5,12 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,8 +31,15 @@ public class IconTextRow extends LinearLayout {
     private ColorStateList mSubTextColor;
 
 
+    private int mRightningVisiblity;
+    private CharSequence mRightText;
+    private int mRightTextSize;
+    private int mRightTextColor;
+
     private TextView mTextView;
     private TextView mSubTextView;
+    private TextView mRightTextView;
+
 
     public IconTextRow(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -55,6 +65,11 @@ public class IconTextRow extends LinearLayout {
         mSubText = typedArray.getText(R.styleable.IconTextRow_subText);
         mSubTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_subTextSize, defaultFontSize);
         mSubTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_subTextColor);
+
+        mRightningVisiblity = typedArray.getInt(R.styleable.IconTextRow_rowRightTextVisibility, 0);
+        mRightText = typedArray.getText(R.styleable.IconTextRow_rowRightText);
+        mRightTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowRightTextSize, defaultFontSize);
+        mRightTextColor = typedArray.getColor(R.styleable.IconTextRow_rowRightTextColor, R.color.blackPrimary);
         typedArray.recycle();
     }
 
@@ -91,9 +106,24 @@ public class IconTextRow extends LinearLayout {
         mSubTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSubTextSize);
         mSubTextView.setTextColor(mSubTextColor != null ? mSubTextColor : ColorStateList.valueOf(Color.GRAY));
         if (mSubTextViewBg != null) {
-            mSubTextView.setBackground(mSubTextViewBg);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mSubTextView.setBackground(mSubTextViewBg);
+            } else {
+                mSubTextView.setBackgroundDrawable(mSubTextViewBg);
+            }
         }
         addView(mSubTextView, params);
+
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.weight = 1;
+        params.setMargins(0, 0, padding, 0);
+        mRightTextView = new TextView(getContext());
+        mRightTextView.setText(mRightText);
+        mRightTextView.setGravity(Gravity.RIGHT);
+        mRightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
+        mRightTextView.setTextColor(mRightTextColor);
+        mRightTextView.setVisibility(mRightningVisiblity);
+        addView(mRightTextView, params);
 
         if (mRightIcon != null) {
             ImageView rightImage = new ImageView(getContext());
@@ -125,5 +155,13 @@ public class IconTextRow extends LinearLayout {
 
     public String getSubText() {
         return mSubTextView.getText().toString();
+    }
+
+    public void setRightText(CharSequence charSequence) {
+        mRightTextView.setText(charSequence);
+    }
+
+    public void setRightTextColor(int resId) {
+        mRightTextView.setTextColor(ContextCompat.getColor(getContext(), resId));
     }
 }

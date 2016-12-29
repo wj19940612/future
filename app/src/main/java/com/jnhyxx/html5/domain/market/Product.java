@@ -3,14 +3,16 @@ package com.jnhyxx.html5.domain.market;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class Product implements Serializable, Parcelable {
+public class Product implements Parcelable {
 
     public static final String EX_PRODUCT = "product";
     public static final String EX_FUND_TYPE = "fund";
     public static final String EX_PRODUCT_LIST = "productList";
 
+    /**
+     * 1  实盘
+     * 0  金币，模拟交易
+     */
     public static final int FUND_TYPE_CASH = 1;
     public static final int FUND_TYPE_SIMULATION = 0;
 
@@ -22,11 +24,7 @@ public class Product implements Serializable, Parcelable {
     public static final int TAG_NONE = 0;
 
     private static final int IS_DOMESTIC = 1;
-
-
-
-    //美原油品种id
-    public static  int US_CRUDE_ID = 10;
+    public static final String VARIETY_TYPE_US_CRUDE = "CL";
     /**
      * displayMarketTimes : 06:00;07:00;04:58
      * decimalScale : 0.2
@@ -56,6 +54,7 @@ public class Product implements Serializable, Parcelable {
     private double flashChartPriceInterval;
     private String varietyType;
     private int baseline;
+    // 1 国内品种  0 国际品种
     private int isDomestic;
     private int tags;
     private int exchangeId;

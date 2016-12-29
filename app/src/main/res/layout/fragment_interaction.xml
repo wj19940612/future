@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:background="@android:color/transparent"
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@null"/>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:drawablePadding="16dp"
+            android:drawableTop="@drawable/image_no_record"
+            android:gravity="center_horizontal"
+            android:paddingTop="60dp"
+            android:textColor="@color/emptyViewColor"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="@string/there_is_no_chatting_record"/>
+
+        <LinearLayout
+            android:id="@+id/inputBoxArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="7dp"
+            android:paddingLeft="8.5dp"
+            android:paddingRight="8.5dp"
+            android:paddingTop="7dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/inputBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8.5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_live_speak"
+                android:imeOptions="actionSend"
+                android:inputType="text"
+                android:padding="7dp"
+                android:textColor="@color/blackPrimary"
+                android:textColorHint="@color/grayHint"
+                android:textSize="16sp"
+                tools:text='聊天内容'/>
+
+            <TextView
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue"
+                android:enabled="false"
+                android:gravity="center"
+                android:minHeight="32dp"
+                android:minWidth="50dp"
+                android:text="@string/live_speak_send"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

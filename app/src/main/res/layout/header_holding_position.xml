@@ -35,7 +35,7 @@
                 android:id="@+id/totalProfit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|left"
                 android:maxLines="1"
                 android:textColor="@color/redPrimary"
                 android:textSize="40sp"
@@ -47,21 +47,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="6dp"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|left"
                 android:maxLines="1"
                 android:paddingTop="10dp"
                 android:textColor="@color/redPrimary"
                 android:textSize="14sp"
                 android:visibility="visible"
                 app:maxViewWidth="90dp"
-                tools:text="(+00000000)"/>
+                tools:text="(+000000000)"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/oneKeyClosePositionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/btn_blue"
             android:gravity="center"

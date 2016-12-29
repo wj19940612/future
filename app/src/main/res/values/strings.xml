@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">期货交易通 TEST</string>
+    <string name="app_name">期货 TEST</string>
+
     <string name="install_qq_first">请先安装QQ</string>
     <string name="android_web_agent">ANDROID_AGENT</string>
 
@@ -39,7 +40,8 @@
 
 
     <!-- API -->
-    <string name="api_error_null">服务器返回空数据</string>
+    <string name="api_error_null">服务器空数据</string>
+    <string name="api_error_null_1">服务器空数据(1)</string>
     <string name="api_error_timeout">网络请求超时</string>
     <string name="api_error_network">网络异常</string>
     <string name="api_error_parse">数据解析异常</string>
@@ -77,7 +79,9 @@
     <string name="sign_up_free_has_space">注    册</string>
     <string name="message_center">消息中心</string>
     <string name="fund_detail">资金明细</string>
+    <string name="now_is_not_has_fund_detail">暂无资金明细</string>
     <string name="score_detail">金币明细</string>
+    <string name="now_is_not_has_score_detail">暂无金币明细</string>
     <string name="personal_info">个人信息</string>
     <string name="paid_to_promote">推广赚钱</string>
     <string name="phone_number">手机号</string>
@@ -162,7 +166,9 @@
     <string name="click_to_load_more">点击加载更多</string>
     <string name="there_is_no_message_for_now">暂无任何消息</string>
     <string name="system_message">系统消息</string>
+    <string name="now_is_not_has_system_message">暂无系统消息</string>
     <string name="trade_remind">交易提醒</string>
+    <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
 
     <!-- 修改密码 Modify password-->
     <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
@@ -201,11 +207,18 @@
     <string name="there_is_no_holding_position_records">暂无持仓记录</string>
     <string name="there_is_no_settlements_records">暂无结算记录</string>
     <string name="close_positions">平仓</string>
+    <string name="stop_loss_price">止损价</string>
+    <string name="stop_profit_price">止盈价</string>
     <string name="stop_loss">止损</string>
     <string name="stop_profit">止盈</string>
     <string name="last_price">最新价</string>
     <string name="buying">买处理中</string>
     <string name="selling">卖处理中</string>
+    <string name="set_stop_profit_stop_loss">设置止盈止损</string>
+    <string name="confirm_setting">确认设置</string>
+    <string name="stop_range">( 范围 %1$s~%2$s )</string>
+    <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统%1$s平仓</string>
+    <string name="set_success">设置成功</string>
 
 
     <!-- Order detail page -->
@@ -243,6 +256,7 @@
     <string name="kline_chart">日线图</string>
     <string name="flash_chart">闪电图</string>
     <string name="plate">盘口</string>
+    <string name="day_k_line">日K</string>
     <string name="buy_long">买涨</string>
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>
@@ -282,6 +296,7 @@
     <!--我的界面 Mine -->
     <string name="trade_detail">交易明细</string>
     <string name="about_us">关于我们</string>
+    <string name="user_feedback">用户反馈</string>
     <string name="no_logged">未登录</string>
     <string name="mine_score">%1$s </string>
     <string name="mine_balance">余额 (元)</string>
@@ -397,6 +412,7 @@
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="install_alipay_first">请先安装支付宝</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>
@@ -435,11 +451,48 @@
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
 
-
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 
 
     <!--个人信息界面-->
     <string name="head_image">头像</string>
+    <string name="user_name">用户名</string>
+
+
+    <string name="live_program_dir">节目单</string>
+    <string name="live_interaction">互动</string>
+    <string name="live_teacher_guide">老师指导</string>
+    <string name="buffering">缓冲中</string>
+    <string name="live_teacher_good">擅长</string>
+    <string name="live_teacher_resume">简介</string>
+    <string name="live_type_manager">管理员</string>
+    <string name="live_type_teacher">老师</string>
+    <string name="live_type_mine">我</string>
+    <string name="live_time_is_not">非直播时间段，无法发言</string>
+    <string name="live_speak_send">发送</string>
+    <string name="there_is_no_chatting_record">暂无聊天记录</string>
+    <string name="there_is_no_teacher_advise">暂无老师指导</string>
+    <string name="live_teacher_order">老师指令:%1$s</string>
+
+    <!--闪电下单-->
+    <string name="open">开  启</string>
+    <string name="close">关  闭</string>
+    <string name="restart_open">重新设置</string>
+    <string name="lightning_orders_title">闪电下单</string>
+    <string name="lightning_orders_open">闪电下单已开启</string>
+    <string name="lightning_orders_close">闪电下单已关闭</string>
+    <string name="lightning_buy_long">闪电买涨</string>
+    <string name="lightning_buy_short">闪电买跌</string>
+    <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
+    <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
+
+    <!--意见反馈-->
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
+    <string name="feedback_user_phone">QQ、微信或手机号</string>
+    <string name="feedback_submit">提    交</string>
+    <string name="feedback_content_number">200</string>
+    <string name="feedback_submit_success">感谢您的反馈</string>
+
 </resources>

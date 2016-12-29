@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:state_selected="true">
+    <item android:state_enabled="true" android:state_selected="true">
         <shape>
             <corners
                 android:bottomLeftRadius="2dp"
@@ -20,6 +19,17 @@
                 android:topLeftRadius="2dp"
                 android:topRightRadius="2dp"/>
             <solid android:color="#77358CF3"/>
+        </shape>
+    </item>
+
+    <item android:state_enabled="false" android:state_selected="true">
+        <shape>
+            <corners
+                android:bottomLeftRadius="2dp"
+                android:bottomRightRadius="2dp"
+                android:topLeftRadius="2dp"
+                android:topRightRadius="2dp"/>
+            <solid android:color="@color/colorDisable"/>
         </shape>
     </item>
 

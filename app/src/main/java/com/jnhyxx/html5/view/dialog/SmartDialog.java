@@ -32,6 +32,7 @@ public class SmartDialog {
     private OnClickListener mPositiveListener;
     private OnClickListener mNegativeListener;
     private OnCancelListener mOnCancelListener;
+    private OnDismissListener mDismissListener;
 
     private boolean mIsDoubleButtons;
 
@@ -49,6 +50,10 @@ public class SmartDialog {
 
     public interface OnCancelListener {
         void onCancel(Dialog dialog);
+    }
+
+    public interface OnDismissListener {
+        void onDismiss(Dialog dialog);
     }
 
     private static Map<String, List<SmartDialog>> mListMap = new HashMap<>();
@@ -139,6 +144,11 @@ public class SmartDialog {
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         mDialog.getWindow().setLayout((int) (displayMetrics.widthPixels * scale),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    public SmartDialog setOnDismissListener(OnDismissListener onDismissListener) {
+        mDismissListener = onDismissListener;
+        return this;
     }
 
     public SmartDialog setPositive(int textId, OnClickListener listener) {
@@ -232,6 +242,14 @@ public class SmartDialog {
                     if (mActivity != null) {
                         mActivity.finish();
                     }
+                }
+            }
+        });
+        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (mDismissListener != null) {
+                    mDismissListener.onDismiss(mDialog);
                 }
             }
         });

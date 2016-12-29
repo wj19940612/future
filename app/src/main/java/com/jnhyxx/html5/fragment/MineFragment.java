@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
+import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
@@ -20,6 +21,7 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.setting.SettingsActivity;
+import com.jnhyxx.html5.activity.userinfo.UserInfoActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -30,6 +32,7 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -37,6 +40,7 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,6 +92,8 @@ public class MineFragment extends BaseFragment {
     TitleBar mTitleBar;
     @BindView(R.id.headImage)
     CircularAnnulusImageView mHeadImage;
+    @BindView(R.id.feedback)
+    IconTextRow mFeedback;
 
     private Unbinder mBinder;
 
@@ -107,7 +113,9 @@ public class MineFragment extends BaseFragment {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Launcher.with(getActivity(), SettingsActivity.class).execute();
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET);
+//                Launcher.with(getActivity(), SettingsActivity.class).execute();
+                Launcher.with(getActivity(), UserInfoActivity.class).execute();
             }
         });
     }
@@ -168,44 +176,56 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage, R.id.feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGIN);
                 Launcher.with(getActivity(), SignInActivity.class).execute();
                 break;
             case R.id.signUpButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REGISTER);
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             case R.id.recharge: //充值
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE);
                 Launcher.with(getActivity(), RechargeActivity.class).execute();
                 break;
             case R.id.withdraw: //提现
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW);
                 Launcher.with(getActivity(), WithdrawActivity.class).execute();
                 break;
             case R.id.messageCenter:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MESSAGE_CENTER);
                 Launcher.with(getActivity(), MessageCenterActivity.class).execute();
                 break;
             case R.id.tradeDetail:
                 openTradeDetailPage();
                 break;
             case R.id.aboutUs:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ABOUT_US);
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
             case R.id.paidToPromote:
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
                     Launcher.with(getActivity(), SettingsActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).execute();
                 }
                 break;
+            case R.id.feedback:
+                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.FEED_BACK);
+                Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
+                break;
         }
     }
 
     private void openPaidToPromotePage() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.EXPAND_EARN_MONEY);
         if (LocalUser.getUser().isLogin()) {
             API.User.getPromoteCode().setTag(TAG).setIndeterminate(this)
                     .setCallback(new Callback<Resp<JsonObject>>() {

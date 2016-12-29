@@ -55,10 +55,11 @@
         android:progressDrawable="@drawable/progress_horizontal"
         android:visibility="visible"/>
 
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:scrollbars="none"/>

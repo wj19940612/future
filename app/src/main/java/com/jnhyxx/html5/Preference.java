@@ -3,7 +3,10 @@ package com.jnhyxx.html5;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 
 public class Preference {
 
@@ -20,6 +23,8 @@ public class Preference {
         String SERVICE_PHONE = "servicePhone";
         String SERVICE_QQ = "serviceQQ";
         String SYS_MESSAGE_ID = "sys_message_id";
+        String LAST_TEACHER_COMMAND = "last_teacher_command";
+        String SERVER_IP_PORT = "server_ip_port";
     }
 
     private static Preference sInstance;
@@ -122,14 +127,56 @@ public class Preference {
     }
 
     public boolean hasShowedThisSysMessage(SysMessage sysMessage) {
-        String sysMessageId = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
-        if (sysMessageId.equals(sysMessage.getId())) {
+        String sysMessageCreateTime = mPrefs.getString(Key.SYS_MESSAGE_ID, "");
+        if (sysMessageCreateTime.equals(sysMessage.getCreateTime())) {
             return true;
         }
         return false;
     }
 
     public void setThisSysMessageShowed(SysMessage sysMessage) {
-        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getId()).apply();
+        getEditor().putString(Key.SYS_MESSAGE_ID, sysMessage.getCreateTime()).apply();
+    }
+
+    public boolean hasShowedThisLastTeacherCommand(LiveHomeChatInfo teacherCommand) {
+        if (teacherCommand != null) {
+            long timeStamp = mPrefs.getLong(Key.LAST_TEACHER_COMMAND, -1);
+            if (teacherCommand.getCreateTime() == timeStamp) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setThisLastTeacherCommandShowed(LiveHomeChatInfo teacherCommand) {
+        if (teacherCommand.getMsg() != null) {
+            getEditor().putLong(Key.LAST_TEACHER_COMMAND, teacherCommand.getCreateTime()).apply();
+        }
+    }
+
+    /**
+     * 存储闪现下单数据
+     *
+     * @param lightningOrderKey           由产品varietyId+用户手机号码+支付方式组成
+     * @param lightningOrderAsset
+     */
+    public void setLightningOrderAsset(String lightningOrderKey, LightningOrderAsset lightningOrderAsset) {
+        getEditor().putString(lightningOrderKey, new Gson().toJson(lightningOrderAsset)).commit();
+    }
+
+    public LightningOrderAsset getLightningOrderAsset(String lightningOrderKey) {
+        String lightningOrderJson = mPrefs.getString(lightningOrderKey, null);
+        if (lightningOrderJson != null) {
+            return new Gson().fromJson(lightningOrderJson, LightningOrderAsset.class);
+        }
+        return null;
+    }
+
+    public void setMarketServerIpPort(String serverIpPort) {
+        getEditor().putString(Key.SERVER_IP_PORT, serverIpPort).apply();
+    }
+
+    public String getMarketServerIpPort() {
+        return mPrefs.getString(Key.SERVER_IP_PORT, null);
     }
 }

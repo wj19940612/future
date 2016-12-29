@@ -12,6 +12,9 @@ public class Resp<T> {
     // 资金不足
     public static final int CODE_FUND_NOT_ENOUGH = 702;
 
+    //闪电下单已失效
+    public static final int CODE_LIGHTNING_ORDER_INVALID = 703;
+
     private int code;
     private String msg;
     private T data;
@@ -40,8 +43,11 @@ public class Resp<T> {
         return code == 503;
     }
 
+    /**
+     * Check if data is null (null or empty if data is a list)
+     * @return true if has data
+     */
     public boolean hasData() {
-        boolean result = false;
         if (data != null && data instanceof List) {
             return ((List) data).size() > 0;
         }

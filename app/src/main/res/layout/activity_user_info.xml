@@ -13,23 +13,43 @@
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="true"
         app:backFeature="true"
         app:titleText="@string/personal_info"/>
 
-    <LinearLayout
-        android:background="@android:color/white"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:background="@android:color/white"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin">
 
         <TextView
-            android:textColor="@color/blackPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/head_image"/>
-    </LinearLayout>
+            android:text="@string/head_image"
+            android:textColor="@color/colorDisable"/>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/helpArrow"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/helpArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/common_big_arrow_list_icon_more"/>
+    </RelativeLayout>
+
+    <include layout="@layout/spilt_line_gray_light"/>
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/messageCenter"
@@ -37,7 +57,12 @@
         android:layout_height="60dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-        app:rowText="@string/message_center"
+        app:rightIconVisibility="visible"
+        app:rowRightText="操盘手2525"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/user_name"
         app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
         app:subTextColor="@android:color/white"/>
+    <include layout="@layout/spilt_line_gray_light"/>
 </LinearLayout>

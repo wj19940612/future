@@ -26,6 +26,7 @@ public abstract class ChartView extends View {
         WHITE("#FFFFFF"),
         FILL("#331D3856"),
         BLUE("#358CF3"),
+        GREEN("#25D282"),
         RED("#FB4B55");
 
         private String value;
@@ -41,22 +42,24 @@ public abstract class ChartView extends View {
 
     private enum Action {
         NONE,
+        TOUCH,
         DRAG,
-        LONG_PRESS,
         ZOOM;
     }
 
     private static final int FONT_SIZE_DP = 8;
     private static final int FONT_BIG_SIZE_DP = 9;
-    private static final int TEXT_MARGIN_WITH_LINE_DP = 5;
+    private static final int TEXT_MARGIN_WITH_LINE_DP = 3;
     private static final int RECT_PADDING_DP = 3;
     private static final int MIDDLE_EXTRA_SPACE_DP = 10;
     private static final int HEIGHT_TIME_LINE_DP = 24;
     private static final float RATIO_OF_TOP = 0.73f;
 
     private static final int WHAT_LONG_PRESS = 1;
-    private static final int DELAY = 400;
-    private static final float CLICK_PIXELS = 2;
+    private static final int WHAT_ONE_CLICK = 2;
+    private static final int DELAY_LONG_PRESS = 400;
+    private static final int DELAY_ONE_CLICK = 100;
+    private static final float CLICK_PIXELS = 1;
 
     public static Paint sPaint;
     private Path mPath;
@@ -87,13 +90,14 @@ public abstract class ChartView extends View {
     private int mTouchIndex; // The position of cross when touch view
     private float mDownX;
     private float mDownY;
+    private Action mAction;
+    private long mElapsedTime;
 
     private float mTransactionX;
     private float mPreviousTransactionX;
     private float mStartX;
     private boolean mDragged;
     private boolean mTouched;
-    private Action mAction;
 
     public ChartView(Context context) {
         super(context);
@@ -147,10 +151,11 @@ public abstract class ChartView extends View {
 
         @Override
         public void handleMessage(Message msg) {
-            MotionEvent e = (MotionEvent) msg.obj;
-            mAction = Action.LONG_PRESS;
-            mTouchIndex = calculateTouchIndex(e);
-            redraw();
+            if (msg.what == WHAT_LONG_PRESS || msg.what == WHAT_ONE_CLICK) {
+                mAction = Action.TOUCH;
+                MotionEvent e = (MotionEvent) msg.obj;
+                triggerTouchLinesRedraw(e);
+            }
         }
     }
 
@@ -205,15 +210,24 @@ public abstract class ChartView extends View {
                 left, top2, width, getBottomPartHeight(),
                 canvas);
 
-        drawTimeLine(left, top + topPartHeight, width, canvas);
-
-        if (mTouchIndex >= 0) {
-            drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
+        if (shouldDrawUnstableData()) {
+            drawUnstableData(mSettings.isIndexesEnable(),
                     left, top, width, topPartHeight,
                     left, top2, width, getBottomPartHeight(),
                     canvas);
+        }
 
-            onTouchLinesAppear(mTouchIndex);
+        drawTimeLine(left, top + topPartHeight, width, canvas);
+
+        if (mTouchIndex >= 0) {
+            if (shouldDrawTouchLines()) {
+                drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
+                        left, top, width, topPartHeight,
+                        left, top2, width, getBottomPartHeight(),
+                        canvas);
+
+                onTouchLinesAppear(mTouchIndex);
+            }
         } else {
             onTouchLinesDisappear();
         }
@@ -229,13 +243,17 @@ public abstract class ChartView extends View {
         return super.dispatchTouchEvent(event);
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
-                mHandler.sendMessageDelayed(message, DELAY);
+                if (mAction == Action.NONE) {
+                    Message message = mHandler.obtainMessage(WHAT_LONG_PRESS, event);
+                    mHandler.sendMessageDelayed(message, DELAY_LONG_PRESS);
+                } else if (mAction == Action.TOUCH) {
+                    Message message = mHandler.obtainMessage(WHAT_ONE_CLICK, event);
+                    mHandler.sendMessageDelayed(message, DELAY_ONE_CLICK);
+                }
 
                 mDownX = event.getX();
                 mDownY = event.getY();
@@ -247,31 +265,50 @@ public abstract class ChartView extends View {
                 }
 
                 mHandler.removeMessages(WHAT_LONG_PRESS);
-                if (mAction == Action.LONG_PRESS) {
-                    int newTouchIndex = calculateTouchIndex(event);
-                    if (newTouchIndex != mTouchIndex) {
-                        if (hasThisTouchIndex(newTouchIndex)) {
-                            mTouchIndex = newTouchIndex;
-                            redraw();
-                            return true;
-                        }
-                    }
+                mHandler.removeMessages(WHAT_ONE_CLICK);
+                if (mAction == Action.TOUCH) {
+                    return triggerTouchLinesRedraw(event);
                 }
 
                 return false;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mHandler.removeMessages(WHAT_LONG_PRESS);
-                mAction = Action.NONE;
-                mTouchIndex = -1;
-                redraw();
+                if (mAction == Action.NONE && mHandler.hasMessages(WHAT_LONG_PRESS)) {
+                    mHandler.removeMessages(WHAT_LONG_PRESS);
+                } else if (mAction == Action.TOUCH && mHandler.hasMessages(WHAT_ONE_CLICK)) {
+                    mHandler.removeMessages(WHAT_ONE_CLICK);
+                    mAction = Action.NONE;
+                    if (mTouchIndex != -1) {
+                        mTouchIndex = -1;
+                        redraw();
+                    }
+                }
                 return true;
         }
-
         return super.onTouchEvent(event);
     }
 
+    private boolean triggerTouchLinesRedraw(MotionEvent event) {
+        if (shouldDrawTouchLines()) {
+            int newTouchIndex = calculateTouchIndex(event);
+            if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
+                mTouchIndex = newTouchIndex;
+                redraw();
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected boolean hasThisTouchIndex(int touchIndex) {
+        return false;
+    }
+
+    protected boolean shouldDrawUnstableData() {
+        return false;
+    }
+
+    protected boolean shouldDrawTouchLines() {
         return false;
     }
 
@@ -321,7 +358,7 @@ public abstract class ChartView extends View {
 
     protected abstract void calculateBaseLines(float[] baselines);
 
-    protected abstract void calculateIndexesBaseLines(float[] indexesBaseLines);
+    protected abstract void calculateIndexesBaseLines(long[] indexesBaseLines);
 
     /**
      * draw top baselines and bottom indexes baselines
@@ -340,9 +377,9 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected abstract void drawBaseLines(boolean indexesEnable,
-            float[] baselines, int left, int top, int width, int height,
-            float[] indexesBaseLines, int left2, int top2, int width2, int height2,
-            Canvas canvas);
+                                          float[] baselines, int left, int top, int width, int height,
+                                          long[] indexesBaseLines, int left2, int top2, int width2, int height2,
+                                          Canvas canvas);
 
     /**
      * draw real time data
@@ -362,6 +399,28 @@ public abstract class ChartView extends View {
                                              int left, int top, int width, int height,
                                              int left2, int top2, int width2, int height2,
                                              Canvas canvas);
+
+    /**
+     * draw real unstable data
+     *
+     * @param indexesEnable
+     * @param left
+     * @param top
+     * @param width
+     * @param topPartHeight
+     * @param left2
+     * @param top2
+     * @param width1
+     * @param bottomPartHeight
+     * @param canvas
+     */
+    protected void drawUnstableData(boolean indexesEnable,
+                                             int left, int top, int width, int topPartHeight,
+                                             int left2, int top2, int width1, int bottomPartHeight,
+                                             Canvas canvas) {
+
+    }
+
 
     /**
      * draw time line
@@ -433,18 +492,19 @@ public abstract class ChartView extends View {
         return y + getPaddingTop();
     }
 
-    protected float getIndexesChartY(float y) {
+    protected float getIndexesChartY(long y) {
         // When values beyond indexes baselines, eg. mv. return -1
-        float[] indexesBaseLines = mSettings.getIndexesBaseLines();
+        long[] indexesBaseLines = mSettings.getIndexesBaseLines();
         if (y > indexesBaseLines[0] || y < indexesBaseLines[indexesBaseLines.length - 1]) {
             return -1;
         }
 
-        int height = getBottomPartHeight() - 2 * (mFontHeight + mTextMargin);
-        y = (indexesBaseLines[0] - y) /
+        int height = getBottomPartHeight();
+
+        float chartY = (indexesBaseLines[0] - y) * 1.0f /
                 (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
 
-        return y + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
+        return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
     }
 
     protected float getChartX(int index) {
@@ -518,7 +578,7 @@ public abstract class ChartView extends View {
         return formatNumber(value, mSettings.getNumberScale());
     }
 
-    protected String formatNumber(float value, int numberScale) {
+    protected String formatNumber(double value, int numberScale) {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance();
 
         decimalFormat.setMaximumFractionDigits(numberScale);

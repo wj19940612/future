@@ -34,6 +34,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     public static final int REQ_CODE_BASE = 8;
     public static final int REQ_CODE_TOKEN_EXPIRED_LOGIN = 800;
+    public static final int REQ_CODE_LOGIN = 108;
 
     public static final String ACTION_TOKEN_EXPIRED = "com.jnhyxx.app.TOKEN_EXPIRED";
     public static final String EX_TOKEN_EXPIRED_MESSAGE = "com.jnhyxx.app.TOKEN_EXPIRED_MESSAGE";
@@ -42,6 +43,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     private TimerHandler mTimerHandler;
     private Progress mProgress;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -113,6 +115,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart(TAG);
     }
 
     @Override
@@ -122,6 +125,7 @@ public class BaseActivity extends AppCompatActivity implements
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(mReceiver);
         MobclickAgent.onPause(this);
+        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override
@@ -188,10 +192,13 @@ public class BaseActivity extends AppCompatActivity implements
                                 callback.onUpdateCompleted();
                             }
                         }
+
                         @Override
                         public void onReceive(Resp<UserInfo> userInfoResp) {
                         }
                     }).fire();
         }
     }
+
+
 }

@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,17 +18,18 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
-import com.jnhyxx.html5.domain.market.MarketServer;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.order.ExchangeStatus;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
+import com.jnhyxx.html5.utils.OnItemOneClickListener;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +66,17 @@ public class SimulationActivity extends BaseActivity {
 
         updateProductGridView();
 
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new OnItemOneClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemOneClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
-                    requestServerIpAndPort(pkg);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_SIMULATION));
+                    Launcher.with(getActivity(), TradeActivity.class)
+                            .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                            .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
+                            .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                            .execute();
                 }
             }
         });
@@ -83,38 +88,6 @@ public class SimulationActivity extends BaseActivity {
         } else {
             mAvailableGold.setText(FinanceUtil.formatWithScale(0));
         }
-    }
-
-    private void requestServerIpAndPort(final ProductPkg pkg) {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<MarketServer>>, List<MarketServer>>() {
-                    @Override
-                    public void onRespSuccess(List<MarketServer> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            requestProductExchangeStatus(pkg.getProduct(), marketServers);
-                        }
-                    }
-                }).fire();
-    }
-
-    private void requestProductExchangeStatus(final Product product, final List<MarketServer> marketServers) {
-        API.Order.getExchangeTradeStatus(product.getExchangeId(), product.getVarietyType())
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<ExchangeStatus>, ExchangeStatus>() {
-                    @Override
-                    public void onRespSuccess(ExchangeStatus exchangeStatus) {
-                        product.setExchangeStatus(exchangeStatus.isTradeable()
-                                ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-
-                        Launcher.with(getActivity(), TradeActivity.class)
-                                .putExtra(Product.EX_PRODUCT, product)
-                                .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
-                                .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                .putExtra(ExchangeStatus.EX_EXCHANGE_STATUS, exchangeStatus)
-                                .putExtra(MarketServer.EX_MARKET_SERVER, new ArrayList<Parcelable>(marketServers))
-                                .execute();
-                    }
-                }).fire();
     }
 
     private void initData(Intent intent) {
@@ -171,6 +144,7 @@ public class SimulationActivity extends BaseActivity {
 
     @OnClick(R.id.goldStoreButton)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE_GOLD_SHOP);
         ToastUtil.show(R.string.coming_soon);
     }
 
@@ -263,9 +237,12 @@ public class SimulationActivity extends BaseActivity {
                     mMarketOpenTime.setVisibility(View.GONE);
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
+
                 }
                 HomePositions.Position position = pkg.getPosition(); // Position status
+                //如果休市，有持仓，则优先显示持仓提示
                 if (position != null && position.getHandsNum() > 0) {
+                    mMarketCloseText.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.VISIBLE);
                     mNewTag.setVisibility(View.GONE);
                     mHotIcon.setVisibility(View.GONE);

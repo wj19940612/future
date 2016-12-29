@@ -21,11 +21,14 @@ import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.android.volley.Request.Method.HEAD;
 
 public class HomeListHeader extends FrameLayout {
 
@@ -52,8 +55,11 @@ public class HomeListHeader extends FrameLayout {
 
     public interface OnViewClickListener {
         void onBannerClick(Information information);
+
         void onSimulationClick();
+
         void onNewerGuideClick();
+
         void onContactService();
     }
 
@@ -171,23 +177,28 @@ public class HomeListHeader extends FrameLayout {
 
     public void setHomeAdvertisement(List<Information> informationList) {
         filterEmptyInformation(informationList);
-
-        mPageIndicator.setCount(informationList.size());
-        if (mAdapter == null) {
-            mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
-            mViewPager.addOnPageChangeListener(mOnPageChangeListener);
-            mViewPager.setAdapter(mAdapter);
-        } else {
-            mAdapter.setNewAdvertisements(informationList);
+        if (!informationList.isEmpty()) {
+            mPageIndicator.setCount(informationList.size());
+            if (mAdapter == null) {
+                mAdapter = new AdvertisementAdapter(getContext(), informationList, mListener);
+                mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+                mViewPager.setAdapter(mAdapter);
+            } else {
+                mAdapter.setNewAdvertisements(informationList);
+            }
         }
     }
 
     private void filterEmptyInformation(List<Information> informationList) {
+        List<Information> removeList = new ArrayList<>();
         for (int i = 0; i < informationList.size(); i++) {
             Information information = informationList.get(i);
             if (TextUtils.isEmpty(information.getCover())) {
-                informationList.remove(i);
+                removeList.add(information);
             }
+        }
+        for (int i = 0; i < removeList.size(); i++) {
+            informationList.remove(removeList.get(i));
         }
     }
 
@@ -225,7 +236,9 @@ public class HomeListHeader extends FrameLayout {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             final Information information = mList.get(pos);
             container.addView(imageView, 0);
-            Picasso.with(mContext).load(information.getCover()).into(imageView);
+            if (!TextUtils.isEmpty(information.getCover())) {
+                Picasso.with(mContext).load(information.getCover()).into(imageView);
+            }
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

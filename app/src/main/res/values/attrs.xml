@@ -30,6 +30,14 @@
         <attr name="rowText" format="reference|string"/>
         <attr name="rowTextSize" format="dimension"/>
         <attr name="rowTextColor" format="color"/>
+        <attr name="rowRightText" format="reference|string"/>
+        <attr name="rowRightTextSize" format="reference|dimension"/>
+        <attr name="rowRightTextColor" format="reference|color"/>
+        <attr name="rowRightTextVisibility">
+            <enum name="visible" value="0"/>
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="TitleBar">
@@ -80,5 +88,9 @@
 
     <declare-styleable name="SetHintTextSizeEditText">
         <attr name="hintTextSize" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="StopProfitLossPicker">
+        <attr name="pickerTitle" format="string|reference"/>
     </declare-styleable>
 </resources>

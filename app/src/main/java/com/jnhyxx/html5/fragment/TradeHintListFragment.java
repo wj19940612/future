@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,12 +17,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
 
 import java.util.HashSet;
@@ -90,9 +89,13 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mEmpty.setText(R.string.now_is_not_has_trade_remind);
+        mListView.setEmptyView(mEmpty);
+
         mPageNo = 0;
         mPageSize = 10;
         mSet = new HashSet<>();
+
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
         mListView.setDivider(null);
@@ -102,10 +105,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                 mPageNo = 0;
                 mSet.clear();
                 requestMessageList();
-
-                if (!Network.isNetworkAvailable() && mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
             }
         });
         requestMessageList();
@@ -123,16 +122,7 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
         API.cancel(TAG);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser && isAdded() && !isLoad) {
-            requestMessageList();
-            isLoad = true;
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
-    private void requestMessageList() {
+    public void requestMessageList() {
         API.Message.getMessageInfo(mType, mPageNo, mPageSize)
                 .setIndeterminate(this)
                 .setTag(TAG)
@@ -141,26 +131,29 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
                                  public void onReceive(Resp<List<SysMessage>> listResp) {
                                      if (listResp.isSuccess()) {
                                          updateMessageList(listResp.getData());
-                                         for (int i = 0; i < listResp.getData().size(); i++) {
-                                             Log.d(TAG, "交易提醒数据" + listResp.getData().get(i) + "\n");
-                                         }
                                      } else {
-                                         if (mSwipeRefreshLayout.isRefreshing()) {
-                                             mSwipeRefreshLayout.setRefreshing(false);
-                                         }
+                                         stopRefreshAnimation();
                                      }
+                                 }
+
+                                 @Override
+                                 public void onFailure(VolleyError volleyError) {
+                                     super.onFailure(volleyError);
+                                     stopRefreshAnimation();
                                  }
                              }
                 ).fire();
     }
 
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void updateMessageList(List<SysMessage> sysMessages) {
-        if (sysMessages == null || sysMessages.isEmpty()) {
-            mEmpty.setText("暂无交易提醒");
-            mListView.setEmptyView(mEmpty);
-            if (mSwipeRefreshLayout.isRefreshing()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+        if (sysMessages == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -271,7 +264,6 @@ public class TradeHintListFragment extends BaseFragment implements AdapterView.O
 
             private void setTradeStatus(SysMessage item) {
                 if (item.isTradeStatus()) {
-                    // TODO: 2016/10/10 是提现信息的显示
                     if (item.isSuccess()) {
                         setSuccessImage();
                     } else {

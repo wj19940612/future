@@ -25,13 +25,16 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         sContext = this;
-
         API.init(sContext.getCacheDir());
         CookieManger.getInstance().init(sContext.getFilesDir());
 
         UmengLib.init(sContext);
 
         MobclickAgent.setDebugMode(true);
+        /**
+         * 禁止友盟的默认统计方式，可以统计fragment
+         */
+        MobclickAgent.openActivityDurationTrack(false);
 
         if (!BuildConfig.DEBUG) {
             handleUncaughtException();

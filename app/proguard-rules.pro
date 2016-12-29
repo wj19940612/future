@@ -87,3 +87,4 @@
 # SlidingMenu
 -dontwarn com.jeremyfeinstein.slidingmenu.lib.**
 -keep class com.jeremyfeinstein.slidingmenu.lib.** { *; }
+>>>>>>> native

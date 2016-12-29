@@ -37,13 +37,14 @@
         android:id="@+id/lossProfitArea"
         android:layout_width="match_parent"
         android:layout_height="@dimen/trade_header_height"
+        android:layout_alignParentBottom="true"
         android:background="@color/bluePrimary"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
         android:paddingLeft="@dimen/common_margin"
         android:paddingRight="@dimen/common_margin"
         android:paddingTop="10dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"

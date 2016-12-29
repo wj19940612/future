@@ -123,6 +123,8 @@ public class OrderDetailActivity extends BaseActivity {
             return R.string.stop_loss_sale;
         } else if (sellType == SettledOrder.SELL_OUT_STOP_PROFIT) {
             return R.string.stop_profit_sale;
+        } else if (sellType == SettledOrder.SELL_OUT_MANUALLY){
+            return R.string.manually_sale;
         } else {
             return R.string.market_price_sale;
         }
@@ -131,7 +133,7 @@ public class OrderDetailActivity extends BaseActivity {
     private void initData(Intent intent) {
         mSettledOrder = (SettledOrder) intent.getSerializableExtra(Launcher.EX_PAYLOAD);
         mOrderDetail = (OrderDetail) intent.getSerializableExtra(Launcher.EX_PAYLOAD_1);
-        mProduct = (Product) intent.getSerializableExtra(Product.EX_PRODUCT);
+        mProduct = intent.getParcelableExtra(Product.EX_PRODUCT);
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
     }

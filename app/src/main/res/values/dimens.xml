@@ -20,6 +20,7 @@
 
     <dimen name="padding_ten">10dp</dimen>
 
+    <dimen name="player_height">180dp</dimen>
 
     <dimen name="min_text_size">11sp</dimen>
 

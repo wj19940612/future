@@ -120,7 +120,7 @@ android {
             applicationId 'com.trade163.zy4'
             versionCode 4
             versionName '1.2.5'
-            buildConfigField('String', 'API_HOST', '\"http://zy8.trade163.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy6.trade163.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",

@@ -6,11 +6,9 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,19 +29,11 @@ public class IconTextRow extends LinearLayout {
     private ColorStateList mSubTextColor;
 
 
-    private int mRightTextVisibility;
-    private CharSequence mRightText;
-    private int mRightTextSize;
-    private int mRightTextColor;
-
     private TextView mTextView;
     private TextView mSubTextView;
-    private TextView mRightTextView;
-    /**
-     * 设置界面的边距为43dp
-     * 去掉padding
-     */
-    private boolean mViewNeedTopPadding;
+
+    //有些不需要上下的边距
+    private boolean mIsNotNeedTopPadding;
 
 
     public IconTextRow(Context context, AttributeSet attrs) {
@@ -71,12 +61,7 @@ public class IconTextRow extends LinearLayout {
         mSubTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_subTextSize, defaultFontSize);
         mSubTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_subTextColor);
 
-        mRightTextVisibility = typedArray.getInt(R.styleable.IconTextRow_rowRightTextVisibility, 0);
-        mRightText = typedArray.getText(R.styleable.IconTextRow_rowRightText);
-        mRightTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowRightTextSize, defaultFontSize);
-        mRightTextColor = typedArray.getColor(R.styleable.IconTextRow_rowRightTextColor, R.color.blackPrimary);
-
-        mViewNeedTopPadding = typedArray.getBoolean(R.styleable.IconTextRow_rowIsNotNeedTopPadding, false);
+        mIsNotNeedTopPadding = typedArray.getBoolean(R.styleable.IconTextRow_rowIsNotNeedTopPadding, false);
         typedArray.recycle();
     }
 
@@ -84,11 +69,12 @@ public class IconTextRow extends LinearLayout {
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
-        if (mViewNeedTopPadding) {
+        if (mIsNotNeedTopPadding) {
             setPadding(padding, 0, padding, 0);
         } else {
             setPadding(padding, padding, padding, padding);
         }
+
 
         LayoutParams params;
         if (mLeftIcon != null) {
@@ -125,17 +111,6 @@ public class IconTextRow extends LinearLayout {
         }
         addView(mSubTextView, params);
 
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.weight = 1;
-        params.setMargins(0, 0, padding, 0);
-        mRightTextView = new TextView(getContext());
-        mRightTextView.setText(mRightText);
-        mRightTextView.setGravity(Gravity.RIGHT);
-        mRightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mRightTextSize);
-        mRightTextView.setTextColor(mRightTextColor);
-        mRightTextView.setVisibility(mRightTextVisibility);
-        addView(mRightTextView, params);
-
         if (mRightIcon != null) {
             ImageView rightImage = new ImageView(getContext());
             rightImage.setImageDrawable(mRightIcon);
@@ -168,11 +143,4 @@ public class IconTextRow extends LinearLayout {
         return mSubTextView.getText().toString();
     }
 
-    public void setRightText(CharSequence charSequence) {
-        mRightTextView.setText(charSequence);
-    }
-
-    public void setRightTextColor(int resId) {
-        mRightTextView.setTextColor(ContextCompat.getColor(getContext(), resId));
-    }
 }

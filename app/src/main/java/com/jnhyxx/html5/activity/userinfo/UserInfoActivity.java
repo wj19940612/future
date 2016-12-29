@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.activity.userinfo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,6 +9,10 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 
@@ -51,5 +56,24 @@ public class UserInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
+
+        getUserInfo();
     }
+
+    private void getUserInfo() {
+        API.User.getUserInfo()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback2<Resp<UserDefiniteInfo>, UserDefiniteInfo>() {
+                    @Override
+                    public void onRespSuccess(UserDefiniteInfo userDefiniteInfo) {
+                        if (userDefiniteInfo != null) {
+                            Log.d(TAG, "用户信息" + userDefiniteInfo.toString());
+                        }
+                    }
+                })
+                .fire();
+    }
+
+
 }

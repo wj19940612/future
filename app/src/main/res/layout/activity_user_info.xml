@@ -56,33 +56,29 @@
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="操盘手2525"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/user_name"
         app:rowTextColor="@color/colorDisable"
         app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subTextColor="@color/blackPrimary"/>
 
 
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/userRealName"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:layout_marginTop="10dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="张三"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/real_name"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subText="张三"
+        app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
 
@@ -90,16 +86,14 @@
         android:id="@+id/sex"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="男"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/sex"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subText="男"
+        app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
 
@@ -107,16 +101,14 @@
         android:id="@+id/birthday"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="1920-12-12"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/birthday"
         app:rowTextColor="@color/colorDisable"
         app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
 
@@ -148,16 +140,14 @@
         android:id="@+id/realNameAuth"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:layout_marginTop="10dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="已认证"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/real_name_authorize"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
+        app:subText="已认证"
         app:subTextColor="@android:color/white"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
@@ -166,16 +156,14 @@
         android:id="@+id/bindBankCard"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="已绑定"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/binding_bank_card"
         app:rowTextColor="@color/colorDisable"
         app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
 
@@ -183,16 +171,14 @@
         android:id="@+id/bindingPhone"
         android:layout_width="match_parent"
         android:layout_height="43dp"
+        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
-        app:rowIsNotNeedTopPadding="true"
-        app:rowRightText="已绑定"
-        app:rowRightTextVisibility="visible"
         app:rowText="@string/binding_phone"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
-        app:subTextColor="@android:color/white"/>
+        app:subText="已经绑定"
+        app:subTextColor="@color/blackPrimary"/>
 
     <View
         android:layout_width="match_parent"

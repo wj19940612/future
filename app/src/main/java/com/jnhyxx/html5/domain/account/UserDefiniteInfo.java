@@ -113,4 +113,17 @@ public class UserDefiniteInfo {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "UserDefiniteInfo{" +
+                "birthday='" + birthday + '\'' +
+                ", certificationStatus=" + certificationStatus +
+                ", introduction='" + introduction + '\'' +
+                ", land='" + land + '\'' +
+                ", realName='" + realName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPortrait='" + userPortrait + '\'' +
+                ", userSex=" + userSex +
+                '}';
+    }
 }

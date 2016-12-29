@@ -317,9 +317,9 @@ public class API extends APIBase {
          * @param userId 用户id
          * @return
          */
-        public static API getUserInfo(int userId) {
+        public static API getUserInfo() {
             return new API("/user/user/findInfo.do",
-                    new ApiParams().put("userId", userId));
+                   null);
         }
 
         /**

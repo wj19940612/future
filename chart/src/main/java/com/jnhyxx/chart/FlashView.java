@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.jnhyxx.chart.domain.FlashViewData;
 
@@ -46,6 +47,7 @@ public class FlashView extends ChartView {
     }
 
     public void addData(FlashViewData point) {
+        Log.d("TAG", "addData: " + point.getLastPrice());
         if (point != null && mPointList != null) {
             if (mMaxPoints > 0 && mPointList.size() >= mMaxPoints) {
                 int indexBeforeDelete = mPointList.size() - mMaxPoints + 1;
@@ -106,8 +108,7 @@ public class FlashView extends ChartView {
         if (lastPoint != null) {
             int areaCount = baselines.length - 1;
             float priceRange = new BigDecimal(mSettings.getFlashChartPriceInterval())
-                    .divide(new BigDecimal(areaCount), mSettings.getNumberScale(),
-                            RoundingMode.HALF_EVEN).floatValue();
+                    .divide(new BigDecimal(areaCount), mSettings.getNumberScale(), RoundingMode.HALF_EVEN).floatValue();
 
             if (baselines[0] == 0 && baselines[baselines.length - 1] == 0) { // the first time
                 BigDecimal bigMid = BigDecimal.valueOf(lastPoint.getLastPrice())
@@ -124,8 +125,8 @@ public class FlashView extends ChartView {
             }
 
             float firstBaseLine = baselines[0];
-            if (lastPoint.getLastPrice() > firstBaseLine - priceRange / 2) {
-                while (lastPoint.getLastPrice() > firstBaseLine - priceRange / 2) {
+            if (lastPoint.getLastPrice() > (firstBaseLine - priceRange / 2)) {
+                while (lastPoint.getLastPrice() > (firstBaseLine - priceRange / 2)) {
                     firstBaseLine += priceRange;
                 }
                 setBaseLinesFromFirst(baselines, firstBaseLine, priceRange);
@@ -133,8 +134,8 @@ public class FlashView extends ChartView {
             }
 
             float lastBaseLine = baselines[baselines.length - 1];
-            if (lastPoint.getLastPrice() < lastBaseLine - priceRange / 2) {
-                while (lastPoint.getLastPrice() < lastBaseLine - priceRange / 2) {
+            if (lastPoint.getLastPrice() < (lastBaseLine + priceRange / 2)) {
+                while (lastPoint.getLastPrice() < (lastBaseLine + priceRange / 2)) {
                     lastBaseLine -= priceRange;
                 }
                 setBaselinesFromLast(baselines, lastBaseLine, priceRange);

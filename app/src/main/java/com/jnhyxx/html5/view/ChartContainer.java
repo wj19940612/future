@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.chart.FlashView;
@@ -17,15 +18,26 @@ import com.jnhyxx.html5.R;
 
 public class ChartContainer extends LinearLayout implements View.OnClickListener {
 
+    public interface OnLiveEnterClickListener {
+        void onClick();
+    }
+
+    public interface OnTabClickListener {
+        void onClick(int tabId);
+    }
+
     private static final int PADDING_IN_DP = 12;
 
     public static final int POS_TREND = 0;
     public static final int POS_FLASH = 1;
     public static final int POS_PLATE = 2;
     public static final int POS_KLINE = 3;
+    public static final int POS_LIVE_ENTER = 4;
 
-    private LinearLayout mTabsLayout;
+    private RelativeLayout mTabsLayout;
     private FrameLayout mContainer;
+    private OnLiveEnterClickListener mOnLiveEnterClickListener;
+    private OnTabClickListener mOnTabClickListener;
 
     public ChartContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -99,13 +111,14 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         onTabClick(POS_TREND);
     }
 
-    public void showFlashView() {
-        onTabClick(POS_FLASH);
+    public void setOnLiveEnterClickListener(OnLiveEnterClickListener onLiveEnterClickListener) {
+        mOnLiveEnterClickListener = onLiveEnterClickListener;
     }
 
-    public void showMarketDataView() {
-        onTabClick(POS_PLATE);
+    public void setOnTabClickListener(OnTabClickListener onTabClickListener) {
+        mOnTabClickListener = onTabClickListener;
     }
+
 
 //    private void initPopupWindow() {
 //        //View popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_window_kline, null);
@@ -129,32 +142,68 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private void initTabs() {
         int paddingPx = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());
-        LinearLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        mTabsLayout = new LinearLayout(getContext());
+        mTabsLayout = new RelativeLayout(getContext());
         mTabsLayout.setPadding(paddingPx, 0, paddingPx, paddingPx);
-        mTabsLayout.setOrientation(HORIZONTAL);
         mTabsLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.bluePrimary));
 
         mTabsLayout.addView(createTab(R.string.trend_chart), POS_TREND);
 
-        LinearLayout.MarginLayoutParams marginLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        marginLayoutParams.setMargins(paddingPx * 2, 0, 0, 0);
-        mTabsLayout.addView(createTab(R.string.flash_chart), POS_FLASH, marginLayoutParams);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(paddingPx * 2, 0, 0, 0);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.trend_chart);
+        mTabsLayout.addView(createTab(R.string.flash_chart), POS_FLASH, layoutParams);
 
-        marginLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        marginLayoutParams.setMargins(paddingPx * 2, 0, 0, 0);
-        mTabsLayout.addView(createTab(R.string.plate), POS_PLATE, marginLayoutParams);
+        layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(paddingPx * 2, 0, 0, 0);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.flash_chart);
+        mTabsLayout.addView(createTab(R.string.plate), POS_PLATE, layoutParams);
 
-        marginLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(paddingPx * 2, 0, 0, 0);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.plate);
+        mTabsLayout.addView(createTab(R.string.day_k_line), POS_KLINE, layoutParams);
+
+        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        marginLayoutParams.setMargins(paddingPx * 2, 0, 0, 0);
-        mTabsLayout.addView(createTab(R.string.day_k_line), POS_KLINE, marginLayoutParams);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        mTabsLayout.addView(createLiveEnter(), POS_LIVE_ENTER, layoutParams);
 
         addView(mTabsLayout, params);
+    }
+
+    public void setLiveEnterVisible(boolean visible) {
+        View liveEnter = mTabsLayout.getChildAt(POS_LIVE_ENTER);
+        if (liveEnter != null) {
+            liveEnter.setVisibility(visible ? VISIBLE : GONE);
+        }
+    }
+
+    private View createLiveEnter() {
+        int paddingPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());
+        TextView view = new TextView(getContext());
+        view.setText(R.string.live);
+        view.setTextColor(ContextCompat.getColor(getContext(), R.color.blueAssist));
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_live_enter, 0);
+        view.setCompoundDrawablePadding(paddingPx / 3);
+        view.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
+        view.setVisibility(GONE);
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnLiveEnterClickListener != null) {
+                    mOnLiveEnterClickListener.onClick();
+                }
+            }
+        });
+        return view;
     }
 
     private View createTab(int resId) {
@@ -168,7 +217,6 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         tab.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
         tab.setId(resId);
         tab.setOnClickListener(this);
-
         return tab;
     }
 
@@ -177,24 +225,29 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         switch (v.getId()) {
             case R.string.trend_chart:
                 onTabClick(POS_TREND);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_TREND);
+                }
                 break;
             case R.string.flash_chart:
                 onTabClick(POS_FLASH);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_FLASH);
+                }
                 break;
             case R.string.plate:
                 onTabClick(POS_PLATE);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_PLATE);
+                }
                 break;
             case R.string.day_k_line:
                 onTabClick(POS_KLINE);
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onClick(POS_KLINE);
+                }
                 break;
         }
-    }
-
-    private void showChild(int pos) {
-        for (int i = 0; i < mContainer.getChildCount(); i++) {
-            mContainer.getChildAt(i).setVisibility(GONE);
-        }
-        mContainer.getChildAt(pos).setVisibility(VISIBLE);
     }
 
 //    public void setTabEnable(int position, boolean enable) {
@@ -257,5 +310,4 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
             mContainer.getChildAt(pos).setVisibility(VISIBLE);
         }
     }
-
 }

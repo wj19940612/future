@@ -25,8 +25,10 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +60,31 @@ public class OrderActivity extends BaseActivity implements
         mOrderAdapter = new OrderAdapter(getSupportFragmentManager(), this, mProduct, mFundType, mMarketData);
         mViewPager.setAdapter(mOrderAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        setViewPager();
+    }
+
+    private void setViewPager() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ORDER_POSITIONS);
+                } else if (position == 1) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ORDER_CLEANING);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initData(Intent intent) {
@@ -77,7 +104,6 @@ public class OrderActivity extends BaseActivity implements
         super.onPause();
         NettyClient.getInstance().stop();
     }
-
 
     @Override
     public void onHoldingFragmentClosePositionEventTriggered() {

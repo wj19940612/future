@@ -25,10 +25,12 @@ import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -77,9 +79,9 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
     private HoldingOrderPresenter mPresenter;
     private Callback mCallback;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
-        protected void onReceiveData(FullMarketData data) {
+        public void onReceiveData(FullMarketData data) {
             mMarketData = data;
             mPresenter.setFullMarketData(data, mProduct.getVarietyId());
             if (mHoldingOrderAdapter != null) {
@@ -324,6 +326,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
 
     @OnClick(R.id.oneKeyClosePositionBtn)
     public void onClick() {
+        MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.ORDER_POSITIONS_ONE_KEY_CLOSE_OUT);
         mPresenter.closeAllHoldingPositions();
         onClosePositionEventTriggered();
     }
@@ -439,7 +442,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                 ButterKnife.bind(this, view);
             }
 
-            public void bindingData(final HoldingOrder item, Context context,
+            public void bindingData(final HoldingOrder item, final Context context,
                                     Product product, String fundUnit,
                                     final FullMarketData data,
                                     boolean showStopProfitLoss,
@@ -468,6 +471,7 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
                     public void onClick(View v) {
                         if (callback != null) {
                             callback.onSetStopProfitLossClick(item);
+                            MobclickAgent.onEvent(context, UmengCountEventIdUtils.SET_STOP_PROFIT_STOP_LOSS);
                         }
                     }
                 });

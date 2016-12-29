@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,17 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jnhnxx.livevideo.LivePlayer;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.SignInActivity;
-import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LastTeacherCommand;
+import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
@@ -37,13 +34,13 @@ import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
 import com.jnhyxx.html5.utils.KeyBoardHelper;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.LiveProgrammeList;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TeacherCommand;
@@ -51,6 +48,7 @@ import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +59,10 @@ import butterknife.OnClick;
 
 public class LiveActivity extends BaseActivity implements LiveInteractionFragment.OnSendButtonClickListener {
 
-    public static final int REQUEST_CODE_LOGIN = 583;
+    private static final int REQ_CODE_TRADE = 123;
 
-    private static final int LIVE_INTERACTION = 0;
-    private static final int TEACHER_ADVISE = 1;
+    private static final int POS_LIVE_INTERACTION = 0;
+    private static final int POS_TEACHER_ADVISE = 1;
 
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
@@ -94,7 +92,6 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private LiveProgrammeList mProgrammeList;
     private KeyBoardHelper mKeyBoardHelper;
 
-    private List<ProductPkg> mProductPkgList = new ArrayList<>();
     private List<Product> mProductList;
 
     private LiveMessage mLiveMessage;
@@ -106,24 +103,21 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private LivePageFragmentAdapter mLivePageFragmentAdapter;
     private int mSelectedPage;
 
-    private NettyHandler mNettyHandler = new NettyHandler() {
+    private NettyHandler mNettyHandler = new NettyHandler<LiveSpeakInfo>() {
 
         @Override
-        protected void onReceiveOriginalData(String data) {
-
-            Log.d(TAG, "onReceiveOriginalData: " + data);
+        public void onReceiveData(LiveSpeakInfo data) {
             if (getLiveInteractionFragment() != null) {
                 getLiveInteractionFragment().setData(data);
             }
 
-            LiveSpeakInfo liveSpeakInfo = new Gson().fromJson(data, LiveSpeakInfo.class);
-            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
+            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(data);
 
             if (LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER && LiveHomeChatInfo.isOrder()) {
                 mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
             }
 
-            if (LiveHomeChatInfo.isOrder()||LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
+            if (LiveHomeChatInfo.isOrder() || LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                 if (getTeacherGuideFragment() != null) {
                     getTeacherGuideFragment().setData(LiveHomeChatInfo);
                 }
@@ -141,6 +135,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
             public void onTeacherHeadClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TEACHER_IMAGE);
                 showTeacherInfoDialog();
             }
 
@@ -153,9 +148,24 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         mLivePlayer.setOnScaleButtonClickListener(new LivePlayer.OnScaleButtonClickListener() {
             @Override
             public void onClick(boolean fullscreen) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_FULL_SCREEN);
                 if (fullscreen) {
                     mKeyBoardHelper.setOnKeyBoardStatusChangeListener(null);
                 }
+            }
+        });
+
+        mLivePlayer.setOnMuteButtonClickListener(new LivePlayer.OnMuteButtonClickListener() {
+            @Override
+            public void onClick(boolean isMute) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_MUTE);
+            }
+        });
+
+        mLivePlayer.setOnPlayClickListener(new LivePlayer.OnPlayClickListener() {
+            @Override
+            public void onClick(boolean isPlay) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_PLAY);
             }
         });
 
@@ -224,6 +234,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showEditTextButton:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
                     if (mTeacher != null) {
                         if (getLiveInteractionFragment() != null) {
@@ -233,7 +244,8 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                         ToastUtil.show(R.string.live_time_is_not);
                     }
                 } else {
-                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQUEST_CODE_LOGIN);
+                    Launcher.with(getActivity(), SignInActivity.class)
+                            .executeForResult(REQ_CODE_LOGIN);
                 }
                 break;
         }
@@ -335,13 +347,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
             mLivePlayer.setVideoPath(active.getRtmp());
+//            this rtmp url will lead to crash
+//            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         }
     }
 
     private void connectNettySocket() {
         if (mLiveMessage.getTeacher() != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
-            mNettyClient.setIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
+            mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
             mNettyClient.start(teacherId, CookieManger.getInstance().getCookies());
         }
         mNettyClient.addNettyHandler(mNettyHandler);
@@ -368,9 +382,11 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             @Override
             public void onPageSelected(int position) {
                 mSelectedPage = position;
-                if (position == LIVE_INTERACTION) {
+                if (position == POS_LIVE_INTERACTION) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_INTERACT);
                     mShowEditTextButton.setVisibility(View.VISIBLE);
-                } else if (position == TEACHER_ADVISE) {
+                } else if (position == POS_TEACHER_ADVISE) {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TEACHER_GUIDE);
                     mShowEditTextButton.setVisibility(View.GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
@@ -385,18 +401,22 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private TeacherGuideFragment getTeacherGuideFragment() {
-        return (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(TEACHER_ADVISE);
+        return (TeacherGuideFragment) mLivePageFragmentAdapter.getFragment(POS_TEACHER_ADVISE);
     }
 
     private LiveInteractionFragment getLiveInteractionFragment() {
-        return (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+        return (LiveInteractionFragment) mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
     }
 
     private void initTitleBar() {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTradePage();
+                if (getLiveInteractionFragment() != null) {
+                    getLiveInteractionFragment().hideInputBox();
+                }
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_TRADE);
+                switchToTradePage();
             }
         });
         View customView = mTitleBar.getCustomView();
@@ -404,6 +424,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         liveProgramme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PROGRAMME);
                 showLiveProgramme();
             }
         });
@@ -424,28 +445,13 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         }
     }
 
-    private void openTradePage() {
-        //获取用户持仓数据
-        requestUserPositions();
-    }
-
-    private boolean ifUserHasPositions(HomePositions homePositions) {
-        if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-    private void requestUserPositions() {
-        API.Order.getHomePositions().setTag(TAG)
-                .setCallback(new Callback1<Resp<HomePositions>>() {
+    private void requestPositions() {
+        API.Order.getHomePositions()
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<HomePositions>, HomePositions>() {
                     @Override
-                    protected void onRespSuccess(Resp<HomePositions> resp) {
-                        if (resp.isSuccess() && resp.hasData()) {
-                            HomePositions mHomePositions = resp.getData();
-                            boolean userHasPositions = ifUserHasPositions(mHomePositions);
-                            requestProductList(userHasPositions, mHomePositions);
-                        }
+                    public void onRespSuccess(HomePositions homePositions) {
+                        requestProductList(homePositions);
                     }
                 }).fire();
     }
@@ -453,9 +459,9 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_LOGIN && resultCode == RESULT_OK) {
+        if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
             LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(LIVE_INTERACTION);
+                    mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
             if (fragment != null) {
                 fragment.setLoginSuccess(true);
             }
@@ -500,60 +506,55 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
         }
     }
 
-    private void requestProductList(final boolean hasPositions, final HomePositions homePositions) {
-        API.Market.getProductList().setTag(TAG)
+    private void requestProductList(final HomePositions homePositions) {
+        API.Market.getProductList()
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products, null, null);
-
-                        if (mProductPkgList != null && !mProductPkgList.isEmpty()) {
-                            // 如果没有持仓  默认进入美原油交易界面, 如果有持仓, 进入有持仓的产品交易界面
-                            int enterPageProductId = 1;
-                            if (hasPositions) {
-                                if (homePositions != null && homePositions.getCashOpS() != null && !homePositions.getCashOpS().isEmpty()) {
-                                    String varietyType = homePositions.getCashOpS().get(homePositions.getCashOpS().size() - 1).getVarietyType();
-                                    for (int i = 0; i < mProductPkgList.size(); i++) {
-                                        if (varietyType.equalsIgnoreCase(mProductPkgList.get(i).getProduct().getVarietyType())) {
-                                            enterPageProductId = i;
-                                            break;
-                                        }
-                                    }
-                                }
-                            } else {
-                                for (int i = 0; i < mProductPkgList.size(); i++) {
-                                    if (Product.US_CRUDE_ID == mProductPkgList.get(i).getProduct().getVarietyId()) {
-                                        enterPageProductId = i;
-                                        break;
-                                    }
+                        List<HomePositions.CashOpSBean> cashOpSBeanList = null;
+                        if (homePositions != null) {
+                            cashOpSBeanList = homePositions.getCashOpS();
+                        }
+                        Product enterProduct = null;
+                        if (cashOpSBeanList != null && cashOpSBeanList.size() > 0) { // has cash positions
+                            HomePositions.CashOpSBean cashOpSBean = cashOpSBeanList.get(0);
+                            for (Product product : mProductList) {
+                                if (product.getVarietyType().equals(cashOpSBean.getVarietyType())) {
+                                    enterProduct = product;
+                                    break;
                                 }
                             }
-                            ProductPkg productPkg = mProductPkgList.get(enterPageProductId);
-                            requestServerIpAndPort(productPkg);
+                        } else {
+                            for (Product product : mProductList) {
+                                if (product.getVarietyType().equalsIgnoreCase(Product.VARIETY_TYPE_US_CRUDE)) {
+                                    enterProduct = product;
+                                }
+                            }
+                        }
+                        if (enterProduct != null) {
+                            Launcher.with(getActivity(), TradeActivity.class)
+                                    .putExtra(Product.EX_PRODUCT, enterProduct)
+                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                                    .executeForResult(REQ_CODE_TRADE);
                         }
                     }
                 }).fire();
     }
 
-    private void requestServerIpAndPort(final ProductPkg productPkg) {
-        API.Market.getMarketServerIpAndPort().setTag(TAG)
-                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
-                    @Override
-                    public void onRespSuccess(List<ServerIpPort> marketServers) {
-                        if (marketServers != null && marketServers.size() > 0) {
-                            if (getLiveInteractionFragment() != null) {
-                                getLiveInteractionFragment().hideInputBox();
-                            }
-                            Launcher.with(LiveActivity.this, TradeActivity.class)
-                                    .putExtra(Product.EX_PRODUCT, productPkg.getProduct())
-                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                    .putExtra(ServerIpPort.EX_IP_PORT, marketServers.get(0))
-                                    .execute();
-                        }
-                    }
-                }).fire();
+    private void switchToTradePage() {
+        if (getCallingActivity() != null
+                && getCallingActivity().getClassName().equals(TradeActivity.class.getName())) {
+            finish();
+        } else {
+            if (LocalUser.getUser().isLogin()) {
+                requestPositions();
+            } else {
+                requestProductList(null);
+            }
+        }
     }
 
     @Override

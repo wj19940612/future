@@ -31,19 +31,20 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
-import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.OnItemOneClickListener;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.jnhyxx.html5.view.HomeListHeader;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class HomeFragment extends BaseFragment {
                             .putExtra(HideTitleWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                             .execute();
                 } else {
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BANNER);
                     Launcher.with(getActivity(), BannerActivity.class)
                             .putExtra(BannerActivity.EX_HTML, information.getContent())
                             .putExtra(BannerActivity.EX_TITLE, information.getTitle())
@@ -102,6 +104,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onSimulationClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE);
                 API.Market.getProductList().setTag(TAG)
                         .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                             @Override
@@ -116,6 +119,7 @@ public class HomeFragment extends BaseFragment {
             //新手引导
             @Override
             public void onNewerGuideClick() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
                 Launcher.with(getActivity(), NewbieActivity.class)
                         .putExtra(NewbieActivity.EX_URL, API.getNewbieUrl())
                         .putExtra(NewbieActivity.EX_TITLE, getString(R.string.newbie_title))
@@ -125,6 +129,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onContactService() {
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -139,12 +144,17 @@ public class HomeFragment extends BaseFragment {
         mList.setEmptyView(mEmpty);
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mList.setOnItemClickListener(new OnItemOneClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                ProductPkg pkg = (ProductPkg) adapterView.getItemAtPosition(position);
+            public void onItemOneClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductPkg pkg = (ProductPkg) parent.getItemAtPosition(position);
                 if (pkg != null) {
-                    requestServerIpAndPort(pkg);
+                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.getProductUmengEventId(pkg.getProduct(), Product.FUND_TYPE_CASH));
+                    Launcher.with(getActivity(), TradeActivity.class)
+                            .putExtra(Product.EX_PRODUCT, pkg.getProduct())
+                            .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
+                            .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
+                            .execute();
                 }
             }
         });
@@ -154,34 +164,16 @@ public class HomeFragment extends BaseFragment {
         requestProductMarketList();
     }
 
-    private void requestServerIpAndPort(final ProductPkg pkg) {
-        API.Market.getMarketServerIpAndPort()
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {
-                    @Override
-                    public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
-                        if (serverIpPorts != null && serverIpPorts.size() > 0) {
-                            Launcher.with(getActivity(), TradeActivity.class)
-                                    .putExtra(Product.EX_PRODUCT, pkg.getProduct())
-                                    .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_CASH)
-                                    .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
-                                    .putExtra(ServerIpPort.EX_IP_PORT, serverIpPorts.get(0))
-                                    .execute();
-                        }
-                    }
-                }).fire();
-    }
-
-    private void requestOrderReport() {
-        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
-            @Override
-            public void onReceive(Resp<OrderReport> orderReportResp) {
-                if (orderReportResp.isSuccess()) {
-                    mHomeListHeader.setOrderReport(orderReportResp.getData());
-                }
-            }
-        }).setTag(TAG).fire();
-    }
+//    private void requestOrderReport() {
+//        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
+//            @Override
+//            public void onReceive(Resp<OrderReport> orderReportResp) {
+//                if (orderReportResp.isSuccess()) {
+//                    mHomeListHeader.setOrderReport(orderReportResp.getData());
+//                }
+//            }
+//        }).setTag(TAG).fire();
+//    }
 
     @Override
     public void onTimeUp(int count) {

@@ -745,7 +745,7 @@ public class API extends APIBase {
                     .put("payType", payType));
         }
 
-        /* *
+        /**
          /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
          *
          * @return

@@ -77,8 +77,10 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.clearPhoneNumButton)
     ImageView mClearPhoneNumButton;
 
+
     private boolean mFreezeObtainAuthCode;
     private int mCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.domain.market.FullMarketData;
+import com.jnhyxx.html5.domain.market.ServerIpPort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,34 +27,24 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
 
+    private static final String TAG = "NettyClient";
+
     private EventLoopGroup mWorkerGroup;
     private Bootstrap mBootstrap;
     private Channel mChannel;
 
     private String mHost;
     private Integer mPort;
+    private boolean mClosed;
 
     private MarketConn mMarketConn;
     private ChattingConn mChattingConn;
 
-    private boolean mClosed;
-
     private NettyClientHandler.Callback mCallback;
+    private List<NettyHandler> mHandlerList;
     private QuotaDataFilter mQuotaDataFilter;
 
-    private List<NettyHandler> mHandlerList;
-
     private static NettyClient mInstance;
-
-    public interface QuotaDataFilter {
-        /**
-         * Filter quota data
-         *
-         * @param data
-         * @return if the data need to be filtered return true, false otherwise
-         */
-        boolean filter(FullMarketData data);
-    }
 
     public static NettyClient getInstance() {
         if (mInstance == null) {
@@ -67,12 +58,12 @@ public class NettyClient {
         this.mCallback = new NettyClientHandler.Callback() {
             @Override
             public void onChannelActive(ChannelHandlerContext ctx) {
-                Log.d("TAG", "onChannelActive: ");
+                Log.d(TAG, "onChannelActive: ");
             }
 
             @Override
             public void onChannelInActive(ChannelHandlerContext ctx) {
-                Log.d("TAG", "onChannelInActive: ");
+                Log.d(TAG, "onChannelInActive: ");
                 ctx.channel().eventLoop().schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -83,43 +74,28 @@ public class NettyClient {
 
             @Override
             public void onReceiveData(String data) {
-                onReceiveOriginalData(data);
-                handleRealTimeQuotaData(data);
+                //Log.d(TAG, "onReceiveData: " + data);
+                processOriginalData(data);
             }
 
             @Override
             public void onError(ChannelHandlerContext ctx, Throwable cause) {
-                Log.d("TAG", "onError: ");
+                Log.d(TAG, "onError: ");
             }
         };
     }
 
-    private void onReceiveOriginalData(String data) {
-        for (int i = 0; i < mHandlerList.size(); i++) {
-            Handler handler = mHandlerList.get(i);
-            Message message = handler.obtainMessage(NettyHandler.WHAT_ORIGINAL, data);
-            handler.sendMessage(message);
-        }
-    }
-
-    private void handleRealTimeQuotaData(String data) {
-        try {
-            if (data.indexOf("lastPrice") == -1) return;
-
-            FullMarketData marketData = new Gson().fromJson(data, FullMarketData.class);
-
-            if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) {
+    private void processOriginalData(String data) {
+        if (mMarketConn != null) {
+            try {
+                FullMarketData marketData = new Gson().fromJson(data, FullMarketData.class);
+                if (mQuotaDataFilter != null && mQuotaDataFilter.filter(marketData)) return;
+            } catch (JsonSyntaxException e) {
+                onError(e.getMessage());
                 return;
             }
-            if (mMarketConn != null) {
-                onReceiveSingleData(marketData);
-            }
-        } catch (JsonSyntaxException e) {
-            onError(e.getMessage());
         }
-    }
 
-    private void onReceiveSingleData(FullMarketData data) {
         for (int i = 0; i < mHandlerList.size(); i++) {
             Handler handler = mHandlerList.get(i);
             Message message = handler.obtainMessage(NettyHandler.WHAT_DATA, data);
@@ -147,7 +123,7 @@ public class NettyClient {
         }
     }
 
-    public void setIpAndPort(String host, String port) {
+    public void setChattingIpAndPort(String host, String port) {
         try {
             this.mHost = host;
             this.mPort = Integer.valueOf(port);
@@ -179,7 +155,23 @@ public class NettyClient {
                 .group(mWorkerGroup)
                 .channel(NioSocketChannel.class)
                 .handler(new NettyInitializer(mCallback));
-        connect();
+
+        ServerIpPort ipPort = ServerIpPort.getMarketServerIpPort();
+        if (ipPort != null && ipPort.isValid()) {
+            mHost = ipPort.getIp();
+            mPort = Integer.valueOf(ipPort.getPort());
+            connect();
+        } else {
+            ServerIpPort.requestMarketServerIpAndPort(new ServerIpPort.Callback() {
+                @Override
+                public void onSuccess(ServerIpPort ipPort) {
+                    Log.d(TAG, "requestMarketServerIpAndPort success: " + ipPort);
+                    mHost = ipPort.getIp();
+                    mPort = Integer.valueOf(ipPort.getPort());
+                    connect();
+                }
+            });
+        }
     }
 
     private void connect() {
@@ -191,12 +183,13 @@ public class NettyClient {
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()) {
                     mChannel = channelFuture.sync().channel();
+
                     if (mMarketConn != null) {
                         mChannel.writeAndFlush(mMarketConn.toJson());
                     }
 
                     if (mChattingConn != null) {
-                        Log.d("TAG", "operationComplete: " + mChattingConn.toJson());
+                        Log.d(TAG, "operationComplete: " + mChattingConn.toJson());
                         mChannel.writeAndFlush(mChattingConn.toJson());
                     }
                 } else {
@@ -225,23 +218,9 @@ public class NettyClient {
         }
         if (mChannel != null) {
             ChannelFuture future = mChannel.close();
-            Log.d("TAG", "stop: " + future.toString());
+            Log.d(TAG, "stop: " + future.toString());
         }
 
-    }
-
-    private static class DefaultQuotaDataFilter implements QuotaDataFilter {
-
-        private String mContractCode;
-
-        public DefaultQuotaDataFilter(String contractCode) {
-            mContractCode = contractCode;
-        }
-
-        @Override
-        public boolean filter(FullMarketData data) {
-            return !data.getInstrumentId().equalsIgnoreCase(mContractCode);
-        }
     }
 
     private static class ChattingConn {
@@ -288,6 +267,30 @@ public class NettyClient {
 
         public String toJson() {
             return new Gson().toJson(this);
+        }
+    }
+
+    public interface QuotaDataFilter {
+        /**
+         * Filter quota data
+         *
+         * @param data
+         * @return if the data need to be filtered return true, false otherwise
+         */
+        boolean filter(FullMarketData data);
+    }
+
+    private static class DefaultQuotaDataFilter implements QuotaDataFilter {
+
+        private String mContractCode;
+
+        public DefaultQuotaDataFilter(String contractCode) {
+            mContractCode = contractCode;
+        }
+
+        @Override
+        public boolean filter(FullMarketData data) {
+            return !data.getInstrumentId().equalsIgnoreCase(mContractCode);
         }
     }
 }

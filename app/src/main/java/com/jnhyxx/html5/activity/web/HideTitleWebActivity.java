@@ -139,7 +139,7 @@ public class HideTitleWebActivity extends BaseActivity {
         webSettings.setUserAgentString(webSettings.getUserAgentString()
                 + " ###" + getString(R.string.android_web_agent) + "/1.0");
         //mWebView.getSettings().setAppCacheEnabled(true);
-        webSettings.setAppCachePath(getExternalCacheDir().getPath());
+        //webSettings.setAppCachePath(getExternalCacheDir().getPath());
         webSettings.setAllowFileAccess(true);
 
         // performance improve

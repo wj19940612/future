@@ -69,6 +69,9 @@ public abstract class Callback<T> extends ApiCallback<T> {
         int toastResId = R.string.api_error_network;
         if (volleyError instanceof NullResponseError) {
             toastResId = R.string.api_error_null;
+            if (((NullResponseError) volleyError).isRespDataNull()) {
+                toastResId = R.string.api_error_null_1;
+            }
         } else if (volleyError instanceof TimeoutError) {
             toastResId = R.string.api_error_timeout;
         } else if (volleyError instanceof ParseError) {

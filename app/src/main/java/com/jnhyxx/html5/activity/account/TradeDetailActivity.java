@@ -15,10 +15,12 @@ import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.fragment.FundDetailFragment;
 import com.jnhyxx.html5.fragment.ScoreDetailListFragment;
 import com.jnhyxx.html5.utils.FontUtil;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,8 +72,10 @@ public class TradeDetailActivity extends BaseActivity {
                     case 0:
                         //左边头部
                         initData();
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FUND_DETAIL);
                         break;
                     case 1:
+                        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.GOLD_DETAIL);
                         mRemainTitle.setText(R.string.account_trade_detail_integral_remain);
                         mRemainNumber.setText(FinanceUtil.formatWithScale(mUserFundInfo.getScoreUsable()));
                         mBlockedTitle.setText(R.string.integral_frozen);

@@ -33,6 +33,7 @@
             android:textColor="@color/colorDisable"/>
 
         <ImageView
+            android:id="@+id/userHeadImage"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
@@ -52,17 +53,161 @@
     <include layout="@layout/spilt_line_gray_light"/>
 
     <com.jnhyxx.html5.view.IconTextRow
-        android:id="@+id/messageCenter"
+        android:id="@+id/userName"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="43dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowRightText="操盘手2525"
         app:rowRightTextVisibility="visible"
         app:rowText="@string/user_name"
         app:rowTextColor="@color/colorDisable"
         app:subText="@string/time"
         app:subTextColor="@android:color/white"/>
+
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/userRealName"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="张三"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/real_name"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
     <include layout="@layout/spilt_line_gray_light"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/sex"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="男"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/sex"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
+    <include layout="@layout/spilt_line_gray_light"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/birthday"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="1920-12-12"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/birthday"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
+    <include layout="@layout/spilt_line_gray_light"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/common_margin"
+            android:text="@string/user_introduction"
+            android:textColor="@color/colorDisable"/>
+
+        <EditText
+            android:id="@+id/userIntroduction"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/user_introduction_hint"
+            android:textColorHint="@color/grayHint"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/realNameAuth"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="已认证"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/real_name_authorize"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
+    <include layout="@layout/spilt_line_gray_light"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/bindBankCard"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="已绑定"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/binding_bank_card"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
+    <include layout="@layout/spilt_line_gray_light"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/bindingPhone"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowRightText="已绑定"
+        app:rowRightTextVisibility="visible"
+        app:rowText="@string/binding_phone"
+        app:rowTextColor="@color/colorDisable"
+        app:subText="@string/time"
+        app:subTextColor="@android:color/white"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red_primary"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/logout"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
 </LinearLayout>

@@ -455,11 +455,6 @@
     <string name="live_right_title">交易</string>
 
 
-    <!--个人信息界面-->
-    <string name="head_image">头像</string>
-    <string name="user_name">用户名</string>
-
-
     <string name="live_program_dir">节目单</string>
     <string name="live_interaction">互动</string>
     <string name="live_teacher_guide">老师指导</string>
@@ -494,5 +489,18 @@
     <string name="feedback_submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>
+
+
+    <!--个人信息界面-->
+    <string name="head_image">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="real_name">真实姓名</string>
+    <string name="sex">性别</string>
+    <string name="boy">男</string>
+    <string name="woman">女</string>
+    <string name="location">所在地</string>
+    <string name="birthday">生日</string>
+    <string name="user_introduction">个人简介</string>
+    <string name="user_introduction_hint">请输入简介</string>
 
 </resources>

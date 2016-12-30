@@ -13,7 +13,7 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.net.Callback2;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -81,9 +81,9 @@ public class IdeaFeedbackActivity extends BaseActivity {
     private void submitFeedBack(String userName, String realName, String feedBackContent) {
         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK_SUBMIT);
         API.User.submitFeedBack(feedBackContent, null, userName, realName, mFeedbackConnectWay.getText().toString())
-                .setCallback(new Callback2<Resp<JsonObject>, JsonObject>() {
+                .setCallback(new Callback1<Resp<JsonObject>>() {
                     @Override
-                    public void onRespSuccess(JsonObject jsonObject) {
+                    protected void onRespSuccess(Resp<JsonObject> resp) {
                         CustomToast.getInstance().showText(getActivity(), R.string.feedback_submit_success);
                         finish();
                     }

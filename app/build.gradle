@@ -57,16 +57,16 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 27
-            versionName '1.3.1'
+            versionCode 29
+            versionName '1.3.3'
             //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 //            minSdkVersion  21
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 12
-            versionName '1.2.0'
+            versionCode 15
+            versionName '1.2.5'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
@@ -118,9 +118,9 @@ android {
         }
         zy4 { // 贵金属期货宝
             applicationId 'com.trade163.zy4'
-            versionCode 3
-            versionName '1.2'
-            buildConfigField('String', 'API_HOST', '\"http://zy6.trade163.com\"')
+            versionCode 4
+            versionName '1.2.5'
+            buildConfigField('String', 'API_HOST', '\"http://zy8.trade163.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",

@@ -134,9 +134,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
         mListView.setEmptyView(mEmpty);
-
         if (mLiveChatInfoAdapter == null) {
             mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
             mListView.setAdapter(mLiveChatInfoAdapter);
@@ -154,7 +152,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         getChatInfo();
         setOnRefresh();
-        if (mDataArrayList != null && mDataArrayList.size() > 6) {
+        if (mDataArrayList != null && mDataArrayList.size() > 5) {
             setLiveViewStackFromBottom(true);
         }
     }

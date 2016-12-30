@@ -1,20 +1,22 @@
 package com.jnhyxx.html5.activity.userinfo;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
+import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +50,8 @@ public class UserInfoActivity extends BaseActivity {
     IconTextRow mBindingPhone;
     @BindView(R.id.logoutButton)
     TextView mLogoutButton;
-    @BindView(R.id.activity_user_info)
-    LinearLayout mActivityUserInfo;
+
+    private UserDefiniteInfo mUserDefiniteInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class UserInfoActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         getUserInfo();
+
+
     }
 
     private void getUserInfo() {
@@ -65,15 +69,53 @@ public class UserInfoActivity extends BaseActivity {
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<UserDefiniteInfo>, UserDefiniteInfo>() {
+
+
                     @Override
                     public void onRespSuccess(UserDefiniteInfo userDefiniteInfo) {
                         if (userDefiniteInfo != null) {
-                            Log.d(TAG, "用户信息" + userDefiniteInfo.toString());
+                            mUserDefiniteInfo = userDefiniteInfo;
+                            updateUserInfo(userDefiniteInfo);
                         }
                     }
                 })
-                .fire();
+                .fireSync();
+    }
+
+    private void updateUserInfo(UserDefiniteInfo userDefiniteInfo) {
+        if (!TextUtils.isEmpty(userDefiniteInfo.getUserPortrait())) {
+            Picasso.with(UserInfoActivity.this).load(userDefiniteInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
+        }
+        if (!TextUtils.isEmpty(userDefiniteInfo.getUserName())) {
+            mUserName.setSubText(userDefiniteInfo.getUserName());
+        }
+
+
     }
 
 
+
+    private int getBindBankcardAuthStatusRes(int authStatus) {
+        /**
+         * cardState银行卡状态 0未填写，1已填写，2已绑定
+         */
+        if (authStatus == UserInfo.BANKCARD_STATUS_FILLED) {
+            return  R.string.filled;
+        } else if (authStatus == UserInfo.BANKCARD_STATUS_BOUND) {
+            return R.string.bound;
+        }
+        return R.string.unbound;
+    }
+
+    private int getRealNameAuthStatusRes(int authStatus) {
+        /**
+         * idStatus实名状态 0未填写，1已填写，2已认证
+         */
+        if (authStatus == UserInfo.REAL_NAME_STATUS_FILLED) {
+            return R.string.filled;
+        } else if (authStatus == UserInfo.REAL_NAME_STATUS_VERIFIED) {
+            return R.string.authorized;
+        }
+        return R.string.un_authorized;
+    }
 }

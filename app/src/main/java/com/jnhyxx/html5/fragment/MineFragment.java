@@ -114,8 +114,7 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET);
-//                Launcher.with(getActivity(), SettingsActivity.class).execute();
-                Launcher.with(getActivity(), UserInfoActivity.class).execute();
+                Launcher.with(getActivity(), SettingsActivity.class).execute();
             }
         });
     }
@@ -212,13 +211,13 @@ public class MineFragment extends BaseFragment {
             case R.id.headImage:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), SettingsActivity.class).execute();
+                    Launcher.with(getActivity(), UserInfoActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).execute();
                 }
                 break;
             case R.id.feedback:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.FEED_BACK);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK);
                 Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
                 break;
         }

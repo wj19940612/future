@@ -38,8 +38,7 @@
             android:layout_height="45dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@+id/helpArrow"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_toLeftOf="@+id/helpArrow"/>
 
         <ImageView
             android:id="@+id/helpArrow"
@@ -56,13 +55,12 @@
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/user_name"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
         app:subTextColor="@color/blackPrimary"/>
 
 
@@ -70,14 +68,13 @@
         android:id="@+id/userRealName"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:layout_marginTop="10dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/real_name"
         app:rowTextColor="@color/colorDisable"
-        app:subText="张三"
         app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
@@ -86,13 +83,12 @@
         android:id="@+id/sex"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/sex"
         app:rowTextColor="@color/colorDisable"
-        app:subText="男"
         app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
@@ -101,13 +97,12 @@
         android:id="@+id/birthday"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/birthday"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
         app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
@@ -140,15 +135,14 @@
         android:id="@+id/realNameAuth"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:layout_marginTop="10dp"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/real_name_authorize"
         app:rowTextColor="@color/colorDisable"
-        app:subText="已认证"
-        app:subTextColor="@android:color/white"/>
+        app:subTextColor="@color/blueAssist"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
 
@@ -156,13 +150,12 @@
         android:id="@+id/bindBankCard"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/binding_bank_card"
         app:rowTextColor="@color/colorDisable"
-        app:subText="@string/time"
         app:subTextColor="@color/blackPrimary"/>
 
     <include layout="@layout/spilt_line_gray_light"/>
@@ -171,13 +164,12 @@
         android:id="@+id/bindingPhone"
         android:layout_width="match_parent"
         android:layout_height="43dp"
-        app:rowIsNotNeedTopPadding="true"
         android:background="@android:color/white"
         app:rightIcon="@drawable/common_big_arrow_list_icon_more"
         app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
         app:rowText="@string/binding_phone"
         app:rowTextColor="@color/colorDisable"
-        app:subText="已经绑定"
         app:subTextColor="@color/blackPrimary"/>
 
     <View

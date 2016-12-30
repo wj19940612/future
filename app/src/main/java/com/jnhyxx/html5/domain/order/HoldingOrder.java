@@ -187,7 +187,9 @@ public class HoldingOrder extends AbsOrder implements Parcelable {
                 ", realMarketVal=" + realMarketVal +
                 ", showId='" + showId + '\'' +
                 ", stopLossPrice=" + stopLossPrice +
+                ", stopLossMoney=" + stopLossMoney +
                 ", stopWinPrice=" + stopWinPrice +
+                ", stopWinMoney=" + stopWinMoney +
                 ", unwindAvgPrice=" + unwindAvgPrice +
                 '}';
     }

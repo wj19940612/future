@@ -134,8 +134,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mListView.setEmptyView(mEmpty);
+        if (mLiveChatInfoAdapter == null) {
+            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
+            mListView.setAdapter(mLiveChatInfoAdapter);
+        }
 
-        setLiveViewStackFromBottom(true);
+
         mListView.setOnScrollListener(this);
 
         mInputBox.addTextChangedListener(mValidationWatcher);
@@ -147,6 +152,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         getChatInfo();
         setOnRefresh();
+        if (mDataArrayList != null && mDataArrayList.size() > 5) {
+            setLiveViewStackFromBottom(true);
+        }
     }
 
     private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
@@ -231,7 +239,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
             mPageOffset++;
-            if (liveSpeakInfo.isOwner()) {
+            if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
@@ -324,10 +332,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         stopRefreshAnimation();
 
-        if (mLiveChatInfoAdapter == null) {
-            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
-            mListView.setAdapter(mLiveChatInfoAdapter);
-        }
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }

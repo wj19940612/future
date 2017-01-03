@@ -152,9 +152,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         getChatInfo();
         setOnRefresh();
-        if (mDataArrayList != null && mDataArrayList.size() > 5) {
-            setLiveViewStackFromBottom(true);
-        }
+        setLiveViewStackFromBottom(true);
     }
 
     private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
@@ -278,10 +276,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
 
-                                             if (liveHomeChatInfoResp.getData().size() < 6) {
+                                             if (liveHomeChatInfoResp.getData().size() < 5 || liveHomeChatInfoResp.getData().size() < mListView.getChildCount()) {
                                                  setLiveViewStackFromBottom(false);
                                              }
-
                                              mPageOffset = mPageOffset + mPageSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);

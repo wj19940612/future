@@ -1,7 +1,11 @@
 package com.jnhyxx.html5.activity.userinfo;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,8 +22,11 @@ import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 用户个人信息界面
@@ -50,8 +57,11 @@ public class UserInfoActivity extends BaseActivity {
     IconTextRow mBindingPhone;
     @BindView(R.id.logoutButton)
     TextView mLogoutButton;
+    @BindView(R.id.location)
+    IconTextRow mLocation;
 
     private UserDefiniteInfo mUserDefiniteInfo;
+    Calendar mCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +71,35 @@ public class UserInfoActivity extends BaseActivity {
 
         getUserInfo();
 
+        mCalendar = Calendar.getInstance();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @OnClick({R.id.birthday, R.id.location})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.birthday:
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
+
+                    }
+                },
+                        mCalendar
+                        .get(Calendar.YEAR), mCalendar
+                        .get(Calendar.MONTH), mCalendar
+                        .get(Calendar.DAY_OF_MONTH)
+//                        1993, 11, 2
+                );
+                datePickerDialog.show();
+                break;
+        }
     }
 
     private void getUserInfo() {
@@ -90,9 +128,7 @@ public class UserInfoActivity extends BaseActivity {
             mUserName.setSubText(userDefiniteInfo.getUserName());
         }
 
-
     }
-
 
 
     private int getBindBankcardAuthStatusRes(int authStatus) {
@@ -100,7 +136,7 @@ public class UserInfoActivity extends BaseActivity {
          * cardState银行卡状态 0未填写，1已填写，2已绑定
          */
         if (authStatus == UserInfo.BANKCARD_STATUS_FILLED) {
-            return  R.string.filled;
+            return R.string.filled;
         } else if (authStatus == UserInfo.BANKCARD_STATUS_BOUND) {
             return R.string.bound;
         }
@@ -118,4 +154,6 @@ public class UserInfoActivity extends BaseActivity {
         }
         return R.string.un_authorized;
     }
+
+
 }

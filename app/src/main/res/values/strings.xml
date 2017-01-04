@@ -183,7 +183,7 @@
     <string name="trade_hint">(以上建议仅供参考,风险自担)</string>
     <string name="message_from">来源: %1$s</string>
     <string name="message_details">资讯详情</string>
-
+    
     <string name="before_data">前值: %1$s</string>
     <string name="expect_data">预期: %1$s</string>
     <string name="real_data">实际: %1$s</string>
@@ -463,6 +463,7 @@
     <string name="live_type_manager">管理员</string>
     <string name="live_type_teacher">老师</string>
     <string name="live_type_mine">我</string>
+    <string name="You_have_been_banned_please_speak_later">您被禁言，请稍后发言</string>
     <string name="live_time_is_not">非直播时间段，无法发言</string>
     <string name="live_speak_send">发送</string>
     <string name="there_is_no_chatting_record">暂无聊天记录</string>

@@ -463,7 +463,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             LiveInteractionFragment fragment = (LiveInteractionFragment)
                     mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
             if (fragment != null) {
-                fragment.setLoginSuccess(true);
+                fragment.updateLiveChatDataStatus();
             }
 
             disconnectNettySocket();

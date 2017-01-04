@@ -235,7 +235,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void addListViewFootView(List<LiveHomeChatInfo> data) {
         stopRefreshAnimation();
-
         if (mLiveTeacherGuideAdapter == null) {
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
             mListView.setAdapter(mLiveTeacherGuideAdapter);
@@ -251,8 +250,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     //判断谈话时间是否超过5分钟，如果超过，出现分割线
     private void getTalkTimeIsThanFiveMinute() {
         if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
-            for (int i = mDataInfoList.size(); i > 0; i--) {
-                if (i < 3) break;
+            for (int i = mDataInfoList.size(); i > 1; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(i - 1).getCreateTime(), mDataInfoList.get(i - 2).getCreateTime())) {
                     mDataInfoList.get(i - 1).setMoreThanFiveMin(true);
                 }

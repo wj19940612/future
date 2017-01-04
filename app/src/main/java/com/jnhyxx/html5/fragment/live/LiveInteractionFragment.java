@@ -7,10 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
-<<<<<<<HEAD
-        =======
 import android.util.Log;
->>>>>>>newBugFix
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

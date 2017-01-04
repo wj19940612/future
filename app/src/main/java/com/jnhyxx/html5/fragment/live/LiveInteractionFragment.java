@@ -541,11 +541,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo, String format) {
                 String chatUser = "";
-                if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
+                if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
                     Picasso.with(context).load(R.drawable.ic_live_pic_head)
                             .transform(new CircleTransform()).into(mUserHeadImage);
-                } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
+                } else if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                     chatUser = item.getName();
                     if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
                         Picasso.with(context).load(teacherInfo.getPictureUrl())

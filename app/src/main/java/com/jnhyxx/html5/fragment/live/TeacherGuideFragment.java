@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.johnz.kutils.DateUtil;
 import com.squareup.picasso.Picasso;
@@ -71,7 +68,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     private ArrayList<LiveHomeChatInfo> mDataInfoList;
 
     public static TeacherGuideFragment newInstance() {
-
         Bundle args = new Bundle();
         TeacherGuideFragment fragment = new TeacherGuideFragment();
         fragment.setArguments(args);
@@ -96,7 +92,10 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setEmptyView(mEmpty);
-        setLiveViewStackFromBottom(true);
+        if (mLiveTeacherGuideAdapter == null) {
+            mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
+            mListView.setAdapter(mLiveTeacherGuideAdapter);
+        }
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataInfoList = new ArrayList<>();
@@ -117,36 +116,30 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                  @Override
                                  public void onRespSuccess(LiveMessage liveMessage) {
                                      mLiveMessage = liveMessage;
+                                     if (mLiveMessage != null) {
+                                         mLiveTeacherGuideAdapter.setTeacherInfo(mLiveMessage.getTeacher());
+                                     }
                                      getTeacherGuideIfo();
-
                                  }
                              }
-                ).fire();
+                ).fireSync();
     }
 
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser
-                && isAdded()
-                && !getActivity().isFinishing()) {
-            mPageOffset = 0;
-            if (mDataInfoList != null) {
-                mDataInfoList.clear();
-            }
-            getLiveMessage();
-        }
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser
+//                && isAdded()
+//                && !getActivity().isFinishing()) {
+//            mPageOffset = 0;
+//            if (mDataInfoList != null) {
+//                mDataInfoList.clear();
+//            }
+//            getLiveMessage();
+//        }
+//    }
 
-    private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
-        mListView.setStackFromBottom(isStackFromBottom);
-        if (isStackFromBottom) {
-            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        } else {
-            mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_DISABLED);
-        }
-    }
 
     public void setData(LiveHomeChatInfo data) {
         if (data != null && mLiveTeacherGuideAdapter != null) {
@@ -160,7 +153,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 }
                 mLiveTeacherGuideAdapter.add(data);
                 mLiveTeacherGuideAdapter.notifyDataSetChanged();
-
             }
         }
     }
@@ -170,16 +162,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                if (!Network.isNetworkAvailable()) {
-                    stopRefreshAnimation();
-                }
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getTeacherGuideIfo();
-                setLiveViewStackFromBottom(false);
             }
         });
     }
@@ -198,15 +186,14 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                         if (listResp.isSuccess()) {
                             if (listResp.hasData()) {
 
-                                if (listResp.getData().size() < 6) {
-                                    setLiveViewStackFromBottom(false);
-                                }
-
-                                mPageOffset = mPageOffset + mPageSize;
+                                mPageOffset = mPageOffset + listResp.getData().size();
                                 mDataInfoList.addAll(0, listResp.getData());
                                 updateTeacherGuide(listResp.getData());
-                                if (mPageOffset > 10) {
+
+                                if (listResp.getData().size() == mPageSize) {
                                     mListView.setSelection(mPageSize - 1);
+                                } else {
+                                    mListView.setSelection(listResp.getData().size() - 1);
                                 }
                             } else {
                                 stopRefreshAnimation();
@@ -235,14 +222,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void addListViewFootView(List<LiveHomeChatInfo> data) {
         stopRefreshAnimation();
-
-        if (mLiveTeacherGuideAdapter == null) {
-            mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
-            mListView.setAdapter(mLiveTeacherGuideAdapter);
-            if (mLiveMessage != null) {
-                mLiveTeacherGuideAdapter.setTeacherInfo(mLiveMessage.getTeacher());
-            }
-        }
         mLiveTeacherGuideAdapter.clear();
         getTalkTimeIsThanFiveMinute();
         mLiveTeacherGuideAdapter.notifyDataSetChanged();
@@ -251,8 +230,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     //判断谈话时间是否超过5分钟，如果超过，出现分割线
     private void getTalkTimeIsThanFiveMinute() {
         if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
-            for (int i = mDataInfoList.size(); i > 0; i--) {
-                if (i < 3) break;
+            for (int i = mDataInfoList.size(); i > 1; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataInfoList.get(i - 1).getCreateTime(), mDataInfoList.get(i - 2).getCreateTime())) {
                     mDataInfoList.get(i - 1).setMoreThanFiveMin(true);
                 }
@@ -303,7 +281,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindDataWithView(getItem(position), position, mContext, mTeacherInfo);
+            viewHolder.bindDataWithView(getItem(position), mContext, mTeacherInfo);
             return convertView;
         }
 
@@ -335,7 +313,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(LiveHomeChatInfo item, int position, Context context, LiveMessage.TeacherInfo teacherInfo) {
+            public void bindDataWithView(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo) {
                 if (item == null) return;
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
@@ -347,12 +325,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     mTimeBeforeHintLayout.setVisibility(View.GONE);
                 }
 
-                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                format = format + "  " + relativeTimeSpanString2.toString();
-                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
-                    format = "刚刚";
-                }
                 if (!mManagerLayout.isShown()) {
                     mManagerLayout.setVisibility(View.VISIBLE);
                 }
@@ -378,7 +350,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     mContent.setText(item.getMsg());
 
                 } else {
-                    Log.d("liveIn", "网址地址" + item.getMsg());
                     if (!TextUtils.isEmpty(item.getMsg())) {
                         if (mContent.getVisibility() == View.VISIBLE || mLlImageLayout.getVisibility() == View.GONE) {
                             mContent.setVisibility(View.GONE);

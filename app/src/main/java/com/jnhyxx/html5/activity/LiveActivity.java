@@ -111,15 +111,15 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 getLiveInteractionFragment().setData(data);
             }
 
-            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(data);
+            LiveHomeChatInfo liveHomeChatInfo = new LiveHomeChatInfo(data);
 
-            if (LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER && LiveHomeChatInfo.isOrder()) {
-                mTeacherCommand.setTeacherCommand(LiveHomeChatInfo);
+            if (liveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER && liveHomeChatInfo.isOrder()) {
+                mTeacherCommand.setTeacherCommand(liveHomeChatInfo);
             }
 
-            if (LiveHomeChatInfo.isOrder() || LiveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
+            if (liveHomeChatInfo.isOrder() || liveHomeChatInfo.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                 if (getTeacherGuideFragment() != null) {
-                    getTeacherGuideFragment().setData(LiveHomeChatInfo);
+                    getTeacherGuideFragment().setData(liveHomeChatInfo);
                 }
             }
         }
@@ -463,7 +463,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
             LiveInteractionFragment fragment = (LiveInteractionFragment)
                     mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
             if (fragment != null) {
-                fragment.setLoginSuccess(true);
+                fragment.updateLiveChatStatus();
             }
 
             disconnectNettySocket();

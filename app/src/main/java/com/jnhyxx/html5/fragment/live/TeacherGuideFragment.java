@@ -85,6 +85,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListView.setEmptyView(mEmpty);
+
         mPageSize = 10;
         mHashSet = new HashSet<>();
         mDataInfoList = new ArrayList<>();
@@ -93,7 +94,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         if (mLiveTeacherGuideAdapter == null) {
             mLiveTeacherGuideAdapter = new LiveTeacherGuideAdapter(getActivity());
             mListView.setAdapter(mLiveTeacherGuideAdapter);
-
         }
         getLiveMessage();
         initSwipeRefreshLayout();
@@ -121,7 +121,6 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                                          mLiveTeacherGuideAdapter.setTeacherInfo(mLiveMessage.getTeacher());
                                      }
                                      getTeacherGuideIfo();
-
                                  }
                              }
                 ).fireSync();

@@ -465,6 +465,7 @@
     <string name="live_type_mine">我</string>
     <string name="You_have_been_banned_please_speak_later">您被禁言，请稍后发言</string>
     <string name="live_time_is_not">非直播时间段，无法发言</string>
+    <string name="You_have_been_banned_please_speak_later">您被禁言，请稍后发言</string>
     <string name="live_speak_send">发送</string>
     <string name="there_is_no_chatting_record">暂无聊天记录</string>
     <string name="there_is_no_teacher_advise">暂无老师指导</string>

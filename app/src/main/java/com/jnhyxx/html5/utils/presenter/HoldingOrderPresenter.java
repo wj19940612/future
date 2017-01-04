@@ -327,8 +327,10 @@ public class HoldingOrderPresenter {
                     }
                     diff = diff.multiply(eachPointMoney).setScale(4, RoundingMode.HALF_EVEN);
 
-                    BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(), -1);
-                    BigDecimal bigDecimalStopProfit = new BigDecimal(holdingOrder.getStopWin());
+                    BigDecimal bigDecimalStopLoss = FinanceUtil.multiply(holdingOrder.getStopLoss(),
+                            determineNegativePositive(holdingOrder, true));
+                    BigDecimal bigDecimalStopProfit = FinanceUtil.multiply(holdingOrder.getStopWin(),
+                            determineNegativePositive(holdingOrder, false));
                     if (orderStatus == HoldingOrder.ORDER_STATUS_HOLDING && diff.compareTo(bigDecimalStopProfit) >= 0) {
                         refresh = true;
                         holdingOrder.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
@@ -349,7 +351,6 @@ public class HoldingOrderPresenter {
             }
         }
 
-
         onShowTotalProfit(hasHoldingOrders, totalProfit.doubleValue(), ratio);
 
         if (refresh) { // 触及风控刷新
@@ -357,6 +358,22 @@ public class HoldingOrderPresenter {
             String closingOrdersStr = closingOrders.deleteCharAt(closingOrders.length() - 1).toString();
             mHandler.sendMessage(mHandler.obtainMessage(RISK_CONTROL, varietyId, -1, closingOrdersStr));
             onRiskControlTriggered(closingOrdersStr);
+        }
+    }
+
+    private double determineNegativePositive(HoldingOrder holdingOrder, boolean isStopLoss) {
+        if (holdingOrder.getDirection() == HoldingOrder.DIRECTION_LONG) {
+            if (isStopLoss) {
+                return holdingOrder.getStopLossMoney() < holdingOrder.getRealAvgPrice() ? -1 : 1;
+            } else {
+                return holdingOrder.getStopWinMoney() > holdingOrder.getRealAvgPrice() ? 1 : -1;
+            }
+        } else {
+            if (isStopLoss) {
+                return holdingOrder.getStopLossMoney() > holdingOrder.getRealAvgPrice() ? -1 : 1;
+            } else {
+                return holdingOrder.getStopWinMoney() < holdingOrder.getRealAvgPrice() ? 1 : -1;
+            }
         }
     }
 

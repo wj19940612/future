@@ -38,6 +38,9 @@ android {
         zy4 { // 贵金属期货宝
             manifestPlaceholders = [UMENG_APPKEY: "58412feef29d9877880010db"]
         }
+        zy9 { // 外汇期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "5865bd1fa40fa33c9c000aef"]
+        }
     }
 }
 

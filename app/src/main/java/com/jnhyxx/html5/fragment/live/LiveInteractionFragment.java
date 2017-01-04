@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,8 +80,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private HashSet<Long> mHashSet;
 
-    private List<LiveHomeChatInfo> mLiveHomeChatInfoListInfo;
-
     private ArrayList<LiveHomeChatInfo> mDataArrayList;
 
     private LiveMessage.TeacherInfo mTeacherInfo;
@@ -90,9 +89,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     private InputMethodManager mInputMethodManager;
 
     private OnSendButtonClickListener mOnSendButtonClickListener;
-
-    //数据是否超过一页
-    private boolean isMoreOnePageData;
 
     public interface OnSendButtonClickListener {
         void onSendButtonClick(String message);
@@ -247,7 +243,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                     mLiveChatInfoAdapter.add(liveHomeChatInfo);
                     mLiveChatInfoAdapter.notifyDataSetChanged();
                     if (liveSpeakInfo.isOwner()) {
-                        if (isMoreOnePageData) {
+                        Log.d(TAG, "含有的数据" + mListView.getChildCount());
+                        if (mDataArrayList.size() > 5 || mDataArrayList.size() > mListView.getChildCount()) {
                             setLiveViewStackFromBottom(true);
                         }
                     }
@@ -266,14 +263,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
                                              mPageOffset = mPageOffset + mPageSize;
-                                             mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
-                                             mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
+                                             mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
                                              updateCHatInfo(mDataArrayList);
-                                             if (liveHomeChatInfoResp.getData().size() == mPageSize) {
-                                                 mListView.setSelection(mPageSize - 1);
-                                             } else {
-                                                 mListView.setSelection(liveHomeChatInfoResp.getData().size() - 1);
-                                             }
+
+                                             locateNewDataEnd(liveHomeChatInfoResp);
+
                                          } else {
                                              stopRefreshAnimation();
                                          }
@@ -287,6 +281,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  }
                              }
                 ).fire();
+    }
+
+    //定位至最新数据的倒数第一条
+    private void locateNewDataEnd(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
+        if (liveHomeChatInfoResp.getData().size() == mPageSize) {
+            mListView.setSelection(mPageSize - 1);
+        } else {
+            mListView.setSelection(liveHomeChatInfoResp.getData().size() - 1);
+        }
     }
 
     private void stopRefreshAnimation() {
@@ -349,12 +352,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         int topRowVerticalPosition =
                 (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
         mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-
-        if (totalItemCount > visibleItemCount) {
-            isMoreOnePageData = true;
-        } else {
-            isMoreOnePageData = false;
-        }
     }
 
     @OnClick(R.id.sendButton)

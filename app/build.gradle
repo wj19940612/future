@@ -26,7 +26,8 @@ android {
                 GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
                 GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
                 GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
-                PACKAGE_NAME    : applicationId
+                PACKAGE_NAME    : applicationId,
+                UMENG_CHANNEL   : "OFFICIAL"
         ]
     }
 
@@ -65,15 +66,16 @@ android {
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 16
-            versionName '1.2.6'
+            versionCode 17
+            versionName '1.2.7'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
                     GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "TENCENT"
             ]
         }
 
@@ -87,7 +89,8 @@ android {
                     GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
                     GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
                     GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy3 { // 金谷理财
@@ -100,7 +103,8 @@ android {
                     GETUI_APP_ID    : "uDkOIdBlgD8FDqbCZ8DaE4",
                     GETUI_APP_KEY   : "4aAkkoaEnU7e7BeyEsKld6",
                     GETUI_APP_SECRET: "gvH8woAsRr6tzjzOIOirH6",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy2 { // 蓝鲸投资
@@ -113,7 +117,8 @@ android {
                     GETUI_APP_ID    : "RBuCXPrguZ6sLPblvr6Ql1",
                     GETUI_APP_KEY   : "noLiE4TEba7nW7VzyiSry9",
                     GETUI_APP_SECRET: "rFWsgW0Cm46u19SMh4aJH9",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy4 { // 贵金属期货宝
@@ -126,7 +131,8 @@ android {
                     GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
                     GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
                     GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy9 { // 外汇期货宝
@@ -139,7 +145,8 @@ android {
                     GETUI_APP_ID    : "tHnk67dP6K7woKB80nk1U7",
                     GETUI_APP_KEY   : "f65TC3TG929G5NQgZEFuc4",
                     GETUI_APP_SECRET: "8InWjcHNYrATV6ha2yxJt2",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
     }

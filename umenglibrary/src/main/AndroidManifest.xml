@@ -50,7 +50,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <!-- umengAppKey，replace to yours -->
+        <!-- umengAppKey，replace to yours, channel is in main manifest -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="${UMENG_APPKEY}">

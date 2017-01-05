@@ -74,8 +74,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private Unbinder mBind;
 
-    private int mPageOffset = 0;
-    private int mPageSize = 0;
+    private int mOffset = 0;
+    private int mSize = 0;
 
     private LiveChatInfoAdapter mLiveChatInfoAdapter;
 
@@ -145,8 +145,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         mInputBox.addTextChangedListener(mValidationWatcher);
 
-        mPageSize = 10;
-        mPageOffset = 0;
+        mSize = 10;
+        mOffset = 0;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public void onStop() {
         super.onStop();
-        mPageOffset = 0;
+        mOffset = 0;
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -236,7 +236,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
-            mPageOffset++;
+            mOffset++;
             if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
@@ -268,8 +268,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     private void getChatInfo() {
-        API.Live.getLiveTalk(mPageOffset, mPageSize)
-                .setTag(TAG)
+        API.Live.getLiveTalk(mOffset, mSize).setTag(TAG)
                 .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
@@ -279,12 +278,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                              if (liveHomeChatInfoResp.getData().size() < 5 || liveHomeChatInfoResp.getData().size() < mListView.getChildCount()) {
                                                  setLiveViewStackFromBottom(false);
                                              }
-                                             mPageOffset = mPageOffset + mPageSize;
+                                             mOffset = mOffset + mSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
                                              updateCHatInfo(mDataArrayList);
-                                             if (mPageOffset > 10) {
-                                                 mListView.setSelection(mPageSize - 1);
+                                             if (mOffset > 10) {
+                                                 mListView.setSelection(mSize - 1);
                                              }
                                          } else {
                                              stopRefreshAnimation();
@@ -341,8 +340,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     //判断谈话时间是否超过5分钟，如果超过，出现分割线
     private void getTalkTimeIsThanFiveMinute() {
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-            for (int i = mDataArrayList.size(); i > 0; i--) {
-                if (i < 3) break;
+            for (int i = mDataArrayList.size(); i > 1; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(i - 1).getCreateTime(), mDataArrayList.get(i - 2).getCreateTime())) {
                     mDataArrayList.get(i - 1).setMoreThanFiveMin(true);
                 }
@@ -449,7 +447,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             TextView mCommonUserContent;
             @BindView(R.id.commonUserLayout)
             RelativeLayout mCommonUserLayout;
-
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);

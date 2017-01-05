@@ -48,6 +48,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.android.volley.Request.Method.HEAD;
+
 
 /**
  * Created by ${wangJie} on 2016/11/8.
@@ -73,8 +75,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private Unbinder mBind;
 
-    private int mPageOffset = 0;
-    private int mPageSize = 0;
+    private int mOffset = 0;
+    private int mSize = 0;
 
     private LiveChatInfoAdapter mLiveChatInfoAdapter;
 
@@ -124,8 +126,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPageSize = 10;
-        mPageOffset = 0;
+        mSize = 10;
+        mOffset = 0;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
 
@@ -139,11 +141,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
         mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
-
-        mPageSize = 10;
-        mPageOffset = 0;
-        mHashSet = new HashSet<>();
-        mDataArrayList = new ArrayList<>();
 
         getChatInfo();
         setOnRefresh();
@@ -161,7 +158,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public void onStop() {
         super.onStop();
-        mPageOffset = 0;
+        mOffset = 0;
     }
 
     @Override
@@ -227,7 +224,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     //接受最新的聊天数据
     public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
-            mPageOffset++;
+
+            mOffset++;
+            if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
+                setLiveViewStackFromBottom(true);
+            }
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
                 ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
             }
@@ -263,18 +264,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     private void getChatInfo() {
-        API.Live.getLiveTalk(mPageOffset, mPageSize)
-                .setTag(TAG)
+        API.Live.getLiveTalk(mOffset, mSize).setTag(TAG)
                 .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
-
-                                             mPageOffset = mPageOffset + liveHomeChatInfoResp.getData().size();
+                                             mOffset = mOffset + liveHomeChatInfoResp.getData().size();
                                              mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
-                                             updateCHatInfo(mDataArrayList);
+                                             updateCHatInfo(liveHomeChatInfoResp.getData());
                                              locateNewDataEnd(liveHomeChatInfoResp);
+
                                          } else {
                                              stopRefreshAnimation();
                                          }
@@ -292,8 +292,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     //定位至最新数据的倒数第一条
     private void locateNewDataEnd(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
-        if (liveHomeChatInfoResp.getData().size() == mPageSize) {
-            mListView.setSelection(mPageSize - 1);
+        if (liveHomeChatInfoResp.getData().size() == mSize) {
+            mListView.setSelection(mSize - 1);
         } else {
             mListView.setSelection(liveHomeChatInfoResp.getData().size() - 1);
         }
@@ -443,7 +443,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             TextView mCommonUserContent;
             @BindView(R.id.commonUserLayout)
             RelativeLayout mCommonUserLayout;
-
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);

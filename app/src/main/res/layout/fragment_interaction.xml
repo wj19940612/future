@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipeRefreshLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,27 +14,27 @@
         android:orientation="vertical">
 
         <ListView
-            android:background="@android:color/transparent"
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:divider="@null"/>
+            android:background="@android:color/transparent"
+            android:divider="@null"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
             android:drawablePadding="16dp"
             android:drawableTop="@drawable/image_no_record"
             android:gravity="center_horizontal"
             android:paddingTop="60dp"
+            android:text="@string/there_is_no_chatting_record"
             android:textColor="@color/emptyViewColor"
             android:textSize="20sp"
-            android:visibility="gone"
-            tools:text="@string/there_is_no_chatting_record"/>
+            android:visibility="visible"/>
 
         <LinearLayout
             android:id="@+id/inputBoxArea"

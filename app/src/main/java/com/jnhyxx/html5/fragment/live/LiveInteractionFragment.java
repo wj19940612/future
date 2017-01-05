@@ -74,8 +74,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private Unbinder mBind;
 
-    private int mPageOffset = 0;
-    private int mPageSize = 0;
+    private int mOffset = 0;
+    private int mSize = 0;
 
     private LiveChatInfoAdapter mLiveChatInfoAdapter;
 
@@ -134,19 +134,25 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mListView.setEmptyView(mEmpty);
+        if (mLiveChatInfoAdapter == null) {
+            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
+            mListView.setAdapter(mLiveChatInfoAdapter);
+        }
 
-        setLiveViewStackFromBottom(true);
+
         mListView.setOnScrollListener(this);
 
         mInputBox.addTextChangedListener(mValidationWatcher);
 
-        mPageSize = 10;
-        mPageOffset = 0;
+        mSize = 10;
+        mOffset = 0;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
 
         getChatInfo();
         setOnRefresh();
+        setLiveViewStackFromBottom(true);
     }
 
     private void setLiveViewStackFromBottom(boolean isStackFromBottom) {
@@ -161,7 +167,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     @Override
     public void onStop() {
         super.onStop();
-        mPageOffset = 0;
+        mOffset = 0;
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -230,8 +236,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
-            mPageOffset++;
-            if (liveSpeakInfo.isOwner()) {
+            mOffset++;
+            if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
@@ -262,24 +268,22 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     private void getChatInfo() {
-        API.Live.getLiveTalk(mPageOffset, mPageSize)
-                .setTag(TAG)
+        API.Live.getLiveTalk(mOffset, mSize).setTag(TAG)
                 .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
 
-                                             if (liveHomeChatInfoResp.getData().size() < 6) {
+                                             if (liveHomeChatInfoResp.getData().size() < 5 || liveHomeChatInfoResp.getData().size() < mListView.getChildCount()) {
                                                  setLiveViewStackFromBottom(false);
                                              }
-
-                                             mPageOffset = mPageOffset + mPageSize;
+                                             mOffset = mOffset + mSize;
                                              mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
                                              mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
                                              updateCHatInfo(mDataArrayList);
-                                             if (mPageOffset > 10) {
-                                                 mListView.setSelection(mPageSize - 1);
+                                             if (mOffset > 10) {
+                                                 mListView.setSelection(mSize - 1);
                                              }
                                          } else {
                                              stopRefreshAnimation();
@@ -324,10 +328,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         stopRefreshAnimation();
 
-        if (mLiveChatInfoAdapter == null) {
-            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
-            mListView.setAdapter(mLiveChatInfoAdapter);
-        }
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }
@@ -340,8 +340,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     //判断谈话时间是否超过5分钟，如果超过，出现分割线
     private void getTalkTimeIsThanFiveMinute() {
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-            for (int i = mDataArrayList.size(); i > 0; i--) {
-                if (i < 3) break;
+            for (int i = mDataArrayList.size(); i > 1; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(i - 1).getCreateTime(), mDataArrayList.get(i - 2).getCreateTime())) {
                     mDataArrayList.get(i - 1).setMoreThanFiveMin(true);
                 }
@@ -449,7 +448,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @BindView(R.id.commonUserLayout)
             RelativeLayout mCommonUserLayout;
 
-
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
@@ -540,11 +538,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
             private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo, String format) {
                 String chatUser = "";
-                if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
+                if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
                     Picasso.with(context).load(R.drawable.ic_live_pic_head)
                             .transform(new CircleTransform()).into(mUserHeadImage);
-                } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
+                } else if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                     chatUser = item.getName();
                     if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
                         Picasso.with(context).load(teacherInfo.getPictureUrl())

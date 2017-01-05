@@ -49,6 +49,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.android.volley.Request.Method.HEAD;
+
 
 /**
  * Created by ${wangJie} on 2016/11/8.
@@ -134,12 +136,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
         mListView.setEmptyView(mEmpty);
         if (mLiveChatInfoAdapter == null) {
             mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
             mListView.setAdapter(mLiveChatInfoAdapter);
         }
-
 
         mListView.setOnScrollListener(this);
 

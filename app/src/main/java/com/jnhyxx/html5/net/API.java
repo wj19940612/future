@@ -11,6 +11,7 @@ import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -319,7 +320,7 @@ public class API extends APIBase {
          */
         public static API getUserInfo() {
             return new API("/user/user/findInfo.do",
-                   null);
+                    null);
         }
 
         /**
@@ -331,6 +332,21 @@ public class API extends APIBase {
          */
         public static API subimitUserInfo(UserDefiniteInfo userDefiniteInfo) {
             return new API("/user/user/updateInfo.do", new ApiParams(UserDefiniteInfo.class, userDefiniteInfo));
+        }
+
+
+        /**
+         * 接口名：修改用户头像信息
+         * URL  http://域名/user/user/updatePic.do
+         *
+         * @param
+         * @return
+         */
+
+        public static API updateUserHeadImage(File file) {
+            return new API("/user/user/updatePic.do",
+                    new ApiParams());
+
         }
     }
 

@@ -14,6 +14,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -98,6 +99,9 @@ public class UserInfoActivity extends BaseActivity {
 //                        1993, 11, 2
                 );
                 datePickerDialog.show();
+                break;
+            case R.id.userHeadImage:
+                UploadUserImageDialogFragment.newInstance().show(getSupportFragmentManager());
                 break;
         }
     }

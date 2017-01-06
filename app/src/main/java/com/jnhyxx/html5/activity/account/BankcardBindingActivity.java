@@ -37,6 +37,7 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -339,7 +340,7 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     @NonNull
-    private View setWheelView(List<ChannelBank> channelBanks) {
+    private View setWheelView(final List<ChannelBank> channelBanks) {
 
         View view = LayoutInflater.from(BankcardBindingActivity.this).inflate(R.layout.dialog_wheel_view, null);
         final WheelView mWheelView = (WheelView) view
@@ -352,15 +353,25 @@ public class BankcardBindingActivity extends BaseActivity {
                     break;
                 }
             }
-        }
-        mWheelView.setSeletion(mMDefaultSelectBankId);// 设置默认被选中的项目
 
-        mWheelView.setItemObjects((channelBanks));// 实际内容
-        mWheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+        }
+        List<String> bankNameList = new ArrayList<>();
+        for (ChannelBank data : channelBanks) {
+            bankNameList.add(data.getName());
+        }
+        
+        mWheelView.setItems(bankNameList);
+        mWheelView.setSelectedIndex(mMDefaultSelectBankId);
+        mWheelView.setOnWheelListener(new WheelView.OnWheelListener() {
             @Override
-            public void onSelected(int selectedIndex, Object item) {
-                mChannelBank = (ChannelBank) item;
-                mMDefaultSelectBankId = mChannelBank.getId();
+            public void onSelected(boolean isUserScroll, int index, String item) {
+                for (int i = 0; i < channelBanks.size(); i++) {
+                    if (item.equalsIgnoreCase(channelBanks.get(i).getName())) {
+                        mMDefaultSelectBankId = channelBanks.get(i).getId();
+                        mChannelBank = channelBanks.get(i);
+                        break;
+                    }
+                }
             }
         });
         return view;

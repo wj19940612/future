@@ -319,8 +319,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getUserInfo() {
-            return new API("/user/user/findInfo.do",
-                    null);
+            return new API("/user/user/findInfo.do", null);
         }
 
         /**

@@ -155,6 +155,9 @@
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.userinfo.SubmitRealNameActivity"
+            android:screenOrientation="portrait"/>
+
         <!-- WebView activity -->
         <activity
             android:name=".activity.WebViewActivity"
@@ -177,16 +180,13 @@
         <activity
             android:name=".activity.web.HideTitleWebActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.LiveActivity"
             android:configChanges="keyboard|screenSize|orientation"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.userinfo.UserInfoActivity"
             android:screenOrientation="portrait"/>
-
 
         <!-- Receiver for getui push -->
         <receiver
@@ -199,7 +199,6 @@
 
         <!-- service -->
         <service android:name=".service.DownloadService"/>
-
 
     </application>
 

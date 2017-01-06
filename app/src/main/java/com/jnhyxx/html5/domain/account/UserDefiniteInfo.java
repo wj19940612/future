@@ -12,35 +12,39 @@ public class UserDefiniteInfo {
     private static final int SEX_MAN = 1;
 
     /**
-     * idStatus实名状态 0未填写，1已填写，2已认证
+     * certificationStatus实名状态 0未填写，1已填写，2已认证
      */
     public static final int REAL_NAME_STATUS_UNFILLED = 0;
     public static final int REAL_NAME_STATUS_FILLED = 1;
     public static final int REAL_NAME_STATUS_VERIFIED = 2;
-
     /**
-     * birthday : 2222
-     * certificationStatus : 1
-     * introduction : 小师傅
-     * land : 安徽
-     * realName : yingying
-     * userName : 正
-     * userPortrait : https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1480048019943.png
-     * userSex : 1
+     * birthday : 2017-3-4
+     * certificationStatus : 2
+     * chinaSex : 女
+     * introduction : 家里蹲大学减肥快乐撒解放路科技大厦独守空房了解萨达六块腹肌代
+     * land : 陕西省-西安市
+     * realName : 王杰
+     * userName : 昵称123abc10
+     * userPortrait : https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1482833394930.png
+     * userSex : 0
      */
-
+    //生日
     private String birthday;
-    //用户实名认证状态 0=未认证 1=已填写 2=已认证
+    //认证状态。用户实名认证状态 0=未认证 1=已填写 2=已认证
     private int certificationStatus;
-    //个人简介
+    //性别
+    private String chinaSex;
+    //简介
     private String introduction;
+    //出生地
     private String land;
+    //真实姓名
     private String realName;
+    //昵称
     private String userName;
-    //用户头像地址
+    //头像网址
     private String userPortrait;
-    //（0是女，1是男）
-    private int userSex;
+
 
     public String getBirthday() {
         return birthday;
@@ -56,6 +60,14 @@ public class UserDefiniteInfo {
 
     public void setCertificationStatus(int certificationStatus) {
         this.certificationStatus = certificationStatus;
+    }
+
+    public String getChinaSex() {
+        return chinaSex;
+    }
+
+    public void setChinaSex(String chinaSex) {
+        this.chinaSex = chinaSex;
     }
 
     public String getIntroduction() {
@@ -98,32 +110,17 @@ public class UserDefiniteInfo {
         this.userPortrait = userPortrait;
     }
 
-    public int getUserSex() {
-        return userSex;
-    }
-
-    public void setUserSex(int userSex) {
-        this.userSex = userSex;
-    }
-
-    public boolean isMan() {
-        if (getUserSex() == SEX_MAN) {
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public String toString() {
         return "UserDefiniteInfo{" +
                 "birthday='" + birthday + '\'' +
                 ", certificationStatus=" + certificationStatus +
+                ", chinaSex='" + chinaSex + '\'' +
                 ", introduction='" + introduction + '\'' +
                 ", land='" + land + '\'' +
                 ", realName='" + realName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", userPortrait='" + userPortrait + '\'' +
-                ", userSex=" + userSex +
                 '}';
     }
 }

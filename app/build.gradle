@@ -75,7 +75,7 @@ android {
                     GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
                     PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "TENCENT"
+                    UMENG_CHANNEL   : "QIHU360"
             ]
         }
 

@@ -302,7 +302,7 @@ public class SignUpActivity extends BaseActivity {
         final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
         String authCode = ViewUtil.getTextTrim(mRegisterAuthCode);
-        API.User.register(phoneNum, password, authCode, null, AppInfo.getMetaData(this, "UMENG_CHANNEL"))
+        API.User.register(phoneNum, password, authCode, null, AppInfo.getMetaData(this, AppInfo.Meta.UMENG_CHANNEL))
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

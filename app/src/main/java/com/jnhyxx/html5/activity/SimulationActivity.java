@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
@@ -77,6 +78,9 @@ public class SimulationActivity extends BaseActivity {
                             .putExtra(Product.EX_FUND_TYPE, Product.FUND_TYPE_SIMULATION)
                             .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(mProductList))
                             .execute();
+                    if (Preference.get().isTagShowed(pkg.getProduct().getVarietyType(), Product.FUND_TYPE_SIMULATION)) {
+                        Preference.get().disableTagShowed(pkg.getProduct().getVarietyType(), Product.FUND_TYPE_SIMULATION);
+                    }
                 }
             }
         });
@@ -235,9 +239,13 @@ public class SimulationActivity extends BaseActivity {
                     mAdvertisement.setVisibility(View.VISIBLE);
                     mMarketCloseText.setVisibility(View.GONE);
                     mMarketOpenTime.setVisibility(View.GONE);
-                    mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
-                    mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
-
+                    if (Preference.get().isTagShowed(product.getVarietyType(), Product.FUND_TYPE_SIMULATION)) {
+                        mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
+                        mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
+                    } else {
+                        mHotIcon.setVisibility(View.GONE);
+                        mNewTag.setVisibility(View.GONE);
+                    }
                 }
                 HomePositions.Position position = pkg.getPosition(); // Position status
                 //如果休市，有持仓，则优先显示持仓提示

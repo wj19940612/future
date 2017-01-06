@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.fragment.dialog;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,16 +8,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +37,7 @@ import butterknife.Unbinder;
  * 上传用户头像
  */
 
-public class UploadUserImageDialogFragment extends DialogFragment {
+public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragment {
     private static final String TAG = "UploadUserImageDialogFr";
 
     /**
@@ -85,11 +79,11 @@ public class UploadUserImageDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_TITLE, R.style.AlertDialogStyle);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setStyle(STYLE_NO_TITLE, R.style.AlertDialogStyle);
+//    }
 
     @Nullable
     @Override
@@ -105,16 +99,16 @@ public class UploadUserImageDialogFragment extends DialogFragment {
         mBind.unbind();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Dialog dialog = getDialog();
-        Window window = dialog.getWindow();
-        window.setGravity(Gravity.BOTTOM);
-        DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        Dialog dialog = getDialog();
+//        Window window = dialog.getWindow();
+//        window.setGravity(Gravity.BOTTOM);
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
+//    }
 
 
     @OnClick({R.id.takePhoneFromCamera, R.id.takePhoneFromPhone, R.id.takePhoneCancel})

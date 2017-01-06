@@ -343,8 +343,7 @@ public class BankcardBindingActivity extends BaseActivity {
     private View setWheelView(final List<ChannelBank> channelBanks) {
 
         View view = LayoutInflater.from(BankcardBindingActivity.this).inflate(R.layout.dialog_wheel_view, null);
-        final WheelView mWheelView = (WheelView) view
-                .findViewById(R.id.wheelView);
+        final WheelView mWheelView = (WheelView) view.findViewById(R.id.wheelView);
         mWheelView.setOffset(1);
         if (!LocalUser.getUser().isBankcardBound()) {
             for (int i = 0; i < channelBanks.size(); i++) {

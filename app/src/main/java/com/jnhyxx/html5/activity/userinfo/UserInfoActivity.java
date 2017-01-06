@@ -18,6 +18,7 @@ import com.jnhyxx.html5.activity.setting.ModifyNickNameActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.fragment.dialog.SelectUserSexDialogFragment;
 import com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
@@ -40,7 +41,7 @@ import static com.jnhyxx.html5.R.id.realNameAuth;
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity {
+public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener {
 
     //修改昵称的请求码
     private static final int REQ_CODE_MODIFY_NICK_NAME = 659;
@@ -102,14 +103,55 @@ public class UserInfoActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.userName, R.id.userRealName, R.id.birthday, R.id.location, R.id.headImageLayout})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.headImageLayout:
+                UploadUserImageDialogFragment.newInstance().show(getSupportFragmentManager());
+                break;
             case R.id.userName:
                 modifyNickName();
                 break;
             case R.id.userRealName:
                 openUserRealNamePage();
+                break;
+            case R.id.sex:
+                new SelectUserSexDialogFragment().show(getSupportFragmentManager());
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                View rootView = LayoutInflater.from(this).inflate(R.layout.dialog_wheel_view, null);
+//                final WheelView wheelView = (WheelView) rootView.findViewById(R.id.wheelView);
+//                wheelView.setOffset(1);
+//                wheelView.setItems(new String[]{"男", "女"});
+//                wheelView.setSelectedItem("男");
+//                wheelView.setOnWheelListener(new WheelView.OnWheelListener() {
+//                    @Override
+//                    public void onSelected(boolean isUserScroll, int index, String item) {
+//                        ToastUtil.curt("所选的性别 " + item + " 索引 " + index);
+//                    }
+//                });
+//                builder.setView(rootView);
+//                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+//                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        });
+//                AlertDialog alertDialog = builder.create();
+//                Window window = alertDialog.getWindow();
+//                if (window != null) {
+//                    window.setGravity(Gravity.BOTTOM);
+//                    //设置dialog的宽度和手机宽度一样
+//                    DisplayMetrics dm = new DisplayMetrics();
+//                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+//                    window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
+//                }
+//                alertDialog.show();
                 break;
             case R.id.birthday:
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -124,9 +166,7 @@ public class UserInfoActivity extends BaseActivity {
                 );
                 datePickerDialog.show();
                 break;
-            case R.id.headImageLayout:
-                UploadUserImageDialogFragment.newInstance().show(getSupportFragmentManager());
-                break;
+
         }
     }
 
@@ -244,5 +284,11 @@ public class UserInfoActivity extends BaseActivity {
             return R.string.authorized;
         }
         return R.string.un_authorized;
+    }
+
+    //选择性别的回调
+    @Override
+    public void onSelected(String userSex) {
+        updateUserInfo();
     }
 }

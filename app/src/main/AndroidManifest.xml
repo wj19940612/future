@@ -154,8 +154,8 @@
         <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
-
-        <activity android:name=".activity.userinfo.SubmitRealNameActivity"
+        <activity
+            android:name=".activity.userinfo.SubmitRealNameActivity"
             android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->
@@ -200,6 +200,8 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
+        <activity android:name=".activity.userinfo.UserIntroduceActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -116,7 +116,7 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
         }
     }
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -161,6 +161,9 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 break;
             case R.id.location:
                 selectAddress();
+                break;
+            case R.id.introductionLayout:
+                Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
         }
     }

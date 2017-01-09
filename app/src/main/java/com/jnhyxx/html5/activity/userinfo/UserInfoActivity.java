@@ -36,13 +36,16 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
 
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener {
+public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener, AddressInitTask.OnAddressListener {
 
 
     //修改昵称的请求码
@@ -157,9 +160,26 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 datePickerDialog.show();
                 break;
             case R.id.location:
-                new AddressInitTask(this).execute("浙江", "杭州市","滨江区");
+                selectAddress();
                 break;
         }
+    }
+
+    //选择所在地
+    private void selectAddress() {
+        AddressInitTask addressInitTask = new AddressInitTask(getActivity(), true);
+        String land = LocalUser.getUser().getUserInfo().getLand();
+        String province = "浙江";
+        String city = "杭州市";
+        if (!TextUtils.isEmpty(land)) {
+            String[] split = land.split("-");
+            if (split.length == 2) {
+                province = split[0];
+                city = split[1];
+            }
+        }
+        addressInitTask.execute(province, city);
+        addressInitTask.setOnAddressListener(this);
     }
 
     private String FormatBirthdayDate(int year, int month, int dayOfMonth, StringBuilder birthdayDate) {
@@ -289,6 +309,11 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
     //选择性别的回调
     @Override
     public void onSelected(String userSex) {
+        updateUserInfo();
+    }
+
+    @Override
+    public void onSelectAddress(Province province, City city, County county) {
         updateUserInfo();
     }
 }

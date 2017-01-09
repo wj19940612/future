@@ -144,7 +144,6 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                     }
                 }
 
-
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Material_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -158,6 +157,7 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 datePickerDialog.show();
                 break;
             case R.id.location:
+                new AddressInitTask(this).execute("浙江", "杭州市","滨江区");
                 break;
         }
     }

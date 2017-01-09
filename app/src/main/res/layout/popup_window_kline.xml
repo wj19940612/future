@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_pop_window_kline"
+              android:gravity="center_horizontal"
+              android:minWidth="60dp"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dayK"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/day_k_line"/>
+
+    <TextView
+        android:id="@+id/threeMin"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/three_min_k"/>
+
+    <TextView
+        android:id="@+id/fiveMin"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/five_min_k"/>
+
+    <TextView
+        android:id="@+id/tenMin"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ten_min_k"/>
+
+    <TextView
+        android:id="@+id/thirtyMin"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/thirty_min_k"/>
+
+    <TextView
+        android:id="@+id/sixtyMin"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp"
+        android:text="@string/sixty_min_k"/>
+</LinearLayout>

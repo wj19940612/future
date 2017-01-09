@@ -954,9 +954,10 @@ public class API extends APIBase {
      * @return
      */
     public static API getKlineData(String varietyType, String type) {
-        return new API(GET, "/quotaData/candlestickData/getCandlesticKData.do",
+        return new API(GET, "/quota/candlestickData/getCandlesticKData.do",
                 new ApiParams()
-                        .put("contractsCode", varietyType));
+                        .put("contractsCode", varietyType)
+                        .put("type", type));
     }
 
     /**

@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.dialog.SelectUserSexDialogFragment;
 import com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -42,6 +43,7 @@ import static com.jnhyxx.html5.R.id.realNameAuth;
  * 用户个人信息界面
  */
 public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener {
+
 
     //修改昵称的请求码
     private static final int REQ_CODE_MODIFY_NICK_NAME = 659;
@@ -75,8 +77,6 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
     @BindView(R.id.location)
     IconTextRow mLocation;
 
-    private UserDefiniteInfo mUserDefiniteInfo;
-
     private Calendar mCalendar;
 
     @Override
@@ -93,6 +93,16 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.d(TAG, "将要上传的用户信息 " + LocalUser.getUser().getUserInfo().getUserDefiniteInfo().toString());
+        API.User.subimitUserInfo(LocalUser.getUser().getUserInfo().getUserDefiniteInfo()).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<Object>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        Log.d(TAG, "上传成功" + resp);
+                    }
+                }).fireSync();
     }
 
     @Override
@@ -117,57 +127,48 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 break;
             case R.id.sex:
                 new SelectUserSexDialogFragment().show(getSupportFragmentManager());
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                View rootView = LayoutInflater.from(this).inflate(R.layout.dialog_wheel_view, null);
-//                final WheelView wheelView = (WheelView) rootView.findViewById(R.id.wheelView);
-//                wheelView.setOffset(1);
-//                wheelView.setItems(new String[]{"男", "女"});
-//                wheelView.setSelectedItem("男");
-//                wheelView.setOnWheelListener(new WheelView.OnWheelListener() {
-//                    @Override
-//                    public void onSelected(boolean isUserScroll, int index, String item) {
-//                        ToastUtil.curt("所选的性别 " + item + " 索引 " + index);
-//                    }
-//                });
-//                builder.setView(rootView);
-//                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                })
-//                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        });
-//                AlertDialog alertDialog = builder.create();
-//                Window window = alertDialog.getWindow();
-//                if (window != null) {
-//                    window.setGravity(Gravity.BOTTOM);
-//                    //设置dialog的宽度和手机宽度一样
-//                    DisplayMetrics dm = new DisplayMetrics();
-//                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-//                    window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
-//                }
-//                alertDialog.show();
                 break;
             case R.id.birthday:
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                int year = mCalendar.get(Calendar.YEAR);
+                int month = mCalendar.get(Calendar.MONTH);
+                int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+                final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
+                if (!TextUtils.isEmpty(birthday)) {
+                    String[] split = birthday.split("-");
+                    if (split.length == 3) {
+                        year = Integer.valueOf(split[0]);
+                        month = Integer.valueOf(split[1]) - 1;
+                        day = Integer.valueOf(split[2]);
+                    }
+                }
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Material_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
+                        StringBuilder birthdayDate = new StringBuilder();
+                        LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
+                        updateUserInfo();
                     }
-                },
-                        mCalendar.get(Calendar.YEAR),
-                        mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH)
-                );
+                }, year, month, day);
+
                 datePickerDialog.show();
                 break;
-
+            case R.id.location:
+                break;
         }
+    }
+
+    private String FormatBirthdayDate(int year, int month, int dayOfMonth, StringBuilder birthdayDate) {
+        birthdayDate.append(year);
+        birthdayDate.append("-");
+        birthdayDate.append(month + 1);
+        birthdayDate.append("-");
+        birthdayDate.append(dayOfMonth);
+        return birthdayDate.toString();
     }
 
     private void openUserRealNamePage() {
@@ -196,7 +197,6 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                     @Override
                     public void onRespSuccess(UserDefiniteInfo userDefiniteInfo) {
                         if (userDefiniteInfo != null) {
-                            mUserDefiniteInfo = userDefiniteInfo;
                             LocalUser.getUser().getUserInfo().setUserDefiniteInfo(userDefiniteInfo);
                             updateUserInfo();
                         }

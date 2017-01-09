@@ -45,6 +45,9 @@ public class UserDefiniteInfo {
     //头像网址
     private String userPortrait;
 
+    //性别（0是女，1是男）
+    private Integer userSex;
+
 
     public String getBirthday() {
         return birthday;
@@ -110,6 +113,14 @@ public class UserDefiniteInfo {
         this.userPortrait = userPortrait;
     }
 
+    public Integer getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(Integer userSex) {
+        this.userSex = userSex;
+    }
+
     @Override
     public String toString() {
         return "UserDefiniteInfo{" +
@@ -121,6 +132,7 @@ public class UserDefiniteInfo {
                 ", realName='" + realName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", userPortrait='" + userPortrait + '\'' +
+                ", userSex=" + userSex +
                 '}';
     }
 }

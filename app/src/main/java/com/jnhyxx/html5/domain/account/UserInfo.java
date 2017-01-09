@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain.account;
 
+import android.text.TextUtils;
+
 /**
  * Created by Administrator on 2016/8/31.
  * 登陆成功后返回的数据
@@ -126,6 +128,24 @@ public class UserInfo {
         setIntroduction(userDefiniteInfo.getIntroduction());
         setLand(userDefiniteInfo.getLand());
         setUserPortrait(userDefiniteInfo.getUserPortrait());
+    }
+
+    public UserDefiniteInfo getUserDefiniteInfo() {
+        UserDefiniteInfo userDefiniteInfo = new UserDefiniteInfo();
+        userDefiniteInfo.setBirthday(getBirthday());
+        userDefiniteInfo.setChinaSex(getChinaSex());
+        if (!TextUtils.isEmpty(getChinaSex())) {
+            userDefiniteInfo.setUserSex(getChinaSex().equalsIgnoreCase("男") ? 1 : 0);
+        }
+
+        if (!isUserRealNameAuth()) {
+            userDefiniteInfo.setRealName(getRealName());
+        }
+        userDefiniteInfo.setCertificationStatus(getIdStatus());
+        userDefiniteInfo.setIntroduction(getIntroduction());
+        userDefiniteInfo.setLand(getLand());
+        userDefiniteInfo.setUserPortrait(getUserPortrait());
+        return userDefiniteInfo;
     }
 
     public double getMoneyUsable() {

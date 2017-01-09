@@ -166,19 +166,19 @@
 
         <include layout="@layout/spilt_line_gray_light"/>
 
-        <com.jnhyxx.html5.view.IconTextRow
-            android:id="@+id/bindBankCard"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:background="@android:color/white"
-            app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-            app:rightIconVisibility="visible"
-            app:rowIsNotNeedTopPadding="true"
-            app:rowText="@string/binding_bank_card"
-            app:rowTextColor="@color/colorDisable"
-            app:subTextColor="@color/blackPrimary"/>
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/bindBankCard"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+        app:rightIconVisibility="visible"
+        app:rowIsNotNeedTopPadding="true"
+        app:rowText="@string/binding_bank_card"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/blueAssist"/>
 
-        <include layout="@layout/spilt_line_gray_light"/>
+    <include layout="@layout/spilt_line_gray_light"/>
 
         <com.jnhyxx.html5.view.IconTextRow
             android:id="@+id/bindingPhone"

@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
+import com.jnhyxx.html5.activity.account.NameVerifyActivity;
 import com.jnhyxx.html5.activity.setting.ModifyNickNameActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -47,7 +49,8 @@ import static com.jnhyxx.html5.R.id.realNameAuth;
  */
 public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener, AddressInitTask.OnAddressListener {
 
-
+    // 绑定银行卡前 先进行实名认证
+    private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
     //修改昵称的请求码
     private static final int REQ_CODE_MODIFY_NICK_NAME = 659;
 
@@ -103,7 +106,6 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
 
                     @Override
                     protected void onRespSuccess(Resp<Object> resp) {
-                        Log.d(TAG, "上传成功" + resp);
                     }
                 }).fireSync();
     }
@@ -114,9 +116,19 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
             updateUserInfo();
         }
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQ_CODE_BASE:
+                    updateUserInfo();
+                    break;
+                case REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST:
+                    bingBankCard();
+                    break;
+            }
+        }
     }
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth,R.id.bindBankCard})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -165,7 +177,21 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
             case R.id.introductionLayout:
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
+            case R.id.realNameAuth:
+                Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
+                break;
+            case R.id.bindBankCard:
+                bingBankCard();
+                break;
         }
+    }
+
+    private void bingBankCard() {
+        if (!LocalUser.getUser().isRealNameFilled()) {
+            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST);
+            return;
+        }
+        Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQ_CODE_BASE);
     }
 
     //选择所在地

@@ -62,7 +62,6 @@ android {
             //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
             minSdkVersion  21
-
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
@@ -184,7 +183,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:cardview-v7:24.2.0'
     compile 'com.android.support:multidex:1.0.0'
-    compile 'cn.qqtheme.framework:WheelPicker:latest.release'
+//    compile 'cn.qqtheme.framework:WheelPicker:latest.release'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile files('libs/netty-buffer-4.1.5.final.jar')

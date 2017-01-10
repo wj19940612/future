@@ -30,6 +30,9 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
+import com.jnhyxx.html5.view.wheel.entity.City;
+import com.jnhyxx.html5.view.wheel.entity.County;
+import com.jnhyxx.html5.view.wheel.entity.Province;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
 
@@ -38,9 +41,6 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.qqtheme.framework.entity.City;
-import cn.qqtheme.framework.entity.County;
-import cn.qqtheme.framework.entity.Province;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
 
@@ -141,7 +141,7 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 openUserRealNamePage();
                 break;
             case R.id.sex:
-                new SelectUserSexDialogFragment().show(getSupportFragmentManager());
+//                new SelectUserSexDialogFragment().show(getSupportFragmentManager());
 
 //                OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
 //                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));

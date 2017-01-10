@@ -47,7 +47,7 @@ import static com.jnhyxx.html5.R.id.realNameAuth;
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener, AddressInitTask.OnAddressListener {
+public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener, AddressInitTask.OnAddressListener, UploadUserImageDialogFragment.OnUserImageListener {
 
     // 绑定银行卡前 先进行实名认证
     private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
@@ -100,7 +100,7 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
     public void onBackPressed() {
         super.onBackPressed();
         Log.d(TAG, "将要上传的用户信息 " + LocalUser.getUser().getUserInfo().getUserDefiniteInfo().toString());
-        API.User.subimitUserInfo(LocalUser.getUser().getUserInfo().getUserDefiniteInfo()).setTag(TAG)
+        API.User.submitUserInfo(LocalUser.getUser().getUserInfo().getUserDefiniteInfo()).setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback1<Resp<Object>>() {
 
@@ -128,7 +128,7 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
         }
     }
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth,R.id.bindBankCard})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -183,7 +183,22 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
             case R.id.bindBankCard:
                 bingBankCard();
                 break;
+            case R.id.logoutButton:
+                logout();
+                break;
         }
+    }
+
+    private void logout() {
+        API.User.logout().setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback1<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        LocalUser.getUser().logout();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).fire();
     }
 
     private void bingBankCard() {
@@ -344,5 +359,15 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
     @Override
     public void onSelectAddress(Province province, City city, County county) {
         updateUserInfo();
+    }
+
+    @Override
+    public void getUserImage(String headImageUrl, String bitmapToBase64) {
+        if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
+            Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
+            }).into(mUserHeadImage);
+        } else {
+            getUserInfo();
+        }
     }
 }

@@ -75,7 +75,7 @@ public class SubmitRealNameActivity extends BaseActivity {
     public void onClick() {
         final String realName = ViewUtil.getTextTrim(mRealNameInput);
         mUserDefiniteInfo.setRealName(realName);
-        API.User.subimitUserInfo(mUserDefiniteInfo)
+        API.User.submitUserInfo(mUserDefiniteInfo)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback<Resp<Object>>() {

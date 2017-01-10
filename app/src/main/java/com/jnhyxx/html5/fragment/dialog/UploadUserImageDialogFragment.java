@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.fragment.dialog;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,23 +10,25 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.ImageUtil;
-import com.squareup.picasso.Picasso;
+import com.johnz.kutils.net.ApiIndeterminate;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +40,7 @@ import butterknife.Unbinder;
  * 上传用户头像
  */
 
-public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragment {
+public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragment implements ApiIndeterminate {
     private static final String TAG = "UploadUserImageDialogFr";
 
     /**
@@ -60,16 +63,35 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
     TextView mTakePhoneFromPhone;
     @BindView(R.id.takePhoneCancel)
     TextView mTakePhoneCancel;
-    // TODO: 2016/12/19 测试图片
-    @BindView(R.id.test)
-    ImageView mTest;
-
     private Unbinder mBind;
     private File mFile;
 
+    private int widthPixels;
 
     public UploadUserImageDialogFragment() {
 
+    }
+
+    private OnUserImageListener mOnUserImageListener;
+
+
+    public interface OnUserImageListener {
+        /**
+         * @param headImageUrl   头像地址
+         * @param bitmapToBase64 所上传的头像转为base64字符串
+         */
+        void getUserImage(String headImageUrl, String bitmapToBase64);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnUserImageListener) {
+            mOnUserImageListener = (OnUserImageListener) context;
+        } else {
+            throw new RuntimeException(context.toString() +
+                    " must implement UploadUserImageDialogFragment.OnUserImageListener");
+        }
     }
 
     public static UploadUserImageDialogFragment newInstance() {
@@ -78,12 +100,6 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
         fragment.setArguments(args);
         return fragment;
     }
-
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setStyle(STYLE_NO_TITLE, R.style.AlertDialogStyle);
-//    }
 
     @Nullable
     @Override
@@ -94,22 +110,17 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        widthPixels = getDisplayWith();
+        Log.d(TAG, "屏幕宽度" + widthPixels);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
     }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        Dialog dialog = getDialog();
-//        Window window = dialog.getWindow();
-//        window.setGravity(Gravity.BOTTOM);
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
-//    }
-
 
     @OnClick({R.id.takePhoneFromCamera, R.id.takePhoneFromPhone, R.id.takePhoneCancel})
     public void onClick(View view) {
@@ -152,7 +163,10 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
                         String s = ImageUtil.FormetFileSize(mFile);
                         Log.d(TAG, "文件的大小 " + s);
                         if (mMBitmapUri != null) {
+                            Log.d(TAG, "拍照后图片的位置" + mMBitmapUri.getPath());
                             cropImage(mMBitmapUri);
+                            Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
+                            Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());
                         }
                     } else {
                         ToastUtil.curt("sd卡不可使用");
@@ -161,71 +175,47 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
 
                 case REQ_CODE_CROP_IMAGE:
                     Uri uri = data.getData();
-                    FileInputStream fileInputStream = null;
                     if (uri != null) {
-                        try {
-                            fileInputStream = new FileInputStream(uri.getPath());
-                            Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                        if (!TextUtils.isEmpty(uri.getPath())) {
+                            Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
                             Log.d(TAG, "裁剪的图片大小 " + bitmap.getAllocationByteCount());
+                            String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
+                            uploadUserHeadImage(bitmapToBase64);
+
                             Bitmap comp = ImageUtil.getUtil().comp(bitmap);
-                            String filePath = SimpleDateFormat.getDateTimeInstance().format(System.currentTimeMillis()) + ".jpeg";
-                            File file = ImageUtil.getUtil().saveBitmap(comp, filePath);
-
-
-                            mTest.setImageBitmap(bitmap);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } finally {
-                            if (fileInputStream != null) {
-                                try {
-                                    fileInputStream.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            Log.d(TAG, "裁剪后的图片大小 " + comp.getAllocationByteCount());
                         }
                     }
                     break;
                 case REQ_CODE_TAKE_PHONE_FROM_PHONES:
-                    Bitmap bitmap = data.getParcelableExtra("data");
-                    Uri data1 = data.getData();
-                    if (data1 != null) {
-                        Log.d(TAG, "相册的地址 " + data1.getPath());
-                    }
-                    if (bitmap != null) {
-                        mTest.setImageBitmap(bitmap);
-                    } else {
-                        Uri phoneUri = data.getData();
-                        FileInputStream phoneFileInputStream = null;
-                        if (phoneUri != null) {
-                            Picasso.with(getActivity()).load(phoneUri).into(mTest);
-                            try {
-                                phoneFileInputStream = new FileInputStream(phoneUri.getPath());
-                                bitmap = BitmapFactory.decodeStream(phoneFileInputStream);
-                                String fileSize = ImageUtil.getFileSize(phoneFileInputStream.available());
-                                Log.d(TAG, "计算出的相册图片大小" + fileSize);
-                                Log.d(TAG, "相册的图片大小 " + bitmap.getAllocationByteCount());
-                                Bitmap bitmap1 = ImageUtil.getUtil().comp(bitmap);
-                                Log.d(TAG, "压缩后的bitmap " + bitmap1.getAllocationByteCount());
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } finally {
-                                if (phoneFileInputStream != null) {
-                                    try {
-                                        phoneFileInputStream.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
+                    Uri photosUri = data.getData();
+                    if (photosUri != null) {
+                        Log.d(TAG, "相册的地址 " + photosUri.getPath());
+                        Bitmap bitmap = BitmapFactory.decodeFile(photosUri.getPath());
+                        Log.d(TAG, "相片中获取的原图大小" + bitmap.getAllocationByteCount());
+                        cropImage(photosUri);
                     }
                     break;
             }
         }
 
+    }
+
+    private void uploadUserHeadImage(final String bitmapToBase64) {
+        API.User.updateUserHeadImage(bitmapToBase64).setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<Object>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<Object> resp) {
+                        if (!TextUtils.isEmpty(resp.getData().toString())) {
+                            LocalUser.getUser().getUserInfo().setUserPortrait(resp.getData().toString());
+                        }
+                        mOnUserImageListener.getUserImage(resp.getData().toString(), bitmapToBase64);
+                        dismissAllowingStateLoss();
+                    }
+                })
+                .fireSync();
     }
 
     private void cropImage(Uri uri) {
@@ -234,10 +224,33 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
         intent.putExtra("crop", "true");// crop=true 有这句才能出来最后的裁剪页面.
         intent.putExtra("aspectX", 1);// 这两项为裁剪框的比例.
         intent.putExtra("aspectY", 1);// x:y=1:1
-        intent.putExtra("outputX", 400);//图片输出大小
-        intent.putExtra("outputY", 300);
+        intent.putExtra("outputX", widthPixels);//图片输出大小
+        intent.putExtra("outputY", widthPixels);
         intent.putExtra("output", uri);
         intent.putExtra("outputFormat", "JPEG");// 返回格式
         startActivityForResult(intent, REQ_CODE_CROP_IMAGE);
+    }
+
+    public int getDisplayWith() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        if (displayMetrics.widthPixels > 0) {
+            return (int) (0.85 * (displayMetrics.widthPixels));
+        }
+        return 400;
+    }
+
+    @Override
+    public void onShow(String tag) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onShow(tag);
+        }
+    }
+
+    @Override
+    public void onDismiss(String tag) {
+        if (getActivity() != null && getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).onDismiss(tag);
+        }
     }
 }

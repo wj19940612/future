@@ -27,6 +27,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -48,8 +49,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.android.volley.Request.Method.HEAD;
 
 
 /**
@@ -484,6 +483,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         showUserMineLayout();
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
+                        if (LocalUser.getUser().isLogin() && !TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
+                            Picasso.with(context).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform()).into(mUserMineHeadImage);
+                        }
                         //普通游客发言
                     } else {
                         showCommonUserLayout();

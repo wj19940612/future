@@ -66,7 +66,7 @@ public class UserIntroduceActivity extends BaseActivity {
     public void onClick() {
         final String userIntroduction = ViewUtil.getTextTrim(mIntroduceInput);
         mUserDefiniteInfo.setIntroduction(userIntroduction);
-        API.User.subimitUserInfo(mUserDefiniteInfo)
+        API.User.submitUserInfo(mUserDefiniteInfo)
                 .setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback1<Resp<Object>>() {

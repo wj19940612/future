@@ -329,7 +329,7 @@ public class API extends APIBase {
          * @param userDefiniteInfo
          * @return
          */
-        public static API subimitUserInfo(UserDefiniteInfo userDefiniteInfo) {
+        public static API submitUserInfo(UserDefiniteInfo userDefiniteInfo) {
             return new API("/user/user/updateInfo.do", new ApiParams(UserDefiniteInfo.class, userDefiniteInfo));
         }
 
@@ -342,9 +342,9 @@ public class API extends APIBase {
          * @return
          */
 
-        public static API updateUserHeadImage(File file) {
+        public static API updateUserHeadImage(String bitmapto64) {
             return new API("/user/user/updatePic.do",
-                    new ApiParams());
+                    new ApiParams().put("pic", bitmapto64));
 
         }
     }

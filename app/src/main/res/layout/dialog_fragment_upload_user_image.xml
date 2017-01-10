@@ -55,12 +55,4 @@
         android:text="@string/take_phone_cancel"
         android:textColor="@android:color/white"
         android:textSize="17sp"/>
-
-    <ImageView
-        android:id="@+id/test"
-        android:scaleType="centerInside"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/holo_green_dark"/>
-
 </LinearLayout>

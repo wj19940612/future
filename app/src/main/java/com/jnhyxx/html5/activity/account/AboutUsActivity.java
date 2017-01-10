@@ -11,6 +11,7 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.ExpandableLayout;
@@ -43,7 +44,7 @@ public class AboutUsActivity extends BaseActivity {
         initData();
 
         String servicePhone = Preference.get().getServicePhone();
-        servicePhone = servicePhone.substring(0, 3) + "-" + servicePhone.substring(3, 7) + "-" + servicePhone.substring(7, servicePhone.length());
+        servicePhone = StrFormatter.getFormatServicePhone(servicePhone);
         mServicePhone.setText(servicePhone);
         mSerViceQQ.setText(Preference.get().getServiceQQ());
     }

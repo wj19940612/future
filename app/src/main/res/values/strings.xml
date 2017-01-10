@@ -198,8 +198,13 @@
     <string name="contact_service">联系客服</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
     <string name="new_tag">NEW</string>
-
-
+    <string name="fund_security">资金安全</string>
+    <string name="risk_informed">风险告知</string>
+    <string name="media_reports">媒体报道</string>
+    <string name="service_phone">客服热线：%1$s</string>
+    <string name="trade_access">交易由纽约商品交易所及上期所实盘对接</string>
+    <string name="cooperation_partner">合作伙伴：合作伙伴: 纽约商业交易所|芝加哥商品交易所|CME集团\n香港交易所|新加坡交易所|欧洲期货交易所</string>
+    
     <!-- Order page -->
     <string name="order">订单</string>
     <string name="holding">持仓</string>

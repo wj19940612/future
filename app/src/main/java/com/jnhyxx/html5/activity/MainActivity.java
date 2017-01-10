@@ -106,8 +106,7 @@ public class MainActivity extends BaseActivity {
 
     private void getServiceInfo() {
         API.User.getChannelByDomain()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback1<Resp<ChannelServiceInfo>>() {
                     @Override
                     protected void onRespSuccess(Resp<ChannelServiceInfo> resp) {

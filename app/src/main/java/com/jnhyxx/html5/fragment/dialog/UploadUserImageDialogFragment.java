@@ -9,13 +9,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,7 +45,7 @@ import butterknife.Unbinder;
  * 上传用户头像
  */
 
-public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragment implements ApiIndeterminate {
+public class UploadUserImageDialogFragment extends DialogFragment implements ApiIndeterminate {
     private static final String TAG = "UploadUserImageDialogFr";
 
     /**
@@ -102,18 +106,31 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_TITLE, R.style.AlertDialogStyle);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Window window = getDialog().getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.BOTTOM);
+            DisplayMetrics dm = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+            window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+        widthPixels = getDisplayWith();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment_upload_user_image, container, false);
         mBind = ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        widthPixels = getDisplayWith();
     }
 
     @Override

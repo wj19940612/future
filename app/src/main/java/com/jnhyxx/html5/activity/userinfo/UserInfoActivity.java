@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.userinfo;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.jnhyxx.html5.activity.setting.ModifyNickNameActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.fragment.dialog.SelectUserSexDialogFragment;
 import com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
@@ -30,6 +30,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
+import com.jnhyxx.html5.view.wheel.OptionPicker;
 import com.jnhyxx.html5.view.wheel.entity.City;
 import com.jnhyxx.html5.view.wheel.entity.County;
 import com.jnhyxx.html5.view.wheel.entity.Province;
@@ -47,7 +48,7 @@ import static com.jnhyxx.html5.R.id.realNameAuth;
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity implements SelectUserSexDialogFragment.OnUserSexListener, AddressInitTask.OnAddressListener, UploadUserImageDialogFragment.OnUserImageListener {
+public class UserInfoActivity extends BaseActivity implements AddressInitTask.OnAddressListener, UploadUserImageDialogFragment.OnUserImageListener {
 
     // 绑定银行卡前 先进行实名认证
     private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
@@ -143,24 +144,27 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
             case R.id.sex:
 //                new SelectUserSexDialogFragment().show(getSupportFragmentManager());
 
-//                OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
-//                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
-////            picker.setSubmitTextColor(R.color.blueAssist);
-////                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
-//                picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
-//                picker.setAnimationStyle(R.style.BottomDialogStyle);
-//                picker.setOffset(2);
-//                picker.setSelectedIndex(0);
-////                picker.setTextSize(11);
+                OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
+                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
+//            picker.setSubmitTextColor(R.color.blueAssist);
+//                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
+                picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
+                picker.setAnimationStyle(R.style.BottomDialogStyle);
+                picker.setOffset(2);
+                picker.setSelectedIndex(0);
+//                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
-//                picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(int index, String item) {
-//                        Log.d(TAG, "返回的结果  " + item);
-//                        LocalUser.getUser().getUserInfo().setChinaSex(item);
-//                    }
-//                });
-//                picker.show();
+                picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+                    @Override
+                    public void onOptionPicked(int index, String item) {
+                        Log.d(TAG, "返回的结果  " + item);
+                        if (!TextUtils.isEmpty(item)) {
+                            mSex.setSubText(item);
+                            LocalUser.getUser().getUserInfo().setChinaSex(item);
+                        }
+                    }
+                });
+                picker.show();
 
                 break;
             case R.id.birthday:
@@ -370,11 +374,6 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
         return R.string.un_authorized;
     }
 
-    //选择性别的回调
-    @Override
-    public void onSelected(String userSex) {
-        updateUserInfo();
-    }
 
     @Override
     public void onSelectAddress(Province province, City city, County county) {

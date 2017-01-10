@@ -158,6 +158,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="HomeFooterText">
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">18dp</item>
+        <item name="android:minWidth">68dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <declare-styleable name="AutofitTextView">
         <!-- Minimum size of the text. -->
         <attr name="minTextSize" format="dimension"/>

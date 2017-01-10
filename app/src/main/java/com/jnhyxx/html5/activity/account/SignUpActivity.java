@@ -32,6 +32,7 @@ import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
+import com.johnz.kutils.AppInfo;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.MemoryPolicy;
@@ -301,7 +302,7 @@ public class SignUpActivity extends BaseActivity {
         final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
         String authCode = ViewUtil.getTextTrim(mRegisterAuthCode);
-        API.User.register(phoneNum, password, authCode, null)
+        API.User.register(phoneNum, password, authCode, null, AppInfo.getMetaData(this, AppInfo.Meta.UMENG_CHANNEL))
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override

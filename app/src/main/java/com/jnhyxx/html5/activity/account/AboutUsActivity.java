@@ -11,6 +11,7 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.ExpandableLayout;
@@ -43,7 +44,7 @@ public class AboutUsActivity extends BaseActivity {
         initData();
 
         String servicePhone = Preference.get().getServicePhone();
-        servicePhone = servicePhone.substring(0, 3) + "-" + servicePhone.substring(3, 7) + "-" + servicePhone.substring(7, servicePhone.length());
+        servicePhone = StrFormatter.getFormatServicePhone(servicePhone);
         mServicePhone.setText(servicePhone);
         mSerViceQQ.setText(Preference.get().getServiceQQ());
     }
@@ -55,7 +56,7 @@ public class AboutUsActivity extends BaseActivity {
         mCompanyInfo.setBottomTxt(getString(R.string.account_about_us_company_info_child, appName));
     }
 
-    @OnClick({R.id.companyInfo, R.id.managerTeam, R.id.companyCulture, R.id.collaborateCase, R.id.companyTelephone, R.id.serviceQq})
+    @OnClick({R.id.companyInfo, R.id.managerTeam, R.id.companyCulture, R.id.collaborateCase, R.id.companyTelephone, R.id.serviceQq, R.id.versionName})
     public void onClick(View view) {
         switch (view.getId()) {
             //公司信息
@@ -95,6 +96,9 @@ public class AboutUsActivity extends BaseActivity {
                 } else {
                     ToastUtil.show(R.string.install_qq_first);
                 }
+                break;
+            case R.id.versionName:
+                ToastUtil.curt(AppInfo.getMetaData(this, AppInfo.Meta.UMENG_CHANNEL));
                 break;
         }
     }

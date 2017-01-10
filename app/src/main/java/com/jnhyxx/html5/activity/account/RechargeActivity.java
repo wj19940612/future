@@ -70,8 +70,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void getSupportApplyWay() {
         API.Finance.getSupportApplyWay()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<SupportApplyWay>>() {
                     @Override
                     public void onReceive(Resp<SupportApplyWay> supportApplyWayResp) {

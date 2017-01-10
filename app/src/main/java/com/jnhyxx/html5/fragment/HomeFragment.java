@@ -37,6 +37,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
@@ -52,6 +53,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.jnhyxx.html5.R.string.service_phone;
 
 public class HomeFragment extends BaseFragment {
 
@@ -69,6 +72,7 @@ public class HomeFragment extends BaseFragment {
 
     private ProductPkgAdapter mProductPkgAdapter;
     private HomeListHeader mHomeListHeader;
+    private View mHomeListFooter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,6 +87,7 @@ public class HomeFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
         mHomeListHeader = new HomeListHeader(getContext());
+        mHomeListFooter = LayoutInflater.from(getContext()).inflate(R.layout.footer_home, null);
         mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
             @Override
             public void onBannerClick(Information information) {
@@ -139,9 +144,10 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-
         mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
+        mList.addFooterView(mHomeListFooter);
+        initHomeListFooterListeners();
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
         mList.setOnItemClickListener(new OnItemOneClickListener() {
@@ -162,6 +168,35 @@ public class HomeFragment extends BaseFragment {
         requestHomeInformation();
         //requestOrderReport();
         requestProductMarketList();
+    }
+
+    private void initHomeListFooterListeners() {
+        mHomeListFooter.findViewById(R.id.fundSecurity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        mHomeListFooter.findViewById(R.id.riskInformed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        mHomeListFooter.findViewById(R.id.mediaReports).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        TextView servicePhone = (TextView) mHomeListFooter.findViewById(R.id.servicePhone);
+        String servicePhoneNum = Preference.get().getServicePhone();
+        if (TextUtils.isEmpty(servicePhoneNum)) {
+            servicePhone.setVisibility(View.GONE);
+        } else {
+            servicePhoneNum = StrFormatter.getFormatServicePhone(servicePhoneNum);
+            servicePhone.setText(getString(service_phone, servicePhoneNum));
+        }
     }
 
 //    private void requestOrderReport() {

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -58,9 +59,9 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
 
 
     @BindView(R.id.takePhoneFromCamera)
-    TextView mTakePhoneFromCamera;
+    LinearLayout mTakePhoneFromCamera;
     @BindView(R.id.takePhoneFromPhone)
-    TextView mTakePhoneFromPhone;
+    LinearLayout mTakePhoneFromPhone;
     @BindView(R.id.takePhoneCancel)
     TextView mTakePhoneCancel;
     private Unbinder mBind;
@@ -113,7 +114,6 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         widthPixels = getDisplayWith();
-        Log.d(TAG, "屏幕宽度" + widthPixels);
     }
 
     @Override
@@ -163,7 +163,6 @@ public class UploadUserImageDialogFragment extends BaseGravityBottomDialogFragme
                         String s = ImageUtil.FormetFileSize(mFile);
                         Log.d(TAG, "文件的大小 " + s);
                         if (mMBitmapUri != null) {
-                            Log.d(TAG, "拍照后图片的位置" + mMBitmapUri.getPath());
                             cropImage(mMBitmapUri);
                             Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
                             Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());

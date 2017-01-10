@@ -5,13 +5,14 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/takePhoneFromCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_line_division_fill"
+        android:background="@drawable/btn_white"
+        android:clickable="true"
         android:gravity="center">
 
         <TextView
-            android:id="@+id/takePhoneFromCamera"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:adjustViewBounds="true"
@@ -24,17 +25,19 @@
             android:textSize="17sp"/>
     </LinearLayout>
 
+    <include layout="@layout/split_line_gray_dark"/>
+
     <LinearLayout
+        android:id="@+id/takePhoneFromPhone"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/bg_line_division_fill"
+        android:background="@drawable/btn_white"
         android:gravity="center">
 
         <TextView
-            android:id="@+id/takePhoneFromPhone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             android:clickable="true"
             android:drawableLeft="@drawable/ic_setting_photo_upload_image"
             android:drawablePadding="10dp"
@@ -44,12 +47,11 @@
             android:textSize="17sp"/>
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/takePhoneCancel"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:background="@color/colorDisable"
+        android:background="@drawable/btn_color_disable"
         android:clickable="true"
         android:gravity="center"
         android:text="@string/take_phone_cancel"

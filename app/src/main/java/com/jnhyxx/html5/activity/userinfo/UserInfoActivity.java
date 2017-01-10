@@ -142,6 +142,26 @@ public class UserInfoActivity extends BaseActivity implements SelectUserSexDialo
                 break;
             case R.id.sex:
                 new SelectUserSexDialogFragment().show(getSupportFragmentManager());
+
+//                OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
+//                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
+////            picker.setSubmitTextColor(R.color.blueAssist);
+////                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
+//                picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
+//                picker.setAnimationStyle(R.style.BottomDialogStyle);
+//                picker.setOffset(2);
+//                picker.setSelectedIndex(0);
+////                picker.setTextSize(11);
+//                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
+//                picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+//                    @Override
+//                    public void onOptionPicked(int index, String item) {
+//                        Log.d(TAG, "返回的结果  " + item);
+//                        LocalUser.getUser().getUserInfo().setChinaSex(item);
+//                    }
+//                });
+//                picker.show();
+
                 break;
             case R.id.birthday:
 

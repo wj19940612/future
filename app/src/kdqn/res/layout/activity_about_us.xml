@@ -83,10 +83,11 @@
                 android:id="@+id/collaborateCase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:elBottomTxt="@string/account_about_us_collaborate_case_child"
                 app:elLeftTxt="@string/account_about_us_collaborate_case"/>
 
-            <include layout="@layout/split_line_gray_light"/>
+            <!--<include layout="@layout/split_line_gray_light"/>-->
 
             <RelativeLayout
                 android:id="@+id/companyTelephone"

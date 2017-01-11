@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">口袋期牛</string>
+
+    <string name="account_about_us_company_info_child">北京鼎金世纪投资管理有限公司，是一家专注于国际金融培训、交易、融资、服务为一体的国际金融交易服务商。
+        \n秉承“一言九鼎、一诺千金”的宗旨，注重提升客户服务的质量和效率，始终以客户利益至上为核心，为客户提供最好的境外交易服务。
+        \n%1$s是北京鼎金世纪投资管理有限公司旗下的掌上交易产品，在确保金融交易严谨的前提下，通过产品娱乐化、大数据共享等方式降低金融交易门槛，为任何企业或者个人提供多通道、可运营的国际期货（美原油、美黄金、恒指等）交易服务，让传统金融交易真正互联网化。</string>
+    <string name="account_about_us_manager_team_child">团队主要成员来国内外知名的证券公司、私募基金、互联网金融企业，拥有丰富的金融市场及互联网经验。</string>
+    <string name="account_about_us_company_culture_child">企业使命
+        \n让中国人不再有难做的境外交易
+        \n企业愿景
+        \n成为国际一流的国际金融交易服务商
+        \n价值观
+        \n至诚至信、服务客户、团队协作、高效创新
+        \n管理理念
+        \n建立信仰和标准，重复重复再重复，最终达成结果</string>
+
+</resources>

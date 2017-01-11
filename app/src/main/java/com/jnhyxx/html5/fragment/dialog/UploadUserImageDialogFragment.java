@@ -20,8 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -124,6 +122,7 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         widthPixels = getDisplayWith();
+        Log.d(TAG, "宽度 " + widthPixels);
     }
 
     @Nullable

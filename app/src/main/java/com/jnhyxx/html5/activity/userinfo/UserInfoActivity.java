@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -48,6 +49,7 @@ import butterknife.OnClick;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
 
+
 /**
  * 用户个人信息界面
  */
@@ -76,7 +78,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     LinearLayout mIntroductionLayout;
     @BindView(R.id.userIntroduction)
     TextView mUserIntroduction;
-    @BindView(realNameAuth)
+    @BindView(R.id.realNameAuth)
     IconTextRow mRealNameAuth;
     @BindView(R.id.bindBankCard)
     IconTextRow mBindBankCard;
@@ -160,7 +162,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     }
 
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, realNameAuth, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -176,32 +178,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 showSexPicker();
                 break;
             case R.id.birthday:
-
-                int year = mCalendar.get(Calendar.YEAR);
-                int month = mCalendar.get(Calendar.MONTH);
-                int day = mCalendar.get(Calendar.DAY_OF_MONTH);
-
-                final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
-                if (!TextUtils.isEmpty(birthday)) {
-                    String[] split = birthday.split("-");
-                    if (split.length == 3) {
-                        year = Integer.valueOf(split[0]);
-                        month = Integer.valueOf(split[1]) - 1;
-                        day = Integer.valueOf(split[2]);
-                    }
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
-                        StringBuilder birthdayDate = new StringBuilder();
-                        LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
-                        updateUserInfo();
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
+                showBirthdayPicker();
                 break;
             case R.id.location:
                 selectAddress();
@@ -209,7 +186,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
             case R.id.introductionLayout:
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
-            case R.id.realNameAuth:
+            case realNameAuth:
                 Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bindBankCard:
@@ -221,21 +198,49 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         }
     }
 
+    private void showBirthdayPicker() {
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+        final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
+        if (!TextUtils.isEmpty(birthday)) {
+            String[] split = birthday.split("-");
+            if (split.length == 3) {
+                year = Integer.valueOf(split[0]);
+                month = Integer.valueOf(split[1]) - 1;
+                day = Integer.valueOf(split[2]);
+            }
+        }
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerDialogStyle, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
+                StringBuilder birthdayDate = new StringBuilder();
+                LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
+                updateUserInfo();
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
+    private int toDp(int size) {
+        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, getResources().getDisplayMetrics()));
+    }
+
     private void showSexPicker() {
         OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
         picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
-//            picker.setSubmitTextColor(R.color.blueAssist);
-//                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
         picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
         picker.setAnimationStyle(R.style.BottomDialogStyle);
         picker.setOffset(2);
         picker.setSelectedIndex(0);
+//        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
         picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
             @Override
             public void onOptionPicked(int index, String item) {
-                Log.d(TAG, "返回的结果  " + item);
                 if (!TextUtils.isEmpty(item)) {
                     mSex.setSubText(item);
                     LocalUser.getUser().getUserInfo().setChinaSex(item);

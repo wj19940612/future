@@ -183,7 +183,7 @@ public class HomeFragment extends BaseFragment {
 
             }
         });
-        mHomeListFooter.findViewById(R.id.mediaReports).setOnClickListener(new View.OnClickListener() {
+        mHomeListFooter.findViewById(R.id.cooperationOrg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

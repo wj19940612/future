@@ -27,13 +27,13 @@
         android:text="@string/fund_security"/>
 
     <TextView
-        android:id="@+id/mediaReports"
+        android:id="@+id/cooperationOrg"
         style="@style/HomeFooterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/riskInformed"
         android:layout_toRightOf="@id/riskInformed"
-        android:text="@string/media_reports"/>
+        android:text="@string/cooperation_org"/>
 
     <TextView
         android:id="@+id/servicePhone"

@@ -149,6 +149,20 @@ android {
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
+        kdqn { // 口袋期牛
+            applicationId 'com.jnhyxx.html5.kdqn'
+            versionCode 3
+            versionName '2.0'
+            buildConfigField('String', 'API_HOST', '\"http://www.koudaiqiniu.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "3ObKTSh0TMAZ2LTP9GNyC",
+                    GETUI_APP_KEY   : "qk9SiYjgqx5GQrLsWM7Vc9",
+                    GETUI_APP_SECRET: "ROLHNMYjVf8U7mY4LQTkI1",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
     }
 
     dexOptions {
@@ -176,6 +190,7 @@ dependencies {
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
     zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
+    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')

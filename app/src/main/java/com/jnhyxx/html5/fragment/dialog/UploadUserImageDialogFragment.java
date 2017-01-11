@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -63,9 +64,9 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
 
 
     @BindView(R.id.takePhoneFromCamera)
-    LinearLayout mTakePhoneFromCamera;
+    TextView mTakePhoneFromCamera;
     @BindView(R.id.takePhoneFromPhone)
-    LinearLayout mTakePhoneFromPhone;
+    TextView mTakePhoneFromPhone;
     @BindView(R.id.takePhoneCancel)
     TextView mTakePhoneCancel;
     private Unbinder mBind;

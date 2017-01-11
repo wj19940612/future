@@ -2,11 +2,14 @@ package com.jnhyxx.html5.activity.userinfo;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,6 +98,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         getUserInfo();
         mCalendar = Calendar.getInstance();
 
+        mUserIntroduction.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
     }
 
     @Override
@@ -109,6 +113,32 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                     protected void onRespSuccess(Resp<Object> resp) {
                     }
                 }).fireSync();
+    }
+
+
+    ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        @Override
+        public void onGlobalLayout() {
+            if (mUserIntroduction.getLineCount() > 0) {
+                Log.e(TAG, "行数" + mUserIntroduction.getLineCount());
+                if (mUserIntroduction.getGravity() != Gravity.LEFT && mUserIntroduction.getLineCount() > 1) {
+                    mUserIntroduction.setGravity(Gravity.LEFT);
+                } else {
+                    mUserIntroduction.setGravity(Gravity.RIGHT);
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mUserIntroduction.getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
+        } else {
+            mUserIntroduction.getViewTreeObserver().removeGlobalOnLayoutListener(mOnGlobalLayoutListener);
+        }
     }
 
     @Override
@@ -129,6 +159,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         }
     }
 
+
     @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -142,30 +173,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 openUserRealNamePage();
                 break;
             case R.id.sex:
-//                new SelectUserSexDialogFragment().show(getSupportFragmentManager());
-
-                OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
-                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
-//            picker.setSubmitTextColor(R.color.blueAssist);
-//                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
-                picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
-                picker.setAnimationStyle(R.style.BottomDialogStyle);
-                picker.setOffset(2);
-                picker.setSelectedIndex(0);
-//                picker.setTextSize(11);
-//                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
-                picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
-                    @Override
-                    public void onOptionPicked(int index, String item) {
-                        Log.d(TAG, "返回的结果  " + item);
-                        if (!TextUtils.isEmpty(item)) {
-                            mSex.setSubText(item);
-                            LocalUser.getUser().getUserInfo().setChinaSex(item);
-                        }
-                    }
-                });
-                picker.show();
-
+                showSexPicker();
                 break;
             case R.id.birthday:
 
@@ -183,7 +191,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                     }
                 }
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Material_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
@@ -211,6 +219,30 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 logout();
                 break;
         }
+    }
+
+    private void showSexPicker() {
+        OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
+        picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
+//            picker.setSubmitTextColor(R.color.blueAssist);
+//                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
+        picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
+        picker.setAnimationStyle(R.style.BottomDialogStyle);
+        picker.setOffset(2);
+        picker.setSelectedIndex(0);
+//                picker.setTextSize(11);
+//                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
+        picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+            @Override
+            public void onOptionPicked(int index, String item) {
+                Log.d(TAG, "返回的结果  " + item);
+                if (!TextUtils.isEmpty(item)) {
+                    mSex.setSubText(item);
+                    LocalUser.getUser().getUserInfo().setChinaSex(item);
+                }
+            }
+        });
+        picker.show();
     }
 
     private void logout() {

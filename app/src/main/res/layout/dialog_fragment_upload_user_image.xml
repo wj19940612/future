@@ -5,7 +5,6 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/takePhoneFromCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_white"
@@ -13,6 +12,7 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/takePhoneFromCamera"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:adjustViewBounds="true"
@@ -20,6 +20,8 @@
             android:drawableLeft="@drawable/ic_setting_camera_upload_image"
             android:drawablePadding="10dp"
             android:gravity="center"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
             android:text="@string/take_phone_from_camera"
             android:textColor="@color/blueAssist"
             android:textSize="17sp"/>
@@ -28,20 +30,22 @@
     <include layout="@layout/split_line_gray_dark"/>
 
     <LinearLayout
-        android:id="@+id/takePhoneFromPhone"
-        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/btn_white"
+        android:clickable="true"
         android:gravity="center">
 
         <TextView
+            android:id="@+id/takePhoneFromPhone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"
             android:drawableLeft="@drawable/ic_setting_photo_upload_image"
             android:drawablePadding="10dp"
             android:gravity="center"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
             android:text="@string/take_phone_from_phone"
             android:textColor="@color/blueAssist"
             android:textSize="17sp"/>

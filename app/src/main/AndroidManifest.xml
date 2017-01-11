@@ -186,7 +186,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.userinfo.UserInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.userinfo.UserIntroduceActivity"/>
 
         <!-- Receiver for getui push -->
         <receiver
@@ -206,8 +208,7 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
-        <activity android:name=".activity.userinfo.UserIntroduceActivity">
-        </activity>
+
     </application>
 
 </manifest>

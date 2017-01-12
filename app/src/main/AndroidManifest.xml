@@ -192,6 +192,12 @@
             </intent-filter>
         </receiver>
 
+        <!-- umeng channel，replace this -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL}">
+        </meta-data>
+
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 

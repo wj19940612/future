@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <com.jnhyxx.html5.view.TitleBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +64,6 @@
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin">
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,7 +77,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <RelativeLayout
                     android:id="@+id/bankCardPay"
@@ -210,11 +207,19 @@
             </LinearLayout>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="12sp"
+                android:textColor="@color/redPrimary"
+                android:text="@string/hint_recharge" />
+
+            <TextView
                 android:id="@+id/nextStepButton"
                 style="@style/PrimaryBigButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:enabled="false"
                 android:text="@string/next_step"/>
 

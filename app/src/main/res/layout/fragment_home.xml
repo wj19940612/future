@@ -19,6 +19,7 @@
         android:divider="@drawable/divider_home_list"
         android:dividerHeight="0.5dp"
         android:headerDividersEnabled="false"
+        android:footerDividersEnabled="false"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 

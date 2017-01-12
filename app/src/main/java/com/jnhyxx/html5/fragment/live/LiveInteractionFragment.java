@@ -104,15 +104,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof LiveInteractionFragment.OnSendButtonClickListener) {
-            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement LiveInteractionFragment.Callback");
-        }
+    public void setOnSendButtonClickListener(OnSendButtonClickListener onSendButtonClickListener) {
+        this.mOnSendButtonClickListener = onSendButtonClickListener;
     }
 
     @Override

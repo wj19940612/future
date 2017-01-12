@@ -36,7 +36,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
@@ -71,7 +72,7 @@
         <!-- wechat callback -->
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboard|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
@@ -178,10 +179,6 @@
             android:name=".activity.web.HideTitleWebActivity"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".activity.LiveActivity"
-            android:configChanges="keyboard|screenSize|orientation"
-            android:screenOrientation="portrait"/>
 
         <!-- Receiver for getui push -->
         <receiver

@@ -141,14 +141,14 @@ public class MainActivity extends BaseActivity {
                 } else if (position == TAB_MINE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MINE);
                 }
-
-                if (position >= 1) {
-                    mTabPosition = position + 1;
-                    mBottomTabs.selectTab(mTabPosition);
-                } else {
-                    mTabPosition = position;
-                    mBottomTabs.selectTab(mTabPosition);
-                }
+                // TODO: 2017/1/11 改变直播层级，后期可能改变
+//                if (position >= 1) {
+//                    mTabPosition = position + 1;
+//                    mBottomTabs.selectTab(mTabPosition);
+//                } else {
+//                    mTabPosition = position;
+                mBottomTabs.selectTab(position);
+//                }
             }
 
             @Override
@@ -163,21 +163,21 @@ public class MainActivity extends BaseActivity {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);
-                if (position == 1) {
-                    openLivePage();
-                } else if (position >= 1) {
-                    mViewPager.setCurrentItem(position - 1, false);
-                } else {
-                    mViewPager.setCurrentItem(position, false);
-                }
+//                if (position == 1) {
+//                    openLivePage();
+//                } else if (position >= 1) {
+//                    mViewPager.setCurrentItem(position - 1, false);
+//                } else {
+                mViewPager.setCurrentItem(position, false);
+//                }
 
             }
         });
     }
 
-    private void openLivePage() {
-        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-    }
+//    private void openLivePage() {
+//        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
+//    }
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -261,8 +261,10 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return new HomeFragment();
                 case 1:
-                    return new InfoFragment();
+                    return new LiveFragment();
                 case 2:
+                    return new InfoFragment();
+                case 3:
                     return new MineFragment();
             }
             return null;
@@ -270,7 +272,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 }

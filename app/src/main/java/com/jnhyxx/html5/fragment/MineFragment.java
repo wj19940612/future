@@ -4,6 +4,7 @@ package com.jnhyxx.html5.fragment;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.setting.SettingsActivity;
+import com.jnhyxx.html5.activity.userinfo.UserInfoActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -32,6 +34,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -39,6 +42,7 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.net.CookieManger;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
@@ -162,15 +166,17 @@ public class MineFragment extends BaseFragment {
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
-
+            if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
+                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mHeadImage);
+            }
         } else {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
-
             mNickname.setText(R.string.no_logged);
             mTitleBar.setRightVisible(false);
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
+            mHeadImage.setImageResource(R.drawable.ic_avatar_default);
         }
     }
 
@@ -210,13 +216,13 @@ public class MineFragment extends BaseFragment {
             case R.id.headImage:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), SettingsActivity.class).execute();
+                    Launcher.with(getActivity(), UserInfoActivity.class).execute();
                 } else {
                     Launcher.with(getActivity(), SignInActivity.class).execute();
                 }
                 break;
             case R.id.feedback:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.FEED_BACK);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK);
                 Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
                 break;
         }

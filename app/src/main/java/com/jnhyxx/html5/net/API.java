@@ -4,12 +4,14 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -207,17 +209,6 @@ public class API extends APIBase {
 
 
         /**
-         * /user/newsNotice/newsImgList 获取首页广告
-         *
-         * @return
-         */
-        public static API getHomeAdvertisements() {
-            return new API("/user/newsNotice/newsImgList",
-                    new ApiParams()
-                            .put(TYPE, 2));
-        }
-
-        /**
          * 退出
          *
          * @return
@@ -256,28 +247,6 @@ public class API extends APIBase {
                     .put("size", size));
         }
 
-        /**
-         * 查询咨询详情
-         * URL  http://域名/user/news/findNews.do
-         *
-         * @param id
-         * @return
-         */
-        public static API findNewsInfo(int id) {
-            return new API("/user/news/findNews.do", new ApiParams()
-                    .put("id", id));
-        }
-
-        /**
-         * 接口名：查询资讯(通过第三方地址)
-         * URL  http://域名/user/news/findNewsByUrl.do
-         *
-         * @param url
-         * @return
-         */
-        public static API findNewsByUrl(String url) {
-            return new API("/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
-        }
 
         /**
          * /user/user/findPromoterCode.do
@@ -343,6 +312,43 @@ public class API extends APIBase {
                             .put("userName", userName)
                             .put("realName", realName)
                             .put("userPhone", userPhone));
+        }
+
+        /**
+         * 接口名：展示用户信息
+         * URL  http://域名/user/user/findInfo.do
+         *
+         * @param userId 用户id
+         * @return
+         */
+        public static API getUserInfo() {
+            return new API("/user/user/findInfo.do", null);
+        }
+
+        /**
+         * 接口名：修改用户信息
+         * URL  http://域名/user/user/updateInfo.do
+         *
+         * @param userDefiniteInfo
+         * @return
+         */
+        public static API submitUserInfo(UserDefiniteInfo userDefiniteInfo) {
+            return new API("/user/user/updateInfo.do", new ApiParams(UserDefiniteInfo.class, userDefiniteInfo));
+        }
+
+
+        /**
+         * 接口名：修改用户头像信息
+         * URL  http://域名/user/user/updatePic.do
+         *
+         * @param
+         * @return
+         */
+
+        public static API updateUserHeadImage(String bitmapto64) {
+            return new API("/user/user/updatePic.do",
+                    new ApiParams().put("pic", bitmapto64));
+
         }
     }
 

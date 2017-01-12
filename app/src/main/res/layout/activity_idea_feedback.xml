@@ -78,7 +78,7 @@
         android:enabled="false"
         android:gravity="center"
         android:padding="@dimen/common_margin"
-        android:text="@string/feedback_submit"
+        android:text="@string/submit"
         android:textColor="@android:color/white"
         android:textSize="16sp"/>
 </LinearLayout>

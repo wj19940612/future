@@ -169,6 +169,12 @@
     <string name="trade_remind">交易提醒</string>
     <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
 
+
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取  消</string>
+
+
     <!-- 修改密码 Modify password-->
     <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
 
@@ -459,6 +465,7 @@
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 
+
     <string name="live_program_dir">节目单</string>
     <string name="live_interaction">互动</string>
     <string name="live_teacher_guide">老师指导</string>
@@ -491,8 +498,23 @@
     <string name="feedback_title">意见反馈</string>
     <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
     <string name="feedback_user_phone">QQ、微信或手机号</string>
-    <string name="feedback_submit">提    交</string>
+    <string name="submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>
+
+
+    <!--个人信息界面-->
+    <string name="head_image">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="real_name">真实姓名</string>
+    <string name="submit_real_name_hint">请填写真实姓名</string>
+    <string name="is_already_real_name">已实名</string>
+    <string name="sex">性别</string>
+    <string name="boy">男</string>
+    <string name="woman">女</string>
+    <string name="location">所在地</string>
+    <string name="birthday">生日</string>
+    <string name="user_introduction">个人简介</string>
+    <string name="please_input_introduction">请输入简介</string>
 
 </resources>

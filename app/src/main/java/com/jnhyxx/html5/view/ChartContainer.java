@@ -172,7 +172,8 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        mTabsLayout.addView(createLiveEnter(), POS_LIVE_ENTER, layoutParams);
+        // TODO: 2017/1/11 先去掉交易界面 
+//        mTabsLayout.addView(createLiveEnter(), POS_LIVE_ENTER, layoutParams);
 
         addView(mTabsLayout, params);
     }

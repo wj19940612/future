@@ -49,8 +49,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.android.volley.Request.Method.HEAD;
-
 
 /**
  * Created by ${wangJie} on 2016/11/8.
@@ -104,15 +102,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof LiveInteractionFragment.OnSendButtonClickListener) {
-            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement LiveInteractionFragment.Callback");
-        }
+    public void setOnSendButtonClickListener(OnSendButtonClickListener onSendButtonClickListener) {
+        this.mOnSendButtonClickListener = onSendButtonClickListener;
     }
 
     @Override

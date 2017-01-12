@@ -5,14 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.LiveActivity">
+    android:orientation="vertical">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backFeature="true"
         app:customView="@layout/tb_live_program_dir"
         app:rightText="@string/live_right_title"
         app:rightTextColor="@android:color/white"

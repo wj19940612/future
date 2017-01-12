@@ -191,6 +191,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         initTitleBar();
         initSlidingTabLayout();
         initKeyboardHelper();
+        getLiveMessage();
     }
 
     @Override
@@ -198,29 +199,20 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         super.setUserVisibleHint(isVisibleToUser);
         Log.d(TAG, "是否可见" + isVisibleToUser);
         if (isAdded() && isVisibleToUser) {
-            getLiveMessage();
             getChattingIpPort();
             if (getLiveInteractionFragment() != null && !mIsFragmentAdd) {
                 mIsFragmentAdd = true;
                 getLiveInteractionFragment().setOnSendButtonClickListener(this);
             }
-        } else {
-            if (mLivePlayer != null && mLivePlayer.isStarted()) {
-                mLivePlayer.stop();
-            }
-            if (mNettyClient != null && mNettyHandler != null) {
-                disconnectNettySocket();
-            }
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         if (mLivePlayer.isStarted()) {
             mLivePlayer.stop();
         }
-        disconnectNettySocket();
     }
 
     private void initKeyboardHelper() {
@@ -232,6 +224,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        disconnectNettySocket();
         mKeyBoardHelper.onDestroy();
     }
 
@@ -290,8 +283,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                         ToastUtil.show(R.string.live_time_is_not);
                     }
                 } else {
-                    Launcher.with(getActivity(), SignInActivity.class)
-                            .executeForResult(BaseActivity.REQ_CODE_LOGIN);
+                    startActivityForResult(new Intent(getActivity(), SignInActivity.class), BaseActivity.REQ_CODE_LOGIN);
                 }
                 break;
         }

@@ -231,13 +231,13 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_LIVE) {
-            mBottomTabs.selectTab(mTabPosition);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+////        if (requestCode == REQ_CODE_LIVE) {
+////            mBottomTabs.selectTab(mTabPosition);
+////        }
+//    }
 
     private class NetworkReceiver extends Network.NetworkChangeReceiver {
 

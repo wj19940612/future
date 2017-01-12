@@ -108,6 +108,12 @@ public class HomeFragment extends BaseFragment {
             }
 
             @Override
+            public void onFuturesRiskTipsClick() {
+
+            }
+
+            // 模拟交易
+            @Override
             public void onSimulationClick() {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE);
                 API.Market.getProductList().setTag(TAG)
@@ -120,8 +126,17 @@ public class HomeFragment extends BaseFragment {
                             }
                         }).fire();
             }
+            // 推广赚钱
+            @Override
+            public void onPaidToPromoteClick() {
 
-            //新手引导
+            }
+            // 投资课堂
+            @Override
+            public void onInvestCourseClick() {
+
+            }
+            // 新手引导
             @Override
             public void onNewerGuideClick() {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
@@ -131,9 +146,9 @@ public class HomeFragment extends BaseFragment {
                         .putExtra(NewbieActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                         .execute();
             }
-
+            // 联系客服
             @Override
-            public void onContactService() {
+            public void onContactServiceClick() {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
@@ -415,12 +430,14 @@ public class HomeFragment extends BaseFragment {
                         String priceChangePercent = marketData.getPercentage();
                         if (priceChangePercent.startsWith("-")) {
                             mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                            mPriceChangePercent.setBackgroundResource(R.drawable.bg_green_primary);
                             mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_down_arrow, 0, 0, 0);
+                            ViewGroup parent = (ViewGroup) mPriceChangePercent.getParent();
+                            parent.setBackgroundResource(R.drawable.bg_green_primary);
                         } else {
                             mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                            mPriceChangePercent.setBackgroundResource(R.drawable.bg_red_primary);
                             mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_up_arrow, 0, 0, 0);
+                            ViewGroup parent = (ViewGroup) mPriceChangePercent.getParent();
+                            parent.setBackgroundResource(R.drawable.bg_red_primary);
                         }
                     } else {
                         mLastPrice.setText("——");

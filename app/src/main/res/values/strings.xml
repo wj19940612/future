@@ -189,12 +189,15 @@
 
 
     <!-- Home page -->
+    <string name="futures_risk_tips">期货风险提示</string>
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
     <string name="next_day">次日</string>
     <string name="simulation">模拟操盘</string>
-    <string name="newer_guide">新手引导</string>
+    <string name="invest_course">投资课堂</string>
+    <string name="newer_video">新手视频</string>
     <string name="contact_service">联系客服</string>
+    <string name="enter_right_now">立即进入</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
     <string name="new_tag">NEW</string>
     <string name="fund_security">资金安全</string>

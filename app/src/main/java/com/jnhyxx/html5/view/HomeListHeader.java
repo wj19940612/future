@@ -28,11 +28,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.android.volley.Request.Method.HEAD;
-
 public class HomeListHeader extends FrameLayout {
 
-    @OnClick({R.id.simulation, R.id.newerGuide, R.id.contactService})
+    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.newerVideo, R.id.contactService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.simulation:
@@ -40,14 +38,29 @@ public class HomeListHeader extends FrameLayout {
                     mListener.onSimulationClick();
                 }
                 break;
-            case R.id.newerGuide:
+            case R.id.paidToPromote:
+                if (mListener != null) {
+                    mListener.onPaidToPromoteClick();
+                }
+                break;
+            case R.id.investCourse:
+                if (mListener != null) {
+                    mListener.onInvestCourseClick();
+                }
+                break;
+            case R.id.newerVideo:
                 if (mListener != null) {
                     mListener.onNewerGuideClick();
                 }
                 break;
             case R.id.contactService:
                 if (mListener != null) {
-                    mListener.onContactService();
+                    mListener.onContactServiceClick();
+                }
+                break;
+            case R.id.futuresRiskTips:
+                if (mListener != null) {
+                    mListener.onFuturesRiskTipsClick();
                 }
                 break;
         }
@@ -56,11 +69,17 @@ public class HomeListHeader extends FrameLayout {
     public interface OnViewClickListener {
         void onBannerClick(Information information);
 
+        void onFuturesRiskTipsClick();
+
         void onSimulationClick();
+
+        void onPaidToPromoteClick();
+
+        void onInvestCourseClick();
 
         void onNewerGuideClick();
 
-        void onContactService();
+        void onContactServiceClick();
     }
 
     private OnViewClickListener mListener;
@@ -69,13 +88,9 @@ public class HomeListHeader extends FrameLayout {
     InfiniteViewPager mViewPager;
     @BindView(R.id.pageIndicator)
     PageIndicator mPageIndicator;
-    @BindView(R.id.currentOnlineNumber)
-    TextView mCurrentOnlineNumber;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mViewSwitcher;
-    @BindView(R.id.simulation)
-    TextView mSimulation;
-    @BindView(R.id.newerGuide)
+    @BindView(R.id.newerVideo)
     TextView mNewerGuide;
     @BindView(R.id.contactService)
     TextView mContactService;
@@ -136,20 +151,10 @@ public class HomeListHeader extends FrameLayout {
 
     public void setSimulationHolding(boolean holding) {
         if (holding) {
-            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate_holding, 0, 0);
+            //mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate_holding, 0, 0);
         } else {
-            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate, 0, 0);
+            //mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate, 0, 0);
         }
-    }
-
-    public void setOrderReport(OrderReport orderReport) {
-        mOrderReport = orderReport;
-        SpannableString currentOnlineNumber = StrUtil.mergeTextWithColor("当前在线",
-                mOrderReport.getCount() + "", ContextCompat.getColor(getContext(), R.color.redPrimary),
-                "人");
-        mCurrentOnlineNumber.setText(currentOnlineNumber);
-        mCount = 0;
-        nextOrderReport();
     }
 
     public void setOnViewClickListener(OnViewClickListener onViewClickListener) {

@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.userinfo.ClipHeadImageActivity;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
@@ -59,6 +60,10 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
      * 打开裁剪界面的请求码
      */
     private static final int REQ_CODE_CROP_IMAGE = 204;
+    /**
+     * 打开自定义裁剪页面的请求码
+     */
+    private static final int REQ_CLIP_HEAD_IMAGE_PAGE = 144;
 
 
     @BindView(R.id.takePhoneFromCamera)
@@ -180,9 +185,13 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                         String s = ImageUtil.FormetFileSize(mFile);
                         Log.d(TAG, "文件的大小 " + s);
                         if (mMBitmapUri != null) {
-                            cropImage(mMBitmapUri);
+//                            cropImage(mMBitmapUri);
                             Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
-                            Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());
+//                            Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());
+
+                            if (!TextUtils.isEmpty(mMBitmapUri.getPath())) {
+                                openClipImagePage(mMBitmapUri.getPath());
+                            }
                         }
                     } else {
                         ToastUtil.curt("sd卡不可使用");
@@ -194,12 +203,12 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                     if (uri != null) {
                         if (!TextUtils.isEmpty(uri.getPath())) {
                             Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
-                            Log.d(TAG, "裁剪的图片大小 " + bitmap.getAllocationByteCount());
+//                            Log.d(TAG, "裁剪的图片大小 " + bitmap.getAllocationByteCount());
                             String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
                             uploadUserHeadImage(bitmapToBase64);
 
                             Bitmap comp = ImageUtil.getUtil().comp(bitmap);
-                            Log.d(TAG, "裁剪后的图片大小 " + comp.getAllocationByteCount());
+//                            Log.d(TAG, "裁剪后的图片大小 " + comp.getAllocationByteCount());
                         }
                     }
                     break;
@@ -208,13 +217,35 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                     if (photosUri != null) {
                         Log.d(TAG, "相册的地址 " + photosUri.getPath());
                         Bitmap bitmap = BitmapFactory.decodeFile(photosUri.getPath());
-                        Log.d(TAG, "相片中获取的原图大小" + bitmap.getAllocationByteCount());
-                        cropImage(photosUri);
+//                        Log.d(TAG, "相片中获取的原图大小" + bitmap.getAllocationByteCount());
+//                        cropImage(photosUri);
+                        if (!TextUtils.isEmpty(photosUri.getPath())) {
+                            openClipImagePage(photosUri.getPath());
+                        }
+                    }
+                    break;
+                case REQ_CLIP_HEAD_IMAGE_PAGE:
+                    if (data != null) {
+                        Bitmap bitmap = data.getParcelableExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE);
+                        String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
+                        uploadUserHeadImage(bitmapToBase64);
                     }
                     break;
             }
         }
 
+    }
+
+    private void openClipImagePage(Bitmap bitmap) {
+        Intent intent = new Intent(getActivity(), ClipHeadImageActivity.class);
+        intent.putExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE, bitmap);
+        startActivityForResult(intent, REQ_CLIP_HEAD_IMAGE_PAGE);
+    }
+
+    private void openClipImagePage(String imaUri) {
+        Intent intent = new Intent(getActivity(), ClipHeadImageActivity.class);
+        intent.putExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE, imaUri);
+        startActivityForResult(intent, REQ_CLIP_HEAD_IMAGE_PAGE);
     }
 
     private void uploadUserHeadImage(final String bitmapToBase64) {

@@ -188,7 +188,7 @@
     <string name="trade_hint">(以上建议仅供参考,风险自担)</string>
     <string name="message_from">来源: %1$s</string>
     <string name="message_details">资讯详情</string>
-    
+
     <string name="before_data">前值: %1$s</string>
     <string name="expect_data">预期: %1$s</string>
     <string name="real_data">实际: %1$s</string>
@@ -209,7 +209,7 @@
     <string name="service_phone">客服热线：%1$s</string>
     <string name="trade_access">交易由纽约商品交易所及上期所实盘对接</string>
     <string name="cooperation_partner">合作伙伴：合作伙伴: 纽约商业交易所|芝加哥商品交易所|CME集团\n香港交易所|新加坡交易所|欧洲期货交易所</string>
-    
+
     <!-- Order page -->
     <string name="order">订单</string>
     <string name="holding">持仓</string>
@@ -516,5 +516,6 @@
     <string name="birthday">生日</string>
     <string name="user_introduction">个人简介</string>
     <string name="please_input_introduction">请输入简介</string>
+    <string name="use_clip_head_image">使用</string>
 
 </resources>

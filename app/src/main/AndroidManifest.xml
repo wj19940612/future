@@ -36,8 +36,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
@@ -187,7 +187,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.userinfo.UserIntroduceActivity"/>
 
-
         <!-- Receiver for getui push -->
         <receiver
             android:name=".receiver.PushReceiver"
@@ -206,7 +205,8 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
-
+        <activity android:name=".activity.userinfo.ClipHeadImageActivity">
+        </activity>
     </application>
 
 </manifest>

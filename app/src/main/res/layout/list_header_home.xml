@@ -126,12 +126,14 @@
             android:textSize="18sp"/>
 
         <TextView
+            android:id="@+id/holdingNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/bg_red_primary"
+            android:textSize="13sp"
             android:gravity="center"
             android:minHeight="20dp"
             android:minWidth="64dp"

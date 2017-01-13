@@ -17,6 +17,7 @@ import android.widget.ViewSwitcher;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
@@ -94,9 +95,11 @@ public class HomeListHeader extends FrameLayout {
     TextView mNewerGuide;
     @BindView(R.id.contactService)
     TextView mContactService;
+    @BindView(R.id.holdingNumber)
+    TextView mHoldingNumber;
 
     private AdvertisementAdapter mAdapter;
-    private OrderReport mOrderReport;
+    private List<OrderReport> mOrderReportList;
     private int mCount;
 
     public HomeListHeader(Context context) {
@@ -149,12 +152,24 @@ public class HomeListHeader extends FrameLayout {
         }
     }
 
-    public void setSimulationHolding(boolean holding) {
-        if (holding) {
-            //mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate_holding, 0, 0);
+    public void setSimulationHolding(List<HomePositions.IntegralOpSBean> integralOpSBeanList) {
+        if (integralOpSBeanList != null && integralOpSBeanList.size() > 0) {
+            int holdingNumber = 0;
+            for (HomePositions.IntegralOpSBean integralOpSBean: integralOpSBeanList) {
+                holdingNumber += integralOpSBean.getHandsNum();
+            }
+            if (getContext() != null) {
+                mHoldingNumber.setText(getContext().getString(R.string.holding_number, holdingNumber));
+            }
         } else {
-            //mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate, 0, 0);
+            mHoldingNumber.setText(R.string.enter_right_now);
         }
+    }
+
+    public void setOrderReports(List<OrderReport> orderReports) {
+        mOrderReportList = orderReports;
+        mCount = 0;
+        nextOrderReport();
     }
 
     public void setOnViewClickListener(OnViewClickListener onViewClickListener) {
@@ -162,15 +177,16 @@ public class HomeListHeader extends FrameLayout {
     }
 
     public void nextOrderReport() {
-        if (mOrderReport == null) return;
-        TextView orderReportView = (TextView) mViewSwitcher.getNextView();
-        List<OrderReport.ResultListBean> listBeen = mOrderReport.getResultList();
-        if (listBeen.size() > 0) {
-            OrderReport.ResultListBean resultListBean = listBeen.get(mCount++ % listBeen.size());
+        if (mOrderReportList == null || mOrderReportList.size() == 0) {
+            mViewSwitcher.setVisibility(GONE);
+        } else {
+            mViewSwitcher.setVisibility(VISIBLE);
+            TextView orderReportView = (TextView) mViewSwitcher.getNextView();
+            OrderReport report = mOrderReportList.get(mCount++ % mOrderReportList.size());
             SpannableString orderReport = StrUtil.mergeTextWithColor(
-                    resultListBean.getNick() + " " + resultListBean.getTime() + " ",
-                    resultListBean.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
-                    " " + resultListBean.getFuturesType());
+                    report.getNick() + " " + report.getTime() + " ",
+                    report.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
+                    " " + report.getFuturesType());
             orderReportView.setText(orderReport);
             mViewSwitcher.showNext();
         }

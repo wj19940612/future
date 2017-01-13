@@ -762,7 +762,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getReportData() {
-            return new API("/order/order/indexReport", null);
+            return new API("/order/statistic/indexReport.do", null);
         }
 
         /**

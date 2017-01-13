@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
+import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -132,16 +132,19 @@ public class HomeFragment extends BaseFragment {
                             }
                         }).fire();
             }
+
             // 推广赚钱
             @Override
             public void onPaidToPromoteClick() {
                 openPaidToPromotePage();
             }
+
             // 投资课堂
             @Override
             public void onInvestCourseClick() {
 
             }
+
             // 新手引导
             @Override
             public void onNewerGuideClick() {
@@ -152,6 +155,7 @@ public class HomeFragment extends BaseFragment {
                         .putExtra(NewbieActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                         .execute();
             }
+
             // 联系客服
             @Override
             public void onContactServiceClick() {
@@ -275,16 +279,15 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-//    private void requestOrderReport() {
-//        API.Order.getReportData().setCallback(new Callback<Resp<OrderReport>>() {
-//            @Override
-//            public void onReceive(Resp<OrderReport> orderReportResp) {
-//                if (orderReportResp.isSuccess()) {
-//                    mHomeListHeader.setOrderReport(orderReportResp.getData());
-//                }
-//            }
-//        }).setTag(TAG).fire();
-//    }
+    private void requestOrderReport() {
+        API.Order.getReportData()
+                .setCallback(new Callback2<Resp<List<OrderReport>>, List<OrderReport>>(false) {
+                    @Override
+                    public void onRespSuccess(List<OrderReport> orderReports) {
+                        mHomeListHeader.setOrderReports(orderReports);
+                    }
+                }).setTag(TAG).fire();
+    }
 
     @Override
     public void onTimeUp(int count) {
@@ -352,7 +355,6 @@ public class HomeFragment extends BaseFragment {
                     .setCallback(new Callback<Resp<HomePositions>>(false) {
                         @Override
                         public void onSuccess(Resp<HomePositions> homePositionsResp) {
-                            Log.d("VolleyHttp", getUrl() + " onSuccess: " + homePositionsResp.toString());
                             if (homePositionsResp.isSuccess()) {
                                 HomePositions homePositions = homePositionsResp.getData();
                                 updateSimulateButton(homePositions);
@@ -369,7 +371,7 @@ public class HomeFragment extends BaseFragment {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
-            mHomeListHeader.setSimulationHolding(false);
+            mHomeListHeader.setSimulationHolding(null);
             mCashPositionList = null;
             updateProductListView();
         }
@@ -378,9 +380,9 @@ public class HomeFragment extends BaseFragment {
     private void updateSimulateButton(HomePositions homePositions) {
         if (mHomeListHeader == null) return;
         if (homePositions.getIntegralOpS().size() > 0) {
-            mHomeListHeader.setSimulationHolding(true);
+            mHomeListHeader.setSimulationHolding(homePositions.getIntegralOpS());
         } else {
-            mHomeListHeader.setSimulationHolding(false);
+            mHomeListHeader.setSimulationHolding(null);
         }
     }
 

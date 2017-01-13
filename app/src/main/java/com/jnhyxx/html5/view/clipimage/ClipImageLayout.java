@@ -2,8 +2,6 @@ package com.jnhyxx.html5.view.clipimage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.RelativeLayout;
@@ -55,11 +53,11 @@ public class ClipImageLayout extends RelativeLayout {
 //        mZoomImageView.setImageDrawable(getResources().getDrawable(
 ////				R.drawable.a));
 
-        Drawable drawable =new BitmapDrawable(bitmap);
-        mZoomImageView.setImageDrawable(drawable);
+//        Drawable drawable =new BitmapDrawable(bitmap);
+//        mZoomImageView.setImageDrawable(drawable);
 
 
-//        mZoomImageView.setImageBitmap(bitmap);
+        mZoomImageView.setImageBitmap(bitmap);
     }
 
     /**

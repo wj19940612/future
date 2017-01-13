@@ -1,7 +1,9 @@
 package com.jnhyxx.html5.fragment.dialog;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -72,6 +75,8 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
     TextView mTakePhoneFromPhone;
     @BindView(R.id.takePhoneCancel)
     TextView mTakePhoneCancel;
+    @BindView(R.id.test)
+    ImageView mTest;
     private Unbinder mBind;
     private File mFile;
 
@@ -152,16 +157,24 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                         MediaStore.ACTION_IMAGE_CAPTURE);
                 mFile = new File(Environment
                         .getExternalStorageDirectory(), "image.jpg");
-                Uri mMBitmapUri = Uri.fromFile(mFile);
-                // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
-                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMBitmapUri);
+                if (mFile.exists()) {
+                    // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+                    Uri mMBitmapUri = Uri.fromFile(mFile);
+                    openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMBitmapUri);
+                    Log.d(TAG, "create file success");
+                }
                 startActivityForResult(openCameraIntent, REQ_CODE_TAKE_PHONE_FROM_CAMERA);
                 break;
             case R.id.takePhoneFromPhone:
-                Intent openAlbumIntent = new Intent(
-                        Intent.ACTION_GET_CONTENT);
-                openAlbumIntent.setType("image/*");
-                startActivityForResult(openAlbumIntent, REQ_CODE_TAKE_PHONE_FROM_PHONES);
+                if (Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)) {
+
+                    Intent openAlbumIntent = new Intent(
+                            Intent.ACTION_GET_CONTENT);
+                    openAlbumIntent.setType("image/*");
+                    startActivityForResult(openAlbumIntent, REQ_CODE_TAKE_PHONE_FROM_PHONES);
+                } else {
+                    ToastUtil.curt("sd卡不可用");
+                }
                 break;
             case R.id.takePhoneCancel:
                 this.dismiss();
@@ -181,17 +194,33 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
             switch (requestCode) {
                 case REQ_CODE_TAKE_PHONE_FROM_CAMERA:
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        Uri mMBitmapUri = Uri.fromFile(mFile);
-                        String s = ImageUtil.FormetFileSize(mFile);
-                        Log.d(TAG, "文件的大小 " + s);
-                        if (mMBitmapUri != null) {
+                        if (mFile != null) {
+                            Uri mMBitmapUri = Uri.fromFile(mFile);
+                            String s = ImageUtil.FormetFileSize(mFile);
+                            Log.d(TAG, "文件的大小 " + s);
+                            if (mMBitmapUri != null) {
 //                            cropImage(mMBitmapUri);
-                            Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
+                                Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
 //                            Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());
 
-                            if (!TextUtils.isEmpty(mMBitmapUri.getPath())) {
-                                openClipImagePage(mMBitmapUri.getPath());
+                                if (!TextUtils.isEmpty(mMBitmapUri.getPath())) {
+                                    openClipImagePage(mMBitmapUri.getPath());
+                                }
                             }
+                        } else if (data != null) {
+                            Uri uri = data.getData();
+                            if (uri != null) {
+                                if (!TextUtils.isEmpty(uri.getPath())) {
+                                    openClipImagePage(uri.getPath());
+                                }
+                            } else {
+                                Bitmap bitmap = data.getParcelableExtra("data");
+                                if (bitmap != null) {
+                                    String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
+                                    uploadUserHeadImage(bitmapToBase64);
+                                }
+                            }
+
                         }
                     } else {
                         ToastUtil.curt("sd卡不可使用");
@@ -217,18 +246,45 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                     if (photosUri != null) {
                         Log.d(TAG, "相册的地址 " + photosUri.getPath());
                         Bitmap bitmap = BitmapFactory.decodeFile(photosUri.getPath());
+                        if (bitmap != null) {
+                            Log.d(TAG, "相册的图片" + bitmap.toString());
 //                        Log.d(TAG, "相片中获取的原图大小" + bitmap.getAllocationByteCount());
 //                        cropImage(photosUri);
-                        if (!TextUtils.isEmpty(photosUri.getPath())) {
-                            openClipImagePage(photosUri.getPath());
+                            if (!TextUtils.isEmpty(photosUri.getPath())) {
+                                openClipImagePage(photosUri.getPath());
+                            }
                         }
+                        ContentResolver contentResolver = getActivity().getContentResolver();
+                        Cursor cursor = contentResolver.query(photosUri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        //将光标移至开头 ，这个很重要，不小心很容易引起越界
+                        cursor.moveToFirst();
+                        //最后根据索引值获取图片路径
+                        String path = cursor.getString(column_index);
+                        Log.d(TAG, "图片路径" + path);
+                        Bitmap bitmap1 = cursor.getExtras().getParcelable("data");
+                        if (bitmap1 != null) {
+                            mTest.setImageBitmap(bitmap1);
+                        }
+                        cursor.close();
+
+//                        else if (data.getExtras() == null) {
+//                            ToastUtil.curt("获取图片失败");
+//                        }
+
+//                        Bitmap bitmapData = data.getParcelableExtra("data");
+//                        if (bitmapData != null) {
+//                            ToastUtil.curt("从相册中获取的图片" + bitmapData.toString());
+//                        }
                     }
                     break;
                 case REQ_CLIP_HEAD_IMAGE_PAGE:
                     if (data != null) {
-                        Bitmap bitmap = data.getParcelableExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE);
+                        byte[] byteArrayExtra = data.getByteArrayExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra.length);
                         String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
                         uploadUserHeadImage(bitmapToBase64);
+
                     }
                     break;
             }

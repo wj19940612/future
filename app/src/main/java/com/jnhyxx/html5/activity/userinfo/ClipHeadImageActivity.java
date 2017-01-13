@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 
 import com.jnhyxx.html5.R;
@@ -21,6 +22,8 @@ import butterknife.ButterKnife;
 public class ClipHeadImageActivity extends BaseActivity {
 
     public static final String KEY_CLIP_USER_IMAGE = "CLIP_USER_IMAGE";
+
+    public static final String mFilePath = Environment.getExternalStorageDirectory() + "clipImage.jpg";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -50,15 +53,27 @@ public class ClipHeadImageActivity extends BaseActivity {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] datas = baos.toByteArray();
-
+//
 //                Intent intent = new Intent(this, UserInfoActivity.class);
 //                intent.putExtra("bitmap", datas);
 //                startActivity(intent);
+
 
                 Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                 intent.putExtra(KEY_CLIP_USER_IMAGE, datas);
                 setResult(RESULT_OK, intent);
                 finish();
+
+//                File file = ImageUtil.getUtil().saveBitmap(bitmap, mFilePath);
+//                if (file.exists()) {
+//
+//                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+//                    intent.putExtra(KEY_CLIP_USER_IMAGE, mFilePath);
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } else {
+//                    ToastUtil.curt("文件创建失败");
+//                }
             }
         });
     }

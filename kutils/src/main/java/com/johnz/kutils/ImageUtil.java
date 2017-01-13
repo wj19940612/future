@@ -231,7 +231,7 @@ public class ImageUtil {
                 baos.close();
 
                 byte[] bitmapBytes = baos.toByteArray();
-                result = Base64.encodeToString(bitmapBytes, Base64.CRLF);
+                result = Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
             }
         } catch (IOException e) {
             e.printStackTrace();

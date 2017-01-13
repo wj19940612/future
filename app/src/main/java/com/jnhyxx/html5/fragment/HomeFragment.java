@@ -27,6 +27,7 @@ import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
+import com.jnhyxx.html5.activity.web.InvestCourseActivity;
 import com.jnhyxx.html5.activity.web.NewbieActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.Information;
@@ -142,7 +143,11 @@ public class HomeFragment extends BaseFragment {
             // 投资课堂
             @Override
             public void onInvestCourseClick() {
-
+                Launcher.with(getActivity(), InvestCourseActivity.class)
+                        .putExtra(InvestCourseActivity.EX_URL, API.getInvestCourseUrl())
+                        .putExtra(InvestCourseActivity.EX_TITLE, getString(R.string.investor_course))
+                        .putExtra(InvestCourseActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                        .execute();
             }
 
             // 新手引导
@@ -303,6 +308,7 @@ public class HomeFragment extends BaseFragment {
         super.onResume();
         requestProductList();
         requestHomePositions();
+        requestOrderReport();
         startScheduleJob(5 * 1000);
     }
 

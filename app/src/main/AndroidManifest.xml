@@ -177,6 +177,9 @@
         <activity
             android:name=".activity.web.HideTitleWebActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.web.InvestCourseActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.LiveActivity"

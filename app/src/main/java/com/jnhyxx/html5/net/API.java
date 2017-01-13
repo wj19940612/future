@@ -1029,4 +1029,22 @@ public class API extends APIBase {
     public static String getNewbieUrl() {
         return getHost() + "/newtrader.html?nohead=1";
     }
+
+    /**
+     * 投资课堂
+     *
+     * @return
+     */
+    public static String getInvestCourseUrl() {
+        return getHost() + "/news/classroom.html?nohead=1";
+    }
+
+    /**
+     * 资讯 课堂 详情页面，完整 url：/news/newsDtl.html?id=5877432c44f417f8e7d8a6c8&classId=102&noImg=20170112
+     *
+     * @return
+     */
+    public static String getNewsDetailUrl() {
+        return getHost() + "/news/newsDtl.html";
+    }
 }

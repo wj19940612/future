@@ -189,6 +189,7 @@
 
 
     <!-- Home page -->
+    <string name="investor_course">投资者课堂</string>
     <string name="futures_risk_tips">期货风险提示</string>
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>

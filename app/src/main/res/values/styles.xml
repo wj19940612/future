@@ -204,11 +204,11 @@
     <style name="datePickerDialogStyle" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
     <!--<item name="android:windowEnterAnimation">@anim/fade_in</item>-->
     <!--<item name="android:windowExitAnimation">@anim/die_out</item>-->
-    <item name="android:padding">0dp</item>
-    <item name="android:listPreferredItemPaddingLeft">0dip</item>
-    <item name="android:listPreferredItemPaddingRight">0dip</item>
-    <item name="android:listPreferredItemPaddingStart">0dip</item>
-    <item name="android:listPreferredItemPaddingEnd">0dip</item>
+    <!--<item name="android:padding">0dp</item>-->
+    <!--<item name="android:listPreferredItemPaddingLeft">0dip</item>-->
+    <!--<item name="android:listPreferredItemPaddingRight">0dip</item>-->
+    <!--<item name="android:listPreferredItemPaddingStart">0dip</item>-->
+    <!--<item name="android:listPreferredItemPaddingEnd">0dip</item>-->
     <item name="android:windowBackground">@android:color/transparent</item>
 </style>
     </resources>

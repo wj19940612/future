@@ -37,7 +37,7 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/takePhoneFromPhone"
+            android:id="@+id/takePhoneFromGallery"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clickable="true"

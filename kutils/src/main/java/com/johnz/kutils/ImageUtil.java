@@ -148,21 +148,10 @@ public class ImageUtil {
             be = 1;
         newOpts.inSampleSize = be;//设置缩放比例
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+
         isBm = new ByteArrayInputStream(baos.toByteArray());
         bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
-    }
-
-    public static long getFileSizes(File f) throws Exception {
-        long s = 0;
-        if (f.exists()) {
-            FileInputStream fis = null;
-            fis = new FileInputStream(f);
-            s = fis.available();
-        } else {
-            f.createNewFile();
-        }
-        return s;
     }
 
     /**

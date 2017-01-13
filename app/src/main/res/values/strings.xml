@@ -517,5 +517,6 @@
     <string name="user_introduction">个人简介</string>
     <string name="please_input_introduction">请输入简介</string>
     <string name="use_clip_head_image">使用</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
 
 </resources>

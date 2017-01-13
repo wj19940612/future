@@ -1,11 +1,15 @@
 package com.jnhyxx.html5.activity.userinfo;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -48,18 +52,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
-import static com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE;
 
 
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity implements AddressInitTask.OnAddressListener, UploadUserImageDialogFragment.OnUserImageListener {
+public class UserInfoActivity extends BaseActivity implements AddressInitTask.OnAddressListener {
 
     // 绑定银行卡前 先进行实名认证
     private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
-    //修改昵称的请求码
-    private static final int REQ_CODE_MODIFY_NICK_NAME = 659;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -102,6 +103,8 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         mCalendar = Calendar.getInstance();
 
         mUserIntroduction.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
+
+
     }
 
     @Override
@@ -158,11 +161,17 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 case REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST:
                     bingBankCard();
                     break;
-                case REQ_CLIP_HEAD_IMAGE_PAGE:
-                    updateUserInfo();
+                case UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE:
+                    if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
+                        Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
+                        }).into(mUserHeadImage);
+                    } else {
+                        getUserInfo();
+                    }
                     break;
             }
         }
+
     }
 
 
@@ -216,7 +225,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 day = Integer.valueOf(split[2]);
             }
         }
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerDialogStyle, new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerDialogStyle, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
@@ -225,6 +234,30 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 updateUserInfo();
             }
         }, year, month, day);
+        datePickerDialog.setCustomTitle(null);
+
+        //设置时间picker的取消颜色
+        SpannableStringBuilder cancelSpannableString = new SpannableStringBuilder();
+        cancelSpannableString.append(getString(R.string.cancel));
+        ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lucky));
+        cancelSpannableString.setSpan(backgroundColorSpan, 0, cancelSpannableString.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        datePickerDialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, cancelSpannableString, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        //设置时间picker的确定颜色
+        SpannableStringBuilder confirmSpannableString = new SpannableStringBuilder();
+        confirmSpannableString.append(getString(R.string.ok));
+        ForegroundColorSpan confirmColorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.blueAssist));
+        confirmSpannableString.setSpan(confirmColorSpan, 0, confirmSpannableString.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, confirmSpannableString, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
         datePickerDialog.show();
     }
 
@@ -421,13 +454,4 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         updateUserInfo();
     }
 
-    @Override
-    public void getUserImage(String headImageUrl, String bitmapToBase64) {
-        if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
-            Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
-            }).into(mUserHeadImage);
-        } else {
-            getUserInfo();
-        }
-    }
 }

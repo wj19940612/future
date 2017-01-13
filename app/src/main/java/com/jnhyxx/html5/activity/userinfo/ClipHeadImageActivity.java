@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.userinfo;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -15,7 +16,6 @@ import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.clipimage.ClipImageLayout;
 import com.johnz.kutils.ImageUtil;
@@ -52,20 +52,16 @@ public class ClipHeadImageActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Bitmap clipBitmap = mClipImageLayout.clip();
-                String bitmapToBase64 = ImageUtil.bitmapToBase64(clipBitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    Log.d(TAG, "图片大小" + clipBitmap.getAllocationByteCount());
+                    String fileSize = ImageUtil.getFileSize(clipBitmap.getAllocationByteCount());
+                    Log.d(TAG, "图片大小" + fileSize);
+                }
+                Bitmap comp = ImageUtil.getUtil().comp(clipBitmap);
+                Log.d(TAG, "裁剪后图片大小" + ImageUtil.getFileSize(clipBitmap.getAllocationByteCount()));
+                String bitmapToBase64 = ImageUtil.bitmapToBase64(comp);
                 uploadUserHeadImage(bitmapToBase64);
-
-
-//                Bitmap bitmap = ImageUtil.getUtil().compressImage(clipBitmap);
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                byte[] datas = baos.toByteArray();
-//                Intent intent = new Intent(getActivity(), UserInfoActivity.class);
-//                intent.putExtra(KEY_CLIP_USER_IMAGE, datas);
-//                setResult(RESULT_OK);
-//                finish();
             }
         });
     }
@@ -83,8 +79,6 @@ public class ClipHeadImageActivity extends BaseActivity {
                             }
                             setResult(RESULT_OK);
                             finish();
-                        } else {
-                            ToastUtil.curt("头像上传失败");
                         }
                     }
                 })

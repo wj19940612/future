@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
+import static com.jnhyxx.html5.fragment.dialog.UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE;
 
 
 /**
@@ -156,6 +157,9 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                     break;
                 case REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST:
                     bingBankCard();
+                    break;
+                case REQ_CLIP_HEAD_IMAGE_PAGE:
+                    updateUserInfo();
                     break;
             }
         }

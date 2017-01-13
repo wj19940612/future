@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -66,7 +65,7 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
     /**
      * 打开自定义裁剪页面的请求码
      */
-    private static final int REQ_CLIP_HEAD_IMAGE_PAGE = 144;
+    public static final int REQ_CLIP_HEAD_IMAGE_PAGE = 144;
 
 
     @BindView(R.id.takePhoneFromCamera)
@@ -75,8 +74,6 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
     TextView mTakePhoneFromPhone;
     @BindView(R.id.takePhoneCancel)
     TextView mTakePhoneCancel;
-    @BindView(R.id.test)
-    ImageView mTest;
     private Unbinder mBind;
     private File mFile;
 
@@ -168,8 +165,10 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
             case R.id.takePhoneFromPhone:
                 if (Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)) {
 
+//                    再比如Android4.4后Intent(Intent.ACTION_GET_CONTENT);和Intent(Intent.ACTION_OPEN_DOCUMENT);两个方法所得到的图片的uri是不一样的，用老的方法导致在Android4.4系统获取不到图片。
+
                     Intent openAlbumIntent = new Intent(
-                            Intent.ACTION_GET_CONTENT);
+                            Intent.ACTION_PICK);
                     openAlbumIntent.setType("image/*");
                     startActivityForResult(openAlbumIntent, REQ_CODE_TAKE_PHONE_FROM_PHONES);
                 } else {
@@ -196,31 +195,11 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                         if (mFile != null) {
                             Uri mMBitmapUri = Uri.fromFile(mFile);
-                            String s = ImageUtil.FormetFileSize(mFile);
-                            Log.d(TAG, "文件的大小 " + s);
                             if (mMBitmapUri != null) {
-//                            cropImage(mMBitmapUri);
-                                Bitmap bitmap = BitmapFactory.decodeFile(mMBitmapUri.getPath());
-//                            Log.d(TAG, "拍照的原图大小" + bitmap.getAllocationByteCount());
-
                                 if (!TextUtils.isEmpty(mMBitmapUri.getPath())) {
                                     openClipImagePage(mMBitmapUri.getPath());
                                 }
                             }
-                        } else if (data != null) {
-                            Uri uri = data.getData();
-                            if (uri != null) {
-                                if (!TextUtils.isEmpty(uri.getPath())) {
-                                    openClipImagePage(uri.getPath());
-                                }
-                            } else {
-                                Bitmap bitmap = data.getParcelableExtra("data");
-                                if (bitmap != null) {
-                                    String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
-                                    uploadUserHeadImage(bitmapToBase64);
-                                }
-                            }
-
                         }
                     } else {
                         ToastUtil.curt("sd卡不可使用");
@@ -234,7 +213,7 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                             Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
 //                            Log.d(TAG, "裁剪的图片大小 " + bitmap.getAllocationByteCount());
                             String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
-                            uploadUserHeadImage(bitmapToBase64);
+//                            uploadUserHeadImage(bitmapToBase64);
 
                             Bitmap comp = ImageUtil.getUtil().comp(bitmap);
 //                            Log.d(TAG, "裁剪后的图片大小 " + comp.getAllocationByteCount());
@@ -244,48 +223,34 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                 case REQ_CODE_TAKE_PHONE_FROM_PHONES:
                     Uri photosUri = data.getData();
                     if (photosUri != null) {
-                        Log.d(TAG, "相册的地址 " + photosUri.getPath());
-                        Bitmap bitmap = BitmapFactory.decodeFile(photosUri.getPath());
-                        if (bitmap != null) {
-                            Log.d(TAG, "相册的图片" + bitmap.toString());
-//                        Log.d(TAG, "相片中获取的原图大小" + bitmap.getAllocationByteCount());
+                        if (!TextUtils.isEmpty(photosUri.getPath()) && photosUri.getPath().endsWith("jpg")) {
+                            Log.d(TAG, "相册的地址 " + photosUri.getPath());
 //                        cropImage(photosUri);
-                            if (!TextUtils.isEmpty(photosUri.getPath())) {
-                                openClipImagePage(photosUri.getPath());
+                            openClipImagePage(photosUri.getPath());
+                        } else {
+                            ContentResolver contentResolver = getActivity().getContentResolver();
+                            Cursor cursor = contentResolver.query(photosUri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                            if (cursor != null) {
+                                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                                cursor.moveToFirst();
+                                //最后根据索引值获取图片路径
+                                String path = cursor.getString(column_index);
+                                Log.d(TAG, "图片路径" + path);
+                                if (!TextUtils.isEmpty(path)) {
+                                    openClipImagePage(path);
+                                }
+                                cursor.close();
                             }
                         }
-                        ContentResolver contentResolver = getActivity().getContentResolver();
-                        Cursor cursor = contentResolver.query(photosUri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        //将光标移至开头 ，这个很重要，不小心很容易引起越界
-                        cursor.moveToFirst();
-                        //最后根据索引值获取图片路径
-                        String path = cursor.getString(column_index);
-                        Log.d(TAG, "图片路径" + path);
-                        Bitmap bitmap1 = cursor.getExtras().getParcelable("data");
-                        if (bitmap1 != null) {
-                            mTest.setImageBitmap(bitmap1);
-                        }
-                        cursor.close();
-
-//                        else if (data.getExtras() == null) {
-//                            ToastUtil.curt("获取图片失败");
-//                        }
-
-//                        Bitmap bitmapData = data.getParcelableExtra("data");
-//                        if (bitmapData != null) {
-//                            ToastUtil.curt("从相册中获取的图片" + bitmapData.toString());
-//                        }
                     }
                     break;
                 case REQ_CLIP_HEAD_IMAGE_PAGE:
-                    if (data != null) {
-                        byte[] byteArrayExtra = data.getByteArrayExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra.length);
-                        String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
-                        uploadUserHeadImage(bitmapToBase64);
-
-                    }
+//                    if (data != null) {
+//                        byte[] byteArrayExtra = data.getByteArrayExtra(ClipHeadImageActivity.KEY_CLIP_USER_IMAGE);
+//                        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArrayExtra, 0, byteArrayExtra.length);
+//                        String bitmapToBase64 = ImageUtil.bitmapToBase64(bitmap);
+//                        uploadUserHeadImage(bitmapToBase64);
+//                    }
                     break;
             }
         }

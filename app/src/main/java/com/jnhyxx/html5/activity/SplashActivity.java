@@ -23,7 +23,9 @@ public class SplashActivity extends BaseActivity {
         PushManager.getInstance().initialize(this.getApplicationContext());
 
         mVersionName = (TextView) findViewById(R.id.versionName);
-        mVersionName.setText("V" + AppInfo.getVersionName(this));
+        if (BuildConfig.FLAVOR.equalsIgnoreCase("yybd")) {
+            mVersionName.setText("V" + AppInfo.getVersionName(this));
+        }
 
         new Thread(new Runnable() {
             @Override

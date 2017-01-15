@@ -1047,4 +1047,31 @@ public class API extends APIBase {
     public static String getNewsDetailUrl() {
         return getHost() + "/news/newsDtl.html";
     }
+
+    /**
+     * 资金安全
+     *
+     * @return
+     */
+    public static String getFundSecurityUrl() {
+        return getHost() + "/banner/zjaq.html?nohead=1";
+    }
+
+    /**
+     * 风险告知
+     *
+     * @return
+     */
+    public static String getRiskInformedUrl() {
+        return getHost() + "/banner/rule.html?nohead=1";
+    }
+
+    /**
+     * 合作机构
+     *
+     * @return
+     */
+    public static String getCooperationOrgUrl() {
+        return getHost() + "/banner/hzhb.html?nohead=1";
+    }
 }

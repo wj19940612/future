@@ -24,6 +24,7 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
@@ -259,19 +260,28 @@ public class HomeFragment extends BaseFragment {
         mHomeListFooter.findViewById(R.id.fundSecurity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.fund_security))
+                        .putExtra(WebViewActivity.EX_URL, API.getFundSecurityUrl())
+                        .execute();
             }
         });
         mHomeListFooter.findViewById(R.id.riskInformed).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.normalize_futures_rule))
+                        .putExtra(WebViewActivity.EX_URL, API.getRiskInformedUrl())
+                        .execute();
             }
         });
         mHomeListFooter.findViewById(R.id.cooperationOrg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.cooperation_org))
+                        .putExtra(WebViewActivity.EX_URL, API.getCooperationOrgUrl())
+                        .execute();
             }
         });
         TextView servicePhone = (TextView) mHomeListFooter.findViewById(R.id.servicePhone);

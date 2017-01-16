@@ -148,6 +148,7 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onUpdateCompleted() {
                 updateAccountInfoView();
+
             }
         });
     }
@@ -167,7 +168,7 @@ public class MineFragment extends BaseFragment {
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mHeadImage);
+                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_avatar_default).transform(new CircleTransform()).into(mHeadImage);
             }
         } else {
             mSignArea.setVisibility(View.VISIBLE);

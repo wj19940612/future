@@ -502,13 +502,12 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         if (requestCode == BaseActivity.REQ_CODE_LOGIN && resultCode == getActivity().RESULT_OK) {
             LiveInteractionFragment fragment = (LiveInteractionFragment)
                     mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
-            if (fragment != null) {
-                fragment.updateLiveChatDataStatus();
-            }
-
             disconnectNettySocket();
             if (mLiveMessage != null) {
                 connectNettySocket();
+            }
+            if (fragment != null) {
+                fragment.updateLiveChatDataStatus();
             }
         }
     }

@@ -60,7 +60,7 @@ android {
         origin {
             versionCode 30
             versionName '1.3.5'
-            //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
+//            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 //            minSdkVersion  21
         }

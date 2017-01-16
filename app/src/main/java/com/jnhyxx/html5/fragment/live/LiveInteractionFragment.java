@@ -148,12 +148,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mOffset = 0;
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mInputBox.removeTextChangedListener(mValidationWatcher);
@@ -245,7 +239,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
                     if (liveSpeakInfo.isOwner()) {
                         Log.d(TAG, "含有的数据" + mListView.getChildCount());
-                        if (mDataArrayList.size() > 5 || mDataArrayList.size() > mListView.getChildCount()) {
+                        if (mDataArrayList.size() > 5 && mDataArrayList.size() > mListView.getChildCount()) {
                             setLiveViewStackFromBottom(true);
                         }
                     }
@@ -306,6 +300,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
             mDataArrayList.clear();
         }
+        mSize = 10;
+        mOffset = 0;
         getChatInfo();
     }
 

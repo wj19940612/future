@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -141,14 +140,7 @@ public class MainActivity extends BaseActivity {
                 } else if (position == TAB_MINE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MINE);
                 }
-                // TODO: 2017/1/11 改变直播层级，后期可能改变
-//                if (position >= 1) {
-//                    mTabPosition = position + 1;
-//                    mBottomTabs.selectTab(mTabPosition);
-//                } else {
-//                    mTabPosition = position;
                 mBottomTabs.selectTab(position);
-//                }
             }
 
             @Override
@@ -163,21 +155,11 @@ public class MainActivity extends BaseActivity {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);
-//                if (position == 1) {
-//                    openLivePage();
-//                } else if (position >= 1) {
-//                    mViewPager.setCurrentItem(position - 1, false);
-//                } else {
                 mViewPager.setCurrentItem(position, false);
-//                }
-
             }
         });
     }
 
-//    private void openLivePage() {
-//        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-//    }
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -209,7 +191,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showSysMessageDialog(final SysMessage sysMessage) {
-        Log.d(TAG, "弹窗消息  " + sysMessage.getCreateTime());
         if (!Preference.get().hasShowedThisSysMessage(sysMessage)) {
             HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                     .setOnCheckDetailListener(new HomePopup.OnClickListener() {
@@ -230,14 +211,6 @@ public class MainActivity extends BaseActivity {
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////        if (requestCode == REQ_CODE_LIVE) {
-////            mBottomTabs.selectTab(mTabPosition);
-////        }
-//    }
 
     private class NetworkReceiver extends Network.NetworkChangeReceiver {
 

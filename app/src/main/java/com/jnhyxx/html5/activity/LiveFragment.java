@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +66,6 @@ import static android.view.View.VISIBLE;
 
 
 public class LiveFragment extends BaseFragment implements LiveInteractionFragment.OnSendButtonClickListener {
-    private static final String TAG = "testLive";
 
     private static final int REQ_CODE_TRADE = 123;
 
@@ -197,7 +195,6 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.d(TAG, "是否可见" + isVisibleToUser);
         if (isAdded() && isVisibleToUser) {
             getChattingIpPort();
             if (getLiveInteractionFragment() != null && !mIsFragmentAdd) {
@@ -385,9 +382,9 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
     private void connectRTMPServer(LiveMessage.ActiveInfo active) {
         if (active != null && !TextUtils.isEmpty(active.getRtmp())) {
-//            mLivePlayer.setVideoPath(active.getRtmp());
+            mLivePlayer.setVideoPath(active.getRtmp());
 //            this rtmp url will lead to crash
-            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
+//            mLivePlayer.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
         }
     }
 

@@ -9,19 +9,38 @@
     android:orientation="vertical"
     tools:context="com.jnhyxx.html5.activity.userinfo.ClipHeadImageActivity">
 
-    <com.jnhyxx.html5.view.TitleBar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backFeature="true"
-        app:rightBackground="@drawable/btn_blue_inverse_login"
-        app:rightText="@string/use_clip_head_image"
-        app:rightTextColor="@color/blueAssist"
-        app:rightTextSize="12sp"
-        app:rightVisible="true"/>
-
     <com.jnhyxx.html5.view.clipimage.ClipImageLayout
         android:id="@+id/clipImageLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_clip_user_image"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/complete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/btn_clip_user_image"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/complete"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+    </LinearLayout>
 </LinearLayout>

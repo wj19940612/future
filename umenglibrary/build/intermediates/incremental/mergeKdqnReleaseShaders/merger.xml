@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\shaders"/></dataSet><dataSet config="kdqn"><source path="D:\code\hengyun\umenglibrary\src\kdqn\shaders"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\shaders"/></dataSet><dataSet config="kdqnRelease"><source path="D:\code\hengyun\umenglibrary\src\kdqnRelease\shaders"/></dataSet></merger>

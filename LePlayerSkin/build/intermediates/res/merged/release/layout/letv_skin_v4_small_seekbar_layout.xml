@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lecloud.skin.ui.view.V4LiveSeekbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    >
+
+    <SeekBar
+        android:id="@+id/live_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:progressDrawable="@drawable/letv_skin_v4_small_seek_bar_2_style"
+        android:thumb="@drawable/letv_skin_v4_new_seek_bar_thumb" >
+    </SeekBar>
+
+    <TextView
+        android:id="@+id/vnew_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/live_seek_bar"
+        android:layout_below="@+id/vnew_seekbar"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="1dp"
+        android:textColor="@color/letv_color_ffffffff"
+        android:visibility="invisible" />
+
+</com.lecloud.skin.ui.view.V4LiveSeekbar>

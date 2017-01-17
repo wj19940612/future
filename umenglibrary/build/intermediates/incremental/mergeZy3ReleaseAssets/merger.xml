@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\code\hengyun\umenglibrary\src\main\assets"/><source path="D:\code\hengyun\umenglibrary\build\generated\assets\shaders\zy3\release"/></dataSet><dataSet config="zy3"><source path="D:\code\hengyun\umenglibrary\src\zy3\assets"/></dataSet><dataSet config="release"><source path="D:\code\hengyun\umenglibrary\src\release\assets"/></dataSet><dataSet config="zy3Release"><source path="D:\code\hengyun\umenglibrary\src\zy3Release\assets"/></dataSet></merger>

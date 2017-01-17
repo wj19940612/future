@@ -1,0 +1,78 @@
+[
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_net_no.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_net_no.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery3.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery3.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_large_controller_ratetype_bg.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_large_controller_ratetype_bg.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_btn_back_default_white.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_btn_back_default_white.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_btn_pause.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_btn_pause.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_top_floatin_bg.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_top_floatin_bg.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_btn_stop.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_btn_stop.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_brightness_icon.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_brightness_icon.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery_charge.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery_charge.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\exploded-aar\\hengyun\\LePlayerSdk\\unspecified\\res\\drawable-hdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_seek_bg.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_seek_bg.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_btn_play.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_btn_play.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery5.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery5.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_net_wifi.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_net_wifi.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery2.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery2.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery1.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery1.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_battery4.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_battery4.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_btn_back_focus.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_btn_back_focus.png"
+    },
+    {
+        "merged": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_volume_icon.png",
+        "source": "D:\\code\\hengyun\\LePlayerSkin\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\letv_skin_v4_large_gesture_volume_icon.png"
+    }
+]

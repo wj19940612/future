@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lecloud.skin.ui.view.V4SmallMediaController xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/letv_skin_vnew_controller_background"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp" >
+
+    <com.lecloud.skin.ui.view.V4PlayBtn
+        android:id="@+id/vnew_play_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:padding="5dp" />
+
+    <com.lecloud.skin.ui.view.V4ChgScreenBtn
+        android:id="@+id/vnew_chg_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="5dp" />
+
+    <com.lecloud.skin.ui.view.V4PlayerSeekBar
+        android:id="@+id/vnew_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/vnew_text_duration_ref"
+        android:layout_toRightOf="@id/vnew_play_btn"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:progressDrawable="@drawable/letv_skin_v4_small_seek_bar_2_style"
+        android:thumb="@drawable/letv_skin_v4_new_seek_bar_thumb" />
+
+    <com.lecloud.skin.ui.base.TextTimerView
+        android:id="@+id/vnew_text_duration_ref"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@id/vnew_chg_btn" />
+
+</com.lecloud.skin.ui.view.V4SmallMediaController>

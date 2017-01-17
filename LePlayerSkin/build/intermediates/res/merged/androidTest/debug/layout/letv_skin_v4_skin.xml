@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+	<include
+        android:id="@+id/v4_letv_skin_v4_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/letv_skin_v4_top_layout" />
+
+
+    <include
+        android:id="@+id/v4_large_media_controller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/letv_skin_v4_controller_large_layout" />
+    
+    <include
+        android:id="@+id/v4_small_media_controller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/letv_skin_v4_controller_layout" />
+    
+<!--     <include -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         layout="@layout/letv_skin_v4_controller_layout" /> -->
+
+</RelativeLayout>

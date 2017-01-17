@@ -308,22 +308,6 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         }
     }
 
-
-//    @Override
-//    public void onBackPressed() {
-//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            if (mLivePlayer != null) {
-//                mLivePlayer.setFullScreen(false);
-//            }
-//        } else {
-//            if (getLiveInteractionFragment() != null) {
-//                getLiveInteractionFragment().hideInputBox();
-//            }
-//            super.onBackPressed();
-//        }
-//    }
-
-
     private void getChattingIpPort() {
         API.Market.getChattingServerIpAndPort().setTag(TAG)
                 .setCallback(new Callback2<Resp<List<ServerIpPort>>, List<ServerIpPort>>() {

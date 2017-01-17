@@ -36,6 +36,10 @@ public class UserIntroduceActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mUserDefiniteInfo = new UserDefiniteInfo();
+        String introduction = LocalUser.getUser().getUserInfo().getIntroduction();
+        if (!TextUtils.isEmpty(introduction)) {
+            mIntroduceInput.setText(introduction);
+        }
         mIntroduceInput.addTextChangedListener(mValidationWatcher);
     }
 

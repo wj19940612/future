@@ -32,6 +32,10 @@ public class PaymentActivity extends WebViewActivity {
             } else if (url.startsWith("alipays:") || url.contains("Intent;scheme=alipays")) {
                 openAlipay(view, url);
                 return true;
+            } else if (url.contains(API.Finance.getUserAggressPaymentConfirmPagePath())) {
+                setResult(RESULT_OK);
+                finish();
+                return true;
             }
         }
         return super.onShouldOverrideUrlLoading(view, url);

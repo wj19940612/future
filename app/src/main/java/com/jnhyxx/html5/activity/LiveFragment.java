@@ -271,8 +271,8 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             case R.id.showEditTextButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
-                    setBottomTabVisibility(GONE);
                     if (mTeacher != null) {
+                        setBottomTabVisibility(GONE);
                         if (getLiveInteractionFragment() != null) {
                             getLiveInteractionFragment().showInputBox();
                         }

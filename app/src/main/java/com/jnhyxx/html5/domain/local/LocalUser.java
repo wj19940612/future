@@ -57,6 +57,11 @@ public class LocalUser {
         mUserInfo.setScoreUsable(userInfo.getScoreUsable());
     }
 
+    public void setUserPortrait(UserInfo userInfo) {
+        mUserInfo.setUserPortrait(userInfo.getUserPortrait());
+    }
+
+
     public UserInfo getUserInfo() {
         return mUserInfo;
     }

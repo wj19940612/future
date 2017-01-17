@@ -27,14 +27,10 @@ public class IconTextRow extends LinearLayout {
     private CharSequence mSubText;
     private int mSubTextSize;
     private ColorStateList mSubTextColor;
-
+    private int mVerticalPaddingTop;
 
     private TextView mTextView;
     private TextView mSubTextView;
-
-    //有些不需要上下的边距
-    private boolean mIsNotNeedTopPadding;
-
 
     public IconTextRow(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -60,8 +56,8 @@ public class IconTextRow extends LinearLayout {
         mSubText = typedArray.getText(R.styleable.IconTextRow_subText);
         mSubTextSize = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_subTextSize, defaultFontSize);
         mSubTextColor = typedArray.getColorStateList(R.styleable.IconTextRow_subTextColor);
+        mVerticalPaddingTop = typedArray.getDimensionPixelOffset(R.styleable.IconTextRow_rowVerticalPadding, 0);
 
-        mIsNotNeedTopPadding = typedArray.getBoolean(R.styleable.IconTextRow_rowIsNotNeedTopPadding, false);
         typedArray.recycle();
     }
 
@@ -69,12 +65,10 @@ public class IconTextRow extends LinearLayout {
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
-        if (mIsNotNeedTopPadding) {
-            setPadding(padding, 0, padding, 0);
-        } else {
-            setPadding(padding, padding, padding, padding);
+        setPadding(padding, padding, padding, padding);
+        if (mVerticalPaddingTop != 0) {
+            setPadding(padding, mVerticalPaddingTop, padding, mVerticalPaddingTop);
         }
-
 
         LayoutParams params;
         if (mLeftIcon != null) {

@@ -3,18 +3,17 @@ package com.jnhyxx.html5.activity.userinfo;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +34,7 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -102,10 +102,20 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         getUserInfo();
         mCalendar = Calendar.getInstance();
 
-        mUserIntroduction.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
-
+        mUserIntroduction.addTextChangedListener(mTextWatcher);
 
     }
+
+    private TextWatcher mTextWatcher = new ValidationWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (mUserIntroduction.getLineCount() > 1) {
+                mUserIntroduction.setGravity(Gravity.LEFT);
+            } else {
+                mUserIntroduction.setGravity(Gravity.RIGHT);
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -121,30 +131,10 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 }).fireSync();
     }
 
-
-    ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-
-        @Override
-        public void onGlobalLayout() {
-            if (mUserIntroduction.getLineCount() > 0) {
-                Log.e(TAG, "行数" + mUserIntroduction.getLineCount());
-                if (mUserIntroduction.getGravity() != Gravity.LEFT && mUserIntroduction.getLineCount() > 1) {
-                    mUserIntroduction.setGravity(Gravity.LEFT);
-                } else {
-                    mUserIntroduction.setGravity(Gravity.RIGHT);
-                }
-            }
-        }
-    };
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mUserIntroduction.getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
-        } else {
-            mUserIntroduction.getViewTreeObserver().removeGlobalOnLayoutListener(mOnGlobalLayoutListener);
-        }
+        mUserIntroduction.removeTextChangedListener(mTextWatcher);
     }
 
     @Override
@@ -261,10 +251,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         datePickerDialog.show();
     }
 
-    private int toDp(int size) {
-        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, getResources().getDisplayMetrics()));
-    }
-
     private void showSexPicker() {
         OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
         picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
@@ -353,8 +339,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
 
     private void getUserInfo() {
         API.User.getUserInfo()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<UserDefiniteInfo>, UserDefiniteInfo>() {
                     @Override
                     public void onRespSuccess(UserDefiniteInfo userDefiniteInfo) {

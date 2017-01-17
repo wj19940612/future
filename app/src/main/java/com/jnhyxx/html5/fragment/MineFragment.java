@@ -21,7 +21,6 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
-import com.jnhyxx.html5.activity.setting.SettingsActivity;
 import com.jnhyxx.html5.activity.userinfo.UserInfoActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
@@ -117,7 +116,7 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET);
-                Launcher.with(getActivity(), SettingsActivity.class).execute();
+                Launcher.with(getActivity(), UserInfoActivity.class).execute();
             }
         });
     }

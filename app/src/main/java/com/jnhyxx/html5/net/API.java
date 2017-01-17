@@ -402,6 +402,30 @@ public class API extends APIBase {
             return new API("/user/finance/findDepositType.do", new ApiParams());
         }
 
+
+        /**
+         * 判断用户是否签署过支付协议
+         * //http://newtest.jnhyxx.com/user/finance/checkTopupRead.do
+         *
+         * @return
+         */
+        public static API isUserAgreePayment() {
+            return new API("/user/finance/checkTopupRead.do", null);
+        }
+
+        /**
+         * 打开用户同意支付协议的h5页面
+         * /xieyi/riskWarning.html
+         */
+        public static String getUserAgreePaymentPagePath() {
+            return getHost() + ("/xieyi/riskWarning.html?nohead=1");
+        }
+
+        //用户同意支付协议后h5返回的网址头
+        public static String getUserAggressPaymentConfirmPagePath() {
+            return getHost() + "/account/banks.html";
+        }
+
         /**
          * 接口名：支付成功页面通知地址
          * <p>

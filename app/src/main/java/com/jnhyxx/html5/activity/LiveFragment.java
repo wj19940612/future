@@ -60,6 +60,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -113,6 +114,9 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
     private boolean mIsFragmentAdd = false;
 
+    private Unbinder mBind;
+
+
     private NettyHandler mNettyHandler = new NettyHandler<LiveSpeakInfo>() {
 
         @Override
@@ -140,7 +144,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_live, container, false);
-        ButterKnife.bind(this, view);
+        mBind = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -216,6 +220,12 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         mKeyBoardHelper = new KeyBoardHelper(getActivity());
         mKeyBoardHelper.onCreate();
         mKeyBoardHelper.setOnKeyBoardStatusChangeListener(mOnKeyBoardStatusChangeListener);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBind.unbind();
     }
 
     @Override

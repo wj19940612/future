@@ -99,10 +99,17 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         setContentView(R.layout.activity_user_info);
         ButterKnife.bind(this);
 
+
+        updateUserInfo();
+
         getUserInfo();
         mCalendar = Calendar.getInstance();
 
         mUserIntroduction.addTextChangedListener(mTextWatcher);
+
+    }
+
+    private void initView() {
 
     }
 
@@ -356,53 +363,28 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
             Picasso.with(UserInfoActivity.this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
-        }
-        if (!TextUtils.isEmpty(userInfo.getUserName())) {
-            mUserName.setSubText(userInfo.getUserName());
         } else {
-            mUserName.setSubText("");
+            if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
+                if (LocalUser.getUser().getUserInfo().isUserisBoy()) {
+                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_boy).transform(new CircleTransform()).into(mUserHeadImage);
+                } else {
+                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_girl).transform(new CircleTransform()).into(mUserHeadImage);
+                }
+            } else {
+                Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
+            }
         }
-
-        if (!TextUtils.isEmpty(userInfo.getRealName())) {
-            mUserRealName.setSubText(userInfo.getRealName());
-        } else {
-            mUserRealName.setSubText("");
-        }
-
-        if (!TextUtils.isEmpty(userInfo.getUserName())) {
-            mUserName.setSubText(userInfo.getUserName());
-        } else {
-            mUserName.setSubText("");
-        }
-
-        if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
-            mSex.setSubText(userInfo.getChinaSex());
-        } else {
-            mSex.setSubText("");
-        }
-
-        if (!TextUtils.isEmpty(userInfo.getLand())) {
-            mLocation.setSubText(userInfo.getLand());
-        } else {
-            mLocation.setSubText("");
-        }
-
-        if (!TextUtils.isEmpty(userInfo.getBirthday())) {
-            mBirthday.setSubText(userInfo.getBirthday());
-        } else {
-            mBirthday.setSubText("");
-        }
-
-        if (!TextUtils.isEmpty(userInfo.getIntroduction())) {
-            mUserIntroduction.setText(userInfo.getIntroduction());
-        }
-
+        mUserName.setSubText(userInfo.getUserName());
+        mUserRealName.setSubText(userInfo.getRealName());
+        mUserName.setSubText(userInfo.getUserName());
+        mSex.setSubText(userInfo.getChinaSex());
+        mLocation.setSubText(userInfo.getLand());
+        mBirthday.setSubText(userInfo.getBirthday());
+        mUserIntroduction.setText(userInfo.getIntroduction());
         mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
         mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
+        mBindingPhone.setSubText(userInfo.getUserPhone());
 
-        if (!TextUtils.isEmpty(userInfo.getUserPhone())) {
-            mBindingPhone.setSubText(userInfo.getUserPhone());
-        }
     }
 
     private int getBindBankcardAuthStatusRes(int authStatus) {

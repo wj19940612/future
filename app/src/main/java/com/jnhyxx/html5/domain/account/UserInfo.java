@@ -288,6 +288,13 @@ public class UserInfo {
         return chinaSex;
     }
 
+    public boolean isUserisBoy() {
+        if (getChinaSex().equalsIgnoreCase("男")) {
+            return true;
+        }
+        return false;
+    }
+
     public void setChinaSex(String chinaSex) {
         this.chinaSex = chinaSex;
     }

@@ -161,18 +161,18 @@ public class RechargeActivity extends BaseActivity {
         API.Finance.isUserAgreePayment()
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback1<Resp<Object>>() {
+                .setCallback(new Callback1<Resp<Boolean>>() {
 
                     @Override
-                    protected void onRespSuccess(Resp<Object> resp) {
+                    protected void onRespSuccess(Resp<Boolean> resp) {
                         if (resp.isSuccess() && resp.hasData()) {
                             Log.d(TAG, "签署协议" + resp.getData());
-                            if (resp.getData().toString().equalsIgnoreCase("true")) {
+                            if (resp.getData()) {
                                 doPayment();
-                            } else if (resp.getData().toString().equalsIgnoreCase("false")) {
+                            } else {
                                 Launcher.with(getActivity(), PaymentActivity.class)
                                         .putExtra(PaymentActivity.EX_URL, API.Finance.getUserAgreePaymentPagePath())
-                                        .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
+                                        .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge_agree_payment))
                                         .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                                         .executeForResult(REQ_CODE_AGREE_PAYMENT);
                             }

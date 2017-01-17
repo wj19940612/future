@@ -418,7 +418,7 @@ public class API extends APIBase {
          * /xieyi/riskWarning.html
          */
         public static String getUserAgreePaymentPagePath() {
-            return getHost() + ("/xieyi/riskWarning.html");
+            return getHost() + ("/xieyi/riskWarning.html?nohead=1");
         }
 
         //用户同意支付协议后h5返回的网址头

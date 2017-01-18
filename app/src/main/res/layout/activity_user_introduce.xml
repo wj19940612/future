@@ -18,7 +18,6 @@
 
 
     <EditText
-        android:lineSpacingExtra="5dp"
         android:id="@+id/introduceInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,8 +25,10 @@
         android:background="@drawable/bg_line_division_center"
         android:gravity="left"
         android:hint="@string/please_input_introduction"
+        android:lineSpacingExtra="5dp"
         android:maxLength="30"
         android:minHeight="100dp"
+        android:paddingBottom="10dp"
         android:textColorHint="@color/grayHint"
         android:textSize="14sp"/>
 

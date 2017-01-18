@@ -187,7 +187,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.plate);
-        mTabsLayout.addView(createTab(R.string.kline_chart), POS_KLINE, layoutParams);
+        mTabsLayout.addView(createTab(R.string.kline_chart, R.drawable.ic_kline_down_arrow), POS_KLINE, layoutParams);
 
         layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -237,6 +237,15 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         tab.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
         tab.setId(resId);
         tab.setOnClickListener(this);
+        return tab;
+    }
+
+    private View createTab(int resId, int rightDrawableRes) {
+        TextView tab = (TextView) createTab(resId);
+        int paddingPx = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
+        tab.setCompoundDrawablePadding(paddingPx);
+        tab.setCompoundDrawablesWithIntrinsicBounds(0, 0, rightDrawableRes, 0);
         return tab;
     }
 

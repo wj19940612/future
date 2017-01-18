@@ -7,13 +7,6 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dayK"
-        style="@style/PopupWindowText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/day_k_line"/>
-
-    <TextView
         android:id="@+id/threeMin"
         style="@style/PopupWindowText"
         android:layout_width="match_parent"
@@ -48,4 +41,11 @@
         android:layout_height="wrap_content"
         android:paddingBottom="6dp"
         android:text="@string/sixty_min_k"/>
+
+    <TextView
+        android:id="@+id/dayK"
+        style="@style/PopupWindowText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/day_k_line"/>
 </LinearLayout>

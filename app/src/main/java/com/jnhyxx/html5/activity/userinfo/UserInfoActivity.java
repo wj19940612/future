@@ -91,8 +91,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     @BindView(R.id.location)
     IconTextRow mLocation;
 
-    private Calendar mCalendar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,10 +101,8 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         updateUserInfo();
 
         getUserInfo();
-        mCalendar = Calendar.getInstance();
 
         mUserIntroduction.addTextChangedListener(mTextWatcher);
-
     }
 
     private TextWatcher mTextWatcher = new ValidationWatcher() {
@@ -205,9 +201,10 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     }
 
     private void showBirthdayPicker() {
-        int year = mCalendar.get(Calendar.YEAR);
-        int month = mCalendar.get(Calendar.MONTH);
-        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month =calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
         if (!TextUtils.isEmpty(birthday)) {

@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity;
+package com.jnhyxx.html5.fragment;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -23,6 +23,9 @@ import android.widget.TextView;
 import com.jnhnxx.livevideo.LivePlayer;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.MainActivity;
+import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.domain.live.LastTeacherCommand;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
@@ -33,7 +36,6 @@ import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.fragment.live.LiveInteractionFragment;
 import com.jnhyxx.html5.fragment.live.LiveTeacherInfoFragment;
 import com.jnhyxx.html5.fragment.live.TeacherGuideFragment;
@@ -237,7 +239,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
     public void setBottomTabVisibility(int visibility) {
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) (getActivity())).mBottomTabs.setVisibility(visibility);
+            ((MainActivity) (getActivity())).getBottomTabs().setVisibility(visibility);
         }
     }
 

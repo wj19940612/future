@@ -203,7 +203,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     private void showBirthdayPicker() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month =calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
@@ -218,15 +218,11 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         final DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerDialogStyle, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
-                StringBuilder birthdayDate = new StringBuilder();
-                LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
-                updateUserInfo();
+
             }
         }, year, month, day);
-        datePickerDialog.setCustomTitle(null);
 
-        //设置时间picker的取消颜色
+//        //设置时间picker的取消颜色
         SpannableStringBuilder cancelSpannableString = new SpannableStringBuilder();
         cancelSpannableString.append(getString(R.string.cancel));
         ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lucky));
@@ -245,7 +241,14 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, confirmSpannableString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                DatePicker datePicker = datePickerDialog.getDatePicker();
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth();
+                int dayOfMonth = datePicker.getDayOfMonth();
+                Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
+                StringBuilder birthdayDate = new StringBuilder();
+                LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
+                updateUserInfo();
             }
         });
         datePickerDialog.show();
@@ -256,8 +259,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
         picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
         picker.setAnimationStyle(R.style.BottomDialogStyle);
-        picker.setOffset(2);
-        picker.setSelectedIndex(0);
+        picker.setOffset(1);
 //        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
@@ -371,16 +373,16 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
 
     private void updateUserHeadImage(UserInfo userInfo) {
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-            Picasso.with(UserInfoActivity.this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
+            Picasso.with(this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
         } else {
             if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
                 if (LocalUser.getUser().getUserInfo().isUserisBoy()) {
-                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_boy).transform(new CircleTransform()).into(mUserHeadImage);
+                    Picasso.with(this).load(R.drawable.ic_user_info_head_boy).transform(new CircleTransform()).into(mUserHeadImage);
                 } else {
-                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_girl).transform(new CircleTransform()).into(mUserHeadImage);
+                    Picasso.with(this).load(R.drawable.ic_user_info_head_girl).transform(new CircleTransform()).into(mUserHeadImage);
                 }
             } else {
-                Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
+                Picasso.with(this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
             }
         }
     }

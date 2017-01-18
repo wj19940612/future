@@ -48,6 +48,11 @@ public class KlineView extends ChartView {
         init();
     }
 
+    @Override
+    protected boolean shouldDrawTitleAboveBaseLines() {
+        return true;
+    }
+
     public void init() {
         mVisibleList = new SparseArray<>();
         mDateFormat = new SimpleDateFormat();
@@ -130,6 +135,13 @@ public class KlineView extends ChartView {
                 indexesBaseLines[i] = indexesBaseLines[i + 1] + volumeRange;
             }
         }
+    }
+
+    @Override
+    protected void drawTitleAboveBaselines(int left, int top, int top2, int touchIndex, Canvas canvas) {
+        float textX = left + mTextMargin;
+        setDefaultTextPaint(sPaint);
+        canvas.drawText("MA5:3700", textX, top + mFontHeight / 2 + mOffset4CenterText, sPaint);
     }
 
     @Override

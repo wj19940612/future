@@ -304,6 +304,11 @@ public abstract class ChartView extends View {
         return false;
     }
 
+    protected boolean shouldDrawTitleAboveBaseLines() {
+        return false;
+    }
+
+
     protected boolean shouldDrawUnstableData() {
         return false;
     }

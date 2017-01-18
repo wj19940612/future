@@ -134,8 +134,9 @@
             <LinearLayout
                 android:id="@+id/introductionLayout"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:background="@android:color/white">
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:minHeight="61dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -147,7 +148,7 @@
                 <TextView
                     android:id="@+id/userIntroduction"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:lineSpacingExtra="3dp"
@@ -173,9 +174,9 @@
                 android:background="@android:color/white"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/real_name_authorize"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blueAssist"/>
 
             <include layout="@layout/spilt_line_gray_light"/>
@@ -187,9 +188,9 @@
                 android:background="@android:color/white"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/binding_bank_card"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blueAssist"/>
 
             <include layout="@layout/spilt_line_gray_light"/>
@@ -200,9 +201,9 @@
                 android:layout_height="43dp"
                 android:background="@android:color/white"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/binding_phone"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>
         </LinearLayout>
     </ScrollView>

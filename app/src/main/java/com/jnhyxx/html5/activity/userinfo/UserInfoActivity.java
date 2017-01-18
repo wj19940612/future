@@ -5,14 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -34,7 +31,6 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
-import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -101,20 +97,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         updateUserInfo();
 
         getUserInfo();
-
-        mUserIntroduction.addTextChangedListener(mTextWatcher);
     }
-
-    private TextWatcher mTextWatcher = new ValidationWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (mUserIntroduction.getLineCount() > 1) {
-                mUserIntroduction.setGravity(Gravity.LEFT);
-            } else {
-                mUserIntroduction.setGravity(Gravity.RIGHT);
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -130,11 +113,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 }).fireSync();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUserIntroduction.removeTextChangedListener(mTextWatcher);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

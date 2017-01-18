@@ -29,17 +29,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_white_with_gray_bottom_border"
-        android:paddingBottom="6dp"
-        android:paddingTop="6dp">
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
 
         <TextView
-            android:id="@+id/currentOnlineNumber"
+            android:id="@+id/futuresRiskTips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_futures_rick_tips"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/ic_exclamation_marker"
+            android:paddingBottom="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/redPrimary"
             android:textSize="12sp"
-            tools:text="当前在线977人"/>
+            android:text="@string/futures_risk_tips"/>
 
         <ViewSwitcher
             android:id="@+id/viewSwitcher"
@@ -55,24 +63,34 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/simulation"
+            android:id="@+id/paidToPromote"
             style="@style/HomeListHeaderButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_simulate"
-            android:text="@string/simulation"/>
+            android:drawableTop="@drawable/ic_paid_to_promote"
+            android:text="@string/paid_to_promote"/>
 
         <TextView
-            android:id="@+id/newerGuide"
+            android:id="@+id/investCourse"
             style="@style/HomeListHeaderButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_newer_guide"
-            android:text="@string/newer_guide"/>
+            android:drawableTop="@drawable/ic_invest_course"
+            android:text="@string/invest_course"/>
+
+        <TextView
+            android:id="@+id/newerVideo"
+            style="@style/HomeListHeaderButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_white_pressable"
+            android:drawableTop="@drawable/ic_newer_video"
+            android:text="@string/newer_video"/>
 
         <TextView
             android:id="@+id/contactService"
@@ -81,7 +99,45 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_contact_service"
+            android:drawableTop="@drawable/ic_service"
             android:text="@string/contact_service"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/simulation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/btn_simulate_enter">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/ic_simulate"
+            android:drawablePadding="10dp"
+            android:text="@string/simulation"
+            android:textColor="#0E2947"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/holdingNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_red_primary"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:minHeight="20dp"
+            android:minWidth="64dp"
+            android:text="@string/enter_right_now"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
 </LinearLayout>

@@ -157,7 +157,6 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-//        if (isBankcardPaymentSelected()) {
         API.Finance.isUserAgreePayment()
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -180,11 +179,6 @@ public class RechargeActivity extends BaseActivity {
                     }
                 })
                 .fire();
-
-
-//        } else {
-
-//        }
     }
 
     private void doPayment() {

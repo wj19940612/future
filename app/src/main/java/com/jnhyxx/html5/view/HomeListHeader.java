@@ -17,6 +17,7 @@ import android.widget.ViewSwitcher;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
@@ -28,11 +29,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.android.volley.Request.Method.HEAD;
-
 public class HomeListHeader extends FrameLayout {
 
-    @OnClick({R.id.simulation, R.id.newerGuide, R.id.contactService})
+    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.newerVideo, R.id.contactService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.simulation:
@@ -40,14 +39,29 @@ public class HomeListHeader extends FrameLayout {
                     mListener.onSimulationClick();
                 }
                 break;
-            case R.id.newerGuide:
+            case R.id.paidToPromote:
+                if (mListener != null) {
+                    mListener.onPaidToPromoteClick();
+                }
+                break;
+            case R.id.investCourse:
+                if (mListener != null) {
+                    mListener.onInvestCourseClick();
+                }
+                break;
+            case R.id.newerVideo:
                 if (mListener != null) {
                     mListener.onNewerGuideClick();
                 }
                 break;
             case R.id.contactService:
                 if (mListener != null) {
-                    mListener.onContactService();
+                    mListener.onContactServiceClick();
+                }
+                break;
+            case R.id.futuresRiskTips:
+                if (mListener != null) {
+                    mListener.onFuturesRiskTipsClick();
                 }
                 break;
         }
@@ -56,11 +70,17 @@ public class HomeListHeader extends FrameLayout {
     public interface OnViewClickListener {
         void onBannerClick(Information information);
 
+        void onFuturesRiskTipsClick();
+
         void onSimulationClick();
+
+        void onPaidToPromoteClick();
+
+        void onInvestCourseClick();
 
         void onNewerGuideClick();
 
-        void onContactService();
+        void onContactServiceClick();
     }
 
     private OnViewClickListener mListener;
@@ -69,19 +89,17 @@ public class HomeListHeader extends FrameLayout {
     InfiniteViewPager mViewPager;
     @BindView(R.id.pageIndicator)
     PageIndicator mPageIndicator;
-    @BindView(R.id.currentOnlineNumber)
-    TextView mCurrentOnlineNumber;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mViewSwitcher;
-    @BindView(R.id.simulation)
-    TextView mSimulation;
-    @BindView(R.id.newerGuide)
+    @BindView(R.id.newerVideo)
     TextView mNewerGuide;
     @BindView(R.id.contactService)
     TextView mContactService;
+    @BindView(R.id.holdingNumber)
+    TextView mHoldingNumber;
 
     private AdvertisementAdapter mAdapter;
-    private OrderReport mOrderReport;
+    private List<OrderReport> mOrderReportList;
     private int mCount;
 
     public HomeListHeader(Context context) {
@@ -134,20 +152,22 @@ public class HomeListHeader extends FrameLayout {
         }
     }
 
-    public void setSimulationHolding(boolean holding) {
-        if (holding) {
-            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate_holding, 0, 0);
+    public void setSimulationHolding(List<HomePositions.IntegralOpSBean> integralOpSBeanList) {
+        if (integralOpSBeanList != null && integralOpSBeanList.size() > 0) {
+            int holdingNumber = 0;
+            for (HomePositions.IntegralOpSBean integralOpSBean: integralOpSBeanList) {
+                holdingNumber += integralOpSBean.getHandsNum();
+            }
+            if (getContext() != null) {
+                mHoldingNumber.setText(getContext().getString(R.string.holding_number, holdingNumber));
+            }
         } else {
-            mSimulation.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_simulate, 0, 0);
+            mHoldingNumber.setText(R.string.enter_right_now);
         }
     }
 
-    public void setOrderReport(OrderReport orderReport) {
-        mOrderReport = orderReport;
-        SpannableString currentOnlineNumber = StrUtil.mergeTextWithColor("当前在线",
-                mOrderReport.getCount() + "", ContextCompat.getColor(getContext(), R.color.redPrimary),
-                "人");
-        mCurrentOnlineNumber.setText(currentOnlineNumber);
+    public void setOrderReports(List<OrderReport> orderReports) {
+        mOrderReportList = orderReports;
         mCount = 0;
         nextOrderReport();
     }
@@ -157,15 +177,16 @@ public class HomeListHeader extends FrameLayout {
     }
 
     public void nextOrderReport() {
-        if (mOrderReport == null) return;
-        TextView orderReportView = (TextView) mViewSwitcher.getNextView();
-        List<OrderReport.ResultListBean> listBeen = mOrderReport.getResultList();
-        if (listBeen.size() > 0) {
-            OrderReport.ResultListBean resultListBean = listBeen.get(mCount++ % listBeen.size());
+        if (mOrderReportList == null || mOrderReportList.size() == 0) {
+            mViewSwitcher.setVisibility(GONE);
+        } else {
+            mViewSwitcher.setVisibility(VISIBLE);
+            TextView orderReportView = (TextView) mViewSwitcher.getNextView();
+            OrderReport report = mOrderReportList.get(mCount++ % mOrderReportList.size());
             SpannableString orderReport = StrUtil.mergeTextWithColor(
-                    resultListBean.getNick() + " " + resultListBean.getTime() + " ",
-                    resultListBean.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
-                    " " + resultListBean.getFuturesType());
+                    report.getNick() + " " + report.getTime() + " ",
+                    report.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
+                    " " + report.getFuturesType());
             orderReportView.setText(orderReport);
             mViewSwitcher.showNext();
         }

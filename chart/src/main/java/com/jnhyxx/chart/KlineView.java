@@ -25,10 +25,14 @@ public class KlineView extends ChartView {
     private static final String MA_ORANGE = "#FFBB22";
     private static final String MA_PURPLE = "#AA20AF";
 
+    public static final String DATE_FORMAT_DAY_K = "MM/dd";
+    public static final String DATE_FORMAT_DAY_MIN = "hh:mm";
+
     private List<KlineViewData> mDataList;
     private SparseArray<KlineViewData> mVisibleList;
     private Settings mSettings;
     private SimpleDateFormat mDateFormat;
+    private String mDateFormatStr;
     private Date mDate;
     private int[] mMovingAverages;
 
@@ -47,6 +51,7 @@ public class KlineView extends ChartView {
     public void init() {
         mVisibleList = new SparseArray<>();
         mDateFormat = new SimpleDateFormat();
+        mDateFormatStr = DATE_FORMAT_DAY_K;
         mDate = new Date();
         mCandleWidth = dp2Px(CANDLES_WIDTH_DP);
         mMovingAverages = new int[]{5, 10, 20};
@@ -55,6 +60,10 @@ public class KlineView extends ChartView {
     public void setDataList(List<KlineViewData> dataList) {
         mDataList = dataList;
         redraw();
+    }
+
+    public void setDataFormat(String formatStr) {
+        mDateFormatStr = formatStr;
     }
 
     private void setCandleLinePaint(Paint paint, String color) {
@@ -189,15 +198,17 @@ public class KlineView extends ChartView {
     @Override
     protected void drawRealTimeData(boolean indexesEnable, int left, int top, int width, int height,
                                     int left2, int top2, int width2, int height2, Canvas canvas) {
-        for (int i = mStart; i < mEnd; i++) {
-            KlineViewData data = mDataList.get(i);
-            float chartX = getChartXOfScreen(i, data);
-            drawCandle(chartX, data, canvas);
-            if (indexesEnable) {
-                drawIndexes(chartX, data, canvas);
+        if (mDataList != null && mDataList.size() > 0) {
+            for (int i = mStart; i < mEnd; i++) {
+                KlineViewData data = mDataList.get(i);
+                float chartX = getChartXOfScreen(i, data);
+                drawCandle(chartX, data, canvas);
+                if (indexesEnable) {
+                    drawIndexes(chartX, data, canvas);
+                }
             }
+            drawMovingAverageLines(canvas);
         }
-        drawMovingAverageLines(canvas);
     }
 
     private void drawMovingAverageLines(Canvas canvas) {
@@ -349,7 +360,7 @@ public class KlineView extends ChartView {
 
     private String formatTimestamp(long timestamp) {
         if (mSettings.getkType() == Settings.DAY_K) {
-            mDateFormat.applyPattern("MM/dd");
+            mDateFormat.applyPattern(mDateFormatStr);
             mDate.setTime(timestamp);
             return mDateFormat.format(mDate);
         }
@@ -357,10 +368,10 @@ public class KlineView extends ChartView {
     }
 
     public void clearData() {
-        setDataList(null);
         mStart = 0;
         mEnd = 0;
         mLength = 0;
+        setDataList(null);
     }
 
     @Override

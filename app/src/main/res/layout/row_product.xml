@@ -113,20 +113,25 @@
             android:textSize="17sp"
             tools:text="46.24"/>
 
-        <TextView
-            android:id="@+id/priceChangePercent"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_red_primary"
-            android:drawableLeft="@drawable/ic_up_arrow"
-            android:drawablePadding="5dp"
+            android:minHeight="20dp"
             android:gravity="center"
-            android:paddingBottom="2dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingTop="2dp"
-            android:textColor="@android:color/white"
-            tools:text="——%"/>
+            android:minWidth="64dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/priceChangePercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_up_arrow"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                tools:text="——%"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

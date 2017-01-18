@@ -24,16 +24,8 @@ public class HomePositions {
         return cashOpS;
     }
 
-    public void setCashOpS(List<CashOpSBean> cashOpS) {
-        this.cashOpS = cashOpS;
-    }
-
     public List<IntegralOpSBean> getIntegralOpS() {
         return integralOpS;
-    }
-
-    public void setIntegralOpS(List<IntegralOpSBean> integralOpS) {
-        this.integralOpS = integralOpS;
     }
 
     public static class CashOpSBean implements Position {
@@ -65,7 +57,6 @@ public class HomePositions {
     public static class IntegralOpSBean implements Position {
         private String varietyType;
         private int handsNum;
-
 
         public void setVarietyType(String varietyType) {
             this.varietyType = varietyType;

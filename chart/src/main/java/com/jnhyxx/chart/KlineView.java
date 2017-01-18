@@ -368,10 +368,10 @@ public class KlineView extends ChartView {
     }
 
     public void clearData() {
-        setDataList(null);
         mStart = 0;
         mEnd = 0;
         mLength = 0;
+        setDataList(null);
     }
 
     @Override

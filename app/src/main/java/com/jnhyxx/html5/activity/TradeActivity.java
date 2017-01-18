@@ -695,12 +695,13 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void requestKlineDataAndSet(final String type) {
+        final KlineView klineView = mChartContainer.getKlineView();
+        klineView.clearData();
         API.getKlineData(mProduct.getContractsCode(), type)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
-                        KlineView klineView = mChartContainer.getKlineView();
                         if (klineDataList != null && klineView != null) {
                             if (TextUtils.isEmpty(type)) { // dayK
                                 klineView.setDataFormat(KlineView.DATE_FORMAT_DAY_K);

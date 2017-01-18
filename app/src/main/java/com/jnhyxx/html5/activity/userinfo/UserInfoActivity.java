@@ -109,10 +109,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
 
     }
 
-    private void initView() {
-
-    }
-
     private TextWatcher mTextWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -274,6 +270,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 if (!TextUtils.isEmpty(item)) {
                     mSex.setSubText(item);
                     LocalUser.getUser().getUserInfo().setChinaSex(item);
+                    updateUserHeadImage(LocalUser.getUser().getUserInfo());
                 }
             }
         });
@@ -361,6 +358,21 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
 
     private void updateUserInfo() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        updateUserHeadImage(userInfo);
+        mUserName.setSubText(userInfo.getUserName());
+        mUserRealName.setSubText(userInfo.getRealName());
+        mUserName.setSubText(userInfo.getUserName());
+        mSex.setSubText(userInfo.getChinaSex());
+        mLocation.setSubText(userInfo.getLand());
+        mBirthday.setSubText(userInfo.getBirthday());
+        mUserIntroduction.setText(userInfo.getIntroduction());
+        mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
+        mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
+        mBindingPhone.setSubText(userInfo.getUserPhone());
+
+    }
+
+    private void updateUserHeadImage(UserInfo userInfo) {
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
             Picasso.with(UserInfoActivity.this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
         } else {
@@ -374,17 +386,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
             }
         }
-        mUserName.setSubText(userInfo.getUserName());
-        mUserRealName.setSubText(userInfo.getRealName());
-        mUserName.setSubText(userInfo.getUserName());
-        mSex.setSubText(userInfo.getChinaSex());
-        mLocation.setSubText(userInfo.getLand());
-        mBirthday.setSubText(userInfo.getBirthday());
-        mUserIntroduction.setText(userInfo.getIntroduction());
-        mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
-        mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
-        mBindingPhone.setSubText(userInfo.getUserPhone());
-
     }
 
     private int getBindBankcardAuthStatusRes(int authStatus) {

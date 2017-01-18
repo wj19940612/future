@@ -290,7 +290,7 @@ public class HomeFragment extends BaseFragment {
             servicePhone.setVisibility(View.GONE);
         } else {
             servicePhoneNum = StrFormatter.getFormatServicePhone(servicePhoneNum);
-            servicePhone.setText(getString(service_phone, servicePhoneNum));
+            servicePhone.setText(getString(R.string.service_phone, servicePhoneNum));
         }
     }
 

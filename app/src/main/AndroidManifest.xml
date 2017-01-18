@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.jnhyxx.html5"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jnhyxx.html5">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -36,6 +36,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SplashActivity"
@@ -71,7 +72,7 @@
         <!-- wechat callback -->
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboard|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
@@ -154,6 +155,9 @@
         <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.userinfo.SubmitRealNameActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->
         <activity
@@ -177,14 +181,16 @@
         <activity
             android:name=".activity.web.HideTitleWebActivity"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.web.InvestCourseActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.LiveActivity"
-            android:configChanges="keyboard|screenSize|orientation"
+            android:name=".activity.userinfo.UserInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.userinfo.UserIntroduceActivity"/>
 
         <!-- Receiver for getui push -->
         <receiver
@@ -204,6 +210,8 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
+        <activity android:name=".activity.userinfo.ClipHeadImageActivity">
+        </activity>
     </application>
 
 </manifest>

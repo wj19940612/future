@@ -279,12 +279,12 @@ public class TradeActivity extends BaseActivity implements
 
 
     private void switchToLivePage() {
-        if (getCallingActivity() != null
-                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
-            finish();
-        } else {
-            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-        }
+//        if (getCallingActivity() != null
+//                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
+//            finish();
+//        } else {
+//            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
+//        }
     }
 
     private void updateLightningOrderView() {

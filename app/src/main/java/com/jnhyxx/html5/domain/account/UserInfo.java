@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain.account;
 
+import android.text.TextUtils;
+
 /**
  * Created by Administrator on 2016/8/31.
  * 登陆成功后返回的数据
@@ -8,21 +10,21 @@ package com.jnhyxx.html5.domain.account;
 public class UserInfo {
 
     /**
-    "issuingbankName": "中国工商银行",
-    "idCard": "3301**********1314",
-    "userPhone": "137****4454",
-    "icon": "https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1473647614249030116.png",
-    "userName": "新昵称1",
-    "moneyUsable": 105466.16,
-    "idStatus": 2,
-    "realName": "*斌",
-    "bIsSetNickName": true,
-    "scoreUsable": -1603300,
-    "bankId": 1,
-    "cardPhone": "13777804454",
-    "cardState": 2,
-    "id": 8,
-    "cardNumber": "6666*********6666"
+     "issuingbankName": "中国工商银行",
+     "idCard": "3301**********1314",
+     "userPhone": "137****4454",
+     "icon": "https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1473647614249030116.png",
+     "userName": "新昵称1",
+     "moneyUsable": 105466.16,
+     "idStatus": 2,
+     "realName": "*斌",
+     "bIsSetNickName": true,
+     "scoreUsable": -1603300,
+     "bankId": 1,
+     "cardPhone": "13777804454",
+     "cardState": 2,
+     "id": 8,
+     "cardNumber": "6666*********6666"
      */
 
     /**
@@ -96,6 +98,55 @@ public class UserInfo {
     private boolean bIsSetNickName;
 
     private int bankId;
+    /**
+     * birthday : 2017-3-4
+     * certificationStatus : 2
+     * chinaSex : 女
+     * introduction : 家里蹲大学减肥快乐撒解放路科技大厦独守空房了解萨达六块腹肌代
+     * land : 陕西省-西安市
+     * userPortrait : https://hystock.oss-cn-qingdao.aliyuncs.com/ueditor/1482833394930.png
+     * userSex : 0
+     */
+
+    //生日
+    private String birthday;
+    //认证状态。用户实名认证状态 0=未认证 1=已填写 2=已认证
+    private int certificationStatus;
+    //性别
+    private String chinaSex;
+    //简介
+    private String introduction;
+    //出生地
+    private String land;
+    //头像网址
+    private String userPortrait;
+
+    public void setUserDefiniteInfo(UserDefiniteInfo userDefiniteInfo) {
+        setBirthday(userDefiniteInfo.getBirthday());
+        setIdStatus(userDefiniteInfo.getCertificationStatus());
+        setChinaSex(userDefiniteInfo.getChinaSex());
+        setIntroduction(userDefiniteInfo.getIntroduction());
+        setLand(userDefiniteInfo.getLand());
+        setUserPortrait(userDefiniteInfo.getUserPortrait());
+    }
+
+    public UserDefiniteInfo getUserDefiniteInfo() {
+        UserDefiniteInfo userDefiniteInfo = new UserDefiniteInfo();
+        userDefiniteInfo.setBirthday(getBirthday());
+        userDefiniteInfo.setChinaSex(getChinaSex());
+        if (!TextUtils.isEmpty(getChinaSex())) {
+            userDefiniteInfo.setUserSex(getChinaSex().equalsIgnoreCase("男") ? 1 : 0);
+        }
+
+        if (!isUserRealNameAuth()) {
+            userDefiniteInfo.setRealName(getRealName());
+        }
+        userDefiniteInfo.setCertificationStatus(getIdStatus());
+        userDefiniteInfo.setIntroduction(getIntroduction());
+        userDefiniteInfo.setLand(getLand());
+        userDefiniteInfo.setUserPortrait(getUserPortrait());
+        return userDefiniteInfo;
+    }
 
     public double getMoneyUsable() {
         return moneyUsable;
@@ -217,6 +268,68 @@ public class UserInfo {
         this.bankId = bankId;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public int getCertificationStatus() {
+        return certificationStatus;
+    }
+
+    public void setCertificationStatus(int certificationStatus) {
+        this.certificationStatus = certificationStatus;
+    }
+
+    public String getChinaSex() {
+        return chinaSex;
+    }
+
+    public boolean isUserisBoy() {
+        if (getChinaSex().equalsIgnoreCase("男")) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setChinaSex(String chinaSex) {
+        this.chinaSex = chinaSex;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getLand() {
+        return land;
+    }
+
+    public void setLand(String land) {
+        this.land = land;
+    }
+
+    public String getUserPortrait() {
+        return userPortrait;
+    }
+
+    public void setUserPortrait(String userPortrait) {
+        this.userPortrait = userPortrait;
+    }
+
+    public boolean isUserRealNameAuth() {
+        if (getIdStatus() == REAL_NAME_STATUS_VERIFIED) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -235,6 +348,12 @@ public class UserInfo {
                 ", icon='" + icon + '\'' +
                 ", bIsSetNickName=" + bIsSetNickName +
                 ", bankId=" + bankId +
+                ", birthday='" + birthday + '\'' +
+                ", certificationStatus=" + certificationStatus +
+                ", chinaSex='" + chinaSex + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", land='" + land + '\'' +
+                ", userPortrait='" + userPortrait + '\'' +
                 '}';
     }
 }

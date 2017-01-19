@@ -152,10 +152,10 @@
                     android:gravity="right"
                     android:lineSpacingExtra="3dp"
                     android:paddingTop="@dimen/common_margin"
-                    android:text="@string/please_input_introduction"
-                    android:textColor="@color/grayHint"
-                    android:textSize="14sp"
-                    tools:text="的撒娇看极大师傅好垃回答时间考虑"/>
+                    android:textColorHint="@color/grayHint"
+                    android:hint="@string/please_input_introduction"
+                    android:textColor="@color/blackPrimary"
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/helpIv"

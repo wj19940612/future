@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:divider="@null"/>
+            android:divider="@null"
+            android:visibility="visible"/>
 
         <TextView
+            android:layout_centerInParent="true"
             android:id="@+id/empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:drawablePadding="16dp"
             android:drawableTop="@drawable/image_no_record"
             android:gravity="center_horizontal"
-            android:paddingTop="60dp"
             android:text="@string/there_is_no_chatting_record"
             android:textColor="@color/emptyViewColor"
             android:textSize="20sp"

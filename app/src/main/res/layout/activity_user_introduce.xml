@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_user_introduce"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.userinfo.UserIntroduceActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/user_introduction"/>
+
+
+    <EditText
+        android:lineSpacingExtra="5dp"
+        android:id="@+id/introduceInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_center"
+        android:gravity="left"
+        android:hint="@string/please_input_introduction"
+        android:maxLength="30"
+        android:minHeight="100dp"
+        android:textColorHint="@color/grayHint"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/submit"
+        style="@style/PrimaryBigButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="30dp"
+        android:text="@string/submit"/>
+</LinearLayout>

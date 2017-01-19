@@ -26,7 +26,8 @@ android {
                 GETUI_APP_ID    : "gnUGtVngQGA80LcPdfbHj9",
                 GETUI_APP_KEY   : "LwJyVosAAu5WcdtMsWQSx6",
                 GETUI_APP_SECRET: "QDYKD2qJoGAk9O5DfMicg3",
-                PACKAGE_NAME    : applicationId
+                PACKAGE_NAME    : applicationId,
+                UMENG_CHANNEL   : "OFFICIAL"
         ]
     }
 
@@ -57,23 +58,24 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 29
-            versionName '1.3.3'
-            //buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
+            versionCode 30
+            versionName '1.3.5'
+//            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-//            minSdkVersion  21
+            minSdkVersion  21
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 15
-            versionName '1.2.5'
+            versionCode 17
+            versionName '1.2.7'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
                     GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "QIHU360"
             ]
         }
 
@@ -87,7 +89,8 @@ android {
                     GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
                     GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
                     GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy3 { // 金谷理财
@@ -100,7 +103,8 @@ android {
                     GETUI_APP_ID    : "uDkOIdBlgD8FDqbCZ8DaE4",
                     GETUI_APP_KEY   : "4aAkkoaEnU7e7BeyEsKld6",
                     GETUI_APP_SECRET: "gvH8woAsRr6tzjzOIOirH6",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy2 { // 蓝鲸投资
@@ -113,20 +117,50 @@ android {
                     GETUI_APP_ID    : "RBuCXPrguZ6sLPblvr6Ql1",
                     GETUI_APP_KEY   : "noLiE4TEba7nW7VzyiSry9",
                     GETUI_APP_SECRET: "rFWsgW0Cm46u19SMh4aJH9",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
         zy4 { // 贵金属期货宝
             applicationId 'com.trade163.zy4'
             versionCode 4
             versionName '1.2.5'
-            buildConfigField('String', 'API_HOST', '\"http://zy8.trade163.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://zy6.trade163.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
                     GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
                     GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
-                    PACKAGE_NAME    : applicationId
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
+        zy9 { // 外汇期货宝
+            applicationId 'com.trade163.zy9'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://zy9.trade163.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "tHnk67dP6K7woKB80nk1U7",
+                    GETUI_APP_KEY   : "f65TC3TG929G5NQgZEFuc4",
+                    GETUI_APP_SECRET: "8InWjcHNYrATV6ha2yxJt2",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
+        kdqn { // 口袋期牛
+            applicationId 'com.jnhyxx.html5.kdqn'
+            versionCode 3
+            versionName '2.0'
+            buildConfigField('String', 'API_HOST', '\"http://www.koudaiqiniu.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "3ObKTSh0TMAZ2LTP9GNyC",
+                    GETUI_APP_KEY   : "qk9SiYjgqx5GQrLsWM7Vc9",
+                    GETUI_APP_SECRET: "ROLHNMYjVf8U7mY4LQTkI1",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
     }
@@ -155,6 +189,8 @@ dependencies {
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
+    zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
+    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')
@@ -169,6 +205,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:cardview-v7:24.2.0'
     compile 'com.android.support:multidex:1.0.0'
+//    compile 'cn.qqtheme.framework:WheelPicker:latest.release'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile files('libs/netty-buffer-4.1.5.final.jar')

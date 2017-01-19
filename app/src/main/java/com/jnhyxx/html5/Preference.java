@@ -25,6 +25,7 @@ public class Preference {
         String SYS_MESSAGE_ID = "sys_message_id";
         String LAST_TEACHER_COMMAND = "last_teacher_command";
         String SERVER_IP_PORT = "server_ip_port";
+        String TAG_SHOWED = "tag_showed";
     }
 
     private static Preference sInstance;
@@ -178,5 +179,13 @@ public class Preference {
 
     public String getMarketServerIpPort() {
         return mPrefs.getString(Key.SERVER_IP_PORT, null);
+    }
+
+    public boolean isTagShowed(String varietyType, int fundType) {
+        return mPrefs.getBoolean(varietyType + Key.TAG_SHOWED + fundType, true);
+    }
+
+    public void disableTagShowed(String varietyType, int fundType) {
+        getEditor().putBoolean(varietyType + Key.TAG_SHOWED + fundType, false).apply();
     }
 }

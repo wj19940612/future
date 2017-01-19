@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F4F4F2">
+
+    <TextView
+        android:id="@+id/riskInformed"
+        style="@style/HomeFooterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/risk_informed"/>
+
+    <TextView
+        android:id="@+id/fundSecurity"
+        style="@style/HomeFooterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/riskInformed"
+        android:layout_toLeftOf="@id/riskInformed"
+        android:text="@string/fund_security"/>
+
+    <TextView
+        android:id="@+id/cooperationOrg"
+        style="@style/HomeFooterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/riskInformed"
+        android:layout_toRightOf="@id/riskInformed"
+        android:text="@string/cooperation_org"/>
+
+    <TextView
+        android:id="@+id/servicePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/riskInformed"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorDisable"
+        android:textSize="8sp"
+        tools:text="@string/service_phone"/>
+
+    <TextView
+        android:id="@+id/tradeAccess"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/servicePhone"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:text="@string/trade_access"
+        android:textColor="@color/colorDisable"
+        android:textSize="8sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tradeAccess"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="1dp"
+        android:text="@string/cooperation_partner"
+        android:textColor="@color/colorDisable"
+        android:textSize="8sp"/>
+</RelativeLayout>

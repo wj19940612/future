@@ -163,6 +163,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
 
         if (mNewsListAdapter == null) {
             mNewsListAdapter = new NewsListAdapter(getActivity());
+            mListView.setAdapter(mNewsListAdapter);
         }
         if (mSwipeRefreshLayout.isRefreshing()) {
             mNewsListAdapter.clear();
@@ -173,7 +174,6 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 mNewsListAdapter.add(item);
             }
         }
-        mListView.setAdapter(mNewsListAdapter);
         mNewsListAdapter.notifyDataSetChanged();
     }
 

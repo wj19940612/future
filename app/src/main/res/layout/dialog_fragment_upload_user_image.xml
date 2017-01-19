@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_white"
+        android:clickable="true"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/takePhoneFromCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_setting_camera_upload_image"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:text="@string/take_phone_from_camera"
+            android:textColor="@color/blueAssist"
+            android:textSize="17sp"/>
+    </LinearLayout>
+
+    <include layout="@layout/split_line_gray_dark"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/btn_white"
+        android:clickable="true"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/takePhoneFromGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_setting_photo_upload_image"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="@string/take_phone_from_phone"
+            android:textColor="@color/blueAssist"
+            android:textSize="17sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/takePhoneCancel"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:background="@drawable/btn_color_disable"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/take_phone_cancel"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"/>
+
+</LinearLayout>

@@ -62,7 +62,8 @@
             android:paddingRight="16dp"
             android:paddingTop="8dp"
             android:text="@string/gold_store"
-            android:textColor="@color/blueAssist"/>
+            android:textColor="@color/blueAssist"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <GridView

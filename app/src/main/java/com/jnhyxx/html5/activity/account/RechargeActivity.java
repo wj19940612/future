@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,10 +19,9 @@ import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.Launcher;
@@ -56,6 +56,8 @@ public class RechargeActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_BANK_PAY = 10000;
     private static final int REQUEST_CODE_APPLY_PAY = 6210;
+    //打开同意支付协议页面
+    private static final int REQ_CODE_AGREE_PAYMENT = 286;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +72,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void getSupportApplyWay() {
         API.Finance.getSupportApplyWay()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback<Resp<SupportApplyWay>>() {
                     @Override
                     public void onReceive(Resp<SupportApplyWay> supportApplyWayResp) {
@@ -156,11 +157,28 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void doNextStepButtonClick() {
-//        if (isBankcardPaymentSelected()) {
-        doPayment();
-//        } else {
+        API.Finance.isUserAgreePayment()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<Boolean>>() {
 
-//        }
+                    @Override
+                    protected void onRespSuccess(Resp<Boolean> resp) {
+                        if (resp.isSuccess() && resp.hasData()) {
+                            Log.d(TAG, "签署协议" + resp.getData());
+                            if (resp.getData()) {
+                                doPayment();
+                            } else {
+                                Launcher.with(getActivity(), PaymentActivity.class)
+                                        .putExtra(PaymentActivity.EX_URL, API.Finance.getUserAgreePaymentPagePath())
+                                        .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge_agree_payment))
+                                        .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                                        .executeForResult(REQ_CODE_AGREE_PAYMENT);
+                            }
+                        }
+                    }
+                })
+                .fire();
     }
 
     private void doPayment() {
@@ -276,6 +294,9 @@ public class RechargeActivity extends BaseActivity {
             double newMoneyUsable = moneyUsable + amount;
             userInfo.setMoneyUsable(newMoneyUsable);
             user.setUserInfo(userInfo);
+        }
+        if (requestCode == REQ_CODE_AGREE_PAYMENT && resultCode == RESULT_OK) {
+            doPayment();
         }
     }
 

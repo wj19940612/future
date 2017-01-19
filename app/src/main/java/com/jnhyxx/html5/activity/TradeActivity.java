@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -239,8 +240,31 @@ public class TradeActivity extends BaseActivity implements
                     case ChartContainer.POS_PLATE:
                         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HANDICAP);
                         break;
-                    case ChartContainer.POS_KLINE:
+                }
+            }
+        });
+        mChartContainer.setOnKlineClickListener(new ChartContainer.OnKlineClickListener() {
+            @Override
+            public void onClick(int kline) {
+                switch (kline) {
+                    case ChartContainer.KLINE_DAY:
                         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.DAY_K);
+                        requestKlineDataAndSet(null);
+                        break;
+                    case ChartContainer.KLINE_THREE:
+                        requestKlineDataAndSet(String.valueOf(ChartContainer.KLINE_THREE));
+                        break;
+                    case ChartContainer.KLINE_FIVE:
+                        requestKlineDataAndSet(String.valueOf(ChartContainer.KLINE_FIVE));
+                        break;
+                    case ChartContainer.KLINE_TEN:
+                        requestKlineDataAndSet(String.valueOf(ChartContainer.KLINE_TEN));
+                        break;
+                    case ChartContainer.KLINE_THIRTY:
+                        requestKlineDataAndSet(String.valueOf(ChartContainer.KLINE_THIRTY));
+                        break;
+                    case ChartContainer.KLINE_SIXTY:
+                        requestKlineDataAndSet(String.valueOf(ChartContainer.KLINE_SIXTY));
                         break;
                 }
             }
@@ -255,12 +279,12 @@ public class TradeActivity extends BaseActivity implements
 
 
     private void switchToLivePage() {
-        if (getCallingActivity() != null
-                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
-            finish();
-        } else {
-            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-        }
+//        if (getCallingActivity() != null
+//                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
+//            finish();
+//        } else {
+//            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
+//        }
     }
 
     private void updateLightningOrderView() {
@@ -655,8 +679,6 @@ public class TradeActivity extends BaseActivity implements
 
         // request Trend Data
         requestTrendDataAndSet();
-        // request Kline Data
-        requestKlineDataAndSet();
     }
 
     private void requestTrendDataAndSet() {
@@ -672,15 +694,21 @@ public class TradeActivity extends BaseActivity implements
                 }).fireSync();
     }
 
-    private void requestKlineDataAndSet() {
-        API.getKlineData(mProduct.getContractsCode(), "")
+    private void requestKlineDataAndSet(final String type) {
+        final KlineView klineView = mChartContainer.getKlineView();
+        klineView.clearData();
+        API.getKlineData(mProduct.getContractsCode(), type)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
-                        if (klineDataList != null && klineDataList.size() > 0) {
-                            KlineView klineView = mChartContainer.getKlineView();
+                        if (klineDataList != null && klineView != null) {
+                            if (TextUtils.isEmpty(type)) { // dayK
+                                klineView.setDataFormat(KlineView.DATE_FORMAT_DAY_K);
+                            } else {
+                                klineView.setDataFormat(KlineView.DATE_FORMAT_DAY_MIN);
+                            }
                             Collections.reverse(klineDataList);
-                            if (klineView == null) return;
                             klineView.setDataList(klineDataList);
                         }
                     }

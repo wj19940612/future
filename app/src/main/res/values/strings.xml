@@ -56,10 +56,9 @@
     <string name="newbie_title">新手引导</string>
 
     <!-- Local Prompt -->
-    <string name="prompt_withdraw">1、消费用户提款免手续费，为防止恶意提款，每日提款申请次数最多为2次，超过次日处理；
-        \n2、为防止套现和洗钱，单笔充值无消费者提现时需提供身份证和银行卡给风控进行核实。如信息核实无误，平台将会在7-15个工作日内处理，银行收取2%的手续费自理，最低2元；
-        \n3、周一至周五09:00-17:00的提款申请当天处理，17:00以后的提款申请延至第二天处理。周五17:00后提款，延至下个工作日处理。提现到账时间最快2小时，最晚1个工作日，如遇节假日顺延。
-        \n4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</string>
+    <string name="prompt_withdraw">1、交易用户提现免手续费，为防止恶意提现，每日提现申请最多2次，超过次日处理；
+        \n2、为防止套现和洗钱，无交易用户提现需提供身份证和银行卡进行风控核实。若信息核实无误，会于7-15个工作日内处理，届时银行将收取2%的手续费（自理）最低2元；
+        \n3、工作日（09:00-17:00）内提现1-2个小时内到账，周末及节假日提现顺延至下一个工作日处理。</string>
     <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
 
 
@@ -170,6 +169,12 @@
     <string name="trade_remind">交易提醒</string>
     <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
 
+
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取  消</string>
+
+
     <!-- 修改密码 Modify password-->
     <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
 
@@ -190,14 +195,26 @@
 
 
     <!-- Home page -->
+    <string name="investor_course">投资者课堂</string>
+    <string name="futures_risk_tips">期货风险提示</string>
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
     <string name="next_day">次日</string>
     <string name="simulation">模拟操盘</string>
-    <string name="newer_guide">新手引导</string>
+    <string name="invest_course">投资课堂</string>
+    <string name="newer_video">新手视频</string>
     <string name="contact_service">联系客服</string>
+    <string name="enter_right_now">立即进入</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
     <string name="new_tag">NEW</string>
+    <string name="fund_security">资金安全</string>
+    <string name="risk_informed">风险告知</string>
+    <string name="cooperation_org">合作机构</string>
+    <string name="service_phone">客服热线：%1$s</string>
+    <string name="trade_access">交易由纽约商品交易所及上期所实盘对接</string>
+    <string name="cooperation_partner">合作伙伴：合作伙伴: 纽约商业交易所|芝加哥商品交易所|CME集团\n香港交易所|新加坡交易所|欧洲期货交易所</string>
+    <string name="holding_number">持仓 (%1$d)</string>
+    <string name="normalize_futures_rule">规范期市秩序，坚持理性投资</string>
 
 
     <!-- Order page -->
@@ -253,10 +270,15 @@
     <string name="available_balance_and_unit">可用资金 (%1$s)</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
     <string name="trend_chart">分时图</string>
-    <string name="kline_chart">日线图</string>
+    <string name="kline_chart">K线图</string>
     <string name="flash_chart">闪电图</string>
     <string name="plate">盘口</string>
     <string name="day_k_line">日K</string>
+    <string name="three_min_k">3分钟</string>
+    <string name="five_min_k">5分钟</string>
+    <string name="ten_min_k">10分钟</string>
+    <string name="thirty_min_k">30分钟</string>
+    <string name="sixty_min_k">60分钟</string>
     <string name="buy_long">买涨</string>
     <string name="sell_short">买跌</string>
     <string name="buy_volume">买量</string>
@@ -314,9 +336,7 @@
     <string name="account_about_us_company_culture">企业文化</string>
     <string name="account_about_us_collaborate_case">合作案例</string>
     <string name="account_about_us_company_telephone">联系电话</string>
-    <string name="account_about_us_company_telephone_number">400&#8211;617&#8211;2286</string>
     <string name="account_about_us_service_qq">客服QQ</string>
-    <string name="account_about_us_service_qq_number">3088152027</string>
     <string name="account_about_us_company_info_child">济南恒运信息技术有限公司成立于2014年3月，是一家集金融服务、软件开发、资产配置、国际外汇、原油、黄金、期货等金融产品于一体的高新技术金融服务公司。
 \n目前，已与华东、华中、华南、华北等地区近60家企业达成战略合作协议，更是在浙江、山东、上海、北京等地设立分公司，业务遍布全国各地，已成为中国最有影响力的“以服务为导向，以创新为灵魂、以方便快捷为宗旨”的高新技术企业之一。
 \n%1$s是济南恒运信息技术有限公司旗下的金融创新产品，旨在为大众用户提供更加便捷、低成本的期货交易。无需下载，注册免开户，超低门槛玩美原油、恒指、沪金等国内外期货。</string>
@@ -413,6 +433,8 @@
     <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
     <string name="install_alipay_first">请先安装支付宝</string>
+    <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
+    <string name="recharge_agree_payment">证券期货交易风险提示</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>
@@ -454,6 +476,7 @@
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 
+
     <string name="live_program_dir">节目单</string>
     <string name="live_interaction">互动</string>
     <string name="live_teacher_guide">老师指导</string>
@@ -463,6 +486,7 @@
     <string name="live_type_manager">管理员</string>
     <string name="live_type_teacher">老师</string>
     <string name="live_type_mine">我</string>
+    <string name="You_have_been_banned_please_speak_later">您被禁言，请稍后发言</string>
     <string name="live_time_is_not">非直播时间段，无法发言</string>
     <string name="live_speak_send">发送</string>
     <string name="there_is_no_chatting_record">暂无聊天记录</string>
@@ -485,8 +509,25 @@
     <string name="feedback_title">意见反馈</string>
     <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
     <string name="feedback_user_phone">QQ、微信或手机号</string>
-    <string name="feedback_submit">提    交</string>
+    <string name="submit">提    交</string>
     <string name="feedback_content_number">200</string>
     <string name="feedback_submit_success">感谢您的反馈</string>
 
+
+    <!--个人信息界面-->
+    <string name="head_image">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="real_name">真实姓名</string>
+    <string name="submit_real_name_hint">请填写真实姓名</string>
+    <string name="is_already_real_name">已实名</string>
+    <string name="sex">性别</string>
+    <string name="boy">男</string>
+    <string name="woman">女</string>
+    <string name="location">所在地</string>
+    <string name="birthday">生日</string>
+    <string name="user_introduction">个人简介</string>
+    <string name="please_input_introduction">请输入简介</string>
+    <string name="use_clip_head_image">使用</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
+    <string name="complete">完成</string>
 </resources>

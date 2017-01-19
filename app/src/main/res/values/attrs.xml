@@ -30,6 +30,8 @@
         <attr name="rowText" format="reference|string"/>
         <attr name="rowTextSize" format="dimension"/>
         <attr name="rowTextColor" format="color"/>
+        <attr name="rowIsNotNeedTopPadding" format="boolean"/>
+        <attr name="rowVerticalPadding" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBar">

@@ -128,4 +128,13 @@ public class StrFormatter {
         return createTime;
     }
 
+    public static String getFormatServicePhone(String servicePhone) {
+        if (servicePhone.length() < 7) {
+            return servicePhone;
+        }
+        return servicePhone.substring(0, 3) +
+                "-" + servicePhone.substring(3, 7) +
+                "-" + servicePhone.substring(7, servicePhone.length());
+    }
+
 }

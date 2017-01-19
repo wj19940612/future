@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
@@ -22,6 +21,7 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.LiveFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
@@ -87,6 +87,10 @@ public class MainActivity extends BaseActivity {
     };
 
 
+    public BottomTabs getBottomTabs() {
+        return mBottomTabs;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +110,7 @@ public class MainActivity extends BaseActivity {
 
     private void getServiceInfo() {
         API.User.getChannelByDomain()
-                .setTag(TAG)
-                .setIndeterminate(this)
+                .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback1<Resp<ChannelServiceInfo>>() {
                     @Override
                     protected void onRespSuccess(Resp<ChannelServiceInfo> resp) {
@@ -142,14 +145,7 @@ public class MainActivity extends BaseActivity {
                 } else if (position == TAB_MINE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MINE);
                 }
-
-                if (position >= 1) {
-                    mTabPosition = position + 1;
-                    mBottomTabs.selectTab(mTabPosition);
-                } else {
-                    mTabPosition = position;
-                    mBottomTabs.selectTab(mTabPosition);
-                }
+                mBottomTabs.selectTab(position);
             }
 
             @Override
@@ -164,21 +160,11 @@ public class MainActivity extends BaseActivity {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);
-                if (position == 1) {
-                    openLivePage();
-                } else if (position >= 1) {
-                    mViewPager.setCurrentItem(position - 1, false);
-                } else {
-                    mViewPager.setCurrentItem(position, false);
-                }
-
+                mViewPager.setCurrentItem(position, false);
             }
         });
     }
 
-    private void openLivePage() {
-        Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-    }
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -210,7 +196,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showSysMessageDialog(final SysMessage sysMessage) {
-        Log.d(TAG, "弹窗消息  " + sysMessage.getCreateTime());
         if (!Preference.get().hasShowedThisSysMessage(sysMessage)) {
             HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                     .setOnCheckDetailListener(new HomePopup.OnClickListener() {
@@ -230,14 +215,6 @@ public class MainActivity extends BaseActivity {
         super.onPause();
         unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_LIVE) {
-            mBottomTabs.selectTab(mTabPosition);
-        }
     }
 
     private class NetworkReceiver extends Network.NetworkChangeReceiver {
@@ -262,8 +239,10 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return new HomeFragment();
                 case 1:
-                    return new InfoFragment();
+                    return new LiveFragment();
                 case 2:
+                    return new InfoFragment();
+                case 3:
                     return new MineFragment();
             }
             return null;
@@ -271,7 +250,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 }

@@ -88,6 +88,7 @@ public class BaseFragment extends Fragment implements
                             Log.d("VolleyHttp", getUrl() + " onSuccess: " + userInfoResp.toString());
                             if (userInfoResp.isSuccess()) {
                                 LocalUser.getUser().setUsableMoneyScore(userInfoResp.getData());
+                                LocalUser.getUser().setUserPortrait(userInfoResp.getData());
                                 if (callback != null) {
                                     callback.onUpdateCompleted();
                                 }

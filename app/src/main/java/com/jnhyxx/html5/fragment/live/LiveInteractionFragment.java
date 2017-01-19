@@ -7,8 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.live.LiveMessage;
 import com.jnhyxx.html5.domain.live.LiveSpeakInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -74,14 +74,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private Unbinder mBind;
 
-    private int mPageOffset = 0;
-    private int mPageSize = 0;
+    private int mOffset = 0;
+    private int mSize = 0;
 
     private LiveChatInfoAdapter mLiveChatInfoAdapter;
 
     private HashSet<Long> mHashSet;
-
-    private List<LiveHomeChatInfo> mLiveHomeChatInfoListInfo;
 
     private ArrayList<LiveHomeChatInfo> mDataArrayList;
 
@@ -104,15 +102,8 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof LiveInteractionFragment.OnSendButtonClickListener) {
-            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement LiveInteractionFragment.Callback");
-        }
+    public void setOnSendButtonClickListener(OnSendButtonClickListener onSendButtonClickListener) {
+        this.mOnSendButtonClickListener = onSendButtonClickListener;
     }
 
     @Override
@@ -124,26 +115,24 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mInputBox.removeTextChangedListener(mValidationWatcher);
-        mBind.unbind();
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        setLiveViewStackFromBottom(true);
-        mListView.setOnScrollListener(this);
-
-        mInputBox.addTextChangedListener(mValidationWatcher);
-
-        mPageSize = 10;
-        mPageOffset = 0;
+        mSize = 10;
+        mOffset = 0;
         mHashSet = new HashSet<>();
         mDataArrayList = new ArrayList<>();
+
+        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputBox.addTextChangedListener(mValidationWatcher);
+
+
+        mListView.setEmptyView(mEmpty);
+        if (mLiveChatInfoAdapter == null) {
+            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
+            mListView.setAdapter(mLiveChatInfoAdapter);
+        }
+        mListView.setOnScrollListener(this);
 
         getChatInfo();
         setOnRefresh();
@@ -159,9 +148,10 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mPageOffset = 0;
+    public void onDestroyView() {
+        super.onDestroyView();
+        mInputBox.removeTextChangedListener(mValidationWatcher);
+        mBind.unbind();
     }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
@@ -186,16 +176,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mInputBoxArea.setVisibility(View.VISIBLE);
         mInputBox.requestFocus();
         mInputMethodManager.showSoftInput(mInputBox, InputMethodManager.SHOW_FORCED);
-        mInputBoxArea.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    hideInputBox();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     public void hideInputBox() {
@@ -212,14 +192,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-
             }
         });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getChatInfo();
-                setLiveViewStackFromBottom(false);
             }
         });
     }
@@ -228,14 +206,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         mTeacherInfo = teacherInfo;
     }
 
+
+    //接受最新的聊天数据
     public void setData(LiveSpeakInfo liveSpeakInfo) {
         if (liveSpeakInfo != null) {
-            mPageOffset++;
-            if (liveSpeakInfo.isOwner()) {
+
+            mOffset++;
+            if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
             if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-                ToastUtil.curt("您被禁言，请稍后发言");
+                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
             }
             updateTalkData(liveSpeakInfo);
         }
@@ -244,17 +225,24 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     //更新接到的最新聊天数据
     private void updateTalkData(LiveSpeakInfo liveSpeakInfo) {
         if (!TextUtils.isEmpty(liveSpeakInfo.getMsg())) {
-            LiveHomeChatInfo LiveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
+            LiveHomeChatInfo liveHomeChatInfo = new LiveHomeChatInfo(liveSpeakInfo);
             if (mLiveChatInfoAdapter != null) {
-                if (mHashSet.add(LiveHomeChatInfo.getCreateTime())) {
-                    mDataArrayList.add(LiveHomeChatInfo);
+                if (mHashSet.add(liveHomeChatInfo.getCreateTime())) {
+                    mDataArrayList.add(liveHomeChatInfo);
                     if (mDataArrayList.size() > 2) {
-                        if (DateUtil.isTimeBetweenFiveMin(LiveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
-                            LiveHomeChatInfo.setMoreThanFiveMin(true);
+                        if (DateUtil.isTimeBetweenFiveMin(liveHomeChatInfo.getCreateTime(), mDataArrayList.get(mDataArrayList.size() - 2).getCreateTime())) {
+                            liveHomeChatInfo.setMoreThanFiveMin(true);
                         }
                     }
-                    mLiveChatInfoAdapter.add(LiveHomeChatInfo);
+                    mLiveChatInfoAdapter.add(liveHomeChatInfo);
                     mLiveChatInfoAdapter.notifyDataSetChanged();
+
+                    if (liveSpeakInfo.isOwner()) {
+                        Log.d(TAG, "含有的数据" + mListView.getChildCount());
+                        if (mDataArrayList.size() > 5 && mDataArrayList.size() > mListView.getChildCount()) {
+                            setLiveViewStackFromBottom(true);
+                        }
+                    }
                 }
             }
         }
@@ -262,30 +250,20 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
 
     private void getChatInfo() {
-        API.Live.getLiveTalk(mPageOffset, mPageSize)
-                .setTag(TAG)
+        API.Live.getLiveTalk(mOffset, mSize).setTag(TAG)
                 .setCallback(new Callback<Resp<List<LiveHomeChatInfo>>>() {
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
                                          if (liveHomeChatInfoResp.hasData()) {
+                                             mOffset = mOffset + liveHomeChatInfoResp.getData().size();
+                                             mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
+                                             updateCHatInfo(liveHomeChatInfoResp.getData());
+                                             locateNewDataEnd(liveHomeChatInfoResp);
 
-                                             if (liveHomeChatInfoResp.getData().size() < 6) {
-                                                 setLiveViewStackFromBottom(false);
-                                             }
-
-                                             mPageOffset = mPageOffset + mPageSize;
-                                             mLiveHomeChatInfoListInfo = liveHomeChatInfoResp.getData();
-                                             mDataArrayList.addAll(0, mLiveHomeChatInfoListInfo);
-                                             updateCHatInfo(mDataArrayList);
-                                             if (mPageOffset > 10) {
-                                                 mListView.setSelection(mPageSize - 1);
-                                             }
                                          } else {
                                              stopRefreshAnimation();
                                          }
-                                     } else {
-                                         stopRefreshAnimation();
                                      }
                                  }
 
@@ -298,6 +276,15 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 ).fire();
     }
 
+    //定位至最新数据的倒数第一条
+    private void locateNewDataEnd(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
+        if (liveHomeChatInfoResp.getData().size() == mSize) {
+            mListView.setSelection(mSize - 1);
+        } else {
+            mListView.setSelection(liveHomeChatInfoResp.getData().size() - 1);
+        }
+    }
+
     private void stopRefreshAnimation() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -305,16 +292,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     //登录成功后需要清空数据，重新获取状态
-    public void setLoginSuccess(boolean isLogin) {
-        if (isLogin) {
-            if (mLiveChatInfoAdapter != null) {
-                mLiveChatInfoAdapter.clear();
-            }
-            if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-                mDataArrayList.clear();
-            }
-            getChatInfo();
+
+    public void updateLiveChatDataStatus() {
+        if (mLiveChatInfoAdapter != null) {
+            mLiveChatInfoAdapter.clear();
         }
+        if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
+            mDataArrayList.clear();
+        }
+        mSize = 10;
+        mOffset = 0;
+        getChatInfo();
     }
 
     private void updateCHatInfo(final List<LiveHomeChatInfo> liveHomeChatInfoList) {
@@ -324,10 +312,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         stopRefreshAnimation();
 
-        if (mLiveChatInfoAdapter == null) {
-            mLiveChatInfoAdapter = new LiveChatInfoAdapter(getActivity());
-            mListView.setAdapter(mLiveChatInfoAdapter);
-        }
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }
@@ -340,8 +324,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     //判断谈话时间是否超过5分钟，如果超过，出现分割线
     private void getTalkTimeIsThanFiveMinute() {
         if (mDataArrayList != null && !mDataArrayList.isEmpty()) {
-            for (int i = mDataArrayList.size(); i > 0; i--) {
-                if (i < 3) break;
+            for (int i = mDataArrayList.size(); i > 1; i--) {
                 if (DateUtil.isTimeBetweenFiveMin(mDataArrayList.get(i - 1).getCreateTime(), mDataArrayList.get(i - 2).getCreateTime())) {
                     mDataArrayList.get(i - 1).setMoreThanFiveMin(true);
                 }
@@ -449,7 +432,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             @BindView(R.id.commonUserLayout)
             RelativeLayout mCommonUserLayout;
 
-
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
@@ -457,14 +439,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             public void bindViewWithData(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo) {
 
                 String formatTime = DateUtil.getFormatTime(item.getCreateTime());
-
-                String format = DateUtil.format(item.getCreateTime(), DateUtil.DEFAULT_FORMAT);
-                CharSequence relativeTimeSpanString2 = DateUtils.getRelativeTimeSpanString(item.getCreateTime());
-                format = format + "  " + relativeTimeSpanString2.toString();
-                if (format.equalsIgnoreCase("0分钟前") || format.equalsIgnoreCase("0分钟后")) {
-                    format = "刚刚";
-                }
-
                 if (item.isMoreThanFiveMin()) {
                     mTimeBeforeHintLayout.setVisibility(View.VISIBLE);
                     mTimeBeforeHint.setText(formatTime);
@@ -475,7 +449,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 //老师或者管理员
                 if (!item.isNormalUser()) {
                     showManagerLayout();
-                    setChatUserStatus(item, context, teacherInfo, format);
+                    setChatUserStatus(item, context, teacherInfo);
                     setTeacherMsg(item, context);
                     //普通游客发言
                 } else {
@@ -484,6 +458,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         showUserMineLayout();
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
+                        if (LocalUser.getUser().isLogin() && !TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
+                            Picasso.with(context).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform()).into(mUserMineHeadImage);
+                        }
                         //普通游客发言
                     } else {
                         showCommonUserLayout();
@@ -538,13 +515,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                 }
             }
 
-            private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo, String format) {
+            private void setChatUserStatus(LiveHomeChatInfo item, Context context, LiveMessage.TeacherInfo teacherInfo) {
                 String chatUser = "";
-                if (item.getChatType() == item.CHAT_TYPE_MANAGER) {
+                if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_MANAGER) {
                     chatUser = context.getString(R.string.live_type_manager);
                     Picasso.with(context).load(R.drawable.ic_live_pic_head)
                             .transform(new CircleTransform()).into(mUserHeadImage);
-                } else if (item.getChatType() == item.CHAT_TYPE_TEACHER) {
+                } else if (item.getChatType() == LiveHomeChatInfo.CHAT_TYPE_TEACHER) {
                     chatUser = item.getName();
                     if (teacherInfo != null && !TextUtils.isEmpty(teacherInfo.getPictureUrl())) {
                         Picasso.with(context).load(teacherInfo.getPictureUrl())

@@ -44,6 +44,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SplashActivity"
@@ -79,7 +80,7 @@
         <!-- wechat callback -->
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboard|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
@@ -162,6 +163,9 @@
         <activity
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.userinfo.SubmitRealNameActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->
         <activity
@@ -187,8 +191,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activity.LiveActivity"
-            android:configChanges="keyboard|screenSize|orientation"
+            android:name=".activity.web.InvestCourseActivity"
             android:screenOrientation="portrait"/>
 
         <!-- service -->
@@ -203,6 +206,25 @@
             android:exported="true"
             android:label="PushService"
             android:process=":pushService"/>
+        <activity
+            android:name=".activity.userinfo.UserInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.userinfo.UserIntroduceActivity"/>
+
+
+        <!-- umeng channel，replace this -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL}">
+        </meta-data>
+
+        <!-- service -->
+        <service android:name=".service.DownloadService"/>
+
+        <activity android:name=".activity.userinfo.ClipHeadImageActivity">
+        </activity>
+
     </application>
 
 </manifest>

@@ -4,12 +4,14 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -96,7 +98,8 @@ public class API extends APIBase {
          * @param password
          * @param regCode
          */
-        public static API register(String phoneNum, String password, String regCode, String promoterCode) {
+        public static API register(String phoneNum, String password, String regCode,
+                                   String promoterCode, String channel) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "注册时密码MD5加密" + password);
@@ -110,7 +113,9 @@ public class API extends APIBase {
                             .put("regCode", regCode)
                             .put("promoterCode", promoterCode)
                             .put("deviceId", Preference.get().getPushClientId())
-                            .put("platform", 0));
+                            .put("platform", 0)
+                            .put("source", channel)
+                            .put("sourceBackup", channel));
         }
 
         /**
@@ -204,17 +209,6 @@ public class API extends APIBase {
 
 
         /**
-         * /user/newsNotice/newsImgList 获取首页广告
-         *
-         * @return
-         */
-        public static API getHomeAdvertisements() {
-            return new API("/user/newsNotice/newsImgList",
-                    new ApiParams()
-                            .put(TYPE, 2));
-        }
-
-        /**
          * 退出
          *
          * @return
@@ -253,28 +247,6 @@ public class API extends APIBase {
                     .put("size", size));
         }
 
-        /**
-         * 查询咨询详情
-         * URL  http://域名/user/news/findNews.do
-         *
-         * @param id
-         * @return
-         */
-        public static API findNewsInfo(int id) {
-            return new API("/user/news/findNews.do", new ApiParams()
-                    .put("id", id));
-        }
-
-        /**
-         * 接口名：查询资讯(通过第三方地址)
-         * URL  http://域名/user/news/findNewsByUrl.do
-         *
-         * @param url
-         * @return
-         */
-        public static API findNewsByUrl(String url) {
-            return new API("/user/news/findNewsByUrl.do", new ApiParams().put("url", url));
-        }
 
         /**
          * /user/user/findPromoterCode.do
@@ -341,6 +313,43 @@ public class API extends APIBase {
                             .put("realName", realName)
                             .put("userPhone", userPhone));
         }
+
+        /**
+         * 接口名：展示用户信息
+         * URL  http://域名/user/user/findInfo.do
+         *
+         * @param userId 用户id
+         * @return
+         */
+        public static API getUserInfo() {
+            return new API("/user/user/findInfo.do", null);
+        }
+
+        /**
+         * 接口名：修改用户信息
+         * URL  http://域名/user/user/updateInfo.do
+         *
+         * @param userDefiniteInfo
+         * @return
+         */
+        public static API submitUserInfo(UserDefiniteInfo userDefiniteInfo) {
+            return new API("/user/user/updateInfo.do", new ApiParams(UserDefiniteInfo.class, userDefiniteInfo));
+        }
+
+
+        /**
+         * 接口名：修改用户头像信息
+         * URL  http://域名/user/user/updatePic.do
+         *
+         * @param
+         * @return
+         */
+
+        public static API updateUserHeadImage(String bitmapto64) {
+            return new API("/user/user/updatePic.do",
+                    new ApiParams().put("pic", bitmapto64));
+
+        }
     }
 
     public static class Finance {
@@ -397,6 +406,30 @@ public class API extends APIBase {
          */
         public static API getSupportApplyWay() {
             return new API("/user/finance/findDepositType.do", new ApiParams());
+        }
+
+
+        /**
+         * 判断用户是否签署过支付协议
+         * //http://newtest.jnhyxx.com/user/finance/checkTopupRead.do
+         *
+         * @return
+         */
+        public static API isUserAgreePayment() {
+            return new API("/user/finance/checkTopupRead.do", null);
+        }
+
+        /**
+         * 打开用户同意支付协议的h5页面
+         * /xieyi/riskWarning.html
+         */
+        public static String getUserAgreePaymentPagePath() {
+            return getHost() + ("/xieyi/riskWarning.html?nohead=1");
+        }
+
+        //用户同意支付协议后h5返回的网址头
+        public static String getUserAggressPaymentConfirmPagePath() {
+            return getHost() + "/account/banks.html";
         }
 
         /**
@@ -731,7 +764,7 @@ public class API extends APIBase {
         }
 
         /**
-         /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
+         * /quota/quota/getAllIpPortByCode.do 获取聊天服务器 ip & port
          *
          * @return
          */
@@ -759,7 +792,7 @@ public class API extends APIBase {
          * @return
          */
         public static API getReportData() {
-            return new API("/order/order/indexReport", null);
+            return new API("/order/statistic/indexReport.do", null);
         }
 
         /**
@@ -951,9 +984,10 @@ public class API extends APIBase {
      * @return
      */
     public static API getKlineData(String varietyType, String type) {
-        return new API(GET, "/quotaData/candlestickData/getCandlesticKData.do",
+        return new API(GET, "/quota/candlestickData/getCandlesticKData.do",
                 new ApiParams()
-                        .put("contractsCode", varietyType));
+                        .put("contractsCode", varietyType)
+                        .put("type", type));
     }
 
     /**
@@ -1025,5 +1059,50 @@ public class API extends APIBase {
      */
     public static String getNewbieUrl() {
         return getHost() + "/newtrader.html?nohead=1";
+    }
+
+    /**
+     * 投资课堂
+     *
+     * @return
+     */
+    public static String getInvestCourseUrl() {
+        return getHost() + "/news/classroom.html?nohead=1";
+    }
+
+    /**
+     * 资讯 课堂 详情页面，完整 url：/news/newsDtl.html?id=5877432c44f417f8e7d8a6c8&classId=102&noImg=20170112
+     *
+     * @return
+     */
+    public static String getNewsDetailUrl() {
+        return getHost() + "/news/newsDtl.html";
+    }
+
+    /**
+     * 资金安全
+     *
+     * @return
+     */
+    public static String getFundSecurityUrl() {
+        return getHost() + "/banner/zjaq.html?nohead=1";
+    }
+
+    /**
+     * 风险告知
+     *
+     * @return
+     */
+    public static String getRiskInformedUrl() {
+        return getHost() + "/banner/rule.html?nohead=1";
+    }
+
+    /**
+     * 合作机构
+     *
+     * @return
+     */
+    public static String getCooperationOrgUrl() {
+        return getHost() + "/banner/hzhb.html?nohead=1";
     }
 }

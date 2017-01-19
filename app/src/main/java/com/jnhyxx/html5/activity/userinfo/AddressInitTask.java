@@ -11,16 +11,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.view.wheel.AddressPicker;
-import com.jnhyxx.html5.view.wheel.ConvertUtils;
-import com.jnhyxx.html5.view.wheel.WheelView;
-import com.jnhyxx.html5.view.wheel.entity.City;
-import com.jnhyxx.html5.view.wheel.entity.County;
-import com.jnhyxx.html5.view.wheel.entity.Province;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.picker.AddressPicker;
+import cn.qqtheme.framework.util.ConvertUtils;
+import cn.qqtheme.framework.widget.WheelView;
 
 
 /**

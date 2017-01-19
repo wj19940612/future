@@ -34,10 +34,6 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.wheel.OptionPicker;
-import com.jnhyxx.html5.view.wheel.entity.City;
-import com.jnhyxx.html5.view.wheel.entity.County;
-import com.jnhyxx.html5.view.wheel.entity.Province;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +42,10 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.picker.OptionPicker;
 
 import static com.jnhyxx.html5.R.id.realNameAuth;
 
@@ -238,6 +238,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
         picker.setAnimationStyle(R.style.BottomDialogStyle);
         picker.setOffset(1);
+        picker.setSelectedItem(LocalUser.getUser().getUserInfo().getChinaSex());
 //        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线

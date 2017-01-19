@@ -238,7 +238,9 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
         picker.setAnimationStyle(R.style.BottomDialogStyle);
         picker.setOffset(1);
-        picker.setSelectedItem(LocalUser.getUser().getUserInfo().getChinaSex());
+        if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
+            picker.setSelectedItem(LocalUser.getUser().getUserInfo().getChinaSex());
+        }
 //        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
@@ -279,8 +281,8 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     private void selectAddress() {
         AddressInitTask addressInitTask = new AddressInitTask(getActivity(), true);
         String land = LocalUser.getUser().getUserInfo().getLand();
-        String province = "浙江";
-        String city = "杭州市";
+        String province = "";
+        String city = "";
         if (!TextUtils.isEmpty(land)) {
             String[] split = land.split("-");
             if (split.length == 2) {

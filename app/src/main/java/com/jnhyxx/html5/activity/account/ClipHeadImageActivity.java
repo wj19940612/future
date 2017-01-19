@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity.userinfo;
+package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

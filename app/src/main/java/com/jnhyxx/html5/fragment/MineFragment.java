@@ -20,8 +20,8 @@ import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
+import com.jnhyxx.html5.activity.account.UserInfoActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
-import com.jnhyxx.html5.activity.userinfo.UserInfoActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -51,6 +51,7 @@ import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
+
 public class MineFragment extends BaseFragment {
 
     //账户余额
@@ -74,7 +75,7 @@ public class MineFragment extends BaseFragment {
     IconTextRow mTradeDetail;
     @BindView(R.id.aboutUs)
     IconTextRow mAboutUs;
-    @BindView(paidToPromote)
+    @BindView(R.id.paidToPromote)
     IconTextRow mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
@@ -180,7 +181,7 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage, R.id.feedback})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
@@ -210,7 +211,7 @@ public class MineFragment extends BaseFragment {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ABOUT_US);
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
-            case R.id.paidToPromote:
+            case paidToPromote:
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:

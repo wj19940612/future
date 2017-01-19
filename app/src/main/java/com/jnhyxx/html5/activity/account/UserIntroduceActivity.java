@@ -1,4 +1,4 @@
-package com.jnhyxx.html5.activity.userinfo;
+package com.jnhyxx.html5.activity.account;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -49,7 +49,7 @@ public class UserIntroduceActivity extends BaseActivity {
             mIntroduceInput.setText(introduction);
         }
         mIntroduceInput.addTextChangedListener(mValidationWatcher);
-        mIntroduceInput.setFilters(new InputFilter[]{emojiFilter,Lengthfilter});
+        mIntroduceInput.setFilters(new InputFilter[]{emoilFilter,Lengthfilter});
 
     }
 
@@ -100,19 +100,18 @@ public class UserIntroduceActivity extends BaseActivity {
     };
 
 
-    InputFilter emojiFilter = new InputFilter() {
+    InputFilter emoilFilter = new InputFilter() {
 
-        Pattern emoji = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
+        Pattern emoil = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
 
                 Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
-            Matcher emojiMatcher = emoji.matcher(source);
+            Matcher emoilMatcher = emoil.matcher(source);
 
-            if (emojiMatcher.find()) {
-
+            if (emoilMatcher.find()) {
                 return "";
             }
             return null;
@@ -134,17 +133,6 @@ public class UserIntroduceActivity extends BaseActivity {
             if (enable != mSubmit.isEnabled()) {
                 mSubmit.setEnabled(enable);
             }
-//            if (s.toString().contains(EMOIL)) {
-//                String noEmoilData = s.toString().replaceAll(EMOIL, "");
-//                mIntroduceInput.setText(noEmoilData);
-//            }
-
-
-//            Pattern p = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
-//                    Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-//            Matcher m = p.matcher(s.toString());
-//            String noEmoilData = m.replaceAll("");
-//            mIntroduceInput.setText(noEmoilData);
         }
     };
 

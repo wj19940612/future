@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.userinfo.UserInfoActivity">
+    android:orientation="vertical">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"

@@ -137,4 +137,8 @@ public class IconTextRow extends LinearLayout {
         return mSubTextView.getText().toString();
     }
 
+    public TextView getSubTextView() {
+        return mSubTextView;
+    }
+
 }

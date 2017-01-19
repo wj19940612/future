@@ -100,9 +100,7 @@
                 app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>
 
-            <include layout="@layout/spilt_line_gray_light"/>
-
-            <com.jnhyxx.html5.view.IconTextRow
+         <!--   <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +110,42 @@
                 app:rowText="@string/location"
                 app:rowTextColor="@color/colorDisable"
                 app:rowVerticalPadding="12dp"
-                app:subTextColor="@color/blackPrimary"/>
+                app:subTextColor="@color/blackPrimary"/>-->
+
+            <include layout="@layout/spilt_line_gray_light"/>
+
+            <LinearLayout
+                android:id="@+id/ll_Location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/location"
+                    android:textColor="@color/colorDisable"/>
+
+                <TextView
+                    android:textColor="@color/blackPrimary"
+                    android:id="@+id/location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/common_big_arrow_list_icon_more"/>
+            </LinearLayout>
 
             <include layout="@layout/spilt_line_gray_light"/>
 
@@ -149,12 +182,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="right"
+                    android:hint="@string/please_input_introduction"
                     android:lineSpacingExtra="3dp"
                     android:paddingTop="@dimen/common_margin"
-                    android:textColorHint="@color/grayHint"
-                    android:hint="@string/please_input_introduction"
                     android:textColor="@color/blackPrimary"
+                    android:textColorHint="@color/grayHint"
                     android:textSize="14sp"/>
 
                 <ImageView

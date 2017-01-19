@@ -94,9 +94,13 @@ public class UserInfoActivity extends BaseActivity {
     IconTextRow mBindingPhone;
     @BindView(R.id.logoutButton)
     TextView mLogoutButton;
+    //    @BindView(R.id.location)
+//    IconTextRow mLocation;//
     @BindView(R.id.location)
-    IconTextRow mLocation;
-
+    TextView mLocation;
+    @BindView(R.id.ll_Location)
+    LinearLayout mLlLocation;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +156,7 @@ public class UserInfoActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -170,7 +174,7 @@ public class UserInfoActivity extends BaseActivity {
             case R.id.birthday:
                 showBirthdayPicker();
                 break;
-            case R.id.location:
+            case R.id.ll_Location:
                 selectAddress();
                 break;
             case R.id.introductionLayout:
@@ -351,7 +355,8 @@ public class UserInfoActivity extends BaseActivity {
         mUserRealName.setSubText(userInfo.getRealName());
         mUserName.setSubText(userInfo.getUserName());
         mSex.setSubText(userInfo.getChinaSex());
-        mLocation.setSubText(userInfo.getLand());
+//        mLocation.setSubText(userInfo.getLand());
+        mLocation.setText(userInfo.getLand());
         mBirthday.setSubText(userInfo.getBirthday());
         mUserIntroduction.setText(userInfo.getIntroduction());
         mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));

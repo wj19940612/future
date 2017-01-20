@@ -4,7 +4,9 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="2dp"/>
-            <solid android:color="#E23E47"/>
+            <solid android:color="#40E23E47"/>
+            <stroke android:width="0.7dp"
+                    android:color="@color/redPrimary"/>
         </shape>
     </item>
 

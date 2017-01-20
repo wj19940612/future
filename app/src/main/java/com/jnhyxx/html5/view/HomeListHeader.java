@@ -31,7 +31,7 @@ import butterknife.OnClick;
 
 public class HomeListHeader extends FrameLayout {
 
-    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.newerVideo, R.id.contactService})
+    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.newerVideo, R.id.contactService, R.id.futuresRiskTips})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.simulation:

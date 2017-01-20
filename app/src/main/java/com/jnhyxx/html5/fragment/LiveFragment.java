@@ -196,13 +196,13 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         initSlidingTabLayout();
         initKeyboardHelper();
         getLiveMessage();
+        getChattingIpPort();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isAdded() && isVisibleToUser) {
-            getChattingIpPort();
             if (getLiveInteractionFragment() != null && !mIsFragmentAdd) {
                 mIsFragmentAdd = true;
                 getLiveInteractionFragment().setOnSendButtonClickListener(this);

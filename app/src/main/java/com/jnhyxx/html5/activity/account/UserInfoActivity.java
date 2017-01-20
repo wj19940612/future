@@ -100,7 +100,7 @@ public class UserInfoActivity extends BaseActivity {
     TextView mLocation;
     @BindView(R.id.ll_Location)
     LinearLayout mLlLocation;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

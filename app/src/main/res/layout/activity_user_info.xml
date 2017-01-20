@@ -132,6 +132,7 @@
                     android:textColor="@color/colorDisable"/>
 
                 <TextView
+                    android:gravity="right"
                     android:textColor="@color/blackPrimary"
                     android:id="@+id/location"
                     android:layout_width="0dp"

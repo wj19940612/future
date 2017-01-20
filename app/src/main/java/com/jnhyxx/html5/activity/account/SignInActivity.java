@@ -2,6 +2,7 @@ package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -39,6 +40,8 @@ import butterknife.OnClick;
 public class SignInActivity extends BaseActivity {
 
     private static final int REQ_CODE_REGISTER = 1;
+
+    public static final String ACTION_LOGIN  = "com.jnhyxx.html5.login_success";
 
     @BindView(R.id.phoneNum)
     EditText mPhoneNum;
@@ -245,10 +248,11 @@ public class SignInActivity extends BaseActivity {
                     @Override
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {
                         if (jsonObjectResp.isSuccess()) {
+                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ACTION_LOGIN));
+
                             UserInfo userInfo = new Gson().fromJson(jsonObjectResp.getData(), UserInfo.class);
                             LocalUser.getUser().setUserInfo(userInfo, phoneNum);
                             ToastUtil.show(R.string.login_success);
-
                             setResult(RESULT_OK);
                             finish();
                         } else {

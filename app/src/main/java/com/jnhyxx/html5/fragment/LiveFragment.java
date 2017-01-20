@@ -1,6 +1,9 @@
 package com.jnhyxx.html5.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -118,6 +122,23 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
     private Unbinder mBind;
 
+    BroadcastReceiver LoginBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(SignInActivity.ACTION_LOGIN)) {
+                LiveInteractionFragment fragment = (LiveInteractionFragment)
+                        mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
+                disconnectNettySocket();
+                if (mLiveMessage != null) {
+                    connectNettySocket();
+                }
+                if (fragment != null) {
+                    fragment.updateLiveChatDataStatus();
+                }
+            }
+        }
+    };
+
 
     private NettyHandler mNettyHandler = new NettyHandler<LiveSpeakInfo>() {
 
@@ -153,6 +174,8 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(LoginBroadcastReceiver, new IntentFilter(SignInActivity.ACTION_LOGIN));
+
         mProgrammeList = new LiveProgrammeList(getActivity(), mDimBackground);
         mTeacherCommand.setOnClickListener(new TeacherCommand.OnClickListener() {
             @Override
@@ -235,6 +258,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         super.onDestroy();
         disconnectNettySocket();
         mKeyBoardHelper.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(LoginBroadcastReceiver);
     }
 
     public void setBottomTabVisibility(int visibility) {
@@ -496,15 +520,15 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BaseActivity.REQ_CODE_LOGIN && resultCode == getActivity().RESULT_OK) {
-            LiveInteractionFragment fragment = (LiveInteractionFragment)
-                    mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
-            disconnectNettySocket();
-            if (mLiveMessage != null) {
-                connectNettySocket();
-            }
-            if (fragment != null) {
-                fragment.updateLiveChatDataStatus();
-            }
+//            LiveInteractionFragment fragment = (LiveInteractionFragment)
+//                    mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
+//            disconnectNettySocket();
+//            if (mLiveMessage != null) {
+//                connectNettySocket();
+//            }
+//            if (fragment != null) {
+//                fragment.updateLiveChatDataStatus();
+//            }
         }
     }
 

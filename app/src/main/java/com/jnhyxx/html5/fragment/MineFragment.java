@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
@@ -186,7 +187,7 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.signInButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGIN);
-                Launcher.with(getActivity(), SignInActivity.class).execute();
+                Launcher.with(getActivity(), SignInActivity.class).executeForResult(BaseActivity.REQ_CODE_LOGIN);
                 break;
             case R.id.signUpButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REGISTER);

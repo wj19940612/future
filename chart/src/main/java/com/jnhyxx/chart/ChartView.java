@@ -81,6 +81,7 @@ public abstract class ChartView extends View {
 
     protected int mMiddleExtraSpace; // The middle space between two parts
     protected int mTextMargin; // The margin between text and baseline
+    protected int mTitleVerticalOffset; // The vertical offset of title above baseline: mBigFontHeight + mTextMargin
 
     private int mXRectPadding;
     private int mYRectPadding;
@@ -168,6 +169,10 @@ public abstract class ChartView extends View {
         redraw();
     }
 
+    protected void resetTouchIndex() {
+        mTouchIndex = -1;
+    }
+
     protected void setBaseLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BASE.get()));
         paint.setStyle(Paint.Style.STROKE);
@@ -188,6 +193,11 @@ public abstract class ChartView extends View {
         int top = getTop();
         int width = getWidth() - getPaddingLeft() - getPaddingRight();
         int topPartHeight = getTopPartHeight();
+        int bottomPartHeight = getBottomPartHeight();
+
+        if (enableDrawMovingAverages()) {
+            calculateMovingAverages(mSettings.isIndexesEnable());
+        }
 
         calculateBaseLines(mSettings.getBaseLines());
 
@@ -198,32 +208,42 @@ public abstract class ChartView extends View {
             calculateIndexesBaseLines(mSettings.getIndexesBaseLines());
         }
 
-        drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
+        if (enableDrawMovingAverages()) {
+            drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
+
+            mTitleVerticalOffset = mBigFontHeight + mTextMargin;
+            top += mTitleVerticalOffset;
+            topPartHeight -= mTitleVerticalOffset;
+            if (mSettings.isIndexesEnable()) {
+                top2 += mTitleVerticalOffset;
+                bottomPartHeight -= mTitleVerticalOffset;
+            }
+        }
 
         drawBaseLines(mSettings.isIndexesEnable(),
                 mSettings.getBaseLines(), left, top, width, topPartHeight,
-                mSettings.getIndexesBaseLines(), left, top2, width, getBottomPartHeight(),
+                mSettings.getIndexesBaseLines(), left, top2, width, bottomPartHeight,
                 canvas);
 
         drawRealTimeData(mSettings.isIndexesEnable(),
                 left, top, width, topPartHeight,
-                left, top2, width, getBottomPartHeight(),
+                left, top2, width, bottomPartHeight,
                 canvas);
 
-        if (shouldDrawUnstableData()) {
+        if (enableDrawUnstableData()) {
             drawUnstableData(mSettings.isIndexesEnable(),
                     left, top, width, topPartHeight,
-                    left, top2, width, getBottomPartHeight(),
+                    left, top2, width, bottomPartHeight,
                     canvas);
         }
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
         if (mTouchIndex >= 0) {
-            if (shouldDrawTouchLines()) {
+            if (enableDrawTouchLines()) {
                 drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
                         left, top, width, topPartHeight,
-                        left, top2, width, getBottomPartHeight(),
+                        left, top2, width, bottomPartHeight,
                         canvas);
 
                 onTouchLinesAppear(mTouchIndex);
@@ -231,6 +251,9 @@ public abstract class ChartView extends View {
         } else {
             onTouchLinesDisappear();
         }
+    }
+
+    protected void calculateMovingAverages(boolean indexesEnable) {
     }
 
     @Override
@@ -289,7 +312,7 @@ public abstract class ChartView extends View {
     }
 
     private boolean triggerTouchLinesRedraw(MotionEvent event) {
-        if (shouldDrawTouchLines()) {
+        if (enableDrawTouchLines()) {
             int newTouchIndex = calculateTouchIndex(event);
             if (newTouchIndex != mTouchIndex && hasThisTouchIndex(newTouchIndex)) {
                 mTouchIndex = newTouchIndex;
@@ -304,16 +327,16 @@ public abstract class ChartView extends View {
         return false;
     }
 
-    protected boolean shouldDrawTitleAboveBaseLines() {
+    protected boolean enableDrawMovingAverages() {
         return false;
     }
 
 
-    protected boolean shouldDrawUnstableData() {
+    protected boolean enableDrawUnstableData() {
         return false;
     }
 
-    protected boolean shouldDrawTouchLines() {
+    protected boolean enableDrawTouchLines() {
         return false;
     }
 
@@ -420,9 +443,9 @@ public abstract class ChartView extends View {
      * @param canvas
      */
     protected void drawUnstableData(boolean indexesEnable,
-                                             int left, int top, int width, int topPartHeight,
-                                             int left2, int top2, int width1, int bottomPartHeight,
-                                             Canvas canvas) {
+                                    int left, int top, int width, int topPartHeight,
+                                    int left2, int top2, int width1, int bottomPartHeight,
+                                    Canvas canvas) {
 
     }
 
@@ -492,9 +515,9 @@ public abstract class ChartView extends View {
             return -1;
         }
 
-        int height = getTopPartHeight();
+        int height = getTopPartHeight() - mTitleVerticalOffset;
         y = (baselines[0] - y) / (baselines[0] - baselines[baselines.length - 1]) * height;
-        return y + getPaddingTop();
+        return y + getPaddingTop() + mTitleVerticalOffset;
     }
 
     protected float getIndexesChartY(long y) {
@@ -504,12 +527,12 @@ public abstract class ChartView extends View {
             return -1;
         }
 
-        int height = getBottomPartHeight();
+        int height = getBottomPartHeight() - mTitleVerticalOffset;
 
         float chartY = (indexesBaseLines[0] - y) * 1.0f /
                 (indexesBaseLines[0] - indexesBaseLines[indexesBaseLines.length - 1]) * height;
 
-        return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight;
+        return chartY + getPaddingTop() + getTopPartHeight() + mCenterPartHeight + mTitleVerticalOffset;
     }
 
     protected float getChartX(int index) {
@@ -579,7 +602,7 @@ public abstract class ChartView extends View {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, getResources().getDisplayMetrics());
     }
 
-    protected String formatNumber(float value) {
+    public String formatNumber(float value) {
         return formatNumber(value, mSettings.getNumberScale());
     }
 

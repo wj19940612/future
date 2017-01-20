@@ -36,7 +36,7 @@ public class TwinkleView extends TrendChart {
     }
 
     @Override
-    protected boolean shouldDrawUnstableData() {
+    protected boolean enableDrawUnstableData() {
         return true;
     }
 

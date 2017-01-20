@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jnhyxx.chart.FlashView;
+import com.jnhyxx.chart.KlineChart;
 import com.jnhyxx.chart.KlineView;
 import com.jnhyxx.chart.TrendView;
 import com.jnhyxx.chart.domain.FlashViewData;
@@ -668,11 +669,11 @@ public class TradeActivity extends BaseActivity implements
             mChartContainer.addKlineView(klineView);
         }
         klineView.clearData();
-        KlineView.Settings settings2 = new KlineView.Settings();
+        KlineChart.Settings settings2 = new KlineChart.Settings();
         settings2.setBaseLines(mProduct.getBaseline());
         settings2.setNumberScale(mProduct.getPriceDecimalScale());
         settings2.setXAxis(40);
-        settings2.setIndexesType(KlineView.Settings.INDEXES_VOL);
+        settings2.setIndexesType(KlineChart.Settings.INDEXES_VOL);
         klineView.setSettings(settings2);
 
         mChartContainer.showTrendView();
@@ -704,9 +705,9 @@ public class TradeActivity extends BaseActivity implements
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
                         if (klineDataList != null && klineView != null) {
                             if (TextUtils.isEmpty(type)) { // dayK
-                                klineView.setDataFormat(KlineView.DATE_FORMAT_DAY_K);
+                                klineView.setDataFormat(KlineChart.DATE_FORMAT_DAY_K);
                             } else {
-                                klineView.setDataFormat(KlineView.DATE_FORMAT_DAY_MIN);
+                                klineView.setDataFormat(KlineChart.DATE_FORMAT_DAY_MIN);
                             }
                             Collections.reverse(klineDataList);
                             klineView.setDataList(klineDataList);

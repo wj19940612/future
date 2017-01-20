@@ -132,7 +132,7 @@ public class TrendChart extends ChartView {
             return;
         }
 
-        if (shouldDrawUnstableData()) {
+        if (enableDrawUnstableData()) {
             redraw();
         } else if (mSettings != null && mUnstableData != null) { // When unstable data > top || < bottom, still redraw
             float[] baseLines = mSettings.getBaseLines();
@@ -349,7 +349,7 @@ public class TrendChart extends ChartView {
     }
 
     @Override
-    protected boolean shouldDrawUnstableData() {
+    protected boolean enableDrawUnstableData() {
         return false;
     }
 

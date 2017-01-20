@@ -61,14 +61,14 @@ public class TouchView extends TrendChart {
 
     @Override
     protected boolean hasThisTouchIndex(int touchIndex) {
-        if (getVisibleList() != null && getVisibleList().get(touchIndex) != null) {
+        if (touchIndex != -1 && getVisibleList() != null && getVisibleList().get(touchIndex) != null) {
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
     }
 
     @Override
-    protected boolean shouldDrawTouchLines() {
+    protected boolean enableDrawTouchLines() {
         return true;
     }
 }

@@ -1,5 +1,7 @@
 package com.jnhyxx.chart.domain;
 
+import android.util.SparseArray;
+
 public class KlineViewData {
 
     /**
@@ -20,6 +22,9 @@ public class KlineViewData {
     private String day;
     private String time;
     private long timeStamp;
+
+    // local cache data
+    private SparseArray<Float> movingAverages;
 
     public float getClosePrice() {
         return closePrice;
@@ -79,5 +84,23 @@ public class KlineViewData {
 
     public long getNowVolume() {
         return nowVolume;
+    }
+
+    public void addMovingAverage(int movingAverageKey, float movingAverageValue) {
+        if (movingAverages == null) {
+            movingAverages = new SparseArray<>();
+        }
+        movingAverages.put(movingAverageKey, Float.valueOf(movingAverageValue));
+    }
+
+    public float getMovingAverage(int movingAverageKey) {
+        if (movingAverages != null) {
+            Float movingAverageValue = movingAverages.get(movingAverageKey);
+            if (movingAverageValue != null) {
+                return movingAverageValue.floatValue();
+            }
+            return 0f;
+        }
+        return 0f;
     }
 }

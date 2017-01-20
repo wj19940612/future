@@ -11,7 +11,6 @@ import com.jnhyxx.html5.domain.order.LightningOrderAsset;
 import com.johnz.kutils.SecurityUtil;
 import com.johnz.kutils.net.ApiParams;
 
-import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -1077,6 +1076,15 @@ public class API extends APIBase {
      */
     public static String getNewsDetailUrl() {
         return getHost() + "/news/newsDtl.html";
+    }
+
+    /**
+     * 期货风险提示
+     *
+     * @return
+     */
+    public static String getFuturesRiskTips() {
+        return getHost() + "/mine/riskWarningText.html?nohead=1";
     }
 
     /**

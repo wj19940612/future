@@ -62,8 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.string.service_phone;
-
 public class HomeFragment extends BaseFragment {
 
     @BindView(android.R.id.list)
@@ -117,7 +115,10 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onFuturesRiskTipsClick() {
-
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.futures_risk_tips_title))
+                        .putExtra(WebViewActivity.EX_URL, API.getFuturesRiskTips())
+                        .execute();
             }
 
             // 模拟交易

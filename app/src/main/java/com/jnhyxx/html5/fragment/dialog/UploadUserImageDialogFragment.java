@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.userinfo.ClipHeadImageActivity;
+import com.jnhyxx.html5.activity.account.ClipHeadImageActivity;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.ImageUtil;
 import com.johnz.kutils.net.ApiIndeterminate;

@@ -6,8 +6,7 @@
     android:id="@+id/activity_clip_head_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.userinfo.ClipHeadImageActivity">
+    android:orientation="vertical">
 
     <com.jnhyxx.html5.view.clipimage.ClipImageLayout
         android:id="@+id/clipImageLayout"

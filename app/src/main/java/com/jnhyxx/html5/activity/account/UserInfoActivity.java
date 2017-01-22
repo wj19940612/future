@@ -1,29 +1,30 @@
-package com.jnhyxx.html5.activity.userinfo;
+package com.jnhyxx.html5.activity.account;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
-import com.jnhyxx.html5.activity.account.NameVerifyActivity;
 import com.jnhyxx.html5.activity.setting.ModifyNickNameActivity;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -34,33 +35,38 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ToastUtil;
-import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.wheel.OptionPicker;
-import com.jnhyxx.html5.view.wheel.entity.City;
-import com.jnhyxx.html5.view.wheel.entity.County;
-import com.jnhyxx.html5.view.wheel.entity.Province;
 import com.johnz.kutils.Launcher;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.jnhyxx.html5.R.id.realNameAuth;
+import cn.qqtheme.framework.entity.City;
+import cn.qqtheme.framework.entity.County;
+import cn.qqtheme.framework.entity.Province;
+import cn.qqtheme.framework.picker.AddressPicker;
+import cn.qqtheme.framework.picker.OptionPicker;
+import cn.qqtheme.framework.util.ConvertUtils;
+import cn.qqtheme.framework.widget.WheelView;
 
 
 /**
  * 用户个人信息界面
  */
-public class UserInfoActivity extends BaseActivity implements AddressInitTask.OnAddressListener {
+public class UserInfoActivity extends BaseActivity {
 
     // 绑定银行卡前 先进行实名认证
     private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
+
+    private static final String SEX_BOY = "男";
+    private static final String SEX_GIRL = "女";
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
@@ -88,8 +94,12 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     IconTextRow mBindingPhone;
     @BindView(R.id.logoutButton)
     TextView mLogoutButton;
+    //    @BindView(R.id.location)
+//    IconTextRow mLocation;//
     @BindView(R.id.location)
-    IconTextRow mLocation;
+    TextView mLocation;
+    @BindView(R.id.ll_Location)
+    LinearLayout mLlLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,20 +111,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         updateUserInfo();
 
         getUserInfo();
-
-        mUserIntroduction.addTextChangedListener(mTextWatcher);
     }
-
-    private TextWatcher mTextWatcher = new ValidationWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (mUserIntroduction.getLineCount() > 1) {
-                mUserIntroduction.setGravity(Gravity.LEFT);
-            } else {
-                mUserIntroduction.setGravity(Gravity.RIGHT);
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -130,11 +127,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
                 }).fireSync();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mUserIntroduction.removeTextChangedListener(mTextWatcher);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,7 +156,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     }
 
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.location, R.id.introductionLayout, realNameAuth, R.id.bindBankCard, R.id.logoutButton})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -182,13 +174,13 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
             case R.id.birthday:
                 showBirthdayPicker();
                 break;
-            case R.id.location:
+            case R.id.ll_Location:
                 selectAddress();
                 break;
             case R.id.introductionLayout:
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
-            case realNameAuth:
+            case R.id.realNameAuth:
                 Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bindBankCard:
@@ -203,7 +195,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     private void showBirthdayPicker() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month =calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         final String birthday = LocalUser.getUser().getUserInfo().getBirthday();
@@ -218,15 +210,11 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         final DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.datePickerDialogStyle, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Log.d(TAG, year + "年" + month + " 月" + dayOfMonth + " 天");
-                StringBuilder birthdayDate = new StringBuilder();
-                LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
-                updateUserInfo();
+
             }
         }, year, month, day);
-        datePickerDialog.setCustomTitle(null);
 
-        //设置时间picker的取消颜色
+//        //设置时间picker的取消颜色
         SpannableStringBuilder cancelSpannableString = new SpannableStringBuilder();
         cancelSpannableString.append(getString(R.string.cancel));
         ForegroundColorSpan backgroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.lucky));
@@ -234,7 +222,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         datePickerDialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, cancelSpannableString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                dialog.cancel();
             }
         });
         //设置时间picker的确定颜色
@@ -245,19 +233,27 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, confirmSpannableString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                DatePicker datePicker = datePickerDialog.getDatePicker();
+                int year = datePicker.getYear();
+                int month = datePicker.getMonth();
+                int dayOfMonth = datePicker.getDayOfMonth();
+                StringBuilder birthdayDate = new StringBuilder();
+                LocalUser.getUser().getUserInfo().setBirthday(FormatBirthdayDate(year, month, dayOfMonth, birthdayDate));
+                updateUserInfo();
             }
         });
         datePickerDialog.show();
     }
 
     private void showSexPicker() {
-        OptionPicker picker = new OptionPicker(this, new String[]{"男", "女",});
+        OptionPicker picker = new OptionPicker(this, new String[]{SEX_BOY, SEX_GIRL,});
         picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
         picker.setSubmitTextColor(ContextCompat.getColor(getActivity(), R.color.blueAssist));
         picker.setAnimationStyle(R.style.BottomDialogStyle);
-        picker.setOffset(2);
-        picker.setSelectedIndex(0);
+        picker.setOffset(1);
+        if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
+            picker.setSelectedItem(LocalUser.getUser().getUserInfo().getChinaSex());
+        }
 //        picker.setTopPadding(toDp(10));
 //                picker.setTextSize(11);
 //                picker.setLineConfig(new WheelView.LineConfig(0));//使用最长的线
@@ -298,8 +294,8 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     private void selectAddress() {
         AddressInitTask addressInitTask = new AddressInitTask(getActivity(), true);
         String land = LocalUser.getUser().getUserInfo().getLand();
-        String province = "浙江";
-        String city = "杭州市";
+        String province = "";
+        String city = "";
         if (!TextUtils.isEmpty(land)) {
             String[] split = land.split("-");
             if (split.length == 2) {
@@ -308,7 +304,6 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
             }
         }
         addressInitTask.execute(province, city);
-        addressInitTask.setOnAddressListener(this);
     }
 
     private String FormatBirthdayDate(int year, int month, int dayOfMonth, StringBuilder birthdayDate) {
@@ -324,7 +319,7 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         if (LocalUser.getUser().getUserInfo().isUserRealNameAuth()) {
             ToastUtil.curt(R.string.is_already_real_name);
         } else {
-            Launcher.with(getActivity(), SubmitRealNameActivity.class).executeForResult(REQ_CODE_BASE);
+
         }
     }
 
@@ -360,7 +355,8 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
         mUserRealName.setSubText(userInfo.getRealName());
         mUserName.setSubText(userInfo.getUserName());
         mSex.setSubText(userInfo.getChinaSex());
-        mLocation.setSubText(userInfo.getLand());
+//        mLocation.setSubText(userInfo.getLand());
+        mLocation.setText(userInfo.getLand());
         mBirthday.setSubText(userInfo.getBirthday());
         mUserIntroduction.setText(userInfo.getIntroduction());
         mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
@@ -371,16 +367,16 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
 
     private void updateUserHeadImage(UserInfo userInfo) {
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-            Picasso.with(UserInfoActivity.this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
+            Picasso.with(this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
         } else {
             if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
                 if (LocalUser.getUser().getUserInfo().isUserisBoy()) {
-                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_boy).transform(new CircleTransform()).into(mUserHeadImage);
+                    Picasso.with(this).load(R.drawable.ic_user_info_head_boy).transform(new CircleTransform()).into(mUserHeadImage);
                 } else {
-                    Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_girl).transform(new CircleTransform()).into(mUserHeadImage);
+                    Picasso.with(this).load(R.drawable.ic_user_info_head_girl).transform(new CircleTransform()).into(mUserHeadImage);
                 }
             } else {
-                Picasso.with(UserInfoActivity.this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
+                Picasso.with(this).load(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mUserHeadImage);
             }
         }
     }
@@ -414,9 +410,100 @@ public class UserInfoActivity extends BaseActivity implements AddressInitTask.On
     }
 
 
-    @Override
-    public void onSelectAddress(Province province, City city, County county) {
-        updateUserInfo();
+    /**
+     * 获取地址数据并显示地址选择器
+     *
+     * @author
+     * @since 2015/12/15
+     */
+    public class AddressInitTask extends AsyncTask<String, Void, ArrayList<Province>> {
+        private static final String TAG = "AddressInitTask";
+
+        private Activity mActivity;
+        private String mSelectedProvince = "",
+                mSelectedCity = "",
+                mSelectedCounty = "";
+        private boolean mHideCounty;
+
+        public AddressInitTask(Activity activity) {
+            this.mActivity = activity;
+        }
+
+        /**
+         * 初始化为不显示区县的模式
+         */
+        public AddressInitTask(Activity activity, boolean hideCounty) {
+            this.mActivity = activity;
+            this.mHideCounty = hideCounty;
+        }
+
+        @Override
+        protected ArrayList<Province> doInBackground(String... params) {
+            if (params != null) {
+                switch (params.length) {
+                    case 1:
+                        mSelectedProvince = params[0];
+                        break;
+                    case 2:
+                        mSelectedProvince = params[0];
+                        mSelectedCity = params[1];
+                        break;
+                    case 3:
+                        mSelectedProvince = params[0];
+                        mSelectedCity = params[1];
+                        mSelectedCounty = params[2];
+                        break;
+                    default:
+                        break;
+                }
+            }
+            ArrayList<Province> data = new ArrayList<Province>();
+            try {
+                String json = ConvertUtils.toString(mActivity.getAssets().open("city.json"));
+
+                Type listType = new TypeToken<ArrayList<Province>>() {
+                }.getType();
+
+                ArrayList<Province> provinces = new Gson().fromJson(json, listType);
+                data.addAll(provinces);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Province> result) {
+//        dialog.dismiss();
+            if (result.size() > 0) {
+                AddressPicker picker = new AddressPicker(mActivity, result);
+                picker.setHideCounty(mHideCounty);
+                if (mHideCounty) {
+                    picker.setColumnWeight(1 / 3.0, 2 / 3.0);//将屏幕分为3份，省级和地级的比例为1:2
+                } else {
+                    picker.setColumnWeight(2 / 8.0, 3 / 8.0, 3 / 8.0);//省级、地级和县级的比例为2:3:3
+                }
+                picker.setCancelTextColor(R.color.lucky);
+//            picker.setSubmitTextColor(R.color.blueAssist);
+                picker.setSubmitTextColor(Color.parseColor("#358CF3"));
+                picker.setAnimationStyle(R.style.BottomDialogStyle);
+                picker.setSelectedItem(mSelectedProvince, mSelectedCity, mSelectedCounty);
+                WheelView.LineConfig lineConfig = new WheelView.LineConfig(0);//使用最长的分割线
+//            lineConfig.setColor(R.color.lucky);//设置分割线颜色
+                picker.setLineConfig(lineConfig);
+                picker.setOnAddressPickListener(new AddressPicker.OnAddressPickListener() {
+                    @Override
+                    public void onAddressPicked(Province province, City city, County county) {
+                        LocalUser.getUser().getUserInfo().setLand(province.getAreaName() + "-" + city.getAreaName());
+                        updateUserInfo();
+                    }
+                });
+                picker.show();
+            } else {
+                Toast.makeText(mActivity, "数据初始化失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
 }

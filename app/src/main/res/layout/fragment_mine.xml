@@ -52,7 +52,7 @@
                             android:layout_height="75dp"
                             android:layout_marginTop="8dp"
                             android:clickable="true"
-                            android:src="@drawable/ic_avatar_default"
+                            android:src="@drawable/ic_user_info_head_visitor"
                             app:borderColor="#4D358CF3"
                             app:borderWidth="3dp"/>
 

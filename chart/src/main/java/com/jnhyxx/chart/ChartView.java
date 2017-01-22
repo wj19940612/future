@@ -49,6 +49,7 @@ public abstract class ChartView extends View {
 
     private static final int FONT_SIZE_DP = 8;
     private static final int FONT_BIG_SIZE_DP = 9;
+    private static final int FONT_MA_TITLE_DP = 10;
     private static final int TEXT_MARGIN_WITH_LINE_DP = 3;
     private static final int RECT_PADDING_DP = 3;
     private static final int MIDDLE_EXTRA_SPACE_DP = 10;
@@ -77,6 +78,9 @@ public abstract class ChartView extends View {
     protected float mBigFontSize;
     protected int mBigFontHeight;
     protected float mOffset4CenterBigText;
+    protected float mMaTitleSize;
+    protected int mMaTitleHeight;
+    protected float mOffset4CenterMaTitle;
     protected float mPriceAreaWidth;
 
     protected int mMiddleExtraSpace; // The middle space between two parts
@@ -134,6 +138,13 @@ public abstract class ChartView extends View {
         sPaint.getFontMetrics(mFontMetrics);
         mBigFontHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
         mOffset4CenterBigText = calOffsetY4TextCenter();
+
+        // ma title text font
+        mMaTitleSize = sp2Px(FONT_MA_TITLE_DP);
+        sPaint.setTextSize(mMaTitleSize);
+        sPaint.getFontMetrics(mFontMetrics);
+        mMaTitleHeight = (int) (mFontMetrics.bottom - mFontMetrics.top);
+        mOffset4CenterMaTitle = calOffsetY4TextCenter();
 
         // constant
         mTextMargin = (int) dp2Px(TEXT_MARGIN_WITH_LINE_DP);
@@ -211,7 +222,7 @@ public abstract class ChartView extends View {
         if (enableDrawMovingAverages()) {
             drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
 
-            mTitleVerticalOffset = mBigFontHeight + mTextMargin;
+            mTitleVerticalOffset = mMaTitleHeight + mTextMargin;
             top += mTitleVerticalOffset;
             topPartHeight -= mTitleVerticalOffset;
             if (mSettings.isIndexesEnable()) {

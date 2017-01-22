@@ -164,8 +164,17 @@
             android:name=".activity.account.WithdrawRecordInfoActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.userinfo.SubmitRealNameActivity"
+            android:name=".activity.account.SubmitRealNameActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.ClipHeadImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.UserInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.account.UserIntroduceActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->
         <activity
@@ -206,11 +215,8 @@
             android:exported="true"
             android:label="PushService"
             android:process=":pushService"/>
-        <activity
-            android:name=".activity.userinfo.UserInfoActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.userinfo.UserIntroduceActivity"/>
+
+
 
 
         <!-- umeng channel，replace this -->
@@ -221,10 +227,6 @@
 
         <!-- service -->
         <service android:name=".service.DownloadService"/>
-
-        <activity android:name=".activity.userinfo.ClipHeadImageActivity">
-        </activity>
-
     </application>
 
 </manifest>

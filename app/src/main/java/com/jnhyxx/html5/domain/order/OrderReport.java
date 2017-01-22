@@ -1,5 +1,7 @@
 package com.jnhyxx.html5.domain.order;
 
+import android.text.TextUtils;
+
 public class OrderReport {
 
 
@@ -45,5 +47,12 @@ public class OrderReport {
 
     public void setTradeType(String tradeType) {
         this.tradeType = tradeType;
+    }
+
+    public boolean isShortSelling() {
+        if (!TextUtils.isEmpty(getTradeType()) && getTradeType().equalsIgnoreCase("做空")) {
+            return true;
+        }
+        return false;
     }
 }

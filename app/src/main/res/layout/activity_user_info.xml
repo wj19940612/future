@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.jnhyxx.html5.activity.userinfo.UserInfoActivity">
+    android:orientation="vertical">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
@@ -101,9 +100,7 @@
                 app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>
 
-            <include layout="@layout/spilt_line_gray_light"/>
-
-            <com.jnhyxx.html5.view.IconTextRow
+         <!--   <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +110,43 @@
                 app:rowText="@string/location"
                 app:rowTextColor="@color/colorDisable"
                 app:rowVerticalPadding="12dp"
-                app:subTextColor="@color/blackPrimary"/>
+                app:subTextColor="@color/blackPrimary"/>-->
+
+            <include layout="@layout/spilt_line_gray_light"/>
+
+            <LinearLayout
+                android:id="@+id/ll_Location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/location"
+                    android:textColor="@color/colorDisable"/>
+
+                <TextView
+                    android:gravity="right"
+                    android:textColor="@color/blackPrimary"
+                    android:id="@+id/location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/common_big_arrow_list_icon_more"/>
+            </LinearLayout>
 
             <include layout="@layout/spilt_line_gray_light"/>
 
@@ -134,8 +167,9 @@
             <LinearLayout
                 android:id="@+id/introductionLayout"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:background="@android:color/white">
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:minHeight="61dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -147,15 +181,16 @@
                 <TextView
                     android:id="@+id/userIntroduction"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="right"
+                    android:hint="@string/please_input_introduction"
                     android:lineSpacingExtra="3dp"
                     android:paddingTop="@dimen/common_margin"
-                    android:text="@string/please_input_introduction"
-                    android:textColor="@color/grayHint"
-                    android:textSize="14sp"
-                    tools:text="的撒娇看极大师傅好垃回答时间考虑"/>
+                    android:textColor="@color/blackPrimary"
+                    android:textColorHint="@color/grayHint"
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/helpIv"
@@ -173,9 +208,9 @@
                 android:background="@android:color/white"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/real_name_authorize"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blueAssist"/>
 
             <include layout="@layout/spilt_line_gray_light"/>
@@ -187,9 +222,9 @@
                 android:background="@android:color/white"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/binding_bank_card"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blueAssist"/>
 
             <include layout="@layout/spilt_line_gray_light"/>
@@ -200,9 +235,9 @@
                 android:layout_height="43dp"
                 android:background="@android:color/white"
                 app:rightIconVisibility="visible"
-                app:rowVerticalPadding="12dp"
                 app:rowText="@string/binding_phone"
                 app:rowTextColor="@color/colorDisable"
+                app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>
         </LinearLayout>
     </ScrollView>

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
@@ -20,8 +21,8 @@ import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.account.SignUpActivity;
 import com.jnhyxx.html5.activity.account.TradeDetailActivity;
+import com.jnhyxx.html5.activity.account.UserInfoActivity;
 import com.jnhyxx.html5.activity.account.WithdrawActivity;
-import com.jnhyxx.html5.activity.userinfo.UserInfoActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
@@ -51,6 +52,7 @@ import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.paidToPromote;
 
+
 public class MineFragment extends BaseFragment {
 
     //账户余额
@@ -74,7 +76,7 @@ public class MineFragment extends BaseFragment {
     IconTextRow mTradeDetail;
     @BindView(R.id.aboutUs)
     IconTextRow mAboutUs;
-    @BindView(paidToPromote)
+    @BindView(R.id.paidToPromote)
     IconTextRow mPaidToPromote;
     @BindView(R.id.nickname)
     TextView mNickname;
@@ -167,7 +169,17 @@ public class MineFragment extends BaseFragment {
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_avatar_default).transform(new CircleTransform()).into(mHeadImage);
+                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mHeadImage);
+            } else {
+                if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
+                    if (userInfo.isUserisBoy()) {
+                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_boy);
+                    } else {
+                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_girl);
+                    }
+                } else {
+                    mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
+                }
             }
         } else {
             mSignArea.setVisibility(View.VISIBLE);
@@ -176,16 +188,16 @@ public class MineFragment extends BaseFragment {
             mTitleBar.setRightVisible(false);
             mBalance.setText(R.string.zero);
             mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
-            mHeadImage.setImageResource(R.drawable.ic_avatar_default);
+            mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
         }
     }
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, R.id.paidToPromote, R.id.headImage, R.id.feedback})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGIN);
-                Launcher.with(getActivity(), SignInActivity.class).execute();
+                Launcher.with(getActivity(), SignInActivity.class).executeForResult(BaseActivity.REQ_CODE_LOGIN);
                 break;
             case R.id.signUpButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REGISTER);
@@ -210,7 +222,7 @@ public class MineFragment extends BaseFragment {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ABOUT_US);
                 Launcher.with(getActivity(), AboutUsActivity.class).execute();
                 break;
-            case R.id.paidToPromote:
+            case paidToPromote:
                 openPaidToPromotePage();
                 break;
             case R.id.headImage:

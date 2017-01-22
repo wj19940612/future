@@ -19,6 +19,9 @@ import java.util.List;
 
 public class KlineView extends RelativeLayout implements KlineChart.OnTouchLinesAppearListener {
 
+    public static final String SIDE_BAR_DATE_FORMAT_DAY_K = "yyyy/MM/dd";
+    public static final String SIDE_BAR_DATE_FORMAT_MIN = "yyyy/MM/dd\nHH:mm";
+
     private KlineChart mKlineChart;
     private View mLeftSideBar;
     private View mRightSideBar;
@@ -44,7 +47,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mLeftSideBar = LayoutInflater.from(getContext()).inflate(R.layout.kline_side_bar, null);
         mRightSideBar = LayoutInflater.from(getContext()).inflate(R.layout.kline_side_bar, null);
 
-        int marginTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20,
+        int marginTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12,
                 getResources().getDisplayMetrics());
         RelativeLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -60,7 +63,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mRightSideBar.setVisibility(GONE);
         addView(mRightSideBar, params);
 
-        mDateFormat = new SimpleDateFormat("yyyy/MM/dd\nHH:mm");
+        mDateFormat = new SimpleDateFormat(SIDE_BAR_DATE_FORMAT_MIN);
     }
 
     private void setSideBar(View sideBar, KlineViewData data, KlineViewData previousData) {
@@ -106,6 +109,11 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
 
     public void setDataFormat(String formatStr) {
         mKlineChart.setDataFormat(formatStr);
+        if (formatStr.equalsIgnoreCase(KlineChart.DATE_FORMAT_DAY_K)) {
+            mDateFormat.applyPattern(SIDE_BAR_DATE_FORMAT_DAY_K);
+        } else {
+            mDateFormat.applyPattern(SIDE_BAR_DATE_FORMAT_MIN);
+        }
     }
 
     public void clearData() {

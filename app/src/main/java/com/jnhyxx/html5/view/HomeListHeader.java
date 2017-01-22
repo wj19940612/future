@@ -155,7 +155,7 @@ public class HomeListHeader extends FrameLayout {
     public void setSimulationHolding(List<HomePositions.IntegralOpSBean> integralOpSBeanList) {
         if (integralOpSBeanList != null && integralOpSBeanList.size() > 0) {
             int holdingNumber = 0;
-            for (HomePositions.IntegralOpSBean integralOpSBean: integralOpSBeanList) {
+            for (HomePositions.IntegralOpSBean integralOpSBean : integralOpSBeanList) {
                 holdingNumber += integralOpSBean.getHandsNum();
             }
             if (getContext() != null) {
@@ -185,7 +185,7 @@ public class HomeListHeader extends FrameLayout {
             OrderReport report = mOrderReportList.get(mCount++ % mOrderReportList.size());
             SpannableString orderReport = StrUtil.mergeTextWithColor(
                     report.getNick() + " " + report.getTime() + " ",
-                    report.getTradeType(), ContextCompat.getColor(getContext(), R.color.redPrimary),
+                    report.getTradeType(), report.isShortSelling() ? ContextCompat.getColor(getContext(), R.color.greenPrimary) : ContextCompat.getColor(getContext(), R.color.redPrimary),
                     " " + report.getFuturesType());
             orderReportView.setText(orderReport);
             mViewSwitcher.showNext();

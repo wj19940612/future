@@ -170,6 +170,16 @@ public class MineFragment extends BaseFragment {
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
                 Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mHeadImage);
+            } else {
+                if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
+                    if (userInfo.isUserisBoy()) {
+                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_boy);
+                    } else {
+                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_girl);
+                    }
+                } else {
+                    mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
+                }
             }
         } else {
             mSignArea.setVisibility(View.VISIBLE);

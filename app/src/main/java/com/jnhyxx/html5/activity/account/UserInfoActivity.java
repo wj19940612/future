@@ -319,7 +319,8 @@ public class UserInfoActivity extends BaseActivity {
         if (LocalUser.getUser().getUserInfo().isUserRealNameAuth()) {
             ToastUtil.curt(R.string.is_already_real_name);
         } else {
-
+            Launcher.with(getActivity(), SubmitRealNameActivity.class)
+                    .executeForResult(REQ_CODE_BASE);
         }
     }
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/colorDisable"
         android:textSize="10sp"
         tools:text="2017/10/23\n14:53"/>
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:text="@string/openPrice"
         android:textColor="@android:color/white"
         android:textSize="11sp"/>
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/redPrimary"
         android:textSize="15sp"
         tools:text="51264"/>
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:text="@string/highestPrice"
         android:textColor="@android:color/white"
         android:textSize="11sp"/>
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/redPrimary"
         android:textSize="15sp"
         tools:text="51264"/>
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:text="@string/lowestPrice"
         android:textColor="@android:color/white"
         android:textSize="11sp"/>
@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/redPrimary"
         android:textSize="15sp"
         tools:text="51264"/>
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:text="@string/closePrice"
         android:textColor="@android:color/white"
         android:textSize="11sp"/>
@@ -87,9 +87,9 @@
         android:id="@+id/closePrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="6dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/redPrimary"
         android:textSize="15sp"
         tools:text="51264"/>

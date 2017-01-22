@@ -111,6 +111,7 @@ public class KlineChart extends ChartView {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(1);
         paint.setPathEffect(null);
+        paint.setTextSize(mMaTitleSize);
         if (movingAverage == mMovingAverages[0]) {
             paint.setColor(Color.parseColor(MA_WHITE));
         } else if (movingAverage == mMovingAverages[1]) {
@@ -197,7 +198,7 @@ public class KlineChart extends ChartView {
 
     @Override
     protected void drawTitleAboveBaselines(int left, int top, int top2, int touchIndex, Canvas canvas) {
-        float textX = left + mTextMargin;
+        float textX = left + mTextMargin * 4;
         if (mDataList != null && mDataList.size() > 0) {
             KlineViewData data = mDataList.get(mDataList.size() - 1);
             if (hasThisTouchIndex(touchIndex)) {
@@ -211,16 +212,16 @@ public class KlineChart extends ChartView {
                     maText = "MA" + movingAverage + ":" + formatNumber(movingAverageValue);
                 }
                 float textWidth = sPaint.measureText(maText);
-                canvas.drawText(maText, textX, top + mFontHeight / 2 + mOffset4CenterText, sPaint);
-                textX += textWidth + mTextMargin;
+                canvas.drawText(maText, textX, top + mMaTitleHeight / 2 + mOffset4CenterMaTitle, sPaint);
+                textX += textWidth + mTextMargin * 2;
             }
         } else {
             for (int movingAverage : mMovingAverages) {
                 setMovingAveragesTextPaint(sPaint, movingAverage);
                 String maText = "MA" + movingAverage + ":--";
                 float textWidth = sPaint.measureText(maText);
-                canvas.drawText(maText, textX, top + mFontHeight / 2 + mOffset4CenterText, sPaint);
-                textX += textWidth + mTextMargin;
+                canvas.drawText(maText, textX, top + mFontHeight / 2 + mOffset4CenterMaTitle, sPaint);
+                textX += textWidth + mTextMargin * 2;
             }
         }
     }

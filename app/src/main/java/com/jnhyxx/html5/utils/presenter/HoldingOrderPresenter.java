@@ -111,7 +111,7 @@ public class HoldingOrderPresenter {
                 }
 
                 if (what == CLOSE_POSITION && varietyId == mQueryJob.varietyId) {
-                    Log.d(TAG, "onRespSuccess: CLOSE_POSITION");
+                    Log.d(TAG, "onRespSuccess: CLOSE_POSITION: hasMessages(QUERY_DATA)" + mHandler.hasMessages(QUERY_DATA));
                     if (mQueryJob.startQuery && mHandler.hasMessages(QUERY_DATA)) {
                         stopQuery();
                         startQuery();
@@ -125,10 +125,10 @@ public class HoldingOrderPresenter {
                 }
             }
         });
-        if (what == LOAD_DATA || what == UPDATE_ONLY || what == RISK_CONTROL) {
-            api.fireSync();
-        } else {
+        if (what == QUERY_DATA) {
             api.fire();
+        } else {
+            api.fireSync();
         }
     }
 

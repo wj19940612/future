@@ -100,10 +100,9 @@ public abstract class ChartView extends View {
     private long mElapsedTime;
 
     private float mTransactionX;
+    private float mMaxTransactionX;
     private float mPreviousTransactionX;
     private float mStartX;
-    private boolean mDragged;
-    private boolean mTouched;
 
     public ChartView(Context context) {
         super(context);

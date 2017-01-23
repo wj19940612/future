@@ -531,4 +531,5 @@
     <string name="use_clip_head_image">使用</string>
     <string name="sd_is_not_useful">sd卡不可使用</string>
     <string name="complete">完成</string>
+    <string name="is_only_a_chinese_name">姓名只能是中文</string>
 </resources>

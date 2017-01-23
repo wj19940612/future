@@ -15,6 +15,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.ViewUtil;
 
@@ -62,6 +63,7 @@ public class SubmitRealNameActivity extends BaseActivity {
             if (enable != mSubmit.isEnabled()) {
                 mSubmit.setEnabled(enable);
             }
+
             String string = s.toString();
             if (string.contains(" ")) {
                 String newData = string.replaceAll(" ", "");
@@ -74,6 +76,10 @@ public class SubmitRealNameActivity extends BaseActivity {
     @OnClick(R.id.submit)
     public void onClick() {
         final String realName = ViewUtil.getTextTrim(mRealNameInput);
+        if (!ValidityDecideUtil.isOnlyAChineseName(realName)) {
+            mErrorBar.show(R.string.is_only_a_chinese_name);
+            return;
+        }
         mUserDefiniteInfo.setRealName(realName);
         API.User.submitUserInfo(mUserDefiniteInfo)
                 .setTag(TAG)

@@ -1032,6 +1032,13 @@ public class API extends APIBase {
     }
 
     /**
+     * 推广赚钱 我的用户 url
+     */
+    public static String getPromoteMyUsersWithHead() {
+        return getHost() + "/mine/users.html";
+    }
+
+    /**
      * 注册界面的服务协议网址
      */
     public static String getRegisterServiceProtocol() {

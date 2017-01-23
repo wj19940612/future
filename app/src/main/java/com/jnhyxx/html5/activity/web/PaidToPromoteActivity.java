@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.web;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
@@ -33,5 +34,14 @@ public class PaidToPromoteActivity extends WebViewActivity {
                 .putExtra(WebViewActivity.EX_URL, API.getPromoteMyUsers())
                 .putExtra(WebViewActivity.EX_RAW_COOKIE, getRawCookie())
                 .execute();
+    }
+
+    @Override
+    protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
+        if (url.equalsIgnoreCase(API.getPromoteMyUsersWithHead())) {
+            openMyUsersPage();
+            return true;
+        }
+        return super.onShouldOverrideUrlLoading(view, url);
     }
 }

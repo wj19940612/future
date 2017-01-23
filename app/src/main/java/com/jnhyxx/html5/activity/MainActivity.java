@@ -27,7 +27,7 @@ import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.receiver.PushReceiver;
+import com.jnhyxx.html5.service.PushIntentService;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.UpgradeUtil;
@@ -68,8 +68,8 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver mPushBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equalsIgnoreCase(PushReceiver.PUSH_ACTION)) {
-                final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushReceiver.KEY_PUSH_DATA);
+            if (intent.getAction().equalsIgnoreCase(PushIntentService.PUSH_ACTION)) {
+                final SysMessage sysMessage = (SysMessage) intent.getSerializableExtra(PushIntentService.KEY_PUSH_DATA);
                 if (sysMessage != null && !Preference.get().hasShowedThisSysMessage(sysMessage)) {
                     HomePopup.with(getActivity(), sysMessage.getPushTopic(), sysMessage.getPushContent())
                             .setOnCheckDetailListener(new HomePopup.OnClickListener() {
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushReceiver.PUSH_ACTION));
+        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
         requestHomePopup();
     }
 

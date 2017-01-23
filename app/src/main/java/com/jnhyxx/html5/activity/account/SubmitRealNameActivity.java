@@ -15,6 +15,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.utils.ValidityDecideUtil;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.johnz.kutils.ViewUtil;
 
@@ -62,7 +63,14 @@ public class SubmitRealNameActivity extends BaseActivity {
             if (enable != mSubmit.isEnabled()) {
                 mSubmit.setEnabled(enable);
             }
+
             String string = s.toString();
+
+            if (!ValidityDecideUtil.isOnlyAChineseName(string)) {
+                mErrorBar.show(R.string.is_only_a_chinese_name);
+                return;
+            }
+
             if (string.contains(" ")) {
                 String newData = string.replaceAll(" ", "");
                 mRealNameInput.setText(newData);
@@ -99,6 +107,10 @@ public class SubmitRealNameActivity extends BaseActivity {
         if (TextUtils.isEmpty(modifyNickName)) {
             return false;
         }
+        if (!ValidityDecideUtil.isOnlyAChineseName(modifyNickName)) {
+            return false;
+        }
+
         return true;
     }
 }

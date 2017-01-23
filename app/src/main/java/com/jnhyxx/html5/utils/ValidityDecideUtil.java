@@ -53,6 +53,18 @@ public class ValidityDecideUtil {
     }
 
     /**
+     * 真实姓名只能是中文
+     * @param realName
+     * @return
+     */
+    public static boolean isOnlyAChineseName(String realName) {
+        realName = realName.trim();
+        Pattern letter = Pattern.compile("^[\u4e00-\u9fa5]+$");
+        Matcher letterMatcher = letter.matcher(realName);
+        return letterMatcher.matches();
+    }
+
+    /**
      * 校验银行卡卡号
      *
      * @param cardId

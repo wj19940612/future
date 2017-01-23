@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -291,6 +292,7 @@ public abstract class ChartView extends View {
 
                 mDownX = event.getX();
                 mDownY = event.getY();
+                mStartX = event.getX() - mPreviousTransactionX;
                 return true;
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
@@ -302,6 +304,14 @@ public abstract class ChartView extends View {
                 mHandler.removeMessages(WHAT_ONE_CLICK);
                 if (mAction == Action.TOUCH) {
                     return triggerTouchLinesRedraw(event);
+                }
+                if (mAction == Action.NONE) {
+                    double distance = Math.abs(event.getX() - (mStartX + mPreviousTransactionX));
+                    if (distance > this.getChartX(1)) {
+                        mAction = Action.DRAG;
+                        mTransactionX = event.getX() - mStartX;
+                        return true;
+                    }
                 }
 
                 return false;
@@ -316,7 +326,12 @@ public abstract class ChartView extends View {
                         mTouchIndex = -1;
                         redraw();
                     }
+                } else if (mAction == Action.DRAG) {
+                    mAction = Action.NONE;
+                    mPreviousTransactionX = mTransactionX;
+                    Log.d("TEST", "onTouchEvent: TransactionX: " + mTransactionX);
                 }
+
                 return true;
         }
         return super.onTouchEvent(event);

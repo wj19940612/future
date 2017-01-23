@@ -65,12 +65,6 @@ public class SubmitRealNameActivity extends BaseActivity {
             }
 
             String string = s.toString();
-
-            if (!ValidityDecideUtil.isOnlyAChineseName(string)) {
-                mErrorBar.show(R.string.is_only_a_chinese_name);
-                return;
-            }
-
             if (string.contains(" ")) {
                 String newData = string.replaceAll(" ", "");
                 mRealNameInput.setText(newData);
@@ -82,6 +76,10 @@ public class SubmitRealNameActivity extends BaseActivity {
     @OnClick(R.id.submit)
     public void onClick() {
         final String realName = ViewUtil.getTextTrim(mRealNameInput);
+        if (!ValidityDecideUtil.isOnlyAChineseName(realName)) {
+            mErrorBar.show(R.string.is_only_a_chinese_name);
+            return;
+        }
         mUserDefiniteInfo.setRealName(realName);
         API.User.submitUserInfo(mUserDefiniteInfo)
                 .setTag(TAG)
@@ -107,10 +105,6 @@ public class SubmitRealNameActivity extends BaseActivity {
         if (TextUtils.isEmpty(modifyNickName)) {
             return false;
         }
-        if (!ValidityDecideUtil.isOnlyAChineseName(modifyNickName)) {
-            return false;
-        }
-
         return true;
     }
 }

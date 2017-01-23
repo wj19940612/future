@@ -233,12 +233,14 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         }
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
         if (mLivePlayer.isStarted()) {
             mLivePlayer.stop();
         }
+        disconnectNettySocket();
     }
 
     private void initKeyboardHelper() {
@@ -256,7 +258,6 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        disconnectNettySocket();
         mKeyBoardHelper.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(LoginBroadcastReceiver);
     }

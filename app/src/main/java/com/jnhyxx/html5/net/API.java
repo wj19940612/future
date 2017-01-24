@@ -317,7 +317,6 @@ public class API extends APIBase {
          * 接口名：展示用户信息
          * URL  http://域名/user/user/findInfo.do
          *
-         * @param userId 用户id
          * @return
          */
         public static API getUserInfo() {
@@ -426,9 +425,35 @@ public class API extends APIBase {
             return getHost() + ("/xieyi/riskWarning.html?nohead=1");
         }
 
-        //用户同意支付协议后h5返回的网址头
+        /**
+         * 用户同意支付协议后h5返回的网址头
+         */
         public static String getUserAggressPaymentConfirmPagePath() {
             return getHost() + "/account/banks.html";
+        }
+
+        /**
+         * 新银行卡支付页面的部分 url
+         *
+         * @return
+         */
+        public static String getBankcardPaymentPagePartUrl() {
+            return getHost() + "/mine/counter.html";
+        }
+
+        /**
+         * 新银行卡支付错误页面的部分 url
+         *
+         */
+        public static String getBankcardPaymentErrorPartUrl() {
+            return getHost() + "/mine/qterror.html";
+        }
+
+        /**
+         * 银行卡支付服务协议
+         */
+        public static String getBankcardPaymentAgreememtUrl() {
+            return getHost() + "/mine/counter_rule.html";
         }
 
         /**
@@ -1119,5 +1144,20 @@ public class API extends APIBase {
      */
     public static String getCooperationOrgUrl() {
         return getHost() + "/banner/hzhb.html?nohead=1";
+    }
+
+    /**
+     * 工具方法：给 h5 url 添加 nohead=1 的参数
+     *
+     * @param originalUrl
+     * @return
+     */
+    public static String appendUrlNoHead(String originalUrl) {
+        int questionMarkerIndex = originalUrl.indexOf("?");
+        if (questionMarkerIndex > -1 && questionMarkerIndex < originalUrl.length() - 1) {
+            return originalUrl + "&nohead=1";
+        } else {
+            return originalUrl + "?nohead=1";
+        }
     }
 }

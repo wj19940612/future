@@ -10,11 +10,7 @@ public class InvestCourseActivity extends WebViewActivity {
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
         if (url.contains(API.getNewsDetailUrl())) {
-            if (url.indexOf("?") != -1) {
-                url += "&nohead=1";
-            } else {
-                url += "?nohead=1";
-            }
+            url = API.appendUrlNoHead(url);
             getWebView().loadUrl(url);
             return true;
         }

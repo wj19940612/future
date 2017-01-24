@@ -216,7 +216,7 @@
     <string name="holding_number">持仓 (%1$d)</string>
     <string name="normalize_futures_rule">规范期市秩序，坚持理性投资</string>
     <string name="futures_risk_tips_title">《证券期货交易风险提示》</string>
-    
+
 
     <!-- Order page -->
     <string name="order">订单</string>
@@ -436,6 +436,7 @@
     <string name="install_alipay_first">请先安装支付宝</string>
     <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
     <string name="recharge_agree_payment">证券期货交易风险提示</string>
+    <string name="payment_service_agreement">支付服务协议</string>
 
     <!--提款记录-->
     <string name="withdraw_record_title">提款记录</string>

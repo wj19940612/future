@@ -66,8 +66,8 @@ android {
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 18
-            versionName '1.2.8'
+            versionCode 20
+            versionName '1.4.0'
             buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
 
             manifestPlaceholders = [
@@ -75,7 +75,7 @@ android {
                     GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
                     PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "QIHU360"
+                    UMENG_CHANNEL   : "TENCENT"
             ]
         }
 

@@ -9,6 +9,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.ToastUtil;
+import com.johnz.kutils.Launcher;
 
 import java.net.URISyntaxException;
 
@@ -35,6 +36,18 @@ public class PaymentActivity extends WebViewActivity {
             } else if (url.contains(API.Finance.getUserAggressPaymentConfirmPagePath())) {
                 setResult(RESULT_OK);
                 finish();
+                return true;
+            } else if (url.contains(API.Finance.getBankcardPaymentPagePartUrl())) {
+                getWebView().loadUrl(API.appendUrlNoHead(url));
+                return true;
+            } else if (url.contains(API.Finance.getBankcardPaymentErrorPartUrl())) {
+                getWebView().loadUrl(API.appendUrlNoHead(url));
+                return true;
+            } else if (url.equalsIgnoreCase(API.Finance.getBankcardPaymentAgreememtUrl())) {
+                Launcher.with(getActivity(), PaymentActivity.class)
+                        .putExtra(PaymentActivity.EX_URL, API.appendUrlNoHead(url))
+                        .putExtra(PaymentActivity.EX_TITLE, getString(R.string.payment_service_agreement))
+                        .execute();
                 return true;
             }
         }

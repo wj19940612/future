@@ -52,9 +52,15 @@ public class KlineChart extends ChartView {
     }
 
     @Override
+    protected boolean enableDragChart() {
+        return true;
+    }
+
+    @Override
     protected boolean enableDrawMovingAverages() {
         return true;
     }
+
 
     private void init() {
         mVisibleList = new SparseArray<>();
@@ -150,6 +156,14 @@ public class KlineChart extends ChartView {
             mMaxBaseLine = max;
             mMinBaseLine = min;
         }
+    }
+
+    @Override
+    protected float calculateMaxTransactionX() {
+        if (mDataList != null) {
+            return Math.max((mDataList.size() - mSettings.getXAxis()) * getChartX(1), 0);
+        }
+        return super.calculateMaxTransactionX();
     }
 
     @Override

@@ -206,6 +206,11 @@ public abstract class ChartView extends View {
         int topPartHeight = getTopPartHeight();
         int bottomPartHeight = getBottomPartHeight();
 
+        if (enableDragChart()) {
+            mMaxTransactionX  = calculateMaxTransactionX();
+            Log.d("TEST", "onDraw calculateMaxTransactionX: " + mMaxTransactionX);
+        }
+
         if (enableDrawMovingAverages()) {
             calculateMovingAverages(mSettings.isIndexesEnable());
         }
@@ -264,6 +269,10 @@ public abstract class ChartView extends View {
         }
     }
 
+    protected float calculateMaxTransactionX() {
+        return 0;
+    }
+
     protected void calculateMovingAverages(boolean indexesEnable) {
     }
 
@@ -304,11 +313,19 @@ public abstract class ChartView extends View {
                 if (mAction == Action.TOUCH) {
                     return triggerTouchLinesRedraw(event);
                 }
-                if (mAction == Action.NONE) {
+                if (mAction == Action.NONE || mAction == Action.DRAG) {
                     double distance = Math.abs(event.getX() - (mStartX + mPreviousTransactionX));
                     if (distance > this.getChartX(1)) {
                         mAction = Action.DRAG;
                         mTransactionX = event.getX() - mStartX;
+                        Log.d("TEST", "onTouchEvent: before mPreviousTransactionX: " + mTransactionX);
+                        if (mTransactionX > mMaxTransactionX) {
+                            mTransactionX = mMaxTransactionX;
+                        }
+                        if (mTransactionX < 0) {
+                            mTransactionX = 0;
+                        }
+                        Log.d("TEST", "onTouchEvent: after mPreviousTransactionX: " + mTransactionX);
                         return true;
                     }
                 }
@@ -328,7 +345,6 @@ public abstract class ChartView extends View {
                 } else if (mAction == Action.DRAG) {
                     mAction = Action.NONE;
                     mPreviousTransactionX = mTransactionX;
-                    Log.d("TEST", "onTouchEvent: TransactionX: " + mTransactionX);
                 }
 
                 return true;
@@ -362,6 +378,10 @@ public abstract class ChartView extends View {
     }
 
     protected boolean enableDrawTouchLines() {
+        return false;
+    }
+
+    protected boolean enableDragChart() {
         return false;
     }
 

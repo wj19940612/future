@@ -4,14 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-public class TouchView extends TrendChart {
+public class KTouchView extends KlineChart {
 
-    private TrendChart mTrendChart;
+    private KlineChart mChart;
 
-    public TouchView(Context context, TrendChart chart) {
+    public KTouchView(Context context, KlineChart chart) {
         super(context);
-        mTrendChart = chart;
-        setVisibleList(mTrendChart.getVisibleList());
+        mChart = chart;
+        setVisibleList(mChart.getVisibleList());
     }
 
     @Override
@@ -23,24 +23,23 @@ public class TouchView extends TrendChart {
     }
 
     @Override
+    protected boolean enableDrawMovingAverages() {
+        return true;
+    }
+
+    @Override
     protected void drawBaseLines(boolean indexesEnable,
                                  float[] baselines, int left, int top, int width, int height,
                                  long[] indexesBaseLines, int left2, int top2, int width2, int height2,
                                  Canvas canvas) {
-        setPriceAreaWidth(mTrendChart.getPriceAreaWidth());
+        setPriceAreaWidth(mChart.getPriceAreaWidth());
     }
+
 
     @Override
     protected void drawRealTimeData(boolean indexesEnable,
                                     int left, int top, int width, int height,
                                     int left2, int top2, int width2, int height2,
-                                    Canvas canvas) {
-    }
-
-    @Override
-    protected void drawUnstableData(boolean indexesEnable,
-                                    int left, int top, int width, int topPartHeight,
-                                    int left2, int top2, int width1, int bottomPartHeight,
                                     Canvas canvas) {
     }
 
@@ -52,8 +51,8 @@ public class TouchView extends TrendChart {
     protected int calculateTouchIndex(MotionEvent e) {
         int touchIndex = super.calculateTouchIndex(e);
         if (getVisibleList() != null && getVisibleList().size() > 0) {
-            touchIndex = Math.max(touchIndex, mTrendChart.getFirstVisibleIndex());
-            touchIndex = Math.min(touchIndex, mTrendChart.getLastVisibleIndex());
+            touchIndex = Math.max(touchIndex, mChart.getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, mChart.getLastVisibleIndex());
         }
         return touchIndex;
     }

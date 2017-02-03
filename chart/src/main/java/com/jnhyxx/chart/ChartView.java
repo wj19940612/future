@@ -211,7 +211,7 @@ public abstract class ChartView extends View {
             Log.d("TEST", "onDraw calculateMaxTransactionX: " + mMaxTransactionX);
         }
 
-        if (enableDrawMovingAverages()) {
+        if (enableMovingAverages()) {
             calculateMovingAverages(mSettings.isIndexesEnable());
         }
 
@@ -224,9 +224,7 @@ public abstract class ChartView extends View {
             calculateIndexesBaseLines(mSettings.getIndexesBaseLines());
         }
 
-        if (enableDrawMovingAverages()) {
-            drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
-
+        if (enableMovingAverages()) {
             mTitleVerticalOffset = mMaTitleHeight + mTextMargin;
             top += mTitleVerticalOffset;
             topPartHeight -= mTitleVerticalOffset;
@@ -254,6 +252,12 @@ public abstract class ChartView extends View {
         }
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
+
+        if (enableDrawMovingAverages()) {
+            drawTitleAboveBaselines(left, getTop(), mSettings.isIndexesEnable() ?
+                    getTop() + getTopPartHeight() + mCenterPartHeight : -1,
+                    mTouchIndex, canvas);
+        }
 
         if (mTouchIndex >= 0) {
             if (enableDrawTouchLines()) {
@@ -369,10 +373,13 @@ public abstract class ChartView extends View {
         return false;
     }
 
-    protected boolean enableDrawMovingAverages() {
+    protected boolean enableMovingAverages() {
         return false;
     }
 
+    protected boolean enableDrawMovingAverages() {
+        return false;
+    }
 
     protected boolean enableDrawUnstableData() {
         return false;

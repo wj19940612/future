@@ -137,7 +137,7 @@ public class KlineChart extends ChartView {
     protected void calculateMovingAverages(boolean indexesEnable) {
         if (mDataList != null && mDataList.size() > 0) {
             mStart = mDataList.size() - mSettings.getXAxis() < 0
-                    ? 0 : (mDataList.size() - mSettings.getXAxis());
+                    ? 0 : (mDataList.size() - mSettings.getXAxis() - calculatePointOffset());
             mLength = Math.min(mDataList.size(), mSettings.getXAxis());
             mEnd = mStart + mLength;
 
@@ -156,6 +156,10 @@ public class KlineChart extends ChartView {
             mMaxBaseLine = max;
             mMinBaseLine = min;
         }
+    }
+
+    private int calculatePointOffset() {
+        return (int) (getTransactionX() / getChartX(1));
     }
 
     @Override

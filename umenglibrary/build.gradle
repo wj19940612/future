@@ -44,6 +44,9 @@ android {
         kdqn { // 口袋期牛
             manifestPlaceholders = [UMENG_APPKEY: "5874964fc62dca2a21001ba4"]
         }
+        yyqhb { // 原油期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58944c116e27a4550b000388"]
+        }
     }
 }
 

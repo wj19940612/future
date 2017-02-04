@@ -28,6 +28,11 @@ public class KTouchView extends KlineChart {
     }
 
     @Override
+    protected boolean enableDragChart() {
+        return false;
+    }
+
+    @Override
     protected void drawBaseLines(boolean indexesEnable,
                                  float[] baselines, int left, int top, int width, int height,
                                  long[] indexesBaseLines, int left2, int top2, int width2, int height2,

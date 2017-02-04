@@ -23,7 +23,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     public static final String SIDE_BAR_DATE_FORMAT_MIN = "yyyy/MM/dd\nHH:mm";
 
     private KlineChart mKlineChart;
-    private KTouchView mKTouchView;
+    //private KTouchView mKTouchView;
     private View mLeftSideBar;
     private View mRightSideBar;
 
@@ -43,9 +43,6 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mKlineChart = new KlineChart(getContext());
         mKlineChart.setOnTouchLinesAppearListener(this);
         addView(mKlineChart, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        mKTouchView = new KTouchView(getContext(), mKlineChart);
-        addView(mKTouchView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         mLeftSideBar = LayoutInflater.from(getContext()).inflate(R.layout.kline_side_bar, null);
@@ -109,7 +106,6 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
 
     public void setDataList(List<KlineViewData> dataList) {
         mKlineChart.setDataList(dataList);
-        mKTouchView.redraw();
     }
 
     public void setDataFormat(String formatStr) {
@@ -123,12 +119,10 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
 
     public void clearData() {
         mKlineChart.clearData();
-        mKTouchView.clearData();
     }
 
     public void setSettings(ChartSettings settings) {
         mKlineChart.setSettings(settings);
-        mKTouchView.setSettings(settings);
     }
 
     @Override

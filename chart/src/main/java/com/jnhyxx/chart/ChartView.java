@@ -253,7 +253,7 @@ public abstract class ChartView extends View {
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
-        if (enableDrawMovingAverages()) {
+        if (enableMovingAverages()) {
             drawTitleAboveBaselines(left, getTop(), mSettings.isIndexesEnable() ?
                     getTop() + getTopPartHeight() + mCenterPartHeight : -1,
                     mTouchIndex, canvas);
@@ -378,10 +378,6 @@ public abstract class ChartView extends View {
     }
 
     protected boolean enableMovingAverages() {
-        return false;
-    }
-
-    protected boolean enableDrawMovingAverages() {
         return false;
     }
 

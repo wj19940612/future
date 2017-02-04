@@ -167,7 +167,6 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
 
         mTabsLayout = new RelativeLayout(getContext());
         mTabsLayout.setPadding(paddingPx, 0, paddingPx, paddingPx);
-        mTabsLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.bluePrimary));
 
         mTabsLayout.addView(createTab(R.string.trend_chart), POS_TREND);
 

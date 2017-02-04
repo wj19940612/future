@@ -64,6 +64,11 @@ public class KlineChart extends ChartView {
         return true;
     }
 
+    @Override
+    protected boolean enableDrawTouchLines() {
+        return true;
+    }
+
     private void init() {
         mVisibleList = new SparseArray<>();
         mDateFormat = new SimpleDateFormat();
@@ -343,22 +348,23 @@ public class KlineChart extends ChartView {
 
     private void drawMovingAverageLines(Canvas canvas) {
         for (int movingAverage : mMovingAverages) {
-            Path path = getPath();
+            setMovingAveragesPaint(sPaint, movingAverage);
+            float startX = -1;
+            float startY = -1;
             for (int i = mStart; i < mEnd; i++) {
                 int start = i - movingAverage + 1;
                 if (start < 0) continue;
                 float chartX = getChartXOfScreen(i);
                 float movingAverageValue = mDataList.get(i).getMovingAverage(movingAverage);
                 float chartY = getChartY(movingAverageValue);
-                if (path.isEmpty()) {
-                    path.moveTo(chartX, chartY);
+                if (startX == -1 && startY == -1) { // start
+                    startX = chartX;
+                    startY = chartY;
                 } else {
-                    path.lineTo(chartX, chartY);
+                    canvas.drawLine(startX, startY, chartX, chartY, sPaint);
+                    startX = chartX;
+                    startY = chartY;
                 }
-            }
-            if (!path.isEmpty()) {
-                setMovingAveragesPaint(sPaint, movingAverage);
-                canvas.drawPath(path, sPaint);
             }
         }
     }
@@ -471,14 +477,6 @@ public class KlineChart extends ChartView {
         mLastVisibleIndex = Math.max(indexOfXAxis, mLastVisibleIndex);
     }
 
-    public int getFirstVisibleIndex() {
-        return mFirstVisibleIndex;
-    }
-
-    public int getLastVisibleIndex() {
-        return mLastVisibleIndex;
-    }
-
     @Override
     protected float getChartX(int index) {
         float offset = super.getChartX(1) / 2;
@@ -559,7 +557,12 @@ public class KlineChart extends ChartView {
     @Override
     protected int calculateTouchIndex(MotionEvent e) {
         float touchX = e.getX();
-        return getIndexOfXAxis(touchX);
+        int touchIndex = getIndexOfXAxis(touchX);
+        if (mVisibleList != null && mVisibleList.size() > 0) {
+            touchIndex = Math.max(touchIndex, mFirstVisibleIndex);
+            touchIndex = Math.min(touchIndex, mLastVisibleIndex);
+        }
+        return touchIndex;
     }
 
     @Override

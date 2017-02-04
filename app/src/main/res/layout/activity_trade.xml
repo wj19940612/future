@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bluePrimary"
     tools:context=".activity.TradeActivity">
 
     <com.jnhyxx.html5.view.TitleBar
@@ -35,7 +36,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/bluePrimary"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingLeft="16dp"
@@ -92,8 +92,7 @@
             android:id="@+id/chartContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/bluePrimary"/>
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:id="@+id/marketCloseArea"
@@ -115,7 +114,6 @@
                 android:id="@+id/nextTradeTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bluePrimary"
                 android:gravity="center"
                 android:text="@string/prompt_next_trade_time_is"
                 android:textColor="#666666"
@@ -126,7 +124,6 @@
             android:id="@+id/marketOpenArea"
             android:layout_width="match_parent"
             android:layout_height="@dimen/market_status_area_height"
-            android:background="@color/bluePrimary"
             android:orientation="vertical"
             android:visibility="gone">
 

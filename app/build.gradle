@@ -78,6 +78,34 @@ android {
                     UMENG_CHANNEL   : "TENCENT"
             ]
         }
+        kdqn { // 口袋期牛
+            applicationId 'com.jnhyxx.html5.kdqn'
+            versionCode 3
+            versionName '2.0'
+            buildConfigField('String', 'API_HOST', '\"http://www.koudaiqiniu.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "3ObKTSh0TMAZ2LTP9GNyC",
+                    GETUI_APP_KEY   : "qk9SiYjgqx5GQrLsWM7Vc9",
+                    GETUI_APP_SECRET: "ROLHNMYjVf8U7mY4LQTkI1",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
+        yyqhb { // 期货原油宝
+            applicationId 'com.dajiexin.yyqhb'
+            versionCode 1
+            versionName '1.2.2'
+            buildConfigField('String', 'API_HOST', '\"http://www.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "zqcxHytZhk5BzgwVIGzas8",
+                    GETUI_APP_KEY   : "SuhJrLPRVX5Ngbx14vmgF6",
+                    GETUI_APP_SECRET: "KQwRYkkEnd7qlEedIPHvJ8",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
 
         zy1 { // 钱猫投资宝
             applicationId 'com.trade163.zy1'
@@ -149,20 +177,6 @@ android {
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
-        kdqn { // 口袋期牛
-            applicationId 'com.jnhyxx.html5.kdqn'
-            versionCode 3
-            versionName '2.0'
-            buildConfigField('String', 'API_HOST', '\"http://www.koudaiqiniu.com\"')
-
-            manifestPlaceholders = [
-                    GETUI_APP_ID    : "3ObKTSh0TMAZ2LTP9GNyC",
-                    GETUI_APP_KEY   : "qk9SiYjgqx5GQrLsWM7Vc9",
-                    GETUI_APP_SECRET: "ROLHNMYjVf8U7mY4LQTkI1",
-                    PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "OFFICIAL"
-            ]
-        }
     }
 
     dexOptions {
@@ -181,6 +195,8 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
+    yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
+    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
 //    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
 //    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
@@ -190,7 +206,6 @@ dependencies {
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
     zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
-    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')

@@ -65,7 +65,6 @@ public abstract class ChartView extends View {
 
     public static Paint sPaint;
     private Path mPath;
-    private Path mSecondPath;
     private Paint.FontMetrics mFontMetrics;
     private RectF mRectF;
     private StringBuilder mStringBuilder;
@@ -117,7 +116,6 @@ public abstract class ChartView extends View {
     private void init() {
         sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPath = new Path();
-        mSecondPath = new Path();
         mRectF = new RectF();
         mStringBuilder = new StringBuilder();
         mHandler = new ChartHandler();
@@ -540,14 +538,6 @@ public abstract class ChartView extends View {
 
     protected float getTransactionX() {
         return mTransactionX;
-    }
-
-    protected Path getSecondPath() {
-        if (mSecondPath == null) {
-            mSecondPath = new Path();
-        }
-        mSecondPath.reset();
-        return mSecondPath;
     }
 
     protected RectF getRectF() {

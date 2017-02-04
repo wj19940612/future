@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -276,11 +275,8 @@ public class KlineChart extends ChartView {
         mPriceAreaWidth = calculatePriceWidth(baselines[0]);
         float topY = top;
         for (int i = 0; i < baselines.length; i++) {
-            Path path = getPath();
-            path.moveTo(left, topY);
-            path.lineTo(left + width, topY);
             setBaseLinePaint(sPaint);
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(left, topY, left + width, topY, sPaint);
 
             if (i % 2 == 0 && i != baselines.length - 1) {
                 setDefaultTextPaint(sPaint);
@@ -305,11 +301,8 @@ public class KlineChart extends ChartView {
             topY = top2;
             verticalInterval = height2 * 1.0f / (indexesBaseLines.length - 1);
             for (int i = 0; i < indexesBaseLines.length; i++) {
-                Path path = getPath();
-                path.moveTo(left2, topY);
-                path.lineTo(left2 + width2, topY);
                 setBaseLinePaint(sPaint);
-                canvas.drawPath(path, sPaint);
+                canvas.drawLine(left2, topY, left2 + width2, topY, sPaint);
 
                 setDefaultTextPaint(sPaint);
                 String baseLineValue = formatIndexesNumber(indexesBaseLines[i]);
@@ -386,19 +379,15 @@ public class KlineChart extends ChartView {
 
     private void drawTopCandleLine(Float maxPrice, float topPrice, String color, float chartX, Canvas canvas) {
         setCandleLinePaint(sPaint, color);
-        Path path = getPath();
-        path.moveTo(chartX, getChartY(maxPrice));
-        path.lineTo(chartX, getChartY(topPrice));
-        canvas.drawPath(path, sPaint);
+        canvas.drawLine(chartX, getChartY(maxPrice), chartX, getChartY(topPrice), sPaint);
     }
 
     private void drawCandleBody(float topPrice, float bottomPrice, String color, float chartX, Canvas canvas) {
         if (topPrice == bottomPrice) {
             setCandleLinePaint(sPaint, color);
-            Path path = getPath();
-            path.moveTo(chartX - mCandleWidth / 2, getChartY(topPrice));
-            path.lineTo(chartX + mCandleWidth / 2, getChartY(bottomPrice));
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(chartX - mCandleWidth / 2, getChartY(topPrice),
+                    chartX + mCandleWidth / 2, getChartY(bottomPrice),
+                    sPaint);
         } else {
             setCandleBodyPaint(sPaint, color);
             RectF rectf = getRectF();
@@ -412,10 +401,9 @@ public class KlineChart extends ChartView {
 
     private void drawBottomCandleLine(Float minPrice, float bottomPrice, String color, float chartX, Canvas canvas) {
         setCandleLinePaint(sPaint, color);
-        Path path = getPath();
-        path.moveTo(chartX, getChartY(bottomPrice));
-        path.lineTo(chartX, getChartY(minPrice));
-        canvas.drawPath(path, sPaint);
+        canvas.drawLine(chartX, getChartY(bottomPrice),
+                chartX, getChartY(minPrice),
+                sPaint);
     }
 
 
@@ -543,14 +531,8 @@ public class KlineChart extends ChartView {
 
             // draw cross line: vertical line and horizontal line
             setTouchLinePaint(sPaint);
-            Path path = getPath();
-            path.moveTo(touchX, top);
-            path.lineTo(touchX, top + height);
-            canvas.drawPath(path, sPaint);
-            path = getPath();
-            path.moveTo(left, touchY);
-            path.lineTo(left + width, touchY);
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(touchX, top, touchX, top + height, sPaint);
+            canvas.drawLine(left, touchY, left + width, touchY, sPaint);
         }
     }
 
@@ -613,9 +595,9 @@ public class KlineChart extends ChartView {
 
     public interface OnTouchLinesAppearListener {
         /**
-         * @param data current kline data
+         * @param data         current kline data
          * @param previousData previous data of current data, n & n - 1
-         * @param isLeftArea true means left area of view
+         * @param isLeftArea   true means left area of view
          */
         void onAppear(KlineViewData data, KlineViewData previousData, boolean isLeftArea);
 

@@ -103,7 +103,7 @@ android {
                     GETUI_APP_KEY   : "SuhJrLPRVX5Ngbx14vmgF6",
                     GETUI_APP_SECRET: "KQwRYkkEnd7qlEedIPHvJ8",
                     PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "TENCENT"
+                    UMENG_CHANNEL   : "OTHERS"
             ]
         }
 
@@ -195,6 +195,8 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
+    yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
+    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
 //    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
 //    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
@@ -204,7 +206,6 @@ dependencies {
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
     zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
-    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
     compile project(':SlidingMenu')
     compile project(':kutils')

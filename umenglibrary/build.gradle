@@ -26,6 +26,12 @@ android {
         yybd { // 原油宝典 -> 期货交易通
             manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
         }
+        kdqn { // 口袋期牛
+            manifestPlaceholders = [UMENG_APPKEY: "5874964fc62dca2a21001ba4"]
+        }
+        yyqhb { // 原油期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58944c116e27a4550b000388"]
+        }
         zy1 { // 钱猫投资宝
             manifestPlaceholders = [UMENG_APPKEY: "58412c94e88bad78e5000ae1"]
         }
@@ -40,12 +46,6 @@ android {
         }
         zy9 { // 外汇期货宝
             manifestPlaceholders = [UMENG_APPKEY: "5865bd1fa40fa33c9c000aef"]
-        }
-        kdqn { // 口袋期牛
-            manifestPlaceholders = [UMENG_APPKEY: "5874964fc62dca2a21001ba4"]
-        }
-        yyqhb { // 原油期货宝
-            manifestPlaceholders = [UMENG_APPKEY: "58944c116e27a4550b000388"]
         }
     }
 }

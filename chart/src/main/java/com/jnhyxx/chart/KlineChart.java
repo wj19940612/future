@@ -59,7 +59,17 @@ public class KlineChart extends ChartView {
     }
 
     @Override
+    protected boolean enableDrawTouchLines() {
+        return true;
+    }
+
+    @Override
     protected boolean enableMovingAverages() {
+        return true;
+    }
+
+    @Override
+    protected boolean enableDrawMovingAverages() {
         return true;
     }
 
@@ -553,6 +563,10 @@ public class KlineChart extends ChartView {
     protected int calculateTouchIndex(MotionEvent e) {
         float touchX = e.getX();
         int touchIndex = getIndexOfXAxis(touchX);
+        if (getVisibleList() != null && getVisibleList().size() > 0) {
+            touchIndex = Math.max(touchIndex, getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, getLastVisibleIndex());
+        }
         return touchIndex;
     }
 

@@ -324,15 +324,15 @@ public abstract class ChartView extends View {
                     if (distance > this.getChartX(1)) {
                         mAction = Action.DRAG;
                         mTransactionX = event.getX() - mStartX;
-                        Log.d("TEST", "onTouchEvent: before mTransactionX: " + mTransactionX);
                         if (mTransactionX > mMaxTransactionX) {
                             mTransactionX = mMaxTransactionX;
                         }
                         if (mTransactionX < 0) {
                             mTransactionX = 0;
                         }
-                        Log.d("TEST", "onTouchEvent: after mTransactionX: " + mTransactionX);
-                        redraw();
+                        if (mTransactionX != mPreviousTransactionX) {
+                            redraw();
+                        }
                         return true;
                     }
                 }
@@ -355,7 +355,7 @@ public abstract class ChartView extends View {
                 }
                 return true;
         }
-        return false;
+        return super.onTouchEvent(event);
     }
 
     private boolean triggerTouchLinesRedraw(MotionEvent event) {

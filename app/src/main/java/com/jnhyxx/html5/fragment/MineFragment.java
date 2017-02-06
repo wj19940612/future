@@ -2,9 +2,14 @@ package com.jnhyxx.html5.fragment;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
+import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
 import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
 import com.jnhyxx.html5.activity.account.MessageCenterActivity;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
@@ -208,8 +214,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), RechargeActivity.class).execute();
                 break;
             case R.id.withdraw: //提现
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW);
-                Launcher.with(getActivity(), WithdrawActivity.class).execute();
+                openWithdrawPage();
                 break;
             case R.id.messageCenter:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.MESSAGE_CENTER);
@@ -238,6 +243,31 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
                 break;
         }
+    }
+
+    private void openWithdrawPage() {
+        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW);
+        if (LocalUser.getUser().isBankcardFilled()) {
+            getActivity().startActivityForResult(new Intent(getActivity(), WithdrawActivity.class),WithdrawActivity.REQ_CODE_ADD_BANKCARD);
+        } else {
+            showBindBankCardDialog();
+        }
+    }
+
+    private void showBindBankCardDialog() {
+        SpannableStringBuilder confirmSpannableString = new SpannableStringBuilder();
+        confirmSpannableString.append(getString(R.string.go_to_bind_bank_card));
+        ForegroundColorSpan confirmColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.blueAssist));
+
+        SmartDialog.with(getActivity(), R.string.You_have_not_binding_bank_cards)
+                .setPositive(R.string.go_to_bind_bank_card, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        Launcher.with(getActivity(), BankcardBindingActivity.class).execute();
+                        dialog.dismiss();
+                    }
+                }).setNegative(R.string.cancel)
+                .show();
     }
 
     private void openPaidToPromotePage() {
@@ -309,6 +339,14 @@ public class MineFragment extends BaseFragment {
                     }).fire();
         } else {
             Launcher.with(getActivity(), SignInActivity.class).execute();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == WithdrawActivity.REQ_CODE_ADD_BANKCARD && resultCode == AppCompatActivity.RESULT_OK) {
+            openWithdrawPage();
         }
     }
 }

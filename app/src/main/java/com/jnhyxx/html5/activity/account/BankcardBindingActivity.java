@@ -49,7 +49,7 @@ public class BankcardBindingActivity extends BaseActivity {
     @BindView(R.id.bankcardInputArea)
     LinearLayout mBankcardInputArea;
     @BindView(R.id.cardholderName)
-    TextView mCardholderName;
+    EditText mCardholderName;
     @BindView(R.id.bankcardNum)
     EditText mBankcardNum;
     @BindView(R.id.phoneNum)

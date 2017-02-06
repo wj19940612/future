@@ -67,6 +67,8 @@
     <string name="dialog_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
     <string name="dialog_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
     <string name="dialog_you_are_not_promoter_yet">您还不是我们的推广员,是否要成为我们的推广员</string>
+    <string name="You_have_not_binding_bank_cards">您还未绑定任何银行卡</string>
+    <string name="go_to_bind_bank_card">去绑卡</string>
 
 
     <!-- Account -->

@@ -35,7 +35,7 @@ import butterknife.OnClick;
 
 public class WithdrawActivity extends BaseActivity {
 
-    private static final int REQ_CODE_ADD_BANKCARD = 1;
+    public static final int REQ_CODE_ADD_BANKCARD = 1;
 
     @BindView(R.id.balance)
     TextView mBalance;

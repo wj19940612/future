@@ -63,7 +63,7 @@ import cn.qqtheme.framework.widget.WheelView;
 public class UserInfoActivity extends BaseActivity {
 
     // 绑定银行卡前 先进行实名认证
-    private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
+    public static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
 
     private static final String SEX_BOY = "男";
     private static final String SEX_GIRL = "女";

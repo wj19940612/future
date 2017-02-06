@@ -63,9 +63,12 @@ public class KlineChart extends ChartView {
         return true;
     }
 
-    @Override
-    protected boolean enableDrawTouchLines() {
-        return true;
+    public int getFirstVisibleIndex() {
+        return mFirstVisibleIndex;
+    }
+
+    public int getLastVisibleIndex() {
+        return mLastVisibleIndex;
     }
 
     private void init() {
@@ -78,6 +81,9 @@ public class KlineChart extends ChartView {
 
         mMaxBaseLine = Float.MIN_VALUE;
         mMinBaseLine = Float.MAX_VALUE;
+
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
     }
 
     public void setDataList(List<KlineViewData> dataList) {
@@ -495,6 +501,13 @@ public class KlineChart extends ChartView {
         mEnd = 0;
         mLength = 0;
         mVisibleList.clear();
+
+        mMaxBaseLine = Float.MIN_VALUE;
+        mMinBaseLine = Float.MAX_VALUE;
+
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
+
         resetTouchIndex();
         setDataList(null);
     }
@@ -540,10 +553,6 @@ public class KlineChart extends ChartView {
     protected int calculateTouchIndex(MotionEvent e) {
         float touchX = e.getX();
         int touchIndex = getIndexOfXAxis(touchX);
-        if (mVisibleList != null && mVisibleList.size() > 0) {
-            touchIndex = Math.max(touchIndex, mFirstVisibleIndex);
-            touchIndex = Math.min(touchIndex, mLastVisibleIndex);
-        }
         return touchIndex;
     }
 

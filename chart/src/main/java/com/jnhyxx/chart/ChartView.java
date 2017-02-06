@@ -251,7 +251,7 @@ public abstract class ChartView extends View {
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
-        if (enableMovingAverages()) {
+        if (enableDrawMovingAverages()) {
             drawTitleAboveBaselines(left, getTop(), mSettings.isIndexesEnable() ?
                     getTop() + getTopPartHeight() + mCenterPartHeight : -1,
                     mTouchIndex, canvas);
@@ -353,10 +353,9 @@ public abstract class ChartView extends View {
                     mAction = Action.NONE;
                     mPreviousTransactionX = mTransactionX;
                 }
-
                 return true;
         }
-        return super.onTouchEvent(event);
+        return false;
     }
 
     private boolean triggerTouchLinesRedraw(MotionEvent event) {
@@ -376,6 +375,10 @@ public abstract class ChartView extends View {
     }
 
     protected boolean enableMovingAverages() {
+        return false;
+    }
+
+    protected boolean enableDrawMovingAverages() {
         return false;
     }
 

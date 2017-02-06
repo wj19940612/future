@@ -2,6 +2,7 @@ package com.jnhyxx.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 public class KTouchView extends KlineChart {
 
@@ -46,15 +47,15 @@ public class KTouchView extends KlineChart {
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
     }
 
-//    @Override
-//    protected int calculateTouchIndex(MotionEvent e) {
-//        int touchIndex = super.calculateTouchIndex(e);
-//        if (getVisibleList() != null && getVisibleList().size() > 0) {
-//            touchIndex = Math.max(touchIndex, mChart.getFirstVisibleIndex());
-//            touchIndex = Math.min(touchIndex, mChart.getLastVisibleIndex());
-//        }
-//        return touchIndex;
-//    }
+    @Override
+    protected int calculateTouchIndex(MotionEvent e) {
+        int touchIndex = super.calculateTouchIndex(e);
+        if (getVisibleList() != null && getVisibleList().size() > 0) {
+            touchIndex = Math.max(touchIndex, mChart.getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, mChart.getLastVisibleIndex());
+        }
+        return touchIndex;
+    }
 
     @Override
     protected boolean hasThisTouchIndex(int touchIndex) {
@@ -62,5 +63,15 @@ public class KTouchView extends KlineChart {
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
+    }
+
+    @Override
+    protected boolean enableDrawTouchLines() {
+        return true;
+    }
+
+    @Override
+    protected boolean enableDrawMovingAverages() {
+        return true;
     }
 }

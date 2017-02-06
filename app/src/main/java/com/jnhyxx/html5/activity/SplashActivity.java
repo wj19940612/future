@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), PushIntentService.class);
 
         mVersionName = (TextView) findViewById(R.id.versionName);
-        if (BuildConfig.FLAVOR.equalsIgnoreCase("yybd")) {
+        if (BuildConfig.FLAVOR.equalsIgnoreCase("yybd") || BuildConfig.FLAVOR.equalsIgnoreCase("yyqhb")) {
             mVersionName.setText("V" + AppInfo.getVersionName(this));
         }
 

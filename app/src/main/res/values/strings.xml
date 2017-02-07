@@ -412,6 +412,9 @@
     <string name="bank_card_is_error">银行卡号格式错误，请输入正确的银行卡号</string>
     <string name="bind_bank_hint">1.为了您的资金安全,只能绑定持卡人本人的银行卡\n 2.未成年人禁止交易</string>
     <string name="cardHolder_real_name_hint">持卡人真实姓名</string>
+    <string name="whether_if_give_up_bind_bank_card">是否放弃绑定银行卡</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>
     <string name="modify_nick_name_title">修改昵称</string>

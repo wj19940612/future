@@ -114,6 +114,23 @@ public class BankcardBindingActivity extends BaseActivity {
         mIdentityNum.removeTextChangedListener(mValidationWatcher);
     }
 
+    @Override
+    public void onBackPressed() {
+        SmartDialog.with(getActivity(), R.string.whether_if_give_up_bind_bank_card)
+                .setNegative(R.string.no, new SmartDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setPositive(R.string.yes, new SmartDialog.OnClickListener() {
+            @Override
+            public void onClick(Dialog dialog) {
+                dialog.dismiss();
+                finish();
+            }
+        }).show();
+    }
+
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
         @Override
         public void afterTextChanged(Editable s) {

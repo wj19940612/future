@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -210,9 +210,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:textSize="12sp"
+                android:text="@string/hint_recharge"
                 android:textColor="@color/redPrimary"
-                android:text="@string/hint_recharge" />
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/nextStepButton"

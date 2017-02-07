@@ -99,39 +99,19 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content"
+            android:background="@color/splitBlockLight"
+            android:minHeight="25dp">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="@dimen/common_margin"
-                android:layout_marginRight="@dimen/common_margin"
-                android:background="@drawable/bg_line_division_compile"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    style="@style/InputTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cardholder"
-                    android:textColor="@color/lucky"/>
-
-                <EditText
-                    android:id="@+id/cardholderName"
-                    style="@style/SignEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <ImageView
-                    android:id="@+id/bindCardHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:src="@drawable/ic_account_bind_bank"/>
-            </LinearLayout>
+                android:paddingBottom="10dp"
+                android:paddingLeft="@dimen/common_margin"
+                android:paddingTop="10dp"
+                android:text="@string/bind_bank_warn"
+                android:textColor="@color/colorDisable"
+                android:textSize="11sp"/>
 
             <com.jnhyxx.html5.view.CommonFailWarn
                 android:id="@+id/commonFailTvWarn"
@@ -142,11 +122,83 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile"
+            android:gravity="center_vertical"
+            android:minHeight="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/InputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@string/name"
+                android:textColor="@color/lucky"/>
+
+            <EditText
+                android:id="@+id/cardholderName"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:hint="@string/cardHolder_real_name_hint"/>
+
+            <ImageView
+                android:id="@+id/bindCardHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:paddingTop="12dp"
+                android:src="@drawable/ic_account_bind_bank"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/identityNumArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:minHeight="40dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
+
+            <TextView
+                android:id="@+id/identityNumTitle"
+                style="@style/InputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/identity_num"
+                android:textColor="@color/lucky"/>
+
+            <EditText
+                android:id="@+id/identityNum"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:digits="0123456789Xx"
+                android:hint="@string/identity_num"
+                android:maxLength="18"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/splitBlockLight"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
             android:background="@drawable/bg_line_division_compile"
             android:gravity="center_vertical|bottom"
+            android:minHeight="40dp"
             android:orientation="horizontal">
 
             <TextView
@@ -162,20 +214,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/please_input_your_bankcard_num"
+                android:hint="@string/bankcard_num"
                 android:inputType="number"
                 android:maxLength="26"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:background="@drawable/bg_line_division_compile"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
 
             <TextView
                 style="@style/InputTitle"
@@ -191,18 +243,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableRight="@drawable/ic_arrow"
-                android:text="@string/please_choose_bank"/>
+                android:textColorHint="@color/grayHint"
+                android:hint="@string/please_choose_bank"/>
         </LinearLayout>
 
-        <LinearLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
+            android:layout_height="10dp"
+            android:background="@color/splitBlockLight"/>
+
+        <LinearLayout
             android:background="@drawable/bg_line_division_compile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
-            android:orientation="horizontal">
+            android:minHeight="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin">
 
             <TextView
                 style="@style/InputTitle"
@@ -221,17 +280,6 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin"
-            android:lineSpacingExtra="2dp"
-            android:paddingTop="15dp"
-            android:text="@string/bind_bank_warn"
-            android:textColor="@color/redPrimary"
-            android:textSize="12sp"/>
-
-        <TextView
             android:id="@+id/submitToAuthButton"
             style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
@@ -239,6 +287,6 @@
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
             android:layout_marginTop="50dp"
-            android:text="@string/bind_bank_bind"/>
+            android:text="@string/next_step"/>
     </LinearLayout>
 </LinearLayout>

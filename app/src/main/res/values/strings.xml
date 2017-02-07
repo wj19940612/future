@@ -143,12 +143,9 @@
     <string name="name">姓名</string>
     <string name="please_input_real_name">请输入真实姓名</string>
     <string name="identity_num">身份证号</string>
-    <string name="please_input_identity_num">请输入身份证号</string>
-    <string name="cardholder">持卡人</string>
     <string name="bankcard_num">银行卡号</string>
-    <string name="please_input_your_bankcard_num">请输入您的银行卡号</string>
     <string name="paying_bank">支付银行</string>
-    <string name="please_choose_bank">请选择银行</string>
+    <string name="please_choose_bank">选择银行</string>
     <string name="bank_reserved_phone_num">银行预留手机号码</string>
     <string name="submit_to_auth">提交认证</string>
     <string name="go_and_auth">去认证</string>
@@ -405,7 +402,7 @@
 
     <!--绑定银行卡-->
     <string name="bind_bank_title">绑定银行卡</string>
-    <string name="bind_bank_warn">持卡人必须与账户信息一致,请确保信息准确,以免影响您的买入与提现操作</string>
+    <string name="bind_bank_warn">持卡人必须与账户信息一致,信息不做其他用途</string>
     <string name="bind_bank_bind">绑    定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
     <string name="unBind_dialog_content">为了您账户的安全，解绑银行卡需本人拨打\n客服电话:  %1$s</string>
@@ -413,7 +410,8 @@
     <string name="bind_bank_is_empty">请选择支付银行</string>
     <string name="no_bank_can_bind">暂时没有可供选择的银行</string>
     <string name="bank_card_is_error">银行卡号格式错误，请输入正确的银行卡号</string>
-    <string name="bank_hint">为了您的账户资金安全,只能绑定持卡人\n本人的银行卡,获取更多帮助,请联系客\n服~</string>
+    <string name="bind_bank_hint">1.为了您的资金安全,只能绑定持卡人本人的银行卡\n 2.未成年人禁止交易</string>
+    <string name="cardHolder_real_name_hint">持卡人真实姓名</string>
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>
     <string name="modify_nick_name_title">修改昵称</string>

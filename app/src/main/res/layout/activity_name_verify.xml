@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:digits="0123456789Xx"
-                android:hint="@string/please_input_identity_num"
+                android:hint="@string/identity_num"
                 android:maxLength="18"/>
         </LinearLayout>
 

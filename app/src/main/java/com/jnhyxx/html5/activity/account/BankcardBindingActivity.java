@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -58,6 +57,10 @@ public class BankcardBindingActivity extends BaseActivity {
     TextView mPayingBank;
     @BindView(R.id.bindCardHint)
     ImageView mBindCardHint;
+    @BindView(R.id.identityNumTitle)
+    TextView mIdentityNumTitle;
+    @BindView(R.id.identityNum)
+    EditText mIdentityNum;
 
     @BindView(R.id.bankcardImageArea)
     LinearLayout mBankcardImageArea;
@@ -83,6 +86,7 @@ public class BankcardBindingActivity extends BaseActivity {
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
 
+
     private ChannelBank mChannelBank;
 
     private int mMDefaultSelectBankId = LocalUser.getUser().getUserInfo().getBankId();
@@ -96,7 +100,8 @@ public class BankcardBindingActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
-
+        mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
+        mIdentityNum.addTextChangedListener(mValidationWatcher);
         showBankcardInfo();
     }
 
@@ -105,6 +110,8 @@ public class BankcardBindingActivity extends BaseActivity {
         super.onDestroy();
         mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
+        mIdentityNum.removeTextChangedListener(mValidationWatcher);
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -112,6 +119,14 @@ public class BankcardBindingActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
             formatPhoneNumber();
+        }
+    };
+
+    private ValidationWatcher mCardHolderValidationWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
         }
     };
 
@@ -140,7 +155,6 @@ public class BankcardBindingActivity extends BaseActivity {
         String newBankCard = StrFormatter.getFormatBankCardNumber(bankCardNoSpace).trim();
         if (!newBankCard.equalsIgnoreCase(oldBankCard)) {
             mBankcardNum.setText(newBankCard);
-            Log.d("wj", "银行卡长度" + newBankCard.length());
             mBankcardNum.setSelection(newBankCard.length());
         }
     }
@@ -220,11 +234,17 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+                final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
                 // TODO: 2016/10/10 暂时去掉银行卡校验
 //                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
 //                    mCommonFailTvWarn.showController(R.string.bank_card_is_error);
 //                    return;
 //                }
+
+                if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
+                    mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
+                    return;
+                }
 
                 if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
@@ -235,6 +255,12 @@ public class BankcardBindingActivity extends BaseActivity {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
                 }
+
+                if (!ValidityDecideUtil.IDCardValidate(identityNum)) {
+                    mCommonFailTvWarn.show(R.string.settings_identity_card_fail);
+                    return;
+                }
+
 
                 final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
 
@@ -273,8 +299,8 @@ public class BankcardBindingActivity extends BaseActivity {
     }
 
     private void showCardHolderDialog() {
-        SmartDialog.with(getActivity(), R.string.bank_hint)
-                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+        SmartDialog.with(getActivity(), R.string.bind_bank_hint)
+                .setPositive(R.string.i_get_it, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
@@ -358,7 +384,7 @@ public class BankcardBindingActivity extends BaseActivity {
         for (ChannelBank data : channelBanks) {
             bankNameList.add(data.getName());
         }
-        
+
         mWheelView.setItems(bankNameList);
         mWheelView.setSelectedIndex(mMDefaultSelectBankId);
         mWheelView.setOnWheelListener(new WheelView.OnWheelListener() {

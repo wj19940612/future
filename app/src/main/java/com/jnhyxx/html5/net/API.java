@@ -1007,10 +1007,12 @@ public class API extends APIBase {
      * @param type
      * @return
      */
-    public static API getKlineData(String varietyType, String type) {
+    public static API getKlineData(String varietyType, String type, String endTime) {
         return new API(GET, "/quota/candlestickData/getCandlesticKData.do",
                 new ApiParams()
                         .put("contractsCode", varietyType)
+                        .put("limit", 100)
+                        .put("endTime", endTime)
                         .put("type", type));
     }
 

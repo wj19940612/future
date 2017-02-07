@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,6 +81,7 @@ public abstract class ChartView extends View {
     protected int mMaTitleHeight;
     protected float mOffset4CenterMaTitle;
     protected float mPriceAreaWidth;
+    protected float mOneXAxisWidth;
 
     protected int mMiddleExtraSpace; // The middle space between two parts
     protected int mTextMargin; // The margin between text and baseline
@@ -102,6 +102,7 @@ public abstract class ChartView extends View {
     private float mMaxTransactionX;
     private float mPreviousTransactionX;
     private float mStartX;
+    private int mStartPointOffset;
 
     public ChartView(Context context) {
         super(context);
@@ -177,11 +178,6 @@ public abstract class ChartView extends View {
         mSettings = settings;
         redraw();
     }
-
-    protected void resetTouchIndex() {
-        mTouchIndex = -1;
-    }
-
     protected void setBaseLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BASE.get()));
         paint.setStyle(Paint.Style.STROKE);
@@ -205,8 +201,8 @@ public abstract class ChartView extends View {
         int bottomPartHeight = getBottomPartHeight();
 
         if (enableDragChart()) {
-            mMaxTransactionX  = calculateMaxTransactionX();
-            Log.d("TEST", "onDraw calculateMaxTransactionX: " + mMaxTransactionX);
+            mOneXAxisWidth = getChartX(1);
+            mMaxTransactionX = calculateMaxTransactionX();
         }
 
         if (enableMovingAverages()) {
@@ -253,7 +249,7 @@ public abstract class ChartView extends View {
 
         if (enableDrawMovingAverages()) {
             drawTitleAboveBaselines(left, getTop(), mSettings.isIndexesEnable() ?
-                    getTop() + getTopPartHeight() + mCenterPartHeight : -1,
+                            getTop() + getTopPartHeight() + mCenterPartHeight : -1,
                     mTouchIndex, canvas);
         }
 
@@ -321,7 +317,7 @@ public abstract class ChartView extends View {
 
                 if (enableDragChart() && (mAction == Action.NONE || mAction == Action.DRAG)) {
                     double distance = Math.abs(event.getX() - (mStartX + mPreviousTransactionX));
-                    if (distance > this.getChartX(1)) {
+                    if (distance > mOneXAxisWidth) {
                         mAction = Action.DRAG;
                         mTransactionX = event.getX() - mStartX;
                         if (mTransactionX > mMaxTransactionX) {
@@ -330,7 +326,9 @@ public abstract class ChartView extends View {
                         if (mTransactionX < 0) {
                             mTransactionX = 0;
                         }
-                        if (mTransactionX != mPreviousTransactionX) {
+                        int newStartPointOffset = calculatePointOffset();
+                        if (mStartPointOffset != newStartPointOffset) {
+                            mStartPointOffset = newStartPointOffset;
                             redraw();
                         }
                         return true;
@@ -396,6 +394,10 @@ public abstract class ChartView extends View {
 
     protected int calculateTouchIndex(MotionEvent e) {
         return -1;
+    }
+
+    protected int calculatePointOffset() {
+        return (int) (mTransactionX / mOneXAxisWidth);
     }
 
     /**
@@ -539,8 +541,8 @@ public abstract class ChartView extends View {
         return mPath;
     }
 
-    protected float getTransactionX() {
-        return mTransactionX;
+    public int getStartPointOffset() {
+        return mStartPointOffset;
     }
 
     protected RectF getRectF() {
@@ -671,5 +673,19 @@ public abstract class ChartView extends View {
 
     protected void redraw() {
         invalidate(0, 0, getWidth(), getHeight());
+    }
+
+    protected void resetChart() {
+        mTouchIndex = -1; // The position of cross when touch view
+        mDownX = 0;
+        mDownY = 0;
+        mAction = Action.NONE;
+        mElapsedTime = 0;
+
+        mTransactionX = 0;
+        mMaxTransactionX = 0;
+        mPreviousTransactionX = 0;
+        mStartX = 0;
+        mStartPointOffset = 0;
     }
 }

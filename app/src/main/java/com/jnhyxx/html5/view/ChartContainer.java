@@ -57,6 +57,8 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private OnKlineClickListener mOnKlineClickListener;
     private PopupWindow mPopupWindow;
 
+    private int mKlineType;
+
     public ChartContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -310,12 +312,17 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         klineTab.setText(clickedView.getText());
         onTabClick(POS_KLINE);
 
+        mKlineType = kline;
         if (mOnKlineClickListener != null) {
             mOnKlineClickListener.onClick(kline);
         }
     }
 
-//    public void setTabEnable(int position, boolean enable) {
+    public int getKlineType() {
+        return mKlineType;
+    }
+
+    //    public void setTabEnable(int position, boolean enable) {
 //        mTabsLayout = (LinearLayout) findViewById(R.id.tabs);
 //        LinearLayout tab = (LinearLayout) mTabsLayout.getChildAt(position);
 //        tab.setEnabled(enable);

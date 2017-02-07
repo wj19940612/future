@@ -135,7 +135,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 //                && !getActivity().isFinishing()) {
 //            mPageOffset = 0;
 //            if (mDataInfoList != null) {
-//                mDataInfoList.clear();
+//                mDataInfoList.resetChart();
 //            }
 //            getLiveMessage();
 //        }

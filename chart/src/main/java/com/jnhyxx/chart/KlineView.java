@@ -19,6 +19,11 @@ import java.util.List;
 
 public class KlineView extends RelativeLayout implements KlineChart.OnTouchLinesAppearListener {
 
+    public interface OnAchieveTheLastListener {
+
+        void onAchieveTheLast(KlineViewData data, List<KlineViewData> dataList);
+    }
+
     public static final String SIDE_BAR_DATE_FORMAT_DAY_K = "yyyy/MM/dd";
     public static final String SIDE_BAR_DATE_FORMAT_MIN = "yyyy/MM/dd\nHH:mm";
 
@@ -27,6 +32,8 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     private View mRightSideBar;
 
     private SimpleDateFormat mDateFormat;
+
+    private OnAchieveTheLastListener mOnAchieveTheLastListener;
 
     public KlineView(Context context) {
         super(context);
@@ -64,6 +71,13 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         addView(mRightSideBar, params);
 
         mDateFormat = new SimpleDateFormat(SIDE_BAR_DATE_FORMAT_MIN);
+    }
+
+    public void setOnAchieveTheLastListener(OnAchieveTheLastListener onAchieveTheLastListener) {
+        mOnAchieveTheLastListener = onAchieveTheLastListener;
+        if (mKlineChart != null) {
+            mKlineChart.setOnAchieveTheLastListener(mOnAchieveTheLastListener);
+        }
     }
 
     private void setSideBar(View sideBar, KlineViewData data, KlineViewData previousData) {
@@ -105,6 +119,10 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
 
     public void setDataList(List<KlineViewData> dataList) {
         mKlineChart.setDataList(dataList);
+    }
+
+    public void appendDataList(List<KlineViewData> dataList) {
+        mKlineChart.appendDataList(dataList);
     }
 
     public void setDataFormat(String formatStr) {

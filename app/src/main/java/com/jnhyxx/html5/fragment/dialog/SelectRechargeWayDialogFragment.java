@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
+import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +44,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     LinearLayout mPayWayLayout;
 
     private Unbinder mBind;
+    private SupportApplyWay mSupportApplyWay;
 
     public static final int PAY_WAY_BANK = 0;
     public static final int PAY_WAY_ALIPAY = 1;
@@ -53,11 +57,20 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     }
 
 
-    public static SelectRechargeWayDialogFragment newInstance() {
+    public static SelectRechargeWayDialogFragment newInstance(SupportApplyWay supportApplyWay) {
         Bundle args = new Bundle();
         SelectRechargeWayDialogFragment fragment = new SelectRechargeWayDialogFragment();
+        args.putSerializable("supportApplyWay", supportApplyWay);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mSupportApplyWay = (SupportApplyWay) getArguments().getSerializable("supportApplyWay");
+        }
     }
 
     @Override
@@ -68,8 +81,8 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
         } else {
             throw new RuntimeException(context.toString() + "must implement PayWayListener");
         }
-
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -79,12 +92,13 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
+        updateView(mSupportApplyWay);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_fragment_select_recharge_way, container,false);
+        View view = inflater.inflate(R.layout.dialog_fragment_select_recharge_way, container, false);
         mBind = ButterKnife.bind(this, view);
         return view;
     }
@@ -107,10 +121,12 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
                 break;
             case R.id.bankCardPay:
                 selectPayWay(PAY_WAY_BANK);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_BANK_CARD);
                 mPayWayListener.selectPayWay(PAY_WAY_BANK);
                 closeDialog();
                 break;
             case R.id.aliPayPay:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_ALIPAY);
                 selectPayWay(PAY_WAY_ALIPAY);
                 mPayWayListener.selectPayWay(PAY_WAY_ALIPAY);
                 closeDialog();
@@ -133,5 +149,18 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
         if (payWay < 0) return;
 //        unSelectAll();
         mPayWayLayout.getChildAt(payWay).setSelected(true);
+    }
+
+    private void updateView(SupportApplyWay supportApplyWay) {
+        if (supportApplyWay.isBank()) {
+            mBankCardPay.setVisibility(View.VISIBLE);
+        } else {
+            mBankCardPay.setVisibility(View.GONE);
+        }
+        if (supportApplyWay.isAlipay()) {
+            mAliPayPay.setVisibility(View.VISIBLE);
+        } else {
+            mAliPayPay.setVisibility(View.GONE);
+        }
     }
 }

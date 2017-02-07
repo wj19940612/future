@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,36 +20,70 @@
             app:titleText="@string/recharge"/>
 
         <RelativeLayout
+            android:id="@+id/payWayLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/paymentHint"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="@dimen/common_margin"
-                android:layout_marginRight="@dimen/common_margin"
-                android:background="@drawable/bg_line_division_compile"
-                android:gravity="bottom"
-                android:orientation="horizontal">
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/payment"
+                android:textColor="@color/lucky"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="@string/recharge_amount"
-                    android:textColor="@color/lucky"/>
+            <TextView
+                android:id="@+id/bankName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/paymentHint"
+                android:text="@string/bank_name"
+                android:textColor="@color/blackPrimary"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="中国人民银行卡(2222)"/>
 
-                <EditText
-                    android:id="@+id/rechargeAmount"
-                    style="@style/SignEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/hint_recharge_amount"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/blackPrimary"/>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/onceRechargeLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bankName"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/paymentHint"
+                android:text="@string/once_recharge_limit"
+                android:textColor="@color/colorDisable"
+                android:textSize="11sp"
+                android:visibility="gone"
+                tools:text="单笔限额3,000元"/>
+
+            <TextView
+                android:id="@+id/bankCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/paymentHint"
+                android:text="@string/bankcard"
+                android:textColor="@color/blackPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow"/>
 
             <com.jnhyxx.html5.view.CommonFailWarn
                 android:id="@+id/commonFail"
@@ -60,193 +94,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/common_margin"
-            android:paddingRight="@dimen/common_margin">
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/please_choose_payment"
-                android:textColor="@color/colorDisable"/>
-
-            <LinearLayout
-                android:id="@+id/payMethodMatherView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginRight="20dp"
+                android:text="@string/recharge_amount"
+                android:textColor="@color/lucky"/>
 
-                <RelativeLayout
-                    android:id="@+id/bankCardPay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_withdraw"
-                    android:clickable="true">
-
-                    <ImageView
-                        android:id="@+id/icBankCardPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_bank_card_pay"/>
-
-                    <TextView
-                        android:id="@+id/hintBankCardPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/icBankCardPay"
-                        android:paddingTop="10dp"
-                        android:text="@string/bank_card_pay"
-                        android:textColor="@color/blackPrimary"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/hintBankCardPay"
-                        android:layout_toRightOf="@+id/icBankCardPay"
-                        android:paddingTop="8dp"
-                        android:text="@string/bank_card_pay_hint"
-                        android:textColor="@color/colorDisable"
-                        android:textSize="12sp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_superscript_recommend"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/aliPayPay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_withdraw"
-                    android:clickable="true"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/icAliPayPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_alipay"/>
-
-                    <TextView
-                        android:id="@+id/hintAliPayPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/icAliPayPay"
-                        android:paddingTop="10dp"
-                        android:text="@string/aliPay_pay"
-                        android:textColor="@color/blackPrimary"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/hintAliPayPay"
-                        android:layout_toRightOf="@+id/icAliPayPay"
-                        android:paddingTop="8dp"
-                        android:text="@string/aliPay_pay_hint"
-                        android:textColor="@color/colorDisable"
-                        android:textSize="12sp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_superscript_recommend"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/weChartPay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_withdraw"
-                    android:clickable="true"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/icWeChartPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:src="@mipmap/ic_launcher"/>
-
-                    <TextView
-                        android:id="@+id/hintWeChartPay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/icWeChartPay"
-                        android:paddingTop="10dp"
-                        android:text="@string/wechat_payment"
-                        android:textColor="@color/blackPrimary"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/hintWeChartPay"
-                        android:layout_toRightOf="@+id/icWeChartPay"
-                        android:paddingTop="8dp"
-                        android:text="@string/aliPay_pay_hint"
-                        android:textColor="@color/colorDisable"
-                        android:textSize="12sp"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_superscript_recommend"/>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/rechargeAmount"
+                style="@style/SignEditText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="12sp"
-                android:textColor="@color/redPrimary"
-                android:text="@string/hint_recharge" />
-
-            <TextView
-                android:id="@+id/nextStepButton"
-                style="@style/PrimaryBigButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:enabled="false"
-                android:text="@string/next_step"/>
-
+                android:layout_weight="1"
+                android:hint="@string/hint_recharge_amount"
+                android:inputType="numberDecimal"
+                android:textColor="@color/blackPrimary"
+                android:textColorHint="@color/grayHint"
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/ic_pingan"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:text="@string/account_fund_is_covered_by_PA"
-            android:textColor="@color/redPrimary"
-            android:textSize="12sp"/>
-
-        <TextView
+            android:id="@+id/nextStepButton"
+            style="@style/PrimaryBigButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center|bottom"
-            android:lineSpacingExtra="2dp"
-            android:paddingBottom="30dp"
-            android:text="@string/recharge_hint"
-            android:textColor="@color/colorDisable"
-            android:textSize="12sp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:layout_marginTop="30dp"
+            android:enabled="false"
+            android:text="@string/next_step"/>
     </LinearLayout>
 
 </ScrollView>

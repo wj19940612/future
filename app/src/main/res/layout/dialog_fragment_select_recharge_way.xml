@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_white"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:src="@drawable/ic_delete_x"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/please_choose_payment"
+        android:textColor="@color/blackPrimary"
+        android:textSize="17sp"/>
+
+    <LinearLayout
+        android:id="@+id/payWayLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <TextView
+            android:id="@+id/bankCardPay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_withdraw"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_bank_card_pay"
+            android:gravity="center"
+            android:minHeight="80dp"
+            android:minWidth="80dp"
+            android:padding="5dp"
+            android:text="@string/bankcard"
+            android:textColor="@color/blackPrimary"/>
+
+        <TextView
+            android:id="@+id/aliPayPay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_withdraw"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_alipay"
+            android:gravity="center"
+            android:minHeight="80dp"
+            android:minWidth="80dp"
+            android:padding="5dp"
+            android:text="@string/aliPay_pay"
+            android:textColor="@color/blackPrimary"/>
+
+        <TextView
+            android:id="@+id/weChartPay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_withdraw"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_bank_card_pay"
+            android:gravity="center"
+            android:minHeight="80dp"
+            android:minWidth="80dp"
+            android:padding="5dp"
+            android:text="@string/wechat_payment"
+            android:textColor="@color/blackPrimary"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

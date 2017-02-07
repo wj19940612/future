@@ -17,6 +17,7 @@ import com.jnhyxx.html5.activity.web.PaymentActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -33,7 +34,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RechargeActivity extends BaseActivity {
+import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_ALIPAY;
+import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_BANK;
+import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_WECHAT;
+
+public class RechargeActivity extends BaseActivity implements SelectRechargeWayDialogFragment.PayWayListener {
 
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
@@ -68,6 +73,8 @@ public class RechargeActivity extends BaseActivity {
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
         getSupportApplyWay();
+
+        SelectRechargeWayDialogFragment.newInstance().show(getSupportFragmentManager());
     }
 
     private void getSupportApplyWay() {
@@ -316,6 +323,20 @@ public class RechargeActivity extends BaseActivity {
     private void unSelectAll() {
         for (int i = 0; i < mPayMethodMatherView.getChildCount(); i++) {
             mPayMethodMatherView.getChildAt(i).setSelected(false);
+        }
+    }
+
+    @Override
+    public void selectPayWay(int payWay) {
+        switch (payWay) {
+            case PAY_WAY_BANK:
+                break;
+            case PAY_WAY_ALIPAY:
+                break;
+            case PAY_WAY_WECHAT:
+                break;
+            default:
+                break;
         }
     }
 }

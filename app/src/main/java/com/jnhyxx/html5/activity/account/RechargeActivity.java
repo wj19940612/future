@@ -70,6 +70,10 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      * 支付方式
      */
     private int mPayWay;
+    /**
+     * 单笔限制额
+     */
+    private int limitSingle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,23 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         getSupportApplyWay();
 
         updateView();
+
+        getUserLimitSingle();
+    }
+
+    private void getUserLimitSingle() {
+        API.User.getUserBankInfo()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserInfo>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        mOnceRechargeLimit.setText(getString(R.string.once_recharge_limit, resp.getData().getLimitSingle()));
+                        limitSingle = resp.getData().getLimitSingle();
+                    }
+                })
+                .fireSync();
     }
 
     private void updateView() {
@@ -92,6 +113,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             mBankName.setText(getBankNameAndBankCard());
         }
     }
+
 
     public String getBankNameAndBankCard() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
@@ -154,6 +176,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         }
         return false;
     }
+
     @OnClick({R.id.payWayLayout, R.id.nextStepButton})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -259,6 +282,9 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
         double amount = Double.valueOf(rechargeAmount);
         if (amount < 50) {
+            return false;
+        }
+        if (amount > limitSingle) {
             return false;
         }
         return true;

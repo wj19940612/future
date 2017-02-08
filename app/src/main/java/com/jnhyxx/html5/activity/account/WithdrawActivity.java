@@ -99,6 +99,7 @@ public class WithdrawActivity extends BaseActivity {
 
         updateBankInfoView();
         getMoneyDrawUsable();
+
     }
 
     private void getMoneyDrawUsable() {

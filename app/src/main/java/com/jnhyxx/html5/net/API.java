@@ -206,6 +206,14 @@ public class API extends APIBase {
             return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
+        /**
+         * 获取用户的银行卡信息
+         *
+         * @return
+         */
+        public static API getUserBankInfo() {
+            return new API("/user/user/showAuthentication.do", null);
+        }
 
         /**
          * 退出
@@ -443,7 +451,6 @@ public class API extends APIBase {
 
         /**
          * 新银行卡支付错误页面的部分 url
-         *
          */
         public static String getBankcardPaymentErrorPartUrl() {
             return getHost() + "/mine/qterror.html";

@@ -121,7 +121,7 @@
     <string name="add_bankcard_right_now">马上添加银行卡</string>
     <string name="profile">个人信息</string>
     <string name="my_users">我的用户</string>
-
+    <string name="withdraw_hint">遇到任何问题，请联系首页客服</string>
     <!--Settings-->
     <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>

@@ -331,9 +331,9 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
         // DOMESTIC
-        String marginWithSign = mProduct.getSign() + tradeQuantity.getMargin();
-        String tradeFeeWithSign = mProduct.getSign() + tradeQuantity.getFee();
-        String totalWithSign = mProduct.getSign() + (tradeQuantity.getMargin() + tradeQuantity.getFee());
+        String marginWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getMargin());
+        String tradeFeeWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getFee());
+        String totalWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getMargin() + tradeQuantity.getFee());
         mMargin.setText(marginWithSign);
         mTradeFee.setText(tradeFeeWithSign);
         mTotalTobePaid.setText(totalWithSign);
@@ -341,17 +341,17 @@ public class PlaceOrderFragment extends BaseFragment {
         if (mProduct.isForeign() && mFuturesFinancing != null) {
             double ratio = mFuturesFinancing.getRatio();
             String marginRmb = "  ( " + Unit.SIGN_CNY +
-                    FinanceUtil.formatWithScale(tradeQuantity.getMargin() * ratio) + " )";
+                    FinanceUtil.formatWithoutZero(tradeQuantity.getMargin() * ratio) + " )";
             mMargin.setText(
                     StrUtil.mergeTextWithColor(marginWithSign, marginRmb, Color.parseColor("#666666"))
             );
             String tradeFeeRmb = "  ( " + Unit.SIGN_CNY +
-                    FinanceUtil.formatWithScale(tradeQuantity.getFee() * ratio) + " )";
+                    FinanceUtil.formatWithoutZero(tradeQuantity.getFee() * ratio) + " )";
             mTradeFee.setText(
                     StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
             );
             String totalRmb = Unit.SIGN_CNY
-                    + FinanceUtil.formatWithScale((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
+                    + FinanceUtil.formatWithoutZero((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
             String totalForeign = "  ( " + totalWithSign + " )";
             mTotalTobePaid.setText(
                     StrUtil.mergeTextWithColor(totalRmb, totalForeign, Color.parseColor("#666666"))

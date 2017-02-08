@@ -108,9 +108,6 @@
             android:name=".activity.account.WithdrawActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.NameVerifyActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.account.BankcardBindingActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -146,9 +143,7 @@
         <activity
             android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.setting.SettingsActivity"
-            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.account.WithdrawRecordActivity"
             android:screenOrientation="portrait"/>

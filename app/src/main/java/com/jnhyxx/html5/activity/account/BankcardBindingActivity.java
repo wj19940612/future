@@ -278,7 +278,6 @@ public class BankcardBindingActivity extends BaseActivity {
                     return;
                 }
 
-
                 submitRealName(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
                 break;
             case R.id.unbindBankcard:

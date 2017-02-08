@@ -181,7 +181,6 @@ public class UserInfoActivity extends BaseActivity {
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.realNameAuth:
-                Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bindBankCard:
                 bingBankCard();
@@ -283,10 +282,7 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void bingBankCard() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST);
-            return;
-        }
+
         Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQ_CODE_BASE);
     }
 

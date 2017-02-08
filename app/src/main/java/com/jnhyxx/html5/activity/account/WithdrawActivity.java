@@ -169,10 +169,6 @@ public class WithdrawActivity extends BaseActivity {
 
     @OnClick(R.id.addBankcardButton)
     void addBankcard() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
-            return;
-        }
 
         Launcher.with(this, BankcardBindingActivity.class).executeForResult(REQ_CODE_ADD_BANKCARD);
     }

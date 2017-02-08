@@ -198,11 +198,6 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void depositByBankApply() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(this, NameVerifyActivity.class)
-                    .executeForResult(REQ_CODE_BASE);
-            return;
-        }
 
         if (!LocalUser.getUser().isBankcardFilled()) {
             Launcher.with(this, BankcardBindingActivity.class)

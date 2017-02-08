@@ -123,7 +123,7 @@
     <string name="add_bankcard_right_now">马上添加银行卡</string>
     <string name="profile">个人信息</string>
     <string name="my_users">我的用户</string>
-
+    <string name="withdraw_hint">遇到任何问题，请联系首页客服</string>
     <!--Settings-->
     <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>
@@ -151,8 +151,9 @@
     <string name="go_and_auth">去认证</string>
     <string name="unbind">解绑</string>
     <string name="recharge_amount">充值金额</string>
-    <string name="hint_recharge_amount">充值金额 ≥ 50</string>
+    <string name="hint_recharge_amount">50元起充</string>
     <string name="please_choose_payment">请选择支付方式</string>
+    <string name="payment">支付方式</string>
     <string name="bankcard_payment">银行卡支付</string>
     <string name="alipay_payment">支付宝支付</string>
     <string name="wechat_payment">微信支付</string>
@@ -416,6 +417,9 @@
     <string name="whether_if_give_up_bind_bank_card">是否放弃绑定银行卡</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="bank_hint">为了您的账户资金安全,只能绑定持卡人\n本人的银行卡,获取更多帮助,请联系客\n服~</string>
+    <string name="bank_name">%1$s(%2$s)</string>
+    <string name="once_recharge_limit">单笔限额%1$d元</string>
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>
     <string name="modify_nick_name_title">修改昵称</string>
@@ -433,10 +437,11 @@
     <string name="recharge_least_money">充值金额≥50</string>
     <string name="bank_card_pay">银行卡支付</string>
     <string name="bank_card_pay_hint">无需开通网银</string>
-    <string name="aliPay_pay">支付宝支付</string>
+    <string name="aliPay_pay">支付宝</string>
+    <string name="wechat_pay">支付宝</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
-    <string name="recharge_hint">资金充提采用银联、支付宝两种方式\n双管监督,让您的资金更安全!</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="recharge_bank_apply_limit">您的充值金额已超过您所绑定银行卡的单笔限额，请重新填写</string>
     <string name="install_alipay_first">请先安装支付宝</string>
     <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
     <string name="recharge_agree_payment">证券期货交易风险提示</string>

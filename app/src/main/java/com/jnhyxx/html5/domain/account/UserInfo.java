@@ -98,6 +98,12 @@ public class UserInfo {
     private boolean bIsSetNickName;
 
     private int bankId;
+
+
+    /**
+     * 银行卡单笔限额
+     */
+    private int limitSingle;
     /**
      * birthday : 2017-3-4
      * certificationStatus : 2
@@ -330,6 +336,14 @@ public class UserInfo {
         return false;
     }
 
+    public int getLimitSingle() {
+        return limitSingle;
+    }
+
+    public void setLimitSingle(int limitSingle) {
+        this.limitSingle = limitSingle;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -348,6 +362,7 @@ public class UserInfo {
                 ", icon='" + icon + '\'' +
                 ", bIsSetNickName=" + bIsSetNickName +
                 ", bankId=" + bankId +
+                ", limitSingle=" + limitSingle +
                 ", birthday='" + birthday + '\'' +
                 ", certificationStatus=" + certificationStatus +
                 ", chinaSex='" + chinaSex + '\'' +

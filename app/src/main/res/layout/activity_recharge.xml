@@ -1,65 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:orientation="vertical"
-            tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
 
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.RechargeActivity">
+
+
+    <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/recharge"/>
 
-        <com.jnhyxx.html5.view.TitleBar
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/payWayLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_compile">
+
+        <TextView
+            android:id="@+id/paymentHint"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backFeature="true"
-            app:titleText="@string/recharge"/>
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/payment"
+            android:textColor="@color/lucky"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="@dimen/common_margin"
-                android:layout_marginRight="@dimen/common_margin"
-                android:background="@drawable/bg_line_division_compile"
-                android:gravity="bottom"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="@string/recharge_amount"
-                    android:textColor="@color/lucky"/>
-
-                <EditText
-                    android:id="@+id/rechargeAmount"
-                    style="@style/SignEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/hint_recharge_amount"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/blackPrimary"/>
-            </LinearLayout>
-
-            <com.jnhyxx.html5.view.CommonFailWarn
-                android:id="@+id/commonFail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/bankName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/paymentHint"
+            android:text="@string/bank_name"
+            android:textColor="@color/blackPrimary"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="中国人民银行卡(2222)"/>
+
+        <TextView
+            android:id="@+id/onceRechargeLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+<!--<<<<<<< HEAD
             android:orientation="vertical"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin">
@@ -224,29 +216,91 @@
                 android:text="@string/next_step"/>
 
         </LinearLayout>
+=======
+            android:layout_below="@+id/bankName"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/paymentHint"
+            android:text="@string/once_recharge_limit"
+            android:textColor="@color/colorDisable"
+            android:textSize="11sp"
+            android:visibility="gone"
+            tools:text="单笔限额3,000元"/>
+>>>>>>> recharge-->
+
+        <TextView
+            android:id="@+id/bankCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/paymentHint"
+            android:text="@string/bankcard"
+            android:textColor="@color/blackPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow"/>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/commonFail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_line_division_compile"
+        android:gravity="bottom"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/ic_pingan"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:text="@string/account_fund_is_covered_by_PA"
-            android:textColor="@color/redPrimary"
-            android:textSize="12sp"/>
+            android:layout_marginRight="20dp"
+            android:text="@string/recharge_amount"
+            android:textColor="@color/lucky"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center|bottom"
-            android:lineSpacingExtra="2dp"
-            android:paddingBottom="30dp"
-            android:text="@string/recharge_hint"
-            android:textColor="@color/colorDisable"
-            android:textSize="12sp"/>
+        <EditText
+            android:id="@+id/rechargeAmount"
+            style="@style/SignEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hint_recharge_amount"
+            android:inputType="numberDecimal"
+            android:textColor="@color/blackPrimary"
+            android:textColorHint="@color/grayHint"
+            android:textSize="14sp"/>
     </LinearLayout>
 
-</ScrollView>
+    <TextView
+        android:id="@+id/nextStepButton"
+        style="@style/PrimaryBigButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="30dp"
+        android:enabled="false"
+        android:text="@string/next_step"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/withdraw_hint"/>
+
+</LinearLayout>

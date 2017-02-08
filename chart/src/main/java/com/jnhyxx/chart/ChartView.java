@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +64,6 @@ public abstract class ChartView extends View {
 
     public static Paint sPaint;
     private Path mPath;
-    private Path mSecondPath;
     private Paint.FontMetrics mFontMetrics;
     private RectF mRectF;
     private StringBuilder mStringBuilder;
@@ -83,6 +81,7 @@ public abstract class ChartView extends View {
     protected int mMaTitleHeight;
     protected float mOffset4CenterMaTitle;
     protected float mPriceAreaWidth;
+    protected float mOneXAxisWidth;
 
     protected int mMiddleExtraSpace; // The middle space between two parts
     protected int mTextMargin; // The margin between text and baseline
@@ -103,6 +102,7 @@ public abstract class ChartView extends View {
     private float mMaxTransactionX;
     private float mPreviousTransactionX;
     private float mStartX;
+    private int mStartPointOffset;
 
     public ChartView(Context context) {
         super(context);
@@ -117,7 +117,6 @@ public abstract class ChartView extends View {
     private void init() {
         sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPath = new Path();
-        mSecondPath = new Path();
         mRectF = new RectF();
         mStringBuilder = new StringBuilder();
         mHandler = new ChartHandler();
@@ -179,11 +178,6 @@ public abstract class ChartView extends View {
         mSettings = settings;
         redraw();
     }
-
-    protected void resetTouchIndex() {
-        mTouchIndex = -1;
-    }
-
     protected void setBaseLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BASE.get()));
         paint.setStyle(Paint.Style.STROKE);
@@ -206,7 +200,12 @@ public abstract class ChartView extends View {
         int topPartHeight = getTopPartHeight();
         int bottomPartHeight = getBottomPartHeight();
 
-        if (enableDrawMovingAverages()) {
+        if (enableDragChart()) {
+            mOneXAxisWidth = getChartX(1);
+            mMaxTransactionX = calculateMaxTransactionX();
+        }
+
+        if (enableMovingAverages()) {
             calculateMovingAverages(mSettings.isIndexesEnable());
         }
 
@@ -219,9 +218,7 @@ public abstract class ChartView extends View {
             calculateIndexesBaseLines(mSettings.getIndexesBaseLines());
         }
 
-        if (enableDrawMovingAverages()) {
-            drawTitleAboveBaselines(left, top, top2, mTouchIndex, canvas);
-
+        if (enableMovingAverages()) {
             mTitleVerticalOffset = mMaTitleHeight + mTextMargin;
             top += mTitleVerticalOffset;
             topPartHeight -= mTitleVerticalOffset;
@@ -250,6 +247,12 @@ public abstract class ChartView extends View {
 
         drawTimeLine(left, top + topPartHeight, width, canvas);
 
+        if (enableDrawMovingAverages()) {
+            drawTitleAboveBaselines(left, getTop(), mSettings.isIndexesEnable() ?
+                            getTop() + getTopPartHeight() + mCenterPartHeight : -1,
+                    mTouchIndex, canvas);
+        }
+
         if (mTouchIndex >= 0) {
             if (enableDrawTouchLines()) {
                 drawTouchLines(mSettings.isIndexesEnable(), mTouchIndex,
@@ -262,6 +265,10 @@ public abstract class ChartView extends View {
         } else {
             onTouchLinesDisappear();
         }
+    }
+
+    protected float calculateMaxTransactionX() {
+        return 0;
     }
 
     protected void calculateMovingAverages(boolean indexesEnable) {
@@ -291,7 +298,9 @@ public abstract class ChartView extends View {
 
                 mDownX = event.getX();
                 mDownY = event.getY();
+
                 mStartX = event.getX() - mPreviousTransactionX;
+
                 return true;
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(mDownX - event.getX()) < CLICK_PIXELS
@@ -301,14 +310,27 @@ public abstract class ChartView extends View {
 
                 mHandler.removeMessages(WHAT_LONG_PRESS);
                 mHandler.removeMessages(WHAT_ONE_CLICK);
+
                 if (mAction == Action.TOUCH) {
                     return triggerTouchLinesRedraw(event);
                 }
-                if (mAction == Action.NONE) {
+
+                if (enableDragChart() && (mAction == Action.NONE || mAction == Action.DRAG)) {
                     double distance = Math.abs(event.getX() - (mStartX + mPreviousTransactionX));
-                    if (distance > this.getChartX(1)) {
+                    if (distance > mOneXAxisWidth) {
                         mAction = Action.DRAG;
                         mTransactionX = event.getX() - mStartX;
+                        if (mTransactionX > mMaxTransactionX) {
+                            mTransactionX = mMaxTransactionX;
+                        }
+                        if (mTransactionX < 0) {
+                            mTransactionX = 0;
+                        }
+                        int newStartPointOffset = calculatePointOffset();
+                        if (mStartPointOffset != newStartPointOffset) {
+                            mStartPointOffset = newStartPointOffset;
+                            redraw();
+                        }
                         return true;
                     }
                 }
@@ -328,9 +350,7 @@ public abstract class ChartView extends View {
                 } else if (mAction == Action.DRAG) {
                     mAction = Action.NONE;
                     mPreviousTransactionX = mTransactionX;
-                    Log.d("TEST", "onTouchEvent: TransactionX: " + mTransactionX);
                 }
-
                 return true;
         }
         return super.onTouchEvent(event);
@@ -352,10 +372,13 @@ public abstract class ChartView extends View {
         return false;
     }
 
-    protected boolean enableDrawMovingAverages() {
+    protected boolean enableMovingAverages() {
         return false;
     }
 
+    protected boolean enableDrawMovingAverages() {
+        return false;
+    }
 
     protected boolean enableDrawUnstableData() {
         return false;
@@ -365,8 +388,16 @@ public abstract class ChartView extends View {
         return false;
     }
 
+    protected boolean enableDragChart() {
+        return false;
+    }
+
     protected int calculateTouchIndex(MotionEvent e) {
         return -1;
+    }
+
+    protected int calculatePointOffset() {
+        return (int) (mTransactionX / mOneXAxisWidth);
     }
 
     /**
@@ -510,12 +541,8 @@ public abstract class ChartView extends View {
         return mPath;
     }
 
-    protected Path getSecondPath() {
-        if (mSecondPath == null) {
-            mSecondPath = new Path();
-        }
-        mSecondPath.reset();
-        return mSecondPath;
+    public int getStartPointOffset() {
+        return mStartPointOffset;
     }
 
     protected RectF getRectF() {
@@ -646,5 +673,19 @@ public abstract class ChartView extends View {
 
     protected void redraw() {
         invalidate(0, 0, getWidth(), getHeight());
+    }
+
+    protected void resetChart() {
+        mTouchIndex = -1; // The position of cross when touch view
+        mDownX = 0;
+        mDownY = 0;
+        mAction = Action.NONE;
+        mElapsedTime = 0;
+
+        mTransactionX = 0;
+        mMaxTransactionX = 0;
+        mPreviousTransactionX = 0;
+        mStartX = 0;
+        mStartPointOffset = 0;
     }
 }

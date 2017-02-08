@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -150,6 +151,40 @@ public class TradeActivity extends BaseActivity implements
             }
         }
     };
+
+    private KlineView.OnAchieveTheLastListener mKlineViewOnAchieveTheLastListener
+            = new KlineView.OnAchieveTheLastListener() {
+
+        @Override
+        public void onAchieveTheLast(KlineViewData data, List<KlineViewData> dataList) {
+            requestKlineDataAndAppend(data);
+        }
+    };
+
+    private void requestKlineDataAndAppend(KlineViewData data) {
+        int type = mChartContainer.getKlineType();
+        String typeStr = null;
+        if (type != ChartContainer.KLINE_DAY) {
+            typeStr = String.valueOf(type);
+        }
+        String endTime = Uri.encode(data.getTime());
+        final KlineView klineView = mChartContainer.getKlineView();
+        API.getKlineData(mProduct.getContractsCode(), typeStr, endTime)
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
+                    @Override
+                    public void onRespSuccess(List<KlineViewData> klineDataList) {
+                        if (klineView != null) {
+                            if (klineDataList != null && !klineDataList.isEmpty()) {
+                                Collections.reverse(klineDataList);
+                                klineView.appendDataList(klineDataList);
+                            } else {
+                                ToastUtil.curt(R.string.there_is_no_more_data);
+                            }
+                        }
+                    }
+                }).fireSync();
+    }
 
     //根据普通下单或者闪电下单改变买涨买跌按钮文字
     private void updateBuyButtonsText(FullMarketData data) {
@@ -667,6 +702,7 @@ public class TradeActivity extends BaseActivity implements
         if (klineView == null) {
             klineView = new KlineView(this);
             mChartContainer.addKlineView(klineView);
+            klineView.setOnAchieveTheLastListener(mKlineViewOnAchieveTheLastListener);
         }
         klineView.clearData();
         KlineChart.Settings settings2 = new KlineChart.Settings();
@@ -698,7 +734,7 @@ public class TradeActivity extends BaseActivity implements
     private void requestKlineDataAndSet(final String type) {
         final KlineView klineView = mChartContainer.getKlineView();
         klineView.clearData();
-        API.getKlineData(mProduct.getContractsCode(), type)
+        API.getKlineData(mProduct.getContractsCode(), type, null)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<KlineViewData>>, List<KlineViewData>>() {
                     @Override

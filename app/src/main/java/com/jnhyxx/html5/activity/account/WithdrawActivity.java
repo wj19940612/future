@@ -27,6 +27,7 @@ import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
@@ -98,6 +99,12 @@ public class WithdrawActivity extends BaseActivity {
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
         getMoneyDrawUsable();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (!TextUtils.isEmpty(userInfo.getIcon())) {
+            Picasso.with(getActivity()).load(userInfo.getIcon()).into(mBankCardIcon);
+        }
+        String bankCardEndNumber = userInfo.getCardNumber().substring(userInfo.getCardNumber().length() - 4);
+        mBankName.setText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
     }
 
     private void getMoneyDrawUsable() {
@@ -114,7 +121,7 @@ public class WithdrawActivity extends BaseActivity {
                 }).fire();
     }
 
-    @OnClick(R.id.confirmButton)
+
     void doConfirmButtonClick() {
         String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
         if (!TextUtils.isEmpty(withdrawAmount)) {
@@ -154,13 +161,23 @@ public class WithdrawActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.withdrawRule:
+                showWithdrawRuleDialog();
                 break;
             case R.id.withdrawRecord:
                 break;
             case R.id.allWithdraw:
+                mWithdrawAmount.setText(mWithdrawAmount.getHint());
                 break;
             case R.id.confirmButton:
+                doConfirmButtonClick();
                 break;
         }
+    }
+
+    private void showWithdrawRuleDialog() {
+        SmartDialog.with(getActivity(), R.string.withdraw_rule_content, R.string.withdraw_rule_title)
+                .setPositive(R.string.i_get_it)
+                .setMessageMaxLines(Integer.MAX_VALUE)
+                .show();
     }
 }

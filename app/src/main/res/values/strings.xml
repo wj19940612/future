@@ -420,7 +420,7 @@
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
-    <string name="default_bank_name_card_number">工商银行 *4545</string>
+    <string name="bank_name_card_number">%1$s (%2$s)</string>
     <string name="withdraw_least_money_hint">可提现%1$s(元)</string>
     <string name="recharge_least_money">充值金额≥50</string>
     <string name="bank_card_pay">银行卡支付</string>
@@ -436,6 +436,9 @@
     <string name="withdraw_rule_hint">工作日2小时内到帐, 具体请看</string>
     <string name="withdraw_rule_title">提现规则</string>
     <string name="all_withdraw">全部提现</string>
+    <string name="withdraw_rule_content">1、交易用户提现免手续费，为防止恶意提现，每日提现申请最多2次，超过次日处理;\n\n
+2、为防止套现和洗钱，无交易用户提现需提供身份证和银行卡进行风控核实。若信息核实无误，会于7-15个工作日内处理，届时银行将收取2%的手续费（自理）最低2元;\n\n
+3、工作日（09:00-17:00）内提现1-2个小时内到账，周末及节假日提现顺延至下一个工作日处理。</string>
 
 
     <!--提款记录-->

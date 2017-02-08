@@ -43,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.identityNum;
+
 public class BankcardBindingActivity extends BaseActivity {
 
     @BindView(R.id.bankcardInputArea)
@@ -59,7 +61,7 @@ public class BankcardBindingActivity extends BaseActivity {
     ImageView mBindCardHint;
     @BindView(R.id.identityNumTitle)
     TextView mIdentityNumTitle;
-    @BindView(R.id.identityNum)
+    @BindView(identityNum)
     EditText mIdentityNum;
 
     @BindView(R.id.bankcardImageArea)
@@ -223,6 +225,7 @@ public class BankcardBindingActivity extends BaseActivity {
         mCardholderName.setText(userInfo.getRealName());
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
+        mIdentityNum.setText(userInfo.getIdCard());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
             mPayingBank.setText(userInfo.getIssuingbankName());
         }

@@ -86,8 +86,6 @@ public class UserInfoActivity extends BaseActivity {
     LinearLayout mIntroductionLayout;
     @BindView(R.id.userIntroduction)
     TextView mUserIntroduction;
-    @BindView(R.id.realNameAuth)
-    IconTextRow mRealNameAuth;
     @BindView(R.id.bindBankCard)
     IconTextRow mBindBankCard;
     @BindView(R.id.bindingPhone)
@@ -156,7 +154,7 @@ public class UserInfoActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -179,8 +177,6 @@ public class UserInfoActivity extends BaseActivity {
                 break;
             case R.id.introductionLayout:
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
-                break;
-            case R.id.realNameAuth:
                 break;
             case R.id.bindBankCard:
                 bingBankCard();
@@ -356,7 +352,6 @@ public class UserInfoActivity extends BaseActivity {
         mLocation.setText(userInfo.getLand());
         mBirthday.setSubText(userInfo.getBirthday());
         mUserIntroduction.setText(userInfo.getIntroduction());
-        mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
         mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
         mBindingPhone.setSubText(userInfo.getUserPhone());
 

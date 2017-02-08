@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,6 +34,7 @@ import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
+import com.jnhyxx.html5.view.NoPasteEditText;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
@@ -66,7 +66,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     TextView mEmpty;
 
     @BindView(R.id.inputBox)
-    EditText mInputBox;
+    NoPasteEditText mInputBox;
     @BindView(R.id.sendButton)
     TextView mSendButton;
     @BindView(R.id.inputBoxArea)

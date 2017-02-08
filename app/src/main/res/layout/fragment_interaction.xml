@@ -48,7 +48,7 @@
             android:paddingTop="7dp"
             android:visibility="gone">
 
-            <EditText
+            <com.jnhyxx.html5.view.NoPasteEditText
                 android:id="@+id/inputBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -1,6 +1,5 @@
 package com.jnhyxx.html5.activity.account;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -91,8 +90,7 @@ public class WithdrawActivity extends BaseActivity {
         mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_RECORD);
-                Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
+
             }
         });
 
@@ -135,14 +133,19 @@ public class WithdrawActivity extends BaseActivity {
                             if (resp.isSuccess()) {
                                 updateUserInfoBalance(amount);
 
-                                SmartDialog.with(getActivity(), resp.getMsg())
-                                        .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                                            @Override
-                                            public void onClick(Dialog dialog) {
-                                                dialog.dismiss();
-                                                finish();
-                                            }
-                                        }).show();
+//                                SmartDialog.with(getActivity(), resp.getMsg())
+//                                        .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(Dialog dialog) {
+//                                                dialog.dismiss();
+//                                                finish();
+//                                            }
+//                                        }).show();
+                                // TODO: 2017/2/8 暂无手续费 
+                                Launcher.with(getActivity(), WithdrawInfoActivity.class)
+                                        .putExtra(Launcher.EX_PAYLOAD, amount)
+                                        .putExtra(Launcher.EX_PAYLOAD_1, 2.00)
+                                        .execute();
                             } else {
                                 SmartDialog.with(getActivity(), resp.getMsg()).show();
                             }
@@ -164,6 +167,9 @@ public class WithdrawActivity extends BaseActivity {
                 showWithdrawRuleDialog();
                 break;
             case R.id.withdrawRecord:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_RECORD);
+                Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
+                finish();
                 break;
             case R.id.allWithdraw:
                 mWithdrawAmount.setText(mWithdrawAmount.getHint());

@@ -117,6 +117,7 @@
     <string name="add_bankcard_right_now">马上添加银行卡</string>
     <string name="profile">个人信息</string>
     <string name="my_users">我的用户</string>
+    <string name="withdraw_hint">遇到任何问题,请联系首页客服</string>
 
     <!--Settings-->
     <string name="unfilled">未填写</string>
@@ -442,7 +443,7 @@
 
 
     <!--提款记录-->
-    <string name="withdraw_record_title">提款记录</string>
+    <string name="withdraw_record_title">提现记录</string>
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">处理中</string>
     <string name="withdraw_money">%1$f元</string>
@@ -469,15 +470,17 @@
     <string name="withdraw_audit_passing">审核通过</string>
     <string name="withdraw_refuse">提现拒绝</string>
     <string name="transfer_fail">转账失败</string>
-
+    <string name="withdraw_auditing">审核中</string>
+    <string name="transfer">转账中</string>
     <string name="common_success">成功</string>
-
+    <string name="amount_to_the_account">到帐金额</string>
+    <string name="the_account_to_the_bank">到帐银行</string>
     <!-- 金币模拟 Gold -->
     <string name="available_gold">可用金币</string>
     <string name="gold_store">金币商城</string>
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
-
+    
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 
@@ -535,5 +538,6 @@
     <string name="use_clip_head_image">使用</string>
     <string name="sd_is_not_useful">sd卡不可使用</string>
     <string name="complete">完成</string>
+    <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
 </resources>

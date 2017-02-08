@@ -136,6 +136,13 @@
         android:enabled="false"
         android:gravity="center"
         android:padding="13sp"
-        android:text="@string/ok_has_space"
+        android:text="@string/next_step"
         android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="@string/withdraw_hint"/>
 </LinearLayout>

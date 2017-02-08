@@ -103,4 +103,17 @@ public class KlineViewData {
         }
         return 0f;
     }
+
+    @Override
+    public String toString() {
+        return "KlineViewData{" +
+                "closePrice=" + closePrice +
+                ", maxPrice=" + maxPrice +
+                ", minPrice=" + minPrice +
+                ", openPrice=" + openPrice +
+                ", time='" + time + '\'' +
+                ", day='" + day + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }

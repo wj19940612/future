@@ -39,6 +39,8 @@ public class SmartDialog {
     private String mMessageText;
     private String mTitleText;
 
+    private int mMessageTextMaxLines = 3;
+
     private boolean mCancelableOnTouchOutside;
 
     private Dialog mDialog;
@@ -207,6 +209,11 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setMessageMaxLines(int maxLines) {
+        mMessageTextMaxLines = maxLines;
+        return this;
+    }
+
     public void show() {
         if (mDialog != null) { // single dialog
             mMessage.setText(mMessageText);
@@ -262,6 +269,7 @@ public class SmartDialog {
         mSingleButton = (TextView) view.findViewById(R.id.singleButton);
 
         mMessage.setText(mMessageText);
+        mMessage.setMaxLines(mMessageTextMaxLines);
         if (TextUtils.isEmpty(mTitleText)) {
             mTitle.setVisibility(View.GONE);
         } else {

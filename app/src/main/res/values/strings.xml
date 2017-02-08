@@ -55,10 +55,6 @@
     <string name="mine">我的</string>
     <string name="newbie_title">新手引导</string>
 
-    <!-- Local Prompt -->
-    <string name="prompt_withdraw">1、交易用户提现免手续费，为防止恶意提现，每日提现申请最多2次，超过次日处理；
-        \n2、为防止套现和洗钱，无交易用户提现需提供身份证和银行卡进行风控核实。若信息核实无误，会于7-15个工作日内处理，届时银行将收取2%的手续费（自理）最低2元；
-        \n3、工作日（09:00-17:00）内提现1-2个小时内到账，周末及节假日提现顺延至下一个工作日处理。</string>
     <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
 
 
@@ -124,6 +120,7 @@
     <string name="profile">个人信息</string>
     <string name="my_users">我的用户</string>
     <string name="withdraw_hint">遇到任何问题，请联系首页客服</string>
+
     <!--Settings-->
     <string name="unfilled">未填写</string>
     <string name="filled">已填写</string>
@@ -432,8 +429,8 @@
     <!--充值、提现-->
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
-    <string name="default_bank_name_card_number">工商银行 *4545</string>
-    <string name="withdraw_least_money_hint">金额≥20元</string>
+    <string name="bank_name_card_number">%1$s (%2$s)</string>
+    <string name="withdraw_least_money_hint">可提现%1$s(元)</string>
     <string name="recharge_least_money">充值金额≥50</string>
     <string name="bank_card_pay">银行卡支付</string>
     <string name="bank_card_pay_hint">无需开通网银</string>
@@ -446,9 +443,16 @@
     <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
     <string name="recharge_agree_payment">证券期货交易风险提示</string>
     <string name="payment_service_agreement">支付服务协议</string>
+    <string name="withdraw_rule_hint">工作日2小时内到帐, 具体请看</string>
+    <string name="withdraw_rule_title">提现规则</string>
+    <string name="all_withdraw">全部提现</string>
+    <string name="withdraw_rule_content">1、交易用户提现免手续费，为防止恶意提现，每日提现申请最多2次，超过次日处理;\n\n
+2、为防止套现和洗钱，无交易用户提现需提供身份证和银行卡进行风控核实。若信息核实无误，会于7-15个工作日内处理，届时银行将收取2%的手续费（自理）最低2元;\n\n
+3、工作日（09:00-17:00）内提现1-2个小时内到账，周末及节假日提现顺延至下一个工作日处理。</string>
+
 
     <!--提款记录-->
-    <string name="withdraw_record_title">提款记录</string>
+    <string name="withdraw_record_title">提现记录</string>
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">处理中</string>
     <string name="withdraw_money">%1$f元</string>
@@ -475,15 +479,17 @@
     <string name="withdraw_audit_passing">审核通过</string>
     <string name="withdraw_refuse">提现拒绝</string>
     <string name="transfer_fail">转账失败</string>
-
+    <string name="withdraw_auditing">审核中</string>
+    <string name="transfer">转账中</string>
     <string name="common_success">成功</string>
-
+    <string name="amount_to_the_account">到帐金额</string>
+    <string name="the_account_to_the_bank">到帐银行</string>
     <!-- 金币模拟 Gold -->
     <string name="available_gold">可用金币</string>
     <string name="gold_store">金币商城</string>
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
-
+    
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 
@@ -541,5 +547,6 @@
     <string name="use_clip_head_image">使用</string>
     <string name="sd_is_not_useful">sd卡不可使用</string>
     <string name="complete">完成</string>
+    <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
 </resources>

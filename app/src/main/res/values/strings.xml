@@ -436,6 +436,7 @@
     <string name="wechat_pay">支付宝</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="recharge_bank_apply_limit">您的充值金额已超过您所绑定银行卡的单笔限额，请重新填写</string>
     <string name="install_alipay_first">请先安装支付宝</string>
     <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
     <string name="recharge_agree_payment">证券期货交易风险提示</string>

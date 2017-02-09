@@ -127,8 +127,8 @@ public class BankcardBindingActivity extends BaseActivity {
                 }).setPositive(R.string.yes, new SmartDialog.OnClickListener() {
             @Override
             public void onClick(Dialog dialog) {
-                dialog.dismiss();
                 finish();
+                dialog.dismiss();
             }
         }).show();
     }

@@ -400,7 +400,7 @@
     <string name="auth_name_write_success">实名认证填写成功</string>
 
     <!--绑定银行卡-->
-    <string name="bind_bank_title">绑定银行卡</string>
+    <string name="bind_bank_title">银行卡信息</string>
     <string name="bind_bank_warn">持卡人必须与账户信息一致,信息不做其他用途</string>
     <string name="bind_bank_bind">绑    定</string>
     <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>

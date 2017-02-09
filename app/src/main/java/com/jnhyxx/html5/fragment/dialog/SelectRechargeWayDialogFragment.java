@@ -21,8 +21,6 @@ import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.function.ToDoubleBiFunction;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,9 +50,9 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     public static final int PAY_WAY_ALIPAY = 1;
     public static final int PAY_WAY_WECHAT = 2;
 
-    private PayWayListener mPayWayListener;
+    private onPayWayListener mOnPayWayListener;
 
-    public interface PayWayListener {
+    public interface onPayWayListener {
         void selectPayWay(int payWay);
     }
 
@@ -79,7 +77,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof RechargeActivity) {
-            mPayWayListener = (PayWayListener) context;
+            mOnPayWayListener = (onPayWayListener) context;
         } else {
             throw new RuntimeException(context.toString() + "must implement PayWayListener");
         }
@@ -124,18 +122,18 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             case R.id.bankCardPay:
                 selectPayWay(PAY_WAY_BANK);
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_BANK_CARD);
-                mPayWayListener.selectPayWay(PAY_WAY_BANK);
+                mOnPayWayListener.selectPayWay(PAY_WAY_BANK);
                 closeDialog();
                 break;
             case R.id.aliPayPay:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_ALIPAY);
                 selectPayWay(PAY_WAY_ALIPAY);
-                mPayWayListener.selectPayWay(PAY_WAY_ALIPAY);
+                mOnPayWayListener.selectPayWay(PAY_WAY_ALIPAY);
                 closeDialog();
                 break;
             case R.id.weChartPay:
                 selectPayWay(PAY_WAY_WECHAT);
-                mPayWayListener.selectPayWay(PAY_WAY_WECHAT);
+                mOnPayWayListener.selectPayWay(PAY_WAY_WECHAT);
                 closeDialog();
                 break;
         }

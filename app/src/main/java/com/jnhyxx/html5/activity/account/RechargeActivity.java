@@ -24,6 +24,7 @@ import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.johnz.kutils.net.CookieManger;
@@ -33,22 +34,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_ALIPAY;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_BANK;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_WECHAT;
 
-public class RechargeActivity extends BaseActivity implements SelectRechargeWayDialogFragment.PayWayListener {
+public class RechargeActivity extends BaseActivity implements SelectRechargeWayDialogFragment.onPayWayListener {
 
 
     private final int APPLY_LIMIT = 10000;
     @BindView(R.id.paymentHint)
     TextView mPaymentHint;
-    @BindView(R.id.bankName)
-    TextView mBankName;
-    @BindView(R.id.onceRechargeLimit)
-    TextView mOnceRechargeLimit;
     @BindView(R.id.commonFail)
     CommonFailWarn mCommonFail;
     @BindView(R.id.payWayLayout)
@@ -57,8 +52,10 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     EditText mRechargeAmount;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
-    @BindView(R.id.bankCard)
+    @BindView(R.id.bankCardName)
     TextView mBankCard;
+    @BindView(R.id.bankCardSingleLimit)
+    TextView mBankCardSingleLimit;
 
     private static final int REQUEST_CODE_BANK_PAY = 10000;
     private static final int REQUEST_CODE_APPLY_PAY = 6210;
@@ -67,6 +64,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
 
     SupportApplyWay mSupportApplyWay;
+
     /**
      * 支付方式
      */
@@ -84,16 +82,14 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
-        getSupportApplyWay();
-
         updateView();
-
+        getSupportApplyWay();
         if (LocalUser.getUser().isBankcardFilled()) {
-            getUserLimitSingle(false);
+            getUserBankSingleLimitAndIsOpenPayPage(false);
         }
     }
 
-    private void getUserLimitSingle(final boolean isOpenPayPage) {
+    private void getUserBankSingleLimitAndIsOpenPayPage(final boolean isOpenPayPage) {
         API.User.getUserBankInfo()
                 .setTag(TAG)
                 .setIndeterminate(this)
@@ -101,8 +97,8 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
-                        mOnceRechargeLimit.setText(getString(R.string.once_recharge_limit, resp.getData().getLimitSingle()));
                         mLimitSingle = resp.getData().getLimitSingle();
+                        updateView();
                         if (isOpenPayPage) {
                             depositByBankApply();
                         }
@@ -113,10 +109,9 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
     private void updateView() {
         if (!LocalUser.getUser().isBankcardFilled()) {
-            hideBindBankCard(View.VISIBLE, GONE);
+            mBankCard.setText(R.string.bankcard);
         } else {
-            hideBindBankCard(GONE, View.VISIBLE);
-            mBankName.setText(getBankNameAndBankCard());
+            updateBankNameAndBankLimit();
         }
     }
 
@@ -133,13 +128,15 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      * 如果未绑定银行卡或者支付宝/微信支付  显示支付名称
      * 如果绑定银行卡并使用银行卡支付，则显示对应的卡和限制额度
      *
-     * @param visible
-     * @param gone
+     * @param
+     * @param
      */
-    private void hideBindBankCard(int visible, int gone) {
-        mBankCard.setVisibility(visible);
-        mBankName.setVisibility(gone);
-        mOnceRechargeLimit.setVisibility(gone);
+    private void updateBankNameAndBankLimit() {
+        mBankCardSingleLimit.setVisibility(View.VISIBLE);
+        String bankSingleLimit = getString(R.string.once_recharge_limit, FinanceUtil.formatWithThousandsSeparator(mLimitSingle));
+        mBankCardSingleLimit.setText(bankSingleLimit);
+//        mBankCard.setText(StrUtil.mergeTextWithRatioColor(getBankNameAndBankCard(), "\n" + bankSingleLimit, 0.7f, ContextCompat.getColor(getActivity(), R.color.blackPrimary)));
+        mBankCard.setText(getBankNameAndBankCard());
     }
 
     private void getSupportApplyWay() {
@@ -299,7 +296,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
             updateView();
-            getUserLimitSingle(true);
+            getUserBankSingleLimitAndIsOpenPayPage(true);
         }
         if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
             LocalUser user = LocalUser.getUser();
@@ -319,22 +316,21 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     @Override
     public void selectPayWay(int payWay) {
         mPayWay = payWay;
-
         switch (mPayWay) {
             case PAY_WAY_BANK:
                 if (LocalUser.getUser().isBankcardFilled()) {
-                    hideBindBankCard(GONE, VISIBLE);
-                    getUserLimitSingle(false);
+                    updateBankNameAndBankLimit();
                 } else {
+                    mBankCardSingleLimit.setVisibility(View.GONE);
                     mBankCard.setText(R.string.bankcard);
                 }
                 break;
             case PAY_WAY_ALIPAY:
-                hideBindBankCard(VISIBLE, GONE);
+                mBankCardSingleLimit.setVisibility(View.GONE);
                 mBankCard.setText(R.string.aliPay_pay);
                 break;
             case PAY_WAY_WECHAT:
-                hideBindBankCard(VISIBLE, GONE);
+                mBankCardSingleLimit.setVisibility(View.GONE);
                 mBankCard.setText(R.string.wechat_pay);
                 break;
             default:

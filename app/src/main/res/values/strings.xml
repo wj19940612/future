@@ -415,8 +415,8 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="bank_hint">为了您的账户资金安全,只能绑定持卡人\n本人的银行卡,获取更多帮助,请联系客\n服~</string>
-    <string name="bank_name">%1$s(%2$s)</string>
-    <string name="once_recharge_limit">单笔限额%1$d元</string>
+    <string name="bank_name">%1$s    (%2$s)</string>
+    <string name="once_recharge_limit">单笔限额%1$s元</string>
     <!--修改昵称-->
     <string name="modify_nick_name">昵称</string>
     <string name="modify_nick_name_title">修改昵称</string>

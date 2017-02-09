@@ -33,47 +33,35 @@
             android:text="@string/payment"
             android:textColor="@color/lucky"/>
 
-        <TextView
-            android:id="@+id/bankName"
+
+        <LinearLayout
+            android:layout_toRightOf="@+id/paymentHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/paymentHint"
-            android:text="@string/bank_name"
-            android:textColor="@color/blackPrimary"
-            android:textStyle="bold"
-            android:visibility="gone"
-            tools:text="中国人民银行卡(2222)"/>
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/onceRechargeLimit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bankName"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/paymentHint"
-            android:text="@string/once_recharge_limit"
-            android:textColor="@color/colorDisable"
-            android:textSize="11sp"
-            android:visibility="gone"
-            tools:text="单笔限额3,000元"/>
+            <TextView
+                android:id="@+id/bankCardName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/bankcard"
+                android:textColor="@color/blackPrimary"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/bankCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/paymentHint"
-            android:text="@string/bankcard"
-            android:textColor="@color/blackPrimary"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/bankCardSingleLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bankCardName"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:paddingTop="5dp"
+                android:visibility="gone"
+                tools:text="单笔"/>
+        </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -96,6 +84,7 @@
         android:layout_marginRight="@dimen/common_margin"
         android:background="@drawable/bg_line_division_compile"
         android:gravity="bottom"
+        android:minHeight="50dp"
         android:orientation="horizontal">
 
         <TextView

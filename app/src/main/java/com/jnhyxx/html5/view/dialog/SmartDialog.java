@@ -3,8 +3,10 @@ package com.jnhyxx.html5.view.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,11 @@ public class SmartDialog {
 
     private Dialog mDialog;
     private Activity mActivity;
+
+    private int mPositiveTextColor = Color.WHITE;
+    private int mSingleButtonBg = R.drawable.btn_dialog_single;
+    private int mMessageGravity = Gravity.CENTER;
+
 
     public interface OnClickListener {
         void onClick(Dialog dialog);
@@ -164,6 +171,21 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setPositiveTextColor(int resColorId) {
+        mPositiveTextColor = resColorId;
+        return this;
+    }
+
+    public SmartDialog setSingleButtonBg(int resBgId) {
+        mSingleButtonBg = resBgId;
+        return this;
+    }
+
+    public SmartDialog setMessageGravity(int gravity) {
+        mMessageGravity = gravity;
+        return this;
+    }
+
     public SmartDialog setNegative(int textId, OnClickListener listener) {
         mNegativeId = textId;
         mNegativeListener = listener;
@@ -269,6 +291,7 @@ public class SmartDialog {
         mSingleButton = (TextView) view.findViewById(R.id.singleButton);
 
         mMessage.setText(mMessageText);
+        mMessage.setGravity(mMessageGravity);
         mMessage.setMaxLines(mMessageTextMaxLines);
         if (TextUtils.isEmpty(mTitleText)) {
             mTitle.setVisibility(View.GONE);
@@ -280,6 +303,7 @@ public class SmartDialog {
             mDoubleButtons.setVisibility(View.VISIBLE);
 
             mPosition.setText(mPositiveId);
+            mPosition.setTextColor(mPositiveTextColor);
             mPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -302,7 +326,7 @@ public class SmartDialog {
         } else {
             mSingleButton.setVisibility(View.VISIBLE);
             mDoubleButtons.setVisibility(View.GONE);
-
+            mSingleButton.setBackgroundResource(mSingleButtonBg);
             mSingleButton.setText(mPositiveId);
             mSingleButton.setOnClickListener(new View.OnClickListener() {
                 @Override

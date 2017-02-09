@@ -265,10 +265,11 @@ public class MineFragment extends BaseFragment {
                 .setPositive(R.string.go_to_bind_bank_card, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class),REQ_CODE_ADD_BANK );
+                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class), REQ_CODE_ADD_BANK);
                         dialog.dismiss();
                     }
-                }).setNegative(R.string.cancel)
+                })
+                .setNegative(R.string.cancel)
                 .show();
     }
 

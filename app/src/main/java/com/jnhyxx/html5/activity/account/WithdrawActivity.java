@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -191,7 +192,9 @@ public class WithdrawActivity extends BaseActivity {
     private void showWithdrawRuleDialog() {
         SmartDialog.with(getActivity(), R.string.withdraw_rule_content, R.string.withdraw_rule_title)
                 .setPositive(R.string.i_get_it)
+                .setSingleButtonBg(R.drawable.btn_blue)
                 .setMessageMaxLines(Integer.MAX_VALUE)
+                .setMessageGravity(Gravity.LEFT)
                 .show();
     }
 }

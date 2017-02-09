@@ -66,6 +66,7 @@ public class WithdrawActivity extends BaseActivity {
             if (enable != mConfirmButton.isEnabled()) {
                 mConfirmButton.setEnabled(enable);
             }
+            mWithdrawAmount.setSelection(s.toString().length());
         }
     };
 
@@ -107,8 +108,8 @@ public class WithdrawActivity extends BaseActivity {
 
     private void updateUserStatus() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (!TextUtils.isEmpty(userInfo.getIcon())) {
-            Picasso.with(getActivity()).load(userInfo.getIcon()).into(mBankCardIcon);
+        if (!TextUtils.isEmpty(userInfo.getAppIcon())) {
+            Picasso.with(getActivity()).load(userInfo.getAppIcon()).into(mBankCardIcon);
         }
         String bankCardEndNumber = userInfo.getCardNumber().substring(userInfo.getCardNumber().length() - 4);
         mBankName.setText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
@@ -143,7 +144,7 @@ public class WithdrawActivity extends BaseActivity {
                                 updateUserInfoBalance(amount);
                                 Launcher.with(getActivity(), WithdrawInfoActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, amount)
-                                        .putExtra(Launcher.EX_PAYLOAD_1, (double)resp.getData())
+                                        .putExtra(Launcher.EX_PAYLOAD_1, (double) resp.getData())
                                         .execute();
                             } else {
                                 SmartDialog.with(getActivity(), resp.getMsg()).show();

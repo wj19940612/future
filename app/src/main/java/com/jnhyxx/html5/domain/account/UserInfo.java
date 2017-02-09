@@ -99,7 +99,10 @@ public class UserInfo {
 
     private int bankId;
 
-
+    /**
+     * 充值银行卡的图标
+     */
+    private String appIcon;
     /**
      * 银行卡单笔限额
      */
@@ -344,6 +347,14 @@ public class UserInfo {
         this.limitSingle = limitSingle;
     }
 
+    public String getAppIcon() {
+        return appIcon;
+    }
+
+    public void setAppIcon(String appIcon) {
+        this.appIcon = appIcon;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -362,6 +373,7 @@ public class UserInfo {
                 ", icon='" + icon + '\'' +
                 ", bIsSetNickName=" + bIsSetNickName +
                 ", bankId=" + bankId +
+                ", appIcon='" + appIcon + '\'' +
                 ", limitSingle=" + limitSingle +
                 ", birthday='" + birthday + '\'' +
                 ", certificationStatus=" + certificationStatus +

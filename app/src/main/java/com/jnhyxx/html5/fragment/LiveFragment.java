@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -103,6 +104,8 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
     @BindView(R.id.showEditTextButton)
     ImageView mShowEditTextButton;
+    @BindView(R.id.contactService)
+    ImageView mContactService;
 
     private LiveProgrammeList mProgrammeList;
     private KeyBoardHelper mKeyBoardHelper;
@@ -276,6 +279,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                 getLiveInteractionFragment().setKeyboardOpened(true);
             }
             mShowEditTextButton.setVisibility(GONE);
+            mContactService.setVisibility(GONE);
             setBottomTabVisibility(GONE);
         }
 
@@ -289,9 +293,11 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             if (mSelectedPage > 0 ||
                     (getTeacherGuideFragment() != null && getTeacherGuideFragment().getUserVisibleHint())) {
                 mShowEditTextButton.setVisibility(GONE);
+                mContactService.setVisibility(GONE);
                 setBottomTabVisibility(GONE);
             } else {
                 mShowEditTextButton.setVisibility(View.VISIBLE);
+                mContactService.setVisibility(View.VISIBLE);
                 setBottomTabVisibility(VISIBLE);
                 if (getLiveInteractionFragment() != null) {
                     getLiveInteractionFragment().hideInputBox();
@@ -301,7 +307,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     };
 
 
-    @OnClick(R.id.showEditTextButton)
+    @OnClick({R.id.showEditTextButton, R.id.contactService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showEditTextButton:
@@ -317,6 +323,17 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     }
                 } else {
                     startActivityForResult(new Intent(getActivity(), SignInActivity.class), BaseActivity.REQ_CODE_LOGIN);
+                }
+                break;
+
+            case R.id.contactService:
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.CONNECT_SERVICE);
+                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    ToastUtil.show(R.string.install_qq_first);
                 }
                 break;
         }
@@ -440,14 +457,15 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                 mSelectedPage = position;
                 if (position == POS_LIVE_INTERACTION) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIVE_INTERACT);
-                    if (!mShowEditTextButton.isShown()) {
+                    if (!mShowEditTextButton.isShown() && !mContactService.isShown()) {
                         mShowEditTextButton.setVisibility(VISIBLE);
+                        mContactService.setVisibility(VISIBLE);
                     }
                     setBottomTabVisibility(VISIBLE);
                 } else if (position == POS_TEACHER_ADVISE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TEACHER_GUIDE);
                     mShowEditTextButton.setVisibility(GONE);
-
+                    mContactService.setVisibility(GONE);
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
                     }
@@ -543,8 +561,9 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     RelativeLayout.LayoutParams.MATCH_PARENT);
             mVideoContainer.setLayoutParams(params);
 
-            if (mShowEditTextButton.isShown()) {
+            if (mShowEditTextButton.isShown() && mContactService.isShown()) {
                 mShowEditTextButton.setVisibility(GONE);
+                mContactService.setVisibility(GONE);
             }
             setBottomTabVisibility(GONE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -559,6 +578,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             if (getLiveInteractionFragment() != null
                     && getLiveInteractionFragment().getUserVisibleHint()) {
                 mShowEditTextButton.setVisibility(View.VISIBLE);
+                mContactService.setVisibility(View.VISIBLE);
             }
             setBottomTabVisibility(VISIBLE);
 

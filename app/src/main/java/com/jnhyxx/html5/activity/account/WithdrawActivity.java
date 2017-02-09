@@ -150,7 +150,6 @@ public class WithdrawActivity extends BaseActivity {
 //                                                finish();
 //                                            }
 //                                        }).show();
-                                // TODO: 2017/2/8 暂无手续费 
                                 Launcher.with(getActivity(), WithdrawInfoActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, amount)
                                         .putExtra(Launcher.EX_PAYLOAD_1, 2.00)

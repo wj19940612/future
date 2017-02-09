@@ -281,7 +281,7 @@ public class BankcardBindingActivity extends BaseActivity {
                     return;
                 }
 
-                submitRealName(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
+                submitBindBank(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
                 break;
             case R.id.unbindBankcard:
                 unbindServiceTelephone();
@@ -292,16 +292,30 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     }
 
-    private void submitBindBank(final String bankcardNum, final String payingBank, final String phoneNum) {
+    private void updateUserBindBankUserNameVerify(String cardHolderName, String identityNum, String payingBank, String bankcardNum, String phoneNum, int bankId) {
+        LocalUser localUser = LocalUser.getUser();
+        UserInfo userInfo = localUser.getUserInfo();
+        userInfo.setIssuingbankName(payingBank);
+        userInfo.setCardNumber(bankcardNum);
+        userInfo.setCardPhone(phoneNum);
+        userInfo.setBankId(bankId);
+        userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
+        userInfo.setRealName(cardHolderName);
+        userInfo.setIdCard(identityNum);
+        userInfo.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+        localUser.setUserInfo(userInfo);
+    }
+
+    private void submitBindBank(final String cardHolderName, final String bankcardNum, final String payingBank, final String phoneNum, final String identityNum) {
         final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
 
-        API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
+        API.User.bindBankCard(cardHolderName, identityNum, bankId, payingBank, bankcardNum, phoneNum)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
-                            updateUserBindBank(payingBank, bankcardNum, phoneNum, bankId);
+                            updateUserBindBankUserNameVerify(cardHolderName, identityNum, payingBank, bankcardNum, phoneNum, bankId);
                             CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 
                             setResult(RESULT_OK);
@@ -311,42 +325,6 @@ public class BankcardBindingActivity extends BaseActivity {
                         }
                     }
                 }).fire();
-    }
-
-    private void updateUserBindBank(String payingBank, String bankcardNum, String phoneNum, int bankId) {
-        LocalUser localUser = LocalUser.getUser();
-        UserInfo userInfo = localUser.getUserInfo();
-        userInfo.setIssuingbankName(payingBank);
-        userInfo.setCardNumber(bankcardNum);
-        userInfo.setCardPhone(phoneNum);
-        userInfo.setBankId(bankId);
-        userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-        localUser.setUserInfo(userInfo);
-    }
-
-    private void submitRealName(final String cardHolderName, final String bankcardNum, final String payingBank, final String phoneNum, final String identityNum) {
-        API.User.authUserName(cardHolderName, identityNum)
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback<Resp>() {
-                    @Override
-                    public void onReceive(Resp resp) {
-                        if (resp.isSuccess()) {
-                            updateUserNameVerify(cardHolderName, identityNum);
-                            submitBindBank(bankcardNum, payingBank, phoneNum);
-                        } else {
-                            mCommonFailTvWarn.show(resp.getMsg());
-                        }
-                    }
-                }).fire();
-    }
-
-    private void updateUserNameVerify(String cardHolderName, String identityNum) {
-        LocalUser localUser = LocalUser.getUser();
-        UserInfo user = localUser.getUserInfo();
-        user.setRealName(cardHolderName);
-        user.setIdCard(identityNum);
-        user.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
-        localUser.setUserInfo(user);
     }
 
     private void showCardHolderDialog() {

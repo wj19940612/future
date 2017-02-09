@@ -186,9 +186,12 @@ public class API extends APIBase {
          * @param bankName
          * @return
          */
-        public static API bindBankCard(Integer bankId, String bankName, String cardNumber, String cardPhone) {
-            return new API("/user/user/bindBankCard.do",
+        public static API bindBankCard(String realName, String identityNum, Integer bankId, String bankName, String cardNumber, String cardPhone) {
+//            return new API("/user/user/bindBankCard.do",
+            return new API("/user/user/bindIdCardAndBankCard.do",
                     new ApiParams()
+                            .put("realName", realName)
+                            .put("idCard", identityNum)
                             .put("bankId", bankId)
                             .put("bankName", bankName)
                             .put("cardNumber", cardNumber)

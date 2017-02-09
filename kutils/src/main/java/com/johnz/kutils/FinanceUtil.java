@@ -20,7 +20,7 @@ public class FinanceUtil {
      * @return
      */
     public static float accurateToFloat(double value) {
-        BigDecimal bigDecimal = new BigDecimal(value);
+        BigDecimal bigDecimal = BigDecimal.valueOf(value);
         return bigDecimal.setScale(2, RoundingMode.HALF_EVEN).floatValue();
     }
 
@@ -201,8 +201,8 @@ public class FinanceUtil {
      * @return 减法结果
      */
     public static BigDecimal subtraction(double minuend, double subtrahend) {
-        BigDecimal bigMinuend = new BigDecimal(minuend);
-        BigDecimal bigSubtrahend = new BigDecimal(subtrahend);
+        BigDecimal bigMinuend = BigDecimal.valueOf(minuend);
+        BigDecimal bigSubtrahend = BigDecimal.valueOf(subtrahend);
         return bigMinuend.subtract(bigSubtrahend);
     }
 

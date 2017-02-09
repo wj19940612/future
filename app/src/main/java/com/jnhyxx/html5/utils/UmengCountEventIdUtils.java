@@ -288,7 +288,7 @@ public class UmengCountEventIdUtils {
     public static final String SPEAK = "live1000";
     //live1001,发送,0
     public static final String SEND_SPEAK = "live1001";
-    //live1002,发送,0
+    //live1002,联系客服,0
     public static final String CONNECT_SERVICE = "live1002";
 
     /**

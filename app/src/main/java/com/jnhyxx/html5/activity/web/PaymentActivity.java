@@ -9,7 +9,6 @@ import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
-import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -19,6 +18,8 @@ import com.johnz.kutils.Launcher;
 import java.net.URISyntaxException;
 
 public class PaymentActivity extends WebViewActivity {
+    //充值失败
+    public static final int REQ_PAYMENT_FAIL = 383;
 
     /**
      * 银行卡支付的标志
@@ -45,7 +46,7 @@ public class PaymentActivity extends WebViewActivity {
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
-                Launcher.with(getActivity(), RechargeActivity.class).execute();
+                setResult(REQ_PAYMENT_FAIL);
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {

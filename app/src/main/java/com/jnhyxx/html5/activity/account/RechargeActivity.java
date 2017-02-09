@@ -253,7 +253,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .executeForResult(REQUEST_CODE_BANK_PAY);
-        finish();
     }
 
     private void depositByAliPay() {
@@ -264,7 +263,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .executeForResult(REQUEST_CODE_APPLY_PAY);
-        finish();
     }
 
     private void depositByWeChartApply() {
@@ -275,7 +273,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .execute();
-        finish();
     }
 
     private boolean checkNextStepButtonEnable() {
@@ -307,6 +304,9 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             double newMoneyUsable = moneyUsable + amount;
             userInfo.setMoneyUsable(newMoneyUsable);
             user.setUserInfo(userInfo);
+        }
+        if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == PaymentActivity.REQ_PAYMENT_FAIL) {
+            finish();
         }
         if (requestCode == REQ_CODE_AGREE_PAYMENT && resultCode == RESULT_OK) {
             doPayment();

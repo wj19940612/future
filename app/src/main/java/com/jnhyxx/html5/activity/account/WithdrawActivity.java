@@ -195,6 +195,8 @@ public class WithdrawActivity extends BaseActivity {
                 .setSingleButtonBg(R.drawable.btn_blue)
                 .setMessageMaxLines(Integer.MAX_VALUE)
                 .setMessageGravity(Gravity.LEFT)
+                .setTitleMargin(30)
+                .setTitleTextColor(R.color.blackPrimary)
                 .show();
     }
 }

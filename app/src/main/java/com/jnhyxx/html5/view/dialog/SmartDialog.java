@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,8 @@ public class SmartDialog {
     private int mPositiveTextColor = Color.WHITE;
     private int mSingleButtonBg = R.drawable.btn_dialog_single;
     private int mMessageGravity = Gravity.CENTER;
+    private int mTitleMargin = 15;
+    private int mTitltTextColor = Color.BLACK;
 
 
     public interface OnClickListener {
@@ -231,8 +234,18 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setTitleTextColor(int titleTextColor) {
+        mTitltTextColor = titleTextColor;
+        return this;
+    }
+
     public SmartDialog setMessageMaxLines(int maxLines) {
         mMessageTextMaxLines = maxLines;
+        return this;
+    }
+
+    public SmartDialog setTitleMargin(int margin) {
+        mTitleMargin = margin;
         return this;
     }
 
@@ -296,7 +309,11 @@ public class SmartDialog {
         if (TextUtils.isEmpty(mTitleText)) {
             mTitle.setVisibility(View.GONE);
         } else {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mTitleMargin, mActivity.getResources().getDisplayMetrics()), 0, 0);
+            mTitle.setLayoutParams(layoutParams);
             mTitle.setText(mTitleText);
+            mTitle.setTextColor(mTitltTextColor);
         }
         if (mIsDoubleButtons) {
             mSingleButton.setVisibility(View.GONE);

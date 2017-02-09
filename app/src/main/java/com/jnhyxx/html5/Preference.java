@@ -191,7 +191,7 @@ public class Preference {
     }
 
     public boolean isFirstWithdraw(String key) {
-        return mPrefs.getBoolean(key, false);
+        return mPrefs.getBoolean(key, true);
     }
 
     public void setIsFirstWithdraw(String key, boolean isFirstWithdraw) {

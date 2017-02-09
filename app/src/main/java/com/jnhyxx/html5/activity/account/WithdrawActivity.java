@@ -89,8 +89,8 @@ public class WithdrawActivity extends BaseActivity {
         setContentView(R.layout.activity_withdraw);
         ButterKnife.bind(this);
 
-        if (!isFirstWithdraw()) {
-            Preference.get().setIsFirstWithdraw(LocalUser.getUser().getPhone(), true);
+        if (isFirstWithdraw()) {
+            Preference.get().setIsFirstWithdraw(LocalUser.getUser().getPhone(), false);
             showWithdrawRuleDialog();
         }
 
@@ -168,7 +168,6 @@ public class WithdrawActivity extends BaseActivity {
             case R.id.withdrawRecord:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_RECORD);
                 Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
-                finish();
                 break;
             case R.id.allWithdraw:
                 mWithdrawAmount.setText(mWithdrawAmount.getHint());

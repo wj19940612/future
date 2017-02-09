@@ -21,6 +21,8 @@ import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.function.ToDoubleBiFunction;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -162,5 +164,11 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
         } else {
             mAliPayPay.setVisibility(View.GONE);
         }
+        // TODO: 2017/2/9 暂无微信的sdk 
+//        if (supportApplyWay.isWechat()) {
+//            mWeChartPay.setVisibility(View.VISIBLE);
+//        } else {
+//            mWeChartPay.setVisibility(View.GONE);
+//        }
     }
 }

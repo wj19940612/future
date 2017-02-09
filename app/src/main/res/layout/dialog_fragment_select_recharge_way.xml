@@ -70,7 +70,7 @@
             android:layout_weight="1"
             android:background="@drawable/btn_withdraw"
             android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_bank_card_pay"
+            android:drawableTop="@drawable/ic_wechat"
             android:gravity="center"
             android:minHeight="80dp"
             android:minWidth="80dp"

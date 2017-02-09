@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
@@ -87,24 +88,29 @@ public class WithdrawActivity extends BaseActivity {
         setContentView(R.layout.activity_withdraw);
         ButterKnife.bind(this);
 
-        mTitleBar.setOnRightViewClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        if (!isFirstWithdraw()) {
+            Preference.get().setIsFirstWithdraw(LocalUser.getUser().getPhone(), true);
+            showWithdrawRuleDialog();
+        }
 
         mWithdrawAmount.addTextChangedListener(mValidationWatcher);
 
         getMoneyDrawUsable();
 
+        updateUserStatus();
+    }
+
+    private boolean isFirstWithdraw() {
+        return Preference.get().isFirstWithdraw(LocalUser.getUser().getPhone());
+    }
+
+    private void updateUserStatus() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (!TextUtils.isEmpty(userInfo.getIcon())) {
             Picasso.with(getActivity()).load(userInfo.getIcon()).into(mBankCardIcon);
         }
         String bankCardEndNumber = userInfo.getCardNumber().substring(userInfo.getCardNumber().length() - 4);
         mBankName.setText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
-
     }
 
     private void getMoneyDrawUsable() {

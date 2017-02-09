@@ -12,10 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backFeature="true"
-        app:rightText="@string/withdraw_record_title"
-        app:rightTextColor="#FEFEFE"
-        app:rightTextSize="14sp"
-        app:rightVisible="true"
         app:titleText="@string/withdraw"/>
 
     <LinearLayout

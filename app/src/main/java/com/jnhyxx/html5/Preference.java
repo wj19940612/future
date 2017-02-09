@@ -26,6 +26,7 @@ public class Preference {
         String LAST_TEACHER_COMMAND = "last_teacher_command";
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
+        String IS_FIRST_WITHDRAW = "isFirstWithdraw";
     }
 
     private static Preference sInstance;
@@ -158,7 +159,7 @@ public class Preference {
     /**
      * 存储闪现下单数据
      *
-     * @param lightningOrderKey           由产品varietyId+用户手机号码+支付方式组成
+     * @param lightningOrderKey   由产品varietyId+用户手机号码+支付方式组成
      * @param lightningOrderAsset
      */
     public void setLightningOrderAsset(String lightningOrderKey, LightningOrderAsset lightningOrderAsset) {
@@ -187,5 +188,13 @@ public class Preference {
 
     public void disableTagShowed(String varietyType, int fundType) {
         getEditor().putBoolean(varietyType + Key.TAG_SHOWED + fundType, false).apply();
+    }
+
+    public boolean isFirstWithdraw(String key) {
+        return mPrefs.getBoolean(key, false);
+    }
+
+    public void setIsFirstWithdraw(String key, boolean isFirstWithdraw) {
+        getEditor().putBoolean(key, isFirstWithdraw).apply();
     }
 }

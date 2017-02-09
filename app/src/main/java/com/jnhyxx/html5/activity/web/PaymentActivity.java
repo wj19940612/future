@@ -9,6 +9,7 @@ import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -29,7 +30,7 @@ public class PaymentActivity extends WebViewActivity {
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         Intent intent = getIntent();
-        mIsBankCardPayment = intent.getBooleanExtra(BANK_CARD_PAYMENT,false);
+        mIsBankCardPayment = intent.getBooleanExtra(BANK_CARD_PAYMENT, false);
     }
 
     @Override
@@ -37,13 +38,14 @@ public class PaymentActivity extends WebViewActivity {
         Log.d("recharge", "onShouldOverrideUrlLoading: " + url);
         if (!TextUtils.isEmpty(url)) {
             if (url.contains(API.Finance.getRechargeSuccessUrl())) {
-                if(mIsBankCardPayment){
+                if (mIsBankCardPayment) {
                     LocalUser.getUser().getUserInfo().setCardState(UserInfo.BANKCARD_STATUS_BOUND);
                 }
                 setResult(RESULT_OK);
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
+                Launcher.with(getActivity(), RechargeActivity.class).execute();
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {

@@ -134,6 +134,8 @@ public class BankcardBindingActivity extends BaseActivity {
                     finish();
                 }
             }).show();
+        } else {
+            super.onBackPressed();
         }
     }
 

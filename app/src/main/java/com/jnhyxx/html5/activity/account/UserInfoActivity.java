@@ -129,7 +129,7 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
+        if (requestCode == BankcardBindingActivity.REQ_CODE_BIND_BANK && resultCode == RESULT_OK) {
             updateUserInfo();
         }
         if (resultCode == RESULT_OK) {
@@ -279,7 +279,7 @@ public class UserInfoActivity extends BaseActivity {
 
     private void bingBankCard() {
 
-        Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQ_CODE_BASE);
+        Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
     }
 
     //选择所在地

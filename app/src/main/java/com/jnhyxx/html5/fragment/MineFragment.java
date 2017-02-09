@@ -60,9 +60,6 @@ import static com.jnhyxx.html5.R.id.paidToPromote;
 
 
 public class MineFragment extends BaseFragment {
-
-    private static final int REQ_CODE_ADD_BANK = 407;
-
     //账户余额
     @BindView(R.id.balance)
     TextView mBalance;
@@ -265,7 +262,7 @@ public class MineFragment extends BaseFragment {
                 .setPositive(R.string.go_to_bind_bank_card, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class), REQ_CODE_ADD_BANK);
+                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class),BankcardBindingActivity.REQ_CODE_BIND_BANK);
                         dialog.dismiss();
                     }
                 })
@@ -348,7 +345,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_ADD_BANK && resultCode == AppCompatActivity.RESULT_OK) {
+        if (requestCode == BankcardBindingActivity.REQ_CODE_BIND_BANK && resultCode == AppCompatActivity.RESULT_OK) {
             openWithdrawPage();
         }
     }

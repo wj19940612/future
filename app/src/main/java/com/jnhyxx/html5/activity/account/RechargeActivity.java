@@ -240,7 +240,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         double amount = Double.valueOf(rechargeAmount);
         if (!LocalUser.getUser().isBankcardFilled()) {
             Launcher.with(this, BankcardBindingActivity.class)
-                    .executeForResult(REQ_CODE_BASE);
+                    .executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
             return;
         } else if (amount > mLimitSingle) {
             SmartDialog.with(getActivity(), R.string.recharge_bank_apply_limit).show();
@@ -291,7 +291,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
+        if (requestCode == BankcardBindingActivity.REQ_CODE_BIND_BANK && resultCode == RESULT_OK) {
             updateView();
             getUserBankSingleLimitAndIsOpenPayPage(true);
         }

@@ -47,6 +47,8 @@ import static com.jnhyxx.html5.R.id.identityNum;
 
 public class BankcardBindingActivity extends BaseActivity {
 
+    public static final int REQ_CODE_BIND_BANK = 414;
+
     @BindView(R.id.bankcardInputArea)
     LinearLayout mBankcardInputArea;
     @BindView(R.id.cardholderName)

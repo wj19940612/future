@@ -197,6 +197,7 @@ public class WithdrawActivity extends BaseActivity {
                 .setMessageGravity(Gravity.LEFT)
                 .setTitleMargin(30)
                 .setTitleTextColor(R.color.blackPrimary)
+                .setMessageTextColor(R.color.blackPrimary)
                 .show();
     }
 }

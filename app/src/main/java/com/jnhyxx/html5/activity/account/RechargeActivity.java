@@ -251,11 +251,11 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         }
 
         Launcher.with(getActivity(), PaymentActivity.class)
+                .putExtra(PaymentActivity.BANK_CARD_PAYMENT, true)
                 .putExtra(PaymentActivity.EX_URL, API.Finance.depositByBankApply(amount))
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))
                 .putExtra(PaymentActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                 .executeForResult(REQUEST_CODE_BANK_PAY);
-
     }
 
     private void depositByAliPay() {
@@ -295,7 +295,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
-           updateView();
+            updateView();
             getUserLimitSingle(true);
         }
         if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
@@ -322,7 +322,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                 if (LocalUser.getUser().isBankcardFilled()) {
                     hideBindBankCard(GONE, VISIBLE);
                     getUserLimitSingle(false);
-                }else {
+                } else {
                     mBankCard.setText(R.string.bankcard);
                 }
                 break;

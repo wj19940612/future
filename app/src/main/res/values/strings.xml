@@ -455,7 +455,7 @@
     <string name="withdraw_record_title">提现记录</string>
     <string name="withdraw_status_fail">失败</string>
     <string name="withdraw_status_auditing">处理中</string>
-    <string name="withdraw_money">%1$f元</string>
+    <string name="withdraw_money">%1$s元</string>
     <string name="withdraw_no_content">暂无提款记录</string>
 
     <!--提现记录详情-->

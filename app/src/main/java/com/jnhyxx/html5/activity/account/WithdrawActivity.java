@@ -141,18 +141,9 @@ public class WithdrawActivity extends BaseActivity {
                         public void onReceive(Resp resp) {
                             if (resp.isSuccess()) {
                                 updateUserInfoBalance(amount);
-
-//                                SmartDialog.with(getActivity(), resp.getMsg())
-//                                        .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(Dialog dialog) {
-//                                                dialog.dismiss();
-//                                                finish();
-//                                            }
-//                                        }).show();
                                 Launcher.with(getActivity(), WithdrawInfoActivity.class)
                                         .putExtra(Launcher.EX_PAYLOAD, amount)
-                                        .putExtra(Launcher.EX_PAYLOAD_1, 2.00)
+                                        .putExtra(Launcher.EX_PAYLOAD_1, (double)resp.getData())
                                         .execute();
                             } else {
                                 SmartDialog.with(getActivity(), resp.getMsg()).show();

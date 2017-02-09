@@ -37,12 +37,12 @@ public class WithdrawInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         double amount = intent.getDoubleExtra(Launcher.EX_PAYLOAD, 0);
         double poundage = intent.getDoubleExtra(Launcher.EX_PAYLOAD_1, 0);
-        mPoundage.setSubText(FinanceUtil.formatWithScale(poundage));
-        mAmountToAccount.setSubText(FinanceUtil.formatWithScale(FinanceUtil.subtraction(amount, poundage).doubleValue()));
+        mPoundage.setSubText(getString(R.string.withdraw_money, FinanceUtil.formatWithScale(poundage)));
+        mAmountToAccount.setSubText(getString(R.string.withdraw_money, FinanceUtil.formatWithScale(FinanceUtil.subtraction(amount, poundage).doubleValue())));
 
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         String bankCardEndNumber = userInfo.getCardNumber().substring(userInfo.getCardNumber().length() - 4);
-        mTheAccountToTheBank.setText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
+        mTheAccountToTheBank.setSubText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
 
     }
 

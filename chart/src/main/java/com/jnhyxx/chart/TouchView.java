@@ -42,7 +42,6 @@ public class TouchView extends TrendChart {
                                     int left, int top, int width, int topPartHeight,
                                     int left2, int top2, int width1, int bottomPartHeight,
                                     Canvas canvas) {
-
     }
 
     @Override

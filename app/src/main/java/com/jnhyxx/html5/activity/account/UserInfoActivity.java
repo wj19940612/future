@@ -63,7 +63,7 @@ import cn.qqtheme.framework.widget.WheelView;
 public class UserInfoActivity extends BaseActivity {
 
     // 绑定银行卡前 先进行实名认证
-    private static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
+    public static final int REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST = 900;
 
     private static final String SEX_BOY = "男";
     private static final String SEX_GIRL = "女";
@@ -86,8 +86,6 @@ public class UserInfoActivity extends BaseActivity {
     LinearLayout mIntroductionLayout;
     @BindView(R.id.userIntroduction)
     TextView mUserIntroduction;
-    @BindView(R.id.realNameAuth)
-    IconTextRow mRealNameAuth;
     @BindView(R.id.bindBankCard)
     IconTextRow mBindBankCard;
     @BindView(R.id.bindingPhone)
@@ -131,7 +129,7 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
+        if (requestCode == BankcardBindingActivity.REQ_CODE_BIND_BANK && resultCode == RESULT_OK) {
             updateUserInfo();
         }
         if (resultCode == RESULT_OK) {
@@ -156,7 +154,7 @@ public class UserInfoActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.realNameAuth, R.id.bindBankCard, R.id.logoutButton})
+    @OnClick({R.id.headImageLayout, R.id.userName, R.id.userRealName, R.id.sex, R.id.birthday, R.id.ll_Location, R.id.introductionLayout, R.id.bindBankCard, R.id.logoutButton})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.headImageLayout:
@@ -179,9 +177,6 @@ public class UserInfoActivity extends BaseActivity {
                 break;
             case R.id.introductionLayout:
                 Launcher.with(getActivity(), UserIntroduceActivity.class).executeForResult(REQ_CODE_BASE);
-                break;
-            case R.id.realNameAuth:
-                Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bindBankCard:
                 bingBankCard();
@@ -283,11 +278,8 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void bingBankCard() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST);
-            return;
-        }
-        Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQ_CODE_BASE);
+
+        Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
     }
 
     //选择所在地
@@ -360,7 +352,6 @@ public class UserInfoActivity extends BaseActivity {
         mLocation.setText(userInfo.getLand());
         mBirthday.setSubText(userInfo.getBirthday());
         mUserIntroduction.setText(userInfo.getIntroduction());
-        mRealNameAuth.setSubText(getRealNameAuthStatusRes(userInfo.getIdStatus()));
         mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
         mBindingPhone.setSubText(userInfo.getUserPhone());
 

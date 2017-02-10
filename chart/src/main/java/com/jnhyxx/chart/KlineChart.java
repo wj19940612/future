@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -30,12 +29,16 @@ public class KlineChart extends ChartView {
 
     private List<KlineViewData> mDataList;
     private SparseArray<KlineViewData> mVisibleList;
+    private int mFirstVisibleIndex;
+    private int mLastVisibleIndex;
+
     private Settings mSettings;
     private SimpleDateFormat mDateFormat;
     private String mDateFormatStr;
     private Date mDate;
     private int[] mMovingAverages;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
+    private KlineView.OnAchieveTheLastListener mOnAchieveTheLastListener;
 
     // visible points index range
     private int mStart;
@@ -52,8 +55,31 @@ public class KlineChart extends ChartView {
     }
 
     @Override
+    protected boolean enableDragChart() {
+        return true;
+    }
+
+    @Override
+    protected boolean enableDrawTouchLines() {
+        return true;
+    }
+
+    @Override
+    protected boolean enableMovingAverages() {
+        return true;
+    }
+
+    @Override
     protected boolean enableDrawMovingAverages() {
         return true;
+    }
+
+    public int getFirstVisibleIndex() {
+        return mFirstVisibleIndex;
+    }
+
+    public int getLastVisibleIndex() {
+        return mLastVisibleIndex;
     }
 
     private void init() {
@@ -66,11 +92,27 @@ public class KlineChart extends ChartView {
 
         mMaxBaseLine = Float.MIN_VALUE;
         mMinBaseLine = Float.MAX_VALUE;
+
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
     }
 
     public void setDataList(List<KlineViewData> dataList) {
         mDataList = dataList;
         redraw();
+    }
+
+    public void appendDataList(List<KlineViewData> dataList) {
+        mDataList.addAll(0, dataList);
+        redraw();
+    }
+
+    public void setVisibleList(SparseArray<KlineViewData> visibleList) {
+        mVisibleList = visibleList;
+    }
+
+    public SparseArray<KlineViewData> getVisibleList() {
+        return mVisibleList;
     }
 
     public void setDataFormat(String formatStr) {
@@ -79,6 +121,10 @@ public class KlineChart extends ChartView {
 
     public void setOnTouchLinesAppearListener(OnTouchLinesAppearListener onTouchLinesAppearListener) {
         mOnTouchLinesAppearListener = onTouchLinesAppearListener;
+    }
+
+    public void setOnAchieveTheLastListener(KlineView.OnAchieveTheLastListener onAchieveTheLastListener) {
+        mOnAchieveTheLastListener = onAchieveTheLastListener;
     }
 
     private void setCandleLinePaint(Paint paint, String color) {
@@ -131,7 +177,7 @@ public class KlineChart extends ChartView {
     protected void calculateMovingAverages(boolean indexesEnable) {
         if (mDataList != null && mDataList.size() > 0) {
             mStart = mDataList.size() - mSettings.getXAxis() < 0
-                    ? 0 : (mDataList.size() - mSettings.getXAxis());
+                    ? 0 : (mDataList.size() - mSettings.getXAxis() - getStartPointOffset());
             mLength = Math.min(mDataList.size(), mSettings.getXAxis());
             mEnd = mStart + mLength;
 
@@ -150,6 +196,14 @@ public class KlineChart extends ChartView {
             mMaxBaseLine = max;
             mMinBaseLine = min;
         }
+    }
+
+    @Override
+    protected float calculateMaxTransactionX() {
+        if (mDataList != null) {
+            return Math.max((mDataList.size() - mSettings.getXAxis()) * mOneXAxisWidth, 0);
+        }
+        return super.calculateMaxTransactionX();
     }
 
     @Override
@@ -199,8 +253,8 @@ public class KlineChart extends ChartView {
     @Override
     protected void drawTitleAboveBaselines(int left, int top, int top2, int touchIndex, Canvas canvas) {
         float textX = left + mTextMargin * 4;
-        if (mDataList != null && mDataList.size() > 0) {
-            KlineViewData data = mDataList.get(mDataList.size() - 1);
+        if (mVisibleList != null && mVisibleList.size() > 0) {
+            KlineViewData data = mVisibleList.get(mVisibleList.size() - 1);
             if (hasThisTouchIndex(touchIndex)) {
                 data = mVisibleList.get(touchIndex);
             }
@@ -226,6 +280,14 @@ public class KlineChart extends ChartView {
         }
     }
 
+    public void setPriceAreaWidth(float priceAreaWidth) {
+        mPriceAreaWidth = priceAreaWidth;
+    }
+
+    public float getPriceAreaWidth() {
+        return mPriceAreaWidth;
+    }
+
     @Override
     protected void drawBaseLines(boolean indexesEnable, float[] baselines, int left, int top, int width, int height,
                                  long[] indexesBaseLines, int left2, int top2, int width2, int height2, Canvas canvas) {
@@ -235,11 +297,8 @@ public class KlineChart extends ChartView {
         mPriceAreaWidth = calculatePriceWidth(baselines[0]);
         float topY = top;
         for (int i = 0; i < baselines.length; i++) {
-            Path path = getPath();
-            path.moveTo(left, topY);
-            path.lineTo(left + width, topY);
             setBaseLinePaint(sPaint);
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(left, topY, left + width, topY, sPaint);
 
             if (i % 2 == 0 && i != baselines.length - 1) {
                 setDefaultTextPaint(sPaint);
@@ -264,11 +323,8 @@ public class KlineChart extends ChartView {
             topY = top2;
             verticalInterval = height2 * 1.0f / (indexesBaseLines.length - 1);
             for (int i = 0; i < indexesBaseLines.length; i++) {
-                Path path = getPath();
-                path.moveTo(left2, topY);
-                path.lineTo(left2 + width2, topY);
                 setBaseLinePaint(sPaint);
-                canvas.drawPath(path, sPaint);
+                canvas.drawLine(left2, topY, left2 + width2, topY, sPaint);
 
                 setDefaultTextPaint(sPaint);
                 String baseLineValue = formatIndexesNumber(indexesBaseLines[i]);
@@ -307,22 +363,23 @@ public class KlineChart extends ChartView {
 
     private void drawMovingAverageLines(Canvas canvas) {
         for (int movingAverage : mMovingAverages) {
-            Path path = getPath();
+            setMovingAveragesPaint(sPaint, movingAverage);
+            float startX = -1;
+            float startY = -1;
             for (int i = mStart; i < mEnd; i++) {
                 int start = i - movingAverage + 1;
                 if (start < 0) continue;
                 float chartX = getChartXOfScreen(i);
                 float movingAverageValue = mDataList.get(i).getMovingAverage(movingAverage);
                 float chartY = getChartY(movingAverageValue);
-                if (path.isEmpty()) {
-                    path.moveTo(chartX, chartY);
+                if (startX == -1 && startY == -1) { // start
+                    startX = chartX;
+                    startY = chartY;
                 } else {
-                    path.lineTo(chartX, chartY);
+                    canvas.drawLine(startX, startY, chartX, chartY, sPaint);
+                    startX = chartX;
+                    startY = chartY;
                 }
-            }
-            if (!path.isEmpty()) {
-                setMovingAveragesPaint(sPaint, movingAverage);
-                canvas.drawPath(path, sPaint);
             }
         }
     }
@@ -344,19 +401,15 @@ public class KlineChart extends ChartView {
 
     private void drawTopCandleLine(Float maxPrice, float topPrice, String color, float chartX, Canvas canvas) {
         setCandleLinePaint(sPaint, color);
-        Path path = getPath();
-        path.moveTo(chartX, getChartY(maxPrice));
-        path.lineTo(chartX, getChartY(topPrice));
-        canvas.drawPath(path, sPaint);
+        canvas.drawLine(chartX, getChartY(maxPrice), chartX, getChartY(topPrice), sPaint);
     }
 
     private void drawCandleBody(float topPrice, float bottomPrice, String color, float chartX, Canvas canvas) {
         if (topPrice == bottomPrice) {
             setCandleLinePaint(sPaint, color);
-            Path path = getPath();
-            path.moveTo(chartX - mCandleWidth / 2, getChartY(topPrice));
-            path.lineTo(chartX + mCandleWidth / 2, getChartY(bottomPrice));
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(chartX - mCandleWidth / 2, getChartY(topPrice),
+                    chartX + mCandleWidth / 2, getChartY(bottomPrice),
+                    sPaint);
         } else {
             setCandleBodyPaint(sPaint, color);
             RectF rectf = getRectF();
@@ -370,10 +423,9 @@ public class KlineChart extends ChartView {
 
     private void drawBottomCandleLine(Float minPrice, float bottomPrice, String color, float chartX, Canvas canvas) {
         setCandleLinePaint(sPaint, color);
-        Path path = getPath();
-        path.moveTo(chartX, getChartY(bottomPrice));
-        path.lineTo(chartX, getChartY(minPrice));
-        canvas.drawPath(path, sPaint);
+        canvas.drawLine(chartX, getChartY(bottomPrice),
+                chartX, getChartY(minPrice),
+                sPaint);
     }
 
 
@@ -425,8 +477,14 @@ public class KlineChart extends ChartView {
 
     private float getChartXOfScreen(int index, KlineViewData data) {
         index = index - mStart; // visible index 0 ~ 39
+        updateFirstLastVisibleIndex(index);
         mVisibleList.put(index, data);
         return getChartX(index);
+    }
+
+    private void updateFirstLastVisibleIndex(int indexOfXAxis) {
+        mFirstVisibleIndex = Math.min(indexOfXAxis, mFirstVisibleIndex);
+        mLastVisibleIndex = Math.max(indexOfXAxis, mLastVisibleIndex);
     }
 
     @Override
@@ -445,6 +503,15 @@ public class KlineChart extends ChartView {
         return (int) (chartX * mSettings.getXAxis() / width);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mOnAchieveTheLastListener != null && mDataList != null &&
+                mDataList.size() > mSettings.getXAxis() && mStart == 0) {
+            mOnAchieveTheLastListener.onAchieveTheLast(mDataList.get(mStart), mDataList);
+        }
+    }
+
     private String formatTimestamp(long timestamp) {
         if (mSettings.getkType() == Settings.DAY_K) {
             mDateFormat.applyPattern(mDateFormatStr);
@@ -459,7 +526,14 @@ public class KlineChart extends ChartView {
         mEnd = 0;
         mLength = 0;
         mVisibleList.clear();
-        resetTouchIndex();
+
+        mMaxBaseLine = Float.MIN_VALUE;
+        mMinBaseLine = Float.MAX_VALUE;
+
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
+
+        resetChart();
         setDataList(null);
     }
 
@@ -495,21 +569,20 @@ public class KlineChart extends ChartView {
 
             // draw cross line: vertical line and horizontal line
             setTouchLinePaint(sPaint);
-            Path path = getPath();
-            path.moveTo(touchX, top);
-            path.lineTo(touchX, top + height);
-            canvas.drawPath(path, sPaint);
-            path = getPath();
-            path.moveTo(left, touchY);
-            path.lineTo(left + width, touchY);
-            canvas.drawPath(path, sPaint);
+            canvas.drawLine(touchX, top, touchX, top + height, sPaint);
+            canvas.drawLine(left, touchY, left + width, touchY, sPaint);
         }
     }
 
     @Override
     protected int calculateTouchIndex(MotionEvent e) {
         float touchX = e.getX();
-        return getIndexOfXAxis(touchX);
+        int touchIndex = getIndexOfXAxis(touchX);
+        if (getVisibleList() != null && getVisibleList().size() > 0) {
+            touchIndex = Math.max(touchIndex, getFirstVisibleIndex());
+            touchIndex = Math.min(touchIndex, getLastVisibleIndex());
+        }
+        return touchIndex;
     }
 
     @Override
@@ -518,11 +591,6 @@ public class KlineChart extends ChartView {
             return true;
         }
         return super.hasThisTouchIndex(touchIndex);
-    }
-
-    @Override
-    protected boolean enableDrawTouchLines() {
-        return true;
     }
 
     @Override
@@ -565,9 +633,9 @@ public class KlineChart extends ChartView {
 
     public interface OnTouchLinesAppearListener {
         /**
-         * @param data current kline data
+         * @param data         current kline data
          * @param previousData previous data of current data, n & n - 1
-         * @param isLeftArea true means left area of view
+         * @param isLeftArea   true means left area of view
          */
         void onAppear(KlineViewData data, KlineViewData previousData, boolean isLeftArea);
 

@@ -46,8 +46,10 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         super.put(2302, "返还");
         //内部充值资金
         super.put(3101, "成功");
+        //内部提现资金拒绝
+        super.put(3102, "拒绝");
         //内部取出资金
-        super.put(-3101, "提现");
+        super.put(-3101, "系统");
         //内部充值积分
         super.put(3201, "充值");
         //内部充值积分

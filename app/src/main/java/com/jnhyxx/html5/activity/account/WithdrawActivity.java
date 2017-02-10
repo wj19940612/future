@@ -133,6 +133,8 @@ public class WithdrawActivity extends BaseActivity {
                         LocalUser.getUser().setUserInfo(userInfo);
                         if (!TextUtils.isEmpty(resp.getData().getAppIcon())) {
                             Picasso.with(getActivity()).load(resp.getData().getAppIcon()).into(mBankCardIcon);
+                        } else {
+                            Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getAppIcon()).into(mBankCardIcon);
                         }
                     }
                 })

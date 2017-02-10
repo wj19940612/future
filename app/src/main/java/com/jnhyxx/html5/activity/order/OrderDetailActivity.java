@@ -96,7 +96,7 @@ public class OrderDetailActivity extends BaseActivity {
 
         FontUtil.setTt0173MFont(mLossProfit);
         mLossProfit.setTextColor(color);
-        mLossProfit.setText(FinanceUtil.fixNumber(lossProfitStr));
+        mLossProfit.setText(lossProfitStr);
         if (mProduct.isForeign()) {
             String lossProfitRmb = "(" + FinanceUtil.formatWithoutZero(Math.abs(lossProfit * rate)) + mFundUnit + ")";
             mLossProfitRmb.setText(lossProfitRmb);

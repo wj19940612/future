@@ -65,7 +65,7 @@ public class MarketDataView extends FrameLayout {
             mPreSettlement.setText(getPrice(marketData.getPreSetPrice(), priceScale));
 
             mTotalHands.setText(marketData.getVolume() != 0
-                    ? FinanceUtil.fixNumber(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume()))
+                    ? FinanceUtil.removeNeedlessZero(FinanceUtil.addUnitWhenBeyondTenThousand(marketData.getVolume()))
                     : NO_DATA);
             mTotalAmount.setText(marketData.getTurnover() != 0
                     ? FinanceUtil.addUnit(marketData.getTurnover())

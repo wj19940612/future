@@ -140,10 +140,10 @@ public class TradePageHeader extends FrameLayout {
             totalProfitRmbStr = "(" + totalProfitRmbStr + fundUnit + ")";
 //            mTotalProfit.setText(StrUtil.mergeTextWithTypefaceRatio(totalProfitStr, FontUtil.getTt0173MFont(), " " + totalProfitRmbStr, 0.5f),
 //                    TextView.BufferType.SPANNABLE);
-            mTotalProfit.setText(FinanceUtil.fixNumber(totalProfitStr));
+            mTotalProfit.setText(totalProfitStr);
             mTotalProfitRmb.setText(totalProfitRmbStr);
         } else {
-            mTotalProfit.setText(FinanceUtil.fixNumber(totalProfitStr));
+            mTotalProfit.setText(totalProfitStr);
             mTotalProfitRmb.setText("");
         }
     }

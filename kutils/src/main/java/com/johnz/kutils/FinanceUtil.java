@@ -165,7 +165,7 @@ public class FinanceUtil {
      * @return 处理后的字符串
      */
     public static String formatWithoutZero(double value) {
-        return fixNumber(formatWithScale(value, DEFAULT_SCALE));
+        return removeNeedlessZero(formatWithScale(value, DEFAULT_SCALE));
     }
 
     /**
@@ -384,29 +384,12 @@ public class FinanceUtil {
     }
 
     /**
-     * 去除小数点后多余的0
+     * 去除两位小数点后多余的.00
      *
      * @param number
      * @return
      */
-    public static String fixNumber(String number) {
-        int position = number.indexOf('.');
-        boolean flag = false;
-        if (position == -1) {
-            flag = true;
-        }
-        char[] array = number.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for (int i = array.length - 1; i >= 0; i--) {
-            if (!flag) {
-                if (array[i] != '0' && array[i] != '.' || position > i) {
-                    sb.append(array[i]);
-                    flag = true;
-                }
-            } else {
-                sb.append(array[i]);
-            }
-        }
-        return sb.reverse().toString();
+    public static String removeNeedlessZero(String number) {
+        return number.replace(".00","");
     }
 }

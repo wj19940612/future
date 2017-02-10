@@ -488,11 +488,19 @@ public class API extends APIBase {
         }
 
         /**
-         * 宝付充值成功返回的地址
+         * 充值失败返回的地址
          */
         public static String getMineWebPageUrl() {
             return getHost() + ("/mine.html");
         }
+
+        /**
+         * 充值失败返回的地址
+         */
+        public static String getRechargeFailProfileUrl() {
+            return getHost() + ("/mine/profile.html");
+        }
+
 
         /**
          * 接口名：用户提现

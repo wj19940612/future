@@ -138,7 +138,7 @@ public class WithdrawActivity extends BaseActivity {
 
 
     void doConfirmButtonClick() {
-        String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount);
+        String withdrawAmount = ViewUtil.getTextTrim(mWithdrawAmount).replace(",", "");
         if (!TextUtils.isEmpty(withdrawAmount)) {
             MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_OK);
             final double amount = Double.valueOf(withdrawAmount);
@@ -157,6 +157,7 @@ public class WithdrawActivity extends BaseActivity {
                                         .putExtra(Launcher.EX_PAYLOAD, amount)
                                         .putExtra(Launcher.EX_PAYLOAD_1, (double) resp.getData())
                                         .execute();
+                                finish();
                             } else {
                                 SmartDialog.with(getActivity(), resp.getMsg()).show();
                             }
@@ -182,7 +183,7 @@ public class WithdrawActivity extends BaseActivity {
                 Launcher.with(getActivity(), WithdrawRecordActivity.class).execute();
                 break;
             case R.id.allWithdraw:
-                mWithdrawAmount.setText(mWithdrawAmount.getHint());
+                mWithdrawAmount.setText(FinanceUtil.formatWithThousandsSeparator(mMoneyDrawUsable));
                 break;
             case R.id.confirmButton:
                 doConfirmButtonClick();

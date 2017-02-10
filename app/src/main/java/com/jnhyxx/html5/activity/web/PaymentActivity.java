@@ -49,8 +49,11 @@ public class PaymentActivity extends WebViewActivity {
                 setResult(REQ_PAYMENT_FAIL);
                 finish();
                 return true;
-            } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {
+            } else if (url.equalsIgnoreCase(API.Finance.getMineWebPageUrl())) {
 //                setResult(RESULT_OK);
+                finish();
+                return true;
+            } else if (url.equalsIgnoreCase(API.Finance.getRechargeFailProfileUrl())) {
                 finish();
                 return true;
             } else if (url.startsWith("alipays:") || url.contains("Intent;scheme=alipays")) {

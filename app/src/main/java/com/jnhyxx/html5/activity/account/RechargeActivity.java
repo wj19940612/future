@@ -297,17 +297,14 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             updateView();
             getUserBankSingleLimitAndIsOpenPayPage(true);
         }
-        if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
-            LocalUser user = LocalUser.getUser();
-            UserInfo userInfo = user.getUserInfo();
-            double moneyUsable = userInfo.getMoneyUsable();
-            String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
-            double amount = Double.valueOf(rechargeAmount);
-            double newMoneyUsable = moneyUsable + amount;
-            userInfo.setMoneyUsable(newMoneyUsable);
-            user.setUserInfo(userInfo);
+        if (requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
             finish();
         }
+
+        if (requestCode == REQUEST_CODE_APPLY_PAY && resultCode == RESULT_OK) {
+            finish();
+        }
+
         if (requestCode == REQ_CODE_AGREE_PAYMENT && resultCode == RESULT_OK) {
             doPayment();
         }

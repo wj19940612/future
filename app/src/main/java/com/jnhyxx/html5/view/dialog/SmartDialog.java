@@ -264,7 +264,7 @@ public class SmartDialog {
 
         if (!mActivity.isFinishing()) {
             mDialog.show();
-            scaleDialogWidth(0.9);
+            scaleDialogWidth(0.8);
         }
     }
 

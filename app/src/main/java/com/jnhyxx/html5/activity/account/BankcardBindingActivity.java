@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -345,7 +346,11 @@ public class BankcardBindingActivity extends BaseActivity {
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
                     }
-                }).show();
+                })
+                .setSingleButtonBg(R.drawable.btn_blue)
+                .setMessageGravity(Gravity.LEFT)
+                .setMessageMaxLines(Integer.MAX_VALUE)
+                .show();
     }
 
     private void showBankDialog() {

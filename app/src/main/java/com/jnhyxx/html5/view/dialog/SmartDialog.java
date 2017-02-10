@@ -3,8 +3,11 @@ package com.jnhyxx.html5.view.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +42,19 @@ public class SmartDialog {
     private String mMessageText;
     private String mTitleText;
 
+    private int mMessageTextMaxLines = 3;
+
     private boolean mCancelableOnTouchOutside;
 
     private Dialog mDialog;
     private Activity mActivity;
+
+    private int mPositiveTextColor = Color.WHITE;
+    private int mSingleButtonBg = R.drawable.btn_dialog_single;
+    private int mMessageGravity = Gravity.CENTER;
+    private int mTitleMargin = 15;
+    private int mTitleTextColor = Color.BLACK;
+    private int mMessageTextColor = Color.BLACK;
 
     public interface OnClickListener {
         void onClick(Dialog dialog);
@@ -162,6 +174,21 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setPositiveTextColor(int resColorId) {
+        mPositiveTextColor = resColorId;
+        return this;
+    }
+
+    public SmartDialog setSingleButtonBg(int resBgId) {
+        mSingleButtonBg = resBgId;
+        return this;
+    }
+
+    public SmartDialog setMessageGravity(int gravity) {
+        mMessageGravity = gravity;
+        return this;
+    }
+
     public SmartDialog setNegative(int textId, OnClickListener listener) {
         mNegativeId = textId;
         mNegativeListener = listener;
@@ -197,6 +224,12 @@ public class SmartDialog {
         return this;
     }
 
+    public SmartDialog setMessageTextColor(int  messageTextColor) {
+        mMessageTextColor = messageTextColor;
+        return this;
+    }
+
+
     public SmartDialog setTitle(int titleId) {
         mTitleText = mActivity.getText(titleId).toString();
         return this;
@@ -204,6 +237,21 @@ public class SmartDialog {
 
     public SmartDialog setTitle(String title) {
         mTitleText = title;
+        return this;
+    }
+
+    public SmartDialog setTitleTextColor(int titleTextColor) {
+        mTitleTextColor = titleTextColor;
+        return this;
+    }
+
+    public SmartDialog setMessageMaxLines(int maxLines) {
+        mMessageTextMaxLines = maxLines;
+        return this;
+    }
+
+    public SmartDialog setTitleMargin(int margin) {
+        mTitleMargin = margin;
         return this;
     }
 
@@ -262,16 +310,24 @@ public class SmartDialog {
         mSingleButton = (TextView) view.findViewById(R.id.singleButton);
 
         mMessage.setText(mMessageText);
+        mMessage.setGravity(mMessageGravity);
+        mMessage.setMaxLines(mMessageTextMaxLines);
+        mMessage.setTextColor(mMessageTextColor);
         if (TextUtils.isEmpty(mTitleText)) {
             mTitle.setVisibility(View.GONE);
         } else {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mTitleMargin, mActivity.getResources().getDisplayMetrics()), 0, 0);
+            mTitle.setLayoutParams(layoutParams);
             mTitle.setText(mTitleText);
+            mTitle.setTextColor(mTitleTextColor);
         }
         if (mIsDoubleButtons) {
             mSingleButton.setVisibility(View.GONE);
             mDoubleButtons.setVisibility(View.VISIBLE);
 
             mPosition.setText(mPositiveId);
+            mPosition.setTextColor(mPositiveTextColor);
             mPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -294,7 +350,7 @@ public class SmartDialog {
         } else {
             mSingleButton.setVisibility(View.VISIBLE);
             mDoubleButtons.setVisibility(View.GONE);
-
+            mSingleButton.setBackgroundResource(mSingleButtonBg);
             mSingleButton.setText(mPositiveId);
             mSingleButton.setOnClickListener(new View.OnClickListener() {
                 @Override

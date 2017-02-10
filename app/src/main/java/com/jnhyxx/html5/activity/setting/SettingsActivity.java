@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
-import com.jnhyxx.html5.activity.account.NameVerifyActivity;
 import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
@@ -126,7 +125,6 @@ public class SettingsActivity extends BaseActivity {
                 break;
             case R.id.realNameVerity:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REAL_NAME);
-                Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BASE);
                 break;
             case R.id.bandingBankcard:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BIND_BANK);
@@ -140,11 +138,6 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void bindingBankcard() {
-        if (!LocalUser.getUser().isRealNameFilled()) {
-            Launcher.with(getActivity(), NameVerifyActivity.class).executeForResult(REQ_CODE_BINDING_CARD_VERIFY_NAME_FIRST);
-            return;
-        }
-
         Launcher.with(getActivity(), BankcardBindingActivity.class).executeForResult(REQ_CODE_BASE);
     }
 

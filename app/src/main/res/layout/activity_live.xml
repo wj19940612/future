@@ -83,6 +83,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/slidingTabLayout"/>
+        <ImageView
+            android:id="@+id/contactService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/showEditTextButton"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="25dp"
+            android:src="@drawable/btn_live_contact_service"
+            android:visibility="visible"
+            />
 
         <ImageView
             android:id="@+id/showEditTextButton"

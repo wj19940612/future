@@ -45,6 +45,10 @@ public class Launcher {
         mIntent.putExtra(key, value);
         return this;
     }
+    public Launcher putExtra(String key, double value) {
+        mIntent.putExtra(key, value);
+        return this;
+    }
 
     public Launcher putExtra(String key, String value) {
         mIntent.putExtra(key, value);

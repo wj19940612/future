@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -180,7 +179,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mOffset = mOffset +mSize;
+                    mOffset = mOffset + mSize;
                     getTradeInfoList();
                 }
             });
@@ -304,23 +303,26 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                     mDataType.setBackgroundResource(R.drawable.bg_green_primary);
                     mTradeDetailMarginRemain.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                 }
-                String data = new RemarkHandleUtil().get(item.getTypeDetail());
-                if (!TextUtils.isEmpty(data)) {
-                    mDataType.setText(data);
+                String data;
+                if (RemarkHandleUtil.isRecharge(item.getType())) {
+                    data = getString(R.string.recharge);
                 } else {
-                    mTradeDetailAdapter.remove(item);
+                    data = new RemarkHandleUtil().get(item.getTypeDetail());
                 }
+                mDataType.setText(data);
+
 //                mTradeDetail.setText(CommonMethodUtils.getRemarkInfo(data, item.getRemark()));
                 /**
                  * 根据得到的key值显示文字，如果value不存在，则不显示;
                  */
 //                String tradeDepict = new TradeDetailRemarkUtil().get(item.getTypeDetail());
-                String tradeStatus = getTradeStatus(item);
-                if (!TextUtils.isEmpty(tradeStatus)) {
-                    mTradeDetail.setText(tradeStatus);
+                String tradeStatus;
+                if (TradeDetailRemarkUtil.isRecharge(item.getType())) {
+                    tradeStatus = getString(R.string.recharge);
                 } else {
-                    mTradeDetailAdapter.remove(item);
+                    tradeStatus = getTradeStatus(item);
                 }
+                mTradeDetail.setText(tradeStatus);
                 mStringBuffer.append(item.getMoney());
                 mStringBuffer.append(Unit.YUAN);
                 mTradeDetailMarginRemain.setText(mStringBuffer.toString());

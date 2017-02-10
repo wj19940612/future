@@ -50,7 +50,7 @@ public class PaymentActivity extends WebViewActivity {
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {
-                setResult(RESULT_OK);
+//                setResult(RESULT_OK);
                 finish();
                 return true;
             } else if (url.startsWith("alipays:") || url.contains("Intent;scheme=alipays")) {

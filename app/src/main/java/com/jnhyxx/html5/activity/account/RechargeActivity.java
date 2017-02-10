@@ -304,8 +304,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             double newMoneyUsable = moneyUsable + amount;
             userInfo.setMoneyUsable(newMoneyUsable);
             user.setUserInfo(userInfo);
-        }
-        if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == PaymentActivity.REQ_PAYMENT_FAIL) {
             finish();
         }
         if (requestCode == REQ_CODE_AGREE_PAYMENT && resultCode == RESULT_OK) {

@@ -108,7 +108,7 @@
             android:name=".activity.account.WithdrawActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.account.NameVerifyActivity"
+            android:name=".activity.account.WithdrawInfoActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.account.BankcardBindingActivity"
@@ -146,9 +146,7 @@
         <activity
             android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.setting.SettingsActivity"
-            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.account.WithdrawRecordActivity"
             android:screenOrientation="portrait"/>
@@ -165,8 +163,9 @@
             android:name=".activity.account.UserInfoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.account.UserIntroduceActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.account.UserIntroduceActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- WebView activity -->
         <activity
@@ -190,7 +189,6 @@
         <activity
             android:name=".activity.web.HideTitleWebActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.web.InvestCourseActivity"
             android:screenOrientation="portrait"/>
@@ -198,18 +196,15 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
-        <!-- 用户自定义服务继承自GTIntentService,作为SDK与APP桥梁服务,用来接收各种消息和命令回复-->
+        <!-- 用户自定义服务继承自GTIntentService,作为SDK与APP桥梁服务,用来接收各种消息和命令回复 -->
         <service android:name=".service.PushIntentService"/>
 
-        <!--push service 配置SDK核心服务 -->
+        <!-- push service 配置SDK核心服务 -->
         <service
             android:name=".service.PushService"
             android:exported="true"
             android:label="PushService"
             android:process=":pushService"/>
-
-
-
 
         <!-- umeng channel，replace this -->
         <meta-data
@@ -219,6 +214,7 @@
 
         <!-- service -->
         <service android:name=".service.DownloadService"/>
+
     </application>
 
 </manifest>

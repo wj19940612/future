@@ -100,17 +100,17 @@
                 app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>
 
-         <!--   <com.jnhyxx.html5.view.IconTextRow
-                android:id="@+id/location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-                app:rightIconVisibility="visible"
-                app:rowText="@string/location"
-                app:rowTextColor="@color/colorDisable"
-                app:rowVerticalPadding="12dp"
-                app:subTextColor="@color/blackPrimary"/>-->
+            <!--   <com.jnhyxx.html5.view.IconTextRow
+                   android:id="@+id/location"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:background="@android:color/white"
+                   app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+                   app:rightIconVisibility="visible"
+                   app:rowText="@string/location"
+                   app:rowTextColor="@color/colorDisable"
+                   app:rowVerticalPadding="12dp"
+                   app:subTextColor="@color/blackPrimary"/>-->
 
             <include layout="@layout/spilt_line_gray_light"/>
 
@@ -132,15 +132,15 @@
                     android:textColor="@color/colorDisable"/>
 
                 <TextView
-                    android:gravity="right"
-                    android:textColor="@color/blackPrimary"
                     android:id="@+id/location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
-                    android:maxLines="1"/>
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/blackPrimary"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -200,29 +200,16 @@
                     android:src="@drawable/common_big_arrow_list_icon_more"/>
             </LinearLayout>
 
-            <com.jnhyxx.html5.view.IconTextRow
-                android:id="@+id/realNameAuth"
-                android:layout_width="match_parent"
-                android:layout_height="43dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/white"
-                app:rightIcon="@drawable/common_big_arrow_list_icon_more"
-                app:rightIconVisibility="visible"
-                app:rowText="@string/real_name_authorize"
-                app:rowTextColor="@color/colorDisable"
-                app:rowVerticalPadding="12dp"
-                app:subTextColor="@color/blueAssist"/>
-
-            <include layout="@layout/spilt_line_gray_light"/>
 
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/bindBankCard"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@android:color/white"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rightIconVisibility="visible"
-                app:rowText="@string/binding_bank_card"
+                app:rowText="@string/bankcard"
                 app:rowTextColor="@color/colorDisable"
                 app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blueAssist"/>
@@ -232,7 +219,7 @@
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/bindingPhone"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 app:rightIconVisibility="visible"
                 app:rowText="@string/binding_phone"

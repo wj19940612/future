@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -44,12 +43,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.identityNum;
+
 public class BankcardBindingActivity extends BaseActivity {
+
+    public static final int REQ_CODE_BIND_BANK = 414;
 
     @BindView(R.id.bankcardInputArea)
     LinearLayout mBankcardInputArea;
     @BindView(R.id.cardholderName)
-    TextView mCardholderName;
+    EditText mCardholderName;
     @BindView(R.id.bankcardNum)
     EditText mBankcardNum;
     @BindView(R.id.phoneNum)
@@ -58,6 +61,10 @@ public class BankcardBindingActivity extends BaseActivity {
     TextView mPayingBank;
     @BindView(R.id.bindCardHint)
     ImageView mBindCardHint;
+    @BindView(R.id.identityNumTitle)
+    TextView mIdentityNumTitle;
+    @BindView(identityNum)
+    EditText mIdentityNum;
 
     @BindView(R.id.bankcardImageArea)
     LinearLayout mBankcardImageArea;
@@ -83,6 +90,7 @@ public class BankcardBindingActivity extends BaseActivity {
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
 
+
     private ChannelBank mChannelBank;
 
     private int mMDefaultSelectBankId = LocalUser.getUser().getUserInfo().getBankId();
@@ -96,7 +104,8 @@ public class BankcardBindingActivity extends BaseActivity {
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
-
+        mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
+        mIdentityNum.addTextChangedListener(mValidationWatcher);
         showBankcardInfo();
     }
 
@@ -105,6 +114,29 @@ public class BankcardBindingActivity extends BaseActivity {
         super.onDestroy();
         mBankcardNum.removeTextChangedListener(mBankCardValidationWatcher);
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
+        mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
+        mIdentityNum.removeTextChangedListener(mValidationWatcher);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!LocalUser.getUser().isBankcardBound()) {
+            SmartDialog.with(getActivity(), R.string.whether_if_give_up_bind_bank_card)
+                    .setNegative(R.string.no, new SmartDialog.OnClickListener() {
+                        @Override
+                        public void onClick(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    }).setPositive(R.string.yes, new SmartDialog.OnClickListener() {
+                @Override
+                public void onClick(Dialog dialog) {
+                    dialog.dismiss();
+                    finish();
+                }
+            }).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private ValidationWatcher mPhoneValidationWatcher = new ValidationWatcher() {
@@ -112,6 +144,14 @@ public class BankcardBindingActivity extends BaseActivity {
         public void afterTextChanged(Editable s) {
             mValidationWatcher.afterTextChanged(s);
             formatPhoneNumber();
+        }
+    };
+
+    private ValidationWatcher mCardHolderValidationWatcher = new ValidationWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mValidationWatcher.afterTextChanged(s);
         }
     };
 
@@ -140,7 +180,6 @@ public class BankcardBindingActivity extends BaseActivity {
         String newBankCard = StrFormatter.getFormatBankCardNumber(bankCardNoSpace).trim();
         if (!newBankCard.equalsIgnoreCase(oldBankCard)) {
             mBankcardNum.setText(newBankCard);
-            Log.d("wj", "银行卡长度" + newBankCard.length());
             mBankcardNum.setSelection(newBankCard.length());
         }
     }
@@ -192,6 +231,7 @@ public class BankcardBindingActivity extends BaseActivity {
         mCardholderName.setText(userInfo.getRealName());
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
+        mIdentityNum.setText(userInfo.getIdCard());
         if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
             mPayingBank.setText(userInfo.getIssuingbankName());
         }
@@ -220,11 +260,17 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String bankcardNum = ViewUtil.getTextTrim(mBankcardNum).replaceAll(" ", "");
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
+                final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
                 // TODO: 2016/10/10 暂时去掉银行卡校验
 //                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
 //                    mCommonFailTvWarn.showController(R.string.bank_card_is_error);
 //                    return;
 //                }
+
+                if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
+                    mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
+                    return;
+                }
 
                 if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
                     mCommonFailTvWarn.show(R.string.common_phone_num_fail);
@@ -236,32 +282,12 @@ public class BankcardBindingActivity extends BaseActivity {
                     return;
                 }
 
-                final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
+                if (!ValidityDecideUtil.IDCardValidate(identityNum)) {
+                    mCommonFailTvWarn.show(R.string.settings_identity_card_fail);
+                    return;
+                }
 
-                API.User.bindBankCard(bankId, payingBank, bankcardNum, phoneNum)
-                        .setIndeterminate(this).setTag(TAG)
-                        .setCallback(new Callback<Resp>() {
-                            @Override
-                            public void onReceive(Resp resp) {
-                                if (resp.isSuccess()) {
-                                    LocalUser localUser = LocalUser.getUser();
-                                    UserInfo userInfo = localUser.getUserInfo();
-                                    userInfo.setIssuingbankName(payingBank);
-                                    userInfo.setCardNumber(bankcardNum);
-                                    userInfo.setCardPhone(phoneNum);
-                                    userInfo.setBankId(bankId);
-                                    userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-                                    localUser.setUserInfo(userInfo);
-
-                                    CustomToast.getInstance().showText(getActivity(), resp.getMsg());
-
-                                    setResult(RESULT_OK);
-                                    finish();
-                                } else {
-                                    mCommonFailTvWarn.show(resp.getMsg());
-                                }
-                            }
-                        }).fire();
+                submitBindBank(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
                 break;
             case R.id.unbindBankcard:
                 unbindServiceTelephone();
@@ -272,9 +298,44 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     }
 
+    private void updateUserBindBankUserNameVerify(String cardHolderName, String identityNum, String payingBank, String bankcardNum, String phoneNum, int bankId) {
+        LocalUser localUser = LocalUser.getUser();
+        UserInfo userInfo = localUser.getUserInfo();
+        userInfo.setIssuingbankName(payingBank);
+        userInfo.setCardNumber(bankcardNum);
+        userInfo.setCardPhone(phoneNum);
+        userInfo.setBankId(bankId);
+        userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
+        userInfo.setRealName(cardHolderName);
+        userInfo.setIdCard(identityNum);
+        userInfo.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+        localUser.setUserInfo(userInfo);
+    }
+
+    private void submitBindBank(final String cardHolderName, final String bankcardNum, final String payingBank, final String phoneNum, final String identityNum) {
+        final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
+
+        API.User.bindBankCard(cardHolderName, identityNum, bankId, payingBank, bankcardNum, phoneNum)
+                .setIndeterminate(this).setTag(TAG)
+                .setCallback(new Callback<Resp>() {
+                    @Override
+                    public void onReceive(Resp resp) {
+                        if (resp.isSuccess()) {
+                            updateUserBindBankUserNameVerify(cardHolderName, identityNum, payingBank, bankcardNum, phoneNum, bankId);
+                            CustomToast.getInstance().showText(getActivity(), resp.getMsg());
+
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            mCommonFailTvWarn.show(resp.getMsg());
+                        }
+                    }
+                }).fire();
+    }
+
     private void showCardHolderDialog() {
-        SmartDialog.with(getActivity(), R.string.bank_hint)
-                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
+        SmartDialog.with(getActivity(), R.string.bind_bank_hint)
+                .setPositive(R.string.i_get_it, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
                         dialog.dismiss();
@@ -358,7 +419,7 @@ public class BankcardBindingActivity extends BaseActivity {
         for (ChannelBank data : channelBanks) {
             bankNameList.add(data.getName());
         }
-        
+
         mWheelView.setItems(bankNameList);
         mWheelView.setSelectedIndex(mMDefaultSelectBankId);
         mWheelView.setOnWheelListener(new WheelView.OnWheelListener() {

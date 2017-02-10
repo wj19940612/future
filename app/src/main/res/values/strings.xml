@@ -131,7 +131,7 @@
     <string name="nickname">昵称</string>
     <string name="settings">设置</string>
     <string name="binding_bank_card">绑定银行卡</string>
-    <string name="binding_phone">绑定手机</string>
+    <string name="phone_authentication">手机认证</string>
     <string name="logout">退出登录</string>
     <string name="real_name_authorize">实名认证</string>
     <string name="nick_name_can_be_modified_once_only">昵称只支持修改一次</string>

@@ -27,6 +27,8 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     public static final String SIDE_BAR_DATE_FORMAT_DAY_K = "yyyy/MM/dd";
     public static final String SIDE_BAR_DATE_FORMAT_MIN = "yyyy/MM/dd\nHH:mm";
 
+    private boolean mIsDayLine;
+
     private KlineChart mKlineChart;
     private View mLeftSideBar;
     private View mRightSideBar;
@@ -86,8 +88,11 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         TextView highestPrice = (TextView) sideBar.findViewById(R.id.highestPrice);
         TextView lowestPrice = (TextView) sideBar.findViewById(R.id.lowestPrice);
         TextView closePrice = (TextView) sideBar.findViewById(R.id.closePrice);
-
-        time.setText(mDateFormat.format(new Date(data.getTimeStamp())));
+        if (mIsDayLine) {
+            time.setText(data.getDay().replaceAll("-", "/"));
+        } else {
+            time.setText(mDateFormat.format(new Date(data.getTimeStamp())));
+        }
         openPrice.setText(mKlineChart.formatNumber(data.getOpenPrice()));
         highestPrice.setText(mKlineChart.formatNumber(data.getMaxPrice()));
         lowestPrice.setText(mKlineChart.formatNumber(data.getMinPrice()));
@@ -128,9 +133,9 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
     public void setDataFormat(String formatStr) {
         mKlineChart.setDataFormat(formatStr);
         if (formatStr.equalsIgnoreCase(KlineChart.DATE_FORMAT_DAY_K)) {
-            mDateFormat.applyPattern(SIDE_BAR_DATE_FORMAT_DAY_K);
+            mIsDayLine = true;
         } else {
-            mDateFormat.applyPattern(SIDE_BAR_DATE_FORMAT_MIN);
+            mIsDayLine = false;
         }
     }
 

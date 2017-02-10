@@ -1,5 +1,6 @@
 package com.jnhyxx.html5.activity.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
+import com.jnhyxx.html5.view.CommonFailWarn;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
@@ -35,8 +37,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WithdrawActivity extends BaseActivity {
+import static com.jnhyxx.html5.R.id.withdrawAmount;
 
+public class WithdrawActivity extends BaseActivity {
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
     @BindView(R.id.withdrawRule)
@@ -47,7 +50,7 @@ public class WithdrawActivity extends BaseActivity {
     TextView mBankName;
     @BindView(R.id.withdrawRecord)
     TextView mWithdrawRecord;
-    @BindView(R.id.withdrawAmount)
+    @BindView(withdrawAmount)
     EditText mWithdrawAmount;
     @BindView(R.id.allWithdraw)
     TextView mAllWithdraw;
@@ -55,6 +58,8 @@ public class WithdrawActivity extends BaseActivity {
     LinearLayout mBankcardInfoArea;
     @BindView(R.id.confirmButton)
     TextView mConfirmButton;
+    @BindView(R.id.failWarn)
+    CommonFailWarn mFailWarn;
     private double mMoneyDrawUsable;
     private UserFundInfo userFundInfo;
 
@@ -75,12 +80,6 @@ public class WithdrawActivity extends BaseActivity {
         if (TextUtils.isEmpty(withdrawAmount)) {
             return false;
         }
-
-        double amount = Double.valueOf(withdrawAmount);
-        if (amount < 20) {
-            return false;
-        }
-
         return true;
     }
 
@@ -100,6 +99,14 @@ public class WithdrawActivity extends BaseActivity {
         getMoneyDrawUsable();
 
         updateUserStatus();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_BASE && resultCode == RESULT_OK) {
+            updateUserInfoBalance(Double.valueOf(ViewUtil.getTextTrim(mWithdrawAmount)));
+        }
     }
 
     private boolean isFirstWithdraw() {
@@ -124,7 +131,7 @@ public class WithdrawActivity extends BaseActivity {
                         userFundInfo = resp.getData();
                         Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
                         mMoneyDrawUsable = userFundInfo.getMoneyDrawUsable();
-                        mWithdrawAmount.setHint(String.valueOf(mMoneyDrawUsable));
+                        mWithdrawAmount.setHint(getString(R.string.withdraw_least_money_hint, FinanceUtil.formatWithThousandsSeparator(LocalUser.getUser().getUserInfo().getMoneyUsable())));
                     }
                 }).fire();
     }
@@ -135,6 +142,10 @@ public class WithdrawActivity extends BaseActivity {
         if (!TextUtils.isEmpty(withdrawAmount)) {
             MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW_OK);
             final double amount = Double.valueOf(withdrawAmount);
+            if (amount < 20) {
+                mFailWarn.show(R.string.withdraw_once_least_limit);
+                return;
+            }
             API.Finance.withdraw(amount)
                     .setTag(TAG).setIndeterminate(this)
                     .setCallback(new Callback<Resp>() {
@@ -157,7 +168,7 @@ public class WithdrawActivity extends BaseActivity {
     private void updateUserInfoBalance(double withdrawAmount) {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         userInfo.setMoneyUsable(FinanceUtil.subtraction(userFundInfo.getMoneyUsable(), withdrawAmount).doubleValue());
-        mWithdrawAmount.setHint(FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue()));
+        mWithdrawAmount.setHint(getString(R.string.withdraw_least_money_hint, FinanceUtil.formatWithScale(FinanceUtil.subtraction(mMoneyDrawUsable, withdrawAmount).doubleValue())));
     }
 
     @OnClick({R.id.withdrawRule, R.id.withdrawRecord, R.id.allWithdraw, R.id.confirmButton})

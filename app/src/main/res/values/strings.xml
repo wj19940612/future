@@ -430,7 +430,7 @@
     <string name="warm_hint">温馨提示:</string>
     <string name="add_bank_card">添加银行卡</string>
     <string name="bank_name_card_number">%1$s (%2$s)</string>
-    <string name="withdraw_least_money_hint">可提现%1$s(元)</string>
+    <string name="withdraw_least_money_hint">可提现  %1$s  元</string>
     <string name="recharge_least_money">充值金额≥50</string>
     <string name="bank_card_pay">银行卡支付</string>
     <string name="bank_card_pay_hint">无需开通网银</string>
@@ -438,6 +438,8 @@
     <string name="wechat_pay">支付宝</string>
     <string name="aliPay_pay_hint">手机支付,即时到账</string>
     <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="withdraw_once_least_limit">单次提现金额不能少于20元</string>
+    <string name="recharge_once_least_limit">单笔充值金额不能少于50元</string>
     <string name="recharge_bank_apply_limit">您的充值金额已超过您所绑定银行卡的单笔限额，请重新填写</string>
     <string name="install_alipay_first">请先安装支付宝</string>
     <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
@@ -489,7 +491,7 @@
     <string name="gold_store">金币商城</string>
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
-    
+
     <!--直播 live-->
     <string name="live_right_title">交易</string>
 

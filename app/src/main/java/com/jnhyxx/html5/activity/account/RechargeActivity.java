@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.rechargeAmount;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_ALIPAY;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_BANK;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_WECHAT;
@@ -48,7 +49,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     CommonFailWarn mCommonFail;
     @BindView(R.id.payWayLayout)
     RelativeLayout mPayWayLayout;
-    @BindView(R.id.rechargeAmount)
+    @BindView(rechargeAmount)
     EditText mRechargeAmount;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
@@ -219,6 +220,12 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     }
 
     private void doPayment() {
+        String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+        double amount = Double.valueOf(rechargeAmount);
+        if (amount < 50) {
+            mCommonFail.show(R.string.recharge_once_least_limit);
+            return;
+        }
         switch (mPayWay) {
             case PAY_WAY_BANK:
                 depositByBankApply();
@@ -278,11 +285,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     private boolean checkNextStepButtonEnable() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         if (TextUtils.isEmpty(rechargeAmount)) {
-            return false;
-        }
-
-        double amount = Double.valueOf(rechargeAmount);
-        if (amount < 50) {
             return false;
         }
         return true;

@@ -48,6 +48,7 @@ public class WithdrawInfoActivity extends BaseActivity {
 
     @OnClick(R.id.confirmButton)
     public void onClick() {
+        setResult(RESULT_OK);
         finish();
     }
 }

@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_transfer"
+            android:drawableTop="@drawable/ic_transfer_normal"
             android:gravity="center"
             android:text="@string/transfer"
             android:textColor="@color/blackPrimary"

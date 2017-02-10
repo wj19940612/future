@@ -106,6 +106,7 @@ public class BankcardBindingActivity extends BaseActivity {
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
         mCardholderName.addTextChangedListener(mCardHolderValidationWatcher);
         mIdentityNum.addTextChangedListener(mValidationWatcher);
+        mPayingBank.addTextChangedListener(mValidationWatcher);
         showBankcardInfo();
     }
 
@@ -116,6 +117,7 @@ public class BankcardBindingActivity extends BaseActivity {
         mPhoneNum.removeTextChangedListener(mPhoneValidationWatcher);
         mCardholderName.removeTextChangedListener(mCardHolderValidationWatcher);
         mIdentityNum.removeTextChangedListener(mValidationWatcher);
+        mPayingBank.removeTextChangedListener(mValidationWatcher);
     }
 
     @Override
@@ -151,6 +153,7 @@ public class BankcardBindingActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+            mCardholderName.setSelection(s.toString().length());
             mValidationWatcher.afterTextChanged(s);
         }
     };
@@ -242,8 +245,10 @@ public class BankcardBindingActivity extends BaseActivity {
         String bankcardNum = ViewUtil.getTextTrim(mBankcardNum);
         String payingBank = ViewUtil.getTextTrim(mPayingBank);
         String phoneNum = ViewUtil.getTextTrim(mPhoneNum);
+        String identityNum = ViewUtil.getTextTrim(mIdentityNum);
         if (TextUtils.isEmpty(cardholderName) || TextUtils.isEmpty(bankcardNum)
-                || TextUtils.isEmpty(payingBank) || TextUtils.isEmpty(phoneNum)) {
+                || TextUtils.isEmpty(payingBank) || TextUtils.isEmpty(phoneNum)
+                || TextUtils.isEmpty(identityNum)) {
             return false;
         }
         return true;

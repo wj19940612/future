@@ -13,7 +13,6 @@
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backFeature="true"
         app:titleText="@string/withdraw_record_info_title"/>
 
     <LinearLayout
@@ -107,6 +106,7 @@
         app:rowText="@string/amount_to_the_account"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/poundage"
         android:layout_width="match_parent"
@@ -115,6 +115,7 @@
         app:rowText="@string/withdraw_record_poundage_hint"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/the_account_to_the_bank"
         android:layout_width="match_parent"
@@ -123,6 +124,7 @@
         app:rowText="@string/the_account_to_the_bank"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <TextView
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"

@@ -115,11 +115,28 @@ public class WithdrawActivity extends BaseActivity {
 
     private void updateUserStatus() {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (!TextUtils.isEmpty(userInfo.getAppIcon())) {
-            Picasso.with(getActivity()).load(userInfo.getAppIcon()).into(mBankCardIcon);
-        }
+        getUserBindBankInfo();
         String bankCardEndNumber = userInfo.getCardNumber().substring(userInfo.getCardNumber().length() - 4);
         mBankName.setText(getString(R.string.bank_name_card_number, userInfo.getIssuingbankName(), bankCardEndNumber));
+    }
+
+    public void getUserBindBankInfo() {
+        API.User.getUserBankInfo()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserInfo>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+                        userInfo.setAppIcon(resp.getData().getAppIcon());
+                        LocalUser.getUser().setUserInfo(userInfo);
+                        if (!TextUtils.isEmpty(resp.getData().getAppIcon())) {
+                            Picasso.with(getActivity()).load(resp.getData().getAppIcon()).into(mBankCardIcon);
+                        }
+                    }
+                })
+                .fireSync();
     }
 
     private void getMoneyDrawUsable() {
@@ -128,6 +145,7 @@ public class WithdrawActivity extends BaseActivity {
                 .setCallback(new Callback1<Resp<UserFundInfo>>() {
                     @Override
                     protected void onRespSuccess(Resp<UserFundInfo> resp) {
+
                         userFundInfo = resp.getData();
                         Log.d(TAG, "用户资金信息 " + userFundInfo.toString());
                         mMoneyDrawUsable = userFundInfo.getMoneyDrawUsable();

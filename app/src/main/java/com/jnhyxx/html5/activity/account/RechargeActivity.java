@@ -98,6 +98,9 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
+                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+                        userInfo.setAppIcon(resp.getData().getAppIcon());
+                        LocalUser.getUser().setUserInfo(userInfo);
                         mLimitSingle = resp.getData().getLimitSingle();
                         updateView();
                         if (isOpenPayPage) {

@@ -90,6 +90,10 @@ public class BankcardBindingActivity extends BaseActivity {
 
     @BindView(R.id.submitToAuthButton)
     TextView mSubmitToAuthButton;
+    @BindView(R.id.cardholderUserName)
+    TextView mCardholderUserName;
+    @BindView(R.id.cardholderIdentityNum)
+    TextView mCardholderIdentityNum;
 
 
     private ChannelBank mChannelBank;
@@ -210,6 +214,9 @@ public class BankcardBindingActivity extends BaseActivity {
             mBankcardImageArea.setVisibility(View.VISIBLE);
 
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
+            mCardholderUserName.setText(userInfo.getRealName());
+            mCardholderIdentityNum.setText(userInfo.getIdCard());
 
             if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
                 mBank.setText(userInfo.getIssuingbankName());

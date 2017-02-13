@@ -92,7 +92,7 @@ android {
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
-        yyqhb { // 期货原油宝
+        yyqhb { // 原油期货宝
             applicationId 'com.dajiexin.yyqhb'
             versionCode 1
             versionName '1.2.2'

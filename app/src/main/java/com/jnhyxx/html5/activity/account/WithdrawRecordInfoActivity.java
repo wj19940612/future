@@ -96,23 +96,24 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         Drawable mSuccessDrawable = ContextCompat.getDrawable(this, R.drawable.ic_apply_succeed);
         mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
+        if (WithDrawRecordInfo.isTransfer(withDrawRecordInfo.getStatus())) {
+            mTransfer.setEnabled(true);
+        }
+
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_start);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
-//            mTransfer.setEnabled(false);
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_audit_passing);
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_start);
-            mTransfer.setEnabled(true);
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
-            mTransfer.setEnabled(true);
             mCompleteStatus = true;
             mWithdrawStatus.setText(R.string.common_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);

@@ -183,10 +183,10 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                     mSaleStatus.setText(R.string.withdraw_status_fail);
                     mSaleGetMoney.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                     //审核通过
-                } else if (item.getStatus() == WithdrawRecord.WITHDRAW_PASS) {
+                } else if (item.getStatus() == WithdrawRecord.WITHDRAW_AND_RECHARGE_INITIATE) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_gray);
                     mSaleStatus.setText(R.string.withdraw_auditing);
-                } else if (item.getStatus() == WithdrawRecord.TRANSFERING) {
+                } else if (item.getStatus() == WithdrawRecord.WITHDRAW_PASS) {
                     mSaleStatus.setBackgroundResource(R.drawable.bg_gray);
                     mSaleStatus.setText(R.string.transfer);
                 } else {

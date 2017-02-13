@@ -103,15 +103,15 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_start);
+            mWithdrawStatus.setText(R.string.withdraw_auditing);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_audit_passing);
+            mWithdrawStatus.setText(R.string.transfer);
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_start);
+            mWithdrawStatus.setText(R.string.transfer);
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
             mCompleteStatus = true;

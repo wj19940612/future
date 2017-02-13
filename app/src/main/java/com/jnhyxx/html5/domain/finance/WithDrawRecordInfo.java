@@ -160,7 +160,7 @@ public class WithDrawRecordInfo implements Serializable {
     }
 
     public static boolean isTransfer(int status) {
-        return status > AUDIT_PASSING;
+        return status > START_TRADE;
     }
 
     @Override

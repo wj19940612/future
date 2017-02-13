@@ -102,7 +102,7 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             mWithdrawStatus.setText(R.string.withdraw_start);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
-            mTransfer.setEnabled(false);
+//            mTransfer.setEnabled(false);
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_audit_passing);
             //转账中
@@ -112,6 +112,7 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             mTransfer.setEnabled(true);
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
+            mTransfer.setEnabled(true);
             mCompleteStatus = true;
             mWithdrawStatus.setText(R.string.common_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);

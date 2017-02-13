@@ -180,9 +180,9 @@ public class BankcardBindingActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSubmitButtonEnable();
-            if (enable != mSubmitToAuthButton.isEnabled()) {
-                mSubmitToAuthButton.setEnabled(enable);
-            }
+//            if (enable != mSubmitToAuthButton.isEnabled()) {
+            mSubmitToAuthButton.setEnabled(enable);
+//            }
         }
     };
 
@@ -264,6 +264,17 @@ public class BankcardBindingActivity extends BaseActivity {
                 || TextUtils.isEmpty(identityNum)) {
             return false;
         }
+
+
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (cardholderName.equalsIgnoreCase(userInfo.getRealName())
+                & bankcardNum.replaceAll(" ", "").equalsIgnoreCase(userInfo.getCardNumber())
+                & payingBank.equalsIgnoreCase(userInfo.getIssuingbankName())
+                & phoneNum.replaceAll(" ", "").equalsIgnoreCase(userInfo.getCardPhone())
+                & identityNum.equalsIgnoreCase(userInfo.getIdCard())) {
+            return false;
+        }
+
         return true;
     }
 
@@ -279,7 +290,7 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
                 final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
-                // TODO: 2016/10/10 暂时去掉银行卡校验
+                //  暂时去掉银行卡校验
 //                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
 //                    mCommonFailTvWarn.showController(R.string.bank_card_is_error);
 //                    return;

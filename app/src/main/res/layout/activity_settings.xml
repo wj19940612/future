@@ -68,7 +68,7 @@
         android:background="@android:color/white"
         app:rightIcon="@drawable/ic_arrow"
         app:rightIconVisibility="invisible"
-        app:rowText="@string/binding_phone"
+        app:rowText="@string/phone_authentication"
         app:rowTextColor="@color/colorDisable"
         app:subTextColor="@color/blackPrimary"/>
 

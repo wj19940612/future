@@ -29,12 +29,12 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
     TitleBar mTitleBar;
     @BindView(R.id.applyFor)
     TextView mApplyFor;
-    @BindView(R.id.leftLine)
-    TextView mLeftLine;
-    @BindView(R.id.detail)
-    TextView mDetail;
-    @BindView(R.id.rightLine)
-    TextView mRightLine;
+    //    @BindView(R.id.detail)
+//    TextView mDetail;
+    @BindView(R.id.auditing)
+    TextView mAuditing;
+    @BindView(R.id.transfer)
+    TextView mTransfer;
     @BindView(R.id.withdrawTitleStatus)
     TextView mWithdrawTitleStatus;
     @BindView(R.id.moneyNumber)
@@ -74,26 +74,26 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         API.Finance.getWithdrawRecordInfo(-1, mWithDrawId)
                 .setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback1<Resp<WithDrawRecordInfo>>() {
-            @Override
-            protected void onRespSuccess(Resp<WithDrawRecordInfo> resp) {
-                mWithDrawRecordInfo = resp.getData();
+                    @Override
+                    protected void onRespSuccess(Resp<WithDrawRecordInfo> resp) {
+                        mWithDrawRecordInfo = resp.getData();
 
-                updateView(mWithDrawRecordInfo);
-            }
-        }).fire();
+                        updateView(mWithDrawRecordInfo);
+                    }
+                }).fire();
 
     }
 
 
     private void updateView(WithDrawRecordInfo withDrawRecordInfo) {
         if (withDrawRecordInfo == null) return;
-        Drawable mNormalDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_normal);
+        Drawable mNormalDrawable = ContextCompat.getDrawable(this, R.drawable.ic_apply_normal);
         mNormalDrawable.setBounds(0, 0, mNormalDrawable.getMinimumWidth(), mNormalDrawable.getMinimumHeight());
 
-        Drawable mFailDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_fail);
+        Drawable mFailDrawable = ContextCompat.getDrawable(this, R.drawable.ic_apply_fail);
         mFailDrawable.setBounds(0, 0, mFailDrawable.getMinimumWidth(), mFailDrawable.getMinimumHeight());
 
-        Drawable mSuccessDrawable = ContextCompat.getDrawable(this,R.drawable.ic_apply_succeed);
+        Drawable mSuccessDrawable = ContextCompat.getDrawable(this, R.drawable.ic_apply_succeed);
         mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
         //刚刚发起
@@ -102,20 +102,19 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             mWithdrawStatus.setText(R.string.withdraw_start);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
+            mTransfer.setEnabled(false);
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_audit_passing);
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
             mWithdrawStatus.setText(R.string.withdraw_start);
-
+            mTransfer.setEnabled(true);
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
             mCompleteStatus = true;
             mWithdrawStatus.setText(R.string.common_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);
-            mLeftLine.setEnabled(true);
-            mRightLine.setEnabled(true);
             mWithdrawTitleStatus.setText(R.string.common_success);
 
             mAccountTimeHint.setVisibility(View.GONE);

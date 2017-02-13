@@ -222,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 app:rightIconVisibility="visible"
-                app:rowText="@string/binding_phone"
+                app:rowText="@string/phone_authentication"
                 app:rowTextColor="@color/colorDisable"
                 app:rowVerticalPadding="12dp"
                 app:subTextColor="@color/blackPrimary"/>

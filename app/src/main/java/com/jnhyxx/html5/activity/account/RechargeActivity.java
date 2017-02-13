@@ -23,7 +23,6 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
@@ -34,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.rechargeAmount;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_ALIPAY;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_BANK;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_WECHAT;
@@ -48,7 +48,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     CommonFailWarn mCommonFail;
     @BindView(R.id.payWayLayout)
     RelativeLayout mPayWayLayout;
-    @BindView(R.id.rechargeAmount)
+    @BindView(rechargeAmount)
     EditText mRechargeAmount;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
@@ -97,6 +97,9 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
+                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+                        userInfo.setAppIcon(resp.getData().getAppIcon());
+                        LocalUser.getUser().setUserInfo(userInfo);
                         mLimitSingle = resp.getData().getLimitSingle();
                         updateView();
                         if (isOpenPayPage) {
@@ -219,6 +222,12 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     }
 
     private void doPayment() {
+        String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
+        double amount = Double.valueOf(rechargeAmount);
+        if (amount < 50) {
+            mCommonFail.show(R.string.recharge_once_least_limit);
+            return;
+        }
         switch (mPayWay) {
             case PAY_WAY_BANK:
                 depositByBankApply();
@@ -243,7 +252,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                     .executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
             return;
         } else if (amount > mLimitSingle) {
-            SmartDialog.with(getActivity(), R.string.recharge_bank_apply_limit).show();
+            mCommonFail.show(R.string.recharge_bank_apply_limit);
             return;
         }
 
@@ -280,11 +289,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         if (TextUtils.isEmpty(rechargeAmount)) {
             return false;
         }
-
-        double amount = Double.valueOf(rechargeAmount);
-        if (amount < 50) {
-            return false;
-        }
         return true;
     }
 
@@ -295,17 +299,14 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             updateView();
             getUserBankSingleLimitAndIsOpenPayPage(true);
         }
-        if (requestCode == REQUEST_CODE_APPLY_PAY || requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
-            LocalUser user = LocalUser.getUser();
-            UserInfo userInfo = user.getUserInfo();
-            double moneyUsable = userInfo.getMoneyUsable();
-            String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
-            double amount = Double.valueOf(rechargeAmount);
-            double newMoneyUsable = moneyUsable + amount;
-            userInfo.setMoneyUsable(newMoneyUsable);
-            user.setUserInfo(userInfo);
+        if (requestCode == REQUEST_CODE_BANK_PAY && resultCode == RESULT_OK) {
             finish();
         }
+
+        if (requestCode == REQUEST_CODE_APPLY_PAY && resultCode == RESULT_OK) {
+            finish();
+        }
+
         if (requestCode == REQ_CODE_AGREE_PAYMENT && resultCode == RESULT_OK) {
             doPayment();
         }

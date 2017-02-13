@@ -68,6 +68,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         if (getArguments() != null) {
             mSupportApplyWay = (SupportApplyWay) getArguments().getSerializable("supportApplyWay");
         }

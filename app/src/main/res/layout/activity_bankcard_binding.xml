@@ -22,12 +22,49 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:gravity="center_vertical"
+            android:minHeight="45dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_holder"
+                android:textColor="@color/lucky"/>
+
+            <TextView
+                android:id="@+id/cardholderUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="10dp"
+                android:textColor="@color/blackPrimary"
+                tools:text="张三"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/identity_num"/>
+
+            <TextView
+                android:id="@+id/cardholderIdentityNum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:paddingLeft="10dp"
+                android:textColor="@color/blackPrimary"
+                tools:text="666666666"/>
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="130dp"
             android:layout_marginLeft="@dimen/common_margin"
             android:layout_marginRight="@dimen/common_margin"
-            android:layout_marginTop="15dp"
             android:background="@drawable/bg_bank_bg"
             android:orientation="vertical"
             android:padding="@dimen/common_margin">
@@ -222,9 +259,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
+            android:minHeight="40dp"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin">
@@ -243,8 +280,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableRight="@drawable/ic_arrow"
-                android:textColorHint="@color/grayHint"
-                android:hint="@string/please_choose_bank"/>
+                android:hint="@string/please_choose_bank"
+                android:textColorHint="@color/grayHint"/>
         </LinearLayout>
 
         <View
@@ -253,15 +290,15 @@
             android:background="@color/splitBlockLight"/>
 
         <LinearLayout
-            android:background="@drawable/bg_line_division_compile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginRight="@dimen/common_margin"
+            android:background="@drawable/bg_line_division_compile"
             android:clickable="true"
             android:gravity="center_vertical|bottom"
             android:minHeight="40dp"
-            android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/common_margin"
-            android:layout_marginRight="@dimen/common_margin">
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/InputTitle"

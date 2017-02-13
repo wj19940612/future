@@ -13,12 +13,12 @@
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backFeature="true"
         app:titleText="@string/withdraw_record_info_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
         android:orientation="horizontal"
         android:paddingLeft="45dp"
         android:paddingRight="45dp">
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:drawablePadding="10dp"
-            android:drawableTop="@drawable/ic_transfer"
+            android:drawableTop="@drawable/ic_transfer_normal"
             android:gravity="center"
             android:text="@string/transfer"
             android:textColor="@color/blackPrimary"
@@ -94,7 +94,7 @@
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_apply_normal"
             android:gravity="center"
-            android:text="@string/withdraw_record_fail"
+            android:text="@string/withdraw_record_success"
             android:textColor="@color/blackPrimary"
             android:textSize="12sp"/>
     </LinearLayout>
@@ -107,6 +107,7 @@
         app:rowText="@string/amount_to_the_account"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/poundage"
         android:layout_width="match_parent"
@@ -115,6 +116,7 @@
         app:rowText="@string/withdraw_record_poundage_hint"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <com.jnhyxx.html5.view.IconTextRow
         android:id="@+id/the_account_to_the_bank"
         android:layout_width="match_parent"
@@ -123,6 +125,7 @@
         app:rowText="@string/the_account_to_the_bank"
         app:rowTextColor="@color/lucky"
         app:subTextColor="@color/blueAssist"/>
+
     <TextView
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"

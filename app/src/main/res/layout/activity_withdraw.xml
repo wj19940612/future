@@ -14,32 +14,41 @@
         app:backFeature="true"
         app:titleText="@string/withdraw"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/common_margin"
         android:minHeight="40dp"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/common_margin">
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
             android:text="@string/withdraw_rule_hint"
             android:textColor="@color/colorDisable"
             android:textSize="11sp"/>
 
         <TextView
             android:id="@+id/withdrawRule"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/hint"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
+            android:paddingRight="@dimen/common_margin"
             android:text="@string/withdraw_rule_title"
             android:textColor="@color/blueAssist"/>
-    </LinearLayout>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/failWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -107,7 +116,7 @@
             android:gravity="center_vertical"
             android:hint="@string/withdraw_least_money_hint"
             android:inputType="numberDecimal"
-            android:textColor="#262626"
+            android:textColor="@color/blackPrimary"
             android:textColorHint="@color/grayHint"
             android:textSize="16sp"/>
 
@@ -126,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/common_margin"
         android:layout_marginRight="@dimen/common_margin"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/btn_blue"
         android:clickable="true"
         android:enabled="false"

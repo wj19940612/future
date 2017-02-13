@@ -425,6 +425,8 @@
     <string name="modify_nick_name_error_warn">昵称只能由中文、英文、数字组成</string>
     <string name="modify_nick_name_hint">支持1~10个字符</string>
     <string name="modify_nick_name_submit_warn">昵称不得包含特殊符号</string>
+    <string name="save">保    存</string>
+    <string name="bind_bank_card_name">%1$s    储蓄卡</string>
 
 
     <!--充值、提现-->

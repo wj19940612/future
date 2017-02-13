@@ -34,6 +34,7 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.WheelView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
@@ -106,6 +107,10 @@ public class BankcardBindingActivity extends BaseActivity {
         setContentView(R.layout.activity_bankcard_binding);
         ButterKnife.bind(this);
 
+        boolean isFromUserInfoPage = getIntent().getBooleanExtra(Launcher.EX_PAYLOAD, false);
+        if (isFromUserInfoPage) {
+            mSubmitToAuthButton.setText(R.string.save);
+        }
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
@@ -219,7 +224,7 @@ public class BankcardBindingActivity extends BaseActivity {
             mCardholderIdentityNum.setText(userInfo.getIdCard());
 
             if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
-                mBank.setText(userInfo.getIssuingbankName());
+                mBank.setText(getString(R.string.bind_bank_card_name, userInfo.getIssuingbankName()));
             }
 
             String bankIconUrl = userInfo.getIcon();

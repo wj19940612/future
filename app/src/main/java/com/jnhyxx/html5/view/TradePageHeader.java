@@ -135,8 +135,8 @@ public class TradePageHeader extends FrameLayout {
                 "" + FinanceUtil.formatWithScale(totalProfit, scale);
         if (isForeign) {
             double totalProfitRmb = FinanceUtil.multiply(totalProfit, ratio).doubleValue();
-            String totalProfitRmbStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithScale(totalProfitRmb)
-                    : FinanceUtil.formatWithScale(totalProfitRmb);
+            String totalProfitRmbStr = totalProfit >= 0 ? "+" + FinanceUtil.formatWithoutZero(totalProfitRmb)
+                    : FinanceUtil.formatWithoutZero(totalProfitRmb);
             totalProfitRmbStr = "(" + totalProfitRmbStr + fundUnit + ")";
 //            mTotalProfit.setText(StrUtil.mergeTextWithTypefaceRatio(totalProfitStr, FontUtil.getTt0173MFont(), " " + totalProfitRmbStr, 0.5f),
 //                    TextView.BufferType.SPANNABLE);

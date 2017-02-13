@@ -159,16 +159,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         @Override
         public void afterTextChanged(Editable s) {
 
-            if (isAliPayPay()) {
-                String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
-                if (TextUtils.isEmpty(rechargeAmount)) return;
-                double amount = Double.valueOf(rechargeAmount);
-                if (amount > APPLY_LIMIT) {
-                    mCommonFail.show(R.string.recharge_apply_limit);
-                    mNextStepButton.setEnabled(false);
-                    return;
-                }
-            }
             boolean enable = checkNextStepButtonEnable();
             if (enable != mNextStepButton.isEnabled()) {
                 mNextStepButton.setEnabled(enable);
@@ -267,6 +257,11 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     private void depositByAliPay() {
         String rechargeAmount = ViewUtil.getTextTrim(mRechargeAmount);
         double amount = Double.valueOf(rechargeAmount);
+        if (amount > APPLY_LIMIT) {
+            mCommonFail.show(R.string.recharge_apply_limit);
+            mNextStepButton.setEnabled(false);
+            return;
+        }
         Launcher.with(getActivity(), PaymentActivity.class)
                 .putExtra(PaymentActivity.EX_URL, API.Finance.depositByAliPay(amount))
                 .putExtra(PaymentActivity.EX_TITLE, getString(R.string.recharge))

@@ -186,9 +186,12 @@ public class API extends APIBase {
          * @param bankName
          * @return
          */
-        public static API bindBankCard(Integer bankId, String bankName, String cardNumber, String cardPhone) {
-            return new API("/user/user/bindBankCard.do",
+        public static API bindBankCard(String realName, String identityNum, Integer bankId, String bankName, String cardNumber, String cardPhone) {
+//            return new API("/user/user/bindBankCard.do",
+            return new API("/user/user/bindIdCardAndBankCard.do",
                     new ApiParams()
+                            .put("realName", realName)
+                            .put("idCard", identityNum)
                             .put("bankId", bankId)
                             .put("bankName", bankName)
                             .put("cardNumber", cardNumber)
@@ -206,6 +209,14 @@ public class API extends APIBase {
             return new API("/user/user/showChannelBankList.do", new ApiParams());
         }
 
+        /**
+         * 获取用户的银行卡信息
+         *
+         * @return
+         */
+        public static API getUserBankInfo() {
+            return new API("/user/user/showAuthentication.do", null);
+        }
 
         /**
          * 退出
@@ -443,7 +454,6 @@ public class API extends APIBase {
 
         /**
          * 新银行卡支付错误页面的部分 url
-         *
          */
         public static String getBankcardPaymentErrorPartUrl() {
             return getHost() + "/mine/qterror.html";
@@ -478,11 +488,19 @@ public class API extends APIBase {
         }
 
         /**
-         * 宝付充值成功返回的地址
+         * 充值失败返回的地址
          */
         public static String getMineWebPageUrl() {
             return getHost() + ("/mine.html");
         }
+
+        /**
+         * 充值失败返回的地址
+         */
+        public static String getRechargeFailProfileUrl() {
+            return getHost() + ("/mine/profile.html");
+        }
+
 
         /**
          * 接口名：用户提现

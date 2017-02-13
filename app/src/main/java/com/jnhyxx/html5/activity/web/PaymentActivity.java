@@ -1,12 +1,16 @@
 package com.jnhyxx.html5.activity.web;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
+import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.Launcher;
@@ -14,20 +18,42 @@ import com.johnz.kutils.Launcher;
 import java.net.URISyntaxException;
 
 public class PaymentActivity extends WebViewActivity {
+    //充值失败
+    public static final int REQ_PAYMENT_FAIL = 383;
+
+    /**
+     * 银行卡支付的标志
+     */
+    public static final String BANK_CARD_PAYMENT = "BANK_CARD_PAYMENT";
+    private boolean mIsBankCardPayment;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        Intent intent = getIntent();
+        mIsBankCardPayment = intent.getBooleanExtra(BANK_CARD_PAYMENT, false);
+    }
 
     @Override
     protected boolean onShouldOverrideUrlLoading(WebView view, String url) {
         Log.d("recharge", "onShouldOverrideUrlLoading: " + url);
         if (!TextUtils.isEmpty(url)) {
             if (url.contains(API.Finance.getRechargeSuccessUrl())) {
+                if (mIsBankCardPayment) {
+                    LocalUser.getUser().getUserInfo().setCardState(UserInfo.BANKCARD_STATUS_BOUND);
+                }
                 setResult(RESULT_OK);
                 finish();
                 return true;
             } else if (TextUtils.equals(url, API.Finance.getRechargeFailUrl())) {
+                setResult(REQ_PAYMENT_FAIL);
                 finish();
                 return true;
-            } else if (TextUtils.equals(url, API.Finance.getMineWebPageUrl())) {
-                setResult(RESULT_OK);
+            } else if (url.equalsIgnoreCase(API.Finance.getMineWebPageUrl())) {
+//                setResult(RESULT_OK);
+                finish();
+                return true;
+            } else if (url.equalsIgnoreCase(API.Finance.getRechargeFailProfileUrl())) {
                 finish();
                 return true;
             } else if (url.startsWith("alipays:") || url.contains("Intent;scheme=alipays")) {

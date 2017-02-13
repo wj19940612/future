@@ -98,15 +98,15 @@ public class OrderDetailActivity extends BaseActivity {
         mLossProfit.setTextColor(color);
         mLossProfit.setText(lossProfitStr);
         if (mProduct.isForeign()) {
-            String lossProfitRmb = "(" + FinanceUtil.formatWithScale(Math.abs(lossProfit * rate)) + mFundUnit + ")";
+            String lossProfitRmb = "(" + FinanceUtil.formatWithoutZero(Math.abs(lossProfit * rate)) + mFundUnit + ")";
             mLossProfitRmb.setText(lossProfitRmb);
         }
 
         // above is header, next is contract and order info
         mTradeVariety.setText(mOrderDetail.getContractsCode());
         mTradeQuantity.setText(mOrderDetail.getHandsNum() + "手");
-        mTradeFee.setText(mOrderDetail.getUserFees() + mProduct.getCurrencyUnit());
-        mMargin.setText(mOrderDetail.getMarginMoney() + mProduct.getCurrencyUnit());
+        mTradeFee.setText(FinanceUtil.formatWithoutZero(mOrderDetail.getUserFees()) + mProduct.getCurrencyUnit());
+        mMargin.setText(FinanceUtil.formatWithoutZero(mOrderDetail.getMarginMoney()) + mProduct.getCurrencyUnit());
         mBuyPrice.setText(FinanceUtil.formatWithScale(mOrderDetail.getRealAvgPrice(), mProduct.getPriceDecimalScale()));
         mBuyType.setText(getString(R.string.market_price_buy));
         mBuyTime.setText(DateUtil.format(mOrderDetail.getBuyTime(), "yyyy/MM/dd HH:mm:ss"));

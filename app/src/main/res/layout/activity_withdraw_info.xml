@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_withdraw_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.WithdrawInfoActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="@string/withdraw_record_info_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:orientation="horizontal"
+        android:paddingLeft="45dp"
+        android:paddingRight="45dp">
+
+        <TextView
+            android:id="@+id/applyFor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_apply"
+            android:gravity="center"
+            android:text="@string/withdraw_record_apply_for"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_withdraw_info"
+            android:enabled="false"/>
+
+        <TextView
+            android:id="@+id/auditing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_check"
+            android:text="@string/withdraw_auditing"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_withdraw_info"
+            android:enabled="false"/>
+
+        <TextView
+            android:id="@+id/withdrawTitleStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_transfer_normal"
+            android:gravity="center"
+            android:text="@string/transfer"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/line_withdraw_info"
+            android:enabled="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_apply_normal"
+            android:gravity="center"
+            android:text="@string/withdraw_record_success"
+            android:textColor="@color/blackPrimary"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/amountToAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rowText="@string/amount_to_the_account"
+        app:rowTextColor="@color/lucky"
+        app:subTextColor="@color/blueAssist"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/poundage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rowText="@string/withdraw_record_poundage_hint"
+        app:rowTextColor="@color/lucky"
+        app:subTextColor="@color/blueAssist"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/the_account_to_the_bank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rowText="@string/the_account_to_the_bank"
+        app:rowTextColor="@color/lucky"
+        app:subTextColor="@color/blueAssist"/>
+
+    <TextView
+        android:id="@+id/confirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/btn_blue"
+        android:clickable="true"
+        android:enabled="true"
+        android:gravity="center"
+        android:padding="13sp"
+        android:text="@string/complete_has_empty"
+        android:textColor="@android:color/white"/>
+</LinearLayout>

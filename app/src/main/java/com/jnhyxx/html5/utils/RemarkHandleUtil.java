@@ -2,6 +2,8 @@ package com.jnhyxx.html5.utils;
 
 import android.util.SparseArray;
 
+import com.jnhyxx.html5.domain.account.TradeDetail;
+
 /**
  * Created by ${wangJie} on 2016/9/21.
  * 这是对交易明细中的资金明细或积分明细的remark字段进行处理的类
@@ -13,13 +15,13 @@ public class RemarkHandleUtil extends SparseArray<String> {
 
     public RemarkHandleUtil() {
         //支付宝充值
-        super.put(1002, "充值");
-        //微信充值
-        super.put(1003, "充值");
-        //宝付充值
-        super.put(1004, "充值");
-        //现在充值
-        super.put(1005, "充值");
+//        super.put(1002, "充值");
+//        //微信充值
+//        super.put(1003, "充值");
+//        //宝付充值
+//        super.put(1004, "充值");
+//        //现在充值
+//        super.put(1005, "充值");
         //用户提现
         super.put(-1201, "提现");
         //拒绝提现
@@ -43,6 +45,8 @@ public class RemarkHandleUtil extends SparseArray<String> {
         super.put(3101, "充值");
         //内部提现资金
         super.put(-3101, "提现");
+        //内部提现资金拒绝
+        super.put(3102, "提现");
         //内部充值积分
         super.put(3201, "金币");
         //内部取出积分
@@ -69,5 +73,9 @@ public class RemarkHandleUtil extends SparseArray<String> {
     @Override
     public String get(int key, String valueIfKeyNotFound) {
         return super.get(key, "");
+    }
+
+    public static boolean isRecharge(int type) {
+        return type == TradeDetail.RECHARGE_TYPE;
     }
 }

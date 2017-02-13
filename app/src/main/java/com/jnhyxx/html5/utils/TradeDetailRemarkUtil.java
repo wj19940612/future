@@ -2,6 +2,8 @@ package com.jnhyxx.html5.utils;
 
 import android.util.SparseArray;
 
+import com.jnhyxx.html5.domain.account.TradeDetail;
+
 /**
  * Created by ${wangJie} on 2016/9/27.
  * * 这是对交易明细中的资金明细或积分明细的remark字段进行处理的类
@@ -12,13 +14,13 @@ import android.util.SparseArray;
 public class TradeDetailRemarkUtil extends SparseArray<String> {
     public TradeDetailRemarkUtil() {
         //支付宝充值
-        super.put(1002, "成功");
-        //微信充值
-        super.put(1003, "成功");
-        //宝付充值
-        super.put(1004, "成功");
-        //现在充值
-        super.put(1005, "成功");
+//        super.put(1002, "成功");
+//        //微信充值
+//        super.put(1003, "成功");
+//        //宝付充值
+//        super.put(1004, "成功");
+//        //现在充值
+//        super.put(1005, "成功");
         //用户提现
         super.put(-1201, "申请");
         //拒绝提现
@@ -43,9 +45,11 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         //返还保证金
         super.put(2302, "返还");
         //内部充值资金
-        super.put(3101, "充值");
+        super.put(3101, "成功");
+        //内部提现资金拒绝
+        super.put(3102, "拒绝");
         //内部取出资金
-        super.put(-3101, "提现");
+        super.put(-3101, "系统");
         //内部充值积分
         super.put(3201, "充值");
         //内部充值积分
@@ -66,5 +70,9 @@ public class TradeDetailRemarkUtil extends SparseArray<String> {
         super.put(-7201, "兑换");
         //拒绝兑换
         super.put(7202, "返还");
+    }
+
+    public static boolean isRecharge(int type) {
+        return type == TradeDetail.RECHARGE_TYPE;
     }
 }

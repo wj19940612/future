@@ -36,6 +36,8 @@ public class TradeDetail implements Serializable {
     public static final int LOGO_FEE_APPLY = -2101;
     public static final int LOGO_FEE_BACK = 2301;
 
+    public static final int RECHARGE_TYPE = 1;
+
 
     /**
      * createTime : 2016-09-18 15:28:03

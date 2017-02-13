@@ -199,5 +199,4 @@ public class CommonFailWarn extends RelativeLayout {
         mCenterSize = centerTxtSize;
         mCenterView.setTextSize(TypedValue.COMPLEX_UNIT_PX, centerTxtSize);
     }
-
 }

@@ -98,6 +98,15 @@ public class UserInfo {
     private boolean bIsSetNickName;
 
     private int bankId;
+
+    /**
+     * 充值银行卡的图标
+     */
+    private String appIcon;
+    /**
+     * 银行卡单笔限额
+     */
+    private int limitSingle;
     /**
      * birthday : 2017-3-4
      * certificationStatus : 2
@@ -330,6 +339,22 @@ public class UserInfo {
         return false;
     }
 
+    public int getLimitSingle() {
+        return limitSingle;
+    }
+
+    public void setLimitSingle(int limitSingle) {
+        this.limitSingle = limitSingle;
+    }
+
+    public String getAppIcon() {
+        return appIcon;
+    }
+
+    public void setAppIcon(String appIcon) {
+        this.appIcon = appIcon;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -348,6 +373,8 @@ public class UserInfo {
                 ", icon='" + icon + '\'' +
                 ", bIsSetNickName=" + bIsSetNickName +
                 ", bankId=" + bankId +
+                ", appIcon='" + appIcon + '\'' +
+                ", limitSingle=" + limitSingle +
                 ", birthday='" + birthday + '\'' +
                 ", certificationStatus=" + certificationStatus +
                 ", chinaSex='" + chinaSex + '\'' +

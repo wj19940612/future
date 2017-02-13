@@ -23,7 +23,6 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
@@ -253,7 +252,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                     .executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
             return;
         } else if (amount > mLimitSingle) {
-            SmartDialog.with(getActivity(), R.string.recharge_bank_apply_limit).show();
+            mCommonFail.show(R.string.recharge_bank_apply_limit);
             return;
         }
 

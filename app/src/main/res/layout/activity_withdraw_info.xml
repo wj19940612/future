@@ -17,7 +17,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
         android:orientation="horizontal"
         android:paddingLeft="45dp"
         android:paddingRight="45dp">
@@ -93,7 +94,7 @@
             android:drawablePadding="10dp"
             android:drawableTop="@drawable/ic_apply_normal"
             android:gravity="center"
-            android:text="@string/withdraw_record_fail"
+            android:text="@string/withdraw_record_success"
             android:textColor="@color/blackPrimary"
             android:textSize="12sp"/>
     </LinearLayout>

@@ -486,8 +486,8 @@
     <string name="withdraw_auditing">审核中</string>
     <string name="transfer">转账中</string>
     <string name="common_success">成功</string>
-    <string name="amount_to_the_account">到帐金额</string>
-    <string name="the_account_to_the_bank">到帐银行</string>
+    <string name="amount_to_the_account">到账金额</string>
+    <string name="the_account_to_the_bank">到账银行</string>
     <!-- 金币模拟 Gold -->
     <string name="available_gold">可用金币</string>
     <string name="gold_store">金币商城</string>

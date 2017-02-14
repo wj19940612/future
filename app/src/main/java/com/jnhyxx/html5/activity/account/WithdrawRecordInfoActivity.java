@@ -126,9 +126,9 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.common_success);
+            mWithdrawStatus.setText(R.string.withdraw_record_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);
-            mWithdrawTitleStatus.setText(R.string.common_success);
+            mWithdrawTitleStatus.setText(R.string.withdraw_record_success);
 
             mAccountTimeHint.setVisibility(View.GONE);
             mAccountTime.setVisibility(View.VISIBLE);
@@ -136,14 +136,14 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             //提现拒绝
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.WITHDRAW_refuse) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.withdraw_refuse);
-            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
+            mWithdrawStatus.setText(R.string.withdraw_fail);
+            mWithdrawTitleStatus.setText(R.string.withdraw_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
             //转账失败
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.TRANSFER_FAIL) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.transfer_fail);
-            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
+            mWithdrawStatus.setText(R.string.withdraw_fail);
+            mWithdrawTitleStatus.setText(R.string.withdraw_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
         } else {
             mCompleteStatus = false;

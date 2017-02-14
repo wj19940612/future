@@ -25,6 +25,7 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -118,6 +119,43 @@ public class BankcardBindingActivity extends BaseActivity {
         mIdentityNum.addTextChangedListener(mValidationWatcher);
         mPayingBank.addTextChangedListener(mValidationWatcher);
         showBankcardInfo();
+
+        getUserBindBankInfo();
+    }
+
+    private void getUserBindBankInfo() {
+        API.User.getUserBankInfo()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserInfo>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        updateUserBankInfo(resp);
+                        showBankcardInfo();
+                    }
+                })
+                .fireSync();
+    }
+
+    private void updateUserBankInfo(Resp<UserInfo> resp) {
+        UserInfo webUserBankInfo = resp.getData();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
+        userInfo.setIdStatus(webUserBankInfo.getIdStatus());
+        userInfo.setRealName(webUserBankInfo.getRealName());
+        userInfo.setCardPhone(webUserBankInfo.getCardPhone());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setIssuingbankName(webUserBankInfo.getIssuingbankName());
+        userInfo.setIdCard(webUserBankInfo.getIdCard());
+        userInfo.setCardState(webUserBankInfo.getCardState());
+        userInfo.setCardNumber(webUserBankInfo.getCardNumber());
+        userInfo.setIcon(webUserBankInfo.getIcon());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setBankId(webUserBankInfo.getBankId());
+        userInfo.setLimitSingle(webUserBankInfo.getLimitSingle());
+
+        LocalUser.getUser().setUserInfo(userInfo);
     }
 
     @Override

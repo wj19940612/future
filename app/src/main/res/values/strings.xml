@@ -552,4 +552,10 @@
     <string name="complete">完成</string>
     <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
+
+    <!--首页底部的三个页面-->
+    <string name="calendar_of_finance">财经日历</string>
+    <string name="yesterday_the_profit_list">昨日盈利榜</string>
+    <string name="trading_strategy">交易攻略</string>
+    <string name="ranking_list_top_hint">本排行榜表示上个正常交易日的数据</string>
 </resources>

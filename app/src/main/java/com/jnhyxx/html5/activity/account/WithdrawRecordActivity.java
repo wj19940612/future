@@ -133,6 +133,7 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
             // When get number of data is less than mPageSize, means no data anymore
             // so remove footer
             mWithdrawRecordList.removeFooterView(mFooter);
+            mFooter = null;
         }
 
         if (mWithdrawRecordAdapter == null) {

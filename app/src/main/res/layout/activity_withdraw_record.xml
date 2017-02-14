@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/activity_with_draw_record"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/transparent"
-              android:orientation="vertical"
-              tools:context="com.jnhyxx.html5.activity.account.WithdrawRecordActivity">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.WithdrawRecordActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
@@ -16,20 +16,26 @@
         app:backFeature="true"
         app:titleText="@string/withdraw_record_title"/>
 
-    <ListView
-        android:id="@+id/withdrawRecord"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/withdrawRecord"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
+        android:drawablePadding="16dp"
         android:drawableTop="@drawable/image_no_record"
         android:gravity="center_horizontal"
-        android:drawablePadding="16dp"
         android:paddingTop="150dp"
         android:text="@string/withdraw_no_content"
         android:textColor="@color/emptyViewColor"

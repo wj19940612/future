@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.domain.account.WithdrawRecord;
@@ -37,6 +39,8 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
     ListView mWithdrawRecordList;
     @BindView(R.id.empty)
     TextView mEmpty;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int mSize = 0;
     private int mOffset;
@@ -55,8 +59,27 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
         mSize = 10;
         mOffset = 0;
         mSet = new HashSet<>();
-        getWithdrawRecordList();
         mWithdrawRecordList.setOnItemClickListener(this);
+        intSwipeRefreshLayout();
+        getWithdrawRecordList();
+    }
+
+    private void intSwipeRefreshLayout() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSize = 10;
+                mOffset = 0;
+                mSet.clear();
+                getWithdrawRecordList();
+            }
+        });
     }
 
     public void getWithdrawRecordList() {
@@ -69,11 +92,24 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
                         updateInfoList(withdrawRecords);
 
                     }
+
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
+                    }
                 }).fire();
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private void updateInfoList(List<WithdrawRecord> withdrawRecordList) {
         if (withdrawRecordList == null) {
+            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
@@ -104,6 +140,10 @@ public class WithdrawRecordActivity extends BaseActivity implements AdapterView.
             mWithdrawRecordList.setAdapter(mWithdrawRecordAdapter);
         }
 
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mWithdrawRecordAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
         for (WithdrawRecord item : withdrawRecordList) {
             if (mSet.add(item.getId())) {
                 mWithdrawRecordAdapter.add(item);

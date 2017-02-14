@@ -24,14 +24,10 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         void onAchieveTheLast(KlineViewData data, List<KlineViewData> dataList);
     }
 
-    public static final String SIDE_BAR_DATE_FORMAT_DAY_K = "yyyy/MM/dd";
-    public static final String SIDE_BAR_DATE_FORMAT_MIN = "yyyy/MM/dd\nHH:mm";
-
-    private boolean mIsDayLine;
-
     private KlineChart mKlineChart;
     private View mLeftSideBar;
     private View mRightSideBar;
+    private boolean mIsDayLine;
 
     private SimpleDateFormat mDateFormat;
 
@@ -72,7 +68,7 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mRightSideBar.setVisibility(GONE);
         addView(mRightSideBar, params);
 
-        mDateFormat = new SimpleDateFormat(SIDE_BAR_DATE_FORMAT_MIN);
+        mDateFormat = new SimpleDateFormat("yyyy/MM/dd\nHH:mm");
     }
 
     public void setOnAchieveTheLastListener(OnAchieveTheLastListener onAchieveTheLastListener) {
@@ -130,13 +126,9 @@ public class KlineView extends RelativeLayout implements KlineChart.OnTouchLines
         mKlineChart.appendDataList(dataList);
     }
 
-    public void setDataFormat(String formatStr) {
-        mKlineChart.setDataFormat(formatStr);
-        if (formatStr.equalsIgnoreCase(KlineChart.DATE_FORMAT_DAY_K)) {
-            mIsDayLine = true;
-        } else {
-            mIsDayLine = false;
-        }
+    public void setDayLine(boolean dayLine) {
+        mIsDayLine = dayLine;
+        mKlineChart.setDayLine(dayLine);
     }
 
     public void clearData() {

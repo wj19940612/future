@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.fragment.home.RankListFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
@@ -42,8 +44,8 @@ public class HomeFragment extends BaseFragment {
 
     private void initSlidingTabLayout() {
         mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setDividerColors(getResources().getColor(android.R.color.transparent));
-        mViewPager.setAdapter(new HomeInfoFragmentPagerAdapter(getChildFragmentManager()), getActivity());
+        mSlidingTabLayout.setDividerColors(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        mViewPager.setAdapter(new HomeInfoFragmentPagerAdapter(getChildFragmentManager(), getActivity()));
         mViewPager.setOffscreenPageLimit(3);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -65,6 +67,16 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new RankListFragment();
+                case 1:
+                    return new Fragment();
+                case 2:
+                    return new Fragment();
+                default:
+                    break;
+            }
             return null;
         }
 
@@ -73,6 +85,12 @@ public class HomeFragment extends BaseFragment {
             switch (position) {
                 case 0:
                     return mContext.getString(R.string.yesterday_the_profit_list);
+                case 1:
+                    return mContext.getString(R.string.trading_strategy);
+                case 2:
+                    return mContext.getString(R.string.calendar_of_finance);
+                default:
+                    break;
             }
 
             return super.getPageTitle(position);

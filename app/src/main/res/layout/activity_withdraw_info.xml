@@ -36,6 +36,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine1"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginRight="5dp"
@@ -56,6 +57,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine2"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginEnd="5dp"
@@ -78,6 +80,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine3"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginEnd="5dp"

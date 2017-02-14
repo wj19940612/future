@@ -55,6 +55,12 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
     LinearLayout mActivityWithdrawRecordInfo;
     @BindView(R.id.accountTimeHint)
     TextView mAccountTimeHint;
+    @BindView(R.id.dashLine1)
+    TextView mDashLine1;
+    @BindView(R.id.dashLine2)
+    TextView mDashLine2;
+    @BindView(R.id.dashLine3)
+    TextView mDashLine3;
 
 
     private int mWithDrawId;
@@ -67,6 +73,11 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_record_info);
         ButterKnife.bind(this);
+
+        //shape虚线显示实线问题
+        mDashLine1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mDashLine2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mDashLine3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         mWithDrawId = getIntent().getIntExtra(WITHDRAW_RECORD_INFO_ID, -1);
 

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,12 @@ import com.jnhyxx.html5.activity.account.WithdrawActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.account.UserFundInfo;
 import com.jnhyxx.html5.domain.account.UserInfo;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
@@ -105,6 +108,7 @@ public class MineFragment extends BaseFragment {
     IconTextRow mFeedback;
 
     private Unbinder mBinder;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -209,8 +213,7 @@ public class MineFragment extends BaseFragment {
                 Launcher.with(getActivity(), SignUpActivity.class).execute();
                 break;
             case R.id.recharge: //充值
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE);
-                Launcher.with(getActivity(), RechargeActivity.class).execute();
+                openRechargePage();
                 break;
             case R.id.withdraw: //提现
                 openWithdrawPage();
@@ -244,6 +247,24 @@ public class MineFragment extends BaseFragment {
         }
     }
 
+    private void openRechargePage() {
+        API.Finance.getSupportApplyWay()
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<SupportApplyWay>, SupportApplyWay>() {
+                    @Override
+                    public void onRespSuccess(SupportApplyWay supportApplyWay) {
+                        Log.d(TAG, "-----" + supportApplyWay.toString());
+                        if (supportApplyWay.isBank() || supportApplyWay.isAlipay() || supportApplyWay.isWechat()) {
+                            MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE);
+                            Launcher.with(getActivity(), RechargeActivity.class).putExtra(Launcher.EX_PAYLOAD,supportApplyWay).execute();
+                        } else {
+                            SmartDialog.with(getActivity(), R.string.now_is_not_support_recharge).show();
+                        }
+                    }
+                }).fire();
+    }
+
+
     private void openWithdrawPage() {
         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.WITHDRAW);
         if (LocalUser.getUser().isBankcardFilled()) {
@@ -262,7 +283,7 @@ public class MineFragment extends BaseFragment {
                 .setPositive(R.string.go_to_bind_bank_card, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class),BankcardBindingActivity.REQ_CODE_BIND_BANK);
+                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class), BankcardBindingActivity.REQ_CODE_BIND_BANK);
                         dialog.dismiss();
                     }
                 })

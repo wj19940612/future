@@ -78,8 +78,8 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
+        mSupportApplyWay = (SupportApplyWay) getIntent().getSerializableExtra(Launcher.EX_PAYLOAD);
         updateView();
-        getSupportApplyWay();
         if (LocalUser.getUser().isBankcardFilled()) {
             getUserBankSingleLimitAndIsOpenPayPage(false);
         }
@@ -155,17 +155,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         mBankCard.setText(getBankNameAndBankCard());
     }
 
-    private void getSupportApplyWay() {
-        API.Finance.getSupportApplyWay()
-                .setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback1<Resp<SupportApplyWay>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<SupportApplyWay> resp) {
-                        mSupportApplyWay = resp.getData();
-                    }
-
-                }).fire();
-    }
 
     private ValidationWatcher mValidationWatcher = new ValidationWatcher() {
 

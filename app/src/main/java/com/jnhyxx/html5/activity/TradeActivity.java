@@ -741,9 +741,9 @@ public class TradeActivity extends BaseActivity implements
                     public void onRespSuccess(List<KlineViewData> klineDataList) {
                         if (klineDataList != null && klineView != null) {
                             if (TextUtils.isEmpty(type)) { // dayK
-                                klineView.setDataFormat(KlineChart.DATE_FORMAT_DAY_K);
+                                klineView.setDayLine(true);
                             } else {
-                                klineView.setDataFormat(KlineChart.DATE_FORMAT_DAY_MIN);
+                                klineView.setDayLine(false);
                             }
                             Collections.reverse(klineDataList);
                             klineView.setDataList(klineDataList);

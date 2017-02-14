@@ -294,7 +294,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     (getTeacherGuideFragment() != null && getTeacherGuideFragment().getUserVisibleHint())) {
                 mShowEditTextButton.setVisibility(GONE);
                 mContactService.setVisibility(GONE);
-                setBottomTabVisibility(GONE);
+//                setBottomTabVisibility(GONE);
             } else {
                 mShowEditTextButton.setVisibility(View.VISIBLE);
                 mContactService.setVisibility(View.VISIBLE);
@@ -469,6 +469,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     if (getLiveInteractionFragment() != null) {
                         getLiveInteractionFragment().hideInputBox();
                     }
+                    setBottomTabVisibility(VISIBLE);
                 }
             }
 

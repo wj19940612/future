@@ -128,17 +128,36 @@ public class WithdrawActivity extends BaseActivity {
 
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
+                        updateUserBankInfo(resp);
                         UserInfo userInfo = LocalUser.getUser().getUserInfo();
-                        userInfo.setAppIcon(resp.getData().getAppIcon());
-                        LocalUser.getUser().setUserInfo(userInfo);
-                        if (!TextUtils.isEmpty(resp.getData().getAppIcon())) {
-                            Picasso.with(getActivity()).load(resp.getData().getAppIcon()).into(mBankCardIcon);
+                        if (!TextUtils.isEmpty(userInfo.getAppIcon())) {
+                            Picasso.with(getActivity()).load(userInfo.getAppIcon()).into(mBankCardIcon);
                         } else {
-                            Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getAppIcon()).into(mBankCardIcon);
+                            Picasso.with(getActivity()).load(userInfo.getIcon()).into(mBankCardIcon);
                         }
                     }
                 })
                 .fireSync();
+    }
+
+    private void updateUserBankInfo(Resp<UserInfo> resp) {
+        UserInfo webUserBankInfo = resp.getData();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
+        userInfo.setIdStatus(webUserBankInfo.getIdStatus());
+        userInfo.setRealName(webUserBankInfo.getRealName());
+        userInfo.setCardPhone(webUserBankInfo.getCardPhone());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setIssuingbankName(webUserBankInfo.getIssuingbankName());
+        userInfo.setIdCard(webUserBankInfo.getIdCard());
+        userInfo.setCardState(webUserBankInfo.getCardState());
+        userInfo.setCardNumber(webUserBankInfo.getCardNumber());
+        userInfo.setIcon(webUserBankInfo.getIcon());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setBankId(webUserBankInfo.getBankId());
+        userInfo.setLimitSingle(webUserBankInfo.getLimitSingle());
+
+        LocalUser.getUser().setUserInfo(userInfo);
     }
 
     private void getMoneyDrawUsable() {

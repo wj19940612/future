@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.jnhyxx.html5.R.id.rechargeAmount;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_ALIPAY;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_BANK;
 import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.PAY_WAY_WECHAT;
@@ -41,14 +40,14 @@ import static com.jnhyxx.html5.fragment.dialog.SelectRechargeWayDialogFragment.P
 public class RechargeActivity extends BaseActivity implements SelectRechargeWayDialogFragment.onPayWayListener {
 
 
-    private final int APPLY_LIMIT = 10000;
+    private static final int APPLY_LIMIT = 10000;
     @BindView(R.id.paymentHint)
     TextView mPaymentHint;
     @BindView(R.id.commonFail)
     CommonFailWarn mCommonFail;
     @BindView(R.id.payWayLayout)
     RelativeLayout mPayWayLayout;
-    @BindView(rechargeAmount)
+    @BindView(R.id.rechargeAmount)
     EditText mRechargeAmount;
     @BindView(R.id.nextStepButton)
     TextView mNextStepButton;
@@ -69,10 +68,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      * 支付方式
      */
     private int mPayWay;
-    /**
-     * 单笔限制额
-     */
-    private int mLimitSingle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +93,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
                     @Override
                     protected void onRespSuccess(Resp<UserInfo> resp) {
-                        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-                        userInfo.setAppIcon(resp.getData().getAppIcon());
-                        LocalUser.getUser().setUserInfo(userInfo);
-                        mLimitSingle = resp.getData().getLimitSingle();
+                        updateUserBankInfo(resp);
                         updateView();
                         if (isOpenPayPage) {
                             depositByBankApply();
@@ -116,6 +109,26 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         } else {
             updateBankNameAndBankLimit();
         }
+    }
+
+    private void updateUserBankInfo(Resp<UserInfo> resp) {
+        UserInfo webUserBankInfo = resp.getData();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
+        userInfo.setIdStatus(webUserBankInfo.getIdStatus());
+        userInfo.setRealName(webUserBankInfo.getRealName());
+        userInfo.setCardPhone(webUserBankInfo.getCardPhone());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setIssuingbankName(webUserBankInfo.getIssuingbankName());
+        userInfo.setIdCard(webUserBankInfo.getIdCard());
+        userInfo.setCardState(webUserBankInfo.getCardState());
+        userInfo.setCardNumber(webUserBankInfo.getCardNumber());
+        userInfo.setIcon(webUserBankInfo.getIcon());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setBankId(webUserBankInfo.getBankId());
+        userInfo.setLimitSingle(webUserBankInfo.getLimitSingle());
+
+        LocalUser.getUser().setUserInfo(userInfo);
     }
 
 
@@ -136,7 +149,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      */
     private void updateBankNameAndBankLimit() {
         mBankCardSingleLimit.setVisibility(View.VISIBLE);
-        String bankSingleLimit = getString(R.string.once_recharge_limit, FinanceUtil.formatWithThousandsSeparator(mLimitSingle));
+        String bankSingleLimit = getString(R.string.once_recharge_limit, FinanceUtil.formatWithThousandsSeparator(LocalUser.getUser().getUserInfo().getLimitSingle()));
         mBankCardSingleLimit.setText(bankSingleLimit);
 //        mBankCard.setText(StrUtil.mergeTextWithRatioColor(getBankNameAndBankCard(), "\n" + bankSingleLimit, 0.7f, ContextCompat.getColor(getActivity(), R.color.blackPrimary)));
         mBankCard.setText(getBankNameAndBankCard());
@@ -241,7 +254,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
             Launcher.with(this, BankcardBindingActivity.class)
                     .executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
             return;
-        } else if (amount > mLimitSingle) {
+        } else if (amount > LocalUser.getUser().getUserInfo().getLimitSingle()) {
             mCommonFail.show(R.string.recharge_bank_apply_limit);
             return;
         }

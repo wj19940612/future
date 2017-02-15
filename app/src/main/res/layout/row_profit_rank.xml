@@ -28,5 +28,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/blueAssist"
-        tools:text="12131  元"/>
+        tools:text="12131"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="@string/yuan"
+        android:textColor="@color/lucky"/>
 </LinearLayout>

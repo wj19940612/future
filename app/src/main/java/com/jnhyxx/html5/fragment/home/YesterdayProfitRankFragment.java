@@ -75,8 +75,10 @@ public class YesterdayProfitRankFragment extends BaseFragment {
                         }
 
                         for (int i = 0; i < 10; i++) {
-                            new ProfitRankModel(10000+i,);
+                            profitRankModels.add(new ProfitRankModel(10000 + i * 1000, i + "" + i + "" + i + "" + i + "****" + i + "" + i + "" + i + "" + i));
                         }
+
+                        
                     }
                 })
                 .fire();
@@ -109,7 +111,7 @@ public class YesterdayProfitRankFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.bindDataWithView(mContext, getItem(position), position);
+            viewHolder.bindDataWithView(getItem(position), position);
             return convertView;
 
         }
@@ -126,9 +128,10 @@ public class YesterdayProfitRankFragment extends BaseFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bindDataWithView(Context context, ProfitRankModel item, int position) {
+            public void bindDataWithView(ProfitRankModel item, int position) {
                 mRanking.setText(String.valueOf(position + 1));
-
+                mPhoneNum.setText(item.getPhone());
+                mProfit.setText(String.valueOf(item.getProfit()));
             }
         }
     }

@@ -141,6 +141,9 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if(position!=TAB_INDEX_LIVE){
+                    updateLiveFragmentInfo();
+                }
                 if (position == TAB_HOME) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_HOME);
                 } else if (position == TAB_MESSAGE) {
@@ -160,17 +163,21 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabClick(int position) {
                 if (position == TAB_INDEX_LIVE) {
-                    Fragment fragment = mMainFragmentsAdapter.getFragment(TAB_LIVE);
-                    if (fragment instanceof LiveFragment) {
-                        LiveFragment liveFragment = (LiveFragment) (fragment);
-                        liveFragment.updateLiveInfo();
-                    }
+                    updateLiveFragmentInfo();
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
             }
         });
+    }
+
+    private void updateLiveFragmentInfo() {
+        Fragment fragment = mMainFragmentsAdapter.getFragment(TAB_LIVE);
+        if (fragment instanceof LiveFragment) {
+            LiveFragment liveFragment = (LiveFragment) (fragment);
+            liveFragment.updateLiveInfo();
+        }
     }
 
 

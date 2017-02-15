@@ -234,6 +234,10 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         if (liveInteractionFragment != null) {
             liveInteractionFragment.updateLiveChatDataStatus();
         }
+        TeacherGuideFragment teacherGuideFragment = getTeacherGuideFragment();
+        if (teacherGuideFragment != null) {
+            teacherGuideFragment.updateTeacherGuide();
+        }
     }
 
     @Override

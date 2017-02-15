@@ -41,12 +41,34 @@ android {
             keyAlias properties.get('keystore_keyAlias')
             keyPassword properties.get('keystore_keyPassword')
         }
+        djx {
+            storeFile file(properties.get('djx_storeFile'))
+            storePassword properties.get('djx_storePassword')
+            keyAlias properties.get('djx_keyAlias')
+            keyPassword properties.get('djx_keyPassword')
+        }
+        hzh {
+            storeFile file(properties.get('keystore_storeFile'))
+            storePassword properties.get('keystore_storePassword')
+            keyAlias properties.get('hzh_keyAlias')
+            keyPassword properties.get('hzh_keyPassword')
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
             signingConfig signingConfigs.release
+        }
+        djx {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
+            signingConfig signingConfigs.djx
+        }
+        hzh {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
+            signingConfig signingConfigs.hzh
         }
     }
     android.applicationVariants.all { variant ->

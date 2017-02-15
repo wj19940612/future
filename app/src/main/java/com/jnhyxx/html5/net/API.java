@@ -1006,6 +1006,17 @@ public class API extends APIBase {
                     .put("loseMoney", loseMoney)
                     .put("winMoney", winMoney));
         }
+
+        /**
+         * 接口名称 昨日盈利棒
+         * 请求类型 get
+         * 请求Url  /order/statistic/profitRank.do
+         *
+         * @return
+         */
+        public static API getProfitRank() {
+            return new API("/order/statistic/profitRank.do", null);
+        }
     }
 
     /**

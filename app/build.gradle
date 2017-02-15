@@ -60,8 +60,8 @@ android {
         origin {
             versionCode 37
             versionName '1.4.0'
-//            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
-            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
+//            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
 //            minSdkVersion 21
         }
         yybd { // 原油宝典 -> 期货交易通

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.Information;
+import com.jnhyxx.html5.utils.StatusBarUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 import com.umeng.analytics.MobclickAgent;
@@ -42,6 +43,7 @@ public class InfoFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         mBinder = ButterKnife.bind(this, view);
+        StatusBarUtil.addStatusBarView((ViewGroup) view, getContext());
         return view;
     }
 

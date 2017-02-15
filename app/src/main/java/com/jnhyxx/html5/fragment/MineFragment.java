@@ -38,6 +38,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
+import com.jnhyxx.html5.utils.StatusBarUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
@@ -111,6 +112,7 @@ public class MineFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         mBinder = ButterKnife.bind(this, view);
+        StatusBarUtil.addStatusBarView((ViewGroup) view, getContext());
         return view;
     }
 
@@ -262,7 +264,7 @@ public class MineFragment extends BaseFragment {
                 .setPositive(R.string.go_to_bind_bank_card, new SmartDialog.OnClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
-                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class),BankcardBindingActivity.REQ_CODE_BIND_BANK);
+                        getActivity().startActivityForResult(new Intent(getActivity(), BankcardBindingActivity.class), BankcardBindingActivity.REQ_CODE_BIND_BANK);
                         dialog.dismiss();
                     }
                 })

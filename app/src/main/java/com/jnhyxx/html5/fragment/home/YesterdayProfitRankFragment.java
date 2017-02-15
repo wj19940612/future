@@ -1,12 +1,15 @@
 package com.jnhyxx.html5.fragment.home;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -79,5 +82,37 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
+    }
+
+    static class ProfitRankAdapter extends ArrayAdapter<ProfitRankModel> {
+
+        Context mContext;
+
+        public ProfitRankAdapter(Context context) {
+            super(context, 0);
+            mContext = context;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.row_profit_rank, null);
+
+            return super.getView(position, convertView, parent);
+
+        }
+
+        static class ViewHolder {
+            @BindView(R.id.ranking)
+            TextView mRanking;
+            @BindView(R.id.phoneNum)
+            TextView mPhoneNum;
+            @BindView(R.id.profit)
+            TextView mProfit;
+
+            ViewHolder(View view) {
+                ButterKnife.bind(this, view);
+            }
+        }
     }
 }

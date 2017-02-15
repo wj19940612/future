@@ -92,18 +92,49 @@ android {
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
+
         yyqhb { // 原油期货宝
             applicationId 'com.dajiexin.yyqhb'
-            versionCode 1
-            versionName '1.2.2'
+            versionCode 2
+            versionName '1.3.0'
             buildConfigField('String', 'API_HOST', '\"http://www.dajiexin.com\"')
 
             manifestPlaceholders = [
-                    GETUI_APP_ID    : "zqcxHytZhk5BzgwVIGzas8",
-                    GETUI_APP_KEY   : "SuhJrLPRVX5Ngbx14vmgF6",
-                    GETUI_APP_SECRET: "KQwRYkkEnd7qlEedIPHvJ8",
+                    GETUI_APP_ID    : "EuZ8iY5BoC6kxsSII23BS4",
+                    GETUI_APP_KEY   : "aJxHTBVy1gActQcuo4ASX7",
+                    GETUI_APP_SECRET: "nqEj72mrVt9N6G91KOYUN",
                     PACKAGE_NAME    : applicationId,
                     UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
+
+        wyejy { // 微赢e交易
+            applicationId 'com.dajiexin.wyejy'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://dl2.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "FxcesZezad9ES1DrTeizg7",
+                    GETUI_APP_KEY   : "jW95oGIu5e87WZUVHwR8B3",
+                    GETUI_APP_SECRET: "cHVLgYBkFF9t3QAwRd97O3",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
+
+        hzh2 { // 恒指汇
+            applicationId 'cn.yuanqibao.hzh'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://hzh.yuanqibao.cn\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "5o8QQrCzyG7oUoPEoRpr69",
+                    GETUI_APP_KEY   : "Ka61PYAHO36m7s98u5RCl1",
+                    GETUI_APP_SECRET: "G0Q3lOrnLA7tLgX40zZ4p7",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
 
@@ -195,11 +226,11 @@ android {
 dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
-    yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
     kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 
-//    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
-//    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
+    yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
+    wyejyCompile project(path: ':umenglibrary', configuration: 'wyejyRelease')
+    hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 
     zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')

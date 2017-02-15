@@ -117,6 +117,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     private LiveMessage.NoticeInfo mNotice;
     private ServerIpPort mServerIpPort;
     private NettyClient mNettyClient;
+    private boolean mStopLive;
 
     private LivePageFragmentAdapter mLivePageFragmentAdapter;
     private int mSelectedPage;
@@ -221,6 +222,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         initTitleBar();
         initSlidingTabLayout();
         initKeyboardHelper();
+
         getLiveMessage();
         getChattingIpPort();
     }
@@ -313,13 +315,13 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             case R.id.showEditTextButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SPEAK);
                 if (LocalUser.getUser().isLogin()) {
-                    if (mTeacher != null) {
+                    if (mStopLive) {
+                        ToastUtil.show(R.string.live_time_is_not);
+                    } else {
                         setBottomTabVisibility(GONE);
                         if (getLiveInteractionFragment() != null) {
                             getLiveInteractionFragment().showInputBox();
                         }
-                    } else {
-                        ToastUtil.show(R.string.live_time_is_not);
                     }
                 } else {
                     startActivityForResult(new Intent(getActivity(), SignInActivity.class), BaseActivity.REQ_CODE_LOGIN);
@@ -340,25 +342,25 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     }
 
     private void getLastTeacherCommand() {
-        if (mTeacher != null) {
-            final int teacherId = mTeacher.getTeacherAccountId();
-            API.Live.getLastTeacherGuide(teacherId).setTag(TAG)
-                    .setCallback(new Callback2<Resp<LastTeacherCommand>, LastTeacherCommand>() {
-                        @Override
-                        public void onRespSuccess(LastTeacherCommand lastTeacherCommand) {
-                            LiveHomeChatInfo teacherCommand = lastTeacherCommand.getMsg();
-                            if (teacherCommand == null) return;
+        if (mTeacher == null) return;
 
-                            if (!Preference.get().hasShowedThisLastTeacherCommand(teacherCommand)) {
-                                long timeStamp = teacherCommand.getCreateTime();
-                                long sysTime = SysTime.getSysTime().getSystemTimestamp();
-                                if (DateUtil.isLessThanTimeInterval(sysTime, timeStamp, 60 * 1000)) {
-                                    mTeacherCommand.setTeacherCommand(teacherCommand);
-                                }
+        final int teacherId = mTeacher.getTeacherAccountId();
+        API.Live.getLastTeacherGuide(teacherId).setTag(TAG)
+                .setCallback(new Callback2<Resp<LastTeacherCommand>, LastTeacherCommand>() {
+                    @Override
+                    public void onRespSuccess(LastTeacherCommand lastTeacherCommand) {
+                        LiveHomeChatInfo teacherCommand = lastTeacherCommand.getMsg();
+                        if (teacherCommand == null) return;
+
+                        if (!Preference.get().hasShowedThisLastTeacherCommand(teacherCommand)) {
+                            long timeStamp = teacherCommand.getCreateTime();
+                            long sysTime = SysTime.getSysTime().getSystemTimestamp();
+                            if (DateUtil.isLessThanTimeInterval(sysTime, timeStamp, 60 * 1000)) {
+                                mTeacherCommand.setTeacherCommand(teacherCommand);
                             }
                         }
-                    }).fire();
-        }
+                    }
+                }).fireSync();
     }
 
     private void getChattingIpPort() {
@@ -368,12 +370,12 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     public void onRespSuccess(List<ServerIpPort> serverIpPorts) {
                         if (serverIpPorts != null && serverIpPorts.size() > 0) {
                             mServerIpPort = serverIpPorts.get(0);
-                            if (mLiveMessage != null) {
+                            if (mTeacher != null) {
                                 connectNettySocket();
                             }
                         }
                     }
-                }).fire();
+                }).fireSync();
     }
 
     private void getLiveMessage() {
@@ -382,25 +384,28 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
                     @Override
                     public void onRespSuccess(LiveMessage liveMessage) {
                         mLiveMessage = liveMessage;
+                        mTeacher = mLiveMessage.getTeacher();
+                        mNotice = mLiveMessage.getNotice();
+                        mStopLive = mLiveMessage.isStopLive();
+
                         if (mServerIpPort != null) {
                             connectNettySocket();
                         }
 
-                        mTeacher = mLiveMessage.getTeacher();
-                        mNotice = mLiveMessage.getNotice();
-                        if (mTeacher != null) { // 在直播
-                            if (getLiveInteractionFragment() != null) {
-                                getLiveInteractionFragment().setTeacherInfo(mTeacher);
-                            }
-                            showLiveViews();
-                            getLastTeacherCommand();
-                        } else if (mNotice != null) { // 未直播,显示通告
+                        if (mStopLive) { // 未直播,显示通告
                             showNoLiveViews();
+                        } else { // 在直播
+                            if (mTeacher != null) {
+                                if (getLiveInteractionFragment() != null) {
+                                    getLiveInteractionFragment().setTeacherInfo(mTeacher);
+                                }
+                                showLiveViews();
+                                getLastTeacherCommand();
+                            }
                         }
-
                         mProgrammeList.setProgramme(mLiveMessage.getProgram());
                     }
-                }).fire();
+                }).fireSync();
     }
 
     private void showLiveViews() {
@@ -426,7 +431,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
     }
 
     private void connectNettySocket() {
-        if (mLiveMessage.getTeacher() != null) {
+        if (mTeacher != null && mServerIpPort != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
             mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
             mNettyClient.start(teacherId, CookieManger.getInstance().getCookies());

@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +15,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.order.ProfitRankModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
-import com.jnhyxx.html5.fragment.IndustryAnalyzeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -129,16 +125,11 @@ public class YesterdayProfitRankFragment extends BaseFragment {
         }
 
         if (mSwipeRefreshLayout.isRefreshing()) {
-            mNewsListAdapter.clear();
+            mProfitRankAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        for (Information item : messageLists) {
-            if (mSet.add(item.getId())) {
-                mNewsListAdapter.add(item);
-            }
-        }
-        mListView.setAdapter(mNewsListAdapter);
-        mNewsListAdapter.notifyDataSetChanged();
+        mProfitRankAdapter.addAll(profitRankModels);
+        mProfitRankAdapter.notifyDataSetChanged();
     }
 
     @Override

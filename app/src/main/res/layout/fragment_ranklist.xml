@@ -16,21 +16,22 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <ListView
+            android:scrollbars="none"
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:divider="@null"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/there_is_no_data_for_now"
-        android:visibility="gone"/>
+    android:id="@android:id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="@string/there_is_no_data_for_now"
+    android:visibility="gone"/>
 </LinearLayout>

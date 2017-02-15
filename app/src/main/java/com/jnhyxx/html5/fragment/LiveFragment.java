@@ -151,6 +151,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             if (getLiveInteractionFragment() != null) {
                 getLiveInteractionFragment().setData(data);
             }
+            mStopLive = data.isStopLive();
 
             LiveHomeChatInfo liveHomeChatInfo = new LiveHomeChatInfo(data);
 

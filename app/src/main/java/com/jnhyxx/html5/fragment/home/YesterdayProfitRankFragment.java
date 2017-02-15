@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.order.ProfitRankModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.fragment.IndustryAnalyzeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -41,6 +46,7 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     TextView mEmpty;
 
     private Unbinder mBind;
+    private ProfitRankAdapter mProfitRankAdapter;
 
     @Nullable
     @Override
@@ -56,6 +62,29 @@ public class YesterdayProfitRankFragment extends BaseFragment {
         mListView.setEmptyView(mEmpty);
 
         getYesterdayProfitRank();
+
+        initSwipeRefreshLayout();
+    }
+
+    private void initSwipeRefreshLayout() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getYesterdayProfitRank();
+            }
+        });
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getYesterdayProfitRank();
+            }
+        });
+    }
+
+    private void stopRefreshAnimation() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     /**
@@ -73,15 +102,43 @@ public class YesterdayProfitRankFragment extends BaseFragment {
                         for (ProfitRankModel data : profitRankModels) {
                             Log.d(TAG, "盈利  " + data.toString());
                         }
-
                         for (int i = 0; i < 10; i++) {
                             profitRankModels.add(new ProfitRankModel(10000 + i * 1000, i + "" + i + "" + i + "" + i + "****" + i + "" + i + "" + i + "" + i));
                         }
+                        updateProfitRank(profitRankModels);
+                    }
 
-                        
+                    @Override
+                    public void onFailure(VolleyError volleyError) {
+                        super.onFailure(volleyError);
+                        stopRefreshAnimation();
                     }
                 })
                 .fire();
+    }
+
+    private void updateProfitRank(List<ProfitRankModel> profitRankModels) {
+        stopRefreshAnimation();
+        if (profitRankModels == null) {
+            return;
+        }
+
+        if (mProfitRankAdapter == null) {
+            mProfitRankAdapter = new ProfitRankAdapter(getActivity());
+            mListView.setAdapter(mProfitRankAdapter);
+        }
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mNewsListAdapter.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        for (Information item : messageLists) {
+            if (mSet.add(item.getId())) {
+                mNewsListAdapter.add(item);
+            }
+        }
+        mListView.setAdapter(mNewsListAdapter);
+        mNewsListAdapter.notifyDataSetChanged();
     }
 
     @Override

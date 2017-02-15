@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.fragment.home.RankListFragment;
+import com.jnhyxx.html5.fragment.home.YesterdayProfitRankFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
 
 import butterknife.BindView;
@@ -69,7 +69,7 @@ public class HomeFragment extends BaseFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new RankListFragment();
+                    return new YesterdayProfitRankFragment();
                 case 1:
                     return new Fragment();
                 case 2:

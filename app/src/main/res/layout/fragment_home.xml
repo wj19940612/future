@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         app:titleText="@string/app_name"/>
 
- <!--   <ListView
+    <ListView
+        android:visibility="gone"
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,11 +25,12 @@
         android:scrollbars="none"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/there_is_no_data_for_now"/>-->
+        android:text="@string/there_is_no_data_for_now"/>
     <com.jnhyxx.html5.view.SlidingTabLayout
         android:background="@android:color/white"
         android:id="@+id/slidingTabLayout"

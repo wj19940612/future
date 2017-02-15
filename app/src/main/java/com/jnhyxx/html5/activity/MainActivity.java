@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity {
                 if (position == TAB_INDEX_LIVE) {
                     Fragment fragment = mMainFragmentsAdapter.getFragment(TAB_LIVE);
                     if (fragment instanceof LiveFragment) {
-                        LiveFragment liveFragment = (LiveFragment) fragment;
+                        LiveFragment liveFragment = (LiveFragment) (fragment);
                         liveFragment.updateLiveInfo();
                     }
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);

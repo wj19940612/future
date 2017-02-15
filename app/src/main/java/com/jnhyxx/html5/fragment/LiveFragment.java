@@ -440,7 +440,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         }
     }
 
-    private void connectNettySocket() {
+    public void connectNettySocket() {
         if (mTeacher != null && mServerIpPort != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
             mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
@@ -449,7 +449,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         mNettyClient.addNettyHandler(mNettyHandler);
     }
 
-    private void disconnectNettySocket() {
+    public void disconnectNettySocket() {
         mNettyClient.stop();
         mNettyClient.removeNettyHandler(mNettyHandler);
     }

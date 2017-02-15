@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 
 import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
 import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
+import static com.jnhyxx.html5.view.BottomTabs.TAB_INDEX_LIVE;
 
 public class MainActivity extends BaseActivity {
 
@@ -58,10 +59,12 @@ public class MainActivity extends BaseActivity {
     private int mTabPosition;
     //首页tab的position
     private static final int TAB_HOME = 0;
+    //直播tab的position
+    private static final int TAB_LIVE = 1;
     //资讯tab的position,用来友盟记录第点击次数
-    private static final int TAB_MESSAGE = 1;
+    private static final int TAB_MESSAGE = 2;
     //我的tab
-    private static final int TAB_MINE = 2;
+    private static final int TAB_MINE = 3;
 
     private static final int REQ_CODE_LIVE = 770;
 
@@ -138,6 +141,9 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if(position!=TAB_INDEX_LIVE){
+                    updateLiveFragmentInfo();
+                }
                 if (position == TAB_HOME) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_HOME);
                 } else if (position == TAB_MESSAGE) {
@@ -156,13 +162,22 @@ public class MainActivity extends BaseActivity {
         mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
             public void onTabClick(int position) {
-                if (position == BottomTabs.TAB_INDEX_LIVE) {
+                if (position == TAB_INDEX_LIVE) {
+                    updateLiveFragmentInfo();
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
                 }
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
             }
         });
+    }
+
+    private void updateLiveFragmentInfo() {
+        Fragment fragment = mMainFragmentsAdapter.getFragment(TAB_LIVE);
+        if (fragment instanceof LiveFragment) {
+            LiveFragment liveFragment = (LiveFragment) (fragment);
+            liveFragment.updateLiveInfo();
+        }
     }
 
 
@@ -229,8 +244,11 @@ public class MainActivity extends BaseActivity {
 
     private class MainFragmentsAdapter extends FragmentPagerAdapter {
 
+        FragmentManager mFragmentManager;
+
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
         }
 
         @Override
@@ -251,6 +269,10 @@ public class MainActivity extends BaseActivity {
         @Override
         public int getCount() {
             return 4;
+        }
+
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
         }
     }
 }

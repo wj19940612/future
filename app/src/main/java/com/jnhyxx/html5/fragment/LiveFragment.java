@@ -151,6 +151,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
             if (getLiveInteractionFragment() != null) {
                 getLiveInteractionFragment().setData(data);
             }
+            mStopLive = data.isStopLive();
 
             LiveHomeChatInfo liveHomeChatInfo = new LiveHomeChatInfo(data);
 
@@ -225,6 +226,19 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
 
         getLiveMessage();
         getChattingIpPort();
+
+        updateLiveInfo();
+    }
+
+    public void updateLiveInfo() {
+        LiveInteractionFragment liveInteractionFragment = getLiveInteractionFragment();
+        if (liveInteractionFragment != null) {
+            liveInteractionFragment.updateLiveChatDataStatus();
+        }
+        TeacherGuideFragment teacherGuideFragment = getTeacherGuideFragment();
+        if (teacherGuideFragment != null) {
+            teacherGuideFragment.updateTeacherGuide();
+        }
     }
 
     @Override
@@ -265,6 +279,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         mKeyBoardHelper.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(LoginBroadcastReceiver);
     }
+
 
     public void setBottomTabVisibility(int visibility) {
         if (getActivity() instanceof MainActivity) {
@@ -430,7 +445,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         }
     }
 
-    private void connectNettySocket() {
+    public void connectNettySocket() {
         if (mTeacher != null && mServerIpPort != null) {
             int teacherId = mLiveMessage.getTeacher().getTeacherAccountId();
             mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
@@ -439,7 +454,7 @@ public class LiveFragment extends BaseFragment implements LiveInteractionFragmen
         mNettyClient.addNettyHandler(mNettyHandler);
     }
 
-    private void disconnectNettySocket() {
+    public void disconnectNettySocket() {
         mNettyClient.stop();
         mNettyClient.removeNettyHandler(mNettyHandler);
     }

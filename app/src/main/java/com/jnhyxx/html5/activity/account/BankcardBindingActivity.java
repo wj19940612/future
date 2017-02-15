@@ -328,32 +328,15 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
                 final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
-                //  暂时去掉银行卡校验
-//                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
-//                    mCommonFailTvWarn.showController(R.string.bank_card_is_error);
-//                    return;
-//                }
 
                 if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
                     mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
                     return;
                 }
-
-                if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
-                    mCommonFailTvWarn.show(R.string.common_phone_num_fail);
-                    return;
-                }
-
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank))) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
                 }
-
-                if (!ValidityDecideUtil.IDCardValidate(identityNum)) {
-                    mCommonFailTvWarn.show(R.string.settings_identity_card_fail);
-                    return;
-                }
-
                 submitBindBank(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
                 break;
             case R.id.unbindBankcard:

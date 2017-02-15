@@ -134,7 +134,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         mListView.setOnScrollListener(this);
 
-        getChatInfo();
+//        getChatInfo();
         setOnRefresh();
     }
 

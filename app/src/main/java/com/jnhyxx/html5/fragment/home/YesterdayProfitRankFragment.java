@@ -73,6 +73,10 @@ public class YesterdayProfitRankFragment extends BaseFragment {
                         for (ProfitRankModel data : profitRankModels) {
                             Log.d(TAG, "盈利  " + data.toString());
                         }
+
+                        for (int i = 0; i < 10; i++) {
+                            new ProfitRankModel(10000+i,);
+                        }
                     }
                 })
                 .fire();
@@ -96,9 +100,17 @@ public class YesterdayProfitRankFragment extends BaseFragment {
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.row_profit_rank, null);
+            ViewHolder viewHolder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.row_profit_rank, null);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
 
-            return super.getView(position, convertView, parent);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            viewHolder.bindDataWithView(mContext, getItem(position), position);
+            return convertView;
 
         }
 
@@ -112,6 +124,11 @@ public class YesterdayProfitRankFragment extends BaseFragment {
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
+            }
+
+            public void bindDataWithView(Context context, ProfitRankModel item, int position) {
+                mRanking.setText(String.valueOf(position + 1));
+
             }
         }
     }

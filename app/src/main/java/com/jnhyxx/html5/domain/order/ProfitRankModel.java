@@ -17,6 +17,15 @@ public class ProfitRankModel {
      */
     private double profit;
 
+    public ProfitRankModel() {
+
+    }
+
+    public ProfitRankModel(double profit, String phone) {
+        this.profit = profit;
+        this.phone = phone;
+    }
+
     public String getPhone() {
         return phone;
     }

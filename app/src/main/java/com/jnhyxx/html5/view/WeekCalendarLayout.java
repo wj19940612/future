@@ -8,7 +8,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,14 +21,26 @@ import com.johnz.kutils.StrUtil;
  * 财经日历的顶部的显示一周星期的view
  */
 
-public class WeekCalendarLayout extends LinearLayout {
+public class WeekCalendarLayout extends LinearLayout implements View.OnClickListener {
     private static final String TAG = "WeekCalendarLayout";
 
     private static String[] weekData = new String[]{"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+
     private static final String TODAY = "\n今天";
 
-    private static final int DEFAULT_ITEM_HEIGHT = 24;
+    private static final int DEFAULT_ITEM_HEIGHT = 30;
 
+    private int mSelectWeek;
+
+    private OnWeekSelectListener mOnWeekSelectListener;
+
+    public interface OnWeekSelectListener {
+        /**
+         * @param index 对应的索引
+         * @param week  所选择的日期
+         */
+        void onWeekSelected(int index, String week);
+    }
 
     public WeekCalendarLayout(Context context) {
         super(context);
@@ -53,30 +64,38 @@ public class WeekCalendarLayout extends LinearLayout {
         setGravity(Gravity.CENTER_VERTICAL);
         for (int i = 0; i < weekData.length; i++) {
             addView(createLine());
-            addView(createWeekView(weekData[i]));
+            addView(createWeekView(weekData[i], i));
         }
         addView(createLine());
     }
 
-    private View createWeekView(String week) {
+    private View createWeekView(String week, int position) {
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_ITEM_HEIGHT,
                 getResources().getDisplayMetrics());
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
         TextView textView = new TextView(getContext());
-        textView.setPadding(padding, padding, padding, padding);
+        textView.setPadding(padding, 0, padding, 0);
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
         textView.setBackgroundResource(R.drawable.bg_week_calendar);
         if (isToadyWeek(week)) {
+            mSelectWeek = position;
             textView.setSelected(true);
+        } else {
+            textView.setSelected(false);
+        }
+
+        if (textView.isSelected()) {
             textView.setTextColor(Color.WHITE);
             textView.setText(StrUtil.mergeTextWithRatio(week, TODAY, 0.7f));
         } else {
-            textView.setSelected(false);
             textView.setText(week);
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.blueAssist));
         }
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
+
+        textView.setOnClickListener(this);
+        textView.setTag(position);
+        LayoutParams layoutParams = new LayoutParams(height, height);
         textView.setLayoutParams(layoutParams);
         return textView;
     }
@@ -98,4 +117,44 @@ public class WeekCalendarLayout extends LinearLayout {
         view.setLayoutParams(layoutParams);
         return view;
     }
+
+    public void setOnWeekSelectListener(OnWeekSelectListener onWeekSelectListener) {
+        mOnWeekSelectListener = onWeekSelectListener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int position = (int) v.getTag();
+        setSelectWeek(position);
+    }
+
+    public void setSelectWeek(int position) {
+//        if (position < 0 || position > 7) return;
+        position = position + 1;
+        for (int i = 0; i < getChildCount(); i++) {
+            View view = getChildAt(i);
+            if (view instanceof TextView) {
+                TextView textView = ((TextView) view);
+                textView.setSelected(false);
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.blueAssist));
+            }
+        }
+        TextView textView = getTextView(position);
+        if (textView != null) {
+            textView.setSelected(true);
+            textView.setTextColor(Color.WHITE);
+            if (mOnWeekSelectListener != null) {
+                mOnWeekSelectListener.onWeekSelected(position, weekData[position - 1]);
+            }
+        }
+    }
+
+    public TextView getTextView(int index) {
+        View view = getChildAt(index * 2 - 1);
+        if (view instanceof TextView) {
+            return (TextView) view;
+        }
+        return null;
+    }
+
 }

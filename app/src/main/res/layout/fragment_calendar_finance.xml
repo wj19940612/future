@@ -5,6 +5,7 @@
               android:orientation="vertical">
 
     <com.jnhyxx.html5.view.WeekCalendarLayout
+        android:id="@+id/calendarWeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="70dp"/>

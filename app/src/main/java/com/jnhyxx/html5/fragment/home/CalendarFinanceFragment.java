@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.utils.ToastUtil;
+import com.jnhyxx.html5.view.WeekCalendarLayout;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -16,7 +19,10 @@ import butterknife.Unbinder;
  * Created by ${wangJie} on 2017/2/16.
  */
 
-public class CalendarFinanceFragment extends BaseFragment {
+public class CalendarFinanceFragment extends BaseFragment implements WeekCalendarLayout.OnWeekSelectListener {
+
+    @BindView(R.id.calendarWeek)
+    WeekCalendarLayout mCalendarWeek;
 
     private Unbinder mBind;
 
@@ -37,5 +43,16 @@ public class CalendarFinanceFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mCalendarWeek.setOnWeekSelectListener(this);
+    }
+
+    @Override
+    public void onWeekSelected(int index, String week) {
+        ToastUtil.curt("所选择的日期" + index + " 星期 " + week);
     }
 }

@@ -6,13 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.fragment.BaseFragment;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by ${wangJie} on 2017/2/16.
  */
 
 public class CalendarFinanceFragment extends BaseFragment {
+
+    private Unbinder mBind;
 
     public static CalendarFinanceFragment newInstance() {
         CalendarFinanceFragment fragment = new CalendarFinanceFragment();
@@ -22,6 +28,14 @@ public class CalendarFinanceFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_calendar_finance, container, false);
+        mBind = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBind.unbind();
     }
 }

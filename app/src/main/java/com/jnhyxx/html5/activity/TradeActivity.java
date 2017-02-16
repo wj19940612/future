@@ -36,6 +36,7 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.order.OrderActivity;
 import com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity;
 import com.jnhyxx.html5.constans.Unit;
+import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
 import com.jnhyxx.html5.domain.market.FullMarketData;
@@ -882,7 +883,7 @@ public class TradeActivity extends BaseActivity implements
                                     })
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
+                        } else if (jsonObjectResp.isFundNotEnough()) {
                             showFundNotEnoughDialog(jsonObjectResp);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_LIGHTNING_ORDER_INVALID) {
                             enableLightningOrderView(false);
@@ -905,8 +906,7 @@ public class TradeActivity extends BaseActivity implements
                                 @Override
                                 public void onClick(Dialog dialog) {
                                     dialog.dismiss();
-                                    Launcher.with(getActivity(), RechargeActivity.class)
-                                            .execute();
+                                    openRechargePage();
                                 }
                             }).setNegative(R.string.cancel)
                     .show();
@@ -915,6 +915,23 @@ public class TradeActivity extends BaseActivity implements
                     .setPositive(R.string.ok)
                     .show();
         }
+    }
+
+    private void openRechargePage() {
+        API.Finance.getSupportApplyWay()
+                .setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<SupportApplyWay>, SupportApplyWay>() {
+                    @Override
+                    public void onRespSuccess(SupportApplyWay supportApplyWay) {
+                        Log.d(TAG, "-----" + supportApplyWay.toString());
+                        if (supportApplyWay.isBank() || supportApplyWay.isAlipay() || supportApplyWay.isWechat()) {
+                            MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE);
+                            Launcher.with(getActivity(), RechargeActivity.class).putExtra(Launcher.EX_PAYLOAD, supportApplyWay).execute();
+                        } else {
+                            SmartDialog.with(getActivity(), R.string.now_is_not_support_recharge).show();
+                        }
+                    }
+                }).fire();
     }
 
     @Override

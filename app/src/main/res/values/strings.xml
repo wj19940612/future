@@ -558,4 +558,5 @@
     <string name="yesterday_the_profit_list">昨日盈利榜</string>
     <string name="trading_strategy">交易攻略</string>
     <string name="ranking_list_top_hint">本排行榜表示上个正常交易日的数据</string>
+    <string name="trading_strategy_title">如何成为有规则的交易者并坚持你的优势?</string>
 </resources>

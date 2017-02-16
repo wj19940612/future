@@ -72,6 +72,9 @@ public class YesterdayProfitRankFragment extends BaseFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (mProfitRankAdapter != null) {
+                    mProfitRankAdapter.clear();
+                }
                 getYesterdayProfitRank();
             }
         });
@@ -177,7 +180,15 @@ public class YesterdayProfitRankFragment extends BaseFragment {
             }
 
             public void bindDataWithView(ProfitRankModel item, int position) {
-                mRanking.setText(String.valueOf(position + 1));
+                if (position == 0) {
+                    mRanking.setBackgroundResource(R.drawable.ic_profit_first);
+                } else if (position == 1) {
+                    mRanking.setBackgroundResource(R.drawable.ic_profit_second);
+                } else if (position == 2) {
+                    mRanking.setBackgroundResource(R.drawable.ic_profit_third);
+                } else {
+                    mRanking.setText(String.valueOf(position + 1));
+                }
                 mPhoneNum.setText(item.getPhone());
                 mProfit.setText(String.valueOf(item.getProfit()));
             }

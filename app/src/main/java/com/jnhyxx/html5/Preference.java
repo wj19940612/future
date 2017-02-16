@@ -27,6 +27,7 @@ public class Preference {
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
+        String PAY_WAY = "payWay";
     }
 
     private static Preference sInstance;
@@ -196,5 +197,13 @@ public class Preference {
 
     public void setIsFirstWithdraw(String key, boolean isFirstWithdraw) {
         getEditor().putBoolean(key, isFirstWithdraw).apply();
+    }
+
+    public void setPayWay(int payWay) {
+        getEditor().putInt(Key.PAY_WAY, payWay).apply();
+    }
+
+    public int getPayWay() {
+        return mPrefs.getInt(Key.PAY_WAY, 0);
     }
 }

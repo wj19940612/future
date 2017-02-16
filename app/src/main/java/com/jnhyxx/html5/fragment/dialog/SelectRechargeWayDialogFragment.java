@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.RechargeActivity;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
@@ -94,7 +95,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         updateView(mSupportApplyWay);
-        choosePayWay(PAY_WAY_BANK);
+        choosePayWay(Preference.get().getPayWay());
     }
 
     @Nullable
@@ -146,6 +147,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     }
 
     public void choosePayWay(int payWay) {
+        Preference.get().setPayWay(payWay);
         unSelectAll();
         mPayWayLayout.getChildAt(payWay).setSelected(true);
     }

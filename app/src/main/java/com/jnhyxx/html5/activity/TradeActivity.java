@@ -882,7 +882,7 @@ public class TradeActivity extends BaseActivity implements
                                     })
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
+                        } else if (jsonObjectResp.isFundNotEnough()) {
                             showFundNotEnoughDialog(jsonObjectResp);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_LIGHTNING_ORDER_INVALID) {
                             enableLightningOrderView(false);

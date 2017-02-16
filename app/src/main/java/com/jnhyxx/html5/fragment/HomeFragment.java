@@ -11,12 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.SimulationActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
@@ -25,7 +26,10 @@ import com.jnhyxx.html5.activity.web.NewbieActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
@@ -58,14 +62,19 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
     @BindView(R.id.riskEvaluation)
-    TextView mRiskEvaluation;
+    LinearLayout mRiskEvaluation;
     @BindView(R.id.contactService)
-    TextView mContactService;
+    LinearLayout mContactService;
     @BindView(R.id.collapsing)
     CollapsingToolbarLayout mCollapsing;
     @BindView(R.id.appbar)
     AppBarLayout mAppbar;
     private Unbinder mBind;
+
+    private List<ProductPkg> mProductPkgList;
+    private List<Product> mProductList;
+    private List<HomePositions.CashOpSBean> mCashPositionList;
+    private List<MarketData> mMarketDataList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,6 +129,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        requestHomePositions();
         requestHomeInformation();
         requestOrderReport();
         startScheduleJob(5 * 1000);
@@ -263,11 +273,50 @@ public class HomeFragment extends BaseFragment {
                     }
                 }).setTag(TAG).fire();
     }
+    private void requestHomePositions() {
+        if (LocalUser.getUser().isLogin()) {
+            API.Order.getHomePositions().setTag(TAG)
+                    .setCallback(new Callback<Resp<HomePositions>>(false) {
+                        @Override
+                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
+                            if (homePositionsResp.isSuccess()) {
+                                HomePositions homePositions = homePositionsResp.getData();
+                                updateSimulateButton(homePositions);
 
+//                                mCashPositionList = homePositions.getCashOpS();
+//                                ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
+//                                updateProductListView();
+                            }
+                        }
+
+                        @Override
+                        public void onReceive(Resp<HomePositions> homePositionsResp) {
+                        }
+                    }).fire();
+        } else { // clearHoldingOrderList all product position
+//            ProductPkg.clearPositions(mProductPkgList);
+            mHomeHeader.setSimulationHolding(null);
+//            mCashPositionList = null;
+//            updateProductListView();
+        }
+    }
+
+    private void updateSimulateButton(HomePositions homePositions) {
+        if (mHomeHeader == null) return;
+        if (homePositions.getIntegralOpS().size() > 0) {
+            mHomeHeader.setSimulationHolding(homePositions.getIntegralOpS());
+        } else {
+            mHomeHeader.setSimulationHolding(null);
+        }
+    }
     @OnClick({R.id.riskEvaluation, R.id.contactService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.riskEvaluation:
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.futures_risk_tips_title))
+                        .putExtra(WebViewActivity.EX_URL, API.getFuturesRiskTips())
+                        .execute();
                 break;
             case R.id.contactService:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);

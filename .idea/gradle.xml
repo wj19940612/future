@@ -3,9 +3,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="LOCAL" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:\android-studio\gradle\gradle-2.14.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -17,7 +16,17 @@
             <option value="$PROJECT_DIR$/umenglibrary" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/SlidingMenu" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/chart" />
+            <option value="$PROJECT_DIR$/kutils" />
+            <option value="$PROJECT_DIR$/livevideo" />
+            <option value="$PROJECT_DIR$/umenglibrary" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

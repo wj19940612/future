@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.ProductOptionalActivity;
 import com.jnhyxx.html5.activity.SimulationActivity;
-import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
@@ -273,6 +273,7 @@ public class HomeFragment extends BaseFragment {
                     }
                 }).setTag(TAG).fire();
     }
+
     private void requestHomePositions() {
         if (LocalUser.getUser().isLogin()) {
             API.Order.getHomePositions().setTag(TAG)
@@ -309,13 +310,16 @@ public class HomeFragment extends BaseFragment {
             mHomeHeader.setSimulationHolding(null);
         }
     }
+
     @OnClick({R.id.riskEvaluation, R.id.contactService})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.riskEvaluation:
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.futures_risk_tips_title))
-                        .putExtra(WebViewActivity.EX_URL, API.getFuturesRiskTips())
+//                Launcher.with(getActivity(), WebViewActivity.class)
+//                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.futures_risk_tips_title))
+//                        .putExtra(WebViewActivity.EX_URL, API.getFuturesRiskTips())
+//                        .execute();
+                Launcher.with(getActivity(), ProductOptionalActivity.class)
                         .execute();
                 break;
             case R.id.contactService:

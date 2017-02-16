@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.fragment.home.CalendarFinanceFragment;
 import com.jnhyxx.html5.fragment.home.TradingStrategyFragment;
 import com.jnhyxx.html5.fragment.home.YesterdayProfitRankFragment;
 import com.jnhyxx.html5.view.SlidingTabLayout;
@@ -74,7 +75,7 @@ public class HomeFragment extends BaseFragment {
                 case 1:
                     return TradingStrategyFragment.newInstance();
                 case 2:
-                    return new Fragment();
+                    return CalendarFinanceFragment.newInstance();
                 default:
                     break;
             }

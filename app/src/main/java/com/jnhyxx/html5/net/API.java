@@ -712,6 +712,7 @@ public class API extends APIBase {
                             .put("url", url));
         }
 
+
         /**
          * 获取大厅 弹出框
          *
@@ -1106,13 +1107,24 @@ public class API extends APIBase {
     }
 
     /**
-     * findNewsByUrl  中所需要的参数
+     * findNewsByUrl  中所需要的参数 获取资讯直播的所需传入的网址
      *
      * @return
      */
     public static String getInfoLiveUrl() {
         return "http://m.jin10.com/flash?maxId=0";
     }
+
+    /**
+     * findNewsByUrl  z中获取财经日历的接口  http://www.dvwu.com/cjrl/getdata?date=2017-01-02（xkctk.hzcb.gov.cn）
+     *
+     * @param date
+     * @return
+     */
+    public static String getCalendarFinanceUrl(String date) {
+        return "http://www.dvwu.com/cjrl/getdata?date=" + date;
+    }
+
 
     /**
      * 新手引导页面网址

@@ -20,6 +20,7 @@ public class StrUtil {
 
     /**
      * 设置 s1 的字体，按比例缩放 s2 的大小，同时拼接 s1 和 s2
+     *
      * @param s1
      * @param typeface
      * @param s2
@@ -101,6 +102,33 @@ public class StrUtil {
             res = new SpannableString(s1);
             if (s2Color != Color.TRANSPARENT) {
                 res.setSpan(new ForegroundColorSpan(s2Color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 设置s1 s2的字体颜色,同时拼接s1 s2
+     *
+     * @param s1
+     * @param s2
+     * @param s1Color
+     * @param s2Color
+     * @return
+     */
+
+    public static SpannableString mergeTextWithColor(String s1, String s2, int s1Color, int s2Color) {
+        SpannableString res = new SpannableString("");
+        if (!TextUtils.isEmpty(s1)) {
+            int start = s1.length();
+            s1 = s1 + s2;
+            int end = s1.length();
+            res = new SpannableString(s1);
+            if (s2Color != Color.TRANSPARENT) {
+                res.setSpan(new ForegroundColorSpan(s2Color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            if (s1Color != Color.TRANSPARENT) {
+                res.setSpan(new ForegroundColorSpan(s1Color), 0, start, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             }
         }
         return res;

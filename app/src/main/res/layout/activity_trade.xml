@@ -5,13 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bluePrimary"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
     tools:context=".activity.TradeActivity">
 
     <com.jnhyxx.html5.view.TitleBar
         android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:barBackground="@android:color/transparent"
         app:backFeature="true"
         app:customView="@layout/tb_product_rule"
         app:rightImage="@drawable/ic_product_menu"

@@ -10,7 +10,7 @@
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/app_name"/>
+        app:titleText="@string/market"/>
 
     <ListView
         android:id="@android:id/list"

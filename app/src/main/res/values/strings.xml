@@ -50,6 +50,7 @@
 
     <!-- Main -->
     <string name="home">首页</string>
+    <string name="market">行情</string>
     <string name="live">直播</string>
     <string name="information">资讯</string>
     <string name="mine">我的</string>

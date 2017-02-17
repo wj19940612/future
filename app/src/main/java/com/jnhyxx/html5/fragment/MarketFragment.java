@@ -1,11 +1,8 @@
 package com.jnhyxx.html5.fragment;
 
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -19,41 +16,22 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
-import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.activity.WebViewActivity;
-import com.jnhyxx.html5.activity.account.SignInActivity;
-import com.jnhyxx.html5.activity.web.BannerActivity;
-import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
-import com.jnhyxx.html5.activity.web.InvestCourseActivity;
-import com.jnhyxx.html5.activity.web.NewbieActivity;
-import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
-import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.domain.order.OrderReport;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
-import com.jnhyxx.html5.utils.StatusBarUtil;
-import com.jnhyxx.html5.utils.StrFormatter;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
-import com.jnhyxx.html5.view.HomeListHeader;
-import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
-import com.johnz.kutils.net.CookieManger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -76,17 +54,13 @@ public class MarketFragment extends BaseFragment {
     private List<Product> mProductList;
     private List<HomePositions.CashOpSBean> mCashPositionList;
     private List<MarketData> mMarketDataList;
-
     private ProductPkgAdapter mProductPkgAdapter;
-    private HomeListHeader mHomeListHeader;
-    private View mHomeListFooter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_market, container, false);
         mBinder = ButterKnife.bind(this, view);
-        StatusBarUtil.addStatusBarView((ViewGroup) view,getContext());
         return view;
     }
 
@@ -94,94 +68,7 @@ public class MarketFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
-        mHomeListHeader = new HomeListHeader(getContext());
-        mHomeListFooter = LayoutInflater.from(getContext()).inflate(R.layout.footer_home, null);
-        mHomeListHeader.setOnViewClickListener(new HomeListHeader.OnViewClickListener() {
-            @Override
-            public void onBannerClick(Information information) {
-                if (information.isH5Style()) {
-                    Launcher.with(getActivity(), HideTitleWebActivity.class)
-                            .putExtra(HideTitleWebActivity.EX_URL, information.getContent())
-                            .putExtra(HideTitleWebActivity.EX_TITLE, information.getTitle())
-                            .putExtra(HideTitleWebActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                            .execute();
-                } else {
-                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.BANNER);
-                    Launcher.with(getActivity(), BannerActivity.class)
-                            .putExtra(BannerActivity.EX_HTML, information.getContent())
-                            .putExtra(BannerActivity.EX_TITLE, information.getTitle())
-                            .putExtra(BannerActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                            .execute();
-                }
-            }
-
-            @Override
-            public void onFuturesRiskTipsClick() {
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.futures_risk_tips_title))
-                        .putExtra(WebViewActivity.EX_URL, API.getFuturesRiskTips())
-                        .execute();
-            }
-
-            // 模拟交易
-            @Override
-            public void onSimulationClick() {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE);
-                API.Market.getProductList().setTag(TAG)
-                        .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
-                            @Override
-                            public void onRespSuccess(List<Product> products) {
-                                Launcher.with(getActivity(), SimulationActivity.class)
-                                        .putExtra(Product.EX_PRODUCT_LIST, new ArrayList<>(products))
-                                        .execute();
-                            }
-                        }).fire();
-            }
-
-            // 推广赚钱
-            @Override
-            public void onPaidToPromoteClick() {
-                openPaidToPromotePage();
-            }
-
-            // 投资课堂
-            @Override
-            public void onInvestCourseClick() {
-                Launcher.with(getActivity(), InvestCourseActivity.class)
-                        .putExtra(InvestCourseActivity.EX_URL, API.getInvestCourseUrl())
-                        .putExtra(InvestCourseActivity.EX_TITLE, getString(R.string.investor_course))
-                        .putExtra(InvestCourseActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                        .execute();
-            }
-
-            // 新手引导
-            @Override
-            public void onNewerGuideClick() {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
-                Launcher.with(getActivity(), NewbieActivity.class)
-                        .putExtra(NewbieActivity.EX_URL, API.getNewbieUrl())
-                        .putExtra(NewbieActivity.EX_TITLE, getString(R.string.newbie_title))
-                        .putExtra(NewbieActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                        .execute();
-            }
-
-            // 联系客服
-            @Override
-            public void onContactServiceClick() {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);
-                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    ToastUtil.show(R.string.install_qq_first);
-                }
-            }
-        });
-        mList.addHeaderView(mHomeListHeader);
         mList.setEmptyView(mEmpty);
-        mList.addFooterView(mHomeListFooter);
-        initHomeListFooterListeners();
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
         mList.setOnItemClickListener(new OnItemOneClickListener() {
@@ -198,121 +85,13 @@ public class MarketFragment extends BaseFragment {
                 }
             }
         });
-
-        requestHomeInformation();
-        //requestOrderReport();
         requestProductMarketList();
-    }
-
-    private void openPaidToPromotePage() {
-        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.EXPAND_EARN_MONEY);
-        if (LocalUser.getUser().isLogin()) {
-            API.User.getPromoteCode().setTag(TAG).setIndeterminate(this)
-                    .setCallback(new Callback<Resp<JsonObject>>() {
-                        @Override
-                        public void onReceive(Resp<JsonObject> resp) {
-                            if (resp.isSuccess()) {
-                                Launcher.with(getActivity(), PaidToPromoteActivity.class)
-                                        .putExtra(PaidToPromoteActivity.EX_URL, API.getPromotePage())
-                                        .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
-                                        .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                                        .execute();
-                            } else if (resp.getCode() == Resp.CODE_GET_PROMOTE_CODE_FAILED) {
-                                showAskApplyPromoterDialog();
-                            } else {
-                                ToastUtil.show(resp.getMsg());
-                            }
-                        }
-                    }).fire();
-        } else {
-            Launcher.with(getActivity(), SignInActivity.class).execute();
-        }
-    }
-
-    private void showAskApplyPromoterDialog() {
-        SmartDialog.with(getActivity(), R.string.dialog_you_are_not_promoter_yet)
-                .setPositive(R.string.ok, new SmartDialog.OnClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        dialog.dismiss();
-                        applyForPromoter();
-                    }
-                })
-                .setNegative(R.string.cancel)
-                .show();
-    }
-
-    private void applyForPromoter() {
-        API.User.becomePromoter().setTag(TAG)
-                .setCallback(new Callback1<Resp<JsonObject>>() {
-                    @Override
-                    protected void onRespSuccess(Resp<JsonObject> resp) {
-                        if (resp.isSuccess()) {
-                            ToastUtil.show(resp.getMsg());
-                            Launcher.with(getActivity(), PaidToPromoteActivity.class)
-                                    .putExtra(PaidToPromoteActivity.EX_URL, API.getPromotePage())
-                                    .putExtra(PaidToPromoteActivity.EX_TITLE, getString(R.string.paid_to_promote))
-                                    .putExtra(PaidToPromoteActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
-                                    .execute();
-                        }
-                    }
-                }).fire();
-    }
-
-    private void initHomeListFooterListeners() {
-        mHomeListFooter.findViewById(R.id.fundSecurity).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.fund_security))
-                        .putExtra(WebViewActivity.EX_URL, API.getFundSecurityUrl())
-                        .execute();
-            }
-        });
-        mHomeListFooter.findViewById(R.id.riskInformed).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.normalize_futures_rule))
-                        .putExtra(WebViewActivity.EX_URL, API.getRiskInformedUrl())
-                        .execute();
-            }
-        });
-        mHomeListFooter.findViewById(R.id.cooperationOrg).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Launcher.with(getActivity(), WebViewActivity.class)
-                        .putExtra(WebViewActivity.EX_TITLE, getContext().getString(R.string.cooperation_org))
-                        .putExtra(WebViewActivity.EX_URL, API.getCooperationOrgUrl())
-                        .execute();
-            }
-        });
-        TextView servicePhone = (TextView) mHomeListFooter.findViewById(R.id.servicePhone);
-        String servicePhoneNum = Preference.get().getServicePhone();
-        if (TextUtils.isEmpty(servicePhoneNum)) {
-            servicePhone.setVisibility(View.GONE);
-        } else {
-            servicePhoneNum = StrFormatter.getFormatServicePhone(servicePhoneNum);
-            servicePhone.setText(getString(R.string.service_phone, servicePhoneNum));
-        }
-    }
-
-    private void requestOrderReport() {
-        API.Order.getReportData()
-                .setCallback(new Callback2<Resp<List<OrderReport>>, List<OrderReport>>(false) {
-                    @Override
-                    public void onRespSuccess(List<OrderReport> orderReports) {
-                        mHomeListHeader.setOrderReports(orderReports);
-                    }
-                }).setTag(TAG).fire();
     }
 
     @Override
     public void onTimeUp(int count) {
         if (getUserVisibleHint()) {
             requestProductMarketList();
-            mHomeListHeader.nextOrderReport();
-            mHomeListHeader.nextAdvertisement();
         }
     }
 
@@ -321,7 +100,6 @@ public class MarketFragment extends BaseFragment {
         super.onResume();
         requestProductList();
         requestHomePositions();
-        requestOrderReport();
         startScheduleJob(5 * 1000);
     }
 
@@ -329,16 +107,6 @@ public class MarketFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         stopScheduleJob();
-    }
-
-    private void requestHomeInformation() {
-        API.User.getNewsList(Information.TYPE_BANNER, 0, 10)
-                .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
-                    @Override
-                    public void onRespSuccess(List<Information> informationList) {
-                        mHomeListHeader.setHomeAdvertisement(informationList);
-                    }
-                }).setTag(TAG).fire();
     }
 
     private void requestProductList() {
@@ -376,8 +144,6 @@ public class MarketFragment extends BaseFragment {
                         public void onSuccess(Resp<HomePositions> homePositionsResp) {
                             if (homePositionsResp.isSuccess()) {
                                 HomePositions homePositions = homePositionsResp.getData();
-                                updateSimulateButton(homePositions);
-
                                 mCashPositionList = homePositions.getCashOpS();
                                 ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
                                 updateProductListView();
@@ -390,18 +156,8 @@ public class MarketFragment extends BaseFragment {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
-            mHomeListHeader.setSimulationHolding(null);
             mCashPositionList = null;
             updateProductListView();
-        }
-    }
-
-    private void updateSimulateButton(HomePositions homePositions) {
-        if (mHomeListHeader == null) return;
-        if (homePositions.getIntegralOpS().size() > 0) {
-            mHomeListHeader.setSimulationHolding(homePositions.getIntegralOpS());
-        } else {
-            mHomeListHeader.setSimulationHolding(null);
         }
     }
 

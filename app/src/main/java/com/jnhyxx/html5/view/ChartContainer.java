@@ -204,28 +204,6 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         }
     }
 
-    private View createLiveEnter() {
-        int paddingPx = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());
-        TextView view = new TextView(getContext());
-        view.setText(R.string.live);
-        view.setTextColor(ContextCompat.getColor(getContext(), R.color.blueAssist));
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_live_enter, 0);
-        view.setCompoundDrawablePadding(paddingPx / 3);
-        view.setPadding(0, paddingPx, 0, paddingPx / 3); // increase click area
-        view.setVisibility(INVISIBLE);
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnLiveEnterClickListener != null) {
-                    mOnLiveEnterClickListener.onClick();
-                }
-            }
-        });
-        return view;
-    }
-
     private View createTab(int resId) {
         int paddingPx = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, PADDING_IN_DP, getResources().getDisplayMetrics());

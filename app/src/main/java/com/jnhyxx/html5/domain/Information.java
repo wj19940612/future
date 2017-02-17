@@ -8,11 +8,22 @@ public class Information implements Serializable {
 
     private static final long serialVersionUID = -7266947195942724446L;
 
-
-    // TODO: 2016/10/13 目前h5写的是type是1和2
+    /**
+     * 首页banner
+     */
     public static final int TYPE_BANNER = 0;
+    /**
+     * 行情分析
+     */
     public static final int TYPE_MARKET_ANALYSIS = 2;
+    /**
+     * 行业资讯
+     */
     public static final int TYPE_INDUSTRY_ANALYSIS = 3;
+    /**
+     * 交易攻略
+     */
+    public static final int TYPE_TRADING_STRATEGY = 4;
 
     /**
      * channelId : 12
@@ -30,18 +41,44 @@ public class Information implements Serializable {
      */
 
     private int channelId;
+    /**
+     * 资讯内容
+     */
     private String content;
+    /**
+     * 资讯封面
+     */
     private String cover;
     private String createTime;
     private String id;
+    /**
+     * 经营者
+     */
     private String operator;
     private int status;
+    /**
+     * html为文本资讯,h5为连接资讯
+     */
     private String style; // h5 or html
+    /**
+     * 资讯摘要
+     */
+
     private String summary;
     private String title;
     private int type;
     private String updateTime;
+    /**
+     * 咨询来源
+     */
     private String source;
+
+    public Information() {
+    }
+
+    public Information(String cover) {
+        this.cover = cover;
+    }
 
     public int getChannelId() {
         return channelId;

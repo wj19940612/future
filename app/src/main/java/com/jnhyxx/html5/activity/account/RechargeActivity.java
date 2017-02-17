@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.web.PaymentActivity;
@@ -95,6 +96,7 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                     protected void onRespSuccess(Resp<UserInfo> resp) {
                         updateUserBankInfo(resp);
                         updateView();
+                        selectPayWay(Preference.get().getPayWay());
                         if (isOpenPayPage) {
                             depositByBankApply();
                         }

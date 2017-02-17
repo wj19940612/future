@@ -1,83 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/announcement"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_with_gray_bottom_border"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp">
+        android:layout_height="30dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:drawablePadding="2dp"
-            android:drawableRight="@drawable/ic_exclamation_marker"
-            android:paddingBottom="2dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingTop="2dp"/>
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="13dp"
+            android:src="@drawable/content_icon_notice" />
 
         <ViewSwitcher
             android:id="@+id/viewSwitcher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="16dp"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_pressable"
         android:orientation="horizontal">
 
-        <TextView
+        <RelativeLayout
             android:id="@+id/simulation"
-            style="@style/HomeListHeaderButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_service"
-            android:text="@string/simulation"/>
+            style="@style/HomeHeaderButton">
 
-        <TextView
+            <ImageView
+                android:id="@+id/iv"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_simulation" />
+
+            <ImageView
+                android:id="@+id/holdingIndicator"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/simulation_circle" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv"
+                android:text="@string/simulation" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/paidToPromote"
-            style="@style/HomeListHeaderButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_paid_to_promote"
-            android:text="@string/paid_to_promote"/>
+            style="@style/HomeHeaderButton">
 
-        <TextView
+            <ImageView
+                android:id="@+id/iv2"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_generalize" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv2"
+                android:text="@string/paid_to_promote" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/investCourse"
-            style="@style/HomeListHeaderButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_invest_course"
-            android:text="@string/invest_course"/>
+            style="@style/HomeHeaderButton">
 
-        <TextView
+            <ImageView
+                android:id="@+id/iv3"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_class" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv3"
+                android:text="@string/invest_course" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/newerVideo"
-            style="@style/HomeListHeaderButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_white_pressable"
-            android:drawableTop="@drawable/ic_newer_video"
-            android:text="@string/newer_video"/>
+            style="@style/HomeHeaderButton">
+
+            <ImageView
+                android:id="@+id/iv4"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_riskassessment" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv4"
+                android:text="@string/live" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 </LinearLayout>

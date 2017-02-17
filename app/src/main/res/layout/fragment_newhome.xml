@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/splitBlockLight"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,37 +22,61 @@
                 android:id="@+id/homeBanner"
                 android:layout_width="match_parent"
                 android:layout_height="200dip"
-                app:layout_collapseMode="none"/>
+                app:layout_collapseMode="none" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/riskEvaluation"
+                    android:layout_width="wrap_content"
                     android:layout_height="48dp"
+                    android:layout_gravity="left"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/riskEvaluation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="风险评估"/>
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/header_icon_newcomer" />
 
                     <TextView
-                        android:id="@+id/contactService"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="客服"/>
+                        android:layout_marginLeft="5dp"
+                        android:text="风险评估"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/contactService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/header_icon_service" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="客服"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -66,6 +90,6 @@
         <com.jnhyxx.html5.view.HomeHeader
             android:id="@+id/homeHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

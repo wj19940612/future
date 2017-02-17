@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.star;
 import static com.jnhyxx.html5.R.id.status;
 
 /**
@@ -91,7 +91,9 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mCalendarFinanceAdapter.clear();
+                if (mCalendarFinanceAdapter != null) {
+                    mCalendarFinanceAdapter.clear();
+                }
                 getCalendarFinanceData();
             }
         });
@@ -100,15 +102,12 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void getCalendarFinanceData() {
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl("2017-02-17"))
                 .setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
                     @Override
                     public void onRespSuccess(Object object) {
-                        Log.d(TAG, "财经日历 " + object.toString());
                         stopRefreshAnimation();
                         CalendarFinanceModel calendarFinanceModel = new Gson().fromJson(object.toString().replaceAll("\\\"", "\""), CalendarFinanceModel.class);
-                        Log.d(TAG, "转换后的参数" + calendarFinanceModel.toString());
                         updateCalendarFinanceData(calendarFinanceModel);
                         for (CalendarFinanceModel.EconomicCalendarsBean data : calendarFinanceModel.getEconomicCalendars()) {
                             Log.d(TAG, "EconomicCalendarsBean  " + data.toString());
@@ -150,6 +149,10 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
     static class CalendarFinanceAdapter extends ArrayAdapter<CalendarFinanceModel.EconomicCalendarsBean> {
 
+        private static final String LOW = "低";
+        private static final String MIDDLE = "中";
+        private static final String TALL = "高";
+
         Context mContext;
 
         public CalendarFinanceAdapter(Context context) {
@@ -177,7 +180,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             ImageView mCountryBanner;
             @BindView(R.id.time)
             TextView mTime;
-            @BindView(R.id.star)
+            @BindView(star)
             ImageView mStar;
             @BindView(status)
             TextView mStatus;
@@ -198,20 +201,33 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
             public void bindDataWithView(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
                 Log.d("wangjieTest", "财经日历 " + item.toString());
-                String organizeMarkUrl = API.Message.getOrganizeMarkUrl(item.getState());
+                String organizeMarkUrl = API.Message.getCalendarFinanceCountryBanner(item.getState());
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
                     Picasso.with(context).load(organizeMarkUrl).into(mCountryBanner);
                 }
-                mTime.setText(DateUtil.format(item.getTime(), "yyyy-MM-dd HH:mm", "HH-mm"));
+                mTime.setText(item.getPredicttime());
 
                 handleStatus(item, context);
 
                 String title = item.getState() + item.getTitle();
                 mTitle.setText(title);
+                Log.d("wangjieTest", " 拆分的长度" + item.getEffect().split("|").length);
+                int textColor = ContextCompat.getColor(context, R.color.blackPrimary);
+                mBeforeData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.before_data_), "  " + item.getBefore(), textColor));
+                mExpectData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.expect_data_), "  " + item.getForecast(), textColor));
+                mPublishData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.real_data_), "  " + item.getReality(), textColor));
 
-                mBeforeData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.before_data_), item.getBefore(), R.color.blackPrimary));
-                mExpectData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.expect_data_), item.getForecast(), R.color.blackPrimary));
-                mPublishData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.real_data_), item.getReality(), R.color.blackPrimary));
+                switch (item.getImportance()) {
+                    case LOW:
+                        mStar.setImageResource(R.drawable.ic_star_general);
+                        break;
+                    case MIDDLE:
+                        mStar.setImageResource(R.drawable.ic_star_important);
+                        break;
+                    case TALL:
+                        mStar.setImageResource(R.drawable.ic_star_very_important);
+                        break;
+                }
             }
 
             /**
@@ -221,22 +237,30 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
              * @param context
              */
             private void handleStatus(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
-                if (TextUtils.isEmpty(item.getEffect())) {
+                if (item.getEffecttype() == CalendarFinanceModel.TYPE_HAS_MORE_STATUS) {
+                    mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                    mStatus.setText(context.getString(R.string.lido, item.getEffect().replaceAll("||", "")));
+                } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_LIDO) {
+                    mStatus.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+//                    mStatus.setText(context.getString(R.string.bad_news, item.getEffect().replace("||","").replaceAll("|","")));
+                    Log.d("1111111", "多种情况  " + item.getEffect());
+                    String[] split = item.getEffect().split("|");
+                    for (int i = 0; i < split.length; i++) {
+                        Log.d("1111111", "多种情况  " + split[i]);
+                    }
+                } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_EMPTY_NEWS) {
                     mStatus.setText(R.string.not_publish);
                     mStatus.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
-                } else {
-                    if (item.isLido()) {
-                        mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mStatus.setText(context.getString(R.string.lido, item.getEffect().replaceAll("|", "")));
-                    } else {
-                        String[] split = item.getEffect().split("|");
-                        if (split.length > 1) {
-                            String liDuo = context.getString(R.string.lido, split[0]);
-                            String badNews = context.getString(R.string.lido, split[1]);
-                            SpannableString spannableString = StrUtil.mergeTextWithColor(liDuo, badNews, R.color.redPrimary, R.color.greenPrimary);
-                            mStatus.setText(spannableString);
-                        }
-                    }
+
+
+//                        String[] split = item.getEffect().split("|");
+//                        if (split.length > 1) {
+//                            Log.d("wangjieTest", "==" + split[0] + "00000" + split[1]);
+//                            String liDuo = context.getString(R.string.lido, split[0]);
+//                            String badNews = context.getString(R.string.lido, split[1]);
+//                            SpannableString spannableString = StrUtil.mergeTextWithColor(liDuo, badNews, R.color.greenPrimary);
+//                            mStatus.setText(spannableString);
+//                        }
                 }
             }
         }

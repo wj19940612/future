@@ -50,6 +50,7 @@
             android:minHeight="18dp"
             android:minWidth="70dp"
             android:text="@string/not_publish"
+            android:textColor="@color/redPrimary"
             android:textSize="10sp"/>
     </LinearLayout>
 

@@ -8,6 +8,15 @@ import java.util.List;
 
 public class CalendarFinanceModel {
 
+    /**
+     * effecttype  利空利多消息
+     * 0  利空利多消息都有
+     * 1  利多消息
+     * 2  没有消息
+     */
+    public static final int TYPE_HAS_MORE_STATUS = 0;
+    public static final int TYPE_LIDO = 1;
+    public static final int TYPE_EMPTY_NEWS = 2;
 
     /**
      * title : 第四季度零售销售年率
@@ -188,18 +197,6 @@ public class CalendarFinanceModel {
 
         public void setReality(String reality) {
             this.reality = reality;
-        }
-
-        /**
-         * 是否利多  否则利空
-         *
-         * @return
-         */
-        public boolean isLido() {
-            if (getEffect().contains("||")) {
-                return true;
-            }
-            return false;
         }
 
         @Override

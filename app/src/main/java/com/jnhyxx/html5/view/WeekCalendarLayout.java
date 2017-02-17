@@ -30,8 +30,6 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
 
     private static final int DEFAULT_ITEM_HEIGHT = 30;
 
-    private int mSelectWeek;
-
     private OnWeekSelectListener mOnWeekSelectListener;
 
     public interface OnWeekSelectListener {
@@ -79,7 +77,6 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
         textView.setBackgroundResource(R.drawable.bg_week_calendar);
         if (isToadyWeek(week)) {
-            mSelectWeek = position;
             textView.setSelected(true);
         } else {
             textView.setSelected(false);

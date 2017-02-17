@@ -302,7 +302,7 @@ public class API extends APIBase {
          * @return 获取渠道客服的qq和电话
          */
         public static API getChannelByDomain() {
-            return new API("/user/user/getChannelByDomain.do", new ApiParams());
+            return new API("/user/user/getChannelByDomain.do", null);
         }
 
         /**
@@ -736,6 +736,16 @@ public class API extends APIBase {
         public static String getOrganizeMarkUrl(String markUrl) {
             return getMessageLiveInfoUrl() + "/flag/" + markUrl + ".png";
         }
+
+        /**
+         *  https://cdn.jin10.com/assets/img/commons/flag/挪威.png
+         * @param countryName
+         * @return
+         */
+        public static String getCalendarFinanceCountryBanner(String countryName) {
+            return "http://cdn.jin10.com/assets/img/commons/flag/"+countryName + ".png";
+        }
+
     }
 
     public static class Market {

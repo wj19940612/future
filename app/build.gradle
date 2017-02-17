@@ -160,16 +160,16 @@ android {
             ]
         }
 
-        zy1 { // 钱猫投资宝
-            applicationId 'com.trade163.zy1'
+        gf2 { // 钱猫投资宝
+            applicationId 'com.dajiexin.gf2'
             versionCode 1
             versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://zy1.trade163.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://gf2.dajiexin.com\"')
 
             manifestPlaceholders = [
-                    GETUI_APP_ID    : "zSSkOrenA48u4xf4A8FYr4",
-                    GETUI_APP_KEY   : "EO1oWJ9hzf7iNcCdV8DcYA",
-                    GETUI_APP_SECRET: "A7j2J8Xevl9e3M6bFlUZm",
+                    GETUI_APP_ID    : "1OLq4X4Df98Sk13f6xAGd9",
+                    GETUI_APP_KEY   : "OOr6ewSyql947XCVRxeDd9",
+                    GETUI_APP_SECRET: "UHHnDKVixc60RmCCGDU154",
                     PACKAGE_NAME    : applicationId,
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
@@ -254,7 +254,7 @@ dependencies {
     wyejyCompile project(path: ':umenglibrary', configuration: 'wyejyRelease')
     hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 
-    zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
+    gf2Compile project(path: ':umenglibrary', configuration: 'gf2Release')
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')

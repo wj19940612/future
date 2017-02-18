@@ -10,7 +10,7 @@
     <com.jnhyxx.html5.view.TitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/app_name"/>
+        app:titleText="@string/market"/>
 
     <ListView
         android:visibility="gone"
@@ -19,8 +19,8 @@
         android:layout_height="match_parent"
         android:divider="@drawable/divider_home_list"
         android:dividerHeight="0.5dp"
-        android:headerDividersEnabled="false"
         android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 

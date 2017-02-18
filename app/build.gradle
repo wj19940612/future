@@ -197,16 +197,14 @@ dependencies {
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
     kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
+    //    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
 
-//    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
-//    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-
+    //    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
     zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
     zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
-
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')
@@ -229,4 +227,5 @@ dependencies {
     compile files('libs/netty-transport-4.1.5.final.jar')
     compile files('libs/netty-resolver-4.1.5.final.jar')
     compile 'com.getui:sdk:2.9.5.0'
+    compile 'com.android.support:design:24.2.1'
 }

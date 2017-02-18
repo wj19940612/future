@@ -27,6 +27,8 @@ public class Preference {
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
+        String PRODUCT_OPTIONAL_FOREIGN = "productOptionalForeign";
+        String PRODUCT_OPTIONAL_DOMESTIC = "productOptionalDomestic";
     }
 
     private static Preference sInstance;
@@ -196,5 +198,21 @@ public class Preference {
 
     public void setIsFirstWithdraw(String key, boolean isFirstWithdraw) {
         getEditor().putBoolean(key, isFirstWithdraw).apply();
+    }
+
+    public void setProductOptionalForeign(String productOptional) {
+        getEditor().putString(Key.PRODUCT_OPTIONAL_FOREIGN, productOptional).apply();
+    }
+
+    public String getProductOptionalForeign() {
+        return mPrefs.getString(Key.PRODUCT_OPTIONAL_FOREIGN, "");
+    }
+
+    public void setProductOptionalDomestic(String productOptional) {
+        getEditor().putString(Key.PRODUCT_OPTIONAL_DOMESTIC, productOptional).apply();
+    }
+
+    public String getProductOptionalDomestic() {
+        return mPrefs.getString(Key.PRODUCT_OPTIONAL_DOMESTIC, "");
     }
 }

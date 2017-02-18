@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/announcement"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="13dp"
+            android:src="@drawable/content_icon_notice" />
+
+        <ViewSwitcher
+            android:id="@+id/viewSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_pressable"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/simulation"
+            style="@style/HomeHeaderButton">
+
+            <ImageView
+                android:id="@+id/iv"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_simulation" />
+
+            <ImageView
+                android:id="@+id/holdingIndicator"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/simulation_circle" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv"
+                android:text="@string/simulation" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/paidToPromote"
+            style="@style/HomeHeaderButton">
+
+            <ImageView
+                android:id="@+id/iv2"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_generalize" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv2"
+                android:text="@string/paid_to_promote" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/investCourse"
+            style="@style/HomeHeaderButton">
+
+            <ImageView
+                android:id="@+id/iv3"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_class" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv3"
+                android:text="@string/invest_course" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/newerVideo"
+            style="@style/HomeHeaderButton">
+
+            <ImageView
+                android:id="@+id/iv4"
+                style="@style/HomeHeaderImage"
+                android:src="@drawable/content_icon_riskassessment" />
+
+            <TextView
+                style="@style/HomeHeaderText"
+                android:layout_below="@id/iv4"
+                android:text="@string/live" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,7 +22,9 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +35,7 @@ import butterknife.Unbinder;
  * 首页排行榜fragment
  */
 
-public class YesterdayProfitRankFragment extends BaseFragment {
+public class YesterdayProfitRankFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -41,6 +44,7 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     @BindView(android.R.id.empty)
     TextView mEmpty;
 
+    private Set<String> mSet;
     private Unbinder mBind;
     private ProfitRankAdapter mProfitRankAdapter;
 
@@ -55,8 +59,9 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mSet = new HashSet<>();
         mListView.setEmptyView(mEmpty);
-
+        mListView.setOnScrollListener(this);
         getYesterdayProfitRank();
 
         initSwipeRefreshLayout();
@@ -72,9 +77,6 @@ public class YesterdayProfitRankFragment extends BaseFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (mProfitRankAdapter != null) {
-                    mProfitRankAdapter.clear();
-                }
                 getYesterdayProfitRank();
             }
         });
@@ -92,19 +94,21 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     private void getYesterdayProfitRank() {
         API.Order.getProfitRank()
                 .setTag(TAG)
-                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<ProfitRankModel>>, List<ProfitRankModel>>() {
 
                     @Override
                     public void onRespSuccess(List<ProfitRankModel> profitRankModels) {
-
                         for (ProfitRankModel data : profitRankModels) {
                             Log.d(TAG, "盈利  " + data.toString());
                         }
-                        for (int i = 0; i < 10; i++) {
-                            profitRankModels.add(new ProfitRankModel(10000 + i * 1000, i + "" + i + "" + i + "" + i + "****" + i + "" + i + "" + i + "" + i));
-                        }
+//                        // TODO: 2017/2/18 测试数据，需要删除
+//                        if (profitRankModels.size() < 9) {
+//                            for (int i = 1; i < 9; i++) {
+//                                profitRankModels.add(new ProfitRankModel(10000 + i * 1000, i + "" + i + "" + i + "" + i + "****" + i + "" + i + "" + i + "" + i));
+//                            }
+//                        }
                         updateProfitRank(profitRankModels);
+                        stopRefreshAnimation();
                     }
 
                     @Override
@@ -117,7 +121,6 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     }
 
     private void updateProfitRank(List<ProfitRankModel> profitRankModels) {
-        stopRefreshAnimation();
         if (profitRankModels == null) {
             return;
         }
@@ -131,7 +134,12 @@ public class YesterdayProfitRankFragment extends BaseFragment {
             mProfitRankAdapter.clear();
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        mProfitRankAdapter.addAll(profitRankModels);
+
+        for (ProfitRankModel data : profitRankModels) {
+            if (mSet.add(data.getPhone())) {
+                mProfitRankAdapter.add(data);
+            }
+        }
         mProfitRankAdapter.notifyDataSetChanged();
     }
 
@@ -139,6 +147,18 @@ public class YesterdayProfitRankFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        int topRowVerticalPosition =
+                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
     }
 
     static class ProfitRankAdapter extends ArrayAdapter<ProfitRankModel> {
@@ -189,7 +209,8 @@ public class YesterdayProfitRankFragment extends BaseFragment {
                 } else {
                     mRanking.setText(String.valueOf(position + 1));
                 }
-                mPhoneNum.setText(item.getPhone());
+                String phone = "****" + item.getPhone().substring(item.getPhone().length() - 4);
+                mPhoneNum.setText(phone);
                 mProfit.setText(String.valueOf(item.getProfit()));
             }
         }

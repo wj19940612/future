@@ -109,7 +109,10 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeInfoTitle.setText(information.getTitle());
         String source = !TextUtils.isEmpty(information.getSource()) ? information.getSource() : "未知";
         mTradeInfoMessageFrom.setText(getString(R.string.message_from, source));
-        mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
+
+        if (TextUtils.isEmpty(information.getCreateTime())) {
+            mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
+        }
         if (!information.isH5Style()) {
             String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
@@ -131,11 +134,12 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
         mTradeAnalyze.setVisibility(View.VISIBLE);
         mTradeInfo.setVisibility(View.GONE);
 
-
         mTitle.setText(information.getTitle());
         String source = !TextUtils.isEmpty(information.getSource()) ? information.getSource() : "未知";
         mMessageFrom.setText(getString(R.string.message_from, source));
-        mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
+        if (TextUtils.isEmpty(information.getCreateTime())) {
+            mTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
+        }
         if (!information.isH5Style()) {
             String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);

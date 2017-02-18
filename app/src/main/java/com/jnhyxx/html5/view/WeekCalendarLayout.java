@@ -15,6 +15,10 @@ import com.jnhyxx.html5.R;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.StrUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 /**
  * Created by ${wangJie} on 2017/2/16.
@@ -26,6 +30,11 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
 
     private static String[] weekData = new String[]{"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
 
+    /**
+     * 今天的日期在星期列表中的索引
+     */
+    private int mTodayWeekIndex;
+
     private static final String TODAY = "\n今天";
 
     private static final int DEFAULT_ITEM_HEIGHT = 30;
@@ -34,10 +43,11 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
 
     public interface OnWeekSelectListener {
         /**
-         * @param index 对应的索引
-         * @param week  所选择的日期
+         * @param index   对应的索引
+         * @param week    所选择的星期
+         * @param dayTime 所选择的日期
          */
-        void onWeekSelected(int index, String week);
+        void onWeekSelected(int index, String week, String dayTime);
     }
 
     public WeekCalendarLayout(Context context) {
@@ -78,6 +88,7 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
         textView.setBackgroundResource(R.drawable.bg_week_calendar);
         if (isToadyWeek(week)) {
             textView.setSelected(true);
+            mTodayWeekIndex = position;
         } else {
             textView.setSelected(false);
         }
@@ -141,10 +152,25 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
             textView.setSelected(true);
             textView.setTextColor(Color.WHITE);
             if (mOnWeekSelectListener != null) {
-                mOnWeekSelectListener.onWeekSelected(position, weekData[position - 1]);
+                mOnWeekSelectListener.onWeekSelected(position, weekData[position - 1], getSelectDayTime(position - 1));
             }
         }
     }
+
+    /**
+     * 获取所选择星期对应的时间
+     *
+     * @param selectPosition
+     * @return 2017-1-20
+     */
+    private String getSelectDayTime(int selectPosition) {
+        Calendar todayCalendar = Calendar.getInstance();
+        todayCalendar.add(Calendar.DAY_OF_YEAR, selectPosition - mTodayWeekIndex);
+        Date time = todayCalendar.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(time);
+    }
+
 
     public TextView getTextView(int index) {
         View view = getChildAt(index * 2 - 1);

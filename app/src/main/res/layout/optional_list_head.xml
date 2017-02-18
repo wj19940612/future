@@ -24,10 +24,4 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:src="@drawable/content_icon_add"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dip"
-        android:layout_alignParentBottom="true"
-        android:background="@color/splitLineGrayLight"/>
 </RelativeLayout>

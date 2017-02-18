@@ -94,9 +94,9 @@ public class HomeFragment extends BaseFragment {
     private List<Product> mProductList;
     private List<HomePositions.CashOpSBean> mCashPositionList;
     private List<MarketData> mMarketDataList;
-    private List<ProductPkg> mForeignPackgae;
-    private List<ProductPkg> mDomesticPackgae;
-    private HeaderAndFooterWrapper mOptinalForeignWrapper;
+    private List<ProductPkg> mForeignPackage;
+    private List<ProductPkg> mDomesticPackage;
+    private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
     public static final int REQ_CODE_FOREIGN = 100;
     public static final int REQ_CODE_DOMESTIC = 101;
@@ -113,8 +113,8 @@ public class HomeFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
-        mForeignPackgae = new ArrayList<ProductPkg>();
-        mDomesticPackgae = new ArrayList<ProductPkg>();
+        mForeignPackage = new ArrayList<ProductPkg>();
+        mDomesticPackage = new ArrayList<ProductPkg>();
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -149,10 +149,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setOptionalProduct() {
-        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackgae);
+        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage);
         mOptionalForeignList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext()));
-        mOptinalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
+        mOptionalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
         View foreignHeadView = View.inflate(getContext(), R.layout.optional_list_head, null);
         TextView headTitle1 = (TextView) foreignHeadView.findViewById(R.id.headerTitle);
         ImageView optionalAdd1 = (ImageView) foreignHeadView.findViewById(R.id.optionalAdd);
@@ -164,11 +164,11 @@ public class HomeFragment extends BaseFragment {
                         .executeForResult(REQ_CODE_DOMESTIC);
             }
         });
-        headTitle1.setText("国际期货");
-        mOptinalForeignWrapper.addHeaderView(foreignHeadView);
-        mOptionalForeignList.setAdapter(mOptinalForeignWrapper);
+        headTitle1.setText(getString(R.string.domestic_futures));
+        mOptionalForeignWrapper.addHeaderView(foreignHeadView);
+        mOptionalForeignList.setAdapter(mOptionalForeignWrapper);
 
-        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackgae);
+        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage);
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalDomesticList.addItemDecoration(new DividerGridItemDecoration(getContext()));
@@ -183,7 +183,7 @@ public class HomeFragment extends BaseFragment {
                         .executeForResult(REQ_CODE_FOREIGN);
             }
         });
-        headTitle2.setText("国际期货");
+        headTitle2.setText(getString(R.string.foreign_futures));
         mOptionalDomesticWrapper.addHeaderView(domesticHeadView);
         mOptionalDomesticList.setAdapter(mOptionalDomesticWrapper);
     }
@@ -363,35 +363,35 @@ public class HomeFragment extends BaseFragment {
         String productOptionalDomestic = Preference.get().getProductOptionalDomestic();
         List<String> optionalForeigns = getOptionalList(productOptionalForeign);
         List<String> optionalDomestics = getOptionalList(productOptionalDomestic);
-        mForeignPackgae.clear();
-        mDomesticPackgae.clear();
+        mForeignPackage.clear();
+        mDomesticPackage.clear();
         for (ProductPkg productPkg : mProductPkgList) {
             Product product = productPkg.getProduct();
             if (product.isForeign()) {
                 if (optionalForeigns != null) {
-                    addOptionalProduct(optionalForeigns, productPkg, mForeignPackgae);
+                    addOptionalProduct(optionalForeigns, productPkg, mForeignPackage);
                 } else {
-                    if (mForeignPackgae.size() < 3) {
-                        mForeignPackgae.add(productPkg);
+                    if (mForeignPackage.size() < 3) {
+                        mForeignPackage.add(productPkg);
                     }
                 }
             } else {
                 if (optionalDomestics != null) {
-                    addOptionalProduct(optionalDomestics, productPkg, mDomesticPackgae);
+                    addOptionalProduct(optionalDomestics, productPkg, mDomesticPackage);
                 } else {
-                    if (mDomesticPackgae.size() < 3) {
-                        mDomesticPackgae.add(productPkg);
+                    if (mDomesticPackage.size() < 3) {
+                        mDomesticPackage.add(productPkg);
                     }
                 }
             }
         }
-        mOptinalForeignWrapper.notifyDataSetChanged();
+        mOptionalForeignWrapper.notifyDataSetChanged();
         mOptionalDomesticWrapper.notifyDataSetChanged();
     }
 
     private void addOptionalProduct(List<String> optionals, ProductPkg productPkg, List<ProductPkg> target) {
-        for (String optionalForeign : optionals) {
-            if (String.valueOf(productPkg.getProduct().getVarietyId()).equals(optionalForeign)) {
+        for (String optional : optionals) {
+            if (String.valueOf(productPkg.getProduct().getVarietyId()).equals(optional)) {
                 target.add(productPkg);
                 break;
             }
@@ -459,10 +459,8 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            if (resultCode == ProductOptionalActivity.REQ_CODE_RESULT) {
-                updateOptionalList();
-            }
+        if (resultCode == ProductOptionalActivity.REQ_CODE_RESULT) {
+            updateOptionalList();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

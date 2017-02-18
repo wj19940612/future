@@ -3,7 +3,6 @@ package com.jnhyxx.html5.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -15,12 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -56,6 +56,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
+import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
@@ -64,7 +65,7 @@ import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
 import com.jnhyxx.html5.view.MarketDataView;
 import com.jnhyxx.html5.view.TitleBar;
-import com.jnhyxx.html5.view.TradePageHeader;
+import com.jnhyxx.html5.view.TradePageFooter;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
@@ -83,12 +84,20 @@ public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
     private static final int REQ_CODE_SET_LIGHTNING_ORDER_PAGE = 10000;
-    private static final int REQ_CODE_LIVE = 321;
 
     @BindView(R.id.titleBar)
     TitleBar mTitleBar;
-    @BindView(R.id.tradePageHeader)
-    TradePageHeader mTradePageHeader;
+    @BindView(R.id.priceChangeArea)
+    RelativeLayout mPriceChangeArea;
+
+    @BindView(R.id.lastPrice)
+    TextView mLastPrice;
+    @BindView(R.id.priceChange)
+    TextView mPriceChange;
+    @BindView(R.id.buySellVolumeLayout)
+    BuySellVolumeLayout mBuySellVolumeLayout;
+    @BindView(R.id.exchangeCloseText)
+    TextView mExchangeCloseText;
 
     @BindView(R.id.openPrice)
     TextView mOpenPrice;
@@ -101,27 +110,15 @@ public class TradeActivity extends BaseActivity implements
     @BindView(R.id.chartContainer)
     ChartContainer mChartContainer;
 
-    @BindView(R.id.lastPrice)
-    TextView mLastPrice;
-    @BindView(R.id.priceChange)
-    TextView mPriceChange;
-    @BindView(R.id.buySellVolumeLayout)
-    BuySellVolumeLayout mBuySellVolumeLayout;
+    @BindView(R.id.marketStatusTime)
+    TextView mMarketStatusTime;
+    @BindView(R.id.tradePageFooter)
+    TradePageFooter mTradePageFooter;
 
     @BindView(R.id.buyLongBtn)
     TextView mBuyLongBtn;
     @BindView(R.id.sellShortBtn)
     TextView mSellShortBtn;
-
-    @BindView(R.id.holdingPositionTimeTo)
-    TextView mHoldingPositionTimeTo;
-    @BindView(R.id.nextTradeTime)
-    TextView mNextTradeTime;
-    @BindView(R.id.marketCloseArea)
-    LinearLayout mMarketCloseArea;
-    @BindView(R.id.marketOpenArea)
-    LinearLayout mMarketOpenArea;
-
     @BindView(R.id.lightningOrderBtn)
     ImageView mLightningOrderBtn;
 
@@ -139,6 +136,7 @@ public class TradeActivity extends BaseActivity implements
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
     private FullMarketData mFullMarketData;
+    private ExchangeStatus mExchangeStatus;
 
     private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
@@ -157,7 +155,6 @@ public class TradeActivity extends BaseActivity implements
 
     private KlineView.OnAchieveTheLastListener mKlineViewOnAchieveTheLastListener
             = new KlineView.OnAchieveTheLastListener() {
-
         @Override
         public void onAchieveTheLast(KlineViewData data, List<KlineViewData> dataList) {
             requestKlineDataAndAppend(data);
@@ -216,8 +213,8 @@ public class TradeActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        translucentStatusBar();
         setContentView(R.layout.activity_trade);
+        updateStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bluePrimary));
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
@@ -231,42 +228,17 @@ public class TradeActivity extends BaseActivity implements
                 mMenu.showMenu();
             }
         });
-        mTradePageHeader.setOnViewClickListener(new TradePageHeader.OnViewClickListener() {
-            @Override
-            public void onSignInButtonClick() {
-                Launcher.with(getActivity(), SignInActivity.class)
-                        .executeForResult(REQ_CODE_LOGIN);
-            }
-
-            @Override
-            public void onOrderListButtonClick() {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.ORDER);
-                openOrdersPage();
-            }
-
+        FontUtil.setTt0173MFont(mLastPrice);
+        mTradePageFooter.setOnOneKeyClosePosButtonListener(new TradePageFooter.OnOneKeyClosePosButtonListener() {
             @Override
             public void onOneKeyClosePosButtonClick() {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TRADE_ONE_KEY_CLOSE_OUT);
                 mHoldingOrderPresenter.closeAllHoldingPositions();
             }
-
-            @Override
-            public void onProfitAreaClick() {
-                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TRADE_POSITIONS_STATUS);
-                openOrdersPage();
-            }
         });
+        mTradePageFooter.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
 
-        mTradePageHeader.setAvailableBalanceUnit(mFundUnit);
-        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
-
-        mChartContainer.setLiveEnterVisible(mFundType == Product.FUND_TYPE_CASH);
-        mChartContainer.setOnLiveEnterClickListener(new ChartContainer.OnLiveEnterClickListener() {
-            @Override
-            public void onClick() {
-                switchToLivePage();
-            }
-        });
+        // init chart container
         mChartContainer.setOnTabClickListener(new ChartContainer.OnTabClickListener() {
             @Override
             public void onClick(int tabId) {
@@ -315,25 +287,6 @@ public class TradeActivity extends BaseActivity implements
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
-    }
-
-    private void translucentStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); // statusBar
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION); // statusNavBar
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
-        }
-    }
-
-    private void switchToLivePage() {
-//        if (getCallingActivity() != null
-//                && getCallingActivity().getClassName().equals(LiveActivity.class.getName())) {
-//            finish();
-//        } else {
-//            Launcher.with(getActivity(), LiveActivity.class).executeForResult(REQ_CODE_LIVE);
-//        }
     }
 
     private void updateLightningOrderView() {
@@ -461,12 +414,12 @@ public class TradeActivity extends BaseActivity implements
 
     private void updateSignTradePagerHeader() {
         if (LocalUser.getUser().isLogin()) {
-            mTradePageHeader.showView(TradePageHeader.HEADER_AVAILABLE_BALANCE);
-            mTradePageHeader.setAvailableBalance(
+            mTradePageFooter.showView(TradePageFooter.HEADER_AVAILABLE_BALANCE);
+            mTradePageFooter.setAvailableBalance(
                     mFundType == Product.FUND_TYPE_CASH ?
                             LocalUser.getUser().getAvailableBalance() : LocalUser.getUser().getAvailableScore());
         } else {
-            mTradePageHeader.showView(TradePageHeader.HEADER_UNLOGIN);
+            mTradePageFooter.showView(TradePageFooter.HEADER_UNLOGIN);
         }
     }
 
@@ -520,16 +473,25 @@ public class TradeActivity extends BaseActivity implements
                     public void onRespSuccess(ExchangeStatus exchangeStatus) {
                         mProduct.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
-                        if (exchangeStatus.isTradeable()) {
-                            mMarketCloseArea.setVisibility(View.GONE);
-                            mMarketOpenArea.setVisibility(View.VISIBLE);
-                            mHoldingPositionTimeTo.setText(getString(R.string.prompt_holding_position_time_to,
+                        mExchangeStatus = exchangeStatus;
+                        // TODO: 18/02/2017 //mExchangeStatus.isTradeable()
+                        if (true) {
+                            mMarketStatusTime.setText(getString(R.string.prompt_holding_position_time_to,
                                     exchangeStatus.getNextTime()));
+                            mLastPrice.setVisibility(View.VISIBLE);
+                            mPriceChange.setVisibility(View.VISIBLE);
+                            mBuySellVolumeLayout.setVisibility(View.VISIBLE);
+                            mExchangeCloseText.setVisibility(View.INVISIBLE);
                         } else {
-                            mMarketCloseArea.setVisibility(View.VISIBLE);
-                            mMarketOpenArea.setVisibility(View.GONE);
-                            mNextTradeTime.setText(getString(R.string.prompt_next_trade_time_is,
+                            mMarketStatusTime.setText(getString(R.string.prompt_next_trade_time_is,
                                     exchangeStatus.getNextTime()));
+                            mLastPrice.setVisibility(View.INVISIBLE);
+                            mPriceChange.setVisibility(View.INVISIBLE);
+                            mBuySellVolumeLayout.setVisibility(View.INVISIBLE);
+                            mExchangeCloseText.setVisibility(View.VISIBLE);
+                            if (mFullMarketData != null) {
+                                updateStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bluePrimary));
+                            }
                         }
                     }
                 }).setTag(TAG).fireSync();
@@ -640,27 +602,37 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateLastPriceView(FullMarketData data) {
-        mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
-        double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
-        double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
-        int textColor;
-        if (priceChangeValue >= 0) {
-            textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
-            mLastPrice.setTextColor(textColor);
-            mPriceChange.setTextColor(textColor);
-            String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
-                    + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
-            mPriceChange.setText(priceChangeStr);
-        } else {
-            textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
-            mLastPrice.setTextColor(textColor);
-            mPriceChange.setTextColor(textColor);
-            String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
-                    + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
-            mPriceChange.setText(priceChangeStr);
+        // TODO: 18/02/2017  mExchangeStatus != null && mExchangeStatus.isTradeable()
+        if (true) {
+            mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
+            double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
+            double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
+            int textColor;
+            if (priceChangeValue >= 0) {
+                textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
+                String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                        + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+                mPriceChange.setText(priceChangeStr);
+            } else {
+                textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
+                String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
+                        + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
+                mPriceChange.setText(priceChangeStr);
+            }
+            mPriceChangeArea.setBackgroundColor(textColor);
+            mTitleBar.setBackgroundColor(textColor);
+            updateStatusBarColor(textColor);
         }
     }
 
+    private void updateStatusBarColor(int textColor) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(textColor);
+        }
+    }
 
     private void updateQuestionMarker() {
         String userPhone = LocalUser.getUser().getPhone();
@@ -817,7 +789,7 @@ public class TradeActivity extends BaseActivity implements
 
                         updateTitleBar(); // based on product
                         updateExchangeStatusView(); // based on product
-                        mTradePageHeader.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
+                        mTradePageFooter.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
                         updateLightningOrderView(); // based on product
                     }
                 }
@@ -995,8 +967,8 @@ public class TradeActivity extends BaseActivity implements
     @Override
     public void onShowTotalProfit(boolean hasHoldingOrders, double totalProfit, double ratio) {
         if (hasHoldingOrders) {
-            mTradePageHeader.showView(TradePageHeader.HEADER_HOLDING_POSITION);
-            mTradePageHeader.setTotalProfit(totalProfit, mProduct.isForeign(),
+            mTradePageFooter.showView(TradePageFooter.HEADER_HOLDING_POSITION);
+            mTradePageFooter.setTotalProfit(totalProfit, mProduct.isForeign(),
                     mProduct.getLossProfitScale(), ratio, mFundUnit);
         } else {
             updateSignTradePagerHeader();

@@ -11,8 +11,7 @@
     <!-- Trade page -->
     <dimen name="sliding_menu_width">110dp</dimen>
     <dimen name="sliding_shadow_width">15dp</dimen>
-    <dimen name="trade_header_height">80dp</dimen>
-    <dimen name="trade_header_btn_width">85dp</dimen>
+    <dimen name="trade_footer_height">60dp</dimen>
     <dimen name="market_status_area_height">77dp</dimen>
     <dimen name="market_date_row_padding">14dp</dimen>
     <!--目前大部分容器距离边界15dp-->

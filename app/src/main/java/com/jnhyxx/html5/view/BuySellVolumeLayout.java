@@ -16,7 +16,7 @@ public class BuySellVolumeLayout extends LinearLayout {
 
     private static final float PADDING_DP = 7;
     private static final float MARGIN_TOP_LINE_DP = 4;
-    private static final float MARGIN_TOP_RECT_DP = 10;
+    private static final float MARGIN_TOP_RECT_DP = 12;
     private static final float RECT_HEIGHT_DP = 6;
     private static final int MAX_VOLUME = 30;
 
@@ -83,8 +83,8 @@ public class BuySellVolumeLayout extends LinearLayout {
         params.weight = 1;
         part.addView(line, params);
         mBuyVolumeNum = new TextView(getContext());
-        mBuyVolumeNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
-        mBuyVolumeNum.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
+        mBuyVolumeNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        mBuyVolumeNum.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
         mBuyVolumeNum.setGravity(Gravity.RIGHT);
         mBuyVolumeNum.setText("0");
         mBuyVolumeNum.setMaxLines(1);
@@ -97,8 +97,8 @@ public class BuySellVolumeLayout extends LinearLayout {
         params.setMargins(0, topMarginLinePx, 0, 0);
         part.addView(line, params);
         mSellVolumeNum = new TextView(getContext());
-        mSellVolumeNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
-        mSellVolumeNum.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
+        mSellVolumeNum.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+        mSellVolumeNum.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
         mSellVolumeNum.setText("0");
         mSellVolumeNum.setGravity(Gravity.RIGHT);
         mSellVolumeNum.setMaxLines(1);
@@ -119,7 +119,7 @@ public class BuySellVolumeLayout extends LinearLayout {
         TextView textView = new TextView(getContext());
         textView.setText(resId);
         textView.setTextColor(ContextCompat.getColor(getContext(), android.R.color.white));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView.setPadding(paddingPx, 0, 0, 0);
         textView.setMaxLines(1);
         return textView;

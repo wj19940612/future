@@ -2,53 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="@dimen/trade_header_height"
-              android:orientation="vertical"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="horizontal"
               android:paddingLeft="@dimen/common_margin"
-              android:paddingRight="@dimen/common_margin"
-              android:paddingTop="10dp">
+              android:paddingRight="@dimen/common_margin">
 
     <TextView
-        android:id="@+id/availableBalanceAndUnit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/available_balance_and_unit"
+        android:text="@string/current_available_balance"
+        android:layout_marginRight="12dp"
         android:textColor="#CCCCCC"
         android:textSize="12sp"/>
 
-    <RelativeLayout
+    <com.jnhyxx.html5.view.autofit.AutofitTextView
+        android:id="@+id/availableBalance"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <com.jnhyxx.html5.view.autofit.AutofitTextView
-            android:id="@+id/availableBalance"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="6dp"
-            android:layout_toLeftOf="@+id/orderListBtn"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:textColor="@color/redPrimary"
-            android:textSize="40sp"
-            tools:text="88888888.88"/>
-
-        <TextView
-            android:id="@+id/orderListBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/btn_blue"
-            android:drawableLeft="@drawable/ic_order_list"
-            android:gravity="center"
-            android:minWidth="@dimen/trade_header_btn_width"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="10dp"
-            android:paddingTop="8dp"
-            android:text="@string/order"
-            android:textColor="@android:color/white"/>
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/orderListBtn"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/blueAssist"
+        android:textSize="20sp"
+        tools:text="￥88888888.88"/>
 </LinearLayout>

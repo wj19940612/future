@@ -10,7 +10,7 @@
     <View
         android:id="@+id/emptyClickArea"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/trade_header_height"
+        android:layout_height="@dimen/trade_footer_height"
         android:background="@android:color/transparent"/>
 
     <LinearLayout

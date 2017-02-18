@@ -90,7 +90,7 @@ public class PlaceOrderFragment extends BaseFragment {
     View mEmptyClickArea;
     @BindView(R.id.bottomSplitLine)
     View mBottomSplitLine;
-    @BindView(R.id.marketCloseText)
+    @BindView(R.id.exchangeCloseText)
     TextView mMarketCloseText;
     @BindView(R.id.marketOpenArea)
     RelativeLayout mMarketOpenArea;
@@ -331,9 +331,9 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updateMarginTradeFeeAndTotal(FuturesFinancing.TradeQuantity tradeQuantity) {
         // DOMESTIC
-        String marginWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getMargin());
-        String tradeFeeWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getFee());
-        String totalWithSign = mProduct.getSign() + FinanceUtil.formatWithoutZero(tradeQuantity.getMargin() + tradeQuantity.getFee());
+        String marginWithSign = mProduct.getSign() + FinanceUtil.formatWithScaleNoZero(tradeQuantity.getMargin());
+        String tradeFeeWithSign = mProduct.getSign() + FinanceUtil.formatWithScaleNoZero(tradeQuantity.getFee());
+        String totalWithSign = mProduct.getSign() + FinanceUtil.formatWithScaleNoZero(tradeQuantity.getMargin() + tradeQuantity.getFee());
         mMargin.setText(marginWithSign);
         mTradeFee.setText(tradeFeeWithSign);
         mTotalTobePaid.setText(totalWithSign);
@@ -341,17 +341,17 @@ public class PlaceOrderFragment extends BaseFragment {
         if (mProduct.isForeign() && mFuturesFinancing != null) {
             double ratio = mFuturesFinancing.getRatio();
             String marginRmb = "  ( " + Unit.SIGN_CNY +
-                    FinanceUtil.formatWithoutZero(tradeQuantity.getMargin() * ratio) + " )";
+                    FinanceUtil.formatWithScaleNoZero(tradeQuantity.getMargin() * ratio) + " )";
             mMargin.setText(
                     StrUtil.mergeTextWithColor(marginWithSign, marginRmb, Color.parseColor("#666666"))
             );
             String tradeFeeRmb = "  ( " + Unit.SIGN_CNY +
-                    FinanceUtil.formatWithoutZero(tradeQuantity.getFee() * ratio) + " )";
+                    FinanceUtil.formatWithScaleNoZero(tradeQuantity.getFee() * ratio) + " )";
             mTradeFee.setText(
                     StrUtil.mergeTextWithColor(tradeFeeWithSign, tradeFeeRmb, Color.parseColor("#666666"))
             );
             String totalRmb = Unit.SIGN_CNY
-                    + FinanceUtil.formatWithoutZero((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
+                    + FinanceUtil.formatWithScaleNoZero((tradeQuantity.getMargin() + tradeQuantity.getFee()) * mProduct.getRatio());
             String totalForeign = "  ( " + totalWithSign + " )";
             mTotalTobePaid.setText(
                     StrUtil.mergeTextWithColor(totalRmb, totalForeign, Color.parseColor("#666666"))

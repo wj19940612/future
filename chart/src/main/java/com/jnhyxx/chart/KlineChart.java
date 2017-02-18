@@ -20,7 +20,7 @@ public class KlineChart extends ChartView {
 
     private static final int CANDLES_WIDTH_DP = 6; //dp
 
-    private static final String MA_WHITE = "#E5E5E5";
+    private static final String MA_BLUE = "#0A1A2C";
     private static final String MA_ORANGE = "#FFBB22";
     private static final String MA_PURPLE = "#AA20AF";
 
@@ -145,7 +145,7 @@ public class KlineChart extends ChartView {
         paint.setStrokeWidth(1);
         paint.setPathEffect(null);
         if (movingAverage == mMovingAverages[0]) {
-            paint.setColor(Color.parseColor(MA_WHITE));
+            paint.setColor(Color.parseColor(MA_BLUE));
         } else if (movingAverage == mMovingAverages[1]) {
             paint.setColor(Color.parseColor(MA_ORANGE));
         } else if (movingAverage == mMovingAverages[2]) {
@@ -159,7 +159,7 @@ public class KlineChart extends ChartView {
         paint.setPathEffect(null);
         paint.setTextSize(mMaTitleSize);
         if (movingAverage == mMovingAverages[0]) {
-            paint.setColor(Color.parseColor(MA_WHITE));
+            paint.setColor(Color.parseColor(MA_BLUE));
         } else if (movingAverage == mMovingAverages[1]) {
             paint.setColor(Color.parseColor(MA_ORANGE));
         } else if (movingAverage == mMovingAverages[2]) {

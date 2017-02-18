@@ -10,11 +10,11 @@
     <View
         android:id="@+id/emptyClickArea"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/trade_header_height"
+        android:layout_height="@dimen/trade_footer_height"
         android:background="@android:color/transparent"/>
 
     <TextView
-        android:id="@+id/marketCloseText"
+        android:id="@+id/exchangeCloseText"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/bluePrimary"

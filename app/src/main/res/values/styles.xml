@@ -202,14 +202,14 @@
 
     <declare-styleable name="AutofitTextView">
         <!-- Minimum size of the text. -->
-        <attr name="minTextSize" format="dimension" />
+        <attr name="minTextSize" format="dimension"/>
         <!-- Amount of precision used to calculate the correct text size to fit within its
         bounds. Lower precision is more precise and takes more time. -->
-        <attr name="precision" format="float" />
+        <attr name="precision" format="float"/>
         <!-- Defines whether to automatically resize text to fit to the view's bounds. -->
-        <attr name="sizeToFit" format="boolean" />
+        <attr name="sizeToFit" format="boolean"/>
         <!-- Max view width that cannot beyond this -->
-        <attr name="maxViewWidth" format="dimension" />
+        <attr name="maxViewWidth" format="dimension"/>
     </declare-styleable>
 
 
@@ -243,6 +243,21 @@
         <!--<item name="android:listPreferredItemPaddingStart">0dip</item>-->
         <!--<item name="android:listPreferredItemPaddingEnd">0dip</item>-->
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="NewHomeProductPrice">
+        <item name="android:textColor">@color/redPrimary</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NewHomeProductPriceChangePercent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">11dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/redPrimary</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
 </resources>

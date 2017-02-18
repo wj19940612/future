@@ -44,7 +44,6 @@ import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
-import com.jnhyxx.html5.utils.StatusBarUtil;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
@@ -86,7 +85,6 @@ public class MarketFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mBinder = ButterKnife.bind(this, view);
-        StatusBarUtil.addStatusBarView((ViewGroup) view,getContext());
         return view;
     }
 

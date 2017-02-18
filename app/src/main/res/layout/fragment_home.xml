@@ -18,8 +18,8 @@
         android:layout_height="match_parent"
         android:divider="@drawable/divider_home_list"
         android:dividerHeight="0.5dp"
-        android:headerDividersEnabled="false"
         android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
         android:overScrollMode="never"
         android:scrollbars="none"/>
 

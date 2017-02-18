@@ -103,14 +103,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:background="#ffffff"/>
+                android:background="#ffffff"
+                android:divider="@drawable/divider_home_list"
+                android:dividerHeight="0.5dp"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/optionalDomesticList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:background="#ffffff"/>
+                android:background="#ffffff"
+                android:divider="@drawable/divider_home_list"
+                android:dividerHeight="0.5dp"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

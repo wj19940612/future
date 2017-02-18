@@ -151,7 +151,7 @@ public class HomeFragment extends BaseFragment {
     private void setOptionalProduct() {
         MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackgae);
         mOptionalForeignList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext(),3));
+        mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext()));
         mOptinalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
         View foreignHeadView = View.inflate(getContext(), R.layout.optional_list_head, null);
         TextView headTitle1 = (TextView) foreignHeadView.findViewById(R.id.headerTitle);
@@ -171,7 +171,7 @@ public class HomeFragment extends BaseFragment {
         MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackgae);
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        mOptionalDomesticList.addItemDecoration(new DividerGridItemDecoration(getContext(),3));
+        mOptionalDomesticList.addItemDecoration(new DividerGridItemDecoration(getContext()));
         View domesticHeadView = View.inflate(getContext(), R.layout.optional_list_head, null);
         TextView headTitle2 = (TextView) domesticHeadView.findViewById(R.id.headerTitle);
         ImageView optionalAdd2 = (ImageView) domesticHeadView.findViewById(R.id.optionalAdd);

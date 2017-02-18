@@ -129,6 +129,11 @@ public class ProductOptionalActivity extends BaseActivity {
                     optionalTitle.setText("品种自选");
                     dragInfo.setVisibility(View.VISIBLE);
                 } else {
+                    if (mDragData2.size() == 0) {
+                        convertView.setVisibility(View.INVISIBLE);
+                    }else {
+                        convertView.setVisibility(View.VISIBLE);
+                    }
                     if (mIsDomestic) {
                         optionalTitle.setText("国内期货");
                     } else {

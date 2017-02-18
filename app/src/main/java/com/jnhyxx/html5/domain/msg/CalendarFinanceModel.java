@@ -11,8 +11,8 @@ public class CalendarFinanceModel {
     /**
      * effecttype  利空利多消息
      * 0  利空利多消息都有
-     * 1  利多消息
-     * 2  没有消息
+     * 1  利多利空消息都有   包含"||"字符串的为利多消息
+     * 2  返回的消息是||
      */
     public static final int TYPE_HAS_MORE_STATUS = 0;
     public static final int TYPE_LIDO = 1;

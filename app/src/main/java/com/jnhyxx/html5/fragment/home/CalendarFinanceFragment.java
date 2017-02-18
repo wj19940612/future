@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.CalendarFinanceModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
@@ -38,6 +40,7 @@ import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.star;
 import static com.jnhyxx.html5.R.id.status;
+import static com.jnhyxx.html5.R.string.lido;
 
 /**
  * Created by ${wangJie} on 2017/2/16.
@@ -86,6 +89,11 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         int dayOfYear = Calendar.DAY_OF_YEAR;
         Log.d(TAG, "日期 " + DateUtil.format(dayOfYear, "yyyy-MM-dd"));
 
+        if (mCalendarFinanceAdapter == null) {
+            mCalendarFinanceAdapter = new CalendarFinanceAdapter(getActivity());
+            mListView.setAdapter(mCalendarFinanceAdapter);
+        }
+
         getCalendarFinanceData();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -100,20 +108,25 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     }
 
     private void getCalendarFinanceData() {
-        API.Message.findNewsByUrl(API.getCalendarFinanceUrl("2017-02-17"))
+        API.Message.findNewsByUrl(API.getCalendarFinanceUrl("2017-02-15"))
                 .setTag(TAG)
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
                     @Override
                     public void onRespSuccess(Object object) {
                         stopRefreshAnimation();
-                        CalendarFinanceModel calendarFinanceModel = new Gson().fromJson(object.toString().replaceAll("\\\"", "\""), CalendarFinanceModel.class);
-                        updateCalendarFinanceData(calendarFinanceModel);
-                        for (CalendarFinanceModel.EconomicCalendarsBean data : calendarFinanceModel.getEconomicCalendars()) {
-                            Log.d(TAG, "EconomicCalendarsBean  " + data.toString());
-                        }
-                        for (CalendarFinanceModel.ImportThingsBean data : calendarFinanceModel.getImportThings()) {
-                            Log.d(TAG, "ImportThingsBean  " + data.toString());
+                        Log.d(TAG, "财经日历" + object.toString());
+                        try {
+                            CalendarFinanceModel calendarFinanceModel = new Gson().fromJson(object.toString().replaceAll("\\\"", "\""), CalendarFinanceModel.class);
+                            updateCalendarFinanceData(calendarFinanceModel);
+                            for (CalendarFinanceModel.EconomicCalendarsBean data : calendarFinanceModel.getEconomicCalendars()) {
+                                Log.d(TAG, "EconomicCalendarsBean  " + data.toString());
+                            }
+                            for (CalendarFinanceModel.ImportThingsBean data : calendarFinanceModel.getImportThings()) {
+                                Log.d(TAG, "ImportThingsBean  " + data.toString());
+                            }
+                        } catch (JsonSyntaxException e) {
+                            ToastUtil.curt(e.getMessage());
                         }
                     }
 
@@ -127,12 +140,9 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     }
 
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
-        if (calendarFinanceModel == null) return;
-        if (mCalendarFinanceAdapter == null) {
-            mCalendarFinanceAdapter = new CalendarFinanceAdapter(getActivity());
-            mListView.setAdapter(mCalendarFinanceAdapter);
+        if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
+            mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
         }
-        mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
     }
 
     private void stopRefreshAnimation() {
@@ -152,7 +162,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         private static final String LOW = "低";
         private static final String MIDDLE = "中";
         private static final String TALL = "高";
-
         Context mContext;
 
         public CalendarFinanceAdapter(Context context) {
@@ -211,7 +220,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
                 String title = item.getState() + item.getTitle();
                 mTitle.setText(title);
-                Log.d("wangjieTest", " 拆分的长度" + item.getEffect().split("|").length);
                 int textColor = ContextCompat.getColor(context, R.color.blackPrimary);
                 mBeforeData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.before_data_), "  " + item.getBefore(), textColor));
                 mExpectData.setText(StrUtil.mergeTextWithColor(context.getString(R.string.expect_data_), "  " + item.getForecast(), textColor));
@@ -227,6 +235,9 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                     case TALL:
                         mStar.setImageResource(R.drawable.ic_star_very_important);
                         break;
+                    default:
+                        mStar.setImageResource(R.drawable.ic_star_important);
+                        break;
                 }
             }
 
@@ -238,29 +249,40 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
              */
             private void handleStatus(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
                 if (item.getEffecttype() == CalendarFinanceModel.TYPE_HAS_MORE_STATUS) {
+                    String effect = item.getEffect();
+                    if (effect.startsWith("|") && effect.endsWith("|")) {
+                        mStatus.setText(context.getString(R.string.lido, effect.substring(1, effect.length() - 1)));
+                    } else {
+                        String substring = effect.substring(effect.indexOf("|"));
+                        mStatus.setText(StrUtil.mergeTextWithColor(context.getString(R.string.lido, effect.substring(0, effect.length() - substring.length())), "  " + context.getString(R.string.bad_news, substring.substring(1, substring.length() - 1)), ContextCompat.getColor(context, R.color.greenPrimary)));
+                    }
                     mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                    mStatus.setText(context.getString(R.string.lido, item.getEffect().replaceAll("||", "")));
                 } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_LIDO) {
-                    mStatus.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-//                    mStatus.setText(context.getString(R.string.bad_news, item.getEffect().replace("||","").replaceAll("|","")));
-                    Log.d("1111111", "多种情况  " + item.getEffect());
-                    String[] split = item.getEffect().split("|");
-                    for (int i = 0; i < split.length; i++) {
-                        Log.d("1111111", "多种情况  " + split[i]);
+                    if (item.getEffect().contains("||")) {
+                        mStatus.setText(context.getString(lido, item.getEffect().replace("||", "")));
+                        mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        Log.d("testCa", "含有||" + item.getEffect() + "  " + item.getState() + item.getTitle());
+                    } else {
+                        String effect = item.getEffect();
+                        if (effect.length() > 5) {
+                            /**
+                             * 利多消息
+                             */
+                            String lido = effect.substring(0, 5);
+                            /**
+                             * 利空消息
+                             */
+                            String badNews = effect.substring(lido.length() + 1, effect.length() - 1);
+                            SpannableString spannableString = StrUtil.mergeTextWithColor(context.getString(R.string.lido, lido), "  " + context.getString(R.string.bad_news, badNews), ContextCompat.getColor(context, R.color.greenPrimary));
+                            mStatus.setText(spannableString);
+                        } else {
+                            mStatus.setText(item.getEffect());
+                            mStatus.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                        }
                     }
                 } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_EMPTY_NEWS) {
                     mStatus.setText(R.string.not_publish);
                     mStatus.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
-
-
-//                        String[] split = item.getEffect().split("|");
-//                        if (split.length > 1) {
-//                            Log.d("wangjieTest", "==" + split[0] + "00000" + split[1]);
-//                            String liDuo = context.getString(R.string.lido, split[0]);
-//                            String badNews = context.getString(R.string.lido, split[1]);
-//                            SpannableString spannableString = StrUtil.mergeTextWithColor(liDuo, badNews, R.color.greenPrimary);
-//                            mStatus.setText(spannableString);
-//                        }
                 }
             }
         }

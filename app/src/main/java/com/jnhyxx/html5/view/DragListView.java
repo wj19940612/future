@@ -317,7 +317,7 @@ public class DragListView extends ListView {
      * 根据Adapter中的位置获取对应ListView的条目
      */
     private View getItemView(int position) {
-        if (position < getAdapter().headCount() || position >= getAdapter().getDragCount() + getAdapter().headCount()) {
+        if (position < getAdapter().headCount() || position > getAdapter().getDragCount() + getAdapter().headCount()) {
             return null;
         }
         int index = position - getFirstVisiblePosition();

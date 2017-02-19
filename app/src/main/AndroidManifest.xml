@@ -197,6 +197,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LiveActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"/>
         <!-- service -->
         <service android:name=".service.DownloadService"/>

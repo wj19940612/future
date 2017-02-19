@@ -586,11 +586,11 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
                 && getCallingActivity().getClassName().equals(TradeActivity.class.getName())) {
             finish();
         } else {
-        if (LocalUser.getUser().isLogin()) {
-            requestPositions();
-        } else {
-            requestProductList(null);
-        }
+            if (LocalUser.getUser().isLogin()) {
+                requestPositions();
+            } else {
+                requestProductList(null);
+            }
         }
     }
 

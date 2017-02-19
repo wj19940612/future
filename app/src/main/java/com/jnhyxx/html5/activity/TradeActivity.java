@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -133,8 +134,9 @@ public class TradeActivity extends BaseActivity implements
     private List<Product> mProductList;
     private AnimationDrawable mQuestionMark;
 
-    private boolean mUpdateRealTimeData;
     private boolean mProductChanged;
+    private boolean mIsFragmentShowed;
+    private boolean mIsSlidingMenuOpened;
 
     private HoldingOrderPresenter mHoldingOrderPresenter;
 
@@ -145,17 +147,23 @@ public class TradeActivity extends BaseActivity implements
         @Override
         public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
-            updateLastPriceView(data);
-            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
-
-            if (mUpdateRealTimeData) {
-                updateFourMainPrices(data);
-                updateChartView(data);
-                mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
-                updateBuyButtonsText(data);
-            }
+            updateFullMarketDataViews(data);
         }
     };
+
+    private void updateFullMarketDataViews(FullMarketData data) {
+        if (mIsSlidingMenuOpened) return;
+
+        updateLastPriceView(data);
+        mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+
+        if (mIsFragmentShowed) return;
+
+        updateFourMainPrices(data);
+        updateChartView(data);
+        mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
+        updateBuyButtonsText(data);
+    }
 
     private KlineView.OnAchieveTheLastListener mKlineViewOnAchieveTheLastListener
             = new KlineView.OnAchieveTheLastListener() {
@@ -222,7 +230,6 @@ public class TradeActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         mHoldingOrderPresenter = new HoldingOrderPresenter(this);
-        mUpdateRealTimeData = true;
 
         initData(getIntent());
         initSlidingMenu();
@@ -478,8 +485,7 @@ public class TradeActivity extends BaseActivity implements
                         mProduct.setExchangeStatus(exchangeStatus.isTradeable()
                                 ? Product.MARKET_STATUS_OPEN : Product.MARKET_STATUS_CLOSE);
                         mExchangeStatus = exchangeStatus;
-                        // TODO: 18/02/2017 //mExchangeStatus.isTradeable()
-                        if (true) {
+                        if (mExchangeStatus.isTradeable()) {
                             mMarketStatusTime.setText(getString(R.string.prompt_holding_position_time_to,
                                     exchangeStatus.getNextTime()));
                             mLastPrice.setVisibility(View.VISIBLE);
@@ -609,26 +615,29 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateLastPriceView(FullMarketData data) {
-        // TODO: 18/02/2017  mExchangeStatus != null && mExchangeStatus.isTradeable()
-        if (true) {
+        if (mExchangeStatus != null && mExchangeStatus.isTradeable()) {
             mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
             double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
             double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
-            int textColor;
+            int bgColor;
             if (priceChangeValue >= 0) {
-                textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
+                bgColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
                 String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
                         + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
                 mPriceChange.setText(priceChangeStr);
             } else {
-                textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
+                bgColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
                 String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
                         + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
                 mPriceChange.setText(priceChangeStr);
             }
-            mPriceChangeArea.setBackgroundColor(textColor);
-            mTitleBar.setBackgroundColor(textColor);
-            updateStatusBarColor(textColor);
+            ColorDrawable colorDrawable = (ColorDrawable) mPriceChangeArea.getBackground();
+            int oldBgColor = colorDrawable.getColor();
+            if (bgColor != oldBgColor) {
+                mPriceChangeArea.setBackgroundColor(bgColor);
+                mTitleBar.setBackgroundColor(bgColor);
+                updateStatusBarColor(bgColor);
+            }
         }
     }
 
@@ -754,7 +763,7 @@ public class TradeActivity extends BaseActivity implements
         mMenu.setSecondaryOnOpenListner(new SlidingMenu.OnOpenListener() {
             @Override
             public void onOpen() {
-                mUpdateRealTimeData = false;
+                mIsSlidingMenuOpened = true;
             }
         });
         mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
@@ -772,7 +781,8 @@ public class TradeActivity extends BaseActivity implements
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
-                mUpdateRealTimeData = true;
+
+                mIsSlidingMenuOpened = false;
             }
         });
         ListView listView = (ListView) mMenu.getMenu();
@@ -922,12 +932,12 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onPlaceOrderFragmentShow() {
-        mUpdateRealTimeData = false;
+        mIsFragmentShowed = true;
     }
 
     @Override
     public void onPlaceOrderFragmentExited() {
-        mUpdateRealTimeData = true;
+        mIsFragmentShowed = false;
     }
 
     @Override
@@ -954,16 +964,20 @@ public class TradeActivity extends BaseActivity implements
 
     @Override
     public void onAgreementFragmentShow() {
-        mUpdateRealTimeData = false;
+        mIsFragmentShowed = true;
     }
 
     @Override
     public void onAgreementFragmentExited() {
-        mUpdateRealTimeData = true;
+        mIsFragmentShowed = false;
     }
 
     @Override
     public void onShowHoldingOrderList(List<HoldingOrder> holdingOrderList) {
+        if (holdingOrderList != null) {
+            mHoldingOrderView.setOrderNumber(holdingOrderList.size());
+        }
+
         updateUsableMoneyScore(new LocalUser.Callback() {
             @Override
             public void onUpdateCompleted() {

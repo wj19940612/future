@@ -69,6 +69,14 @@ public class Product implements Parcelable {
     private String currencyUnit;
     private double ratio;
     private String advertisement;
+    private boolean isOptional;
+    public void setIsOptional(boolean isOptional) {
+        this.isOptional = isOptional;
+    }
+
+    public boolean getIsOptional() {
+        return isOptional;
+    }
 
     public String getDisplayMarketTimes() {
         return displayMarketTimes;

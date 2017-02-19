@@ -51,6 +51,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     public static final int PAY_WAY_WECHAT = 2;
 
     private onPayWayListener mOnPayWayListener;
+    private int mSelectWay = PAY_WAY_BANK;
 
     public interface onPayWayListener {
         void selectPayWay(int payWay);
@@ -94,7 +95,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         updateView(mSupportApplyWay);
-        choosePayWay(PAY_WAY_BANK);
+        choosePayWay(mSelectWay);
     }
 
     @Nullable
@@ -146,6 +147,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     }
 
     public void choosePayWay(int payWay) {
+        mSelectWay = payWay;
         unSelectAll();
         mPayWayLayout.getChildAt(payWay).setSelected(true);
     }

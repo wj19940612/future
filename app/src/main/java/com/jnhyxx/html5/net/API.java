@@ -302,7 +302,7 @@ public class API extends APIBase {
          * @return 获取渠道客服的qq和电话
          */
         public static API getChannelByDomain() {
-            return new API("/user/user/getChannelByDomain.do", new ApiParams());
+            return new API("/user/user/getChannelByDomain.do", null);
         }
 
         /**
@@ -712,6 +712,7 @@ public class API extends APIBase {
                             .put("url", url));
         }
 
+
         /**
          * 获取大厅 弹出框
          *
@@ -735,6 +736,16 @@ public class API extends APIBase {
         public static String getOrganizeMarkUrl(String markUrl) {
             return getMessageLiveInfoUrl() + "/flag/" + markUrl + ".png";
         }
+
+        /**
+         *  https://cdn.jin10.com/assets/img/commons/flag/挪威.png
+         * @param countryName
+         * @return
+         */
+        public static String getCalendarFinanceCountryBanner(String countryName) {
+            return "http://cdn.jin10.com/assets/img/commons/flag/"+countryName + ".png";
+        }
+
     }
 
     public static class Market {
@@ -1006,6 +1017,17 @@ public class API extends APIBase {
                     .put("loseMoney", loseMoney)
                     .put("winMoney", winMoney));
         }
+
+        /**
+         * 接口名称 昨日盈利棒
+         * 请求类型 get
+         * 请求Url  /order/statistic/profitRank.do
+         *
+         * @return
+         */
+        public static API getProfitRank() {
+            return new API("/order/statistic/profitRank.do", null);
+        }
     }
 
     /**
@@ -1095,13 +1117,24 @@ public class API extends APIBase {
     }
 
     /**
-     * findNewsByUrl  中所需要的参数
+     * findNewsByUrl  中所需要的参数 获取资讯直播的所需传入的网址
      *
      * @return
      */
     public static String getInfoLiveUrl() {
         return "http://m.jin10.com/flash?maxId=0";
     }
+
+    /**
+     * findNewsByUrl  z中获取财经日历的接口  http://www.dvwu.com/cjrl/getdata?date=2017-01-02（xkctk.hzcb.gov.cn）
+     *
+     * @param date
+     * @return
+     */
+    public static String getCalendarFinanceUrl(String date) {
+        return "http://www.dvwu.com/cjrl/getdata?date=" + date;
+    }
+
 
     /**
      * 新手引导页面网址

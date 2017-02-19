@@ -553,4 +553,18 @@
     <string name="complete">完成</string>
     <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
+
+    <!--首页底部的三个页面-->
+    <string name="calendar_of_finance">  财经日历</string>
+    <string name="yesterday_the_profit_list">昨日盈利榜</string>
+    <string name="trading_strategy">  交易攻略</string>
+    <string name="ranking_list_top_hint">本排行榜表示上个正常交易日的数据</string>
+    <string name="trading_strategy_title">如何成为有规则的交易者并坚持你的优势?</string>
+    <string name="not_publish">未公布</string>
+    <string name="lido">利多    %1$s</string>
+    <string name="bad_news">利空    %1$s</string>
+
+    <string name="before_data_">前值: </string>
+    <string name="expect_data_">预期: </string>
+    <string name="real_data_">实际: </string>
 </resources>

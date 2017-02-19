@@ -9,7 +9,7 @@
 
     <item>
         <shape>
-            <solid android:color="#E5E5E5"/>
+            <solid android:color="@color/splitLineGrayLight"/>
         </shape>
     </item>
 

@@ -36,7 +36,7 @@
             android:gravity="center_horizontal"
             android:text="@string/market_close"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="40sp"
             android:visibility="invisible"/>
 
         <TextView
@@ -136,29 +136,46 @@
             android:layout_height="0.5dp"
             android:background="@color/splitLineGrayDark"/>
 
-        <com.jnhyxx.html5.view.ChartContainer
-            android:id="@+id/chartContainer"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/marketStatusTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/splitBlockLight"
-            android:gravity="center"
-            android:padding="3dp"
-            android:text="@string/prompt_next_trade_time_is"
-            android:textColor="#666666"
-            android:textSize="12sp"/>
+            <com.jnhyxx.html5.view.TradePageFooter
+                android:id="@+id/tradePageFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"/>
 
-        <!--tools:text="@string/prompt_holding_position_time_to"-->
+            <TextView
+                android:id="@+id/marketStatusTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tradePageFooter"
+                android:background="@color/splitBlockLight"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="@string/prompt_next_trade_time_is"
+                android:textColor="@color/colorDisable"
+                android:textSize="12sp"/>
 
-        <com.jnhyxx.html5.view.TradePageFooter
-            android:id="@+id/tradePageFooter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <com.jnhyxx.html5.view.ChartContainer
+                android:id="@+id/chartContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/marketStatusTime"/>
+
+            <com.jnhyxx.html5.view.HoldingOrderView
+                android:id="@+id/holdingOrderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_order"
+                app:orderNumber="0"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -213,6 +230,5 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/titleBar"
         android:orientation="vertical"/>
 </RelativeLayout>

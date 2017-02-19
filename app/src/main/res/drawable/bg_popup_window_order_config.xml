@@ -8,7 +8,7 @@
                 android:bottomRightRadius="2dp"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@color/splitLineGrayLight"/>
         </shape>
     </item>
 
@@ -22,7 +22,7 @@
                 android:bottomRightRadius="2dp"
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"/>
-            <solid android:color="@color/colorPrimary"/>
+            <solid android:color="@android:color/white"/>
         </shape>
     </item>
 

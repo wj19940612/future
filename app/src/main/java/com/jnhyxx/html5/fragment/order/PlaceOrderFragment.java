@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
@@ -28,9 +26,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.netty.NettyClient;
 import com.jnhyxx.html5.netty.NettyHandler;
-import com.jnhyxx.html5.utils.BlurEngine;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.OrderConfigurationSelector;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.StrUtil;
@@ -60,24 +56,25 @@ public class PlaceOrderFragment extends BaseFragment {
     public static final int TYPE_BUY_LONG = 1;
     public static final int TYPE_SELL_SHORT = 0;
 
+
+    @BindView(R.id.emptyClickArea)
+    View mEmptyClickArea;
+
     @BindView(R.id.tradeQuantitySelector)
     OrderConfigurationSelector mTradeQuantitySelector;
-    @BindView(R.id.lastPrice)
-    TextView mLastPrice;
-    @BindView(R.id.priceChange)
-    TextView mPriceChange;
-    @BindView(R.id.buySellVolumeLayout)
-    BuySellVolumeLayout mBuySellVolumeLayout;
     @BindView(R.id.touchStopLossSelector)
     OrderConfigurationSelector mTouchStopLossSelector;
     @BindView(R.id.touchStopProfitSelector)
     OrderConfigurationSelector mTouchStopProfitSelector;
+
     @BindView(R.id.margin)
     TextView mMargin;
     @BindView(R.id.tradeFee)
     TextView mTradeFee;
+
     @BindView(R.id.rateAndMarketTime)
     TextView mRateAndMarketTime;
+
     @BindView(R.id.totalTobePaid)
     TextView mTotalTobePaid;
     @BindView(R.id.lastBidAskPrice)
@@ -86,14 +83,8 @@ public class PlaceOrderFragment extends BaseFragment {
     TextView mConfirmButton;
     @BindView(R.id.lastBidAskPriceBg)
     LinearLayout mLastBidAskPriceBg;
-    @BindView(R.id.emptyClickArea)
-    View mEmptyClickArea;
     @BindView(R.id.bottomSplitLine)
     View mBottomSplitLine;
-    @BindView(R.id.exchangeCloseText)
-    TextView mMarketCloseText;
-    @BindView(R.id.marketOpenArea)
-    RelativeLayout mMarketOpenArea;
 
     private int mLongOrShort;
     private Product mProduct;
@@ -105,7 +96,6 @@ public class PlaceOrderFragment extends BaseFragment {
     private boolean mIsShowing;
 
     private Unbinder mBinder;
-    private BlurEngine mBlurEngine;
     private Callback mCallback;
 
     private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
@@ -155,7 +145,6 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBlurEngine = new BlurEngine(container, R.color.blackHalfTransparent);
         View view = inflater.inflate(R.layout.fragment_place_order, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
@@ -245,33 +234,9 @@ public class PlaceOrderFragment extends BaseFragment {
 
     private void updateMarketDataRelatedView() {
         if (mMarketData != null) {
-            mBuySellVolumeLayout.setVolumes(mMarketData.getAskVolume(), mMarketData.getBidVolume());
-            updateLastPriceView(mMarketData);
             mLastBidAskPrice.setText(mLongOrShort == TYPE_BUY_LONG ?
                     FinanceUtil.formatWithScale(mMarketData.getAskPrice(), mProduct.getPriceDecimalScale()) :
                     FinanceUtil.formatWithScale(mMarketData.getBidPrice(), mProduct.getPriceDecimalScale()));
-        }
-    }
-
-    private void updateLastPriceView(FullMarketData data) {
-        mLastPrice.setText(FinanceUtil.formatWithScale(data.getLastPrice(), mProduct.getPriceDecimalScale()));
-        double priceChangeValue = data.getLastPrice() - data.getPreSetPrice();
-        double priceChangePercent = priceChangeValue / data.getPreSetPrice() * 100;
-        int textColor;
-        if (priceChangeValue >= 0) {
-            textColor = ContextCompat.getColor(getActivity(), R.color.redPrimary);
-            mLastPrice.setTextColor(textColor);
-            mPriceChange.setTextColor(textColor);
-            String priceChangeStr = "+" + FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
-                    + "\n+" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
-            mPriceChange.setText(priceChangeStr);
-        } else {
-            textColor = ContextCompat.getColor(getActivity(), R.color.greenPrimary);
-            mLastPrice.setTextColor(textColor);
-            mPriceChange.setTextColor(textColor);
-            String priceChangeStr = FinanceUtil.formatWithScale(priceChangeValue, mProduct.getPriceDecimalScale())
-                    + "\n" + FinanceUtil.formatWithScale(priceChangePercent) + "%";
-            mPriceChange.setText(priceChangeStr);
         }
     }
 
@@ -289,7 +254,6 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mBlurEngine.onResume();
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
     }
 
@@ -309,16 +273,9 @@ public class PlaceOrderFragment extends BaseFragment {
         if (mExchangeStatus.isTradeable()) {
             marketTimeStr = getString(R.string.prompt_holding_position_time_to_then_close,
                     mExchangeStatus.getNextTime());
-
-            mMarketOpenArea.setVisibility(View.VISIBLE);
-            mMarketCloseText.setVisibility(View.GONE);
         } else {
             marketTimeStr = getString(R.string.prompt_next_trade_time_is,
                     mExchangeStatus.getNextTime());
-
-            mMarketOpenArea.setVisibility(View.GONE);
-            mMarketCloseText.setVisibility(View.VISIBLE);
-            mMarketCloseText.setText(marketTimeStr);
         }
         String rateAndMarketTimeStr = mRateAndMarketTime.getText().toString();
         if (TextUtils.isEmpty(rateAndMarketTimeStr)) {
@@ -368,7 +325,6 @@ public class PlaceOrderFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBlurEngine.onDestroyView();
         mBinder.unbind();
     }
 

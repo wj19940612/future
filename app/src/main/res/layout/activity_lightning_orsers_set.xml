@@ -139,7 +139,7 @@
         android:id="@+id/rateAndMarketTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_market_time_status"
+        android:background="@color/splitBlockLight"
         android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"

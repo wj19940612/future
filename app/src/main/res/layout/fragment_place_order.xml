@@ -10,70 +10,17 @@
     <View
         android:id="@+id/emptyClickArea"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/trade_footer_height"
+        android:layout_height="@dimen/empty_area_height"
         android:background="@android:color/transparent"/>
-
-    <TextView
-        android:id="@+id/exchangeCloseText"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/bluePrimary"
-        android:gravity="center"
-        android:textColor="#666666"
-        android:textSize="15sp"
-        tools:text="@string/prompt_next_trade_time_is"/>
-
-    <RelativeLayout
-        android:id="@+id/marketOpenArea"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/bluePrimary"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/lastPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/redPrimary"
-            android:textSize="30sp"
-            tools:text="45.89"/>
-
-        <TextView
-            android:id="@+id/priceChange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/lastPrice"
-            android:textColor="@color/redPrimary"
-            android:textSize="11sp"
-            tools:text="+0.15\n+0.33%"/>
-
-        <com.jnhyxx.html5.view.BuySellVolumeLayout
-            android:id="@+id/buySellVolumeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/priceChange"
-            android:orientation="vertical"/>
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bluePrimary"
+        android:background="@android:color/white"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <View
-            android:id="@+id/spiltLine"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/splitLineBlueLight"/>
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,7 +35,7 @@
                 android:paddingBottom="14dp"
                 android:paddingTop="14dp"
                 android:text="@string/trade_quantity"
-                android:textColor="#A8A8A8"/>
+                android:textColor="@color/colorDisable"/>
 
             <com.jnhyxx.html5.view.OrderConfigurationSelector
                 android:id="@+id/tradeQuantitySelector"
@@ -101,7 +48,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/splitLineBlueLight"/>
+            android:background="@color/splitLineGrayLight"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -109,7 +56,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="12dp"
             android:text="@string/touch_stop_loss"
-            android:textColor="#A8A8A8"/>
+            android:textColor="@color/colorDisable"/>
 
         <com.jnhyxx.html5.view.OrderConfigurationSelector
             android:id="@+id/touchStopLossSelector"
@@ -123,7 +70,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="12dp"
             android:text="@string/touch_stop_profit"
-            android:textColor="#A8A8A8"/>
+            android:textColor="@color/colorDisable"/>
 
         <com.jnhyxx.html5.view.OrderConfigurationSelector
             android:id="@+id/touchStopProfitSelector"
@@ -136,7 +83,7 @@
             android:layout_height="0.5dp"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:background="@color/splitLineBlueLight"/>
+            android:background="@color/splitLineGrayLight"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:text="@string/margin"
-                android:textColor="#A8A8A8"/>
+                android:textColor="@color/colorDisable"/>
 
             <TextView
                 android:id="@+id/margin"
@@ -172,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:text="@string/trade_fee"
-                android:textColor="#A8A8A8"/>
+                android:textColor="@color/colorDisable"/>
 
             <TextView
                 android:id="@+id/tradeFee"
@@ -189,7 +136,7 @@
         android:id="@+id/rateAndMarketTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_market_time_status"
+        android:background="@color/splitBlockLight"
         android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
@@ -201,7 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/bluePrimary"
+        android:background="@android:color/white"
         android:gravity="top"
         android:orientation="horizontal"
         android:paddingLeft="16dp"

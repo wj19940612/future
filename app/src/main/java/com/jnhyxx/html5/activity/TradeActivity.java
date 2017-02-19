@@ -63,6 +63,7 @@ import com.jnhyxx.html5.utils.presenter.HoldingOrderPresenter;
 import com.jnhyxx.html5.utils.presenter.IHoldingOrderView;
 import com.jnhyxx.html5.view.BuySellVolumeLayout;
 import com.jnhyxx.html5.view.ChartContainer;
+import com.jnhyxx.html5.view.HoldingOrderView;
 import com.jnhyxx.html5.view.MarketDataView;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.TradePageFooter;
@@ -121,6 +122,8 @@ public class TradeActivity extends BaseActivity implements
     TextView mSellShortBtn;
     @BindView(R.id.lightningOrderBtn)
     ImageView mLightningOrderBtn;
+    @BindView(R.id.holdingOrderView)
+    HoldingOrderView mHoldingOrderView;
 
     private SlidingMenu mMenu;
 
@@ -504,7 +507,7 @@ public class TradeActivity extends BaseActivity implements
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
     }
 
-    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn})
+    @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn, R.id.holdingOrderView})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buyLongBtn:
@@ -529,6 +532,9 @@ public class TradeActivity extends BaseActivity implements
             case R.id.lightningOrderBtn:
                 MobclickAgent.onEvent(getActivity(), mLightningOrderBtn.isSelected() ? UmengCountEventIdUtils.LIGHTNING_OPEN_DOOR : UmengCountEventIdUtils.LIGHTNING_CLOSE_DOOR);
                 openLightningOrdersPage();
+                break;
+            case R.id.holdingOrderView:
+                openOrdersPage();
                 break;
         }
     }

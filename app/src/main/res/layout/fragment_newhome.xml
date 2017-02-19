@@ -22,7 +22,7 @@
             <com.jnhyxx.html5.view.HomeBanner
                 android:id="@+id/homeBanner"
                 android:layout_width="match_parent"
-                android:layout_height="200dip"
+                android:layout_height="wrap_content"
                 app:layout_collapseMode="none"/>
 
             <android.support.v7.widget.Toolbar
@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="风险评估"
+                        android:text="@string/risk_evaluation"
                         android:textColor="#ffffff"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="客服"
+                        android:text="@string/contact_service"
                         android:textColor="#ffffff"
                         android:textSize="14sp"/>
                 </LinearLayout>

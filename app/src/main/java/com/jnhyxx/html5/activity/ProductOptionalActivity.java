@@ -2,6 +2,7 @@ package com.jnhyxx.html5.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.market.Product;
+import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -32,35 +34,47 @@ import butterknife.ButterKnife;
  */
 
 public class ProductOptionalActivity extends BaseActivity {
+    public static final int REQ_CODE_RESULT = 100;
+
     @BindView(android.R.id.list)
     DragListView list;
-    private List<String> mProductOptionals = Arrays.asList(new String[]{"10", "11", "8"});
-    private List<Product> mProductList1 = new ArrayList<>();
-    private List<Product> mProductList2 = new ArrayList<>();
-    private MyAdapter mAdapter;
-    private boolean mIsDomestic;
-    private String mProductOptional;
+    private List<String> mProductOptionals;
+    private List<Product> mProductList1;
 
-    public static final int REQ_CODE_RESULT = 100;
+    private List<Product> mProductList2;
+
+    private MyAdapter mAdapter;
+
+    private boolean mIsDomestic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_optional);
         ButterKnife.bind(this);
-        mIsDomestic = getIntent().getBooleanExtra("isDomestic", false);
+
+        mIsDomestic = getIntent().getBooleanExtra(HomeFragment.IS_DOMESTIC, false);
+        String productOptional;
         if (mIsDomestic) {
-            mProductOptional = Preference.get().getProductOptionalDomestic();
+            productOptional = Preference.get().getProductOptionalDomestic();
         } else {
-            mProductOptional = Preference.get().getProductOptionalForeign();
+            productOptional = Preference.get().getProductOptionalForeign();
         }
-        List<String> strings = Arrays.asList(mProductOptional.split(","));
-        if (strings.size() > 0) {
-            mProductOptionals = strings;
-        }
-        requestProductList();
+        mProductOptionals = getOptionalList(productOptional);
+
+        mProductList1 = new ArrayList<>();
+        mProductList2 = new ArrayList<>();
         mAdapter = new MyAdapter(this, mProductList1, mProductList2);
         list.setAdapter(mAdapter);
+
+        requestProductList();
+    }
+
+    private List<String> getOptionalList(String optional) {
+        if (!TextUtils.isEmpty(optional)) {
+            return Arrays.asList(optional.split(","));
+        }
+        return null;
     }
 
     @Override
@@ -83,24 +97,38 @@ public class ProductOptionalActivity extends BaseActivity {
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
                     public void onRespSuccess(List<Product> products) {
-                        for (int i = 0; i < mProductOptionals.size(); i++) {
-                            for (int j = 0; j < products.size(); j++) {
-                                Product product = products.get(j);
-                                if ((String.valueOf(product.getVarietyId())).equals(mProductOptionals.get(i))) {
-                                    product.setIsOptional(true);
-                                    mProductList1.add(product);
-                                    products.remove(j);
-                                    break;
+                        if (mProductOptionals == null) {
+                            ListIterator<Product> iterator = products.listIterator();
+                            while (iterator.hasNext()) {
+                                Product product = iterator.next();
+                                if (product.isDomestic() == mIsDomestic) {
+                                    if (mProductList1.size() < 3) {
+                                        product.setIsOptional(true);
+                                        mProductList1.add(product);
+                                        iterator.remove();
+                                    }
+                                } else {
+                                    iterator.remove();
                                 }
                             }
-                        }
-                        ListIterator<Product> productListIterator = products.listIterator();
-                        while (productListIterator.hasNext()) {
-                            Product product = productListIterator.next();
-                            product.setIsOptional(false);
-                            if (product.isDomestic() == mIsDomestic) {
-                                mProductList2.add(product);
+                            mProductList2.addAll(products);
+                        } else {
+                            for (String productOptional : mProductOptionals) {
+                                ListIterator<Product> iterator2 = products.listIterator();
+                                while (iterator2.hasNext()) {
+                                    Product product = iterator2.next();
+                                    if (product.isDomestic() == mIsDomestic) {
+                                        if (String.valueOf(product.getVarietyId()).equals(productOptional)) {
+                                            product.setIsOptional(true);
+                                            mProductList1.add(product);
+                                            iterator2.remove();
+                                        }
+                                    } else {
+                                        iterator2.remove();
+                                    }
+                                }
                             }
+                            mProductList2.addAll(products);
                         }
                         mAdapter.notifyDataSetChanged();
                     }
@@ -126,18 +154,18 @@ public class ProductOptionalActivity extends BaseActivity {
                 TextView optionalTitle = (TextView) convertView.findViewById(R.id.optionalTitle);
                 TextView dragInfo = (TextView) convertView.findViewById(R.id.dragInfo);
                 if (position == 0) {
-                    optionalTitle.setText("品种自选");
+                    optionalTitle.setText(getString(R.string.optional_futures));
                     dragInfo.setVisibility(View.VISIBLE);
                 } else {
                     if (mDragData2.size() == 0) {
                         convertView.setVisibility(View.INVISIBLE);
-                    }else {
+                    } else {
                         convertView.setVisibility(View.VISIBLE);
                     }
                     if (mIsDomestic) {
-                        optionalTitle.setText("国内期货");
+                        optionalTitle.setText(getString(R.string.domestic_futures));
                     } else {
-                        optionalTitle.setText("国际期货");
+                        optionalTitle.setText(getString(R.string.foreign_futures));
                     }
                     dragInfo.setVisibility(View.INVISIBLE);
                 }
@@ -212,7 +240,7 @@ public class ProductOptionalActivity extends BaseActivity {
                             mDragData1.add(product);
                         } else {
                             if (mDragData1.size() < 2) {
-                                ToastUtil.curt("至少得有一个自选品种");
+                                ToastUtil.curt(R.string.optional_notice);
                                 return;
                             }
                             product.setIsOptional(!product.getIsOptional());

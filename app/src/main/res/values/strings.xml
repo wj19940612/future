@@ -201,7 +201,7 @@
     <string name="simulation">模拟交易</string>
     <string name="invest_course">投资课堂</string>
     <string name="newer_video">新手视频</string>
-    <string name="contact_service">联系客服</string>
+    <string name="contact_service">客服</string>
     <string name="enter_right_now">立即进入</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
     <string name="new_tag">NEW</string>
@@ -214,7 +214,7 @@
     <string name="holding_number">持仓 (%1$d)</string>
     <string name="normalize_futures_rule">规范期市秩序，坚持理性投资</string>
     <string name="futures_risk_tips_title">《证券期货交易风险提示》</string>
-
+    <string name="risk_evaluation">风险提示</string>
 
     <!-- Order page -->
     <string name="order">订单</string>
@@ -553,7 +553,10 @@
     <string name="complete">完成</string>
     <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
-    
+
+    <!--品种自选-->
     <string name="foreign_futures">国际期货</string>
     <string name="domestic_futures">国内期货</string>
+    <string name="optional_futures">品种自选</string>
+    <string name="optional_notice">至少得有一个自选品种</string>
 </resources>

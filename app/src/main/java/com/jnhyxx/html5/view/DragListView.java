@@ -251,7 +251,7 @@ public class DragListView extends ListView {
         mMinDragY = mRawOffsetY + getChildAt(getAdapter().headCount()).getTop();
         // 根据是否显示完全，设定快照在Y轴上可拖到的最大值
         if (isShowAll()) {
-            mMaxDragY = mRawOffsetY + getChildAt(getAdapter().getDragCount() - 1).getTop();
+            mMaxDragY = mRawOffsetY + getChildAt(getAdapter().getDragCount() + getAdapter().headCount() - 1).getTop();
         } else {
             mMaxDragY = mRawOffsetY + getHeight() - mDragItemHeight;
         }
@@ -268,7 +268,7 @@ public class DragListView extends ListView {
         }
         View firstChild = getChildAt(0);
         int itemAllHeight = firstChild.getBottom() - firstChild.getTop() + getDividerHeight();
-        return itemAllHeight * getAdapter().getDragCount() < getHeight();
+        return itemAllHeight * (getAdapter().getDragCount() + getAdapter().headCount()) < getHeight();
     }
 
     /**
@@ -315,7 +315,7 @@ public class DragListView extends ListView {
      * 根据Adapter中的位置获取对应ListView的条目
      */
     private View getItemView(int position) {
-        if (position < 0 || position >= getAdapter().getCount()) {
+        if (position < getAdapter().headCount() || position >= getAdapter().getDragCount() + getAdapter().headCount()) {
             return null;
         }
         int index = position - getFirstVisiblePosition();
@@ -338,7 +338,9 @@ public class DragListView extends ListView {
     private void updateItemView() {
         int position = pointToPosition(mMoveX, mMoveY);
         if (position != AdapterView.INVALID_POSITION) {
-            mToPosition = position;
+            if (position < (getAdapter().getDragCount() + getAdapter().headCount()) && position > 0) {
+                mToPosition = position;
+            }
         }
 
         // 调换位置，并把显示进行调换
@@ -395,7 +397,7 @@ public class DragListView extends ListView {
      * 调换位置
      */
     private boolean exchangePosition() {
-        int itemCount = getAdapter().getDragCount();
+        int itemCount = getAdapter().getDragCount() + getAdapter().headCount();
         if (mFromPosition >= getAdapter().headCount() && mFromPosition < itemCount
                 && mToPosition >= getAdapter().headCount() && mToPosition < itemCount) {
             getAdapter().swapData(mFromPosition - getAdapter().headCount(), mToPosition - getAdapter().headCount());

@@ -62,6 +62,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,8 +88,11 @@ public class HomeFragment extends BaseFragment {
     RecyclerView mOptionalForeignList;
     @BindView(R.id.optionalDomesticList)
     RecyclerView mOptionalDomesticList;
-
     private Unbinder mBind;
+
+    public static final int REQ_CODE_FOREIGN = 100;
+    public static final int REQ_CODE_DOMESTIC = 101;
+    public static final String IS_DOMESTIC = "isDomestic";
 
     private List<ProductPkg> mProductPkgList;
     private List<Product> mProductList;
@@ -96,10 +100,9 @@ public class HomeFragment extends BaseFragment {
     private List<MarketData> mMarketDataList;
     private List<ProductPkg> mForeignPackage;
     private List<ProductPkg> mDomesticPackage;
+
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
-    public static final int REQ_CODE_FOREIGN = 100;
-    public static final int REQ_CODE_DOMESTIC = 101;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -160,11 +163,11 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), ProductOptionalActivity.class)
-                        .putExtra("isDomestic", false)
+                        .putExtra(IS_DOMESTIC, false)
                         .executeForResult(REQ_CODE_DOMESTIC);
             }
         });
-        headTitle1.setText(getString(R.string.domestic_futures));
+        headTitle1.setText(getString(R.string.foreign_futures));
         mOptionalForeignWrapper.addHeaderView(foreignHeadView);
         mOptionalForeignList.setAdapter(mOptionalForeignWrapper);
 
@@ -179,11 +182,11 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Launcher.with(getActivity(), ProductOptionalActivity.class)
-                        .putExtra("isDomestic", true)
+                        .putExtra(IS_DOMESTIC, true)
                         .executeForResult(REQ_CODE_FOREIGN);
             }
         });
-        headTitle2.setText(getString(R.string.foreign_futures));
+        headTitle2.setText(getString(R.string.domestic_futures));
         mOptionalDomesticWrapper.addHeaderView(domesticHeadView);
         mOptionalDomesticList.setAdapter(mOptionalDomesticWrapper);
     }
@@ -202,7 +205,7 @@ public class HomeFragment extends BaseFragment {
         requestProductList();
         requestHomePositions();
         requestOrderReport();
-        startScheduleJob(5 * 1000);
+        startScheduleJob(1 * 1000);
     }
 
     @Override
@@ -351,56 +354,54 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onRespSuccess(List<Product> products) {
                         mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products,
+                        ProductPkg.updateProductPkgList(mProductPkgList, mProductList,
                                 mCashPositionList, mMarketDataList);
-                        updateOptionalList();
+                        updateOptionalLists();
                     }
                 }).fire();
     }
 
-    private void updateOptionalList() {
+    private void updateOptionalLists() {
         String productOptionalForeign = Preference.get().getProductOptionalForeign();
         String productOptionalDomestic = Preference.get().getProductOptionalDomestic();
         List<String> optionalForeigns = getOptionalList(productOptionalForeign);
         List<String> optionalDomestics = getOptionalList(productOptionalDomestic);
         mForeignPackage.clear();
         mDomesticPackage.clear();
-        for (ProductPkg productPkg : mProductPkgList) {
-            Product product = productPkg.getProduct();
-            if (product.isForeign()) {
-                if (optionalForeigns != null) {
-                    addOptionalProduct(optionalForeigns, productPkg, mForeignPackage);
-                } else {
-                    if (mForeignPackage.size() < 3) {
-                        mForeignPackage.add(productPkg);
-                    }
-                }
-            } else {
-                if (optionalDomestics != null) {
-                    addOptionalProduct(optionalDomestics, productPkg, mDomesticPackage);
-                } else {
-                    if (mDomesticPackage.size() < 3) {
-                        mDomesticPackage.add(productPkg);
-                    }
-                }
-            }
-        }
+        updateOptional(optionalForeigns, mForeignPackage);
+        updateOptional(optionalDomestics, mDomesticPackage);
         mOptionalForeignWrapper.notifyDataSetChanged();
         mOptionalDomesticWrapper.notifyDataSetChanged();
     }
 
-    private void addOptionalProduct(List<String> optionals, ProductPkg productPkg, List<ProductPkg> target) {
-        for (String optional : optionals) {
-            if (String.valueOf(productPkg.getProduct().getVarietyId()).equals(optional)) {
-                target.add(productPkg);
-                break;
+    private void updateOptional(List<String> optionals, List<ProductPkg> targetList) {
+        if (optionals != null) {
+            for (String str : optionals) {
+                for (ProductPkg productPkg : mProductPkgList) {
+                    if (String.valueOf(productPkg.getProduct().getVarietyId()).equals(str)) {
+                        targetList.add(productPkg);
+                    }
+                }
+            }
+        } else {
+            for (ProductPkg productPkg : mProductPkgList) {
+                if (targetList == mForeignPackage && productPkg.getProduct().isForeign()) {
+                    if (targetList.size() < 3) {
+                        targetList.add(productPkg);
+                    }
+                }
+                if (targetList == mDomesticPackage && productPkg.getProduct().isDomestic()) {
+                    if (targetList.size() < 3) {
+                        targetList.add(productPkg);
+                    }
+                }
             }
         }
     }
 
-    private List<String> getOptionalList(String productOptionalForeign) {
-        if (!TextUtils.isEmpty(productOptionalForeign)) {
-            String[] foreignSplit = productOptionalForeign.split(",");
+    private List<String> getOptionalList(String productOptional) {
+        if (!TextUtils.isEmpty(productOptional)) {
+            String[] foreignSplit = productOptional.split(",");
             return Arrays.asList(foreignSplit);
         }
         return null;
@@ -414,7 +415,7 @@ public class HomeFragment extends BaseFragment {
                         if (listResp.isSuccess()) {
                             mMarketDataList = listResp.getData();
                             ProductPkg.updateMarketInProductPkgList(mProductPkgList, mMarketDataList);
-                            updateOptionalList();
+                            updateOptionalLists();
                         }
                     }
                 }).fire();
@@ -432,7 +433,7 @@ public class HomeFragment extends BaseFragment {
 
                                 mCashPositionList = homePositions.getCashOpS();
                                 ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
-                                updateOptionalList();
+                                updateOptionalLists();
                             }
                         }
 
@@ -442,7 +443,7 @@ public class HomeFragment extends BaseFragment {
                     }).fire();
         } else { // clearHoldingOrderList all product position
             ProductPkg.clearPositions(mProductPkgList);
-            updateOptionalList();
+            updateOptionalLists();
             mHomeHeader.setSimulationHolding(null);
             mCashPositionList = null;
         }
@@ -460,7 +461,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == ProductOptionalActivity.REQ_CODE_RESULT) {
-            updateOptionalList();
+            updateOptionalLists();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -534,19 +535,15 @@ public class HomeFragment extends BaseFragment {
             TextView mMarketCloseText;
             @BindView(R.id.holdingPosition)
             TextView mHoldingPosition;
-            @BindView(R.id.advertisement)
-            TextView mAdvertisement;
-            @BindView(R.id.marketOpenTime)
-            TextView mMarketOpenTime;
-            @BindView(R.id.marketCloseArea)
-            LinearLayout mMarketCloseArea;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
             @BindView(R.id.priceChangePercent)
             TextView mPriceChangePercent;
-            @BindView(R.id.priceChangeArea)
-            LinearLayout mPriceChangeArea;
+            @BindView(R.id.bgTwinkle)
+            View mBgTwinkle;
+
             private View mView;
+            private ProductPkg mLastPackage;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -571,75 +568,60 @@ public class HomeFragment extends BaseFragment {
                 });
                 Product product = pkg.getProduct();
                 mProductName.setText(product.getVarietyName());
-                mAdvertisement.setText(product.getAdvertisement());
                 if (product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
                     mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
-                    mAdvertisement.setTextColor(Color.parseColor("#7FA8A8A8"));
                     mHotIcon.setVisibility(View.GONE);
                     mNewTag.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
-                    mMarketCloseArea.setVisibility(View.VISIBLE);
-                    mPriceChangeArea.setVisibility(View.GONE);
-                    String marketOpenTime = createMarketOpenTime(product, context);
-                    mMarketOpenTime.setText(marketOpenTime);
                 } else {
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
-                    mAdvertisement.setTextColor(Color.parseColor("#A8A8A8"));
                     mMarketCloseText.setVisibility(View.GONE);
-                    mMarketCloseArea.setVisibility(View.GONE);
-                    mPriceChangeArea.setVisibility(View.VISIBLE);
-                    MarketData marketData = pkg.getMarketData(); // Market status
-                    if (marketData != null) {
-                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                                product.getPriceDecimalScale()));
-                        mPriceChangePercent.setText(marketData.getUnsignedPercentage());
-                        String priceChangePercent = marketData.getPercentage();
-                        if (priceChangePercent.startsWith("-")) {
-                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                            mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_down_arrow, 0, 0, 0);
-                            ViewGroup parent = (ViewGroup) mPriceChangePercent.getParent();
-                            parent.setBackgroundResource(R.drawable.bg_green_primary);
-                        } else {
-                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                            mPriceChangePercent.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_up_arrow, 0, 0, 0);
-                            ViewGroup parent = (ViewGroup) mPriceChangePercent.getParent();
-                            parent.setBackgroundResource(R.drawable.bg_red_primary);
-                        }
-                    } else {
-                        mLastPrice.setText("——");
-                        mPriceChangePercent.setText("——%");
-                        mPriceChangePercent.setCompoundDrawables(null, null, null, null);
-                    }
-                    HomePositions.Position position = pkg.getPosition(); // Position status
-                    if (position != null && position.getHandsNum() > 0) {
-                        mHoldingPosition.setVisibility(View.VISIBLE);
-                    } else {
-                        mHoldingPosition.setVisibility(View.GONE);
-                    }
                 }
-
+                MarketData marketData = pkg.getMarketData(); // Market status
+                if (marketData != null) {
+                    mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
+                            product.getPriceDecimalScale()));
+                    String priceChangePercent = marketData.getPercentage();
+                    if (priceChangePercent.startsWith("-")) {
+                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                        mPriceChangePercent.setText(priceChangePercent);
+                        setTwinkleColor(marketData, R.color.lightGreen);
+                    } else {
+                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        mPriceChangePercent.setText("+" + priceChangePercent);
+                        setTwinkleColor(marketData, R.color.lightRed);
+                    }
+                } else {
+                    mLastPrice.setText("——");
+                    mPriceChangePercent.setText("——%");
+                    mPriceChangePercent.setCompoundDrawables(null, null, null, null);
+                }
+                HomePositions.Position position = pkg.getPosition(); // Position status
+                if (position != null && position.getHandsNum() > 0) {
+                    mHoldingPosition.setVisibility(View.VISIBLE);
+                } else {
+                    mHoldingPosition.setVisibility(View.GONE);
+                }
+                mLastPackage = pkg;
             }
 
-            private String createMarketOpenTime(Product product, Context context) {
-                String timeLine = product.getOpenMarketTime();
-                if (!TextUtils.isEmpty(timeLine)) {
-                    String[] timeSplit = timeLine.split(";");
-                    String startTime = timeSplit[0];
-                    String endTime = timeSplit[timeSplit.length - 1];
-                    endTime = addChinesePrefix(startTime, endTime, context);
-                    return startTime + "~" + endTime;
+            private void setTwinkleColor(MarketData marketData, int color) {
+                if (mLastPackage != null) {
+                    if (mLastPackage.getMarketData().getLastPrice() != marketData.getLastPrice()) {
+                        mBgTwinkle.setBackgroundColor(getResources().getColor(color));
+                        mBgTwinkle.postDelayed(new TimerTask() {
+                            @Override
+                            public void run() {
+                                mBgTwinkle.setBackgroundColor(Color.TRANSPARENT);
+                            }
+                        }, 500);
+                    }
                 }
-                return "";
-            }
-
-            private String addChinesePrefix(String startTime, String endTime, Context context) {
-                if (startTime.compareTo(endTime) > 0) {
-                    return context.getString(R.string.next_day) + endTime;
-                }
-                return endTime;
             }
         }
     }

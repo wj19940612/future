@@ -28,13 +28,8 @@ public abstract class DragListViewAdapter<T> extends BaseAdapter {
         mDragData2 = list2;
     }
 
-    @Override
-    public int getCount() {
-        return mDragData1 == null ? 0 : mDragData1.size();
-    }
-
     public int getDragCount() {
-        return mDragData1 == null ? 0 : mDragData1.size() + headCount();
+        return mDragData1 == null ? 0 : mDragData1.size();
     }
 
     @Override

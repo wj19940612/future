@@ -1,18 +1,21 @@
 package com.jnhyxx.html5.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
 import com.johnz.kutils.StrUtil;
 
@@ -25,17 +28,19 @@ import butterknife.OnClick;
 public class HomeHeader extends FrameLayout {
 
     @BindView(R.id.simulation)
-    TextView mSimulation;
+    RelativeLayout mSimulation;
     @BindView(R.id.paidToPromote)
-    TextView mPaidToPromote;
+    RelativeLayout mPaidToPromote;
     @BindView(R.id.investCourse)
-    TextView mInvestCourse;
+    RelativeLayout mInvestCourse;
     @BindView(R.id.newerVideo)
-    TextView mNewerGuide;
+    RelativeLayout mNewerGuide;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mViewSwitcher;
     @BindView(R.id.announcement)
     LinearLayout mAnnouncement;
+    @BindView(R.id.holdingIndicator)
+    ImageView mHoldingIndicator;
 
     public interface OnViewClickListener {
 
@@ -77,7 +82,8 @@ public class HomeHeader extends FrameLayout {
             @Override
             public View makeView() {
                 TextView textView = new TextView(getContext());
-                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(12);
+                textView.setTextColor(Color.parseColor("#666666"));
                 return textView;
             }
         });
@@ -96,12 +102,20 @@ public class HomeHeader extends FrameLayout {
             mAnnouncement.setVisibility(VISIBLE);
             TextView orderReportView = (TextView) mViewSwitcher.getNextView();
             OrderReport report = mOrderReportList.get(mCount++ % mOrderReportList.size());
-            SpannableString orderReport = StrUtil.mergeTextWithColor("【" +
-                            report.getNick() + " " + report.getTime() + " ",
+            SpannableString orderReport = StrUtil.mergeTextWithColor(
+                    report.getNick() + " " + report.getTime() + " ",
                     report.getTradeType(), report.isShortSelling() ? ContextCompat.getColor(getContext(), R.color.greenPrimary) : ContextCompat.getColor(getContext(), R.color.redPrimary),
-                    " " + report.getFuturesType() + "】");
+                    " " + report.getFuturesType());
             orderReportView.setText(orderReport);
             mViewSwitcher.showNext();
+        }
+    }
+
+    public void setSimulationHolding(List<HomePositions.IntegralOpSBean> integralOpSBeanList) {
+        if (integralOpSBeanList != null && integralOpSBeanList.size() > 0) {
+            mHoldingIndicator.setVisibility(VISIBLE);
+        } else {
+            mHoldingIndicator.setVisibility(INVISIBLE);
         }
     }
 

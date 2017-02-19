@@ -33,8 +33,8 @@ public class HomeHeader extends FrameLayout {
     RelativeLayout mPaidToPromote;
     @BindView(R.id.investCourse)
     RelativeLayout mInvestCourse;
-    @BindView(R.id.newerVideo)
-    RelativeLayout mNewerGuide;
+    @BindView(R.id.live)
+    RelativeLayout mLive;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mViewSwitcher;
     @BindView(R.id.announcement)
@@ -50,7 +50,7 @@ public class HomeHeader extends FrameLayout {
 
         void onInvestCourseClick();
 
-        void onNewerGuideClick();
+        void onLiveClick();
 
     }
 
@@ -83,6 +83,7 @@ public class HomeHeader extends FrameLayout {
             public View makeView() {
                 TextView textView = new TextView(getContext());
                 textView.setTextSize(12);
+                textView.setPadding(10, 0, 0, 0);
                 textView.setTextColor(Color.parseColor("#666666"));
                 return textView;
             }
@@ -119,7 +120,7 @@ public class HomeHeader extends FrameLayout {
         }
     }
 
-    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.newerVideo})
+    @OnClick({R.id.simulation, R.id.paidToPromote, R.id.investCourse, R.id.live})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.simulation:
@@ -137,9 +138,9 @@ public class HomeHeader extends FrameLayout {
                     mListener.onInvestCourseClick();
                 }
                 break;
-            case R.id.newerVideo:
+            case R.id.live:
                 if (mListener != null) {
-                    mListener.onNewerGuideClick();
+                    mListener.onLiveClick();
                 }
                 break;
         }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class ProductOptionalActivity extends BaseActivity {
     public static final int REQ_CODE_RESULT = 100;
 
     @BindView(android.R.id.list)
-    DragListView list;
+    DragListView mList;
     private List<String> mProductOptionals;
     private List<Product> mProductList1;
 
@@ -54,7 +55,7 @@ public class ProductOptionalActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mIsDomestic = getIntent().getBooleanExtra(HomeFragment.IS_DOMESTIC, false);
-        String productOptional;
+        final String productOptional;
         if (mIsDomestic) {
             productOptional = Preference.get().getProductOptionalDomestic();
         } else {
@@ -65,8 +66,27 @@ public class ProductOptionalActivity extends BaseActivity {
         mProductList1 = new ArrayList<>();
         mProductList2 = new ArrayList<>();
         mAdapter = new MyAdapter(this, mProductList1, mProductList2);
-        list.setAdapter(mAdapter);
-
+        mList.setAdapter(mAdapter);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Product product = mAdapter.getItem(position);
+                if (position > mProductList1.size() + 1) {
+                    product.setIsOptional(!product.getIsOptional());
+                    mProductList2.remove(product);
+                    mProductList1.add(product);
+                } else {
+                    if (mProductList1.size() < 2) {
+                        ToastUtil.curt(R.string.optional_notice);
+                        return;
+                    }
+                    product.setIsOptional(!product.getIsOptional());
+                    mProductList1.remove(product);
+                    mProductList2.add(product);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+        });
         requestProductList();
     }
 
@@ -140,6 +160,24 @@ public class ProductOptionalActivity extends BaseActivity {
 
         public MyAdapter(Context context, List<Product> list1, List<Product> list2) {
             super(context, list1, list2);
+        }
+
+        @Override
+        public Product getItem(int position) {
+            Product product = new Product();
+            if (position == 0 || position == mDragData1.size() + 1) {
+                return null;
+            } else {
+                int tempPosition;
+                if (position >= mDragData1.size() + 2) {
+                    tempPosition = position - mDragData1.size() - 2;
+                    product = mDragData2.get(tempPosition);
+                } else if (position >= 1) {
+                    tempPosition = position - 1;
+                    product = mDragData1.get(tempPosition);
+                }
+            }
+            return product;
         }
 
         @Override
@@ -250,6 +288,7 @@ public class ProductOptionalActivity extends BaseActivity {
                         notifyDataSetChanged();
                     }
                 });
+
                 mName.setText(product.getVarietyName());
                 if (position > mDragData1.size() + 1) {
                     mTouch.setVisibility(View.INVISIBLE);

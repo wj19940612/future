@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.App;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
+import com.jnhyxx.html5.activity.LiveActivity;
 import com.jnhyxx.html5.activity.ProductOptionalActivity;
 import com.jnhyxx.html5.activity.SimulationActivity;
 import com.jnhyxx.html5.activity.TradeActivity;
@@ -33,7 +34,6 @@ import com.jnhyxx.html5.activity.account.SignInActivity;
 import com.jnhyxx.html5.activity.web.BannerActivity;
 import com.jnhyxx.html5.activity.web.HideTitleWebActivity;
 import com.jnhyxx.html5.activity.web.InvestCourseActivity;
-import com.jnhyxx.html5.activity.web.NewbieActivity;
 import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
@@ -212,8 +212,10 @@ public class HomeFragment extends BaseFragment {
     public void onTimeUp(int count) {
         super.onTimeUp(count);
         requestProductMarketList();
-        mHomeHeader.nextOrderReport();
-        mHomeBanner.nextAdvertisement();
+        if (count % 5 == 0) {
+            mHomeHeader.nextOrderReport();
+            mHomeBanner.nextAdvertisement();
+        }
     }
 
     @Override
@@ -261,14 +263,11 @@ public class HomeFragment extends BaseFragment {
                     .execute();
         }
 
-        // 新手引导
+        // 直播
         @Override
-        public void onNewerGuideClick() {
+        public void onLiveClick() {
             MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
-            Launcher.with(getActivity(), NewbieActivity.class)
-                    .putExtra(NewbieActivity.EX_URL, API.getNewbieUrl())
-                    .putExtra(NewbieActivity.EX_TITLE, getString(R.string.newbie_title))
-                    .putExtra(NewbieActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+            Launcher.with(getActivity(), LiveActivity.class)
                     .execute();
         }
     };

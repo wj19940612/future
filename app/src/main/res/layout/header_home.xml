@@ -83,7 +83,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/newerVideo"
+            android:id="@+id/live"
             style="@style/HomeHeaderButton">
 
             <ImageView

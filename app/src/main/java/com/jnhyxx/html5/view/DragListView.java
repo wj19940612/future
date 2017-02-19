@@ -176,6 +176,8 @@ public class DragListView extends ListView {
                             startDrag();
                         }
                     }
+                } else {
+                    return super.onTouchEvent(ev);
                 }
                 break;
 

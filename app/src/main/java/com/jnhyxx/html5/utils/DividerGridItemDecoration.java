@@ -69,14 +69,14 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getBottom() + params.topMargin;
             final int bottom = top + mDivider.getIntrinsicHeight();
             if (i % spanCount == 1) {
-                mDivider.setBounds(left + mHorizontalMargin, top, right, bottom);
+                mDivider.setBounds(left + mHorizontalMargin, top, right + mDivider.getIntrinsicHeight(), bottom);
             }
             if (i % spanCount == 2) {
                 mDivider.setBounds(left, top, right, bottom);
             }
 
             if (i % spanCount == 0) {
-                mDivider.setBounds(left, top, right - mHorizontalMargin, bottom);
+                mDivider.setBounds(left, top, right - mHorizontalMargin + mDivider.getIntrinsicHeight(), bottom);
             }
             if (i == 0) {
                 mDivider.setBounds(left, top, right, bottom);

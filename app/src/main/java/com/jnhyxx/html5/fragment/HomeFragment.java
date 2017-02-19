@@ -8,6 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -42,6 +47,9 @@ import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.domain.order.OrderReport;
+import com.jnhyxx.html5.fragment.home.CalendarFinanceFragment;
+import com.jnhyxx.html5.fragment.home.TradingStrategyFragment;
+import com.jnhyxx.html5.fragment.home.YesterdayProfitRankFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -69,25 +77,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.viewPager;
+
+
 public class HomeFragment extends BaseFragment {
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.homeHeader)
-    HomeHeader mHomeHeader;
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
     @BindView(R.id.riskEvaluation)
     LinearLayout mRiskEvaluation;
     @BindView(R.id.contactService)
     LinearLayout mContactService;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.collapsing)
     CollapsingToolbarLayout mCollapsing;
     @BindView(R.id.appbar)
     AppBarLayout mAppbar;
+    @BindView(R.id.homeHeader)
+    HomeHeader mHomeHeader;
     @BindView(R.id.optionalForeignList)
     RecyclerView mOptionalForeignList;
     @BindView(R.id.optionalDomesticList)
     RecyclerView mOptionalDomesticList;
+    @BindView(R.id.tabLayout)
+    TabLayout mTabLayout;
+    @BindView(R.id.replaceLayout)
+    RelativeLayout mReplaceLayout;
     private Unbinder mBind;
 
     public static final int REQ_CODE_FOREIGN = 100;
@@ -104,6 +119,15 @@ public class HomeFragment extends BaseFragment {
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
 
+
+    public interface OnListViewHeightListener {
+        /**
+         *
+         * @param height  控件高度
+         */
+        void listViewHeight(int height);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,6 +139,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initSlidingTabLayout();
+
         mProductPkgList = new ArrayList<>();
         mForeignPackage = new ArrayList<ProductPkg>();
         mDomesticPackage = new ArrayList<ProductPkg>();
@@ -228,6 +254,92 @@ public class HomeFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBind.unbind();
+    }
+
+    private void initSlidingTabLayout() {
+        showProfitRankFragment();
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
+        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
+    }
+
+    private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            switch (tab.getPosition()) {
+                case 0:
+                    showProfitRankFragment();
+                    break;
+                case 1:
+                    showTradingStrategyFragment();
+                    break;
+                case 2:
+                    showCalendarFinanceFragment();
+                    break;
+            }
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    };
+
+    private void showProfitRankFragment() {
+        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+        YesterdayProfitRankFragment yesterdayProfitRankFragment = YesterdayProfitRankFragment.newInstance();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.replaceLayout, yesterdayProfitRankFragment)
+                .commit();
+        yesterdayProfitRankFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+            @Override
+            public void listViewHeight(int height) {
+                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+                layoutParams.height = height;
+                mReplaceLayout.setLayoutParams(layoutParams);
+            }
+        });
+
+    }
+
+
+    private void showTradingStrategyFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+        TradingStrategyFragment tradingStrategyFragment = TradingStrategyFragment.newInstance();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.replaceLayout, tradingStrategyFragment)
+                .commit();
+        tradingStrategyFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+            @Override
+            public void listViewHeight(int height) {
+                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+                layoutParams.height = height;
+                mReplaceLayout.setLayoutParams(layoutParams);
+            }
+        });
+
+    }
+
+    private void showCalendarFinanceFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+        CalendarFinanceFragment calendarFinanceFragment = CalendarFinanceFragment.newInstance();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.replaceLayout, calendarFinanceFragment)
+                .commit();
+        calendarFinanceFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+            @Override
+            public void listViewHeight(int height) {
+                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+                layoutParams.height = height;
+                mReplaceLayout.setLayoutParams(layoutParams);
+            }
+        });
     }
 
     private HomeHeader.OnViewClickListener mOnViewClickListener = new HomeHeader.OnViewClickListener() {
@@ -622,6 +734,59 @@ public class HomeFragment extends BaseFragment {
                     }
                 }
             }
+        }
+    }
+
+
+    public static class HomeInfoFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        Context mContext;
+        FragmentManager mFragmentManager;
+
+        public HomeInfoFragmentPagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            mContext = context;
+            mFragmentManager = fm;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new YesterdayProfitRankFragment();
+                case 1:
+                    return TradingStrategyFragment.newInstance();
+                case 2:
+                    return CalendarFinanceFragment.newInstance();
+                default:
+                    break;
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return mContext.getString(R.string.yesterday_the_profit_list);
+                case 1:
+                    return mContext.getString(R.string.trading_strategy);
+                case 2:
+                    return mContext.getString(R.string.calendar_of_finance);
+                default:
+                    break;
+            }
+
+            return super.getPageTitle(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + viewPager + ":" + position);
         }
     }
 }

@@ -146,7 +146,6 @@
         <activity
             android:name=".activity.account.TradeDetailActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.account.WithdrawRecordActivity"
             android:screenOrientation="portrait"/>
@@ -215,7 +214,7 @@
         <!-- umeng channel，replace this -->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL}"></meta-data>
+            android:value="${UMENG_CHANNEL}"/>
 
         <!-- service -->
         <service android:name=".service.DownloadService"/>

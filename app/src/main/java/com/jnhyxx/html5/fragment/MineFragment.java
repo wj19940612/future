@@ -349,4 +349,5 @@ public class MineFragment extends BaseFragment {
             openWithdrawPage();
         }
     }
+
 }

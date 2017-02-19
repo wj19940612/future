@@ -19,7 +19,7 @@
 
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
-    <color name="colorSlidingMenu">#CBCBCB</color>
+    <color name="colorSlidingMenu">#CDCDCD</color>
     <color name="grayHint">#CBCBCB</color>
 
     <!-- system half black is #80000000 -->

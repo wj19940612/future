@@ -145,10 +145,11 @@ public class TradeActivity extends BaseActivity implements
         @Override
         public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
+            updateLastPriceView(data);
+            mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
+
             if (mUpdateRealTimeData) {
                 updateFourMainPrices(data);
-                updateLastPriceView(data);
-                mBuySellVolumeLayout.setVolumes(data.getAskVolume(), data.getBidVolume());
                 updateChartView(data);
                 mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
                 updateBuyButtonsText(data);

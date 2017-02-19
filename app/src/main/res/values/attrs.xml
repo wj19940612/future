@@ -88,6 +88,10 @@
         <attr name="pickerTitle" format="string|reference"/>
     </declare-styleable>
 
+    <declare-styleable name="HoldingOrderView">
+        <attr name="orderNumber" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="DragListView">
         <attr name="dragHandle" format="integer"/>
     </declare-styleable>

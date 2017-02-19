@@ -20,7 +20,7 @@
                 android:topLeftRadius="2dp"
                 android:topRightRadius="2dp"/>
             <solid android:color="@android:color/transparent"/>
-            <stroke android:width="0.5dp" android:color="#E5E5E5"/>
+            <stroke android:width="0.5dp" android:color="@color/splitLineGrayLight"/>
         </shape>
     </item>
 </selector>

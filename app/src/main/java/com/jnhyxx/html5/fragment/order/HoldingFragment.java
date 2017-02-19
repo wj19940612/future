@@ -278,11 +278,11 @@ public class HoldingFragment extends BaseFragment implements IHoldingOrderView<H
             String totalProfitRmbStr;
             if (totalProfit >= 0) {
                 mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.redPrimary));
-                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_red_one_key_close);
+                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_one_key_close_red);
                 totalProfitStr = "+" + FinanceUtil.formatWithScale(totalProfit, scale);
             } else {
                 mTotalProfit.setTextColor(ContextCompat.getColor(getContext(), R.color.greenPrimary));
-                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_green_one_key_close);
+                mOneKeyClosePositionBtn.setBackgroundResource(R.drawable.btn_one_key_close_green);
                 totalProfitStr = FinanceUtil.formatWithScale(totalProfit, scale);
             }
             mTotalProfit.setText(totalProfitStr);

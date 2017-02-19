@@ -99,6 +99,14 @@ public class FullMarketData implements Parcelable {
         this.lastPrice = lastPrice;
     }
 
+    public void setAskVolume(int askVolume) {
+        this.askVolume = askVolume;
+    }
+
+    public void setBidVolume(int bidVolume) {
+        this.bidVolume = bidVolume;
+    }
+
     public double getLowestPrice() {
         return lowestPrice;
     }

@@ -3,30 +3,33 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="@dimen/trade_header_height"
-              android:orientation="vertical"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="horizontal"
               android:paddingLeft="@dimen/common_margin"
-              android:paddingRight="@dimen/common_margin"
-              android:paddingTop="10dp">
-
-    <TextView
-        android:id="@+id/totalProfitAndUnit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/holding_position_total_profit_and_unit"
-        android:textColor="#CCCCCC"
-        android:textSize="12sp"/>
+              android:paddingRight="@dimen/common_margin">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/totalProfitAndUnit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/holding_position_total_profit_and_unit"
+            android:textColor="#CCCCCC"
+            android:textSize="12sp"/>
 
         <LinearLayout
             android:id="@+id/totalProfitArea"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -37,37 +40,38 @@
                 android:gravity="center_vertical|left"
                 android:maxLines="1"
                 android:textColor="@color/redPrimary"
-                android:textSize="40sp"
+                android:textSize="20sp"
                 app:maxViewWidth="140dp"
-                tools:text="+00000"/>
+                tools:text="+000000000"/>
 
             <com.jnhyxx.html5.view.autofit.AutofitTextView
                 android:id="@+id/totalProfitRmb"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="6dp"
+                android:layout_marginTop="1dp"
                 android:gravity="center_vertical|left"
                 android:maxLines="1"
-                android:paddingTop="10dp"
                 android:textColor="@color/redPrimary"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:visibility="visible"
                 app:maxViewWidth="90dp"
-                tools:text="(+000000000)"/>
+                tools:text="(+0000000000)"/>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/oneKeyClosePositionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/btn_blue"
-            android:gravity="center"
-            android:minWidth="@dimen/trade_header_btn_width"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:text="@string/one_key_close_position"
-            android:textColor="@android:color/white"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/oneKeyClosePositionBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="4dp"
+        android:background="@drawable/btn_one_key_close_blue_inverse"
+        android:gravity="center"
+        android:minWidth="84dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:text="@string/one_key_close_position"
+        android:textColor="@color/blueAssist"
+        android:textSize="13sp"/>
 </LinearLayout>

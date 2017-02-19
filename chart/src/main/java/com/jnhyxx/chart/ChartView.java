@@ -21,10 +21,9 @@ public abstract class ChartView extends View {
 
     protected enum ChartColor {
 
-        BASE("#3B4856"),
+        BASE("#CDCDCD"),
         TEXT("#A8A8A8"),
         WHITE("#FFFFFF"),
-        FILL("#331D3856"),
         BLUE("#358CF3"),
         GREEN("#25D282"),
         RED("#FB4B55");

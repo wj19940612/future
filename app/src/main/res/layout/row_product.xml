@@ -55,7 +55,7 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:id="@+id/marketCloseText"
+                android:id="@+id/exchangeCloseText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bluePrimary"
+    android:background="@android:color/white"
     tools:context=".activity.TradeActivity">
 
     <com.jnhyxx.html5.view.TitleBar
@@ -17,21 +17,69 @@
         app:rightImage="@drawable/ic_product_menu"
         app:rightVisible="true"/>
 
+    <RelativeLayout
+        android:id="@+id/priceChangeArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="12dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/exchangeCloseText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:text="@string/market_close"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/lastPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
+            android:textSize="44sp"
+            tools:text="45.89"/>
+
+        <TextView
+            android:id="@+id/priceChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/lastPrice"
+            android:lineSpacingExtra="3dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="+0.15\n+0.33%"/>
+
+        <com.jnhyxx.html5.view.BuySellVolumeLayout
+            android:id="@+id/buySellVolumeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/priceChange"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"/>
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/titleBar"
+        android:layout_below="@id/priceChangeArea"
         android:orientation="vertical">
-
-        <com.jnhyxx.html5.view.TradePageHeader
-            android:id="@+id/tradePageHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/splitBlockDark"/>
+            android:background="@color/splitBlockLight"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,94 +134,48 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/splitLineBlueLight"/>
+            android:background="@color/splitLineGrayDark"/>
 
-        <com.jnhyxx.html5.view.ChartContainer
-            android:id="@+id/chartContainer"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/marketCloseArea"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/market_status_area_height"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <TextView
+            <com.jnhyxx.html5.view.TradePageFooter
+                android:id="@+id/tradePageFooter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_market_time_status"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text="@string/market_close"
-                android:textColor="#666666"/>
+                android:layout_alignParentBottom="true"/>
 
             <TextView
-                android:id="@+id/nextTradeTime"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/prompt_next_trade_time_is"
-                android:textColor="#666666"
-                android:textSize="15sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/marketOpenArea"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/market_status_area_height"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/holdingPositionTimeTo"
+                android:id="@+id/marketStatusTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_market_time_status"
+                android:layout_above="@id/tradePageFooter"
+                android:background="@color/splitBlockLight"
                 android:gravity="center"
                 android:padding="3dp"
-                android:textColor="#666666"
-                android:textSize="12sp"
-                tools:text="@string/prompt_holding_position_time_to"/>
+                android:text="@string/prompt_next_trade_time_is"
+                android:textColor="@color/colorDisable"
+                android:textSize="12sp"/>
 
-            <RelativeLayout
+            <com.jnhyxx.html5.view.ChartContainer
+                android:id="@+id/chartContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:layout_above="@id/marketStatusTime"/>
 
-                <TextView
-                    android:id="@+id/lastPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/redPrimary"
-                    android:textSize="30sp"
-                    tools:text="45.89"/>
-
-                <TextView
-                    android:id="@+id/priceChange"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@id/lastPrice"
-                    android:textColor="@color/redPrimary"
-                    android:textSize="11sp"
-                    tools:text="+0.15\n+0.33%"/>
-
-                <com.jnhyxx.html5.view.BuySellVolumeLayout
-                    android:id="@+id/buySellVolumeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/priceChange"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"/>
-            </RelativeLayout>
-        </LinearLayout>
+            <com.jnhyxx.html5.view.HoldingOrderView
+                android:id="@+id/holdingOrderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_order"
+                app:orderNumber="0"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -228,6 +230,5 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/titleBar"
         android:orientation="vertical"/>
 </RelativeLayout>

@@ -213,7 +213,7 @@ public class MarketFragment extends BaseFragment {
             ImageView mHotIcon;
             @BindView(R.id.newTag)
             TextView mNewTag;
-            @BindView(R.id.marketCloseText)
+            @BindView(R.id.exchangeCloseText)
             TextView mMarketCloseText;
             @BindView(R.id.holdingPosition)
             TextView mHoldingPosition;

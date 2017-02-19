@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/trade_header_height"
-                android:gravity="center_vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
         android:text="@string/prompt_unlogin_unable_to_trade"
-        android:textColor="#666666"/>
-
-    <TextView
-        android:id="@+id/signInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/btn_blue"
-        android:gravity="center"
-        android:minWidth="@dimen/trade_header_btn_width"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/sign_in"
-        android:textColor="@android:color/white"/>
+        android:textColor="#666666"
+        android:textSize="15sp"/>
 </RelativeLayout>

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -70,9 +72,11 @@ public class TrendChart extends ChartView {
     }
 
     protected void setRealTimeFillPaint(Paint paint) {
-        paint.setColor(Color.parseColor(ChartView.ChartColor.FILL.get()));
         paint.setStyle(Paint.Style.FILL);
-        paint.setAlpha(51);
+        paint.setShader(new LinearGradient(0, 0, 0, getHeight() * 0.75f,
+                Color.parseColor("#33358CF3"),
+                Color.parseColor("#00FFFFFF"),
+                Shader.TileMode.CLAMP));
     }
 
     protected void setTouchLineTextPaint(Paint paint) {
@@ -297,11 +301,12 @@ public class TrendChart extends ChartView {
             canvas.drawPath(path, sPaint);
 
             // fill area
-            setRealTimeFillPaint(sPaint);
             path.lineTo(chartX, top + height);
             path.lineTo(firstChartX, top + height);
             path.close();
+            setRealTimeFillPaint(sPaint);
             canvas.drawPath(path, sPaint);
+            sPaint.setShader(null);
         }
     }
 

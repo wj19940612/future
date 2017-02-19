@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.App;
@@ -78,25 +78,24 @@ import butterknife.Unbinder;
 
 
 public class HomeFragment extends BaseFragment {
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.homeHeader)
-    HomeHeader mHomeHeader;
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
     @BindView(R.id.riskEvaluation)
     LinearLayout mRiskEvaluation;
     @BindView(R.id.contactService)
     LinearLayout mContactService;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.collapsing)
     CollapsingToolbarLayout mCollapsing;
     @BindView(R.id.appbar)
     AppBarLayout mAppbar;
+    @BindView(R.id.homeHeader)
+    HomeHeader mHomeHeader;
     @BindView(R.id.optionalForeignList)
     RecyclerView mOptionalForeignList;
     @BindView(R.id.optionalDomesticList)
     RecyclerView mOptionalDomesticList;
-
     @BindView(R.id.slidingTabLayout)
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.viewPager)
@@ -660,6 +659,7 @@ public class HomeFragment extends BaseFragment {
                 }
                 return "";
             }
+
             private String addChinesePrefix(String startTime, String endTime, Context context) {
                 if (startTime.compareTo(endTime) > 0) {
                     return context.getString(R.string.next_day) + endTime;

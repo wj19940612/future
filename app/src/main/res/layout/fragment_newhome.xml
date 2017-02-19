@@ -100,7 +100,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/optionalForeignList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="#ffffff"
                 android:divider="@drawable/divider_home_list"
@@ -109,11 +109,22 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/optionalDomesticList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="#ffffff"
                 android:divider="@drawable/divider_home_list"
                 android:dividerHeight="0.5dp"/>
+
+            <com.jnhyxx.html5.view.SlidingTabLayout
+                android:id="@+id/slidingTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

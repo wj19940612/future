@@ -216,8 +216,6 @@
         <!-- service -->
         <service android:name=".service.DownloadService"/>
 
-        <activity android:name=".activity.TestActivity">
-        </activity>
     </application>
 
 </manifest>

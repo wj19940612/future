@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -24,9 +25,11 @@ import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.CalendarFinanceModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ViewUtil;
 import com.jnhyxx.html5.view.WeekCalendarLayout;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.StrUtil;
@@ -55,6 +58,8 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+
+    private int mWeekCalendarLayoutHeight;
     /**
      * 所要查看财经日历数据的请求时间  默认为当天
      */
@@ -66,6 +71,12 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     public static CalendarFinanceFragment newInstance() {
         CalendarFinanceFragment fragment = new CalendarFinanceFragment();
         return fragment;
+    }
+
+    private HomeFragment.OnListViewHeightListener mOnListViewHeightListener;
+
+    public void setOnListViewHeightListener(HomeFragment.OnListViewHeightListener onListViewHeightListener) {
+        mOnListViewHeightListener = onListViewHeightListener;
     }
 
     @Nullable
@@ -103,7 +114,17 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                 getCalendarFinanceData(mTime);
             }
         });
+
+        ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mCalendarWeek.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mWeekCalendarLayoutHeight = mCalendarWeek.getHeight();
+            }
+        });
     }
+
 
     private void getCalendarFinanceData(String time) {
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
@@ -137,6 +158,11 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
         }
+        mCalendarFinanceAdapter.notifyDataSetChanged();
+        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1+mWeekCalendarLayoutHeight);
     }
 
     private void stopRefreshAnimation() {

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/splitBlockLight"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -83,8 +84,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -115,14 +118,21 @@
                 android:divider="@drawable/divider_home_list"
                 android:dividerHeight="0.5dp"/>
 
-            <com.jnhyxx.html5.view.SlidingTabLayout
-                android:id="@+id/slidingTabLayout"
+            <android.support.design.widget.TabLayout
+                app:tabIndicatorColor="@color/blueAssist"
+                app:tabSelectedTextColor="@color/blueAssist"
+                app:tabTextColor="@color/blackPrimary"
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"/>
+                android:layout_marginTop="10dp"
+                app:tabPadding="@dimen/common_margin"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                android:background="@drawable/bg_line_division_fill"/>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
+            <RelativeLayout
+                android:id="@+id/replaceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>

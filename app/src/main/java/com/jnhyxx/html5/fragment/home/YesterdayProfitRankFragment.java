@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,9 +19,11 @@ import com.android.volley.VolleyError;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.order.ProfitRankModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
+import com.jnhyxx.html5.utils.ViewUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +32,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
 
 /**
  * Created by ${wangJie} on 2017/2/14.
@@ -43,10 +47,26 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(android.R.id.empty)
     TextView mEmpty;
+    @BindView(R.id.hint)
+    TextView mHint;
 
     private Set<String> mSet;
     private Unbinder mBind;
     private ProfitRankAdapter mProfitRankAdapter;
+
+    private int mHintHeight;
+
+    private HomeFragment.OnListViewHeightListener mOnListViewHeightListener;
+
+
+    public void setOnListViewHeightListener(HomeFragment.OnListViewHeightListener onListViewHeightListener) {
+        mOnListViewHeightListener = onListViewHeightListener;
+    }
+
+    public static YesterdayProfitRankFragment newInstance() {
+        YesterdayProfitRankFragment fragment = new YesterdayProfitRankFragment();
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -65,6 +85,15 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
         getYesterdayProfitRank();
 
         initSwipeRefreshLayout();
+
+        ViewTreeObserver viewTreeObserver = mHint.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mHint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mHintHeight = mHint.getHeight();
+            }
+        });
     }
 
     private void initSwipeRefreshLayout() {
@@ -101,12 +130,6 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
                         for (ProfitRankModel data : profitRankModels) {
                             Log.d(TAG, "盈利  " + data.toString());
                         }
-//                        // TODO: 2017/2/18 测试数据，需要删除
-//                        if (profitRankModels.size() < 9) {
-//                            for (int i = 1; i < 9; i++) {
-//                                profitRankModels.add(new ProfitRankModel(10000 + i * 1000, i + "" + i + "" + i + "" + i + "****" + i + "" + i + "" + i + "" + i));
-//                            }
-//                        }
                         updateProfitRank(profitRankModels);
                         stopRefreshAnimation();
                     }
@@ -141,7 +164,13 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             }
         }
         mProfitRankAdapter.notifyDataSetChanged();
+        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
     }
+
 
     @Override
     public void onDestroyView() {

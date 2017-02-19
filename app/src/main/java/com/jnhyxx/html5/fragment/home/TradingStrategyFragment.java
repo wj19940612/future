@@ -25,6 +25,7 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.web.TradeAnalyzeDetailsActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.fragment.BaseFragment;
+import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -65,6 +66,12 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
 
     private TradingStrategyAdapter mTradingStrategyAdapter;
 
+    private HomeFragment.OnListViewHeightListener mOnListViewHeightListener;
+
+    public void setOnListViewHeightListener(HomeFragment.OnListViewHeightListener onListViewHeightListener) {
+        mOnListViewHeightListener = onListViewHeightListener;
+    }
+
     public static TradingStrategyFragment newInstance() {
         TradingStrategyFragment fragment = new TradingStrategyFragment();
         return fragment;
@@ -89,7 +96,6 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
         mListView.setEmptyView(mEmpty);
         initSwipeRefreshLayout();
         requestInfoList();
-
     }
 
     private void initSwipeRefreshLayout() {
@@ -145,6 +151,13 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
             }
         }
         mTradingStrategyAdapter.notifyDataSetInvalidated();
+        ViewGroup.LayoutParams params = mListView.getLayoutParams();
+        int heightBasedOnChildren1 = com.jnhyxx.html5.utils.ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        params.height = heightBasedOnChildren1 + (mListView.getDividerHeight() * (mTradingStrategyAdapter.getCount() - 1));
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        mListView.setLayoutParams(params);
+        mOnListViewHeightListener.listViewHeight(heightBasedOnChildren1);
     }
 
     private void handleListViewFootView(List<Information> informationList) {

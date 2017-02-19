@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
-import com.jnhyxx.html5.activity.TestActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
 import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
@@ -351,8 +350,4 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.test)
-    public void onClick() {
-        Launcher.with(getActivity(), TestActivity.class).execute();
-    }
 }

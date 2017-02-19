@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivity {
     private void initView() {
         mMainFragmentsAdapter = new MainFragmentsAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mMainFragmentsAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

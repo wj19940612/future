@@ -86,6 +86,12 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
 
         initSwipeRefreshLayout();
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         ViewTreeObserver viewTreeObserver = mHint.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

@@ -115,6 +115,12 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             }
         });
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -124,7 +130,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             }
         });
     }
-
 
     private void getCalendarFinanceData(String time) {
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
@@ -162,7 +167,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
-        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1+mWeekCalendarLayoutHeight);
+        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
     }
 
     private void stopRefreshAnimation() {

@@ -248,6 +248,15 @@
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rowText="@string/user_feedback"
                 app:rowTextColor="@color/blackPrimary"/>
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="测试"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

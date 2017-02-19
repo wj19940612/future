@@ -670,7 +670,7 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    static class HomeInfoFragmentPagerAdapter extends FragmentPagerAdapter {
+    public static class HomeInfoFragmentPagerAdapter extends FragmentPagerAdapter {
 
         Context mContext;
 

@@ -8,11 +8,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -114,8 +116,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                 getCalendarFinanceData(mTime);
             }
         });
-
-
     }
 
     @Override
@@ -125,7 +125,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mCalendarWeek.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mCalendarWeek.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 mWeekCalendarLayoutHeight = mCalendarWeek.getHeight();
             }
         });
@@ -162,12 +162,26 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
+            mCalendarFinanceAdapter.notifyDataSetChanged();
+            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+            // listView.getDividerHeight()获取子项间分隔符占用的高度
+            // params.height最后得到整个ListView完整显示需要的高度
+            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
+        } else {
+            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7));
         }
-        mCalendarFinanceAdapter.notifyDataSetChanged();
-        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
+//        final ViewTreeObserver viewTreeObserver = mListView.getViewTreeObserver();
+//        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                viewTreeObserver.removeOnGlobalLayoutListener(this);
+
+//            }
+//        });
+
     }
 
     private void stopRefreshAnimation() {

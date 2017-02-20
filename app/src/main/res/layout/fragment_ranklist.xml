@@ -19,21 +19,36 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ListView
-            android:id="@+id/listView"
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:divider="@null"
-            android:scrollbars="none"/>
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:divider="@null"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dp"
+                android:drawablePadding="16dp"
+                android:drawableTop="@drawable/image_no_record"
+                android:gravity="center_horizontal"
+                android:text="@string/coming_soon"
+                android:textColor="@color/emptyViewColor"
+                android:textSize="20sp"
+                android:visibility="visible"/>
+        </LinearLayout>
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/there_is_no_data_for_now"
-        android:visibility="gone"/>
 </LinearLayout>

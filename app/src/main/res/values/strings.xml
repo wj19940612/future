@@ -572,6 +572,8 @@
     <string name="bad_news">利空    %1$s</string>
 
     <string name="before_data_">前值: </string>
-    <string name="expect_data_">预期: </string>
-    <string name="real_data_">实际: </string>
+    <string name="expect_data_">预期值: </string>
+    <string name="real_data_">公布值: </string>
+    <string name="not_strategy">暂无攻略</string>
+    <string name="not_finance_data">暂无财经消息</string>
 </resources>

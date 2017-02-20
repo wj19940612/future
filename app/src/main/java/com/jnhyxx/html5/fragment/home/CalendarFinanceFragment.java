@@ -60,7 +60,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
     private int mWeekCalendarLayoutHeight;
     /**
      * 所要查看财经日历数据的请求时间  默认为当天
@@ -99,9 +98,8 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mCalendarWeek.setOnWeekSelectListener(this);
-        mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
-
+        mListView.setEmptyView(mEmpty);
         if (mCalendarFinanceAdapter == null) {
             mCalendarFinanceAdapter = new CalendarFinanceAdapter(getActivity());
             mListView.setAdapter(mCalendarFinanceAdapter);
@@ -172,6 +170,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     }
 
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
+        mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
@@ -204,9 +203,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
     @Override
     public void onWeekSelected(int index, String week, String dayTime) {
-        if (mCalendarFinanceAdapter != null) {
-            mCalendarFinanceAdapter.clear();
-        }
         mTime = dayTime;
         getCalendarFinanceData(dayTime);
     }

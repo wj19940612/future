@@ -9,11 +9,11 @@ public class Resp<T> {
     public static final int CODE_REQUEST_AUTH_CODE_OVER_LIMIT = 601;
     public static final int CODE_GET_PROMOTE_CODE_FAILED = 600;
 
-    // 部分资金不足
-//    private static final int CODE_FUND_NOT_ENOUGH = 702;
-    //资金不足
-//    private static final int CODE_FUND_NOT_ENOUGH_ALL = 704;
-
+    // 资金不足
+    public static final int CODE_FUND_NOT_ENOUGH = 702;
+    // 资金不足，部分买入
+    public static final int CODE_FUND_NOT_ENOUGH_AND_PART_DEAL = 704;
+    
     //闪电下单已失效
     public static final int CODE_LIGHTNING_ORDER_INVALID = 703;
 
@@ -43,10 +43,6 @@ public class Resp<T> {
 
     public boolean isTokenExpired() {
         return code == 503;
-    }
-
-    public boolean isFundNotEnough() {
-        return code == 702 || code == 704;
     }
 
     /**

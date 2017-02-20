@@ -79,7 +79,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@color/splitBlockLight"/>
+            android:background="@color/splitLineGrayNew"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,7 +134,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/splitLineGrayDark"/>
+            android:background="@color/splitLineGrayNew"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/tradePageFooter"
-                android:background="@color/splitBlockLight"
+                android:background="@color/splitLineGrayNew"
                 android:gravity="center"
                 android:padding="3dp"
                 android:text="@string/prompt_next_trade_time_is"

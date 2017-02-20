@@ -21,6 +21,7 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
+import com.jnhyxx.html5.fragment.LiveFragment;
 import com.jnhyxx.html5.fragment.MarketFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
@@ -152,7 +153,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
     private void checkVersion() {
         UpgradeUtil.log(this);
         if (UpgradeUtil.hasNewVersion(this)) {
@@ -204,8 +204,11 @@ public class MainActivity extends BaseActivity {
 
     private class MainFragmentsAdapter extends FragmentPagerAdapter {
 
+        FragmentManager mFragmentManager;
+
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
         }
 
         @Override
@@ -226,6 +229,10 @@ public class MainActivity extends BaseActivity {
         @Override
         public int getCount() {
             return 4;
+        }
+
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
         }
     }
 }

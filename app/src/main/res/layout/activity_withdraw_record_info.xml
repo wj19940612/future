@@ -17,70 +17,6 @@
         app:backFeature="true"
         app:titleText="@string/withdraw_record_info_title"/>
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="100dp"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:paddingLeft="45dp"-->
-    <!--android:paddingRight="45dp">-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/applyFor"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical"-->
-    <!--android:drawablePadding="10dp"-->
-    <!--android:drawableTop="@drawable/ic_apply"-->
-    <!--android:gravity="center"-->
-    <!--android:text="@string/withdraw_record_apply_for"-->
-    <!--android:textColor="@color/blackPrimary"-->
-    <!--android:textSize="12sp"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/leftLine"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginEnd="5dp"-->
-    <!--android:layout_marginTop="35dp"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@drawable/bg_withdraw_record_info_line"-->
-    <!--android:enabled="false"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/detail"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical"-->
-    <!--android:drawablePadding="10dp"-->
-    <!--android:drawableTop="@drawable/ic_apply_deal"-->
-    <!--android:text="@string/withdraw_record_detail"-->
-    <!--android:textColor="@color/blackPrimary"-->
-    <!--android:textSize="12sp"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/rightLine"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginEnd="5dp"-->
-    <!--android:layout_marginStart="5dp"-->
-    <!--android:layout_marginTop="35dp"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@drawable/bg_withdraw_record_info_line"-->
-    <!--android:enabled="false"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/withdrawTitleStatus"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center_vertical"-->
-    <!--android:drawablePadding="10dp"-->
-    <!--android:drawableTop="@drawable/ic_apply_normal"-->
-    <!--android:gravity="center"-->
-    <!--android:text="成功"-->
-    <!--android:textColor="@color/blackPrimary"-->
-    <!--android:textSize="12sp"/>-->
-    <!--</LinearLayout>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,6 +38,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine1"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginRight="5dp"
@@ -122,6 +59,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine2"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginEnd="5dp"
@@ -145,6 +83,7 @@
             android:textSize="12sp"/>
 
         <TextView
+            android:id="@+id/dashLine3"
             android:layout_width="0dp"
             android:layout_height="1.5dp"
             android:layout_marginEnd="5dp"

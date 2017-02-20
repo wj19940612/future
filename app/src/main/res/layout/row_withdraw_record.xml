@@ -71,5 +71,5 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:text="2321313"
-        android:textColor="@android:color/holo_red_light" />
+        android:textColor="@color/colorDisable" />
 </LinearLayout>

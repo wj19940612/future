@@ -231,6 +231,7 @@
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/aboutUs"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="60dp"
                 android:background="@android:color/white"
                 app:leftIcon="@drawable/ic_account_list_about_us"

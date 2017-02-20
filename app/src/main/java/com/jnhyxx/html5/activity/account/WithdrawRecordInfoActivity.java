@@ -55,6 +55,12 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
     LinearLayout mActivityWithdrawRecordInfo;
     @BindView(R.id.accountTimeHint)
     TextView mAccountTimeHint;
+    @BindView(R.id.dashLine1)
+    TextView mDashLine1;
+    @BindView(R.id.dashLine2)
+    TextView mDashLine2;
+    @BindView(R.id.dashLine3)
+    TextView mDashLine3;
 
 
     private int mWithDrawId;
@@ -67,6 +73,11 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_record_info);
         ButterKnife.bind(this);
+
+        //shape虚线显示实线问题
+        mDashLine1.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mDashLine2.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mDashLine3.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         mWithDrawId = getIntent().getIntExtra(WITHDRAW_RECORD_INFO_ID, -1);
 
@@ -96,26 +107,28 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
         Drawable mSuccessDrawable = ContextCompat.getDrawable(this, R.drawable.ic_apply_succeed);
         mSuccessDrawable.setBounds(0, 0, mSuccessDrawable.getMinimumWidth(), mSuccessDrawable.getMinimumHeight());
 
+        if (WithDrawRecordInfo.isTransfer(withDrawRecordInfo.getStatus())) {
+            mTransfer.setEnabled(true);
+        }
+
         //刚刚发起
         if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.START_TRADE) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_start);
+            mWithdrawStatus.setText(R.string.withdraw_auditing);
             //审批通过
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.AUDIT_PASSING) {
-            mTransfer.setEnabled(false);
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_audit_passing);
+            mWithdrawStatus.setText(R.string.transfer);
             //转账中
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.FUND_TRANSFER) {
             mCompleteStatus = false;
-            mWithdrawStatus.setText(R.string.withdraw_start);
-            mTransfer.setEnabled(true);
+            mWithdrawStatus.setText(R.string.transfer);
             //冲提成功
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.RECHARGE_OR_WITHDRAW_SUCCESS) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.common_success);
+            mWithdrawStatus.setText(R.string.withdraw_record_success);
             mWithdrawTitleStatus.setCompoundDrawables(null, mSuccessDrawable, null, null);
-            mWithdrawTitleStatus.setText(R.string.common_success);
+            mWithdrawTitleStatus.setText(R.string.withdraw_record_success);
 
             mAccountTimeHint.setVisibility(View.GONE);
             mAccountTime.setVisibility(View.VISIBLE);
@@ -123,14 +136,14 @@ public class WithdrawRecordInfoActivity extends BaseActivity {
             //提现拒绝
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.WITHDRAW_refuse) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.withdraw_refuse);
-            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
+            mWithdrawStatus.setText(R.string.withdraw_fail);
+            mWithdrawTitleStatus.setText(R.string.withdraw_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
             //转账失败
         } else if (withDrawRecordInfo.getStatus() == WithDrawRecordInfo.TRANSFER_FAIL) {
             mCompleteStatus = true;
-            mWithdrawStatus.setText(R.string.transfer_fail);
-            mWithdrawTitleStatus.setText(R.string.withdraw_status_fail);
+            mWithdrawStatus.setText(R.string.withdraw_fail);
+            mWithdrawTitleStatus.setText(R.string.withdraw_fail);
             mWithdrawTitleStatus.setCompoundDrawables(null, mFailDrawable, null, null);
         } else {
             mCompleteStatus = false;

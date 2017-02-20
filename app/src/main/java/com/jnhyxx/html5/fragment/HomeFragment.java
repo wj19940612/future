@@ -76,6 +76,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.priceChangePercent;
 import static com.jnhyxx.html5.R.id.viewPager;
 
 
@@ -245,6 +246,15 @@ public class HomeFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         stopScheduleJob();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            startScheduleJob(1 * 1000);
+        } else {
+            stopScheduleJob();
+        }
     }
 
     @Override
@@ -641,7 +651,7 @@ public class HomeFragment extends BaseFragment {
             TextView mHoldingPosition;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(R.id.priceChangePercent)
+            @BindView(priceChangePercent)
             TextView mPriceChangePercent;
             @BindView(R.id.bgTwinkle)
             LinearLayout mBgTwinkle;
@@ -671,44 +681,64 @@ public class HomeFragment extends BaseFragment {
                     }
                 });
                 Product product = pkg.getProduct();
+                MarketData marketData = pkg.getMarketData(); // Market status
                 mProductName.setText(product.getVarietyName());
                 if (product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
-                    mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
+                    mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.market_close_color));
+                    mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.market_close_color));
                     mHotIcon.setVisibility(View.GONE);
                     mNewTag.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
+                    if ((marketData != null)) {
+                        String priceChangePercent = marketData.getPercentage();
+                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
+                                product.getPriceDecimalScale()));
+                        if (priceChangePercent.startsWith("-")) {
+                            mPriceChangePercent.setText(priceChangePercent);
+                        } else {
+                            mPriceChangePercent.setText("+" + priceChangePercent);
+                        }
+                    } else {
+                        mLastPrice.setText("——");
+                        mPriceChangePercent.setText("——%");
+                    }
                 } else {
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mMarketCloseText.setVisibility(View.GONE);
-                }
-                MarketData marketData = pkg.getMarketData(); // Market status
-                if (marketData != null) {
-                    mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                            product.getPriceDecimalScale()));
-                    String priceChangePercent = marketData.getPercentage();
-                    if (priceChangePercent.startsWith("-")) {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mPriceChangePercent.setText(priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyGreen);
-                    } else {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mPriceChangePercent.setText("+" + priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyRed);
+                    if (marketData != null ) {
+                        String priceChangePercent = marketData.getPercentage();
+                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
+                                product.getPriceDecimalScale()));
+                        if (priceChangePercent.startsWith("-")) {
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                            mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                            mPriceChangePercent.setText(priceChangePercent);
+                            setTwinkleColor(marketData, R.color.twentyGreen);
+                        } else {
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mPriceChangePercent.setText("+" + priceChangePercent);
+                            setTwinkleColor(marketData, R.color.twentyRed);
+                        }
+                        mTempPrice = pkg.getMarketData().getLastPrice();
                     }
-                    mTempPrice = pkg.getMarketData().getLastPrice();
-                } else {
-                    mLastPrice.setText("——");
-                    mPriceChangePercent.setText("——%");
-                    mPriceChangePercent.setCompoundDrawables(null, null, null, null);
+                    else {
+                        mLastPrice.setText("——");
+                        mPriceChangePercent.setText("——%");
+                    }
                 }
+
+
                 HomePositions.Position position = pkg.getPosition(); // Position status
                 if (position != null && position.getHandsNum() > 0) {
                     mHoldingPosition.setVisibility(View.VISIBLE);
+                    if (product.getTags() == Product.TAG_HOT || product.getTags() == Product.TAG_NEW) {
+                        mHotIcon.setVisibility(View.GONE);
+                        mNewTag.setVisibility(View.GONE);
+                    }
                 } else {
                     mHoldingPosition.setVisibility(View.GONE);
                 }

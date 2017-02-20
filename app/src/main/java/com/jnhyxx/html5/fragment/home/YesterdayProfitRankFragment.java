@@ -266,9 +266,18 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
                 } else {
                     mRanking.setText(String.valueOf(position + 1));
                 }
-//                String phone = "****" + item.getPhone().substring(item.getPhone().length() - 4);
                 mPhoneNum.setText(item.getPhone());
-                mProfit.setText(String.valueOf(item.getProfit()));
+                mProfit.setText(handleProfit(item.getProfit()));
+            }
+
+            private String handleProfit(double profit) {
+                String profitData = String.valueOf(profit);
+                if (profitData.endsWith(".00")) {
+                    return profitData.substring(0, profitData.length() - 3);
+                } else if (profitData.endsWith(".0")) {
+                    return profitData.substring(0, profitData.length() - 2);
+                }
+                return profitData;
             }
         }
     }

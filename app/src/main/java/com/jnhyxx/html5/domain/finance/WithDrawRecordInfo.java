@@ -159,6 +159,10 @@ public class WithDrawRecordInfo implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public static boolean isTransfer(int status) {
+        return status > START_TRADE;
+    }
+
     @Override
     public String toString() {
         return "WithDrawRecordInfo{" +

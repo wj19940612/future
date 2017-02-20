@@ -30,7 +30,6 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
@@ -134,7 +133,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         mListView.setOnScrollListener(this);
 
-        getChatInfo();
+//        getChatInfo();
         setOnRefresh();
     }
 
@@ -215,9 +214,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
-            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
-            }
+//            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
+//                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
+//            }
             updateTalkData(liveSpeakInfo);
         }
     }

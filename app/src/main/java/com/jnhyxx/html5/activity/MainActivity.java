@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-
     public BottomTabs getBottomTabs() {
         return mBottomTabs;
     }
@@ -153,7 +152,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
     private void checkVersion() {
         UpgradeUtil.log(this);
         if (UpgradeUtil.hasNewVersion(this)) {
@@ -205,8 +203,11 @@ public class MainActivity extends BaseActivity {
 
     private class MainFragmentsAdapter extends FragmentPagerAdapter {
 
+        FragmentManager mFragmentManager;
+
         public MainFragmentsAdapter(FragmentManager fm) {
             super(fm);
+            mFragmentManager = fm;
         }
 
         @Override
@@ -227,6 +228,10 @@ public class MainActivity extends BaseActivity {
         @Override
         public int getCount() {
             return 4;
+        }
+
+        public Fragment getFragment(int position) {
+            return mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + position);
         }
     }
 }

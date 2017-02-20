@@ -99,11 +99,18 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         initSwipeRefreshLayout();
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        mPageOffset = 0;
-//    }
+    public void updateTeacherGuide() {
+        if (mLiveTeacherGuideAdapter == null) {
+            return;
+        }
+        mLiveTeacherGuideAdapter.clear();
+        if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
+            mDataInfoList.clear();
+        }
+        mPageOffset = 0;
+        mPageSize = 10;
+        getTeacherGuideIfo();
+    }
 
     @Override
     public void onDestroyView() {

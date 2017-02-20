@@ -57,6 +57,8 @@ public class LiveMessage implements Serializable {
      * updateTime : 2016-10-26 09:19:04
      */
 
+    private boolean stopLive;
+
     private List<ProgramInfo> program;
 
     public TeacherInfo getTeacher() {
@@ -73,6 +75,10 @@ public class LiveMessage implements Serializable {
 
     public List<ProgramInfo> getProgram() {
         return program;
+    }
+
+    public boolean isStopLive() {
+        return stopLive;
     }
 
     public static class ActiveInfo {

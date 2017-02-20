@@ -70,6 +70,7 @@
             android:padding="@dimen/common_margin">
 
             <ImageView
+                android:gravity="center_vertical"
                 android:id="@+id/bankCardIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:lineSpacingExtra="20dp"
+            android:lineSpacingExtra="5dp"
             android:paddingTop="30dp"
             android:text="@string/bing_bank_behind_warn"
             android:textColor="@color/colorDisable"/>

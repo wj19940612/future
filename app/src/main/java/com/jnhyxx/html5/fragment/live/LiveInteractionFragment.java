@@ -106,6 +106,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnSendButtonClickListener) {
+            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
+        }else {
+            throw new RuntimeException(context.toString()
+                    + " must implement LiveInteractionFragment.OnSendButtonClickListener");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interaction, container, false);
@@ -133,7 +144,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         mListView.setOnScrollListener(this);
 
-//        getChatInfo();
+        getChatInfo();
         setOnRefresh();
     }
 
@@ -257,7 +268,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                              mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                              locateNewDataEnd(liveHomeChatInfoResp);
-
                                          }
                                      }
                                  }

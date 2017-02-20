@@ -121,6 +121,7 @@ public class DragListView extends ListView {
     private int[] mTempLoc = new int[2];
     private View mItemView;
     private int mDragHandleId;
+    public boolean isLongPress;
 
 
     public DragListView(Context context) {
@@ -131,7 +132,6 @@ public class DragListView extends ListView {
         super(context, attrs);
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DragListView, 0, 0);
-
             mDragHandleId = typedArray.getResourceId(R.styleable.DragListView_dragHandle, 0);
         }
     }
@@ -139,7 +139,6 @@ public class DragListView extends ListView {
     public DragListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -160,10 +159,9 @@ public class DragListView extends ListView {
                     int rawX = (int) ev.getRawX();
                     int rawY = (int) ev.getRawY();
                     View view = mItemView.findViewById(mDragHandleId);
-                    if (view != null && view.getVisibility() == VISIBLE) {
+                    if (isLongPress ||view != null && view.getVisibility() == VISIBLE) {
                         view.getLocationOnScreen(mTempLoc);
-
-                        if (rawX > mTempLoc[0] && rawY > mTempLoc[1] &&
+                        if ( rawX > mTempLoc[0] && rawY > mTempLoc[1] &&
                                 rawX < mTempLoc[0] + view.getWidth() &&
                                 rawY < mTempLoc[1] + view.getHeight()) {
                             mIsDraging = true;
@@ -381,6 +379,7 @@ public class DragListView extends ListView {
     private void stopDrag() {
         // 显示坐标上的条目
         View view = getItemView(mToPosition);
+        isLongPress = false;
         if (view != null) {
             view.setVisibility(View.VISIBLE);
         }

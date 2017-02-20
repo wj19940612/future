@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:paddingLeft="15dp"
-        android:text="品种自选"
+        android:text="我的自选"
         android:textColor="#666666"
         android:textSize="14sp"/>
 

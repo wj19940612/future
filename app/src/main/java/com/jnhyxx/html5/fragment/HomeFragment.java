@@ -115,6 +115,9 @@ public class HomeFragment extends BaseFragment {
     private List<ProductPkg> mForeignPackage;
     private List<ProductPkg> mDomesticPackage;
 
+    private List<Double> mForeignPrice;
+    private List<Double> mDomesticPrice;
+
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
 
@@ -142,6 +145,8 @@ public class HomeFragment extends BaseFragment {
         mProductPkgList = new ArrayList<>();
         mForeignPackage = new ArrayList<ProductPkg>();
         mDomesticPackage = new ArrayList<ProductPkg>();
+        mForeignPrice = new ArrayList<>();
+        mDomesticPrice = new ArrayList<>();
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -176,7 +181,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setOptionalProduct() {
-        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage);
+        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage, mForeignPrice);
         mOptionalForeignList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext()));
         mOptionalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
@@ -195,7 +200,7 @@ public class HomeFragment extends BaseFragment {
         mOptionalForeignWrapper.addHeaderView(foreignHeadView);
         mOptionalForeignList.setAdapter(mOptionalForeignWrapper);
 
-        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage);
+        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage, mDomesticPrice);
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalDomesticList.addItemDecoration(new DividerGridItemDecoration(getContext()));
@@ -479,6 +484,26 @@ public class HomeFragment extends BaseFragment {
         mDomesticPackage.clear();
         updateOptional(optionalForeigns, mForeignPackage);
         updateOptional(optionalDomestics, mDomesticPackage);
+        if (mDomesticPrice.isEmpty() || mDomesticPrice.size() < mDomesticPackage.size()) {
+            for (ProductPkg productPkg : mDomesticPackage) {
+                MarketData marketData = productPkg.getMarketData();
+                if (marketData != null) {
+                    mDomesticPrice.add(marketData.getLastPrice());
+                } else {
+                    mDomesticPrice.add(0d);
+                }
+            }
+        }
+        if (mForeignPrice.isEmpty() || mForeignPrice.size() < mForeignPackage.size()) {
+            for (ProductPkg productPkg : mForeignPackage) {
+                MarketData marketData = productPkg.getMarketData();
+                if (marketData != null) {
+                    mForeignPrice.add(marketData.getLastPrice());
+                } else {
+                    mForeignPrice.add(0d);
+                }
+            }
+        }
         mOptionalForeignWrapper.notifyDataSetChanged();
         mOptionalDomesticWrapper.notifyDataSetChanged();
     }
@@ -570,6 +595,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == ProductOptionalActivity.REQ_CODE_RESULT) {
+            mForeignPrice.clear();
+            mDomesticPrice.clear();
             updateOptionalLists();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -600,8 +627,8 @@ public class HomeFragment extends BaseFragment {
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private Context mContext;
         private List<ProductPkg> mList;
-        private List<ProductPkg> mLastList;
         private View mHeaderView;
+        List<Double> mTempPrice;
 
         public void setHeaderView(View headerView) {
             mHeaderView = headerView;
@@ -612,9 +639,10 @@ public class HomeFragment extends BaseFragment {
             return mHeaderView;
         }
 
-        public MyAdapter(Context context, List<ProductPkg> datas) {
+        public MyAdapter(Context context, List<ProductPkg> datas, List<Double> domesticPrice) {
             mContext = context;
             mList = datas;
+            mTempPrice = domesticPrice;
         }
 
         @Override
@@ -625,7 +653,7 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindData(mContext, mList.get(position));
+            holder.bindData(mContext, mList.get(position), mTempPrice, position);
             Log.e(TAG, "onBindViewHolder: " + mList.get(position).getProduct().getVarietyName());
         }
 
@@ -653,7 +681,6 @@ public class HomeFragment extends BaseFragment {
             LinearLayout mBgTwinkle;
 
             private View mView;
-            private double mTempPrice;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -661,7 +688,7 @@ public class HomeFragment extends BaseFragment {
                 ButterKnife.bind(this, mView);
             }
 
-            public void bindData(Context context, final ProductPkg pkg) {
+            public void bindData(Context context, final ProductPkg pkg, List<Double> tempList, int pos) {
                 mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -699,14 +726,15 @@ public class HomeFragment extends BaseFragment {
                         mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mPriceChangePercent.setText(priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyGreen);
+                        setTwinkleColor(marketData, R.color.twentyGreen, tempList.get(pos));
                     } else {
                         mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mPriceChangePercent.setText("+" + priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyRed);
+                        setTwinkleColor(marketData, R.color.twentyRed, tempList.get(pos));
                     }
-                    mTempPrice = pkg.getMarketData().getLastPrice();
+                    tempList.remove(pos);
+                    tempList.add(pos, marketData.getLastPrice());
                 } else {
                     mLastPrice.setText("——");
                     mPriceChangePercent.setText("——%");
@@ -720,8 +748,9 @@ public class HomeFragment extends BaseFragment {
                 }
             }
 
-            private void setTwinkleColor(MarketData marketData, int color) {
-                if (mTempPrice != marketData.getLastPrice()) {
+            private void setTwinkleColor(MarketData marketData, int color, Double tempPrice) {
+                Log.e(TAG, "setTwinkleColor: " + marketData + "+++++++++++" + tempPrice);
+                if (tempPrice != marketData.getLastPrice()) {
                     mBgTwinkle.setBackgroundColor(ContextCompat.getColor(getContext(), color));
                     mBgTwinkle.postDelayed(new Runnable() {
                         @Override

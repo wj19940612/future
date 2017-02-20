@@ -249,18 +249,13 @@ dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
-    //    ycpCompile project(path: ':umenglibrary', configuration: 'ycpRelease')
 
-<<<<<<< HEAD
-    //    rytCompile project(path: ':umenglibrary', configuration: 'rytRelease')
-    zy1Compile project(path: ':umenglibrary', configuration: 'zy1Release')
-=======
     yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
     wyejyCompile project(path: ':umenglibrary', configuration: 'wyejyRelease')
     hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 
     gf2Compile project(path: ':umenglibrary', configuration: 'gf2Release')
->>>>>>> dev
+
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')

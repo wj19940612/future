@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -83,10 +85,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
         mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
         getYesterdayProfitRank();
-
         initSwipeRefreshLayout();
-
-
     }
 
     @Override
@@ -150,7 +149,11 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     }
 
     private void updateProfitRank(List<ProfitRankModel> profitRankModels) {
-        if (profitRankModels == null) {
+        if (profitRankModels == null||profitRankModels.isEmpty()) {
+            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7)+mHintHeight);
             return;
         }
 
@@ -170,11 +173,18 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             }
         }
         mProfitRankAdapter.notifyDataSetChanged();
-        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
 
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
+//        final ViewTreeObserver viewTreeObserver = mListView.getViewTreeObserver();
+//        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                viewTreeObserver.removeOnGlobalLayoutListener(this);
+                int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+                // listView.getDividerHeight()获取子项间分隔符占用的高度
+                // params.height最后得到整个ListView完整显示需要的高度
+                mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
+//            }
+//        });
     }
 
 

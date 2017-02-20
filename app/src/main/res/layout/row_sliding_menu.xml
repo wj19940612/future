@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@android:color/white"
+        android:textColor="@color/lucky"
         android:textSize="15sp"
         android:maxLines="1"
         tools:text="美原油"/>
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@android:color/white"
+        android:textColor="@color/lucky"
         android:maxLines="1"
         android:textSize="12sp"
         tools:text="CL1609"/>

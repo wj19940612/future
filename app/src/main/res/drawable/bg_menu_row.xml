@@ -8,7 +8,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/colorSlidingMenu"/>
+            <solid android:color="@color/splitLineGrayNew"/>
         </shape>
     </item>
 </selector>

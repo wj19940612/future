@@ -7,12 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -151,13 +153,21 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
             }
         }
         mTradingStrategyAdapter.notifyDataSetInvalidated();
-        ViewGroup.LayoutParams params = mListView.getLayoutParams();
+        if (informationList.isEmpty()) {
+            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7));
+            return;
+        }
         int heightBasedOnChildren1 = com.jnhyxx.html5.utils.ViewUtil.setListViewHeightBasedOnChildren1(mListView);
-        params.height = heightBasedOnChildren1 + (mListView.getDividerHeight() * (mTradingStrategyAdapter.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        mListView.setLayoutParams(params);
         mOnListViewHeightListener.listViewHeight(heightBasedOnChildren1);
+//        ViewGroup.LayoutParams params = mListView.getLayoutParams();
+//        params.height = heightBasedOnChildren1 + (mListView.getDividerHeight() * (mTradingStrategyAdapter.getCount() - 1));
+//        // listView.getDividerHeight()获取子项间分隔符占用的高度
+//        // params.height最后得到整个ListView完整显示需要的高度
+//        mListView.setLayoutParams(params);
+
     }
 
     private void handleListViewFootView(List<Information> informationList) {

@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-
     public BottomTabs getBottomTabs() {
         return mBottomTabs;
     }

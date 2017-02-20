@@ -53,7 +53,6 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     @BindView(R.id.hint)
     TextView mHint;
 
-    private Set<String> mSet;
     private Unbinder mBind;
     private ProfitRankAdapter mProfitRankAdapter;
 
@@ -179,11 +178,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        for (ProfitRankModel data : profitRankModels) {
-            if (mSet.add(data.getPhone())) {
-                mProfitRankAdapter.add(data);
-            }
-        }
+        mProfitRankAdapter.addAll(profitRankModels);
         mProfitRankAdapter.notifyDataSetChanged();
 
 //        final ViewTreeObserver viewTreeObserver = mListView.getViewTreeObserver();

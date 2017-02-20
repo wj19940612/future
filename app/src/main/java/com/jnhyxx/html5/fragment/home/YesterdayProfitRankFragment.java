@@ -191,7 +191,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
 //            @Override
 //            public void onGlobalLayout() {
 //                viewTreeObserver.removeOnGlobalLayoutListener(this);
-        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(mListView);
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
         mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);

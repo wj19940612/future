@@ -161,7 +161,7 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
             mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7));
             return;
         }
-        int heightBasedOnChildren1 = com.jnhyxx.html5.utils.ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        int heightBasedOnChildren1 = com.jnhyxx.html5.utils.ViewUtil.setListViewHeightBasedOnChildren(mListView);
         mOnListViewHeightListener.listViewHeight(heightBasedOnChildren1);
 //        ViewGroup.LayoutParams params = mListView.getLayoutParams();
 //        params.height = heightBasedOnChildren1 + (mListView.getDividerHeight() * (mTradingStrategyAdapter.getCount() - 1));

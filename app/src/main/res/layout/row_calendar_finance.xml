@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/countryBanner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="17dp"
             android:minHeight="17dp"
             android:minWidth="24dp"
             android:src="@mipmap/ic_launcher"/>
@@ -29,7 +29,7 @@
             android:id="@+id/time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/common_margin"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:textColor="@color/colorDisable"
             android:textSize="13sp"
@@ -38,20 +38,37 @@
         <ImageView
             android:id="@+id/star"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/status"
+            android:id="@+id/lidoNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_red"
             android:gravity="center"
             android:minHeight="18dp"
             android:minWidth="70dp"
-            android:text="@string/not_publish"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:textColor="@color/redPrimary"
             android:textSize="10sp"/>
+
+        <TextView
+            android:id="@+id/badNews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_green"
+            android:gravity="center"
+            android:minHeight="18dp"
+            android:minWidth="70dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/not_publish"
+            android:textColor="@color/greenPrimary"
+            android:textSize="10sp"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <TextView

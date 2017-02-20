@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -42,9 +41,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.id.star;
-import static com.jnhyxx.html5.R.id.status;
 import static com.jnhyxx.html5.R.string.lido;
+
 
 /**
  * Created by ${wangJie} on 2017/2/16.
@@ -173,7 +171,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
-            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
             // listView.getDividerHeight()获取子项间分隔符占用的高度
             // params.height最后得到整个ListView完整显示需要的高度
             mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
@@ -254,10 +252,12 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             ImageView mCountryBanner;
             @BindView(R.id.time)
             TextView mTime;
-            @BindView(star)
+            @BindView(R.id.star)
             ImageView mStar;
-            @BindView(status)
-            TextView mStatus;
+            @BindView(R.id.lidoNews)
+            TextView mLidoNews;
+            @BindView(R.id.badNews)
+            TextView mBadNews;
             @BindView(R.id.title)
             TextView mTitle;
             @BindView(R.id.beforeData)
@@ -315,18 +315,25 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                 if (item.getEffecttype() == CalendarFinanceModel.TYPE_HAS_MORE_STATUS) {
                     String effect = item.getEffect();
                     if (effect.startsWith("|") && effect.endsWith("|")) {
-                        mStatus.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mStatus.setText(context.getString(R.string.bad_news, effect.substring(1, effect.length() - 1)));
+                        mLidoNews.setVisibility(View.GONE);
+                        mBadNews.setVisibility(View.VISIBLE);
+                        mLidoNews.setText(context.getString(R.string.bad_news, effect.substring(1, effect.length() - 1)));
                     } else {
+                        mLidoNews.setVisibility(View.VISIBLE);
+                        mBadNews.setVisibility(View.VISIBLE);
+                        mLidoNews.setBackgroundResource(R.drawable.btn_red);
                         String substring = effect.substring(effect.indexOf("|"));
-                        mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mStatus.setText(StrUtil.mergeTextWithColor(context.getString(R.string.lido, effect.substring(0, effect.length() - substring.length())), "  " + context.getString(R.string.bad_news, substring.substring(1, substring.length() - 1)), ContextCompat.getColor(context, R.color.greenPrimary)));
+                        mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        mBadNews.setText(context.getString(R.string.bad_news, substring.substring(1, substring.length() - 1)));
                     }
 
                 } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_LIDO) {
                     if (item.getEffect().contains("||")) {
-                        mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mStatus.setText(context.getString(lido, item.getEffect().replace("||", "")));
+                        mBadNews.setVisibility(View.GONE);
+                        mLidoNews.setVisibility(View.VISIBLE);
+                        mLidoNews.setBackgroundResource(R.drawable.btn_red);
+                        mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                        mLidoNews.setText(context.getString(lido, item.getEffect().replace("||", "")));
                     } else {
                         String effect = item.getEffect();
                         if (effect.length() > 5) {
@@ -337,18 +344,23 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                             /**
                              * 利空消息
                              */
-                            mStatus.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mBadNews.setVisibility(View.VISIBLE);
+                            mLidoNews.setVisibility(View.VISIBLE);
+                            mLidoNews.setBackgroundResource(R.drawable.btn_red);
+                            mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                             String badNews = effect.substring(lido.length() + 1, effect.length() - 1);
-                            SpannableString spannableString = StrUtil.mergeTextWithColor(context.getString(R.string.lido, lido), "  " + context.getString(R.string.bad_news, badNews), ContextCompat.getColor(context, R.color.greenPrimary));
-                            mStatus.setText(spannableString);
+                            mLidoNews.setText(context.getString(R.string.lido, lido));
+                            mBadNews.setText( context.getString(R.string.bad_news, badNews));
                         } else {
-                            mStatus.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                            mStatus.setText(item.getEffect());
+                            mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                            mLidoNews.setText(item.getEffect());
                         }
                     }
                 } else if (item.getEffecttype() == CalendarFinanceModel.TYPE_EMPTY_NEWS) {
-                    mStatus.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
-                    mStatus.setText(R.string.not_publish);
+                    mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
+                    mLidoNews.setBackgroundResource(R.drawable.btn_transparent);
+                    mLidoNews.setText(R.string.not_publish);
                 }
             }
         }

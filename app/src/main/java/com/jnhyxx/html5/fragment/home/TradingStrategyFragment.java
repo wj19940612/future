@@ -136,6 +136,8 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
                         stopRefreshAnimation();
                     }
                 }).fire();
+
+
     }
 
     private void updateViewWithData(List<Information> informationList) {

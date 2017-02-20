@@ -25,6 +25,7 @@ import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.Network;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.ImageUtil;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -289,7 +290,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
 
                 String organizeMarkUrl = API.Message.getOrganizeMarkUrl(infoLiveMessage.get(9));
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
-                    Picasso.with(mContext).load(organizeMarkUrl).into(mViewHolder.mOrganizeMarket);
+                    Picasso.with(mContext).load(ImageUtil.utf8Togb2312(organizeMarkUrl)).into(mViewHolder.mOrganizeMarket);
                 }
                 mViewHolder.mContent.setText(infoLiveMessage.get(2));
                 String time = DateUtils.getRelativeTimeSpanString(DateUtil.getStringToDate(infoLiveMessage.get(8))).toString();

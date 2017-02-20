@@ -20,10 +20,7 @@
         <ImageView
             android:id="@+id/countryBanner"
             android:layout_width="24dp"
-            android:layout_height="17dp"
-            android:minHeight="17dp"
-            android:minWidth="24dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_height="17dp"/>
 
         <TextView
             android:id="@+id/time"

@@ -35,6 +35,7 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ViewUtil;
 import com.jnhyxx.html5.view.WeekCalendarLayout;
 import com.johnz.kutils.DateUtil;
+import com.johnz.kutils.ImageUtil;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
@@ -276,7 +277,8 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             public void bindDataWithView(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
                 String organizeMarkUrl = API.Message.getCalendarFinanceCountryBanner(item.getState());
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
-                    Picasso.with(context).load(organizeMarkUrl).into(mCountryBanner);
+                    Picasso.with(context).load(ImageUtil.utf8Togb2312(organizeMarkUrl)).error(R.mipmap.ic_launcher)
+                            .into(mCountryBanner);
                 }
                 mTime.setText(item.getPredicttime());
 

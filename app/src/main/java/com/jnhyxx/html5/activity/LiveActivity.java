@@ -373,7 +373,7 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     }
 
     private void connectNettySocket() {
-        if (mTeacher != null) {
+        if (mTeacher != null && mServerIpPort != null) {
             int teacherId = mTeacher.getTeacherAccountId();
             mNettyClient.setChattingIpAndPort(mServerIpPort.getIp(), mServerIpPort.getPort());
             mNettyClient.start(teacherId, CookieManger.getInstance().getCookies());
@@ -485,16 +485,16 @@ public class LiveActivity extends BaseActivity implements LiveInteractionFragmen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_LOGIN && resultCode == RESULT_OK) {
-//            LiveInteractionFragment fragment = (LiveInteractionFragment)
-//                    mLivePageFragmentAdapter.getFragment(POS_LIVE_INTERACTION);
-//            if (fragment != null) {
-//                fragment.setLoginSuccess(true);
-//            }
-//
-//            disconnectNettySocket();
-//            if (mLiveMessage != null) {
-//                connectNettySocket();
-//            }
+
+            LiveInteractionFragment liveInteractionFragment = getLiveInteractionFragment();
+            if (liveInteractionFragment != null) {
+                liveInteractionFragment.updateLiveChatDataStatus();
+            }
+
+            disconnectNettySocket();
+            if (mLiveMessage != null) {
+                connectNettySocket();
+            }
         }
     }
 

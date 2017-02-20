@@ -214,9 +214,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
-//            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-//                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
-//            }
             updateTalkData(liveSpeakInfo);
         }
     }

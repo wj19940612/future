@@ -16,6 +16,7 @@
         app:rightTextColor="@android:color/white"
         app:rightTextSize="16sp"
         app:rightVisible="true"
+        app:backFeature="true"
         app:titleText="@string/live"/>
 
     <RelativeLayout

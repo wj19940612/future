@@ -101,9 +101,9 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    viewTreeObserver.removeOnGlobalLayoutListener(this);
+                    mHint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    viewTreeObserver.removeGlobalOnLayoutListener(this);
+                    mHint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 mHintHeight = mHint.getHeight();
             }
@@ -163,7 +163,9 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7) + mHintHeight);
+            if (mOnListViewHeightListener != null) {
+                mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7) + mHintHeight);
+            }
             return;
         }
 
@@ -189,7 +191,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
 //            @Override
 //            public void onGlobalLayout() {
 //                viewTreeObserver.removeOnGlobalLayoutListener(this);
-        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(mListView);
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
         mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
@@ -264,9 +266,18 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
                 } else {
                     mRanking.setText(String.valueOf(position + 1));
                 }
-                String phone = "****" + item.getPhone().substring(item.getPhone().length() - 4);
-                mPhoneNum.setText(phone);
-                mProfit.setText(String.valueOf(item.getProfit()));
+                mPhoneNum.setText(item.getPhone());
+                mProfit.setText(handleProfit(item.getProfit()));
+            }
+
+            private String handleProfit(double profit) {
+                String profitData = String.valueOf(profit);
+                if (profitData.endsWith(".00")) {
+                    return profitData.substring(0, profitData.length() - 3);
+                } else if (profitData.endsWith(".0")) {
+                    return profitData.substring(0, profitData.length() - 2);
+                }
+                return profitData;
             }
         }
     }

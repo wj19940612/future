@@ -17,7 +17,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +75,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.priceChangePercent;
 import static com.jnhyxx.html5.R.id.viewPager;
 
 
@@ -115,6 +115,9 @@ public class HomeFragment extends BaseFragment {
     private List<ProductPkg> mForeignPackage;
     private List<ProductPkg> mDomesticPackage;
 
+    private List<Double> mForeignPrice;
+    private List<Double> mDomesticPrice;
+
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
 
@@ -139,8 +142,10 @@ public class HomeFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initSlidingTabLayout();
         mProductPkgList = new ArrayList<>();
-        mForeignPackage = new ArrayList<>();
-        mDomesticPackage = new ArrayList<>();
+        mForeignPackage = new ArrayList<ProductPkg>();
+        mDomesticPackage = new ArrayList<ProductPkg>();
+        mForeignPrice = new ArrayList<>();
+        mDomesticPrice = new ArrayList<>();
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -175,7 +180,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setOptionalProduct() {
-        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage);
+        MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage, mForeignPrice);
         mOptionalForeignList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext()));
         mOptionalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
@@ -194,7 +199,7 @@ public class HomeFragment extends BaseFragment {
         mOptionalForeignWrapper.addHeaderView(foreignHeadView);
         mOptionalForeignList.setAdapter(mOptionalForeignWrapper);
 
-        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage);
+        MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage, mDomesticPrice);
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalDomesticList.addItemDecoration(new DividerGridItemDecoration(getContext()));
@@ -245,6 +250,15 @@ public class HomeFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         stopScheduleJob();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            startScheduleJob(1 * 1000);
+        } else {
+            stopScheduleJob();
+        }
     }
 
     @Override
@@ -354,11 +368,13 @@ public class HomeFragment extends BaseFragment {
                         }
                     }).fire();
         }
+
         // 推广赚钱
         @Override
         public void onPaidToPromoteClick() {
             openPaidToPromotePage();
         }
+
         // 投资课堂
         @Override
         public void onInvestCourseClick() {
@@ -368,6 +384,7 @@ public class HomeFragment extends BaseFragment {
                     .putExtra(InvestCourseActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                     .execute();
         }
+
         // 直播
         @Override
         public void onLiveClick() {
@@ -473,6 +490,26 @@ public class HomeFragment extends BaseFragment {
         mDomesticPackage.clear();
         updateOptional(optionalForeigns, mForeignPackage);
         updateOptional(optionalDomestics, mDomesticPackage);
+        if (mDomesticPrice.isEmpty() || mDomesticPrice.size() < mDomesticPackage.size()) {
+            for (ProductPkg productPkg : mDomesticPackage) {
+                MarketData marketData = productPkg.getMarketData();
+                if (marketData != null) {
+                    mDomesticPrice.add(marketData.getLastPrice());
+                } else {
+                    mDomesticPrice.add(0d);
+                }
+            }
+        }
+        if (mForeignPrice.isEmpty() || mForeignPrice.size() < mForeignPackage.size()) {
+            for (ProductPkg productPkg : mForeignPackage) {
+                MarketData marketData = productPkg.getMarketData();
+                if (marketData != null) {
+                    mForeignPrice.add(marketData.getLastPrice());
+                } else {
+                    mForeignPrice.add(0d);
+                }
+            }
+        }
         mOptionalForeignWrapper.notifyDataSetChanged();
         mOptionalDomesticWrapper.notifyDataSetChanged();
     }
@@ -564,6 +601,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == ProductOptionalActivity.REQ_CODE_RESULT) {
+            mForeignPrice.clear();
+            mDomesticPrice.clear();
             updateOptionalLists();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -594,8 +633,8 @@ public class HomeFragment extends BaseFragment {
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private Context mContext;
         private List<ProductPkg> mList;
-        private List<ProductPkg> mLastList;
         private View mHeaderView;
+        List<Double> mTempPrice;
 
         public void setHeaderView(View headerView) {
             mHeaderView = headerView;
@@ -606,9 +645,10 @@ public class HomeFragment extends BaseFragment {
             return mHeaderView;
         }
 
-        public MyAdapter(Context context, List<ProductPkg> datas) {
+        public MyAdapter(Context context, List<ProductPkg> datas, List<Double> domesticPrice) {
             mContext = context;
             mList = datas;
+            mTempPrice = domesticPrice;
         }
 
         @Override
@@ -619,8 +659,7 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bindData(mContext, mList.get(position));
-            Log.e(TAG, "onBindViewHolder: " + mList.get(position).getProduct().getVarietyName());
+            holder.bindData(mContext, mList.get(position), mTempPrice, position);
         }
 
         @Override
@@ -641,13 +680,12 @@ public class HomeFragment extends BaseFragment {
             TextView mHoldingPosition;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(R.id.priceChangePercent)
+            @BindView(priceChangePercent)
             TextView mPriceChangePercent;
             @BindView(R.id.bgTwinkle)
             LinearLayout mBgTwinkle;
 
             private View mView;
-            private double mTempPrice;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -655,7 +693,7 @@ public class HomeFragment extends BaseFragment {
                 ButterKnife.bind(this, mView);
             }
 
-            public void bindData(Context context, final ProductPkg pkg) {
+            public void bindData(Context context, final ProductPkg pkg, List<Double> tempList, int pos) {
                 mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -671,51 +709,70 @@ public class HomeFragment extends BaseFragment {
                     }
                 });
                 Product product = pkg.getProduct();
+                MarketData marketData = pkg.getMarketData(); // Market status
                 mProductName.setText(product.getVarietyName());
                 if (product.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
-                    mProductName.setTextColor(ContextCompat.getColor(context, R.color.blackHalfTransparent));
+                    mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.market_close_color));
+                    mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.market_close_color));
                     mHotIcon.setVisibility(View.GONE);
                     mNewTag.setVisibility(View.GONE);
                     mHoldingPosition.setVisibility(View.GONE);
                     mMarketCloseText.setVisibility(View.VISIBLE);
+                    if ((marketData != null)) {
+                        String priceChangePercent = marketData.getPercentage();
+                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
+                                product.getPriceDecimalScale()));
+                        if (priceChangePercent.startsWith("-")) {
+                            mPriceChangePercent.setText(priceChangePercent);
+                        } else {
+                            mPriceChangePercent.setText("+" + priceChangePercent);
+                        }
+                    } else {
+                        mLastPrice.setText("——");
+                        mPriceChangePercent.setText("——%");
+                    }
                 } else {
                     mHotIcon.setVisibility(product.getTags() == Product.TAG_HOT ? View.VISIBLE : View.GONE);
                     mNewTag.setVisibility(product.getTags() == Product.TAG_NEW ? View.VISIBLE : View.GONE);
                     mProductName.setTextColor(ContextCompat.getColor(context, android.R.color.black));
                     mMarketCloseText.setVisibility(View.GONE);
-                }
-                MarketData marketData = pkg.getMarketData(); // Market status
-                if (marketData != null) {
-                    mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
-                            product.getPriceDecimalScale()));
-                    String priceChangePercent = marketData.getPercentage();
-                    if (priceChangePercent.startsWith("-")) {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
-                        mPriceChangePercent.setText(priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyGreen);
+                    if (marketData != null) {
+                        mLastPrice.setText(FinanceUtil.formatWithScale(marketData.getLastPrice(),
+                                product.getPriceDecimalScale()));
+                        String priceChangePercent = marketData.getPercentage();
+                        if (priceChangePercent.startsWith("-")) {
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                            mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
+                            mPriceChangePercent.setText(priceChangePercent);
+                            setTwinkleColor(marketData, R.color.twentyGreen, tempList.get(pos));
+                        } else {
+                            mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+                            mPriceChangePercent.setText("+" + priceChangePercent);
+                            setTwinkleColor(marketData, R.color.twentyRed, tempList.get(pos));
+                        }
+                        tempList.remove(pos);
+                        tempList.add(pos, marketData.getLastPrice());
                     } else {
-                        mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mPriceChangePercent.setText("+" + priceChangePercent);
-                        setTwinkleColor(marketData, R.color.twentyRed);
+                        mLastPrice.setText("——");
+                        mPriceChangePercent.setText("——%");
+                        mPriceChangePercent.setCompoundDrawables(null, null, null, null);
                     }
-                    mTempPrice = pkg.getMarketData().getLastPrice();
-                } else {
-                    mLastPrice.setText("——");
-                    mPriceChangePercent.setText("——%");
-                    mPriceChangePercent.setCompoundDrawables(null, null, null, null);
-                }
-                HomePositions.Position position = pkg.getPosition(); // Position status
-                if (position != null && position.getHandsNum() > 0) {
-                    mHoldingPosition.setVisibility(View.VISIBLE);
-                } else {
-                    mHoldingPosition.setVisibility(View.GONE);
+                    HomePositions.Position position = pkg.getPosition(); // Position status
+                    if (position != null && position.getHandsNum() > 0) {
+                        mHoldingPosition.setVisibility(View.VISIBLE);
+                        if (product.getTags() == Product.TAG_HOT || product.getTags() == Product.TAG_NEW) {
+                            mHotIcon.setVisibility(View.GONE);
+                            mNewTag.setVisibility(View.GONE);
+                        }
+                    } else {
+                        mHoldingPosition.setVisibility(View.GONE);
+                    }
                 }
             }
 
-            private void setTwinkleColor(MarketData marketData, int color) {
-                if (mTempPrice != marketData.getLastPrice()) {
+            private void setTwinkleColor(MarketData marketData, int color, Double tempPrice) {
+                if (tempPrice != marketData.getLastPrice()) {
                     mBgTwinkle.setBackgroundColor(ContextCompat.getColor(getContext(), color));
                     mBgTwinkle.postDelayed(new Runnable() {
                         @Override

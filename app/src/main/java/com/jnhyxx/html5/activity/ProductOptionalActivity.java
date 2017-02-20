@@ -100,14 +100,22 @@ public class ProductOptionalActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         setResult(REQ_CODE_RESULT);
-        StringBuilder sb = new StringBuilder();
-        for (Product product : mProductList1) {
-            sb.append(product.getVarietyId()).append(",");
-        }
-        if (mIsDomestic) {
-            Preference.get().setProductOptionalDomestic(sb.deleteCharAt(sb.length() - 1).toString());
+        if (mProductList1.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (Product product : mProductList1) {
+                sb.append(product.getVarietyId()).append(",");
+            }
+            if (mIsDomestic) {
+                Preference.get().setProductOptionalDomestic(sb.deleteCharAt(sb.length() - 1).toString());
+            } else {
+                Preference.get().setProductOptionalForeign(sb.deleteCharAt(sb.length() - 1).toString());
+            }
         } else {
-            Preference.get().setProductOptionalForeign(sb.deleteCharAt(sb.length() - 1).toString());
+            if (mIsDomestic) {
+                Preference.get().setProductOptionalDomestic("");
+            } else {
+                Preference.get().setProductOptionalForeign("");
+            }
         }
         super.onBackPressed();
     }

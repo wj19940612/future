@@ -21,7 +21,7 @@ public abstract class ChartView extends View {
 
     protected enum ChartColor {
 
-        BASE("#CDCDCD"),
+        BASE("#EEEEEE"),
         TEXT("#A8A8A8"),
         WHITE("#FFFFFF"),
         BLUE("#358CF3"),
@@ -54,6 +54,7 @@ public abstract class ChartView extends View {
     private static final int MIDDLE_EXTRA_SPACE_DP = 10;
     private static final int HEIGHT_TIME_LINE_DP = 24;
     private static final float RATIO_OF_TOP = 0.73f;
+    private static final float BASELINE_WIDTH = 0.5f;
 
     private static final int WHAT_LONG_PRESS = 1;
     private static final int WHAT_ONE_CLICK = 2;
@@ -90,6 +91,7 @@ public abstract class ChartView extends View {
     private int mYRectPadding;
     private int mTimeLineHeight;
     private int mCenterPartHeight;
+    private float mBaseLineWidth;
 
     private int mTouchIndex; // The position of cross when touch view
     private float mDownX;
@@ -151,6 +153,7 @@ public abstract class ChartView extends View {
         mMiddleExtraSpace = (int) dp2Px(MIDDLE_EXTRA_SPACE_DP);
         mTimeLineHeight = (int) dp2Px(HEIGHT_TIME_LINE_DP);
         mCenterPartHeight = mMiddleExtraSpace + mTimeLineHeight;
+        mBaseLineWidth = dp2Px(BASELINE_WIDTH);
 
         // gesture
         mTouchIndex = -1;
@@ -180,7 +183,7 @@ public abstract class ChartView extends View {
     protected void setBaseLinePaint(Paint paint) {
         paint.setColor(Color.parseColor(ChartColor.BASE.get()));
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(mBaseLineWidth);
     }
 
     protected void setDefaultTextPaint(Paint paint) {

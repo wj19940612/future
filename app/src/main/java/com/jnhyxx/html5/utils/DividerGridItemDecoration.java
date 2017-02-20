@@ -25,7 +25,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     public DividerGridItemDecoration(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
-        mHorizontalMargin = dip2px(context, 16);
+        mHorizontalMargin = dip2px(context, 10);
         mVerticalMargin = dip2px(context, 10);
         a.recycle();
     }

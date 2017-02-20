@@ -70,7 +70,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,8 +121,7 @@ public class HomeFragment extends BaseFragment {
 
     public interface OnListViewHeightListener {
         /**
-         *
-         * @param height  控件高度
+         * @param height 控件高度
          */
         void listViewHeight(int height);
     }
@@ -230,7 +228,7 @@ public class HomeFragment extends BaseFragment {
         super.onResume();
         requestProductList();
         requestHomePositions();
-        requestOrderReport();
+//        requestOrderReport();
         startScheduleJob(1 * 1000);
     }
 
@@ -239,7 +237,7 @@ public class HomeFragment extends BaseFragment {
         super.onTimeUp(count);
         requestProductMarketList();
         if (count % 5 == 0) {
-            mHomeHeader.nextOrderReport();
+//            mHomeHeader.nextOrderReport();
             mHomeBanner.nextAdvertisement();
         }
     }
@@ -602,6 +600,7 @@ public class HomeFragment extends BaseFragment {
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private Context mContext;
         private List<ProductPkg> mList;
+        private List<ProductPkg> mLastList;
         private View mHeaderView;
 
         public void setHeaderView(View headerView) {
@@ -651,10 +650,10 @@ public class HomeFragment extends BaseFragment {
             @BindView(R.id.priceChangePercent)
             TextView mPriceChangePercent;
             @BindView(R.id.bgTwinkle)
-            View mBgTwinkle;
+            LinearLayout mBgTwinkle;
 
             private View mView;
-            private ProductPkg mLastPackage;
+            private double mTempPrice;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -700,13 +699,14 @@ public class HomeFragment extends BaseFragment {
                         mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
                         mPriceChangePercent.setText(priceChangePercent);
-                        setTwinkleColor(marketData, R.color.lightGreen);
+                        setTwinkleColor(marketData, R.color.twentyGreen);
                     } else {
                         mLastPrice.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mPriceChangePercent.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                         mPriceChangePercent.setText("+" + priceChangePercent);
-                        setTwinkleColor(marketData, R.color.lightRed);
+                        setTwinkleColor(marketData, R.color.twentyRed);
                     }
+                    mTempPrice = pkg.getMarketData().getLastPrice();
                 } else {
                     mLastPrice.setText("——");
                     mPriceChangePercent.setText("——%");
@@ -718,20 +718,17 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     mHoldingPosition.setVisibility(View.GONE);
                 }
-                mLastPackage = pkg;
             }
 
             private void setTwinkleColor(MarketData marketData, int color) {
-                if (mLastPackage != null) {
-                    if (mLastPackage.getMarketData().getLastPrice() != marketData.getLastPrice()) {
-                        mBgTwinkle.setBackgroundColor(getResources().getColor(color));
-                        mBgTwinkle.postDelayed(new TimerTask() {
-                            @Override
-                            public void run() {
-                                mBgTwinkle.setBackgroundColor(Color.TRANSPARENT);
-                            }
-                        }, 500);
-                    }
+                if (mTempPrice != marketData.getLastPrice()) {
+                    mBgTwinkle.setBackgroundColor(ContextCompat.getColor(getContext(), color));
+                    mBgTwinkle.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBgTwinkle.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }, 500);
                 }
             }
         }

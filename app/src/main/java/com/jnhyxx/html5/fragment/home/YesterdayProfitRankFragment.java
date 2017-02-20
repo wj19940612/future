@@ -101,9 +101,9 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    viewTreeObserver.removeOnGlobalLayoutListener(this);
+                    mHint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    viewTreeObserver.removeGlobalOnLayoutListener(this);
+                    mHint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 mHintHeight = mHint.getHeight();
             }

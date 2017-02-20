@@ -126,14 +126,14 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     }
 
     private void measureWeekCalendarLayout() {
-        final ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
+        ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    viewTreeObserver.removeOnGlobalLayoutListener(this);
+                    mCalendarWeek.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    viewTreeObserver.removeGlobalOnLayoutListener(this);
+                    mCalendarWeek.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
                 mWeekCalendarLayoutHeight = mCalendarWeek.getHeight();
             }

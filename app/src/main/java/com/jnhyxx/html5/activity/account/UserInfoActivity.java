@@ -141,6 +141,7 @@ public class UserInfoActivity extends BaseActivity {
                     bingBankCard();
                     break;
                 case UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE:
+                    setResult(RESULT_OK);
                     if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
                         Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
                         }).into(mUserHeadImage);

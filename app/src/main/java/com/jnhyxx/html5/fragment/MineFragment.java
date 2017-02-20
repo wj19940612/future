@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -60,9 +59,13 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.jnhyxx.html5.R.id.paidToPromote;
+import static com.jnhyxx.html5.activity.BaseActivity.REQ_CODE_LOGIN;
 
 
 public class MineFragment extends BaseFragment {
+    //进入用户信息界面的请求吗
+    private static final int REQ_CODE_USER_INFO = 344;
+
     //账户余额
     @BindView(R.id.balance)
     TextView mBalance;
@@ -127,9 +130,11 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET);
-                Launcher.with(getActivity(), UserInfoActivity.class).execute();
+                Launcher.with(getActivity(), UserInfoActivity.class).executeForResult(REQ_CODE_USER_INFO);
             }
         });
+
+        updateUserImage();
     }
 
     @Override
@@ -168,15 +173,27 @@ public class MineFragment extends BaseFragment {
             mSignArea.setVisibility(View.GONE);
             mFundArea.setVisibility(View.VISIBLE);
             mTitleBar.setRightVisible(true);
-
             UserInfo userInfo = LocalUser.getUser().getUserInfo();
-
             String userName = userInfo.getUserName();
             double moneyUsable = userInfo.getMoneyUsable();
             double scoreUsable = userInfo.getScoreUsable();
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
+        } else {
+            mSignArea.setVisibility(View.VISIBLE);
+            mFundArea.setVisibility(View.GONE);
+            mNickname.setText(R.string.no_logged);
+            mTitleBar.setRightVisible(false);
+            mBalance.setText(R.string.zero);
+            mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
+            mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
+        }
+    }
+
+    private void updateUserImage() {
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (LocalUser.getUser().isLogin()) {
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
                 Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mHeadImage);
             } else {
@@ -191,12 +208,6 @@ public class MineFragment extends BaseFragment {
                 }
             }
         } else {
-            mSignArea.setVisibility(View.VISIBLE);
-            mFundArea.setVisibility(View.GONE);
-            mNickname.setText(R.string.no_logged);
-            mTitleBar.setRightVisible(false);
-            mBalance.setText(R.string.zero);
-            mScore.setText(getString(R.string.mine_score, getString(R.string.zero)));
             mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
         }
     }
@@ -206,7 +217,7 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.signInButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGIN);
-                Launcher.with(getActivity(), SignInActivity.class).executeForResult(BaseActivity.REQ_CODE_LOGIN);
+                startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
                 break;
             case R.id.signUpButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REGISTER);
@@ -235,9 +246,11 @@ public class MineFragment extends BaseFragment {
             case R.id.headImage:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
-                    Launcher.with(getActivity(), UserInfoActivity.class).execute();
+//                    Launcher.with(getActivity(), UserInfoActivity.class).executeForResult(REQ_CODE_USER_INFO);
+                    startActivityForResult(new Intent(getActivity(),UserInfoActivity.class),REQ_CODE_USER_INFO);
                 } else {
-                    Launcher.with(getActivity(), SignInActivity.class).execute();
+//                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
+                    startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
                 }
                 break;
             case R.id.feedback:
@@ -256,7 +269,7 @@ public class MineFragment extends BaseFragment {
                         Log.d(TAG, "-----" + supportApplyWay.toString());
                         if (supportApplyWay.isBank() || supportApplyWay.isAlipay() || supportApplyWay.isWechat()) {
                             MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.RECHARGE);
-                            Launcher.with(getActivity(), RechargeActivity.class).putExtra(Launcher.EX_PAYLOAD,supportApplyWay).execute();
+                            Launcher.with(getActivity(), RechargeActivity.class).putExtra(Launcher.EX_PAYLOAD, supportApplyWay).execute();
                         } else {
                             SmartDialog.with(getActivity(), R.string.now_is_not_support_recharge).show();
                         }
@@ -312,7 +325,8 @@ public class MineFragment extends BaseFragment {
                         }
                     }).fire();
         } else {
-            Launcher.with(getActivity(), SignInActivity.class).execute();
+//            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
+            startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
         }
     }
 
@@ -359,15 +373,25 @@ public class MineFragment extends BaseFragment {
                         }
                     }).fire();
         } else {
-            Launcher.with(getActivity(), SignInActivity.class).execute();
+            startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BankcardBindingActivity.REQ_CODE_BIND_BANK && resultCode == AppCompatActivity.RESULT_OK) {
-            openWithdrawPage();
+        if (resultCode == BaseActivity.RESULT_OK) {
+            switch (requestCode) {
+                case BankcardBindingActivity.REQ_CODE_BIND_BANK:
+                    openWithdrawPage();
+                    break;
+                case REQ_CODE_USER_INFO:
+                    updateUserImage();
+                    break;
+                case REQ_CODE_LOGIN:
+                    updateUserImage();
+                    break;
+            }
         }
     }
 

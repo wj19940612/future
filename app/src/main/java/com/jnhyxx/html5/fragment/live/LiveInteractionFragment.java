@@ -255,14 +255,13 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
+                                         stopRefreshAnimation();
                                          if (liveHomeChatInfoResp.hasData()) {
                                              mOffset = mOffset + liveHomeChatInfoResp.getData().size();
                                              mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                              locateNewDataEnd(liveHomeChatInfoResp);
 
-                                         } else {
-                                             stopRefreshAnimation();
                                          }
                                      }
                                  }
@@ -307,11 +306,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private void updateCHatInfo(final List<LiveHomeChatInfo> liveHomeChatInfoList) {
         if (liveHomeChatInfoList == null || liveHomeChatInfoList.isEmpty()) {
-            stopRefreshAnimation();
+
             return;
         }
-        stopRefreshAnimation();
-
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }

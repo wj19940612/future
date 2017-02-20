@@ -187,6 +187,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     @Override
                     public void onReceive(Resp<List<LiveHomeChatInfo>> listResp) {
                         if (listResp.isSuccess()) {
+                            stopRefreshAnimation();
                             if (listResp.hasData()) {
                                 mPageOffset = mPageOffset + listResp.getData().size();
                                 mDataInfoList.addAll(0, listResp.getData());
@@ -214,14 +215,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
-            stopRefreshAnimation();
             return;
         }
         addListViewFootView(data);
     }
 
     private void addListViewFootView(List<LiveHomeChatInfo> data) {
-        stopRefreshAnimation();
         mLiveTeacherGuideAdapter.clear();
         getTalkTimeIsThanFiveMinute();
         mLiveTeacherGuideAdapter.notifyDataSetChanged();

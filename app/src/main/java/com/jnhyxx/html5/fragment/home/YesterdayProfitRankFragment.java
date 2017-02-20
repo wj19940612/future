@@ -163,7 +163,9 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7) + mHintHeight);
+            if (mOnListViewHeightListener != null) {
+                mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7) + mHintHeight);
+            }
             return;
         }
 
@@ -264,8 +266,8 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
                 } else {
                     mRanking.setText(String.valueOf(position + 1));
                 }
-                String phone = "****" + item.getPhone().substring(item.getPhone().length() - 4);
-                mPhoneNum.setText(phone);
+//                String phone = "****" + item.getPhone().substring(item.getPhone().length() - 4);
+                mPhoneNum.setText(item.getPhone());
                 mProfit.setText(String.valueOf(item.getProfit()));
             }
         }

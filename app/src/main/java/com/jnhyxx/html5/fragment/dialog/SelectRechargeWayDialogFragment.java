@@ -51,6 +51,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     public static final int PAY_WAY_WECHAT = 2;
 
     private onPayWayListener mOnPayWayListener;
+    private int mSelectWay = PAY_WAY_BANK;
 
     public interface onPayWayListener {
         void selectPayWay(int payWay);
@@ -94,6 +95,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         updateView(mSupportApplyWay);
+        choosePayWay(mSelectWay);
     }
 
     @Nullable
@@ -121,19 +123,19 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
                 closeDialog();
                 break;
             case R.id.bankCardPay:
-                selectPayWay(PAY_WAY_BANK);
+                choosePayWay(PAY_WAY_BANK);
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_BANK_CARD);
                 mOnPayWayListener.selectPayWay(PAY_WAY_BANK);
                 closeDialog();
                 break;
             case R.id.aliPayPay:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.PAY_ALIPAY);
-                selectPayWay(PAY_WAY_ALIPAY);
+                choosePayWay(PAY_WAY_ALIPAY);
                 mOnPayWayListener.selectPayWay(PAY_WAY_ALIPAY);
                 closeDialog();
                 break;
             case R.id.weChartPay:
-                selectPayWay(PAY_WAY_WECHAT);
+                choosePayWay(PAY_WAY_WECHAT);
                 mOnPayWayListener.selectPayWay(PAY_WAY_WECHAT);
                 closeDialog();
                 break;
@@ -141,15 +143,19 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     }
 
     private void closeDialog() {
-        if (this.isVisible()) {
-            dismissAllowingStateLoss();
-        }
+        dismissAllowingStateLoss();
     }
 
-    public void selectPayWay(int payWay) {
-        if (payWay < 0) return;
-//        unSelectAll();
+    public void choosePayWay(int payWay) {
+        mSelectWay = payWay;
+        unSelectAll();
         mPayWayLayout.getChildAt(payWay).setSelected(true);
+    }
+
+    public void unSelectAll() {
+        for (int i = 0; i < mPayWayLayout.getChildCount(); i++) {
+            mPayWayLayout.getChildAt(i).setSelected(false);
+        }
     }
 
     private void updateView(SupportApplyWay supportApplyWay) {

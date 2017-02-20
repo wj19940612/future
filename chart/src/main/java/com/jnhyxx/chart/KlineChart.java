@@ -35,6 +35,7 @@ public class KlineChart extends ChartView {
     private Settings mSettings;
     private SimpleDateFormat mDateFormat;
     private String mDateFormatStr;
+    private boolean mIsDayLine;
     private Date mDate;
     private int[] mMovingAverages;
     private OnTouchLinesAppearListener mOnTouchLinesAppearListener;
@@ -115,8 +116,13 @@ public class KlineChart extends ChartView {
         return mVisibleList;
     }
 
-    public void setDataFormat(String formatStr) {
-        mDateFormatStr = formatStr;
+    public void setDayLine(boolean dayLine) {
+        mIsDayLine = dayLine;
+        if (mIsDayLine) {
+            mDateFormatStr = DATE_FORMAT_DAY_K;
+        } else {
+            mDateFormatStr = DATE_FORMAT_DAY_MIN;
+        }
     }
 
     public void setOnTouchLinesAppearListener(OnTouchLinesAppearListener onTouchLinesAppearListener) {
@@ -459,7 +465,12 @@ public class KlineChart extends ChartView {
                 setDefaultTextPaint(sPaint);
                 if (i == mStart) {
                     float textX = left + mTextMargin;
-                    canvas.drawText(formatTimestamp(data.getTimeStamp()), textX, textY, sPaint);
+                    String timeStr = formatTimestamp(data.getTimeStamp());
+                    if (mIsDayLine) {
+                        timeStr = data.getDay();
+                        timeStr = timeStr.substring(timeStr.indexOf("-") + 1).replaceAll("-", "/");
+                    }
+                    canvas.drawText(timeStr, textX, textY, sPaint);
                 } else {
                     String displayTime = formatTimestamp(data.getTimeStamp());
                     float textWidth = sPaint.measureText(displayTime);

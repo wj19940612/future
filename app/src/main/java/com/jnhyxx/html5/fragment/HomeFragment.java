@@ -138,10 +138,9 @@ public class HomeFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initSlidingTabLayout();
-
         mProductPkgList = new ArrayList<>();
-        mForeignPackage = new ArrayList<ProductPkg>();
-        mDomesticPackage = new ArrayList<ProductPkg>();
+        mForeignPackage = new ArrayList<>();
+        mDomesticPackage = new ArrayList<>();
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -341,7 +340,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private HomeHeader.OnViewClickListener mOnViewClickListener = new HomeHeader.OnViewClickListener() {
-
         // 模拟交易
         @Override
         public void onSimulationClick() {
@@ -356,13 +354,11 @@ public class HomeFragment extends BaseFragment {
                         }
                     }).fire();
         }
-
         // 推广赚钱
         @Override
         public void onPaidToPromoteClick() {
             openPaidToPromotePage();
         }
-
         // 投资课堂
         @Override
         public void onInvestCourseClick() {
@@ -372,13 +368,11 @@ public class HomeFragment extends BaseFragment {
                     .putExtra(InvestCourseActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
                     .execute();
         }
-
         // 直播
         @Override
         public void onLiveClick() {
             MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_NEWBIE_GUIDE);
-            Launcher.with(getActivity(), LiveActivity.class)
-                    .execute();
+            Launcher.with(getActivity(), LiveActivity.class).execute();
         }
     };
 

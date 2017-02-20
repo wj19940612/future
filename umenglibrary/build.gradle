@@ -23,18 +23,30 @@ android {
         origin {
             manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
         }
+
         yybd { // 原油宝典 -> 期货交易通
             manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
         }
+
         kdqn { // 口袋期牛
             manifestPlaceholders = [UMENG_APPKEY: "5874964fc62dca2a21001ba4"]
         }
+
+        // dajiexin apks
         yyqhb { // 原油期货宝
-            manifestPlaceholders = [UMENG_APPKEY: "58944c116e27a4550b000388"]
+            manifestPlaceholders = [UMENG_APPKEY: "58a404607f2c7405f0000d8c"]
         }
-        zy1 { // 钱猫投资宝
-            manifestPlaceholders = [UMENG_APPKEY: "58412c94e88bad78e5000ae1"]
+        wyejy { // 微赢e交易
+            manifestPlaceholders = [UMENG_APPKEY: "58a406827f2c74043b001408"]
         }
+        hzh2 { // 恒指汇
+            manifestPlaceholders = [UMENG_APPKEY: "58a422d75312dd5724001448"]
+        }
+
+        gf2 { // 钱猫投资宝
+            manifestPlaceholders = [UMENG_APPKEY: "58a6be8504e2053aeb00078f"]
+        }
+
         zy3 { // 金谷理财
             manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]
         }

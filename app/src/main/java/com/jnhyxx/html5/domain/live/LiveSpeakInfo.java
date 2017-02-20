@@ -28,6 +28,7 @@ public class LiveSpeakInfo {
     private long time;
     private boolean isText;
     private boolean isOrder;
+    private boolean stopLive;
 
     public String getMsg() {
         return msg;
@@ -99,5 +100,12 @@ public class LiveSpeakInfo {
 
     public void setIsOrder(boolean isOrder) {
         this.isOrder = isOrder;
+    }
+    public boolean isStopLive() {
+        return stopLive;
+    }
+
+    public void setStopLive(boolean stopLive) {
+        this.stopLive = stopLive;
     }
 }

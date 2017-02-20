@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment.home;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -121,11 +122,19 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     @Override
     public void onResume() {
         super.onResume();
-        ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
+        measureWeekCalendarLayout();
+    }
+
+    private void measureWeekCalendarLayout() {
+        final ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mCalendarWeek.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this);
+                } else {
+                    viewTreeObserver.removeGlobalOnLayoutListener(this);
+                }
                 mWeekCalendarLayoutHeight = mCalendarWeek.getHeight();
             }
         });
@@ -134,6 +143,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void getCalendarFinanceData(String time) {
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
                 .setTag(TAG)
+                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
                     @Override

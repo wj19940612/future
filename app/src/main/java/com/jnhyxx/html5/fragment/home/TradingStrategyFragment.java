@@ -94,7 +94,7 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
         mListView.setDivider(null);
         mListView.setOnItemClickListener(this);
         mListView.setOnScrollListener(this);
-        mEmpty.setText(R.string.coming_soon);
+        mEmpty.setText(R.string.not_strategy);
         mListView.setEmptyView(mEmpty);
         initSwipeRefreshLayout();
         requestInfoList();

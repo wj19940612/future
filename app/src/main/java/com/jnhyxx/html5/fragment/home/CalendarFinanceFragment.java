@@ -100,7 +100,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mCalendarWeek.setOnWeekSelectListener(this);
-        mEmpty.setText(R.string.coming_soon);
+        mEmpty.setText(R.string.not_finance_data);
         mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
 

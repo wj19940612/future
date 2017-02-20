@@ -119,6 +119,7 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
     private void requestInfoList() {
         API.Message.findNewsList(Information.TYPE_TRADING_STRATEGY, mOffset, mPageSize)
                 .setTag(TAG)
+                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<Information>>, List<Information>>() {
                     @Override
                     public void onRespSuccess(List<Information> informationList) {

@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.fragment.home;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -91,11 +92,19 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     @Override
     public void onResume() {
         super.onResume();
-        ViewTreeObserver viewTreeObserver = mHint.getViewTreeObserver();
+        measureListHint();
+    }
+
+    private void measureListHint() {
+        final ViewTreeObserver viewTreeObserver = mHint.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mHint.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this);
+                } else {
+                    viewTreeObserver.removeGlobalOnLayoutListener(this);
+                }
                 mHintHeight = mHint.getHeight();
             }
         });
@@ -128,6 +137,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     private void getYesterdayProfitRank() {
         API.Order.getProfitRank()
                 .setTag(TAG)
+                .setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<ProfitRankModel>>, List<ProfitRankModel>>() {
 
                     @Override
@@ -149,11 +159,11 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     }
 
     private void updateProfitRank(List<ProfitRankModel> profitRankModels) {
-        if (profitRankModels == null||profitRankModels.isEmpty()) {
+        if (profitRankModels == null || profitRankModels.isEmpty()) {
             WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7)+mHintHeight);
+            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7) + mHintHeight);
             return;
         }
 
@@ -179,10 +189,10 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
 //            @Override
 //            public void onGlobalLayout() {
 //                viewTreeObserver.removeOnGlobalLayoutListener(this);
-                int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
-                // listView.getDividerHeight()获取子项间分隔符占用的高度
-                // params.height最后得到整个ListView完整显示需要的高度
-                mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
+        int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren1(mListView);
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mHintHeight);
 //            }
 //        });
     }

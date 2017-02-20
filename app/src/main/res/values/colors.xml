@@ -16,8 +16,8 @@
     <color name="colorDisable">#A8A8A8</color>
     <color name="greenPrimary">#25D282</color>
     <color name="redPrimary">#FB4B55</color>
-    <color name="lightGreen">#E7F9F1</color>
-    <color name="lightRed">#FFEDEE</color>
+    <color name="twentyGreen">#3325D282</color>
+    <color name="twentyRed">#33FB4B55</color>
 
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>

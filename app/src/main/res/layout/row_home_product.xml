@@ -5,30 +5,22 @@
                 android:layout_height="88dp"
                 android:background="@drawable/bg_white_pressable"
                 android:minHeight="88dp"
-                android:orientation="horizontal">
-
-    <View
-        android:id="@+id/bgTwinkle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"/>
+                android:orientation="horizontal"
+    >
 
     <LinearLayout
+        android:id="@+id/bgTwinkle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_pressable"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -96,15 +88,13 @@
         <TextView
             android:id="@+id/lastPrice"
             style="@style/NewHomeProductPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginBottom="11dp"
+            android:layout_marginTop="10dp"
             tools:text="46.24"/>
 
         <TextView
             android:id="@+id/priceChangePercent"
             style="@style/NewHomeProductPriceChangePercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             tools:text="——%"/>
     </LinearLayout>
 

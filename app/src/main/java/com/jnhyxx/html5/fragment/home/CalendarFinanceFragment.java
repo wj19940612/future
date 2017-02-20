@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -138,9 +139,13 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     }
 
     private void getCalendarFinanceData(String time) {
+        /**
+         * 修改超时时间为5秒
+         */
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
                 .setTag(TAG)
                 .setIndeterminate(this)
+                .setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
                     @Override
@@ -351,9 +356,8 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                             mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
                             String badNews = effect.substring(lido.length() + 1, effect.length() - 1);
                             mLidoNews.setText(context.getString(R.string.lido, lido));
-                            mBadNews.setText( context.getString(R.string.bad_news, badNews));
-                        }
-                        else {
+                            mBadNews.setText(context.getString(R.string.bad_news, badNews));
+                        } else {
 //                            mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.greenPrimary));
 //                            mLidoNews.setText(item.getEffect());
                         }

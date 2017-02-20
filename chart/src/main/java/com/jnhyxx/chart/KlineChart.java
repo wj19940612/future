@@ -20,7 +20,7 @@ public class KlineChart extends ChartView {
 
     private static final int CANDLES_WIDTH_DP = 6; //dp
 
-    private static final String MA_BLUE = "#0A1A2C";
+    private static final String MA_BLUE = "#0E2947";
     private static final String MA_ORANGE = "#FFBB22";
     private static final String MA_PURPLE = "#AA20AF";
 

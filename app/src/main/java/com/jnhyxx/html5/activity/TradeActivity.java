@@ -500,9 +500,7 @@ public class TradeActivity extends BaseActivity implements
                             mPriceChange.setVisibility(View.INVISIBLE);
                             mBuySellVolumeLayout.setVisibility(View.INVISIBLE);
                             mExchangeCloseText.setVisibility(View.VISIBLE);
-                            if (mFullMarketData != null) {
-                                updateStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bluePrimary));
-                            }
+                            updateTopPartColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
                         }
                     }
                 }).setTag(TAG).fireSync();
@@ -635,11 +633,15 @@ public class TradeActivity extends BaseActivity implements
             ColorDrawable colorDrawable = (ColorDrawable) mPriceChangeArea.getBackground();
             int oldBgColor = colorDrawable.getColor();
             if (bgColor != oldBgColor) {
-                mPriceChangeArea.setBackgroundColor(bgColor);
-                mTitleBar.setBackgroundColor(bgColor);
-                updateStatusBarColor(bgColor);
+                updateTopPartColor(bgColor);
             }
         }
+    }
+
+    private void updateTopPartColor(int bgColor) {
+        mPriceChangeArea.setBackgroundColor(bgColor);
+        mTitleBar.setBackgroundColor(bgColor);
+        updateStatusBarColor(bgColor);
     }
 
     private void updateStatusBarColor(int textColor) {
@@ -770,10 +772,13 @@ public class TradeActivity extends BaseActivity implements
         mMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
-                if (mProductChanged) {
-                    NettyClient.getInstance().stop();
+                mIsSlidingMenuOpened = false;
 
+                if (mProductChanged) {
                     hideFragmentOfContainer();
+
+                    updateTopPartColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                    updateExchangeStatusView(); // based on product
                     updateChartView(); // based on product
 
                     mHoldingOrderPresenter.clearData();
@@ -782,8 +787,6 @@ public class TradeActivity extends BaseActivity implements
                     NettyClient.getInstance().start(mProduct.getContractsCode());
                     mProductChanged = false;
                 }
-
-                mIsSlidingMenuOpened = false;
             }
         });
         ListView listView = (ListView) mMenu.getMenu();
@@ -806,9 +809,10 @@ public class TradeActivity extends BaseActivity implements
                         mFullMarketData = null;
 
                         updateTitleBar(); // based on product
-                        updateExchangeStatusView(); // based on product
                         mTradePageFooter.setTotalProfitUnit(mProduct.getCurrencyUnit()); // based on product
                         updateLightningOrderView(); // based on product
+
+                        NettyClient.getInstance().stop();
                     }
                 }
             }
@@ -885,8 +889,11 @@ public class TradeActivity extends BaseActivity implements
                                     })
                                     .show();
                             mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
-                        } else if (jsonObjectResp.isFundNotEnough()) {
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH) {
                             showFundNotEnoughDialog(jsonObjectResp);
+                        } else if (jsonObjectResp.getCode() == Resp.CODE_FUND_NOT_ENOUGH_AND_PART_DEAL) {
+                            showFundNotEnoughDialog(jsonObjectResp);
+                            mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
                         } else if (jsonObjectResp.getCode() == Resp.CODE_LIGHTNING_ORDER_INVALID) {
                             enableLightningOrderView(false);
                             showLightningOrderInvalidDialog();

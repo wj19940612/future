@@ -42,6 +42,10 @@ public class PaymentActivity extends WebViewActivity {
                 if (mIsBankCardPayment) {
                     LocalUser.getUser().getUserInfo().setCardState(UserInfo.BANKCARD_STATUS_BOUND);
                 }
+                if (url.contains("result=1")) {
+                    finish();
+                    return true;
+                }
                 setResult(RESULT_OK);
                 finish();
                 return true;

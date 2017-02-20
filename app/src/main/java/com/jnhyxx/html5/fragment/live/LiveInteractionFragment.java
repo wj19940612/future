@@ -30,7 +30,6 @@ import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.utils.transform.CircleTransform;
@@ -104,6 +103,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     public void setOnSendButtonClickListener(OnSendButtonClickListener onSendButtonClickListener) {
         this.mOnSendButtonClickListener = onSendButtonClickListener;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnSendButtonClickListener) {
+            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
+        }else {
+            throw new RuntimeException(context.toString()
+                    + " must implement LiveInteractionFragment.OnSendButtonClickListener");
+        }
     }
 
     @Override
@@ -215,9 +225,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
-            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
-            }
             updateTalkData(liveSpeakInfo);
         }
     }
@@ -255,14 +262,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
+                                         stopRefreshAnimation();
                                          if (liveHomeChatInfoResp.hasData()) {
                                              mOffset = mOffset + liveHomeChatInfoResp.getData().size();
                                              mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                              locateNewDataEnd(liveHomeChatInfoResp);
-
-                                         } else {
-                                             stopRefreshAnimation();
                                          }
                                      }
                                  }
@@ -307,11 +312,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private void updateCHatInfo(final List<LiveHomeChatInfo> liveHomeChatInfoList) {
         if (liveHomeChatInfoList == null || liveHomeChatInfoList.isEmpty()) {
-            stopRefreshAnimation();
+
             return;
         }
-        stopRefreshAnimation();
-
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }

@@ -9,8 +9,9 @@ import java.io.Serializable;
 
 public class SupportApplyWay implements Serializable {
 
-    public static final int ALI_PAY_DEPOSIT_ANDROID = 1;
+    private static final long serialVersionUID = -1943115901524014234L;
 
+    public static final int ALI_PAY_DEPOSIT_ANDROID = 1;
     //银行卡支付
     public static final int DEPOSIT_BY_BANK_APPLY_PAY = 0;
     //支付宝支付

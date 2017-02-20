@@ -99,11 +99,18 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
         initSwipeRefreshLayout();
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        mPageOffset = 0;
-//    }
+    public void updateTeacherGuide() {
+        if (mLiveTeacherGuideAdapter == null) {
+            return;
+        }
+        mLiveTeacherGuideAdapter.clear();
+        if (mDataInfoList != null && !mDataInfoList.isEmpty()) {
+            mDataInfoList.clear();
+        }
+        mPageOffset = 0;
+        mPageSize = 10;
+        getTeacherGuideIfo();
+    }
 
     @Override
     public void onDestroyView() {
@@ -187,6 +194,7 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
                     @Override
                     public void onReceive(Resp<List<LiveHomeChatInfo>> listResp) {
                         if (listResp.isSuccess()) {
+                            stopRefreshAnimation();
                             if (listResp.hasData()) {
                                 mPageOffset = mPageOffset + listResp.getData().size();
                                 mDataInfoList.addAll(0, listResp.getData());
@@ -214,14 +222,12 @@ public class TeacherGuideFragment extends BaseFragment implements AbsListView.On
 
     private void updateTeacherGuide(List<LiveHomeChatInfo> data) {
         if (data == null || data.isEmpty()) {
-            stopRefreshAnimation();
             return;
         }
         addListViewFootView(data);
     }
 
     private void addListViewFootView(List<LiveHomeChatInfo> data) {
-        stopRefreshAnimation();
         mLiveTeacherGuideAdapter.clear();
         getTalkTimeIsThanFiveMinute();
         mLiveTeacherGuideAdapter.notifyDataSetChanged();

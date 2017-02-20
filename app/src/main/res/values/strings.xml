@@ -166,6 +166,7 @@
     <string name="now_is_not_has_system_message">暂无系统消息</string>
     <string name="trade_remind">交易提醒</string>
     <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
+    <string name="now_is_not_support_recharge">平台近期进行充值维护,暂停充值业务,如有疑问请联系首页客服!</string>
 
 
     <string name="take_phone_from_camera">拍照</string>
@@ -426,6 +427,8 @@
     <string name="modify_nick_name_error_warn">昵称只能由中文、英文、数字组成</string>
     <string name="modify_nick_name_hint">支持1~10个字符</string>
     <string name="modify_nick_name_submit_warn">昵称不得包含特殊符号</string>
+    <string name="save">保    存</string>
+    <string name="bind_bank_card_name">%1$s    储蓄卡</string>
 
 
     <!--充值、提现-->
@@ -481,13 +484,12 @@
     <string name="withdraw_record_account_time">到账时间</string>
     <string name="withdraw_start">处理中</string>
     <string name="withdraw_audit_passing">审核通过</string>
-    <string name="withdraw_refuse">提现拒绝</string>
-    <string name="transfer_fail">转账失败</string>
+    <string name="withdraw_fail">提现失败</string>
     <string name="withdraw_auditing">审核中</string>
     <string name="transfer">转账中</string>
     <string name="common_success">成功</string>
-    <string name="amount_to_the_account">到帐金额</string>
-    <string name="the_account_to_the_bank">到帐银行</string>
+    <string name="amount_to_the_account">到账金额</string>
+    <string name="the_account_to_the_bank">到账银行</string>
     <!-- 金币模拟 Gold -->
     <string name="available_gold">可用金币</string>
     <string name="gold_store">金币商城</string>
@@ -570,6 +572,8 @@
     <string name="bad_news">利空    %1$s</string>
 
     <string name="before_data_">前值: </string>
-    <string name="expect_data_">预期: </string>
-    <string name="real_data_">实际: </string>
+    <string name="expect_data_">预期值: </string>
+    <string name="real_data_">公布值: </string>
+    <string name="not_strategy">暂无攻略</string>
+    <string name="not_finance_data">暂无财经消息</string>
 </resources>

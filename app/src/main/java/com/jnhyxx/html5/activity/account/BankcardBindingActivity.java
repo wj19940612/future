@@ -25,6 +25,7 @@ import com.jnhyxx.html5.domain.account.UserInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ValidationWatcher;
@@ -34,6 +35,7 @@ import com.jnhyxx.html5.view.CustomToast;
 import com.jnhyxx.html5.view.TitleBar;
 import com.jnhyxx.html5.view.WheelView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
@@ -106,6 +108,10 @@ public class BankcardBindingActivity extends BaseActivity {
         setContentView(R.layout.activity_bankcard_binding);
         ButterKnife.bind(this);
 
+        boolean isFromUserInfoPage = getIntent().getBooleanExtra(Launcher.EX_PAYLOAD, false);
+        if (isFromUserInfoPage) {
+            mSubmitToAuthButton.setText(R.string.save);
+        }
 
         mPhoneNum.addTextChangedListener(mPhoneValidationWatcher);
         mBankcardNum.addTextChangedListener(mBankCardValidationWatcher);
@@ -113,6 +119,43 @@ public class BankcardBindingActivity extends BaseActivity {
         mIdentityNum.addTextChangedListener(mValidationWatcher);
         mPayingBank.addTextChangedListener(mValidationWatcher);
         showBankcardInfo();
+
+        getUserBindBankInfo();
+    }
+
+    private void getUserBindBankInfo() {
+        API.User.getUserBankInfo()
+                .setTag(TAG)
+                .setIndeterminate(this)
+                .setCallback(new Callback1<Resp<UserInfo>>() {
+
+                    @Override
+                    protected void onRespSuccess(Resp<UserInfo> resp) {
+                        updateUserBankInfo(resp);
+                        showBankcardInfo();
+                    }
+                })
+                .fireSync();
+    }
+
+    private void updateUserBankInfo(Resp<UserInfo> resp) {
+        UserInfo webUserBankInfo = resp.getData();
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+
+        userInfo.setIdStatus(webUserBankInfo.getIdStatus());
+        userInfo.setRealName(webUserBankInfo.getRealName());
+        userInfo.setCardPhone(webUserBankInfo.getCardPhone());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setIssuingbankName(webUserBankInfo.getIssuingbankName());
+        userInfo.setIdCard(webUserBankInfo.getIdCard());
+        userInfo.setCardState(webUserBankInfo.getCardState());
+        userInfo.setCardNumber(webUserBankInfo.getCardNumber());
+        userInfo.setIcon(webUserBankInfo.getIcon());
+        userInfo.setAppIcon(webUserBankInfo.getAppIcon());
+        userInfo.setBankId(webUserBankInfo.getBankId());
+        userInfo.setLimitSingle(webUserBankInfo.getLimitSingle());
+
+        LocalUser.getUser().setUserInfo(userInfo);
     }
 
     @Override
@@ -127,7 +170,7 @@ public class BankcardBindingActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (!LocalUser.getUser().isBankcardBound()) {
+        if (!LocalUser.getUser().isBankcardFilled()) {
             SmartDialog.with(getActivity(), R.string.whether_if_give_up_bind_bank_card)
                     .setNegative(R.string.no, new SmartDialog.OnClickListener() {
                         @Override
@@ -175,9 +218,9 @@ public class BankcardBindingActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable editable) {
             boolean enable = checkSubmitButtonEnable();
-            if (enable != mSubmitToAuthButton.isEnabled()) {
-                mSubmitToAuthButton.setEnabled(enable);
-            }
+//            if (enable != mSubmitToAuthButton.isEnabled()) {
+            mSubmitToAuthButton.setEnabled(enable);
+//            }
         }
     };
 
@@ -219,7 +262,7 @@ public class BankcardBindingActivity extends BaseActivity {
             mCardholderIdentityNum.setText(userInfo.getIdCard());
 
             if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
-                mBank.setText(userInfo.getIssuingbankName());
+                mBank.setText(getString(R.string.bind_bank_card_name, userInfo.getIssuingbankName()));
             }
 
             String bankIconUrl = userInfo.getIcon();
@@ -259,6 +302,17 @@ public class BankcardBindingActivity extends BaseActivity {
                 || TextUtils.isEmpty(identityNum)) {
             return false;
         }
+
+
+        UserInfo userInfo = LocalUser.getUser().getUserInfo();
+        if (cardholderName.equalsIgnoreCase(userInfo.getRealName())
+                & bankcardNum.replaceAll(" ", "").equalsIgnoreCase(userInfo.getCardNumber())
+                & payingBank.equalsIgnoreCase(userInfo.getIssuingbankName())
+                & phoneNum.replaceAll(" ", "").equalsIgnoreCase(userInfo.getCardPhone())
+                & identityNum.equalsIgnoreCase(userInfo.getIdCard())) {
+            return false;
+        }
+
         return true;
     }
 
@@ -274,32 +328,15 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String payingBank = ViewUtil.getTextTrim(mPayingBank);
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
                 final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
-                // TODO: 2016/10/10 暂时去掉银行卡校验
-//                if (!ValidityDecideUtil.checkBankCard(bankcardNum)) {
-//                    mCommonFailTvWarn.showController(R.string.bank_card_is_error);
-//                    return;
-//                }
 
                 if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
                     mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
                     return;
                 }
-
-                if (!ValidityDecideUtil.isMobileNum(phoneNum)) {
-                    mCommonFailTvWarn.show(R.string.common_phone_num_fail);
-                    return;
-                }
-
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank))) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
                     return;
                 }
-
-                if (!ValidityDecideUtil.IDCardValidate(identityNum)) {
-                    mCommonFailTvWarn.show(R.string.settings_identity_card_fail);
-                    return;
-                }
-
                 submitBindBank(cardHolderName, bankcardNum, payingBank, phoneNum, identityNum);
                 break;
             case R.id.unbindBankcard:

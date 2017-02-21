@@ -29,6 +29,7 @@ public class Preference {
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
         String PRODUCT_OPTIONAL_FOREIGN = "productOptionalForeign";
         String PRODUCT_OPTIONAL_DOMESTIC = "productOptionalDomestic";
+        String PAY_WAY = "pay_way";
     }
 
     private static Preference sInstance;
@@ -214,5 +215,13 @@ public class Preference {
 
     public String getProductOptionalDomestic() {
         return mPrefs.getString(Key.PRODUCT_OPTIONAL_DOMESTIC, "");
+    }
+
+    public int getRechargePayWay() {
+        return mPrefs.getInt(Key.PAY_WAY, 0);
+    }
+
+    public void setRechargePayWay(int payWay) {
+        getEditor().putInt(Key.PAY_WAY, payWay).apply();
     }
 }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.web.PaymentActivity;
@@ -79,7 +80,8 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
         mRechargeAmount.addTextChangedListener(mValidationWatcher);
 
         mSupportApplyWay = (SupportApplyWay) getIntent().getSerializableExtra(Launcher.EX_PAYLOAD);
-        updateView();
+        handlePayWay(Preference.get().getRechargePayWay());
+
         if (LocalUser.getUser().isBankcardFilled()) {
             getUserBankSingleLimitAndIsOpenPayPage(false);
         }
@@ -104,10 +106,12 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
     }
 
     private void updateView() {
-        if (!LocalUser.getUser().isBankcardFilled()) {
-            mBankCard.setText(R.string.bankcard);
-        } else {
-            updateBankNameAndBankLimit();
+        if (Preference.get().getRechargePayWay() == PAY_WAY_BANK) {
+            if (!LocalUser.getUser().isBankcardFilled()) {
+                mBankCard.setText(R.string.bankcard);
+            } else {
+                updateBankNameAndBankLimit();
+            }
         }
     }
 
@@ -146,12 +150,13 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      *
      * @param
      * @param
+     * @param
      */
     private void updateBankNameAndBankLimit() {
+        Log.d(TAG,"限制e度  "+LocalUser.getUser().getUserInfo().getLimitSingle());
         mBankCardSingleLimit.setVisibility(View.VISIBLE);
         String bankSingleLimit = getString(R.string.once_recharge_limit, FinanceUtil.formatWithThousandsSeparator(LocalUser.getUser().getUserInfo().getLimitSingle()));
         mBankCardSingleLimit.setText(bankSingleLimit);
-//        mBankCard.setText(StrUtil.mergeTextWithRatioColor(getBankNameAndBankCard(), "\n" + bankSingleLimit, 0.7f, ContextCompat.getColor(getActivity(), R.color.blackPrimary)));
         mBankCard.setText(getBankNameAndBankCard());
     }
 
@@ -311,6 +316,10 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
 
     @Override
     public void selectPayWay(int payWay) {
+        handlePayWay(payWay);
+    }
+
+    private void handlePayWay(int payWay) {
         mPayWay = payWay;
         switch (mPayWay) {
             case PAY_WAY_BANK:

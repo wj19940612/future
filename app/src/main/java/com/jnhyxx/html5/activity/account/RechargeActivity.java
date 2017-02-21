@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -153,7 +152,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
      * @param
      */
     private void updateBankNameAndBankLimit() {
-        Log.d(TAG,"限制e度  "+LocalUser.getUser().getUserInfo().getLimitSingle());
         mBankCardSingleLimit.setVisibility(View.VISIBLE);
         String bankSingleLimit = getString(R.string.once_recharge_limit, FinanceUtil.formatWithThousandsSeparator(LocalUser.getUser().getUserInfo().getLimitSingle()));
         mBankCardSingleLimit.setText(bankSingleLimit);
@@ -202,7 +200,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                     @Override
                     protected void onRespSuccess(Resp<Boolean> resp) {
                         if (resp.isSuccess() && resp.hasData()) {
-                            Log.d(TAG, "签署协议" + resp.getData());
                             if (resp.getData()) {
                                 doPayment();
                             } else {

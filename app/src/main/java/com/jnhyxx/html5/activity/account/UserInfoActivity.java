@@ -476,7 +476,7 @@ public class UserInfoActivity extends BaseActivity {
                 } else {
                     picker.setColumnWeight(2 / 8.0, 3 / 8.0, 3 / 8.0);//省级、地级和县级的比例为2:3:3
                 }
-                picker.setCancelTextColor(R.color.lucky);
+                picker.setCancelTextColor(ContextCompat.getColor(getActivity(),R.color.lucky));
 //            picker.setSubmitTextColor(R.color.blueAssist);
                 picker.setSubmitTextColor(Color.parseColor("#358CF3"));
                 picker.setAnimationStyle(R.style.BottomDialogStyle);

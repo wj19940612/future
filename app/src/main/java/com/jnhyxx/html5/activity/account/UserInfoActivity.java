@@ -359,6 +359,7 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void updateUserHeadImage(UserInfo userInfo) {
+        if (userInfo == null) return;
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
             Picasso.with(this).load(userInfo.getUserPortrait())
                     .placeholder(R.drawable.ic_user_info_head_visitor)

@@ -195,7 +195,10 @@ public class MineFragment extends BaseFragment {
         UserInfo userInfo = LocalUser.getUser().getUserInfo();
         if (LocalUser.getUser().isLogin()) {
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-                Picasso.with(getActivity()).load(userInfo.getUserPortrait()).error(R.drawable.ic_user_info_head_visitor).transform(new CircleTransform()).into(mHeadImage);
+                Picasso.with(getActivity()).load(userInfo.getUserPortrait())
+                        .error(R.drawable.ic_user_info_head_visitor)
+                        .placeholder(R.drawable.ic_user_info_head_visitor)
+                        .transform(new CircleTransform()).into(mHeadImage);
             } else {
                 if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
                     if (userInfo.isUserisBoy()) {
@@ -217,7 +220,7 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.signInButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LOGIN);
-                startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
+                startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQ_CODE_LOGIN);
                 break;
             case R.id.signUpButton:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.REGISTER);
@@ -247,10 +250,10 @@ public class MineFragment extends BaseFragment {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
 //                    Launcher.with(getActivity(), UserInfoActivity.class).executeForResult(REQ_CODE_USER_INFO);
-                    startActivityForResult(new Intent(getActivity(),UserInfoActivity.class),REQ_CODE_USER_INFO);
+                    startActivityForResult(new Intent(getActivity(), UserInfoActivity.class), REQ_CODE_USER_INFO);
                 } else {
 //                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
-                    startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
+                    startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQ_CODE_LOGIN);
                 }
                 break;
             case R.id.feedback:
@@ -326,7 +329,7 @@ public class MineFragment extends BaseFragment {
                     }).fire();
         } else {
 //            Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
-            startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
+            startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQ_CODE_LOGIN);
         }
     }
 
@@ -373,7 +376,7 @@ public class MineFragment extends BaseFragment {
                         }
                     }).fire();
         } else {
-            startActivityForResult(new Intent(getActivity(),SignInActivity.class),REQ_CODE_LOGIN);
+            startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQ_CODE_LOGIN);
         }
     }
 

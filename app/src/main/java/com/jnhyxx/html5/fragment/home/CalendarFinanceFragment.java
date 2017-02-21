@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -143,6 +144,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
                 .setTag(TAG)
                 .setIndeterminate(this)
+                .setRetryPolicy(new DefaultRetryPolicy())
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
                     @Override
@@ -362,7 +364,11 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                     mBadNews.setVisibility(View.GONE);
                     mLidoNews.setBackgroundResource(R.drawable.btn_transparent);
                     mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
-                    mLidoNews.setText(R.string.not_publish);
+                    if (item.getEffect().contains("||")) {
+                        mLidoNews.setText(R.string.less_affected);
+                    } else {
+                        mLidoNews.setText(R.string.not_publish);
+                    }
                 }
             }
         }

@@ -28,9 +28,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ViewUtil;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +51,6 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     @BindView(R.id.hint)
     TextView mHint;
 
-    private Set<String> mSet;
     private Unbinder mBind;
     private ProfitRankAdapter mProfitRankAdapter;
 
@@ -82,7 +79,6 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mSet = new HashSet<>();
         mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
         getYesterdayProfitRank();
@@ -179,11 +175,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
             mSwipeRefreshLayout.setRefreshing(false);
         }
 
-        for (ProfitRankModel data : profitRankModels) {
-            if (mSet.add(data.getPhone())) {
-                mProfitRankAdapter.add(data);
-            }
-        }
+        mProfitRankAdapter.addAll(profitRankModels);
         mProfitRankAdapter.notifyDataSetChanged();
 
 //        final ViewTreeObserver viewTreeObserver = mListView.getViewTreeObserver();

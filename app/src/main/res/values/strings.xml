@@ -576,4 +576,5 @@
     <string name="real_data_">公布值: </string>
     <string name="not_strategy">暂无攻略</string>
     <string name="not_finance_data">暂无财经消息</string>
+    <string name="less_affected">影响较小</string>
 </resources>

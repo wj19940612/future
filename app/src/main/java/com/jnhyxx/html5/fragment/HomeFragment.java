@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -75,9 +72,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.id.priceChangePercent;
-import static com.jnhyxx.html5.R.id.viewPager;
-
 
 public class HomeFragment extends BaseFragment {
     @BindView(R.id.homeBanner)
@@ -88,10 +82,6 @@ public class HomeFragment extends BaseFragment {
     LinearLayout mContactService;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.collapsing)
-    CollapsingToolbarLayout mCollapsing;
-    @BindView(R.id.appbar)
-    AppBarLayout mAppbar;
     @BindView(R.id.homeHeader)
     HomeHeader mHomeHeader;
     @BindView(R.id.optionalForeignList)
@@ -102,6 +92,8 @@ public class HomeFragment extends BaseFragment {
     TabLayout mTabLayout;
     @BindView(R.id.replaceLayout)
     RelativeLayout mReplaceLayout;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView mNestedScrollView;
     private Unbinder mBind;
 
     public static final int REQ_CODE_FOREIGN = 100;
@@ -120,7 +112,7 @@ public class HomeFragment extends BaseFragment {
 
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
-
+    private int mHomeBannerHeight;
 
     public interface OnListViewHeightListener {
         /**
@@ -166,20 +158,26 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-        mAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        mHomeBanner.post(new Runnable() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                mToolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.colorPrimary),
-                        Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange()));
+            public void run() {
+                mHomeBannerHeight = mHomeBanner.getMeasuredHeight();
             }
         });
-
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                        Math.abs(Math.min(mHomeBannerHeight, scrollY) * 1.0f) / mHomeBannerHeight));
+            }
+        });
         setOptionalProduct();
         requestHomeInformation();
         requestProductMarketList();
     }
 
     private void setOptionalProduct() {
+        mOptionalForeignList.setHasFixedSize(true);
         MyAdapter foreignAdapter = new MyAdapter(getContext(), mForeignPackage, mForeignPrice);
         mOptionalForeignList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalForeignList.addItemDecoration(new DividerGridItemDecoration(getContext()));
@@ -199,6 +197,7 @@ public class HomeFragment extends BaseFragment {
         mOptionalForeignWrapper.addHeaderView(foreignHeadView);
         mOptionalForeignList.setAdapter(mOptionalForeignWrapper);
 
+        mOptionalDomesticList.setHasFixedSize(true);
         MyAdapter domesticAdapter = new MyAdapter(getContext(), mDomesticPackage, mDomesticPrice);
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticList.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
@@ -482,36 +481,43 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void updateOptionalLists() {
-        String productOptionalForeign = Preference.get().getProductOptionalForeign();
-        String productOptionalDomestic = Preference.get().getProductOptionalDomestic();
-        List<String> optionalForeigns = getOptionalList(productOptionalForeign);
-        List<String> optionalDomestics = getOptionalList(productOptionalDomestic);
-        mForeignPackage.clear();
-        mDomesticPackage.clear();
-        updateOptional(optionalForeigns, mForeignPackage);
-        updateOptional(optionalDomestics, mDomesticPackage);
-        if (mDomesticPrice.isEmpty() || mDomesticPrice.size() < mDomesticPackage.size()) {
-            for (ProductPkg productPkg : mDomesticPackage) {
-                MarketData marketData = productPkg.getMarketData();
-                if (marketData != null) {
-                    mDomesticPrice.add(marketData.getLastPrice());
-                } else {
-                    mDomesticPrice.add(0d);
+        new Thread() {
+            @Override
+            public void run() {
+                String productOptionalForeign = Preference.get().getProductOptionalForeign();
+                String productOptionalDomestic = Preference.get().getProductOptionalDomestic();
+                List<String> optionalForeigns = getOptionalList(productOptionalForeign);
+                List<String> optionalDomestics = getOptionalList(productOptionalDomestic);
+                mForeignPackage.clear();
+                mDomesticPackage.clear();
+                updateOptional(optionalForeigns, mForeignPackage);
+                updateOptional(optionalDomestics, mDomesticPackage);
+                if (mDomesticPrice.isEmpty() || mDomesticPrice.size() < mDomesticPackage.size()) {
+                    for (ProductPkg productPkg : mDomesticPackage) {
+                        MarketData marketData = productPkg.getMarketData();
+                        if (marketData != null) {
+                            mDomesticPrice.add(marketData.getLastPrice());
+                        } else {
+                            mDomesticPrice.add(0d);
+                        }
+                    }
                 }
-            }
-        }
-        if (mForeignPrice.isEmpty() || mForeignPrice.size() < mForeignPackage.size()) {
-            for (ProductPkg productPkg : mForeignPackage) {
-                MarketData marketData = productPkg.getMarketData();
-                if (marketData != null) {
-                    mForeignPrice.add(marketData.getLastPrice());
-                } else {
-                    mForeignPrice.add(0d);
+                if (mForeignPrice.isEmpty() || mForeignPrice.size() < mForeignPackage.size()) {
+                    for (ProductPkg productPkg : mForeignPackage) {
+                        MarketData marketData = productPkg.getMarketData();
+                        if (marketData != null) {
+                            mForeignPrice.add(marketData.getLastPrice());
+                        } else {
+                            mForeignPrice.add(0d);
+                        }
+                    }
                 }
+                mOptionalForeignList.setVisibility(mForeignPackage.size() == 0 ? View.GONE : View.VISIBLE);
+                mOptionalForeignList.setVisibility(mDomesticPackage.size() == 0 ? View.GONE : View.VISIBLE);
+                mOptionalForeignWrapper.notifyDataSetChanged();
+                mOptionalDomesticWrapper.notifyDataSetChanged();
             }
-        }
-        mOptionalForeignWrapper.notifyDataSetChanged();
-        mOptionalDomesticWrapper.notifyDataSetChanged();
+        }.run();
     }
 
     private void updateOptional(List<String> optionals, List<ProductPkg> targetList) {
@@ -680,7 +686,7 @@ public class HomeFragment extends BaseFragment {
             TextView mHoldingPosition;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(priceChangePercent)
+            @BindView(R.id.priceChangePercent)
             TextView mPriceChangePercent;
             @BindView(R.id.bgTwinkle)
             LinearLayout mBgTwinkle;
@@ -756,7 +762,6 @@ public class HomeFragment extends BaseFragment {
                     } else {
                         mLastPrice.setText("——");
                         mPriceChangePercent.setText("——%");
-                        mPriceChangePercent.setCompoundDrawables(null, null, null, null);
                     }
                     HomePositions.Position position = pkg.getPosition(); // Position status
                     if (position != null && position.getHandsNum() > 0) {
@@ -782,59 +787,6 @@ public class HomeFragment extends BaseFragment {
                     }, 500);
                 }
             }
-        }
-    }
-
-
-    public static class HomeInfoFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        Context mContext;
-        FragmentManager mFragmentManager;
-
-        public HomeInfoFragmentPagerAdapter(FragmentManager fm, Context context) {
-            super(fm);
-            mContext = context;
-            mFragmentManager = fm;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new YesterdayProfitRankFragment();
-                case 1:
-                    return TradingStrategyFragment.newInstance();
-                case 2:
-                    return CalendarFinanceFragment.newInstance();
-                default:
-                    break;
-            }
-            return null;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return mContext.getString(R.string.yesterday_the_profit_list);
-                case 1:
-                    return mContext.getString(R.string.trading_strategy);
-                case 2:
-                    return mContext.getString(R.string.calendar_of_finance);
-                default:
-                    break;
-            }
-
-            return super.getPageTitle(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        public Fragment getFragment(int position) {
-            return mFragmentManager.findFragmentByTag("android:switcher:" + viewPager + ":" + position);
         }
     }
 }

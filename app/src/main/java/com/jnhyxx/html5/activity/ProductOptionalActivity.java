@@ -110,12 +110,6 @@ public class ProductOptionalActivity extends BaseActivity {
             } else {
                 Preference.get().setProductOptionalForeign(sb.deleteCharAt(sb.length() - 1).toString());
             }
-        } else {
-            if (mIsDomestic) {
-                Preference.get().setProductOptionalDomestic("");
-            } else {
-                Preference.get().setProductOptionalForeign("");
-            }
         }
         super.onBackPressed();
     }
@@ -124,41 +118,46 @@ public class ProductOptionalActivity extends BaseActivity {
         API.Market.getProductList().setTag(TAG).setIndeterminate(this)
                 .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
                     @Override
-                    public void onRespSuccess(List<Product> products) {
-                        if (mProductOptionals == null) {
-                            ListIterator<Product> iterator = products.listIterator();
-                            while (iterator.hasNext()) {
-                                Product product = iterator.next();
-                                if (product.isDomestic() == mIsDomestic) {
-                                    if (mProductList1.size() < 3) {
-                                        product.setIsOptional(true);
-                                        mProductList1.add(product);
-                                        iterator.remove();
-                                    }
-                                } else {
-                                    iterator.remove();
-                                }
-                            }
-                            mProductList2.addAll(products);
-                        } else {
-                            for (String productOptional : mProductOptionals) {
-                                ListIterator<Product> iterator2 = products.listIterator();
-                                while (iterator2.hasNext()) {
-                                    Product product = iterator2.next();
-                                    if (product.isDomestic() == mIsDomestic) {
-                                        if (String.valueOf(product.getVarietyId()).equals(productOptional)) {
-                                            product.setIsOptional(true);
-                                            mProductList1.add(product);
-                                            iterator2.remove();
+                    public void onRespSuccess(final List<Product> products) {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                if (mProductOptionals == null) {
+                                    ListIterator<Product> iterator = products.listIterator();
+                                    while (iterator.hasNext()) {
+                                        Product product = iterator.next();
+                                        if (product.isDomestic() == mIsDomestic) {
+                                            if (mProductList1.size() < 3) {
+                                                product.setIsOptional(true);
+                                                mProductList1.add(product);
+                                                iterator.remove();
+                                            }
+                                        } else {
+                                            iterator.remove();
                                         }
-                                    } else {
-                                        iterator2.remove();
                                     }
+                                    mProductList2.addAll(products);
+                                } else {
+                                    for (String productOptional : mProductOptionals) {
+                                        ListIterator<Product> iterator2 = products.listIterator();
+                                        while (iterator2.hasNext()) {
+                                            Product product = iterator2.next();
+                                            if (product.isDomestic() == mIsDomestic) {
+                                                if (String.valueOf(product.getVarietyId()).equals(productOptional)) {
+                                                    product.setIsOptional(true);
+                                                    mProductList1.add(product);
+                                                    iterator2.remove();
+                                                }
+                                            } else {
+                                                iterator2.remove();
+                                            }
+                                        }
+                                    }
+                                    mProductList2.addAll(products);
                                 }
+                                mAdapter.notifyDataSetChanged();
                             }
-                            mProductList2.addAll(products);
-                        }
-                        mAdapter.notifyDataSetChanged();
+                        }.run();
                     }
                 }).fire();
     }

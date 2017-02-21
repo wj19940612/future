@@ -362,7 +362,11 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                     mBadNews.setVisibility(View.GONE);
                     mLidoNews.setBackgroundResource(R.drawable.btn_transparent);
                     mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.colorDisable));
-                    mLidoNews.setText(R.string.not_publish);
+                    if (item.getEffect().contains("||")) {
+                        mLidoNews.setText(R.string.less_affected);
+                    } else {
+                        mLidoNews.setText(R.string.not_publish);
+                    }
                 }
             }
         }

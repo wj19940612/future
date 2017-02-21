@@ -75,10 +75,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    public BottomTabs getBottomTabs() {
-        return mBottomTabs;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,7 +160,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
+        LocalBroadcastManager.getInstance(MainActivity.this)
+                .registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
         requestHomePopup();
     }
 
@@ -198,7 +195,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
+        LocalBroadcastManager.getInstance(MainActivity.this)
+                .unregisterReceiver(mPushBroadcastReceiver);
     }
 
     private class MainFragmentsAdapter extends FragmentPagerAdapter {

@@ -100,7 +100,18 @@ public class MarketFragment extends BaseFragment {
         super.onResume();
         requestProductList();
         requestHomePositions();
-        startScheduleJob(5 * 1000);
+
+        startScheduleJob(1 * 1000);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startScheduleJob(1 * 1000);
+        } else {
+            stopScheduleJob();
+        }
     }
 
     @Override

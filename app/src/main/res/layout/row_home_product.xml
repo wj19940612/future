@@ -30,22 +30,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#262626"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 tools:text="美原油"/>
 
             <ImageView
                 android:id="@+id/hotIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="5dp"
                 android:src="@drawable/ic_hot"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/newTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/bg_red_primary"
                 android:paddingBottom="2dp"
                 android:paddingLeft="7dp"
@@ -60,7 +61,7 @@
                 android:id="@+id/marketCloseText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/bg_market_close"
                 android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
@@ -74,7 +75,7 @@
                 android:id="@+id/holdingPosition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/bg_holding_position"
                 android:paddingBottom="2dp"
                 android:paddingLeft="5dp"

@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
@@ -73,9 +71,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.jnhyxx.html5.R.id.priceChangePercent;
-import static com.jnhyxx.html5.R.id.viewPager;
 
 
 public class HomeFragment extends BaseFragment {
@@ -691,7 +686,7 @@ public class HomeFragment extends BaseFragment {
             TextView mHoldingPosition;
             @BindView(R.id.lastPrice)
             TextView mLastPrice;
-            @BindView(priceChangePercent)
+            @BindView(R.id.priceChangePercent)
             TextView mPriceChangePercent;
             @BindView(R.id.bgTwinkle)
             LinearLayout mBgTwinkle;
@@ -767,7 +762,6 @@ public class HomeFragment extends BaseFragment {
                     } else {
                         mLastPrice.setText("——");
                         mPriceChangePercent.setText("——%");
-                        mPriceChangePercent.setCompoundDrawables(null, null, null, null);
                     }
                     HomePositions.Position position = pkg.getPosition(); // Position status
                     if (position != null && position.getHandsNum() > 0) {
@@ -793,59 +787,6 @@ public class HomeFragment extends BaseFragment {
                     }, 500);
                 }
             }
-        }
-    }
-
-
-    public static class HomeInfoFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        Context mContext;
-        FragmentManager mFragmentManager;
-
-        public HomeInfoFragmentPagerAdapter(FragmentManager fm, Context context) {
-            super(fm);
-            mContext = context;
-            mFragmentManager = fm;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new YesterdayProfitRankFragment();
-                case 1:
-                    return TradingStrategyFragment.newInstance();
-                case 2:
-                    return CalendarFinanceFragment.newInstance();
-                default:
-                    break;
-            }
-            return null;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return mContext.getString(R.string.yesterday_the_profit_list);
-                case 1:
-                    return mContext.getString(R.string.trading_strategy);
-                case 2:
-                    return mContext.getString(R.string.calendar_of_finance);
-                default:
-                    break;
-            }
-
-            return super.getPageTitle(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        public Fragment getFragment(int position) {
-            return mFragmentManager.findFragmentByTag("android:switcher:" + viewPager + ":" + position);
         }
     }
 }

@@ -28,9 +28,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.ViewUtil;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,7 +79,6 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mSet = new HashSet<>();
         mListView.setEmptyView(mEmpty);
         mListView.setOnScrollListener(this);
         getYesterdayProfitRank();

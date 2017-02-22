@@ -34,6 +34,7 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
      * 今天的日期在星期列表中的索引
      */
     private int mTodayWeekIndex;
+    private int mIndex;
 
     private static final String TODAY = "\n今天";
 
@@ -137,8 +138,8 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
     }
 
     public void setSelectWeek(int position) {
-//        if (position < 0 || position > 7) return;
-        position = position + 1;
+        if (position < 0 || position > 7) return;
+
         for (int i = 0; i < getChildCount(); i++) {
             View view = getChildAt(i);
             if (view instanceof TextView) {
@@ -151,10 +152,15 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
         if (textView != null) {
             textView.setSelected(true);
             textView.setTextColor(Color.WHITE);
+            mIndex = position;
             if (mOnWeekSelectListener != null) {
-                mOnWeekSelectListener.onWeekSelected(position, weekData[position - 1], getSelectDayTime(position - 1));
+                mOnWeekSelectListener.onWeekSelected(position, weekData[position], getSelectDayTime(position));
             }
         }
+    }
+
+    public int getIndex() {
+        return mIndex;
     }
 
     /**
@@ -173,7 +179,7 @@ public class WeekCalendarLayout extends LinearLayout implements View.OnClickList
 
 
     public TextView getTextView(int index) {
-        View view = getChildAt(index * 2 - 1);
+        View view = getChildAt(index * 2 + 1);
         if (view instanceof TextView) {
             return (TextView) view;
         }

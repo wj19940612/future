@@ -78,47 +78,29 @@
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
 
-        <LinearLayout
+        <TextView
             android:id="@+id/riskEvaluation"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:gravity="center_vertical">
+            android:drawableLeft="@drawable/ic_home_newcomer"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/risk_evaluation"
+            android:textColor="#ffffff"
+            android:textSize="14sp"/>
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/header_icon_newcomer"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="@string/risk_evaluation"
-                android:textColor="#ffffff"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
             android:id="@+id/contactService"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/header_icon_service"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="@string/contact_service"
-                android:textColor="#ffffff"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
+            android:drawableLeft="@drawable/ic_home_service"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/contact_service"
+            android:textColor="#ffffff"
+            android:textSize="14sp"/>
     </android.support.v7.widget.Toolbar>
+
 </FrameLayout>

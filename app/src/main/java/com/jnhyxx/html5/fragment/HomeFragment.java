@@ -80,9 +80,9 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
     @BindView(R.id.riskEvaluation)
-    LinearLayout mRiskEvaluation;
+    TextView mRiskEvaluation;
     @BindView(R.id.contactService)
-    LinearLayout mContactService;
+    TextView mContactService;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.homeHeader)
@@ -263,9 +263,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-//        if (!mIsScrolling) {
-            requestProductMarketList();
-//        }
+        requestProductMarketList();
         if (count % 5 == 0) {
 //            mHomeHeader.nextOrderReport();
             mHomeBanner.nextAdvertisement();
@@ -294,11 +292,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initSlidingTabLayout() {
-//        showProfitRankFragment();
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
-//        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
+        showProfitRankFragment();
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
+        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
     }
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -539,8 +537,8 @@ public class HomeFragment extends BaseFragment {
                         }
                     }
                 }
-                mOptionalForeignList.setVisibility(mForeignPackage.size() == 0 ? View.GONE : View.VISIBLE);
-                mOptionalForeignList.setVisibility(mDomesticPackage.size() == 0 ? View.GONE : View.VISIBLE);
+                mOptionalDomesticList.setVisibility(mDomesticPackage.isEmpty() ? View.GONE : View.VISIBLE);
+                mOptionalForeignList.setVisibility(mForeignPackage.isEmpty() ? View.GONE : View.VISIBLE);
                 if (!mIsScrolling) {
                     Log.e(TAG, "run: " + mIsScrolling);
                     mOptionalForeignWrapper.notifyDataSetChanged();

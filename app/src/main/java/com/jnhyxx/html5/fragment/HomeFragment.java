@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.DividerGridItemDecoration;
 import com.jnhyxx.html5.utils.HeaderAndFooterWrapper;
+import com.jnhyxx.html5.utils.MyNestedScrollView;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.HomeBanner;
@@ -93,7 +96,7 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.replaceLayout)
     RelativeLayout mReplaceLayout;
     @BindView(R.id.nestedScrollView)
-    NestedScrollView mNestedScrollView;
+    MyNestedScrollView mNestedScrollView;
     private Unbinder mBind;
 
     public static final int REQ_CODE_FOREIGN = 100;
@@ -113,6 +116,8 @@ public class HomeFragment extends BaseFragment {
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
     private int mHomeBannerHeight;
+
+    private boolean mIsScrolling;
 
     public interface OnListViewHeightListener {
         /**
@@ -164,11 +169,31 @@ public class HomeFragment extends BaseFragment {
                 mHomeBannerHeight = mHomeBanner.getMeasuredHeight();
             }
         });
+        mNestedScrollView.smoothScrollTo(0, 20);
+        mNestedScrollView.setHandler(new Handler());
         mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                         Math.abs(Math.min(mHomeBannerHeight, scrollY) * 1.0f) / mHomeBannerHeight));
+            }
+        });
+
+        mNestedScrollView.setOnScrollStateChangedListener(new MyNestedScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(MyNestedScrollView.ScrollType scrollType) {
+                switch (scrollType) {
+                    case IDLE:
+                        mIsScrolling = false;
+                        break;
+                    case TOUCH_SCROLL:
+                        mIsScrolling = true;
+                        break;
+                    case FLING:
+                        mIsScrolling = true;
+                        break;
+                }
             }
         });
         setOptionalProduct();
@@ -238,7 +263,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        requestProductMarketList();
+//        if (!mIsScrolling) {
+            requestProductMarketList();
+//        }
         if (count % 5 == 0) {
 //            mHomeHeader.nextOrderReport();
             mHomeBanner.nextAdvertisement();
@@ -514,8 +541,11 @@ public class HomeFragment extends BaseFragment {
                 }
                 mOptionalForeignList.setVisibility(mForeignPackage.size() == 0 ? View.GONE : View.VISIBLE);
                 mOptionalForeignList.setVisibility(mDomesticPackage.size() == 0 ? View.GONE : View.VISIBLE);
-                mOptionalForeignWrapper.notifyDataSetChanged();
-                mOptionalDomesticWrapper.notifyDataSetChanged();
+                if (!mIsScrolling) {
+                    Log.e(TAG, "run: " + mIsScrolling);
+                    mOptionalForeignWrapper.notifyDataSetChanged();
+                    mOptionalDomesticWrapper.notifyDataSetChanged();
+                }
             }
         }.run();
     }

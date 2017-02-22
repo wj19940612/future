@@ -55,7 +55,7 @@ import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.DividerGridItemDecoration;
 import com.jnhyxx.html5.utils.HeaderAndFooterWrapper;
-import com.jnhyxx.html5.utils.MyNestedScrollView;
+import com.jnhyxx.html5.view.MyNestedScrollView;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.view.HomeBanner;

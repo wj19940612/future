@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <com.jnhyxx.html5.utils.MyNestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </com.jnhyxx.html5.utils.MyNestedScrollView>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

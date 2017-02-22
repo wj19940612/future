@@ -62,8 +62,6 @@ import static com.jnhyxx.html5.activity.BaseActivity.REQ_CODE_LOGIN;
 
 
 public class MineFragment extends BaseFragment {
-    //进入用户信息界面的请求吗
-    private static final int REQ_CODE_USER_INFO = 344;
 
     //账户余额
     @BindView(R.id.balance)
@@ -129,11 +127,10 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SET);
-                Launcher.with(getActivity(), UserInfoActivity.class).executeForResult(REQ_CODE_USER_INFO);
+                Launcher.with(getActivity(), UserInfoActivity.class).execute();
             }
         });
 
-        updateUserImage();
     }
 
     @Override
@@ -179,6 +176,7 @@ public class MineFragment extends BaseFragment {
             mNickname.setText(getString(R.string.nickname_logged, userName));
             mBalance.setText(FinanceUtil.formatWithScale(moneyUsable));
             mScore.setText(getString(R.string.mine_score, FinanceUtil.formatWithScale(scoreUsable)));
+            updateUserImage(userInfo);
         } else {
             mSignArea.setVisibility(View.VISIBLE);
             mFundArea.setVisibility(View.GONE);
@@ -190,9 +188,7 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void updateUserImage() {
-        UserInfo userInfo = LocalUser.getUser().getUserInfo();
-        if (LocalUser.getUser().isLogin()) {
+    private void updateUserImage(UserInfo userInfo) {
             if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
                 Picasso.with(getActivity()).load(userInfo.getUserPortrait())
                         .error(R.drawable.ic_user_info_head_visitor)
@@ -210,9 +206,6 @@ public class MineFragment extends BaseFragment {
                     mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
                 }
             }
-        } else {
-            mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
-        }
     }
 
     @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback})
@@ -249,8 +242,7 @@ public class MineFragment extends BaseFragment {
             case R.id.headImage:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.USER_HEAD);
                 if (LocalUser.getUser().isLogin()) {
-//                    Launcher.with(getActivity(), UserInfoActivity.class).executeForResult(REQ_CODE_USER_INFO);
-                    startActivityForResult(new Intent(getActivity(), UserInfoActivity.class), REQ_CODE_USER_INFO);
+                    Launcher.with(getActivity(), UserInfoActivity.class).execute();
                 } else {
 //                    Launcher.with(getActivity(), SignInActivity.class).executeForResult(REQ_CODE_LOGIN);
                     startActivityForResult(new Intent(getActivity(), SignInActivity.class), REQ_CODE_LOGIN);
@@ -387,12 +379,6 @@ public class MineFragment extends BaseFragment {
             switch (requestCode) {
                 case BankcardBindingActivity.REQ_CODE_BIND_BANK:
                     openWithdrawPage();
-                    break;
-                case REQ_CODE_USER_INFO:
-                    updateUserImage();
-                    break;
-                case REQ_CODE_LOGIN:
-                    updateUserImage();
                     break;
             }
         }

@@ -273,7 +273,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                 String organizeMarkUrl = API.Message.getCalendarFinanceCountryBanner(item.getState());
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
                     Picasso.with(context).load(ImageUtil.utf8Togb2312(organizeMarkUrl)).error(R.mipmap.ic_launcher)
-                            .resizeDimen(R.dimen.country_flag_width_size, R.dimen.country_flag_height)
+                            .resizeDimen(R.dimen.country_flag_width, R.dimen.country_flag_height)
                             .into(mCountryBanner);
                 }
                 mTime.setText(item.getPredicttime());

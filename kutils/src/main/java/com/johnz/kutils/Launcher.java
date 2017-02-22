@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class Launcher {
@@ -26,8 +27,8 @@ public class Launcher {
 
     public static Launcher with(Context context, Class<?> clazz) {
         sInstance = new Launcher();
-        sInstance.mContext = context;
-        sInstance.mIntent.setClass(context, clazz);
+        sInstance.mContext = new WeakReference<Context>(context).get();
+        sInstance.mIntent.setClass(sInstance.mContext, clazz);
         return sInstance;
     }
 
@@ -45,6 +46,7 @@ public class Launcher {
         mIntent.putExtra(key, value);
         return this;
     }
+
     public Launcher putExtra(String key, double value) {
         mIntent.putExtra(key, value);
         return this;
@@ -61,10 +63,10 @@ public class Launcher {
     }
 
     /**
-     * @deprecated 为了提高速度 使用 putExtra(String key, Parcelable parcelable)
      * @param key
      * @param data
      * @return
+     * @deprecated 为了提高速度 使用 putExtra(String key, Parcelable parcelable)
      */
     public Launcher putExtra(String key, Serializable data) {
         mIntent.putExtra(key, data);

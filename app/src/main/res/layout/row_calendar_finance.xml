@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="425dp"
     android:orientation="vertical"
     android:paddingLeft="@dimen/common_margin"
     android:paddingRight="@dimen/common_margin"
@@ -68,13 +68,14 @@
     </LinearLayout>
 
     <TextView
+        android:maxLines="2"
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="21dp"
         android:textColor="@color/blackPrimary"
         android:textSize="16sp"
-        tools:text="加拿大至11月18日全国经济指数"/>
+        tools:text="加拿大至11月18日全国经济指数dhjkfhdjksahfjkdsdsfhjkdsfhdskhfs"/>
 
     <LinearLayout
         android:layout_width="match_parent"

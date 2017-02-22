@@ -1,7 +1,6 @@
 package com.jnhyxx.html5.fragment.home;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -31,7 +29,6 @@ import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
-import com.jnhyxx.html5.utils.ViewUtil;
 import com.jnhyxx.html5.view.WeekCalendarLayout;
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.ImageUtil;
@@ -42,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.jnhyxx.html5.R.id.listView;
 import static com.jnhyxx.html5.R.string.lido;
 
 
@@ -53,7 +51,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
     @BindView(R.id.calendarWeek)
     WeekCalendarLayout mCalendarWeek;
-    @BindView(R.id.listView)
+    @BindView(listView)
     ListView mListView;
     @BindView(android.R.id.empty)
     TextView mEmpty;
@@ -118,22 +116,14 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     @Override
     public void onResume() {
         super.onResume();
-        measureWeekCalendarLayout();
-    }
-
-    private void measureWeekCalendarLayout() {
-        ViewTreeObserver viewTreeObserver = mCalendarWeek.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mCalendarWeek.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    mCalendarWeek.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        if(mCalendarWeek!=null){
+            mCalendarWeek.post(new Runnable() {
+                @Override
+                public void run() {
+                    mWeekCalendarLayoutHeight = mCalendarWeek.getMeasuredHeight();
                 }
-                mWeekCalendarLayoutHeight = mCalendarWeek.getHeight();
-            }
-        });
+            });
+        }
     }
 
     private void getCalendarFinanceData(String time) {
@@ -168,27 +158,19 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
+            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size()*428 + mWeekCalendarLayoutHeight);
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
-            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
-            // listView.getDividerHeight()获取子项间分隔符占用的高度
-            // params.height最后得到整个ListView完整显示需要的高度
-            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
+//            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
+////             listView.getDividerHeight()获取子项间分隔符占用的高度
+////             params.height最后得到整个ListView完整显示需要的高度
+//            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
         } else {
             WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics displayMetrics = new DisplayMetrics();
             windowManager.getDefaultDisplay().getMetrics(displayMetrics);
             mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7));
         }
-//        final ViewTreeObserver viewTreeObserver = mListView.getViewTreeObserver();
-//        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                viewTreeObserver.removeOnGlobalLayoutListener(this);
-
-//            }
-//        });
-
     }
 
     private void stopRefreshAnimation() {

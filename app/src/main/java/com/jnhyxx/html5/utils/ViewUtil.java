@@ -55,11 +55,12 @@ public class ViewUtil {
             totalHeight += listItem.getMeasuredHeight(); //统计所有子项的总高度
         }
 
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        //listView.getDividerHeight()获取子项间分隔符占用的高度
-        //params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
-        return params.height;
+//        ViewGroup.LayoutParams params = listView.getLayoutParams();
+//        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+//        //listView.getDividerHeight()获取子项间分隔符占用的高度
+//        //params.height最后得到整个ListView完整显示需要的高度
+//        listView.setLayoutParams(params);
+//        return params.height;
+        return totalHeight;
     }
 }

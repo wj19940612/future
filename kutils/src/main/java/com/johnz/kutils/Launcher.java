@@ -89,13 +89,21 @@ public class Launcher {
     }
 
     public void execute() {
-        mContext.startActivity(mIntent);
+        if (mContext != null) {
+            mContext.startActivity(mIntent);
+            mContext = null;
+            mIntent = null;
+        }
     }
 
     public void executeForResult(int requestCode) {
-        if (mContext instanceof Activity) {
-            Activity activity = (Activity) mContext;
-            activity.startActivityForResult(mIntent, requestCode);
+        if (mContext != null) {
+            if (mContext instanceof Activity) {
+                Activity activity = (Activity) mContext;
+                activity.startActivityForResult(mIntent, requestCode);
+                mContext = null;
+                mIntent = null;
+            }
         }
     }
 

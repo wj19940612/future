@@ -68,7 +68,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_white_pressable"
             android:drawableTop="@drawable/ic_home_riskassessment"
-            android:text="@string/newer_video"/>
+            android:text="@string/live"/>
     </LinearLayout>
 
 </LinearLayout>

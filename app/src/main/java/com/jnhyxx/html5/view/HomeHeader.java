@@ -48,7 +48,6 @@ public class HomeHeader extends FrameLayout {
         void onInvestCourseClick();
 
         void onLiveClick();
-
     }
 
     private OnViewClickListener mListener;

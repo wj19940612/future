@@ -56,12 +56,12 @@
                 app:tabIndicatorColor="@color/blueAssist"
                 app:tabMode="fixed"
                 app:tabPadding="@dimen/common_margin"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:tabSelectedTextColor="@color/blueAssist"
                 app:tabTextColor="@color/blackPrimary"/>
 
             <RelativeLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/replaceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

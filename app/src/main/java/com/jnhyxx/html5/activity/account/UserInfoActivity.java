@@ -279,7 +279,6 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void bingBankCard() {
-
         Launcher.with(getActivity(), BankcardBindingActivity.class).putExtra(Launcher.EX_PAYLOAD, true).executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
     }
 

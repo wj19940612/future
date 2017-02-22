@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,7 +167,7 @@ public class HomeFragment extends BaseFragment {
         mHomeBanner.post(new Runnable() {
             @Override
             public void run() {
-                mHomeBannerHeight = mHomeBanner.getMeasuredHeight();
+                mHomeBannerHeight = mHomeBanner.getHeight();
             }
         });
         mNestedScrollView.smoothScrollTo(0, 20);
@@ -176,7 +177,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
-                        Math.abs(Math.min(mHomeBannerHeight, scrollY) * 1.0f) / mHomeBannerHeight));
+                        Math.abs(Math.min(mHomeBannerHeight, dp2px(scrollY)) * 1.0f) / mHomeBannerHeight));
+                Log.e("test", mHomeBannerHeight + "+++++++" + dp2px(scrollY));
             }
         });
 
@@ -199,6 +201,11 @@ public class HomeFragment extends BaseFragment {
         setOptionalProduct();
         requestHomeInformation();
         requestProductMarketList();
+    }
+
+    private int dp2px(float dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private void setOptionalProduct() {

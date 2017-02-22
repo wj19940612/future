@@ -292,11 +292,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initSlidingTabLayout() {
-//        showProfitRankFragment();
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
-//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
-//        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
+        showProfitRankFragment();
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
+        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
     }
 
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -559,16 +559,16 @@ public class HomeFragment extends BaseFragment {
             }
         } else {
             for (ProductPkg productPkg : mProductPkgList) {
-//                if (targetList == mForeignPackage && productPkg.getProduct().isForeign()) {
-//                    if (targetList.size() < 3) {
-//                        targetList.add(productPkg);
-//                    }
-//                }
-//                if (targetList == mDomesticPackage && productPkg.getProduct().isDomestic()) {
-//                    if (targetList.size() < 3) {
-//                        targetList.add(productPkg);
-//                    }
-//                }
+                if (targetList == mForeignPackage && productPkg.getProduct().isForeign()) {
+                    if (targetList.size() < 3) {
+                        targetList.add(productPkg);
+                    }
+                }
+                if (targetList == mDomesticPackage && productPkg.getProduct().isDomestic()) {
+                    if (targetList.size() < 3) {
+                        targetList.add(productPkg);
+                    }
+                }
             }
         }
     }

@@ -110,7 +110,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         super.onAttach(context);
         if (context instanceof OnSendButtonClickListener) {
             mOnSendButtonClickListener = (OnSendButtonClickListener) context;
-        }else {
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement LiveInteractionFragment.OnSendButtonClickListener");
         }
@@ -462,7 +462,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
                         if (LocalUser.getUser().isLogin() && !TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
-                            Picasso.with(context).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform()).into(mUserMineHeadImage);
+                            Picasso.with(context)
+                                    .load(LocalUser.getUser().getUserInfo().getUserPortrait())
+                                    .transform(new CircleTransform())
+                                    .resize(R.dimen.live_user_image_size, R.dimen.live_user_image_size)
+                                    .into(mUserMineHeadImage);
                         }
                         //普通游客发言
                     } else {

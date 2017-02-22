@@ -143,8 +143,12 @@ public class UserInfoActivity extends BaseActivity {
                 case UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE:
                     setResult(RESULT_OK);
                     if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
-                        Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
-                        }).into(mUserHeadImage);
+                        Picasso.with(getActivity())
+                                .load(LocalUser.getUser().getUserInfo().getUserPortrait())
+                                .transform(new CircleTransform() {
+                                })
+                                .resize(R.dimen.user_image_size, R.dimen.user_image_size)
+                                .into(mUserHeadImage);
                     } else {
                         getUserInfo();
                     }
@@ -362,7 +366,9 @@ public class UserInfoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
             Picasso.with(this).load(userInfo.getUserPortrait())
                     .placeholder(R.drawable.ic_user_info_head_visitor)
-                    .transform(new CircleTransform()).into(mUserHeadImage);
+                    .transform(new CircleTransform())
+                    .resize(R.dimen.user_image_size, R.dimen.user_image_size)
+                    .into(mUserHeadImage);
         } else {
             if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
                 if (LocalUser.getUser().getUserInfo().isUserisBoy()) {

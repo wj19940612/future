@@ -115,7 +115,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     @Override
     public void onRefresh() {
         getInfoLiveData();
-        if (!Network.isNetworkAvailable() ) {
+        if (!Network.isNetworkAvailable()) {
             stopRefreshAnimation();
         }
     }
@@ -171,6 +171,8 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
                     infoLiveMessageList.add(strings);
                 }
             }
+        } catch (NumberFormatException e) {
+            Log.d(TAG, " InfoLive NumberFormatException  " + e.getMessage() +" cause "+e.getCause());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -179,7 +181,7 @@ public class InfoLiveFragment extends BaseFragment implements AbsListView.OnScro
     }
 
     private void setAdapter(ArrayList<ArrayList<String>> infoLiveMessageList) {
-        if (infoLiveMessageList == null ) {
+        if (infoLiveMessageList == null) {
             return;
         }
         if (mInfoLiveMessageAdapter == null) {

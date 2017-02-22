@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class Launcher {
@@ -26,8 +27,8 @@ public class Launcher {
 
     public static Launcher with(Context context, Class<?> clazz) {
         sInstance = new Launcher();
-        sInstance.mContext = context;
-        sInstance.mIntent.setClass(context, clazz);
+        sInstance.mContext = new WeakReference<Context>(context).get();
+        sInstance.mIntent.setClass(sInstance.mContext, clazz);
         return sInstance;
     }
 
@@ -88,13 +89,21 @@ public class Launcher {
     }
 
     public void execute() {
-        mContext.startActivity(mIntent);
+        if (mContext != null) {
+            mContext.startActivity(mIntent);
+            mContext = null;
+            mIntent = null;
+        }
     }
 
     public void executeForResult(int requestCode) {
-        if (mContext instanceof Activity) {
-            Activity activity = (Activity) mContext;
-            activity.startActivityForResult(mIntent, requestCode);
+        if (mContext != null) {
+            if (mContext instanceof Activity) {
+                Activity activity = (Activity) mContext;
+                activity.startActivityForResult(mIntent, requestCode);
+                mContext = null;
+                mIntent = null;
+            }
         }
     }
 

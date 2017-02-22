@@ -24,11 +24,21 @@
 
     <dimen name="min_text_size">11sp</dimen>
 
-    <dimen name="user_image_size">45dp</dimen>
+    <dimen name="user_head_size">45dp</dimen>
     //直播互动界面用户的头像大小
-    <dimen name="live_user_image_size">30dp</dimen>
+    <dimen name="live_user_head_size">30dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="find_pwd_auto_code_width">85dp</dimen>
+
+    <dimen name="live_teacher_head_size">39dp</dimen>
+    <dimen name="teacher_command_head_size">50dp</dimen>
+    <dimen name="mine_user_head_size">75dp</dimen>
+    <dimen name="country_flag_width">24dp</dimen>
+    <dimen name="country_flag_height">17dp</dimen>
+    <dimen name="trading_strategy_width">345dp</dimen>
+    <dimen name="trading_strategy_height">140dp</dimen>
 </resources>
 

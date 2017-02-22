@@ -147,7 +147,7 @@ public class UserInfoActivity extends BaseActivity {
                                 .load(LocalUser.getUser().getUserInfo().getUserPortrait())
                                 .transform(new CircleTransform() {
                                 })
-                                .resize(R.dimen.user_image_size, R.dimen.user_image_size)
+                                .resize(R.dimen.user_head_size, R.dimen.user_head_size)
                                 .into(mUserHeadImage);
                     } else {
                         getUserInfo();
@@ -367,7 +367,7 @@ public class UserInfoActivity extends BaseActivity {
             Picasso.with(this).load(userInfo.getUserPortrait())
                     .placeholder(R.drawable.ic_user_info_head_visitor)
                     .transform(new CircleTransform())
-                    .resizeDimen(R.dimen.user_image_size, R.dimen.user_image_size)
+                    .resizeDimen(R.dimen.user_head_size, R.dimen.user_head_size)
                     .into(mUserHeadImage);
         } else {
             if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {

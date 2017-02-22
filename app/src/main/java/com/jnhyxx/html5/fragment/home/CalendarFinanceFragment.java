@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,7 +142,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
          */
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
                 .setTag(TAG)
-                .setIndeterminate(this)
                 .setRetryPolicy(new DefaultRetryPolicy())
                 .setCallback(new Callback2<Resp<Object>, Object>() {
 
@@ -153,9 +151,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                         try {
                             CalendarFinanceModel calendarFinanceModel = new Gson().fromJson(object.toString().replaceAll("\\\"", "\""), CalendarFinanceModel.class);
                             updateCalendarFinanceData(calendarFinanceModel);
-                            for (CalendarFinanceModel.EconomicCalendarsBean data : calendarFinanceModel.getEconomicCalendars()) {
-                                Log.d(TAG, "EconomicCalendarsBean  " + data.toString());
-                            }
                         } catch (JsonSyntaxException e) {
 
                         }
@@ -278,6 +273,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                 String organizeMarkUrl = API.Message.getCalendarFinanceCountryBanner(item.getState());
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
                     Picasso.with(context).load(ImageUtil.utf8Togb2312(organizeMarkUrl)).error(R.mipmap.ic_launcher)
+                            .resizeDimen(R.dimen.country_flag_width_size, R.dimen.country_flag_height)
                             .into(mCountryBanner);
                 }
                 mTime.setText(item.getPredicttime());

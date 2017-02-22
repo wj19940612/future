@@ -258,7 +258,9 @@ public class TradingStrategyFragment extends BaseFragment implements AdapterView
 
             public void bindDataWithView(Information item, Context context) {
                 if (!TextUtils.isEmpty(item.getCover())) {
-                    Picasso.with(context).load(item.getCover()).into(mImage);
+                    Picasso.with(context).load(item.getCover())
+                            .resizeDimen(R.dimen.trading_strategy_width, R.dimen.trading_strategy_height)
+                            .into(mImage);
                 }
                 mStrategyTitle.setText(item.getTitle());
             }

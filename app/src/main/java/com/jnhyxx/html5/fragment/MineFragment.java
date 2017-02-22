@@ -42,7 +42,6 @@ import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-import com.jnhyxx.html5.utils.transform.CircleTransform;
 import com.jnhyxx.html5.view.CircularAnnulusImageView;
 import com.jnhyxx.html5.view.IconTextRow;
 import com.jnhyxx.html5.view.TitleBar;
@@ -198,7 +197,8 @@ public class MineFragment extends BaseFragment {
                 Picasso.with(getActivity()).load(userInfo.getUserPortrait())
                         .error(R.drawable.ic_user_info_head_visitor)
                         .placeholder(R.drawable.ic_user_info_head_visitor)
-                        .transform(new CircleTransform()).into(mHeadImage);
+                        .resizeDimen(R.dimen.mine_user_head_size, R.dimen.mine_user_head_size)
+                        .into(mHeadImage);
             } else {
                 if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
                     if (userInfo.isUserisBoy()) {

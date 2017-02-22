@@ -85,9 +85,9 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
     @BindView(R.id.riskEvaluation)
-    LinearLayout mRiskEvaluation;
+    TextView mRiskEvaluation;
     @BindView(R.id.contactService)
-    LinearLayout mContactService;
+    TextView mContactService;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.homeHeader)
@@ -268,9 +268,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-//        if (!mIsScrolling) {
-            requestProductMarketList();
-//        }
+        requestProductMarketList();
         if (count % 5 == 0) {
 //            mHomeHeader.nextOrderReport();
             mHomeBanner.nextAdvertisement();
@@ -544,8 +542,8 @@ public class HomeFragment extends BaseFragment {
                         }
                     }
                 }
-                mOptionalForeignList.setVisibility(mForeignPackage.size() == 0 ? View.GONE : View.VISIBLE);
-                mOptionalForeignList.setVisibility(mDomesticPackage.size() == 0 ? View.GONE : View.VISIBLE);
+                mOptionalDomesticList.setVisibility(mDomesticPackage.isEmpty() ? View.GONE : View.VISIBLE);
+                mOptionalForeignList.setVisibility(mForeignPackage.isEmpty() ? View.GONE : View.VISIBLE);
                 if (!mIsScrolling) {
                     Log.e(TAG, "run: " + mIsScrolling);
                     mOptionalForeignWrapper.notifyDataSetChanged();
@@ -566,16 +564,16 @@ public class HomeFragment extends BaseFragment {
             }
         } else {
             for (ProductPkg productPkg : mProductPkgList) {
-                if (targetList == mForeignPackage && productPkg.getProduct().isForeign()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
-                }
-                if (targetList == mDomesticPackage && productPkg.getProduct().isDomestic()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
-                }
+//                if (targetList == mForeignPackage && productPkg.getProduct().isForeign()) {
+//                    if (targetList.size() < 3) {
+//                        targetList.add(productPkg);
+//                    }
+//                }
+//                if (targetList == mDomesticPackage && productPkg.getProduct().isDomestic()) {
+//                    if (targetList.size() < 3) {
+//                        targetList.add(productPkg);
+//                    }
+//                }
             }
         }
     }

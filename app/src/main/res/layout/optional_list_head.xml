@@ -23,5 +23,5 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
-        android:src="@drawable/content_icon_add"/>
+        android:src="@drawable/ic_home_add"/>
 </RelativeLayout>

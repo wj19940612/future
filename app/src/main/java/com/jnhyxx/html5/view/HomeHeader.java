@@ -2,15 +2,14 @@ package com.jnhyxx.html5.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -28,19 +27,17 @@ import butterknife.OnClick;
 public class HomeHeader extends FrameLayout {
 
     @BindView(R.id.simulation)
-    RelativeLayout mSimulation;
+    TextView mSimulation;
     @BindView(R.id.paidToPromote)
-    RelativeLayout mPaidToPromote;
+    TextView mPaidToPromote;
     @BindView(R.id.investCourse)
-    RelativeLayout mInvestCourse;
+    TextView mInvestCourse;
     @BindView(R.id.live)
-    RelativeLayout mLive;
+    TextView mLive;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mViewSwitcher;
     @BindView(R.id.announcement)
     LinearLayout mAnnouncement;
-    @BindView(R.id.holdingIndicator)
-    ImageView mHoldingIndicator;
 
     public interface OnViewClickListener {
 
@@ -114,9 +111,13 @@ public class HomeHeader extends FrameLayout {
 
     public void setSimulationHolding(List<HomePositions.IntegralOpSBean> integralOpSBeanList) {
         if (integralOpSBeanList != null && integralOpSBeanList.size() > 0) {
-            mHoldingIndicator.setVisibility(VISIBLE);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_home_simulating);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mSimulation.setCompoundDrawables(null, drawable, null, null);
         } else {
-            mHoldingIndicator.setVisibility(INVISIBLE);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_home_simulation);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mSimulation.setCompoundDrawables(null, drawable, null, null);
         }
     }
 

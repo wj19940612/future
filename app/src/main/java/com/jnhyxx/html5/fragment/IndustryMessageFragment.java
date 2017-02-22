@@ -117,10 +117,8 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                     public void onReceive(Resp<List<Information>> listResp) {
                         if (listResp.isSuccess()) {
                             updateInfoList(listResp.getData());
-                        } else {
                             stopRefreshAnimation();
                         }
-
                     }
 
                     @Override
@@ -133,13 +131,15 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
 
     private void updateInfoList(List<Information> messageLists) {
         if (messageLists == null) {
-            stopRefreshAnimation();
             return;
         }
         if (mFooter == null) {
             mFooter = new TextView(getContext());
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
-                    getResources().getDisplayMetrics());
+            int padding = 16;
+            if (getContext() != null && getContext().getResources() != null) {
+                padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
+                        getResources().getDisplayMetrics());
+            }
             mFooter.setPadding(padding, padding, padding, padding);
             mFooter.setGravity(Gravity.CENTER);
             mFooter.setText(R.string.click_to_load_more);
@@ -147,7 +147,7 @@ public class IndustryMessageFragment extends BaseFragment implements AdapterView
                 @Override
                 public void onClick(View view) {
                     if (mSwipeRefreshLayout.isRefreshing()) return;
-                    mOffset +=mPageSize;
+                    mOffset += mPageSize;
                     requestInfoList();
                 }
             });

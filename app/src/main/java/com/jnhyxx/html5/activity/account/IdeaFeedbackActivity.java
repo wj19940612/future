@@ -81,9 +81,9 @@ public class IdeaFeedbackActivity extends BaseActivity {
     private void submitFeedBack(String userName, String realName, String feedBackContent) {
         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK_SUBMIT);
         API.User.submitFeedBack(feedBackContent, null, userName, realName, mFeedbackConnectWay.getText().toString())
-                .setCallback(new Callback1<Resp<JsonObject>>() {
+                .setCallback(new Callback1<Resp<Object>>() {
                     @Override
-                    protected void onRespSuccess(Resp<JsonObject> resp) {
+                    protected void onRespSuccess(Resp<Object> resp) {
                         CustomToast.getInstance().showText(getActivity(), R.string.feedback_submit_success);
                         finish();
                     }

@@ -465,7 +465,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                             Picasso.with(context)
                                     .load(LocalUser.getUser().getUserInfo().getUserPortrait())
                                     .transform(new CircleTransform())
-                                    .resize(R.dimen.live_user_image_size, R.dimen.live_user_image_size)
+                                    .resizeDimen(R.dimen.live_user_image_size, R.dimen.live_user_image_size)
                                     .into(mUserMineHeadImage);
                         }
                         //普通游客发言

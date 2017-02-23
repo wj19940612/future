@@ -18,14 +18,12 @@ import android.widget.TextView;
 
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
-import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
-import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
@@ -88,6 +86,25 @@ public class MarketFragment extends BaseFragment {
         requestProductMarketList();
     }
 
+    public void updateProductList(List<Product> productList) {
+        mProductList = productList;
+        ProductPkg.updateProductPkgList(mProductPkgList, productList,
+                mCashPositionList, mMarketDataList);
+        updateProductListView();
+    }
+
+    public void updatePositions(HomePositions data) {
+        if (data != null) {
+            mCashPositionList = data.getCashOpS();
+            ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
+            updateProductListView();
+        } else {
+            ProductPkg.clearPositions(mProductPkgList);
+            mCashPositionList = null;
+            updateProductListView();
+        }
+    }
+
     @Override
     public void onTimeUp(int count) {
         if (getUserVisibleHint()) {
@@ -98,9 +115,6 @@ public class MarketFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestProductList();
-        requestHomePositions();
-
         startScheduleJob(1 * 1000);
     }
 
@@ -120,19 +134,6 @@ public class MarketFragment extends BaseFragment {
         stopScheduleJob();
     }
 
-    private void requestProductList() {
-        API.Market.getProductList().setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
-                    @Override
-                    public void onRespSuccess(List<Product> products) {
-                        mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, products,
-                                mCashPositionList, mMarketDataList);
-                        updateProductListView();
-                    }
-                }).fire();
-    }
-
     private void requestProductMarketList() {
         API.Market.getProductMarketList().setTag(TAG)
                 .setCallback(new Callback<Resp<List<MarketData>>>(false) {
@@ -145,31 +146,6 @@ public class MarketFragment extends BaseFragment {
                         }
                     }
                 }).fire();
-    }
-
-    private void requestHomePositions() {
-        if (LocalUser.getUser().isLogin()) {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback<Resp<HomePositions>>(false) {
-                        @Override
-                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
-                            if (homePositionsResp.isSuccess()) {
-                                HomePositions homePositions = homePositionsResp.getData();
-                                mCashPositionList = homePositions.getCashOpS();
-                                ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
-                                updateProductListView();
-                            }
-                        }
-
-                        @Override
-                        public void onReceive(Resp<HomePositions> homePositionsResp) {
-                        }
-                    }).fire();
-        } else { // clearHoldingOrderList all product position
-            ProductPkg.clearPositions(mProductPkgList);
-            mCashPositionList = null;
-            updateProductListView();
-        }
     }
 
     private void updateProductListView() {

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
@@ -45,10 +43,6 @@ import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
-import com.jnhyxx.html5.domain.order.OrderReport;
-import com.jnhyxx.html5.fragment.home.CalendarFinanceFragment;
-import com.jnhyxx.html5.fragment.home.TradingStrategyFragment;
-import com.jnhyxx.html5.fragment.home.YesterdayProfitRankFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
@@ -78,24 +72,26 @@ import butterknife.Unbinder;
 
 
 public class HomeFragment extends BaseFragment {
+
     @BindView(R.id.homeBanner)
     HomeBanner mHomeBanner;
+    @BindView(R.id.homeHeader)
+    HomeHeader mHomeHeader;
+
     @BindView(R.id.riskEvaluation)
     TextView mRiskEvaluation;
     @BindView(R.id.contactService)
     TextView mContactService;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.homeHeader)
-    HomeHeader mHomeHeader;
+
     @BindView(R.id.optionalForeignList)
     RecyclerView mOptionalForeignList;
     @BindView(R.id.optionalDomesticList)
     RecyclerView mOptionalDomesticList;
     @BindView(R.id.tabLayout)
     TabLayout mTabLayout;
-    @BindView(R.id.replaceLayout)
-    RelativeLayout mReplaceLayout;
+
     @BindView(R.id.nestedScrollView)
     MyNestedScrollView mNestedScrollView;
     private Unbinder mBind;
@@ -140,8 +136,8 @@ public class HomeFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initSlidingTabLayout();
         mProductPkgList = new ArrayList<>();
-        mForeignPackage = new ArrayList<ProductPkg>();
-        mDomesticPackage = new ArrayList<ProductPkg>();
+        mForeignPackage = new ArrayList<>();
+        mDomesticPackage = new ArrayList<>();
         mForeignPrice = new ArrayList<>();
         mDomesticPrice = new ArrayList<>();
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
@@ -198,6 +194,7 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
+
         setOptionalProduct();
         requestHomeInformation();
         requestProductMarketList();
@@ -261,18 +258,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestProductList();
-        requestHomePositions();
-//        requestOrderReport();
         startScheduleJob(1 * 1000);
     }
 
     @Override
     public void onTimeUp(int count) {
         super.onTimeUp(count);
-        requestProductMarketList();
+        if (getUserVisibleHint()) {
+            requestProductMarketList();
+        }
         if (count % 5 == 0) {
-//            mHomeHeader.nextOrderReport();
             mHomeBanner.nextAdvertisement();
         }
     }
@@ -299,7 +294,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initSlidingTabLayout() {
-        showProfitRankFragment();
+        //showProfitRankFragment();
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.yesterday_the_profit_list));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.trading_strategy));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.calendar_of_finance));
@@ -311,13 +306,13 @@ public class HomeFragment extends BaseFragment {
         public void onTabSelected(TabLayout.Tab tab) {
             switch (tab.getPosition()) {
                 case 0:
-                    showProfitRankFragment();
+                    //showProfitRankFragment();
                     break;
                 case 1:
-                    showTradingStrategyFragment();
+                    //showTradingStrategyFragment();
                     break;
                 case 2:
-                    showCalendarFinanceFragment();
+                    //showCalendarFinanceFragment();
                     break;
             }
         }
@@ -333,56 +328,56 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
-    private void showProfitRankFragment() {
-        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
-        YesterdayProfitRankFragment yesterdayProfitRankFragment = YesterdayProfitRankFragment.newInstance();
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.replaceLayout, yesterdayProfitRankFragment)
-                .commit();
-        yesterdayProfitRankFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
-            @Override
-            public void listViewHeight(int height) {
-                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
-                layoutParams.height = height;
-                mReplaceLayout.setLayoutParams(layoutParams);
-            }
-        });
-
-    }
-
-
-    private void showTradingStrategyFragment() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
-        TradingStrategyFragment tradingStrategyFragment = TradingStrategyFragment.newInstance();
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.replaceLayout, tradingStrategyFragment)
-                .commit();
-        tradingStrategyFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
-            @Override
-            public void listViewHeight(int height) {
-                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
-                layoutParams.height = height;
-                mReplaceLayout.setLayoutParams(layoutParams);
-            }
-        });
-
-    }
-
-    private void showCalendarFinanceFragment() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
-        CalendarFinanceFragment calendarFinanceFragment = CalendarFinanceFragment.newInstance();
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.replaceLayout, calendarFinanceFragment)
-                .commit();
-        calendarFinanceFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
-            @Override
-            public void listViewHeight(int height) {
-                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
-                layoutParams.height = height;
-                mReplaceLayout.setLayoutParams(layoutParams);
-            }
-        });
-    }
+//    private void showProfitRankFragment() {
+//        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+//        YesterdayProfitRankFragment yesterdayProfitRankFragment = YesterdayProfitRankFragment.newInstance();
+//        getChildFragmentManager().beginTransaction()
+//                .replace(R.id.replaceLayout, yesterdayProfitRankFragment)
+//                .commit();
+//        yesterdayProfitRankFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+//            @Override
+//            public void listViewHeight(int height) {
+//                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+//                layoutParams.height = height;
+//                mReplaceLayout.setLayoutParams(layoutParams);
+//            }
+//        });
+//
+//    }
+//
+//
+//    private void showTradingStrategyFragment() {
+//        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+//        TradingStrategyFragment tradingStrategyFragment = TradingStrategyFragment.newInstance();
+//        getChildFragmentManager().beginTransaction()
+//                .replace(R.id.replaceLayout, tradingStrategyFragment)
+//                .commit();
+//        tradingStrategyFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+//            @Override
+//            public void listViewHeight(int height) {
+//                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+//                layoutParams.height = height;
+//                mReplaceLayout.setLayoutParams(layoutParams);
+//            }
+//        });
+//
+//    }
+//
+//    private void showCalendarFinanceFragment() {
+//        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.replaceLayout);
+//        CalendarFinanceFragment calendarFinanceFragment = CalendarFinanceFragment.newInstance();
+//        getChildFragmentManager().beginTransaction()
+//                .replace(R.id.replaceLayout, calendarFinanceFragment)
+//                .commit();
+//        calendarFinanceFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
+//            @Override
+//            public void listViewHeight(int height) {
+//                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
+//                layoutParams.height = height;
+//                mReplaceLayout.setLayoutParams(layoutParams);
+//            }
+//        });
+//    }
 
     private HomeHeader.OnViewClickListener mOnViewClickListener = new HomeHeader.OnViewClickListener() {
         // 模拟交易
@@ -489,27 +484,11 @@ public class HomeFragment extends BaseFragment {
                 }).setTag(TAG).fire();
     }
 
-    private void requestOrderReport() {
-        API.Order.getReportData()
-                .setCallback(new Callback2<Resp<List<OrderReport>>, List<OrderReport>>(false) {
-                    @Override
-                    public void onRespSuccess(List<OrderReport> orderReports) {
-                        mHomeHeader.setOrderReports(orderReports);
-                    }
-                }).setTag(TAG).fire();
-    }
-
-    private void requestProductList() {
-        API.Market.getProductList().setTag(TAG).setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
-                    @Override
-                    public void onRespSuccess(List<Product> products) {
-                        mProductList = products;
-                        ProductPkg.updateProductPkgList(mProductPkgList, mProductList,
-                                mCashPositionList, mMarketDataList);
-                        updateOptionalLists();
-                    }
-                }).fire();
+    public void updateProductList(List<Product> productList) {
+        mProductList = productList;
+        ProductPkg.updateProductPkgList(mProductPkgList, productList,
+                mCashPositionList, mMarketDataList);
+        updateOptionalLists();
     }
 
     private void updateOptionalLists() {
@@ -602,31 +581,19 @@ public class HomeFragment extends BaseFragment {
                 }).fire();
     }
 
-    private void requestHomePositions() {
-        if (LocalUser.getUser().isLogin()) {
-            API.Order.getHomePositions().setTag(TAG)
-                    .setCallback(new Callback<Resp<HomePositions>>(false) {
-                        @Override
-                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
-                            if (homePositionsResp.isSuccess()) {
-                                HomePositions homePositions = homePositionsResp.getData();
-                                updateSimulateButton(homePositions);
-
-                                mCashPositionList = homePositions.getCashOpS();
-                                ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
-                                updateOptionalLists();
-                            }
-                        }
-
-                        @Override
-                        public void onReceive(Resp<HomePositions> homePositionsResp) {
-                        }
-                    }).fire();
-        } else { // clearHoldingOrderList all product position
-            ProductPkg.clearPositions(mProductPkgList);
+    public void updatePositions(HomePositions homePositions) {
+        if (homePositions != null) {
+            mCashPositionList = homePositions.getCashOpS();
+            ProductPkg.updatePositionInProductPkg(mProductPkgList, mCashPositionList);
             updateOptionalLists();
-            mHomeHeader.setSimulationHolding(null);
+
+            updateSimulateButton(homePositions);
+        } else {
+            ProductPkg.clearPositions(mProductPkgList);
             mCashPositionList = null;
+            updateOptionalLists();
+
+            mHomeHeader.setSimulationHolding(null);
         }
     }
 

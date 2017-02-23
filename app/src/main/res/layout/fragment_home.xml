@@ -59,11 +59,15 @@
                 app:tabSelectedTextColor="@color/blueAssist"
                 app:tabTextColor="@color/blackPrimary"/>
 
-            <RelativeLayout
-                android:id="@+id/replaceLayout"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/bottomList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:divider="@drawable/divider_home_list"
+                android:dividerHeight="0.5dp"
+                android:nestedScrollingEnabled="false"/>
         </LinearLayout>
     </com.jnhyxx.html5.view.MyNestedScrollView>
 

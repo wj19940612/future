@@ -17,15 +17,21 @@ import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
+import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
+import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
 import com.jnhyxx.html5.fragment.MarketFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Callback1;
+import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.service.PushIntentService;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
@@ -47,12 +53,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
 
-    private MainFragmentsAdapter mMainFragmentsAdapter;
-
     private static final int TAB_HOME = 0;
     private static final int TAB_MARKET = 1;
     private static final int TAB_MESSAGE = 2;
     private static final int TAB_MINE = 3;
+
+    private MainFragmentsAdapter mMainFragmentsAdapter;
 
     private BroadcastReceiver mPushBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -163,6 +169,65 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(MainActivity.this)
                 .registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
         requestHomePopup();
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        requestProductList();
+        requestHomePositions();
+    }
+
+    private void requestProductList() {
+        API.Market.getProductList().setTag(TAG).setIndeterminate(this)
+                .setCallback(new Callback2<Resp<List<Product>>, List<Product>>() {
+                    @Override
+                    public void onRespSuccess(List<Product> products) {
+                        updateProductListInFragments(products);
+                    }
+                }).fireSync();
+    }
+
+    private void updateProductListInFragments(List<Product> products) {
+        MarketFragment marketFragment = (MarketFragment) mMainFragmentsAdapter.getFragment(TAB_MARKET);
+        if (marketFragment != null) {
+            marketFragment.updateProductList(products);
+        }
+        HomeFragment homeFragment = (HomeFragment) mMainFragmentsAdapter.getFragment(TAB_HOME);
+        if (homeFragment != null) {
+            homeFragment.updateProductList(products);
+        }
+    }
+
+    private void requestHomePositions() {
+        if (LocalUser.getUser().isLogin()) {
+            API.Order.getHomePositions().setTag(TAG)
+                    .setCallback(new Callback<Resp<HomePositions>>(false) {
+                        @Override
+                        public void onSuccess(Resp<HomePositions> homePositionsResp) {
+                            if (homePositionsResp.isSuccess()) {
+                                updatePositionsInFragments(homePositionsResp.getData());
+                            }
+                        }
+
+                        @Override
+                        public void onReceive(Resp<HomePositions> homePositionsResp) {
+                        }
+                    }).fireSync();
+        } else { // clearHoldingOrderList all product position
+            updatePositionsInFragments(null);
+        }
+    }
+
+    private void updatePositionsInFragments(HomePositions data) {
+        MarketFragment marketFragment = (MarketFragment) mMainFragmentsAdapter.getFragment(TAB_MARKET);
+        if (marketFragment != null) {
+            marketFragment.updatePositions(data);
+        }
+        HomeFragment homeFragment = (HomeFragment) mMainFragmentsAdapter.getFragment(TAB_HOME);
+        if (homeFragment != null) {
+            homeFragment.updatePositions(data);
+        }
     }
 
     private void requestHomePopup() {

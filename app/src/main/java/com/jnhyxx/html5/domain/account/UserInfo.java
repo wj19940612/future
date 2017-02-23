@@ -137,7 +137,9 @@ public class UserInfo {
         setIntroduction(userDefiniteInfo.getIntroduction());
         setLand(userDefiniteInfo.getLand());
         setUserPortrait(userDefiniteInfo.getUserPortrait());
-        setRealName(userDefiniteInfo.getRealName());
+        if (userDefiniteInfo.getCertificationStatus() != REAL_NAME_STATUS_VERIFIED) {
+            setRealName(userDefiniteInfo.getRealName());
+        }
     }
 
     public UserDefiniteInfo getUserDefiniteInfo() {

@@ -159,7 +159,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
-            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHrightPixels() * 0.25) + mWeekCalendarLayoutHeight);
+            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHrightPixels() * 0.23) + mWeekCalendarLayoutHeight);
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
 //            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);

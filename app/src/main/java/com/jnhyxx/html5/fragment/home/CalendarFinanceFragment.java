@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,7 +117,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     @Override
     public void onResume() {
         super.onResume();
-        if(mCalendarWeek!=null){
+        if (mCalendarWeek != null) {
             mCalendarWeek.post(new Runnable() {
                 @Override
                 public void run() {
@@ -158,7 +159,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
-            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size()*428 + mWeekCalendarLayoutHeight);
+            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHrightPixels() * 0.25) + mWeekCalendarLayoutHeight);
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
 //            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
@@ -166,17 +167,24 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 ////             params.height最后得到整个ListView完整显示需要的高度
 //            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
         } else {
-            WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-            mOnListViewHeightListener.listViewHeight((int) (displayMetrics.heightPixels * 0.7));
+
+            mOnListViewHeightListener.listViewHeight((int) (getDevicesHrightPixels() * 0.7));
         }
     }
+
 
     private void stopRefreshAnimation() {
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private int getDevicesHrightPixels() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        Log.d(TAG, "屏幕高度 " + displayMetrics.heightPixels);
+        return displayMetrics.heightPixels;
     }
 
     @Override

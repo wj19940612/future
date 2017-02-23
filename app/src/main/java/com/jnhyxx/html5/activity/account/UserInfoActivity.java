@@ -147,7 +147,7 @@ public class UserInfoActivity extends BaseActivity {
                                 .load(LocalUser.getUser().getUserInfo().getUserPortrait())
                                 .transform(new CircleTransform() {
                                 })
-                                .resize(R.dimen.user_head_size, R.dimen.user_head_size)
+                                .resizeDimen(R.dimen.user_head_size, R.dimen.user_head_size)
                                 .into(mUserHeadImage);
                     } else {
                         getUserInfo();

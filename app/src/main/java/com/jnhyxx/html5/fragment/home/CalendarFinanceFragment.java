@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,7 +158,13 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
-            mOnListViewHeightListener.listViewHeight(calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHrightPixels() * 0.23) + mWeekCalendarLayoutHeight);
+            int itemHeight = 0;
+            if (getDevicesHeightPixels() > 1279) {
+                itemHeight = calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHeightPixels() * 0.23);
+            } else {
+                itemHeight = calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHeightPixels() * 0.245);
+            }
+            mOnListViewHeightListener.listViewHeight(itemHeight + mWeekCalendarLayoutHeight);
             mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
             mCalendarFinanceAdapter.notifyDataSetChanged();
 //            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
@@ -168,7 +173,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 //            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
         } else {
 
-            mOnListViewHeightListener.listViewHeight((int) (getDevicesHrightPixels() * 0.7));
+            mOnListViewHeightListener.listViewHeight((int) (getDevicesHeightPixels() * 0.7));
         }
     }
 
@@ -179,11 +184,10 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         }
     }
 
-    private int getDevicesHrightPixels() {
+    private int getDevicesHeightPixels() {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        Log.d(TAG, "屏幕高度 " + displayMetrics.heightPixels);
         return displayMetrics.heightPixels;
     }
 

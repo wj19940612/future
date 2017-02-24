@@ -178,7 +178,6 @@ public class HomeFragment extends BaseFragment {
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                         Math.abs(Math.min(mHomeBannerHeight, dp2px(scrollY)) * 1.0f) / mHomeBannerHeight));
-                Log.e("test", mHomeBannerHeight + "+++++++" + dp2px(scrollY));
             }
         });
 

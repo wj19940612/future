@@ -96,7 +96,6 @@ public class RechargeActivity extends BaseActivity implements SelectRechargeWayD
                     protected void onRespSuccess(Resp<UserInfo> resp) {
                         updateUserBankInfo(resp);
                         updateView();
-                        selectPayWay(Preference.get().getPayWay());
                         if (isOpenPayPage) {
                             depositByBankApply();
                         }

@@ -27,13 +27,9 @@ public class Preference {
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
-<<<<<<< HEAD
-        String PAY_WAY = "payWay";
-=======
         String PRODUCT_OPTIONAL_FOREIGN = "productOptionalForeign";
         String PRODUCT_OPTIONAL_DOMESTIC = "productOptionalDomestic";
         String PAY_WAY = "pay_way";
->>>>>>> f/newVersion
     }
 
     private static Preference sInstance;

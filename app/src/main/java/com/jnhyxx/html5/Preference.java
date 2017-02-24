@@ -27,7 +27,13 @@ public class Preference {
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
+<<<<<<< HEAD
         String PAY_WAY = "payWay";
+=======
+        String PRODUCT_OPTIONAL_FOREIGN = "productOptionalForeign";
+        String PRODUCT_OPTIONAL_DOMESTIC = "productOptionalDomestic";
+        String PAY_WAY = "pay_way";
+>>>>>>> f/newVersion
     }
 
     private static Preference sInstance;
@@ -199,11 +205,27 @@ public class Preference {
         getEditor().putBoolean(key, isFirstWithdraw).apply();
     }
 
-    public void setPayWay(int payWay) {
-        getEditor().putInt(Key.PAY_WAY, payWay).apply();
+    public void setProductOptionalForeign(String productOptional) {
+        getEditor().putString(Key.PRODUCT_OPTIONAL_FOREIGN, productOptional).apply();
     }
 
-    public int getPayWay() {
+    public String getProductOptionalForeign() {
+        return mPrefs.getString(Key.PRODUCT_OPTIONAL_FOREIGN, "");
+    }
+
+    public void setProductOptionalDomestic(String productOptional) {
+        getEditor().putString(Key.PRODUCT_OPTIONAL_DOMESTIC, productOptional).apply();
+    }
+
+    public String getProductOptionalDomestic() {
+        return mPrefs.getString(Key.PRODUCT_OPTIONAL_DOMESTIC, "");
+    }
+
+    public int getRechargePayWay() {
         return mPrefs.getInt(Key.PAY_WAY, 0);
+    }
+
+    public void setRechargePayWay(int payWay) {
+        getEditor().putInt(Key.PAY_WAY, payWay).apply();
     }
 }

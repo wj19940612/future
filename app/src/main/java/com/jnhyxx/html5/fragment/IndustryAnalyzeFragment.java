@@ -23,9 +23,7 @@ import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
-
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
-
 import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.Launcher;
 import com.umeng.analytics.MobclickAgent;
@@ -90,13 +88,10 @@ public class IndustryAnalyzeFragment extends BaseFragment implements AdapterView
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (mEmptyView != null) {
-            mListView.setEmptyView(mEmptyView);
-        }
+        mListView.setEmptyView(mEmptyView);
         mOffset = 0;
         mPageSize = 15;
         mSet = new HashSet<>();
-
 
         mListView.setDivider(null);
         mListView.setOnItemClickListener(this);

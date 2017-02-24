@@ -108,27 +108,28 @@ public class LiveProgrammeList {
             }
 
             public void bindData(LiveMessage.ProgramInfo programInfo, Context context) {
-                    String pictureUrl = programInfo.getPictureUrl();
-                    if (TextUtils.isEmpty(pictureUrl)) {
-                        Picasso.with(context).load(R.drawable.ic_live_pic_head)
-                                .transform(new CircleTransform())
-                                .into(mTeacherHead);
-                    } else {
-                        Picasso.with(context).load(pictureUrl)
-                                .transform(new CircleTransform())
-                                .error(R.drawable.ic_live_pic_head)
-                                .into(mTeacherHead);
-                    }
-                    String liveTime;
-                    if (programInfo.getLiveTime().contains(",")) {
-                        liveTime = programInfo.getLiveTime().replaceAll(",", "\n");
-                    } else {
-                        liveTime = programInfo.getLiveTime();
-                    }
-                    mLiveTime.setText(liveTime);
-                    // TODO: 2016/11/11 目前先写死为'工作日'，由于原始数据过长，后期优化
-                    mWorkday.setText("工作日");
-                    mTeacherName.setText(programInfo.getTeacherName());
+                String pictureUrl = programInfo.getPictureUrl();
+                if (TextUtils.isEmpty(pictureUrl)) {
+                    Picasso.with(context).load(R.drawable.ic_live_pic_head)
+                            .transform(new CircleTransform())
+                            .into(mTeacherHead);
+                } else {
+                    Picasso.with(context).load(pictureUrl)
+                            .transform(new CircleTransform())
+                            .error(R.drawable.ic_live_pic_head)
+                            .resizeDimen(R.dimen.live_teacher_head_size, R.dimen.live_teacher_head_size)
+                            .into(mTeacherHead);
+                }
+                String liveTime;
+                if (programInfo.getLiveTime().contains(",")) {
+                    liveTime = programInfo.getLiveTime().replaceAll(",", "\n");
+                } else {
+                    liveTime = programInfo.getLiveTime();
+                }
+                mLiveTime.setText(liveTime);
+                // TODO: 2016/11/11 目前先写死为'工作日'，由于原始数据过长，后期优化
+                mWorkday.setText("工作日");
+                mTeacherName.setText(programInfo.getTeacherName());
             }
         }
 

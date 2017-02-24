@@ -50,7 +50,7 @@
 
     <!-- Main -->
     <string name="home">首页</string>
-    <string name="live">直播</string>
+    <string name="market">行情</string>
     <string name="information">资讯</string>
     <string name="mine">我的</string>
     <string name="newbie_title">新手引导</string>
@@ -194,14 +194,13 @@
 
     <!-- Home page -->
     <string name="investor_course">投资者课堂</string>
-    <string name="futures_risk_tips">期货风险提示</string>
     <string name="market_close">休市</string>
     <string name="holding_position">持仓中</string>
     <string name="next_day">次日</string>
     <string name="simulation">模拟交易</string>
     <string name="invest_course">投资课堂</string>
-    <string name="newer_video">新手视频</string>
-    <string name="contact_service">联系客服</string>
+    <string name="live">直播</string>
+    <string name="contact_service">客服</string>
     <string name="enter_right_now">立即进入</string>
     <string name="there_is_no_data_for_now">暂无数据</string>
     <string name="new_tag">NEW</string>
@@ -214,7 +213,7 @@
     <string name="holding_number">持仓 (%1$d)</string>
     <string name="normalize_futures_rule">规范期市秩序，坚持理性投资</string>
     <string name="futures_risk_tips_title">《证券期货交易风险提示》</string>
-
+    <string name="risk_evaluation">风险提示</string>
 
     <!-- Order page -->
     <string name="order">订单</string>
@@ -266,8 +265,8 @@
     <string name="play_rule">玩法规则</string>
     <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
     <string name="one_key_close_position">一键平仓</string>
-    <string name="available_balance_and_unit">可用资金 (%1$s)</string>
-    <string name="prompt_unlogin_unable_to_trade">您还未登录, 暂时无法交易!</string>
+    <string name="current_available_balance">当前可用余额</string>
+    <string name="prompt_unlogin_unable_to_trade">您还未登录</string>
     <string name="trend_chart">分时图</string>
     <string name="kline_chart">K线图</string>
     <string name="flash_chart">闪电图</string>
@@ -554,4 +553,26 @@
     <string name="complete">完成</string>
     <string name="complete_has_empty">完  成</string>
     <string name="is_only_a_chinese_name">姓名只能是中文</string>
+
+    <!--品种自选-->
+    <string name="foreign_futures">国际期货</string>
+    <string name="domestic_futures">国内期货</string>
+    <string name="optional_futures">我的自选</string>
+    <string name="optional_notice">至少得有一个自选品种</string>
+    <!--首页底部的三个页面-->
+    <string name="calendar_of_finance">  财经日历</string>
+    <string name="yesterday_the_profit_list">昨日盈利榜</string>
+    <string name="trading_strategy">  交易攻略</string>
+    <string name="ranking_list_top_hint">本排行榜表示上个正常交易日的数据</string>
+    <string name="trading_strategy_title">如何成为有规则的交易者并坚持你的优势?</string>
+    <string name="not_publish">未公布</string>
+    <string name="lido">利多    %1$s</string>
+    <string name="bad_news">利空    %1$s</string>
+
+    <string name="before_data_">前值: </string>
+    <string name="expect_data_">预期值: </string>
+    <string name="real_data_">公布值: </string>
+    <string name="not_strategy">暂无攻略</string>
+    <string name="not_finance_data">暂无财经消息</string>
+    <string name="less_affected">影响较小</string>
 </resources>

@@ -145,6 +145,10 @@ public class NettyClient {
         connect();
     }
 
+    public boolean isStarted() {
+        return !mClosed;
+    }
+
     public void start(String contractCode) {
         mClosed = false;
         mMarketConn = new MarketConn(contractCode);

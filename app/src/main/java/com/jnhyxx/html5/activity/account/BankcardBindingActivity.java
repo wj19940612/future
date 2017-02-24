@@ -251,7 +251,7 @@ public class BankcardBindingActivity extends BaseActivity {
      * 若果绑定了，显示银行卡信息
      */
     private void showBankcardInfo() {
-        if (LocalUser.getUser().isBankcardBound()) {
+        if (LocalUser.getUser().isBankcardBound() && LocalUser.getUser().isRealNameBound()) {
             mTitleBar.setTitle(R.string.bankcard);
             mBankcardInputArea.setVisibility(View.GONE);
             mBankcardImageArea.setVisibility(View.VISIBLE);
@@ -283,11 +283,27 @@ public class BankcardBindingActivity extends BaseActivity {
 
     private void setOldBindBankInfo(UserInfo userInfo) {
         mCardholderName.setText(userInfo.getRealName());
+        mIdentityNum.setText(userInfo.getIdCard());
         mBankcardNum.setText(userInfo.getCardNumber());
         mPhoneNum.setText(userInfo.getCardPhone());
-        mIdentityNum.setText(userInfo.getIdCard());
-        if (!TextUtils.isEmpty(userInfo.getIssuingbankName())) {
-            mPayingBank.setText(userInfo.getIssuingbankName());
+        mPayingBank.setText(userInfo.getIssuingbankName());
+
+        if (LocalUser.getUser().isRealNameBound()) {
+            mCardholderName.setEnabled(false);
+            mIdentityNum.setEnabled(false);
+        } else {
+            mCardholderName.setEnabled(true);
+            mIdentityNum.setEnabled(true);
+        }
+
+        if (LocalUser.getUser().isBankcardBound()) {
+            mBankcardNum.setEnabled(false);
+            mPhoneNum.setEnabled(false);
+            mPayingBank.setEnabled(false);
+        } else {
+            mBankcardNum.setEnabled(true);
+            mPhoneNum.setEnabled(true);
+            mPayingBank.setEnabled(true);
         }
     }
 
@@ -329,9 +345,14 @@ public class BankcardBindingActivity extends BaseActivity {
                 final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
                 final String identityNum = ViewUtil.getTextTrim(mIdentityNum);
 
-                if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
-                    mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
-                    return;
+                /**
+                 * 如果用户已经实名认证，则不检验
+                 */
+                if (!LocalUser.getUser().getUserInfo().isUserRealNameAuth()) {
+                    if (!ValidityDecideUtil.isOnlyAChineseName(cardHolderName)) {
+                        mCommonFailTvWarn.show(R.string.is_only_a_chinese_name);
+                        return;
+                    }
                 }
                 if (!TextUtils.isEmpty(payingBank) && TextUtils.equals(payingBank, getString(R.string.please_choose_bank))) {
                     mCommonFailTvWarn.show(R.string.bind_bank_is_empty);
@@ -348,7 +369,8 @@ public class BankcardBindingActivity extends BaseActivity {
         }
     }
 
-    private void updateUserBindBankUserNameVerify(String cardHolderName, String identityNum, String payingBank, String bankcardNum, String phoneNum, int bankId) {
+    private void updateUserBindBankUserNameVerify(String identityNum, String payingBank, String bankcardNum, String phoneNum, int bankId) {
+        final String cardHolderName = ViewUtil.getTextTrim(mCardholderName);
         LocalUser localUser = LocalUser.getUser();
         UserInfo userInfo = localUser.getUserInfo();
         userInfo.setIssuingbankName(payingBank);
@@ -362,16 +384,16 @@ public class BankcardBindingActivity extends BaseActivity {
         localUser.setUserInfo(userInfo);
     }
 
-    private void submitBindBank(final String cardHolderName, final String bankcardNum, final String payingBank, final String phoneNum, final String identityNum) {
+    private void submitBindBank(String cardHolderName, final String bankcardNum, final String payingBank, final String phoneNum, final String identityNum) {
         final int bankId = mChannelBank != null ? mChannelBank.getId() : LocalUser.getUser().getUserInfo().getBankId();
-
+        cardHolderName = LocalUser.getUser().getUserInfo().isUserRealNameAuth() ? null : cardHolderName;
         API.User.bindBankCard(cardHolderName, identityNum, bankId, payingBank, bankcardNum, phoneNum)
                 .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp>() {
                     @Override
                     public void onReceive(Resp resp) {
                         if (resp.isSuccess()) {
-                            updateUserBindBankUserNameVerify(cardHolderName, identityNum, payingBank, bankcardNum, phoneNum, bankId);
+                            updateUserBindBankUserNameVerify(identityNum, payingBank, bankcardNum, phoneNum, bankId);
                             CustomToast.getInstance().showText(getActivity(), resp.getMsg());
 
                             setResult(RESULT_OK);

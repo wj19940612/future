@@ -4,6 +4,6 @@
     <item android:color="@color/blueAssist" android:state_selected="true"/>
     <item android:color="@color/blueAssist" android:state_pressed="true"/>
     <item android:color="@color/colorDisable" android:state_enabled="false"/>
-    <item android:color="@android:color/white"/>
+    <item android:color="@color/blackPrimary"/>
 
 </selector>

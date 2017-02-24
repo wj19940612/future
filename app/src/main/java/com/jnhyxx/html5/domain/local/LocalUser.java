@@ -77,6 +77,14 @@ public class LocalUser {
         return false;
     }
 
+    public boolean isRealNameBound() {
+        if (mUserInfo != null) {
+            return mUserInfo.getIdStatus() == UserInfo.REAL_NAME_STATUS_VERIFIED;
+        }
+        return false;
+    }
+
+
     public boolean isBankcardFilled() {
         if (mUserInfo != null) {
             return mUserInfo.getCardState() > UserInfo.BANKCARD_STATUS_UNFILLED;

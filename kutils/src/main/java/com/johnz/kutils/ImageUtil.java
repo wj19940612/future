@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 
 public class ImageUtil {
@@ -247,5 +248,31 @@ public class ImageUtil {
     public static Bitmap base64ToBitmap(String base64Data) {
         byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    /**
+     * 图片网址中包含中文  部分手机不显示
+     *  将中文替换转码
+     *
+     * @param str
+     * @return
+     */
+    public static String utf8Togb2312(String str) {
+        String data = "";
+        try {
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c + "".getBytes().length > 1 && c != ':' && c != '/') {
+                    data = data + java.net.URLEncoder.encode(c + "", "utf-8");
+                } else {
+                    data = data + c;
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println(data);
+        }
+        return data;
     }
 }

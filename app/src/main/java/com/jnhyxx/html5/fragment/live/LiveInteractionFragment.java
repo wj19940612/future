@@ -106,6 +106,17 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnSendButtonClickListener) {
+            mOnSendButtonClickListener = (OnSendButtonClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement LiveInteractionFragment.OnSendButtonClickListener");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_interaction, container, false);
@@ -133,7 +144,7 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
         }
         mListView.setOnScrollListener(this);
 
-//        getChatInfo();
+        getChatInfo();
         setOnRefresh();
     }
 
@@ -214,9 +225,6 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
             if (liveSpeakInfo.isOwner() && mDataArrayList.size() > 5) {
                 setLiveViewStackFromBottom(true);
             }
-//            if (liveSpeakInfo.isSlience() && liveSpeakInfo.isOwner()) {
-//                ToastUtil.curt(R.string.You_have_been_banned_please_speak_later);
-//            }
             updateTalkData(liveSpeakInfo);
         }
     }
@@ -254,14 +262,12 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                                  @Override
                                  public void onReceive(Resp<List<LiveHomeChatInfo>> liveHomeChatInfoResp) {
                                      if (liveHomeChatInfoResp.isSuccess()) {
+                                         stopRefreshAnimation();
                                          if (liveHomeChatInfoResp.hasData()) {
                                              mOffset = mOffset + liveHomeChatInfoResp.getData().size();
                                              mDataArrayList.addAll(0, liveHomeChatInfoResp.getData());
                                              updateCHatInfo(liveHomeChatInfoResp.getData());
                                              locateNewDataEnd(liveHomeChatInfoResp);
-
-                                         } else {
-                                             stopRefreshAnimation();
                                          }
                                      }
                                  }
@@ -306,11 +312,9 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
 
     private void updateCHatInfo(final List<LiveHomeChatInfo> liveHomeChatInfoList) {
         if (liveHomeChatInfoList == null || liveHomeChatInfoList.isEmpty()) {
-            stopRefreshAnimation();
+
             return;
         }
-        stopRefreshAnimation();
-
         if (mTeacherInfo != null) {
             mLiveChatInfoAdapter.setTeacher(mTeacherInfo);
         }
@@ -458,7 +462,11 @@ public class LiveInteractionFragment extends BaseFragment implements AbsListView
                         mUserMineStatus.setText(R.string.live_type_mine);
                         mUserMineContent.setText(item.getMsg());
                         if (LocalUser.getUser().isLogin() && !TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
-                            Picasso.with(context).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform()).into(mUserMineHeadImage);
+                            Picasso.with(context)
+                                    .load(LocalUser.getUser().getUserInfo().getUserPortrait())
+                                    .transform(new CircleTransform())
+                                    .resizeDimen(R.dimen.live_user_head_size, R.dimen.live_user_head_size)
+                                    .into(mUserMineHeadImage);
                         }
                         //普通游客发言
                     } else {

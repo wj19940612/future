@@ -119,7 +119,7 @@
             android:orientation="horizontal"
             android:paddingLeft="@dimen/common_margin"
             android:paddingRight="@dimen/common_margin"
-            android:paddingTop="@dimen/dimen_20">
+            android:paddingTop="20dp">
 
             <TextView
                 android:id="@+id/tradeInfoMessageFrom"

@@ -20,6 +20,7 @@ public class StrUtil {
 
     /**
      * 设置 s1 的字体，按比例缩放 s2 的大小，同时拼接 s1 和 s2
+     *
      * @param s1
      * @param typeface
      * @param s2
@@ -105,6 +106,7 @@ public class StrUtil {
         }
         return res;
     }
+
 
     /**
      * 设置 s1 颜色，同时拼接 s1 和 s2

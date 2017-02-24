@@ -211,13 +211,30 @@
 
     <!--"-->
     <style name="datePickerDialogStyle" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
-    <!--<item name="android:windowEnterAnimation">@anim/fade_in</item>-->
-    <!--<item name="android:windowExitAnimation">@anim/die_out</item>-->
-    <!--<item name="android:padding">0dp</item>-->
-    <!--<item name="android:listPreferredItemPaddingLeft">0dip</item>-->
-    <!--<item name="android:listPreferredItemPaddingRight">0dip</item>-->
-    <!--<item name="android:listPreferredItemPaddingStart">0dip</item>-->
-    <!--<item name="android:listPreferredItemPaddingEnd">0dip</item>-->
-    <item name="android:windowBackground">@android:color/transparent</item>
-</style>
-    </resources>
+        <!--<item name="android:windowEnterAnimation">@anim/fade_in</item>-->
+        <!--<item name="android:windowExitAnimation">@anim/die_out</item>-->
+        <!--<item name="android:padding">0dp</item>-->
+        <!--<item name="android:listPreferredItemPaddingLeft">0dip</item>-->
+        <!--<item name="android:listPreferredItemPaddingRight">0dip</item>-->
+        <!--<item name="android:listPreferredItemPaddingStart">0dip</item>-->
+        <!--<item name="android:listPreferredItemPaddingEnd">0dip</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="NewHomeProductPrice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/redPrimary</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NewHomeProductPriceChangePercent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/redPrimary</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+</resources>

@@ -80,11 +80,11 @@ android {
     }
     productFlavors {
         origin {
-            versionCode 50
-            versionName '1.5.0'
+            versionCode 55
+            versionName '1.5.5'
 //            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
-//            minSdkVersion 21
+            //minSdkVersion 21
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
@@ -255,11 +255,11 @@ dependencies {
     hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 
     gf2Compile project(path: ':umenglibrary', configuration: 'gf2Release')
+
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
     zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
     zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
-
     compile project(':SlidingMenu')
     compile project(':kutils')
     compile project(':chart')
@@ -282,4 +282,5 @@ dependencies {
     compile files('libs/netty-transport-4.1.5.final.jar')
     compile files('libs/netty-resolver-4.1.5.final.jar')
     compile 'com.getui:sdk:2.9.5.0'
+    compile 'com.android.support:design:24.2.1'
 }

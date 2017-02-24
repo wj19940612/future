@@ -3,6 +3,7 @@ package com.jnhyxx.html5.activity.account;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +45,9 @@ public class AboutUsActivity extends BaseActivity {
         initData();
 
         String servicePhone = Preference.get().getServicePhone();
-        servicePhone = StrFormatter.getFormatServicePhone(servicePhone);
+        if (!TextUtils.isEmpty(servicePhone)) {
+            servicePhone = StrFormatter.getFormatServicePhone(servicePhone);
+        }
         mServicePhone.setText(servicePhone);
         mSerViceQQ.setText(Preference.get().getServiceQQ());
     }
@@ -71,24 +74,24 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             //企业文化
             case R.id.companyCulture:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.COMPANY_CULTURE);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.COMPANY_CULTURE);
                 changeViewStatus(R.id.companyCulture);
                 break;
             //合作案例
             case R.id.collaborateCase:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.SHOW_CASE);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SHOW_CASE);
                 changeViewStatus(R.id.collaborateCase);
                 break;
             //公司热线
             case R.id.companyTelephone:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.CONNECT_PHONE);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.CONNECT_PHONE);
                 String servicePhone = Preference.get().getServicePhone().replaceAll("-", "");
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + servicePhone));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             case R.id.serviceQq:
-                MobclickAgent.onEvent(getActivity(),UmengCountEventIdUtils.SERVICE_QQ);
+                MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SERVICE_QQ);
                 String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
                 Intent intentQQ = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
                 if (intentQQ.resolveActivity(getPackageManager()) != null) {

@@ -21,14 +21,13 @@ import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.fragment.InfoFragment;
-import com.jnhyxx.html5.fragment.LiveFragment;
+import com.jnhyxx.html5.fragment.MarketFragment;
 import com.jnhyxx.html5.fragment.MineFragment;
 import com.jnhyxx.html5.fragment.dialog.UpgradeDialog;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.service.PushIntentService;
-import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.UpgradeUtil;
 import com.jnhyxx.html5.view.BottomTabs;
@@ -41,10 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.jnhyxx.html5.utils.Network.registerNetworkChangeReceiver;
-import static com.jnhyxx.html5.utils.Network.unregisterNetworkChangeReceiver;
-import static com.jnhyxx.html5.view.BottomTabs.TAB_INDEX_LIVE;
-
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.bottomTabs)
@@ -54,19 +49,10 @@ public class MainActivity extends BaseActivity {
 
     private MainFragmentsAdapter mMainFragmentsAdapter;
 
-    private BroadcastReceiver mNetworkChangeReceiver;
-
-    private int mTabPosition;
-    //首页tab的position
     private static final int TAB_HOME = 0;
-    //直播tab的position
-    private static final int TAB_LIVE = 1;
-    //资讯tab的position,用来友盟记录第点击次数
+    private static final int TAB_MARKET = 1;
     private static final int TAB_MESSAGE = 2;
-    //我的tab
     private static final int TAB_MINE = 3;
-
-    private static final int REQ_CODE_LIVE = 770;
 
     private BroadcastReceiver mPushBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -89,11 +75,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-
-    public BottomTabs getBottomTabs() {
-        return mBottomTabs;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +84,6 @@ public class MainActivity extends BaseActivity {
         checkVersion();
 
         initView();
-
-        mNetworkChangeReceiver = new NetworkReceiver();
 
         getServiceInfo();
 
@@ -141,16 +120,16 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(position!=TAB_INDEX_LIVE){
-                    updateLiveFragmentInfo();
-                }
                 if (position == TAB_HOME) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_HOME);
+                } else if (position == TAB_MARKET) {
+
                 } else if (position == TAB_MESSAGE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MESSAGE);
                 } else if (position == TAB_MINE) {
                     MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_MINE);
                 }
+
                 mBottomTabs.selectTab(position);
             }
 
@@ -159,27 +138,15 @@ public class MainActivity extends BaseActivity {
             }
         });
         mViewPager.setCurrentItem(0);
+
         mBottomTabs.setOnTabClickListener(new BottomTabs.OnTabClickListener() {
             @Override
             public void onTabClick(int position) {
-                if (position == TAB_INDEX_LIVE) {
-                    updateLiveFragmentInfo();
-                    MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TAB_LIVE);
-                }
                 mBottomTabs.selectTab(position);
                 mViewPager.setCurrentItem(position, false);
             }
         });
     }
-
-    private void updateLiveFragmentInfo() {
-        Fragment fragment = mMainFragmentsAdapter.getFragment(TAB_LIVE);
-        if (fragment instanceof LiveFragment) {
-            LiveFragment liveFragment = (LiveFragment) (fragment);
-            liveFragment.updateLiveInfo();
-        }
-    }
-
 
     private void checkVersion() {
         UpgradeUtil.log(this);
@@ -193,8 +160,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        registerNetworkChangeReceiver(this, mNetworkChangeReceiver);
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
+        LocalBroadcastManager.getInstance(MainActivity.this)
+                .registerReceiver(mPushBroadcastReceiver, new IntentFilter(PushIntentService.PUSH_ACTION));
         requestHomePopup();
     }
 
@@ -228,18 +195,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterNetworkChangeReceiver(this, mNetworkChangeReceiver);
-        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mPushBroadcastReceiver);
-    }
-
-    private class NetworkReceiver extends Network.NetworkChangeReceiver {
-
-        @Override
-        protected void onNetworkChanged(int availableNetworkType) {
-            if (availableNetworkType > Network.NET_NONE) {
-
-            }
-        }
+        LocalBroadcastManager.getInstance(MainActivity.this)
+                .unregisterReceiver(mPushBroadcastReceiver);
     }
 
     private class MainFragmentsAdapter extends FragmentPagerAdapter {
@@ -257,7 +214,7 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return new HomeFragment();
                 case 1:
-                    return new LiveFragment();
+                    return new MarketFragment();
                 case 2:
                     return new InfoFragment();
                 case 3:

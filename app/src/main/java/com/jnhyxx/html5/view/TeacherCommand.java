@@ -105,10 +105,13 @@ public class TeacherCommand extends LinearLayout {
     public void setTeacherHeader(String headPictureUrl) {
         if (TextUtils.isEmpty(headPictureUrl)) {
             Picasso.with(getContext()).load(R.drawable.ic_live_pic_head)
+                    .resizeDimen(R.dimen.teacher_command_head_size, R.dimen.teacher_command_head_size)
                     .transform(new CircleTransform()).into(mTeacherHead);
         } else {
             Picasso.with(getContext()).load(headPictureUrl)
-                    .transform(new CircleTransform()).into(mTeacherHead);
+                    .transform(new CircleTransform())
+                    .resizeDimen(R.dimen.teacher_command_head_size, R.dimen.teacher_command_head_size)
+                    .into(mTeacherHead);
         }
     }
 

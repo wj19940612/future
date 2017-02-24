@@ -15,7 +15,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.fragment.BaseFragment;
 import com.jnhyxx.html5.net.API;
-import com.jnhyxx.html5.utils.BlurEngine;
 import com.johnz.kutils.Launcher;
 
 import butterknife.BindView;
@@ -71,7 +70,6 @@ public class AgreementFragment extends BaseFragment {
         void onAgreementFragmentExited();
     }
     private Unbinder mBinder;
-    private BlurEngine mBlurEngine;
     private Callback mCallback;
     private int mLongOrShort;
 
@@ -105,7 +103,6 @@ public class AgreementFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBlurEngine = new BlurEngine(container, R.color.blackHalfTransparent);
         View view = inflater.inflate(R.layout.fragment_agreement, container, false);
         mBinder = ButterKnife.bind(this, view);
         return view;
@@ -114,13 +111,11 @@ public class AgreementFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mBlurEngine.onResume();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBlurEngine.onDestroyView();
         mBinder.unbind();
     }
 

@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="splitLineGrayLight">#E5E5E5</color>
+    <color name="splitLineGrayNew">#EEEEEE</color>
     <color name="splitLineGrayDark">#CDCDCD</color>
 
     <color name="splitLineBlueLight">#3B4856</color>
@@ -16,10 +17,12 @@
     <color name="colorDisable">#A8A8A8</color>
     <color name="greenPrimary">#25D282</color>
     <color name="redPrimary">#FB4B55</color>
+    <color name="twentyGreen">#3325D282</color>
+    <color name="twentyRed">#33FB4B55</color>
 
     <color name="bluePrimary">#0A1A2C</color>
     <color name="blueAssist">#358CF3</color>
-    <color name="colorSlidingMenu">#1E61B0</color>
+    <color name="colorSlidingMenu">#CDCDCD</color>
     <color name="grayHint">#CBCBCB</color>
 
     <!-- system half black is #80000000 -->
@@ -32,4 +35,5 @@
     <color name="mine_balance_text_color">#CCCCCC</color>
 
     <color name="live_teacher_info">#323232</color>
+    <color name="market_close_color">#A8A8A8</color>
 </resources>

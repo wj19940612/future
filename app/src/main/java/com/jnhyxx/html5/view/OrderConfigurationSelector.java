@@ -293,6 +293,7 @@ public class OrderConfigurationSelector extends LinearLayout {
         textView.setGravity(Gravity.CENTER);
         textView.setOnClickListener(mHideItemClickListener);
         textView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.text_order_config_selector_item));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         textView.setBackgroundResource(R.drawable.bg_order_config_selector_item);
         textView.setTag(KEY_POSITION, position);
         textView.setHeight(height);

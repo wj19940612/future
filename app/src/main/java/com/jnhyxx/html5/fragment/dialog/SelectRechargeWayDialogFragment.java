@@ -95,7 +95,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
             window.setLayout(dm.widthPixels, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         updateView(mSupportApplyWay);
-        choosePayWay(Preference.get().getPayWay());
+        choosePayWay(Preference.get().getRechargePayWay());
     }
 
     @Nullable
@@ -147,7 +147,7 @@ public class SelectRechargeWayDialogFragment extends DialogFragment {
     }
 
     public void choosePayWay(int payWay) {
-        Preference.get().setPayWay(payWay);
+        Preference.get().setRechargePayWay(payWay);
         unSelectAll();
         mPayWayLayout.getChildAt(payWay).setSelected(true);
     }

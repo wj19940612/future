@@ -262,7 +262,10 @@ public class HoldingOrderPresenter {
                         protected void onRespSuccess(Resp<JsonObject> resp) {
                             setOrderListStatus(HoldingOrder.ORDER_STATUS_CLOSING, mHoldingOrderList);
                             onSubmitAllHoldingOrderCompleted(resp.getMsg());
-                            mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION, mQueryJob.varietyId, -1));
+                            if (mHandler != null) {
+                                mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION,
+                                        mQueryJob.varietyId, -1));
+                            }
                         }
                     }).fire();
         }
@@ -290,7 +293,10 @@ public class HoldingOrderPresenter {
                     protected void onRespSuccess(Resp<JsonObject> resp) {
                         order.setOrderStatus(HoldingOrder.ORDER_STATUS_CLOSING);
                         onSubmitHoldingOrderCompleted(order);
-                        mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION, mQueryJob.varietyId, -1));
+                        if (mHandler != null) {
+                            mHandler.sendMessage(mHandler.obtainMessage(CLOSE_POSITION,
+                                    mQueryJob.varietyId, -1));
+                        }
                     }
                 }).fireSync();
     }

@@ -141,9 +141,14 @@ public class UserInfoActivity extends BaseActivity {
                     bingBankCard();
                     break;
                 case UploadUserImageDialogFragment.REQ_CLIP_HEAD_IMAGE_PAGE:
+                    setResult(RESULT_OK);
                     if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getUserPortrait())) {
-                        Picasso.with(getActivity()).load(LocalUser.getUser().getUserInfo().getUserPortrait()).transform(new CircleTransform() {
-                        }).into(mUserHeadImage);
+                        Picasso.with(getActivity())
+                                .load(LocalUser.getUser().getUserInfo().getUserPortrait())
+                                .transform(new CircleTransform() {
+                                })
+                                .resizeDimen(R.dimen.user_head_size, R.dimen.user_head_size)
+                                .into(mUserHeadImage);
                     } else {
                         getUserInfo();
                     }
@@ -278,7 +283,6 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void bingBankCard() {
-
         Launcher.with(getActivity(), BankcardBindingActivity.class).putExtra(Launcher.EX_PAYLOAD, true).executeForResult(BankcardBindingActivity.REQ_CODE_BIND_BANK);
     }
 
@@ -358,8 +362,13 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void updateUserHeadImage(UserInfo userInfo) {
+        if (userInfo == null) return;
         if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-            Picasso.with(this).load(userInfo.getUserPortrait()).transform(new CircleTransform()).into(mUserHeadImage);
+            Picasso.with(this).load(userInfo.getUserPortrait())
+                    .placeholder(R.drawable.ic_user_info_head_visitor)
+                    .transform(new CircleTransform())
+                    .resizeDimen(R.dimen.user_head_size, R.dimen.user_head_size)
+                    .into(mUserHeadImage);
         } else {
             if (!TextUtils.isEmpty(LocalUser.getUser().getUserInfo().getChinaSex())) {
                 if (LocalUser.getUser().getUserInfo().isUserisBoy()) {
@@ -475,7 +484,7 @@ public class UserInfoActivity extends BaseActivity {
                 } else {
                     picker.setColumnWeight(2 / 8.0, 3 / 8.0, 3 / 8.0);//省级、地级和县级的比例为2:3:3
                 }
-                picker.setCancelTextColor(R.color.lucky);
+                picker.setCancelTextColor(ContextCompat.getColor(getActivity(), R.color.lucky));
 //            picker.setSubmitTextColor(R.color.blueAssist);
                 picker.setSubmitTextColor(Color.parseColor("#358CF3"));
                 picker.setAnimationStyle(R.style.BottomDialogStyle);

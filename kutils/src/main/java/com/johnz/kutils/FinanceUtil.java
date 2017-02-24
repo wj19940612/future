@@ -164,7 +164,7 @@ public class FinanceUtil {
      * @param value
      * @return 处理后的字符串
      */
-    public static String formatWithoutZero(double value) {
+    public static String formatWithScaleNoZero(double value) {
         return removeNeedlessZero(formatWithScale(value, DEFAULT_SCALE));
     }
 

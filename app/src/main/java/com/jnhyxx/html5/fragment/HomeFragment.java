@@ -373,14 +373,6 @@ public class HomeFragment extends BaseFragment {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.replaceLayout, calendarFinanceFragment)
                 .commit();
-        calendarFinanceFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
-            @Override
-            public void listViewHeight(int height) {
-                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
-                layoutParams.height = height;
-                mReplaceLayout.setLayoutParams(layoutParams);
-            }
-        });
     }
 
     private HomeHeader.OnViewClickListener mOnViewClickListener = new HomeHeader.OnViewClickListener() {

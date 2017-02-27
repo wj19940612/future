@@ -2,20 +2,15 @@ package com.jnhyxx.html5.fragment.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -25,7 +20,6 @@ import com.google.gson.JsonSyntaxException;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.domain.msg.CalendarFinanceModel;
 import com.jnhyxx.html5.fragment.BaseFragment;
-import com.jnhyxx.html5.fragment.HomeFragment;
 import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
@@ -35,11 +29,13 @@ import com.johnz.kutils.ImageUtil;
 import com.johnz.kutils.StrUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.jnhyxx.html5.R.id.listView;
 import static com.jnhyxx.html5.R.string.lido;
 
 
@@ -47,35 +43,27 @@ import static com.jnhyxx.html5.R.string.lido;
  * Created by ${wangJie} on 2017/2/16.
  */
 
-public class CalendarFinanceFragment extends BaseFragment implements WeekCalendarLayout.OnWeekSelectListener, AbsListView.OnScrollListener {
+public class CalendarFinanceFragment extends BaseFragment implements WeekCalendarLayout.OnWeekSelectListener {
 
     @BindView(R.id.calendarWeek)
     WeekCalendarLayout mCalendarWeek;
-    @BindView(listView)
-    ListView mListView;
     @BindView(android.R.id.empty)
     TextView mEmpty;
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView mRecyclerView;
 
-    private int mWeekCalendarLayoutHeight;
     /**
      * 所要查看财经日历数据的请求时间  默认为当天
      */
     private String mTime = DateUtil.format(System.currentTimeMillis(), "yyyy-MM-dd");
 
     private Unbinder mBind;
-    private CalendarFinanceAdapter mCalendarFinanceAdapter;
+    private CalendarFinanceRecycleViewAdapter mCalendarFinanceRecycleViewAdapter;
+    private ArrayList<CalendarFinanceModel.EconomicCalendarsBean> mCalendarsBeanArrayList;
 
     public static CalendarFinanceFragment newInstance() {
         CalendarFinanceFragment fragment = new CalendarFinanceFragment();
         return fragment;
-    }
-
-    private HomeFragment.OnListViewHeightListener mOnListViewHeightListener;
-
-    public void setOnListViewHeightListener(HomeFragment.OnListViewHeightListener onListViewHeightListener) {
-        mOnListViewHeightListener = onListViewHeightListener;
     }
 
     @Nullable
@@ -96,40 +84,15 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mCalendarWeek.setOnWeekSelectListener(this);
-        mListView.setOnScrollListener(this);
-        mListView.setEmptyView(mEmpty);
-        if (mCalendarFinanceAdapter == null) {
-            mCalendarFinanceAdapter = new CalendarFinanceAdapter(getActivity());
-            mListView.setAdapter(mCalendarFinanceAdapter);
-        }
-
+        mCalendarsBeanArrayList = new ArrayList<>();
+        mCalendarFinanceRecycleViewAdapter = new CalendarFinanceRecycleViewAdapter(getActivity(), mCalendarsBeanArrayList);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mCalendarFinanceRecycleViewAdapter);
         getCalendarFinanceData(mTime);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getCalendarFinanceData(mTime);
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mCalendarWeek != null) {
-            mCalendarWeek.post(new Runnable() {
-                @Override
-                public void run() {
-                    mWeekCalendarLayoutHeight = mCalendarWeek.getMeasuredHeight();
-                }
-            });
-        }
     }
 
     private void getCalendarFinanceData(String time) {
-        /**
-         * 修改超时时间为5秒
-         */
         API.Message.findNewsByUrl(API.getCalendarFinanceUrl(time))
                 .setTag(TAG)
                 .setRetryPolicy(new DefaultRetryPolicy())
@@ -137,7 +100,6 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
                     @Override
                     public void onRespSuccess(Object object) {
-                        stopRefreshAnimation();
                         try {
                             CalendarFinanceModel calendarFinanceModel = new Gson().fromJson(object.toString().replaceAll("\\\"", "\""), CalendarFinanceModel.class);
                             updateCalendarFinanceData(calendarFinanceModel);
@@ -149,46 +111,21 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                     @Override
                     public void onFailure(VolleyError volleyError) {
                         super.onFailure(volleyError);
-                        stopRefreshAnimation();
                     }
                 })
                 .fire();
     }
 
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
-        mCalendarFinanceAdapter.clear();
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
-            int itemHeight = 0;
-            if (getDevicesHeightPixels() > 1279) {
-                itemHeight = calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHeightPixels() * 0.23);
-            } else {
-                itemHeight = calendarFinanceModel.getEconomicCalendars().size() * (int) (getDevicesHeightPixels() * 0.245);
-            }
-            mOnListViewHeightListener.listViewHeight(itemHeight + mWeekCalendarLayoutHeight);
-            mCalendarFinanceAdapter.addAll(calendarFinanceModel.getEconomicCalendars());
-            mCalendarFinanceAdapter.notifyDataSetChanged();
-//            int listViewHeightBasedOnChildren1 = ViewUtil.setListViewHeightBasedOnChildren(150, mListView);
-////             listView.getDividerHeight()获取子项间分隔符占用的高度
-////             params.height最后得到整个ListView完整显示需要的高度
-//            mOnListViewHeightListener.listViewHeight(listViewHeightBasedOnChildren1 + mWeekCalendarLayoutHeight);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.GONE);
+            mCalendarFinanceRecycleViewAdapter.clear();
+            mCalendarsBeanArrayList.addAll(calendarFinanceModel.getEconomicCalendars());
         } else {
-
-            mOnListViewHeightListener.listViewHeight((int) (getDevicesHeightPixels() * 0.7));
+            mRecyclerView.setVisibility(View.GONE);
+            mEmpty.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    private void stopRefreshAnimation() {
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    private int getDevicesHeightPixels() {
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        return displayMetrics.heightPixels;
     }
 
     @Override
@@ -197,47 +134,55 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
         getCalendarFinanceData(dayTime);
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-    }
+    static class CalendarFinanceRecycleViewAdapter extends RecyclerView.Adapter<CalendarFinanceRecycleViewAdapter.ViewHolder> {
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        int topRowVerticalPosition =
-                (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
-        mSwipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-    }
-
-
-    static class CalendarFinanceAdapter extends ArrayAdapter<CalendarFinanceModel.EconomicCalendarsBean> {
-
-        private static final String LOW = "低";
-        private static final String MIDDLE = "中";
-        private static final String TALL = "高";
+        List<CalendarFinanceModel.EconomicCalendarsBean> mCalendarsBeanList;
         Context mContext;
 
-        public CalendarFinanceAdapter(Context context) {
-            super(context, 0);
+        public CalendarFinanceRecycleViewAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public CalendarFinanceRecycleViewAdapter(Context context, List<CalendarFinanceModel.EconomicCalendarsBean> calendarsBeanList) {
+            this.mCalendarsBeanList = calendarsBeanList;
             mContext = context;
         }
 
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.row_calendar_finance, null);
-                viewHolder = new ViewHolder(convertView);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-            viewHolder.bindDataWithView(getItem(position), mContext);
-            return convertView;
+        public void addAll(List<CalendarFinanceModel.EconomicCalendarsBean> calendarsBeanList) {
+            mCalendarsBeanList = calendarsBeanList;
+            notifyDataSetChanged();
         }
 
-        static class ViewHolder {
+        public void clear() {
+            if (mCalendarsBeanList != null) {
+                mCalendarsBeanList.clear();
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_calendar_finance, null);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.bindDataWithView(mCalendarsBeanList.get(position), position, mContext);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCalendarsBeanList != null ? mCalendarsBeanList.size() : 0;
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
+
+            private static final String LOW = "低";
+            private static final String MIDDLE = "中";
+            private static final String TALL = "高";
+
             @BindView(R.id.countryBanner)
             ImageView mCountryBanner;
             @BindView(R.id.time)
@@ -259,11 +204,13 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
             @BindView(R.id.reviseBefore)
             TextView mReviseBefore;
 
-            ViewHolder(View view) {
-                ButterKnife.bind(this, view);
+            public ViewHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
             }
 
-            public void bindDataWithView(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
+            private void bindDataWithView(CalendarFinanceModel.EconomicCalendarsBean item, int position, Context context) {
+
                 String organizeMarkUrl = API.Message.getCalendarFinanceCountryBanner(item.getState());
                 if (!TextUtils.isEmpty(organizeMarkUrl)) {
                     Picasso.with(context).load(ImageUtil.utf8Togb2312(organizeMarkUrl)).error(R.mipmap.ic_launcher)
@@ -295,14 +242,9 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                         mStar.setImageResource(R.drawable.ic_star_important);
                         break;
                 }
+
             }
 
-            /**
-             * 处理利空和利多消息
-             *
-             * @param item
-             * @param context
-             */
             private void handleStatus(CalendarFinanceModel.EconomicCalendarsBean item, Context context) {
                 if (item.getEffecttype() == CalendarFinanceModel.TYPE_HAS_MORE_STATUS) {
                     String effect = item.getEffect();
@@ -317,7 +259,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                         mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
 
                         String substring = effect.substring(effect.indexOf("|"));
-                        mLidoNews.setText(context.getString(R.string.lido, effect.substring(0, effect.length() - substring.length())));
+                        mLidoNews.setText(context.getString(lido, effect.substring(0, effect.length() - substring.length())));
                         mBadNews.setText(context.getString(R.string.bad_news, substring.substring(1, substring.length() - 1)));
                     }
 
@@ -327,7 +269,7 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
                         mLidoNews.setVisibility(View.VISIBLE);
                         mLidoNews.setBackgroundResource(R.drawable.btn_red);
                         mLidoNews.setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
-                        mLidoNews.setText(context.getString(lido, item.getEffect().replace("||", "")));
+                        mLidoNews.setText(context.getString(R.string.lido, item.getEffect().replace("||", "")));
                     } else {
                         String effect = item.getEffect();
                         if (effect.length() > 5) {

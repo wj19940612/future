@@ -181,7 +181,6 @@ public class HomeFragment extends BaseFragment {
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                         Math.abs(Math.min(mHomeBannerHeight, dp2px(scrollY)) * 1.0f) / mHomeBannerHeight));
-                Log.e("test", mHomeBannerHeight + "+++++++" + dp2px(scrollY));
             }
         });
 
@@ -377,14 +376,6 @@ public class HomeFragment extends BaseFragment {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.replaceLayout, calendarFinanceFragment)
                 .commit();
-        calendarFinanceFragment.setOnListViewHeightListener(new OnListViewHeightListener() {
-            @Override
-            public void listViewHeight(int height) {
-                ViewGroup.LayoutParams layoutParams = mReplaceLayout.getLayoutParams();
-                layoutParams.height = height;
-                mReplaceLayout.setLayoutParams(layoutParams);
-            }
-        });
     }
 
     private HomeHeader.OnViewClickListener mOnViewClickListener = new HomeHeader.OnViewClickListener() {

@@ -69,7 +69,10 @@ public class Product implements Parcelable {
     private String currencyUnit;
     private double ratio;
     private String advertisement;
+
+    // 额外的字段用于判断是否为可选的产品
     private boolean isOptional;
+
     public void setIsOptional(boolean isOptional) {
         this.isOptional = isOptional;
     }

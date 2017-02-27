@@ -378,9 +378,13 @@ public class BankcardBindingActivity extends BaseActivity {
         userInfo.setCardPhone(phoneNum);
         userInfo.setBankId(bankId);
         userInfo.setCardState(UserInfo.BANKCARD_STATUS_FILLED);
-        userInfo.setRealName(cardHolderName);
         userInfo.setIdCard(identityNum);
-        userInfo.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+        if (!LocalUser.getUser().isRealNameBound()) {
+            userInfo.setIdStatus(UserInfo.REAL_NAME_STATUS_FILLED);
+        }
+        if (!LocalUser.getUser().isRealNameBound()) {
+            userInfo.setRealName(cardHolderName);
+        }
         localUser.setUserInfo(userInfo);
     }
 

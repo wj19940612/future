@@ -84,9 +84,8 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mCalendarWeek.setOnWeekSelectListener(this);
-
         mCalendarsBeanArrayList = new ArrayList<>();
-        mCalendarFinanceRecycleViewAdapter = new CalendarFinanceRecycleViewAdapter(getActivity(),mCalendarsBeanArrayList);
+        mCalendarFinanceRecycleViewAdapter = new CalendarFinanceRecycleViewAdapter(getActivity(), mCalendarsBeanArrayList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mCalendarFinanceRecycleViewAdapter);
@@ -119,8 +118,13 @@ public class CalendarFinanceFragment extends BaseFragment implements WeekCalenda
 
     private void updateCalendarFinanceData(CalendarFinanceModel calendarFinanceModel) {
         if (calendarFinanceModel != null && !calendarFinanceModel.getEconomicCalendars().isEmpty()) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.GONE);
             mCalendarFinanceRecycleViewAdapter.clear();
             mCalendarsBeanArrayList.addAll(calendarFinanceModel.getEconomicCalendars());
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            mEmpty.setVisibility(View.VISIBLE);
         }
     }
 

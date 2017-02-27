@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/optionalForeignList"
+                android:id="@+id/optionalForeignView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -37,7 +37,7 @@
                 android:nestedScrollingEnabled="false"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/optionalDomesticList"
+                android:id="@+id/optionalDomesticView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -59,15 +59,10 @@
                 app:tabSelectedTextColor="@color/blueAssist"
                 app:tabTextColor="@color/blackPrimary"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/bottomList"
+            <FrameLayout
+                android:id="@+id/replaceLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#ffffff"
-                android:divider="@drawable/divider_home_list"
-                android:dividerHeight="0.5dp"
-                android:nestedScrollingEnabled="false"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </com.jnhyxx.html5.view.MyNestedScrollView>
 

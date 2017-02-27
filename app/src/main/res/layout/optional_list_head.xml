@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="32dp"
-    android:minHeight="32dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
@@ -11,17 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
-        android:text="国际期货"
-        android:textColor="#666666"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:text="@string/foreign_futures"
+        android:textColor="@color/lucky"
         android:textSize="14sp"/>
 
     <ImageView
-        android:id="@+id/optionalAdd"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:id="@+id/optionalEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/ic_home_add"/>
+        android:layout_marginRight="@dimen/common_margin"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:src="@drawable/ic_home_edit"/>
 </RelativeLayout>

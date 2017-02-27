@@ -35,10 +35,12 @@ import butterknife.ButterKnife;
  */
 
 public class ProductOptionalActivity extends BaseActivity {
+
     public static final int REQ_CODE_RESULT = 100;
 
     @BindView(android.R.id.list)
     DragListView mList;
+
     private List<String> mProductOptionals;
     private List<Product> mProductList1;
 
@@ -57,9 +59,9 @@ public class ProductOptionalActivity extends BaseActivity {
         mIsDomestic = getIntent().getBooleanExtra(HomeFragment.IS_DOMESTIC, false);
         final String productOptional;
         if (mIsDomestic) {
-            productOptional = Preference.get().getProductOptionalDomestic();
+            productOptional = Preference.get().getOptionalDomesticProduct();
         } else {
-            productOptional = Preference.get().getProductOptionalForeign();
+            productOptional = Preference.get().getOptionalForeignProduct();
         }
         mProductOptionals = getOptionalList(productOptional);
 
@@ -106,9 +108,9 @@ public class ProductOptionalActivity extends BaseActivity {
                 sb.append(product.getVarietyId()).append(",");
             }
             if (mIsDomestic) {
-                Preference.get().setProductOptionalDomestic(sb.deleteCharAt(sb.length() - 1).toString());
+                Preference.get().setOptionalDomesticProduct(sb.deleteCharAt(sb.length() - 1).toString());
             } else {
-                Preference.get().setProductOptionalForeign(sb.deleteCharAt(sb.length() - 1).toString());
+                Preference.get().setOptionalForeignProduct(sb.deleteCharAt(sb.length() - 1).toString());
             }
         }
         super.onBackPressed();

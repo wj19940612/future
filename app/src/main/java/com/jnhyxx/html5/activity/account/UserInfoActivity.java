@@ -12,7 +12,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -114,7 +113,6 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.d(TAG, "将要上传的用户信息 " + LocalUser.getUser().getUserInfo().getUserDefiniteInfo().toString());
         API.User.submitUserInfo(LocalUser.getUser().getUserInfo().getUserDefiniteInfo()).setTag(TAG)
                 .setIndeterminate(this)
                 .setCallback(new Callback1<Resp<Object>>() {
@@ -358,7 +356,6 @@ public class UserInfoActivity extends BaseActivity {
         mUserIntroduction.setText(userInfo.getIntroduction());
         mBindBankCard.setSubText(getBindBankcardAuthStatusRes(userInfo.getCardState()));
         mBindingPhone.setSubText(userInfo.getUserPhone());
-
     }
 
     private void updateUserHeadImage(UserInfo userInfo) {

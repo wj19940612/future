@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.jnhyxx.html5.view.WeekCalendarLayout
+        android:id="@+id/calendarWeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:minHeight="70dp"/>
 
-        <com.jnhyxx.html5.view.WeekCalendarLayout
-            android:id="@+id/calendarWeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="70dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"/>
 
-
-        <ListView
-            android:visibility="gone"
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:divider="@null"
-            android:scrollbars="none"/>
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            android:drawablePadding="16dp"
-            android:drawableTop="@drawable/image_no_record"
-            android:gravity="center_horizontal"
-            android:text="@string/there_is_no_data_for_now"
-            android:textColor="@color/emptyViewColor"
-            android:textSize="20sp"
-            android:visibility="visible"/>
-    </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:drawablePadding="16dp"
+        android:drawableTop="@drawable/image_no_record"
+        android:gravity="center_horizontal"
+        android:text="@string/there_is_no_data_for_now"
+        android:textColor="@color/emptyViewColor"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+</LinearLayout>
 

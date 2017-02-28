@@ -2,11 +2,15 @@ package com.jnhyxx.html5;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.domain.order.LightningOrderAsset;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Preference {
 
@@ -27,8 +31,8 @@ public class Preference {
         String SERVER_IP_PORT = "server_ip_port";
         String TAG_SHOWED = "tag_showed";
         String IS_FIRST_WITHDRAW = "isFirstWithdraw";
-        String PRODUCT_OPTIONAL_FOREIGN = "productOptionalForeign";
-        String PRODUCT_OPTIONAL_DOMESTIC = "productOptionalDomestic";
+        String OPTIONAL_FOREIGN_PRODUCT = "optionalForeignProduct";
+        String OPTIONAL_DOMESTIC_PRODUCT = "optionalDomesticProduct";
         String PAY_WAY = "pay_way";
     }
 
@@ -201,20 +205,38 @@ public class Preference {
         getEditor().putBoolean(key, isFirstWithdraw).apply();
     }
 
-    public void setProductOptionalForeign(String productOptional) {
-        getEditor().putString(Key.PRODUCT_OPTIONAL_FOREIGN, productOptional).apply();
+    public void setOptionalForeignProduct(String productOptional) {
+        getEditor().putString(Key.OPTIONAL_FOREIGN_PRODUCT, productOptional).apply();
     }
 
-    public String getProductOptionalForeign() {
-        return mPrefs.getString(Key.PRODUCT_OPTIONAL_FOREIGN, "");
+    public String getOptionalForeignProduct() {
+        return mPrefs.getString(Key.OPTIONAL_FOREIGN_PRODUCT, "");
     }
 
-    public void setProductOptionalDomestic(String productOptional) {
-        getEditor().putString(Key.PRODUCT_OPTIONAL_DOMESTIC, productOptional).apply();
+    public List<String> getOptionalForeignProductList() {
+        String optionalForeignProduct = getOptionalForeignProduct();
+        return splitOptionalProduct(optionalForeignProduct);
     }
 
-    public String getProductOptionalDomestic() {
-        return mPrefs.getString(Key.PRODUCT_OPTIONAL_DOMESTIC, "");
+    public void setOptionalDomesticProduct(String productOptional) {
+        getEditor().putString(Key.OPTIONAL_DOMESTIC_PRODUCT, productOptional).apply();
+    }
+
+    public String getOptionalDomesticProduct() {
+        return mPrefs.getString(Key.OPTIONAL_DOMESTIC_PRODUCT, "");
+    }
+
+    public List<String> getOptionalDomesticProductList() {
+        String optionalDomesticProduct = getOptionalDomesticProduct();
+        return splitOptionalProduct(optionalDomesticProduct);
+    }
+
+    private List<String> splitOptionalProduct(String optionalProduct) {
+        if (!TextUtils.isEmpty(optionalProduct)) {
+            String[] foreignSplit = optionalProduct.split(",");
+            return Arrays.asList(foreignSplit);
+        }
+        return null;
     }
 
     public int getRechargePayWay() {

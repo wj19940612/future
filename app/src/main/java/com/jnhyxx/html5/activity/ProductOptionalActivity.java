@@ -2,7 +2,6 @@ package com.jnhyxx.html5.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,7 +22,6 @@ import com.jnhyxx.html5.view.DragListView;
 import com.jnhyxx.html5.view.DragListViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -35,10 +33,12 @@ import butterknife.ButterKnife;
  */
 
 public class ProductOptionalActivity extends BaseActivity {
+
     public static final int REQ_CODE_RESULT = 100;
 
     @BindView(android.R.id.list)
     DragListView mList;
+
     private List<String> mProductOptionals;
     private List<Product> mProductList1;
 
@@ -55,13 +55,11 @@ public class ProductOptionalActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         mIsDomestic = getIntent().getBooleanExtra(HomeFragment.IS_DOMESTIC, false);
-        final String productOptional;
         if (mIsDomestic) {
-            productOptional = Preference.get().getProductOptionalDomestic();
+            mProductOptionals = Preference.get().getOptionalDomesticProductList();
         } else {
-            productOptional = Preference.get().getProductOptionalForeign();
+            mProductOptionals = Preference.get().getOptionalForeignProductList();
         }
-        mProductOptionals = getOptionalList(productOptional);
 
         mProductList1 = new ArrayList<>();
         mProductList2 = new ArrayList<>();
@@ -90,25 +88,18 @@ public class ProductOptionalActivity extends BaseActivity {
         requestProductList();
     }
 
-    private List<String> getOptionalList(String optional) {
-        if (!TextUtils.isEmpty(optional)) {
-            return Arrays.asList(optional.split(","));
-        }
-        return null;
-    }
-
     @Override
     public void onBackPressed() {
         setResult(REQ_CODE_RESULT);
         if (mProductList1.size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (Product product : mProductList1) {
-                sb.append(product.getVarietyId()).append(",");
+                sb.append(product.getVarietyType()).append(",");
             }
             if (mIsDomestic) {
-                Preference.get().setProductOptionalDomestic(sb.deleteCharAt(sb.length() - 1).toString());
+                Preference.get().setOptionalDomesticProduct(sb.deleteCharAt(sb.length() - 1).toString());
             } else {
-                Preference.get().setProductOptionalForeign(sb.deleteCharAt(sb.length() - 1).toString());
+                Preference.get().setOptionalForeignProduct(sb.deleteCharAt(sb.length() - 1).toString());
             }
         }
         super.onBackPressed();
@@ -126,7 +117,7 @@ public class ProductOptionalActivity extends BaseActivity {
                                     ListIterator<Product> iterator = products.listIterator();
                                     while (iterator.hasNext()) {
                                         Product product = iterator.next();
-                                        if (product.isDomestic() == mIsDomestic) {
+                                        if (product.isDomestic() == mIsDomestic) { // 逻辑注意区。 mIsDomestic 可以是true 和 false，这里可以用于判断产品是国际还是国内
                                             if (mProductList1.size() < 3) {
                                                 product.setIsOptional(true);
                                                 mProductList1.add(product);
@@ -143,7 +134,7 @@ public class ProductOptionalActivity extends BaseActivity {
                                         while (iterator2.hasNext()) {
                                             Product product = iterator2.next();
                                             if (product.isDomestic() == mIsDomestic) {
-                                                if (String.valueOf(product.getVarietyId()).equals(productOptional)) {
+                                                if (String.valueOf(product.getVarietyType()).equals(productOptional)) {
                                                     product.setIsOptional(true);
                                                     mProductList1.add(product);
                                                     iterator2.remove();
@@ -159,7 +150,7 @@ public class ProductOptionalActivity extends BaseActivity {
                             }
                         }.run();
                     }
-                }).fire();
+                }).fireSync();
     }
 
     class MyAdapter extends DragListViewAdapter<Product> {

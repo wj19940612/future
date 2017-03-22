@@ -39,8 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static u.aly.x.R;
-
 public class MarketFragment extends BaseFragment {
 
     @BindView(android.R.id.list)

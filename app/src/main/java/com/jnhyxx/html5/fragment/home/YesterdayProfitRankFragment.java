@@ -134,7 +134,7 @@ public class YesterdayProfitRankFragment extends BaseFragment implements AbsList
         API.Order.getProfitRank()
                 .setTag(TAG)
                 .setIndeterminate(this)
-                .setCallback(new Callback2<Resp<List<ProfitRankModel>>, List<ProfitRankModel>>() {
+                .setCallback(new Callback2<Resp<List<ProfitRankModel>>, List<ProfitRankModel>>(false) {
 
                     @Override
                     public void onRespSuccess(List<ProfitRankModel> profitRankModels) {

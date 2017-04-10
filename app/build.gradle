@@ -88,16 +88,16 @@ android {
         }
         yybd { // 原油宝典 -> 期货交易通
             applicationId 'com.jnhyxx.yybd'
-            versionCode 20
-            versionName '1.4.0'
-            buildConfigField('String', 'API_HOST', '\"http://new.jnhyxx.com\"')
+            versionCode 25
+            versionName '1.2.8'
+            buildConfigField('String', 'API_HOST', '\"http://gf5.dajiexin.com\"')
 
             manifestPlaceholders = [
                     GETUI_APP_ID    : "zDqB744dvm5uKOw5X4LUh5",
                     GETUI_APP_KEY   : "RdPe1ldvUp8CD6YvsuI218",
                     GETUI_APP_SECRET: "2ihqKbsxit8PolJhVcEMD",
                     PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "TENCENT"
+                    UMENG_CHANNEL   : "OTHERS"
             ]
         }
         kdqn { // 口袋期牛

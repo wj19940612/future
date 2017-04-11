@@ -117,8 +117,8 @@ android {
 
         yyqhb { // 原油期货宝
             applicationId 'com.dajiexin.yyqhb'
-            versionCode 3
-            versionName '2.0'
+            versionCode 5
+            versionName '1.3.1'
             buildConfigField('String', 'API_HOST', '\"http://www.dajiexin.com\"')
 
             manifestPlaceholders = [
@@ -126,7 +126,7 @@ android {
                     GETUI_APP_KEY   : "aJxHTBVy1gActQcuo4ASX7",
                     GETUI_APP_SECRET: "nqEj72mrVt9N6G91KOYUN",
                     PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "OTHERS"
+                    UMENG_CHANNEL   : "MUMAYI"
             ]
         }
 

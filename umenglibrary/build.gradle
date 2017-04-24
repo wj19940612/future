@@ -46,6 +46,15 @@ android {
         gf2 { // 钱猫投资宝
             manifestPlaceholders = [UMENG_APPKEY: "58a6be8504e2053aeb00078f"]
         }
+        gf4 { // 外汇期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58fda0754544cb7d4f0016b6"]
+        }
+        gf8 { // 期货原油交易
+            manifestPlaceholders = [UMENG_APPKEY: "58fd9d42a325112614000a4a"]
+        }
+        gf10 { // 期货交易赚钱宝
+            manifestPlaceholders = [UMENG_APPKEY: "58fda15d99f0c71b8c000dd1"]
+        }
 
         zy3 { // 金谷理财
             manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]

@@ -160,20 +160,6 @@ android {
             ]
         }
 
-        gf2 { // 钱猫投资宝
-            applicationId 'com.dajiexin.gf2'
-            versionCode 1
-            versionName '1.0'
-            buildConfigField('String', 'API_HOST', '\"http://gf2.dajiexin.com\"')
-
-            manifestPlaceholders = [
-                    GETUI_APP_ID    : "1OLq4X4Df98Sk13f6xAGd9",
-                    GETUI_APP_KEY   : "OOr6ewSyql947XCVRxeDd9",
-                    GETUI_APP_SECRET: "UHHnDKVixc60RmCCGDU154",
-                    PACKAGE_NAME    : applicationId,
-                    UMENG_CHANNEL   : "OFFICIAL"
-            ]
-        }
         zy3 { // 金谷理财
             applicationId 'com.trade163.zy3'
             versionCode 1
@@ -230,6 +216,63 @@ android {
                     UMENG_CHANNEL   : "OFFICIAL"
             ]
         }
+
+        gf2 { // 钱猫投资宝
+            applicationId 'com.dajiexin.gf2'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf2.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "1OLq4X4Df98Sk13f6xAGd9",
+                    GETUI_APP_KEY   : "OOr6ewSyql947XCVRxeDd9",
+                    GETUI_APP_SECRET: "UHHnDKVixc60RmCCGDU154",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OFFICIAL"
+            ]
+        }
+        gf4 { // 外汇期货宝
+            applicationId 'com.dajiexin.gf4'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf4.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Usjdmgh3dA8KrjABoBGTA9",
+                    GETUI_APP_KEY   : "i9iH1DkArFAUvau00LBrE1",
+                    GETUI_APP_SECRET: "H2tCehTlST6odAvXxxjs65",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
+        gf8 { // 期货原油交易
+            applicationId 'com.dajiexin.gf8'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf8.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "EHcmH2ooY87hqxLrjbnN23",
+                    GETUI_APP_KEY   : "zPTsqKatqQ70wA9oSDldb9",
+                    GETUI_APP_SECRET: "iwQknkWxWa6zZaF0q54dGA",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
+        gf10 { // 期货交易赚钱宝
+            applicationId 'com.dajiexin.gf10'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf10.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Ct64W06xEI7NqthtlPImK",
+                    GETUI_APP_KEY   : "pDEB67qvF59jvtT3PMZaI",
+                    GETUI_APP_SECRET: "rOeOFWodpR8riX2DLRvPz7",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
     }
 
     dexOptions {
@@ -255,6 +298,9 @@ dependencies {
     hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 
     gf2Compile project(path: ':umenglibrary', configuration: 'gf2Release')
+    gf4Compile project(path: ':umenglibrary', configuration: 'gf4Release')
+    gf8Compile project(path: ':umenglibrary', configuration: 'gf8Release')
+    gf10Compile project(path: ':umenglibrary', configuration: 'gf10Release')
 
     zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
     zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')

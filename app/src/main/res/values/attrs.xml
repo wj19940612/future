@@ -32,6 +32,8 @@
         <attr name="rowTextColor" format="color"/>
         <attr name="rowIsNotNeedTopPadding" format="boolean"/>
         <attr name="rowVerticalPadding" format="dimension"/>
+        <attr name="hasBottomSplitLine" format="boolean"/>
+        <attr name="splitLineColor" format="color|reference"/>
     </declare-styleable>
 
     <declare-styleable name="TitleBar">

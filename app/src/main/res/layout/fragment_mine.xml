@@ -196,37 +196,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@android:color/white"
+                app:hasBottomSplitLine="true"
                 app:leftIcon="@drawable/ic_account_list_news"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rowText="@string/message_center"
                 app:rowTextColor="@color/blackPrimary"
+                app:splitLineColor="@color/splitLineGrayDark"
                 app:subTextColor="@android:color/white"/>
-
-            <include layout="@layout/split_line_gray_dark"/>
 
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/tradeDetail"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@android:color/white"
+                app:hasBottomSplitLine="true"
                 app:leftIcon="@drawable/ic_account_list_detail"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rowText="@string/trade_detail"
-                app:rowTextColor="@color/blackPrimary"/>
-
-            <include layout="@layout/split_line_gray_dark"/>
+                app:rowTextColor="@color/blackPrimary"
+                app:splitLineColor="@color/splitLineGrayDark"/>
 
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/paidToPromote"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@android:color/white"
+                app:hasBottomSplitLine="true"
                 app:leftIcon="@drawable/ic_account_list_brand"
                 app:rightIcon="@drawable/common_big_arrow_list_icon_more"
                 app:rowText="@string/paid_to_promote"
-                app:rowTextColor="@color/blackPrimary"/>
+                app:rowTextColor="@color/blackPrimary"
+                app:splitLineColor="@color/splitLineGrayDark"/>
 
-            <include layout="@layout/split_line_gray_dark"/>
+            <com.jnhyxx.html5.view.IconTextRow
+                android:id="@+id/newbieTask"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:visibility="gone"
+                app:hasBottomSplitLine="true"
+                app:leftIcon="@drawable/ic_newbie_task"
+                app:rightIcon="@drawable/common_big_arrow_list_icon_more"
+                app:rowText="@string/newbie_task"
+                app:rowTextColor="@color/blackPrimary"
+                app:splitLineColor="@color/splitLineGrayDark"/>
 
             <com.jnhyxx.html5.view.IconTextRow
                 android:id="@+id/aboutUs"

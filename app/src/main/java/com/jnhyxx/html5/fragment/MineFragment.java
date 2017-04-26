@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
 import com.jnhyxx.html5.activity.account.BankcardBindingActivity;
 import com.jnhyxx.html5.activity.account.IdeaFeedbackActivity;
@@ -238,7 +239,8 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback})
+    @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter,
+            R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback, R.id.newbieTask})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInButton:
@@ -281,6 +283,17 @@ public class MineFragment extends BaseFragment {
             case R.id.feedback:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.FEED_BACK);
                 Launcher.with(getActivity(), IdeaFeedbackActivity.class).execute();
+                break;
+            case R.id.newbieTask:
+                if (LocalUser.getUser().isLogin()) {
+                    Launcher.with(getActivity(), WebViewActivity.class)
+                            .putExtra(WebViewActivity.EX_TITLE, getString(R.string.newbie_task))
+                            .putExtra(WebViewActivity.EX_URL, API.getNewbieTaskUrl())
+                            .putExtra(WebViewActivity.EX_RAW_COOKIE, CookieManger.getInstance().getRawCookie())
+                            .execute();
+                } else {
+                    Launcher.with(getActivity(), SignUpActivity.class).execute();
+                }
                 break;
         }
     }

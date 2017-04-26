@@ -1166,6 +1166,15 @@ public class API extends APIBase {
     }
 
     /**
+     * 新手任务
+     *
+     * @return
+     */
+    public static String getNewbieTaskUrl() {
+        return getHost() + "/agreement/newtask.html?nohead=1";
+    }
+
+    /**
      * 投资课堂
      *
      * @return

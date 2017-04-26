@@ -83,7 +83,7 @@ android {
             versionCode 58
             versionName '1.5.8'
 //            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
-            buildConfigField('String', 'API_HOST', '\"http://newtest.jnhyxx.com\"')
+            buildConfigField('String', 'API_HOST', '\"http://qh2.esongbai.xyz\"')
             minSdkVersion 21
         }
         yybd { // 原油宝典 -> 期货交易通

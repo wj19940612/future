@@ -34,6 +34,7 @@ public class Preference {
         String OPTIONAL_FOREIGN_PRODUCT = "optionalForeignProduct";
         String OPTIONAL_DOMESTIC_PRODUCT = "optionalDomesticProduct";
         String PAY_WAY = "pay_way";
+        String HAS_NEWBIE_TASK = "has_newbie_task";
     }
 
     private static Preference sInstance;
@@ -53,6 +54,14 @@ public class Preference {
 
     private SharedPreferences.Editor getEditor() {
         return mPrefs.edit();
+    }
+
+    public void setHasNewbieTask(boolean hasNewbieTask) {
+        getEditor().putBoolean(Key.HAS_NEWBIE_TASK, hasNewbieTask).apply();
+    }
+
+    public boolean hasNewbieTask() {
+        return mPrefs.getBoolean(Key.HAS_NEWBIE_TASK, false);
     }
 
     public void setForeground(boolean foreground) {

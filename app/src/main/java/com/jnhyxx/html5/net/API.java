@@ -359,6 +359,10 @@ public class API extends APIBase {
                     new ApiParams().put("pic", bitmapto64));
 
         }
+
+        public static API checkChannelHasNewbieTask() {
+            return new API("/user/mission/findChannelMission.do", null);
+        }
     }
 
     public static class Finance {
@@ -738,12 +742,13 @@ public class API extends APIBase {
         }
 
         /**
-         *  https://cdn.jin10.com/assets/img/commons/flag/挪威.png
+         * https://cdn.jin10.com/assets/img/commons/flag/挪威.png
+         *
          * @param countryName
          * @return
          */
         public static String getCalendarFinanceCountryBanner(String countryName) {
-            return "http://cdn.jin10.com/assets/img/commons/flag/"+countryName + ".png";
+            return "http://cdn.jin10.com/assets/img/commons/flag/" + countryName + ".png";
         }
 
     }

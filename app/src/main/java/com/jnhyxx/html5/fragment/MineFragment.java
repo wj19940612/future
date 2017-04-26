@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.account.AboutUsActivity;
@@ -106,6 +107,8 @@ public class MineFragment extends BaseFragment {
     CircularAnnulusImageView mHeadImage;
     @BindView(R.id.feedback)
     IconTextRow mFeedback;
+    @BindView(R.id.newbieTask)
+    IconTextRow mNewbieTask;
 
     private Unbinder mBinder;
 
@@ -131,6 +134,15 @@ public class MineFragment extends BaseFragment {
             }
         });
 
+        showNewbieTaskView(Preference.get().hasNewbieTask());
+    }
+
+    private void showNewbieTaskView(boolean hasNewbieTask) {
+        if (hasNewbieTask) {
+            mNewbieTask.setVisibility(View.VISIBLE);
+        } else {
+            mNewbieTask.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -152,6 +164,24 @@ public class MineFragment extends BaseFragment {
         super.onResume();
         updateAccountInfoView();
         requestUserInfo();
+        requestNewbieTask();
+    }
+
+    private void requestNewbieTask() {
+        API.User.checkChannelHasNewbieTask().setTag(TAG)
+                .setCallback(new Callback<Resp<Integer>>(false) {
+                    @Override
+                    public void onReceive(Resp<Integer> integerResp) {
+                        Integer hasNewbieTask = integerResp.getData();
+                        if (hasNewbieTask != null && hasNewbieTask.intValue() == 1) {
+                            Preference.get().setHasNewbieTask(true);
+                            showNewbieTaskView(true);
+                        } else {
+                            Preference.get().setHasNewbieTask(false);
+                            showNewbieTaskView(false);
+                        }
+                    }
+                }).fireSync();
     }
 
     private void requestUserInfo() {
@@ -189,23 +219,23 @@ public class MineFragment extends BaseFragment {
     }
 
     private void updateUserImage(UserInfo userInfo) {
-            if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
-                Picasso.with(getActivity()).load(userInfo.getUserPortrait())
-                        .error(R.drawable.ic_user_info_head_visitor)
-                        .placeholder(R.drawable.ic_user_info_head_visitor)
-                        .resizeDimen(R.dimen.mine_user_head_size, R.dimen.mine_user_head_size)
-                        .into(mHeadImage);
-            } else {
-                if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
-                    if (userInfo.isUserisBoy()) {
-                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_boy);
-                    } else {
-                        mHeadImage.setImageResource(R.drawable.ic_user_info_head_girl);
-                    }
+        if (!TextUtils.isEmpty(userInfo.getUserPortrait())) {
+            Picasso.with(getActivity()).load(userInfo.getUserPortrait())
+                    .error(R.drawable.ic_user_info_head_visitor)
+                    .placeholder(R.drawable.ic_user_info_head_visitor)
+                    .resizeDimen(R.dimen.mine_user_head_size, R.dimen.mine_user_head_size)
+                    .into(mHeadImage);
+        } else {
+            if (!TextUtils.isEmpty(userInfo.getChinaSex())) {
+                if (userInfo.isUserisBoy()) {
+                    mHeadImage.setImageResource(R.drawable.ic_user_info_head_boy);
                 } else {
-                    mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
+                    mHeadImage.setImageResource(R.drawable.ic_user_info_head_girl);
                 }
+            } else {
+                mHeadImage.setImageResource(R.drawable.ic_user_info_head_visitor);
             }
+        }
     }
 
     @OnClick({R.id.signInButton, R.id.signUpButton, R.id.recharge, R.id.withdraw, R.id.messageCenter, R.id.tradeDetail, R.id.aboutUs, paidToPromote, R.id.headImage, R.id.feedback})

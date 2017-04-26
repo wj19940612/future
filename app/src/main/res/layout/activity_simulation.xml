@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/goldStoreButton"
+            android:layout_toLeftOf="@+id/getStoreButton"
             android:orientation="horizontal">
 
             <TextView
@@ -51,7 +51,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/goldStoreButton"
+            android:id="@+id/getStoreButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -61,9 +61,9 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp"
-            android:text="@string/gold_store"
+            android:text="@string/get_store"
             android:textColor="@color/blueAssist"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <GridView

@@ -100,6 +100,7 @@
     <string name="hine_please_input_new_password">请输入新的密码</string>
     <string name="forget_password">忘记密码?</string>
     <string name="recharge">充值</string>
+    <string name="newbie">新手</string>
     <string name="withdraw">提现</string>
     <string name="next_step">下一步</string>
     <string name="please_contact_service_if_issues_happen">如果遇到问题,请在首页联系客服</string>
@@ -491,7 +492,7 @@
     <string name="the_account_to_the_bank">到账银行</string>
     <!-- 金币模拟 Gold -->
     <string name="available_gold">可用金币</string>
-    <string name="gold_store">金币商城</string>
+    <string name="get_store">免费领金币</string>
     <string name="choose_trade_variety">选择交易品种</string>
     <string name="coming_soon">敬请期待</string>
 

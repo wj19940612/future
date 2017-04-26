@@ -22,12 +22,13 @@ import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
 import com.jnhyxx.html5.net.API;
+import com.jnhyxx.html5.net.Callback1;
 import com.jnhyxx.html5.net.Callback2;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.FontUtil;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
-import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
+import com.jnhyxx.html5.view.dialog.SmartDialog;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
 import com.umeng.analytics.MobclickAgent;
@@ -43,12 +44,12 @@ public class SimulationActivity extends BaseActivity {
 
     @BindView(R.id.availableGold)
     TextView mAvailableGold;
-    @BindView(R.id.goldStoreButton)
-    TextView mGoldStoreButton;
     @BindView(R.id.activity_score)
     LinearLayout mActivityScore;
     @BindView(R.id.gridView)
     GridView mGridView;
+    @BindView(R.id.getStoreButton)
+    TextView mGetStoreButton;
 
     private List<HomePositions.IntegralOpSBean> mSimulationPositionList;
     private List<ProductPkg> mProductPkgList;
@@ -146,10 +147,23 @@ public class SimulationActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.goldStoreButton)
-    public void onClick() {
-        MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SIMULATION_TRADE_GOLD_SHOP);
-        ToastUtil.show(R.string.coming_soon);
+    @OnClick(R.id.getStoreButton)
+    public void onViewClicked() {
+        API.User.getScore(mAvailableGold.getText().toString()).setTag(TAG)
+                .setCallback(new Callback1<Resp>() {
+                    @Override
+                    protected void onRespSuccess(Resp resp) {
+                        SmartDialog.with(getActivity(), resp.getMsg())
+                                .setPositive(R.string.ok)
+                                .show();
+                        updateUsableMoneyScore(new LocalUser.Callback() {
+                            @Override
+                            public void onUpdateCompleted() {
+                                updateUserAvailableScore();
+                            }
+                        });
+                    }
+                }).fire();
     }
 
     static class ProductAdapter extends BaseAdapter {

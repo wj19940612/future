@@ -360,8 +360,23 @@ public class API extends APIBase {
 
         }
 
+        /**
+         * 接口名：检查渠道是否开启了新手任务
+         *
+         * @return
+         */
         public static API checkChannelHasNewbieTask() {
             return new API("/user/mission/findChannelMission.do", null);
+        }
+
+        /**
+         * 接口名：领取金币
+         *
+         * @return
+         */
+        public static API getScore(String scoreUsable) {
+            return new API("/user/shopping/getScore.do",
+                    new ApiParams().put("scoreUsable", scoreUsable));
         }
     }
 

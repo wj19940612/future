@@ -349,7 +349,7 @@ public class ScoreDetailListFragment extends BaseFragment implements AbsListView
                 }
             }
         } else {
-            result = new TradeDetailRemarkUtil().get(item.getTypeDetail());
+            result = new TradeDetailRemarkUtil().get(item.getTypeDetail(), remark);
         }
         return result;
     }

@@ -67,6 +67,8 @@ public class RemarkHandleUtil extends SparseArray<String> {
         super.put(-7201, "商品");
         //拒绝兑换
         super.put(7202, "金币");
+        //获取金币
+        super.put(7203, "金币");
 
     }
 
@@ -77,5 +79,9 @@ public class RemarkHandleUtil extends SparseArray<String> {
 
     public static boolean isRecharge(int type) {
         return type == TradeDetail.RECHARGE_TYPE;
+    }
+
+    public static boolean isNewbieTask(int type) {
+        return type == TradeDetail.NEWBIE_TASK_TYPE;
     }
 }

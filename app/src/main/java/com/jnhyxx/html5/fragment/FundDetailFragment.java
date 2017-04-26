@@ -306,6 +306,8 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 String data;
                 if (RemarkHandleUtil.isRecharge(item.getType())) {
                     data = getString(R.string.recharge);
+                } else if (RemarkHandleUtil.isNewbieTask(item.getType())) {
+                    data = getString(R.string.newbie);
                 } else {
                     data = new RemarkHandleUtil().get(item.getTypeDetail());
                 }
@@ -355,7 +357,7 @@ public class FundDetailFragment extends BaseFragment implements AbsListView.OnSc
                 }
             }
         } else {
-            result = new TradeDetailRemarkUtil().get(item.getTypeDetail());
+            result = new TradeDetailRemarkUtil().get(item.getTypeDetail(), remark);
         }
         return result;
     }

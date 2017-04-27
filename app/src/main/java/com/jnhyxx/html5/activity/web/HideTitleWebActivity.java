@@ -25,6 +25,7 @@ import com.jnhyxx.html5.AppJs;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.activity.dialog.SaveImageActivity;
+import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.utils.Network;
 import com.jnhyxx.html5.view.TitleBar;
 import com.johnz.kutils.Launcher;
@@ -117,6 +118,15 @@ public class HideTitleWebActivity extends BaseActivity {
         mPureHtml = intent.getStringExtra(EX_HTML);
 
         tryToFixPageUrl();
+
+        if (mPageUrl.equalsIgnoreCase(API.getMatchEnter())) {
+            Launcher.with(getActivity(), MatchActivity.class)
+                    .putExtra(MatchActivity.EX_URL, mPageUrl)
+                    .putExtra(MatchActivity.EX_TITLE, mTitle)
+                    .putExtra(MatchActivity.EX_RAW_COOKIE, mRawCookie)
+                    .execute();
+            finish();
+        }
     }
 
     private void tryToFixPageUrl() {

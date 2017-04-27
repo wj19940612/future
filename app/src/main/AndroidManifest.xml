@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.jnhyxx.html5">
+<manifest package="com.jnhyxx.html5"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -192,6 +192,10 @@
             android:name=".activity.web.InvestCourseActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activity.web.MatchActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".activity.ProductOptionalActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -218,7 +222,6 @@
 
         <!-- service -->
         <service android:name=".service.DownloadService"/>
-
     </application>
 
 </manifest>

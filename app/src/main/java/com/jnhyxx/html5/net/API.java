@@ -1229,6 +1229,42 @@ public class API extends APIBase {
     }
 
     /**
+     * 首页 banner 期货比赛入口
+     *
+     * @return
+     */
+    public static String getMatchEnter() {
+        return getHost() + "/match/Match1.html";
+    }
+
+    /**
+     * h5 登入页面
+     *
+     * @return
+     */
+    public static String getWebLoginPage() {
+        return getHost() + "/user/login.html";
+    }
+
+    /**
+     * h5 开始页面
+     *
+     * @return
+     */
+    public static String getWebHomePage() {
+        return getHost() + "/index.html";
+    }
+
+    /**
+     * h5 模拟页面
+     *
+     * @return
+     */
+    public static String getWebSimulation() {
+        return getHost() + "/simulation.html";
+    }
+
+    /**
      * 工具方法：给 h5 url 添加 nohead=1 的参数
      *
      * @param originalUrl

@@ -310,6 +310,14 @@ dependencies {
     compile project(':kutils')
     compile project(':chart')
     compile project(':livevideo')
+    compile('cn.qqtheme.framework:WheelPicker:1.4.4') {
+        exclude group: 'com.android.support'
+    }
+    compile files('libs/netty-buffer-4.1.5.final.jar')
+    compile files('libs/netty-codec-4.1.5.final.jar')
+    compile files('libs/netty-common-4.1.5.final.jar')
+    compile files('libs/netty-transport-4.1.5.final.jar')
+    compile files('libs/netty-resolver-4.1.5.final.jar')
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
@@ -319,16 +327,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.android.support:multidex:1.0.0'
-    compile ('cn.qqtheme.framework:WheelPicker:1.4.4') {
-        exclude group: 'com.android.support'
-    }
-    testCompile 'junit:junit:4.12'
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
-    compile files('libs/netty-buffer-4.1.5.final.jar')
-    compile files('libs/netty-codec-4.1.5.final.jar')
-    compile files('libs/netty-common-4.1.5.final.jar')
-    compile files('libs/netty-transport-4.1.5.final.jar')
-    compile files('libs/netty-resolver-4.1.5.final.jar')
     compile 'com.getui:sdk:2.9.5.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
 }

@@ -70,6 +70,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-umeng.txt'
             signingConfig signingConfigs.hzh
         }
+        debug {
+            ext.enableCrashlytics = false
+        }
     }
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -78,17 +81,19 @@ android {
             output.outputFile = new File(file.parent, newFileName)
         }
     }
+
     productFlavors {
 
         flavorDimensions 'app', 'channel'
 
-        origin {
+        origin { // for dev
             dimension 'app'
             versionCode 60
             versionName '1.6.0'
-//            buildConfigField('String', 'API_HOST', '\"http://mtest2.trade163.com\"')
             buildConfigField('String', 'API_HOST', '\"http://qh2.esongbai.xyz\"')
             minSdkVersion 21
+
+            resConfigs "xxhdpi"
         }
 
         yybd { // 原油宝典 -> 期货交易通
@@ -152,7 +157,13 @@ android {
         }
     }
 
+    aaptOptions {
+        cruncherEnabled false // !!set true when package release apk
+    }
+
     dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
         javaMaxHeapSize '4g'
     }
 

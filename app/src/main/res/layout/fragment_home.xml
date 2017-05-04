@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/bluePrimary"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:id="@+id/riskEvaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:drawableLeft="@drawable/ic_home_newcomer"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/risk_evaluation"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:text="首页"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/contactService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:drawableLeft="@drawable/ic_home_service"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/contact_service"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+    </android.support.v7.widget.Toolbar>
 
     <com.jnhyxx.html5.view.MyNestedScrollView
         android:id="@+id/nestedScrollView"
@@ -62,43 +108,7 @@
             <FrameLayout
                 android:id="@+id/replaceLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </com.jnhyxx.html5.view.MyNestedScrollView>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
-
-        <TextView
-            android:id="@+id/riskEvaluation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:drawableLeft="@drawable/ic_home_newcomer"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="@string/risk_evaluation"
-            android:textColor="#ffffff"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/contactService"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:drawableLeft="@drawable/ic_home_service"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="@string/contact_service"
-            android:textColor="#ffffff"
-            android:textSize="14sp"/>
-    </android.support.v7.widget.Toolbar>
-
-</FrameLayout>
+</LinearLayout>

@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -145,7 +144,7 @@ public class HomeFragment extends BaseFragment {
         mDomesticPkgList = new ArrayList<>();
         mTheLastForeignPrice = new ArrayList<>();
         mTheLastDomesticPrice = new ArrayList<>();
-        
+
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -172,18 +171,9 @@ public class HomeFragment extends BaseFragment {
                 mHomeBannerHeight = mHomeBanner.getHeight();
             }
         });
-        
+
         mNestedScrollView.smoothScrollTo(0, 20);
         mNestedScrollView.setHandler(new Handler());
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
-                        Math.abs(Math.min(mHomeBannerHeight, dp2px(scrollY)) * 1.0f) / mHomeBannerHeight));
-            }
-        });
-
         mNestedScrollView.setOnScrollStateChangedListener(new MyNestedScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(MyNestedScrollView.ScrollType scrollType) {
@@ -202,7 +192,7 @@ public class HomeFragment extends BaseFragment {
         });
 
         setOptionalProductRecyclerView();
-        
+
         requestHomeInformation();
         requestProductMarketList();
     }
@@ -252,14 +242,6 @@ public class HomeFragment extends BaseFragment {
         headTitle2.setText(getString(R.string.domestic_futures));
         mOptionalDomesticWrapper.addHeaderView(domesticHeadView);
         mOptionalDomesticView.setAdapter(mOptionalDomesticWrapper);
-    }
-
-    public int changeAlpha(int color, float fraction) {
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        int alpha = (int) (Color.alpha(color) * fraction);
-        return Color.argb(alpha, red, green, blue);
     }
 
     @Override
@@ -546,14 +528,10 @@ public class HomeFragment extends BaseFragment {
         } else {
             for (ProductPkg productPkg : mProductPkgList) {
                 if (targetList == mForeignPkgList && productPkg.getProduct().isForeign()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
+                    targetList.add(productPkg);
                 }
                 if (targetList == mDomesticPkgList && productPkg.getProduct().isDomestic()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
+                    targetList.add(productPkg);
                 }
             }
         }

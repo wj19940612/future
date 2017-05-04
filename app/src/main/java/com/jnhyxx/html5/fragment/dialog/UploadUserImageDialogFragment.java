@@ -123,7 +123,7 @@ public class UploadUserImageDialogFragment extends DialogFragment implements Api
                     Intent openCameraIntent = new Intent(
                             MediaStore.ACTION_IMAGE_CAPTURE);
                     mFile = new File(Environment
-                            .getExternalStorageDirectory(), "image.jpg");
+                            .getExternalStorageDirectory(), System.currentTimeMillis() + "image.jpg");
                     // 指定照片保存路径（SD卡），image.jpg为一个临时文件，防止拿到
                     Uri mMBitmapUri = Uri.fromFile(mFile);
                     openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMBitmapUri);

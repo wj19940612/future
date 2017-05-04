@@ -2,7 +2,6 @@ package com.jnhyxx.html5.activity.account;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,9 +47,7 @@ public class ClipHeadImageActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String bitmapPath = intent.getStringExtra(KEY_CLIP_USER_IMAGE);
-        Log.d("UploadUserImage", "传入的地址" + bitmapPath);
-        Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
-        mClipImageLayout.setZoomImageViewImage(bitmap);
+        mClipImageLayout.setZoomImageViewImage(bitmapPath.replace("/raw//", ""));
     }
 
     private void uploadUserHeadImage(final String bitmapToBase64) {

@@ -140,6 +140,21 @@ android {
             ]
         }
 
+        dl9 {
+            dimension 'app'
+            applicationId 'com.dajiexin.dl9'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://dl9.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "klzGNkTyVu5fjX4xZeelB1",
+                    GETUI_APP_KEY   : "oze2BLZyoh9jhCqZDPsgb2",
+                    GETUI_APP_SECRET: "hQzY5wqDuN80gdk3lDRW27",
+                    PACKAGE_NAME    : applicationId,
+            ]
+        }
+
         tencent {
             dimension 'channel'
             manifestPlaceholders = [UMENG_CHANNEL: "TENCENT"]
@@ -153,6 +168,11 @@ android {
         others {
             dimension 'channel'
             manifestPlaceholders = [UMENG_CHANNEL: "OTHERS"]
+        }
+
+        preinstall {
+            dimension 'channel'
+            manifestPlaceholders = [UMENG_CHANNEL: "PREINSTALL"]
         }
     }
 
@@ -179,6 +199,7 @@ dependencies {
     originCompile project(path: ':umenglibrary', configuration: 'originRelease')
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
+    dl9Compile project(path: ':umenglibrary', configuration: 'dl9Release')
 
 //    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 //    wyejyCompile project(path: ':umenglibrary', configuration: 'wyejyRelease')

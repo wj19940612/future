@@ -86,6 +86,7 @@ public class MarketFragment extends BaseFragment {
         requestProductMarketList();
     }
 
+    // call from MainActivity
     public void updateProductList(List<Product> productList) {
         mProductList = productList;
         ProductPkg.updateProductPkgList(mProductPkgList, productList,
@@ -93,6 +94,7 @@ public class MarketFragment extends BaseFragment {
         updateProductListView();
     }
 
+    // call from MainActivity
     public void updatePositions(HomePositions data) {
         if (data != null) {
             mCashPositionList = data.getCashOpS();

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.domain.live.LiveHomeChatInfo;
 import com.jnhyxx.html5.domain.msg.SysMessage;
 import com.jnhyxx.html5.domain.order.LightningOrderAsset;
@@ -26,6 +27,7 @@ public class Preference {
         String PHONE_NUMBER = "phone";
         String SERVICE_PHONE = "servicePhone";
         String SERVICE_QQ = "serviceQQ";
+        String SERVICE_QQ_TYPE = "serviceQQType";
         String SYS_MESSAGE_ID = "sys_message_id";
         String LAST_TEACHER_COMMAND = "last_teacher_command";
         String SERVER_IP_PORT = "server_ip_port";
@@ -134,6 +136,14 @@ public class Preference {
 
     public String getServicePhone() {
         return mPrefs.getString(Key.SERVICE_PHONE, null);
+    }
+
+    public void setQQType(int qqType) {
+        getEditor().putInt(Key.SERVICE_QQ_TYPE, qqType).apply();
+    }
+
+    public int getQQType() {
+        return mPrefs.getInt(Key.SERVICE_QQ_TYPE, ChannelServiceInfo.QQ_TYPE_MARKETING);
     }
 
     public void setServiceQQ(String serviceQQ) {

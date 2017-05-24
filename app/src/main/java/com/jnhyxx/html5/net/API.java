@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.jnhyxx.html5.Preference;
+import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.domain.account.UserDefiniteInfo;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
@@ -1132,8 +1133,11 @@ public class API extends APIBase {
         return getHost() + "/activity/Article.html?type=5&nohead=1";
     }
 
-    public static String getServiceQQ(String serviceQQ) {
-        return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
+    public static String getServiceQQ(String serviceQQ, int qqType) {
+        if (qqType == ChannelServiceInfo.QQ_TYPE_NORMAL) {
+            return "mqqwpa://im/chat?chat_type=wpa&uin=" + serviceQQ + "&version=1";
+        }
+        return "mqqwpa://im/chat?chat_type=crm&uin=" + serviceQQ + "&version=1";
     }
 
     /**

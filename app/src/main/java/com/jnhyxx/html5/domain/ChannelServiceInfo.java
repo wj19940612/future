@@ -7,6 +7,8 @@ package com.jnhyxx.html5.domain;
 
 public class ChannelServiceInfo {
 
+    public static final int QQ_TYPE_MARKETING = 1;
+    public static final int QQ_TYPE_NORMAL = 2;
 
     /**
      * backstageDomain : newtest.jnhyxx.com
@@ -24,7 +26,6 @@ public class ChannelServiceInfo {
      * superId : 12
      * userNamePrefix : 聚光湖北
      */
-
     private String backstageDomain;
     private String channelQrCode;
     private String description;

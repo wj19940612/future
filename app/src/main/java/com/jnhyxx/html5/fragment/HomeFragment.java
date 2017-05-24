@@ -642,7 +642,7 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.contactService:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HOME_PAGE_CONNECT_SERVICE);
-                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
+                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ(), Preference.get().getQQType());
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(intent);

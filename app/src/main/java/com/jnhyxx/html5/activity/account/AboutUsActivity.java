@@ -92,7 +92,7 @@ public class AboutUsActivity extends BaseActivity {
                 break;
             case R.id.serviceQq:
                 MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.SERVICE_QQ);
-                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ());
+                String serviceQQUrl = API.getServiceQQ(Preference.get().getServiceQQ(), Preference.get().getQQType());
                 Intent intentQQ = new Intent(Intent.ACTION_VIEW, Uri.parse(serviceQQUrl));
                 if (intentQQ.resolveActivity(getPackageManager()) != null) {
                     startActivity(intentQQ);

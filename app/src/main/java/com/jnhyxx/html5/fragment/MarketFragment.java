@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
 import com.jnhyxx.html5.activity.WebViewActivity;
@@ -27,6 +28,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.johnz.kutils.FinanceUtil;
@@ -97,6 +99,14 @@ public class MarketFragment extends BaseFragment implements View.OnClickListener
         mFundSecurity.setOnClickListener(this);
         TextView mCooperationOrg = (TextView) footView.findViewById(R.id.cooperationOrg);
         mCooperationOrg.setOnClickListener(this);
+        TextView servicePhone = (TextView) footView.findViewById(R.id.servicePhone);
+        String servicePhoneNum = Preference.get().getServicePhone();
+        if (TextUtils.isEmpty(servicePhoneNum)) {
+            servicePhone.setVisibility(View.GONE);
+        } else {
+            servicePhoneNum = StrFormatter.getFormatServicePhone(servicePhoneNum);
+            servicePhone.setText(getString(R.string.service_phone, servicePhoneNum));
+        }
     }
 
     // call from MainActivity

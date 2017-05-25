@@ -114,12 +114,25 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
             mTradeInfoTime.setText(DateUtil.format(information.getCreateTime(), DateUtil.DEFAULT_FORMAT, "yyyy/MM/dd HH:mm"));
         }
         if (!information.isH5Style()) {
-            String s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+            String s;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+                s = INFO_HTML_META + "<body>" + information.getContent() + "</body>";
+            } else {
+                mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+                s = getHtmlData(information.getContent());
+            }
+
             mWebView.loadDataWithBaseURL(null, s, "text/html", "utf-8", null);
         } else {
             setWebViewMargin();
             mWebView.loadUrl(information.getContent());
         }
+    }
+
+    private String getHtmlData(String bodyHTML) {
+        String head = "<head><style>img{max-width: 100%; width:auto; height: auto;}</style>" + INFO_HTML_META + "</head>";
+        return "<html>" + head + bodyHTML + "</html>";
     }
 
     private void setWebViewMargin() {
@@ -166,7 +179,8 @@ public class TradeAnalyzeDetailsActivity extends BaseActivity {
          *  2、LayoutAlgorithm.SINGLE_COLUMN: 适应屏幕，内容将自动缩放
          *
          */
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+//        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setDefaultTextEncodingName("utf-8"); //设置文本编码
 
         mWebView.clearHistory();

@@ -578,4 +578,6 @@
     <string name="not_strategy">暂无攻略</string>
     <string name="not_finance_data">暂无财经消息</string>
     <string name="less_affected">影响较小</string>
+
+    <string name="exchange_next_open_time">下次开市时间：%1$s</string>
 </resources>

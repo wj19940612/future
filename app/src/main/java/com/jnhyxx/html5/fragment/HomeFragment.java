@@ -10,12 +10,12 @@ import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +41,7 @@ import com.jnhyxx.html5.activity.web.PaidToPromoteActivity;
 import com.jnhyxx.html5.domain.Information;
 import com.jnhyxx.html5.domain.local.LocalUser;
 import com.jnhyxx.html5.domain.local.ProductPkg;
+import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.HomePositions;
@@ -60,8 +61,10 @@ import com.jnhyxx.html5.view.HomeBanner;
 import com.jnhyxx.html5.view.HomeHeader;
 import com.jnhyxx.html5.view.MyNestedScrollView;
 import com.jnhyxx.html5.view.dialog.SmartDialog;
+import com.johnz.kutils.DateUtil;
 import com.johnz.kutils.FinanceUtil;
 import com.johnz.kutils.Launcher;
+import com.johnz.kutils.StrUtil;
 import com.johnz.kutils.net.CookieManger;
 import com.umeng.analytics.MobclickAgent;
 
@@ -72,6 +75,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.jnhyxx.html5.R.id.headerTitle;
 
 
 public class HomeFragment extends BaseFragment {
@@ -117,7 +122,7 @@ public class HomeFragment extends BaseFragment {
 
     private HeaderAndFooterWrapper mOptionalForeignWrapper;
     private HeaderAndFooterWrapper mOptionalDomesticWrapper;
-    private int mHomeBannerHeight;
+    private View mOptionalDomesticHeader;
 
     private boolean mIsScrolling;
 
@@ -145,7 +150,7 @@ public class HomeFragment extends BaseFragment {
         mDomesticPkgList = new ArrayList<>();
         mTheLastForeignPrice = new ArrayList<>();
         mTheLastDomesticPrice = new ArrayList<>();
-        
+
         mHomeHeader.setOnViewClickListener(mOnViewClickListener);
         mHomeBanner.setListener(new HomeBanner.OnViewClickListener() {
             @Override
@@ -166,24 +171,9 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-        mHomeBanner.post(new Runnable() {
-            @Override
-            public void run() {
-                mHomeBannerHeight = mHomeBanner.getHeight();
-            }
-        });
-        
+
         mNestedScrollView.smoothScrollTo(0, 20);
         mNestedScrollView.setHandler(new Handler());
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                mToolbar.setBackgroundColor(changeAlpha(ContextCompat.getColor(getContext(), R.color.colorPrimary),
-                        Math.abs(Math.min(mHomeBannerHeight, dp2px(scrollY)) * 1.0f) / mHomeBannerHeight));
-            }
-        });
-
         mNestedScrollView.setOnScrollStateChangedListener(new MyNestedScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(MyNestedScrollView.ScrollType scrollType) {
@@ -202,14 +192,9 @@ public class HomeFragment extends BaseFragment {
         });
 
         setOptionalProductRecyclerView();
-        
+
         requestHomeInformation();
         requestProductMarketList();
-    }
-
-    private int dp2px(float dp) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private void setOptionalProductRecyclerView() {
@@ -219,7 +204,7 @@ public class HomeFragment extends BaseFragment {
         mOptionalForeignView.addItemDecoration(new DividerGridItemDecoration(getContext()));
         mOptionalForeignWrapper = new HeaderAndFooterWrapper(foreignAdapter);
         View foreignHeadView = View.inflate(getContext(), R.layout.optional_list_head, null);
-        TextView headTitle1 = (TextView) foreignHeadView.findViewById(R.id.headerTitle);
+        TextView headTitle1 = (TextView) foreignHeadView.findViewById(headerTitle);
         ImageView optionalAdd1 = (ImageView) foreignHeadView.findViewById(R.id.optionalEdit);
         optionalAdd1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,9 +223,9 @@ public class HomeFragment extends BaseFragment {
         mOptionalDomesticWrapper = new HeaderAndFooterWrapper(domesticAdapter);
         mOptionalDomesticView.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
         mOptionalDomesticView.addItemDecoration(new DividerGridItemDecoration(getContext()));
-        View domesticHeadView = View.inflate(getContext(), R.layout.optional_list_head, null);
-        TextView headTitle2 = (TextView) domesticHeadView.findViewById(R.id.headerTitle);
-        ImageView optionalAdd2 = (ImageView) domesticHeadView.findViewById(R.id.optionalEdit);
+        mOptionalDomesticHeader = View.inflate(getContext(), R.layout.optional_list_head, null);
+        TextView headTitle2 = (TextView) mOptionalDomesticHeader.findViewById(headerTitle);
+        ImageView optionalAdd2 = (ImageView) mOptionalDomesticHeader.findViewById(R.id.optionalEdit);
         optionalAdd2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,16 +235,8 @@ public class HomeFragment extends BaseFragment {
             }
         });
         headTitle2.setText(getString(R.string.domestic_futures));
-        mOptionalDomesticWrapper.addHeaderView(domesticHeadView);
+        mOptionalDomesticWrapper.addHeaderView(mOptionalDomesticHeader);
         mOptionalDomesticView.setAdapter(mOptionalDomesticWrapper);
-    }
-
-    public int changeAlpha(int color, float fraction) {
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        int alpha = (int) (Color.alpha(color) * fraction);
-        return Color.argb(alpha, red, green, blue);
     }
 
     @Override
@@ -483,6 +460,7 @@ public class HomeFragment extends BaseFragment {
                 }).setTag(TAG).fireSync();
     }
 
+    // call from MainActivity
     public void updateProductList(List<Product> productList) {
         mProductList = productList;
         ProductPkg.updateProductPkgList(mProductPkgList, productList,
@@ -522,16 +500,64 @@ public class HomeFragment extends BaseFragment {
                     }
                 }
 
-                mOptionalDomesticView.setVisibility(mDomesticPkgList.isEmpty() ? View.GONE : View.VISIBLE);
                 mOptionalForeignView.setVisibility(mForeignPkgList.isEmpty() ? View.GONE : View.VISIBLE);
+                mOptionalDomesticView.setVisibility(mDomesticPkgList.isEmpty() ? View.GONE : View.VISIBLE);
 
                 if (!mIsScrolling) {
                     Log.e(TAG, "run: " + mIsScrolling);
                     mOptionalForeignWrapper.notifyDataSetChanged();
                     mOptionalDomesticWrapper.notifyDataSetChanged();
                 }
+
+                if (!mDomesticPkgList.isEmpty()) {
+                    ProductPkg productPkg = mDomesticPkgList.get(0);
+                    if (productPkg != null) {
+                        Product firstProduct = productPkg.getProduct();
+                        TextView headerTitle = (TextView) mOptionalDomesticHeader.findViewById(R.id.headerTitle);
+                        if (firstProduct.getExchangeStatus() == Product.MARKET_STATUS_CLOSE) {
+                            String openMarketTime = firstProduct.getOpenMarketTime();
+                            String exchangeNextOpenTime = getExchangeNextOpenTime(openMarketTime);
+                            exchangeNextOpenTime = "    " + getString(R.string.exchange_next_open_time, exchangeNextOpenTime);
+                            SpannableString spannableString = StrUtil.mergeTextWithRatioColor(
+                                    getString(R.string.domestic_futures),
+                                    exchangeNextOpenTime, 0.8f, Color.parseColor("#C0C0C0"));
+                            headerTitle.setText(spannableString);
+                        } else {
+                            headerTitle.setText(getString(R.string.domestic_futures));
+                        }
+                    }
+                }
             }
         }.run();
+    }
+
+    private String getExchangeNextOpenTime(String openMarketTime) {
+        String curTime = DateUtil.format(SysTime.getSysTime().getSystemTimestamp(), "HH:mm");
+        if (!TextUtils.isEmpty(openMarketTime)) {
+            String[] openTimes = openMarketTime.split(";");
+            if (openTimes.length > 0 && openTimes.length % 2 == 0) {
+                int i = 1;
+                for (; i < openTimes.length; i++) {
+                    if (isBetween(openTimes[i - 1], openTimes[i], curTime)) {
+                        return openTimes[i];
+                    }
+                }
+                if (i == openTimes.length) {
+                    if (isBetween(openTimes[i - 1], openTimes[0], curTime)) {
+                        return openTimes[0];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isBetween(String time1, String time2, String time) {
+        if (time1.compareTo(time2) <= 0) {
+            return time.compareTo(time1) >= 0 && time.compareTo(time2) < 0;
+        } else {
+            return time.compareTo(time1) >= 0 || time.compareTo(time2) < 0;
+        }
     }
 
     private void updateOptionalList(List<String> optionals, List<ProductPkg> targetList) {
@@ -546,14 +572,10 @@ public class HomeFragment extends BaseFragment {
         } else {
             for (ProductPkg productPkg : mProductPkgList) {
                 if (targetList == mForeignPkgList && productPkg.getProduct().isForeign()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
+                    targetList.add(productPkg);
                 }
                 if (targetList == mDomesticPkgList && productPkg.getProduct().isDomestic()) {
-                    if (targetList.size() < 3) {
-                        targetList.add(productPkg);
-                    }
+                    targetList.add(productPkg);
                 }
             }
         }
@@ -573,6 +595,7 @@ public class HomeFragment extends BaseFragment {
                 }).fireSync();
     }
 
+    // call from MainActivity
     public void updatePositions(HomePositions homePositions) {
         if (homePositions != null) {
             mCashPositionList = homePositions.getCashOpS();

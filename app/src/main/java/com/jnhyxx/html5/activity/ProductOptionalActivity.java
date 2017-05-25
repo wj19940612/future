@@ -118,11 +118,9 @@ public class ProductOptionalActivity extends BaseActivity {
                                     while (iterator.hasNext()) {
                                         Product product = iterator.next();
                                         if (product.isDomestic() == mIsDomestic) { // 逻辑注意区。 mIsDomestic 可以是true 和 false，这里可以用于判断产品是国际还是国内
-                                            if (mProductList1.size() < 3) {
-                                                product.setIsOptional(true);
-                                                mProductList1.add(product);
-                                                iterator.remove();
-                                            }
+                                            product.setIsOptional(true);
+                                            mProductList1.add(product);
+                                            iterator.remove();
                                         } else {
                                             iterator.remove();
                                         }

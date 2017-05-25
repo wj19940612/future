@@ -561,6 +561,7 @@
     <string name="domestic_futures">国内期货</string>
     <string name="optional_futures">我的自选</string>
     <string name="optional_notice">至少得有一个自选品种</string>
+    <string name="optional_title">自选</string>
 
     <!--首页底部的三个页面-->
     <string name="calendar_of_finance">  财经日历</string>

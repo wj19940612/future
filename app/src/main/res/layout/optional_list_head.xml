@@ -15,15 +15,17 @@
         android:textColor="@color/lucky"
         android:textSize="14sp"/>
 
-    <ImageView
+    <TextView
         android:id="@+id/optionalEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/common_margin"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/ic_home_edit"
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingTop="8dp"
-        android:src="@drawable/ic_home_edit"/>
+        android:text="@string/optional_title"/>
 </RelativeLayout>

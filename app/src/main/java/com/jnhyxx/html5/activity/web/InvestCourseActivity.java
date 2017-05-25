@@ -14,6 +14,13 @@ public class InvestCourseActivity extends WebViewActivity {
             getWebView().loadUrl(url);
             return true;
         }
+
+        if (url.contains("/banner/")) { // banner 里面的页面（这里是新手引导）
+            url = API.appendUrlNoHead(url);
+            getWebView().loadUrl(url);
+            return true;
+        }
+
         return super.onShouldOverrideUrlLoading(view, url);
     }
 }

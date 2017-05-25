@@ -18,7 +18,6 @@ import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.account.MessageCenterListItemInfoActivity;
 import com.jnhyxx.html5.domain.ChannelServiceInfo;
 import com.jnhyxx.html5.domain.local.LocalUser;
-import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.market.ServerIpPort;
 import com.jnhyxx.html5.domain.msg.SysMessage;
@@ -103,6 +102,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     protected void onRespSuccess(Resp<ChannelServiceInfo> resp) {
                         Preference preference = Preference.get();
+                        preference.setQQType(resp.getData().getQqType());
                         preference.setServiceQQ(resp.getData().getQq());
                         preference.setServicePhone(resp.getData().getPhone());
                     }

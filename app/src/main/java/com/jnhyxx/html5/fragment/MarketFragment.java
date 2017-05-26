@@ -16,8 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jnhyxx.html5.Preference;
 import com.jnhyxx.html5.R;
 import com.jnhyxx.html5.activity.TradeActivity;
+import com.jnhyxx.html5.activity.WebViewActivity;
 import com.jnhyxx.html5.domain.local.ProductPkg;
 import com.jnhyxx.html5.domain.market.MarketData;
 import com.jnhyxx.html5.domain.market.Product;
@@ -26,6 +28,7 @@ import com.jnhyxx.html5.net.API;
 import com.jnhyxx.html5.net.Callback;
 import com.jnhyxx.html5.net.Resp;
 import com.jnhyxx.html5.utils.OnItemOneClickListener;
+import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.UmengCountEventIdUtils;
 import com.jnhyxx.html5.utils.adapter.GroupAdapter;
 import com.johnz.kutils.FinanceUtil;
@@ -39,13 +42,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MarketFragment extends BaseFragment {
+public class MarketFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(android.R.id.list)
     ListView mList;
     @BindView(android.R.id.empty)
     TextView mEmpty;
-
     private Unbinder mBinder;
 
     private List<ProductPkg> mProductPkgList;
@@ -53,6 +55,7 @@ public class MarketFragment extends BaseFragment {
     private List<HomePositions.CashOpSBean> mCashPositionList;
     private List<MarketData> mMarketDataList;
     private ProductPkgAdapter mProductPkgAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +70,7 @@ public class MarketFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         mProductPkgList = new ArrayList<>();
         mList.setEmptyView(mEmpty);
+        initFootView();
         mProductPkgAdapter = new ProductPkgAdapter(getContext(), mProductPkgList);
         mList.setAdapter(mProductPkgAdapter);
         mList.setOnItemClickListener(new OnItemOneClickListener() {
@@ -84,6 +88,25 @@ public class MarketFragment extends BaseFragment {
             }
         });
         requestProductMarketList();
+    }
+
+    private void initFootView() {
+        View footView = LayoutInflater.from(getActivity()).inflate(R.layout.footer_mark, null);
+        mList.addFooterView(footView);
+        TextView mRiskInformed = (TextView) footView.findViewById(R.id.riskInformed);
+        mRiskInformed.setOnClickListener(this);
+        TextView mFundSecurity = (TextView) footView.findViewById(R.id.fundSecurity);
+        mFundSecurity.setOnClickListener(this);
+        TextView mCooperationOrg = (TextView) footView.findViewById(R.id.cooperationOrg);
+        mCooperationOrg.setOnClickListener(this);
+        TextView servicePhone = (TextView) footView.findViewById(R.id.servicePhone);
+        String servicePhoneNum = Preference.get().getServicePhone();
+        if (TextUtils.isEmpty(servicePhoneNum)) {
+            servicePhone.setVisibility(View.GONE);
+        } else {
+            servicePhoneNum = StrFormatter.getFormatServicePhone(servicePhoneNum);
+            servicePhone.setText(getString(R.string.service_phone, servicePhoneNum));
+        }
     }
 
     // call from MainActivity
@@ -161,6 +184,30 @@ public class MarketFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mBinder.unbind();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.riskInformed:
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getRiskInformedUrl())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.risk_informed))
+                        .execute();
+                break;
+            case R.id.fundSecurity:
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getFundSecurityUrl())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.fund_security))
+                        .execute();
+                break;
+            case R.id.cooperationOrg:
+                Launcher.with(getActivity(), WebViewActivity.class)
+                        .putExtra(WebViewActivity.EX_URL, API.getCooperationOrgUrl())
+                        .putExtra(WebViewActivity.EX_TITLE, getString(R.string.cooperation_org))
+                        .execute();
+                break;
+        }
     }
 
     static class ProductPkgAdapter extends GroupAdapter<ProductPkg> {

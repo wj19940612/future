@@ -141,7 +141,7 @@ public class DateUtil {
         SimpleDateFormat parser = new SimpleDateFormat(format);
         try {
             long originDate = parser.parse(date).getTime();
-            long finalDate = originDate + min * 1000; // 1 min
+            long finalDate = originDate + min * 60 * 1000;
             return parser.format(new Date(finalDate));
         } catch (ParseException e) {
             e.printStackTrace();

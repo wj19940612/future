@@ -323,6 +323,10 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+
+        List<TrendViewData> data = TrendView.Util.createDataList(mLocalTrendData.getRawData(),
+                settings.getOpenMarketTimes());
+        trendView.setDataList(data);
     }
 
     private void setTrendView2AllDay() {
@@ -340,6 +344,10 @@ public class TradeActivity extends BaseActivity implements
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
+
+        List<TrendViewData> data = TrendView.Util.createDataList(mLocalTrendData.getRawData(),
+                settings.getOpenMarketTimes());
+        trendView.setDataList(data);
     }
 
     private void updateLightningOrderView() {

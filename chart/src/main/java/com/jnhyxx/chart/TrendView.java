@@ -104,6 +104,8 @@ public class TrendView extends FrameLayout {
         }
 
         public static List<TrendViewData> createDataList(String rawData, String[] openMarketTime) {
+            if (TextUtils.isEmpty(rawData)) return null;
+
             List<TrendViewData> result = new ArrayList<>();
             HashSet hashSet = new HashSet();
             int length = rawData.length();
@@ -180,7 +182,7 @@ public class TrendView extends FrameLayout {
          * @param time
          * @return
          */
-        private static boolean isBetweenTimes(String time1, String time2, String time) {
+        public static boolean isBetweenTimes(String time1, String time2, String time) {
             if (time1.compareTo(time2) <= 0) {
                 return time.compareTo(time1) >= 0 && time.compareTo(time2) < 0;
             } else {

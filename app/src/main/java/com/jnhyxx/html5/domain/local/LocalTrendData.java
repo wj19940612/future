@@ -1,21 +1,20 @@
 package com.jnhyxx.html5.domain.local;
 
-import android.util.Log;
-
 import com.jnhyxx.chart.TrendView;
 import com.johnz.kutils.DateUtil;
 
 public class LocalTrendData {
 
+    private static final int INTERVAL_HOURS = 6;
+
     private String rawData;
     private boolean isForeign;
     private String openMarketTime;
-    private String[] openMarketTimeArray;
+    private String[] customOpenMarketTimeArray;
 
     public LocalTrendData(String openMarketTime, boolean foreign) {
         this.openMarketTime = openMarketTime;
         this.isForeign = foreign;
-
     }
 
     public void setForeign(boolean foreign) {
@@ -35,13 +34,18 @@ public class LocalTrendData {
     }
 
     public String getOpenMarketTime(long currentTime) {
-        openMarketTimeArray = processOpenMarketTime();
+        customOpenMarketTimeArray = processOpenMarketTime();
+        return createOpenMarketTime(currentTime);
+    }
 
-        for (int i = 0; i < openMarketTimeArray.length; i += 2) {
-                
+    private String createOpenMarketTime(long currentTime) {
+        for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
+            String curTime = DateUtil.format(currentTime, "HH:mm");
+            if (TrendView.Util.isBetweenTimes(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], curTime)) {
+                return customOpenMarketTimeArray[i] + ";" + customOpenMarketTimeArray[i + 1];
+            }
         }
-
-        return openMarketTime;
+        return "";
     }
 
     private String[] processOpenMarketTime() {
@@ -54,20 +58,21 @@ public class LocalTrendData {
 
     private String[] createSubOpenMarketTimeArray(String startTime, String endTime) {
         int diffHour = TrendView.Util.getDiffMinutes(startTime, endTime) / 60;
-        Log.d("TEST", "st: " + startTime + ", endTime: " + endTime + ". createSubOpenMarketTimeArray: " + diffHour);
-        int numOfSegment = diffHour / 6 + (diffHour % 6 > 3 ? 1 : 0);
-        Log.d("TEST", "numOfSegment: " + numOfSegment);
+        int numOfSegment = diffHour / INTERVAL_HOURS + (diffHour % INTERVAL_HOURS > 3 ? 1 : 0);
         String[] newStartEnd = new String[numOfSegment * 2];
         newStartEnd[0] = startTime;
         newStartEnd[newStartEnd.length - 1] = endTime;
-        for (int i = 1; i < newStartEnd.length - 1; i += 2) {
-            newStartEnd[i] = DateUtil.addMinutes(startTime, 60 * 6 * i, "HH:mm");
-            newStartEnd[i + 1] = newStartEnd[i];
+        for (int i = 2; i < newStartEnd.length - 1; i += 2) {
+            newStartEnd[i] = DateUtil.addMinutes(startTime, 60 * INTERVAL_HOURS * (i / 2), "HH:mm");
+            newStartEnd[i - 1] = newStartEnd[i];
         }
         return newStartEnd;
     }
 
     public String getDisplayMarketTimes(long currentTime) {
-        return null;
+        if (customOpenMarketTimeArray != null && customOpenMarketTimeArray.length > 0) {
+            return createOpenMarketTime(currentTime);
+        }
+        return getOpenMarketTime(currentTime);
     }
 }

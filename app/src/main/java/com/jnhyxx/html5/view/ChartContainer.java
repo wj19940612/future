@@ -37,11 +37,12 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
 
     private static final int PADDING_IN_DP = 12;
 
-    public static final int POS_TREND = 0;
-    public static final int POS_FLASH = 1;
-    public static final int POS_PLATE = 2;
-    public static final int POS_KLINE = 3;
-    public static final int POS_LIVE_ENTER = 4;
+    public static final int TAB_TREND = 0;
+    public static final int TAB_ALL_DAY = 1;
+    public static final int TAB_FLASH = 2;
+    public static final int TAB_PLATE = 3;
+    public static final int TAB_KLINE = 4;
+    public static final int TAB_LIVE_ENTER = 5;
 
     public static final int KLINE_DAY = 0;
     public static final int KLINE_THREE = 3;
@@ -79,56 +80,54 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         LinearLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         addView(mContainer, params);
-
-        onTabClick(POS_TREND);
     }
 
     public void addTrendView(TrendView trendView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(trendView, POS_TREND, params);
+        mContainer.addView(trendView, 0, params);
     }
 
     public void addFlashView(FlashView flashView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(flashView, POS_FLASH, params);
+        mContainer.addView(flashView, 1, params);
     }
 
     public void addMarketDataView(MarketDataView marketDataView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(marketDataView, POS_PLATE, params);
+        mContainer.addView(marketDataView, 2, params);
     }
 
     public void addKlineView(KlineView klineView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(klineView, POS_KLINE, params);
+        mContainer.addView(klineView, 3, params);
     }
 
     public TrendView getTrendView() {
-        return (TrendView) mContainer.getChildAt(POS_TREND);
+        return (TrendView) mContainer.getChildAt(0);
     }
 
     public FlashView getFlashView() {
-        return (FlashView) mContainer.getChildAt(POS_FLASH);
+        return (FlashView) mContainer.getChildAt(1);
     }
 
     public MarketDataView getMarketDataView() {
-        return (MarketDataView) mContainer.getChildAt(POS_PLATE);
+        return (MarketDataView) mContainer.getChildAt(2);
     }
 
     public KlineView getKlineView() {
-        return (KlineView) mContainer.getChildAt(POS_KLINE);
+        return (KlineView) mContainer.getChildAt(3);
     }
 
     public void showTrendView() {
-        onTabClick(POS_TREND);
+        onTabClick(TAB_TREND);
     }
 
     public void setOnLiveEnterClickListener(OnLiveEnterClickListener onLiveEnterClickListener) {
@@ -170,25 +169,31 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         mTabsLayout = new RelativeLayout(getContext());
         mTabsLayout.setPadding(paddingPx, 0, paddingPx, paddingPx);
 
-        mTabsLayout.addView(createTab(R.string.trend_chart), POS_TREND);
+        mTabsLayout.addView(createTab(R.string.trend_chart), TAB_TREND);
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.trend_chart);
-        mTabsLayout.addView(createTab(R.string.flash_chart), POS_FLASH, layoutParams);
+        mTabsLayout.addView(createTab(R.string.all_day), TAB_ALL_DAY, layoutParams);
+
+         layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.all_day);
+        mTabsLayout.addView(createTab(R.string.flash_chart), TAB_FLASH, layoutParams);
 
         layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.flash_chart);
-        mTabsLayout.addView(createTab(R.string.plate), POS_PLATE, layoutParams);
+        mTabsLayout.addView(createTab(R.string.plate), TAB_PLATE, layoutParams);
 
         layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.plate);
-        mTabsLayout.addView(createTab(R.string.kline_chart, R.drawable.ic_kline_down_arrow), POS_KLINE, layoutParams);
+        mTabsLayout.addView(createTab(R.string.kline_chart, R.drawable.ic_kline_down_arrow), TAB_KLINE, layoutParams);
 
         layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -198,7 +203,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     }
 
     public void setLiveEnterVisible(boolean visible) {
-        View liveEnter = mTabsLayout.getChildAt(POS_LIVE_ENTER);
+        View liveEnter = mTabsLayout.getChildAt(TAB_LIVE_ENTER);
         if (liveEnter != null) {
             liveEnter.setVisibility(visible ? VISIBLE : GONE);
         }
@@ -231,24 +236,31 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.string.trend_chart:
-                onTabClick(POS_TREND);
+                onTabClick(TAB_TREND);
                 resetKlineTab();
                 if (mOnTabClickListener != null) {
-                    mOnTabClickListener.onClick(POS_TREND);
+                    mOnTabClickListener.onClick(TAB_TREND);
+                }
+                break;
+            case R.string.all_day:
+                onTabClick(TAB_ALL_DAY);
+                resetKlineTab();
+                if (mOnTabClickListener != null) {
+                    mOnTabClickListener.onClick(TAB_ALL_DAY);
                 }
                 break;
             case R.string.flash_chart:
-                onTabClick(POS_FLASH);
+                onTabClick(TAB_FLASH);
                 resetKlineTab();
                 if (mOnTabClickListener != null) {
-                    mOnTabClickListener.onClick(POS_FLASH);
+                    mOnTabClickListener.onClick(TAB_FLASH);
                 }
                 break;
             case R.string.plate:
-                onTabClick(POS_PLATE);
+                onTabClick(TAB_PLATE);
                 resetKlineTab();
                 if (mOnTabClickListener != null) {
-                    mOnTabClickListener.onClick(POS_PLATE);
+                    mOnTabClickListener.onClick(TAB_PLATE);
                 }
                 break;
             case R.string.kline_chart: // tab[K线图]
@@ -276,7 +288,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     }
 
     private void resetKlineTab() {
-        TextView klineTab = (TextView) mTabsLayout.getChildAt(POS_KLINE);
+        TextView klineTab = (TextView) mTabsLayout.getChildAt(TAB_KLINE);
         klineTab.setText(R.string.kline_chart);
     }
     
@@ -286,9 +298,9 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         }
 
         TextView clickedView = (TextView) v;
-        TextView klineTab = (TextView) mTabsLayout.getChildAt(POS_KLINE);
+        TextView klineTab = (TextView) mTabsLayout.getChildAt(TAB_KLINE);
         klineTab.setText(clickedView.getText());
-        onTabClick(POS_KLINE);
+        onTabClick(TAB_KLINE);
 
         mKlineType = kline;
         if (mOnKlineClickListener != null) {
@@ -344,8 +356,12 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 view.setVisibility(GONE);
             }
         }
-        if (pos < mContainer.getChildCount()) {
-            mContainer.getChildAt(pos).setVisibility(VISIBLE);
+        if (pos < mTabsLayout.getChildCount() && mContainer.getChildCount() > 0) {
+            if (pos <= TAB_ALL_DAY) {
+                mContainer.getChildAt(0).setVisibility(VISIBLE);
+            } else {
+                mContainer.getChildAt(pos - 1).setVisibility(VISIBLE);
+            }
         }
     }
 }

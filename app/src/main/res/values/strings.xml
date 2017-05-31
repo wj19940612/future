@@ -270,6 +270,7 @@
     <string name="current_available_balance">当前可用余额</string>
     <string name="prompt_unlogin_unable_to_trade">您还未登录</string>
     <string name="trend_chart">分时图</string>
+    <string name="all_day">全天</string>
     <string name="kline_chart">K线图</string>
     <string name="flash_chart">闪电图</string>
     <string name="plate">盘口</string>

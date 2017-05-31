@@ -134,6 +134,21 @@ public class DateUtil {
         return date;
     }
 
+    public static String addMinutes(String date, int min, String format) {
+        if (date.length() != format.length()) {
+            return date;
+        }
+        SimpleDateFormat parser = new SimpleDateFormat(format);
+        try {
+            long originDate = parser.parse(date).getTime();
+            long finalDate = originDate + min * 1000; // 1 min
+            return parser.format(new Date(finalDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     public static String getDayOfWeek(long time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);

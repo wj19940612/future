@@ -60,6 +60,10 @@ android {
             manifestPlaceholders = [UMENG_APPKEY: "591ee20f3eae2578b1000c9a"]
         }
 
+        dl15 { // 黄金期货交易
+            manifestPlaceholders = [UMENG_APPKEY: "5927d5d94544cb2aeb0008b9"]
+        }
+
         zy3 { // 金谷理财
             manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]
         }

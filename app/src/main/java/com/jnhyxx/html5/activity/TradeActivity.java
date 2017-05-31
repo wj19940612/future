@@ -42,7 +42,9 @@ import com.jnhyxx.html5.activity.trade.SetLightningOrdersActivity;
 import com.jnhyxx.html5.constans.Unit;
 import com.jnhyxx.html5.domain.finance.SupportApplyWay;
 import com.jnhyxx.html5.domain.local.LocalUser;
+import com.jnhyxx.html5.domain.local.LocalTrendData;
 import com.jnhyxx.html5.domain.local.SubmittedOrder;
+import com.jnhyxx.html5.domain.local.SysTime;
 import com.jnhyxx.html5.domain.market.FullMarketData;
 import com.jnhyxx.html5.domain.market.Product;
 import com.jnhyxx.html5.domain.order.ExchangeStatus;
@@ -134,6 +136,7 @@ public class TradeActivity extends BaseActivity implements
     private String mFundUnit;
     private List<Product> mProductList;
     private AnimationDrawable mQuestionMark;
+    private LocalTrendData mLocalTrendData;
 
     private boolean mProductChanged;
     private boolean mIsFragmentShowed;
@@ -255,13 +258,17 @@ public class TradeActivity extends BaseActivity implements
             @Override
             public void onClick(int tabId) {
                 switch (tabId) {
-                    case ChartContainer.POS_TREND:
+                    case ChartContainer.TAB_TREND:
+                        setTrendView2Partial();
+                        break;
+                    case ChartContainer.TAB_ALL_DAY:
+                        setTrendView2AllDay();
                         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.TIME_SHARDED);
                         break;
-                    case ChartContainer.POS_FLASH:
+                    case ChartContainer.TAB_FLASH:
                         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.LIGHTNING);
                         break;
-                    case ChartContainer.POS_PLATE:
+                    case ChartContainer.TAB_PLATE:
                         MobclickAgent.onEvent(getActivity(), UmengCountEventIdUtils.HANDICAP);
                         break;
                 }
@@ -299,6 +306,40 @@ public class TradeActivity extends BaseActivity implements
         updateChartView(); // based on product
         updateExchangeStatusView(); // based on product
         updateLightningOrderView(); // based on product
+    }
+
+    private void setTrendView2Partial() {
+        TrendView trendView = mChartContainer.getTrendView();
+        if (trendView == null) {
+            trendView = new TrendView(this);
+            mChartContainer.addTrendView(trendView);
+        }
+        trendView.clearData();
+        TrendView.Settings settings = new TrendView.Settings();
+        settings.setBaseLines(mProduct.getBaseline());
+        settings.setNumberScale(mProduct.getPriceDecimalScale());
+        settings.setOpenMarketTimes(mLocalTrendData.getOpenMarketTime(SysTime.getSysTime().getSystemTimestamp()));
+        settings.setDisplayMarketTimes(mLocalTrendData.getDisplayMarketTimes(SysTime.getSysTime().getSystemTimestamp()));
+        settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
+        settings.setCalculateXAxisFromOpenMarketTime(true);
+        trendView.setSettings(settings);
+    }
+
+    private void setTrendView2AllDay() {
+        TrendView trendView = mChartContainer.getTrendView();
+        if (trendView == null) {
+            trendView = new TrendView(this);
+            mChartContainer.addTrendView(trendView);
+        }
+        trendView.clearData();
+        TrendView.Settings settings = new TrendView.Settings();
+        settings.setBaseLines(mProduct.getBaseline());
+        settings.setNumberScale(mProduct.getPriceDecimalScale());
+        settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
+        settings.setDisplayMarketTimes(mProduct.getDisplayMarketTimes());
+        settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
+        settings.setCalculateXAxisFromOpenMarketTime(true);
+        trendView.setSettings(settings);
     }
 
     private void updateLightningOrderView() {
@@ -511,6 +552,7 @@ public class TradeActivity extends BaseActivity implements
         mFundType = intent.getIntExtra(Product.EX_FUND_TYPE, 0);
         mFundUnit = (mFundType == Product.FUND_TYPE_CASH ? Unit.YUAN : Unit.GOLD);
         mProductList = intent.getParcelableArrayListExtra(Product.EX_PRODUCT_LIST);
+        mLocalTrendData = new LocalTrendData(mProduct.getOpenMarketTime(), mProduct.isForeign());
     }
 
     @OnClick({R.id.buyLongBtn, R.id.sellShortBtn, R.id.lightningOrderBtn, R.id.holdingOrderView})
@@ -668,20 +710,7 @@ public class TradeActivity extends BaseActivity implements
     }
 
     private void updateChartView() {
-        TrendView trendView = mChartContainer.getTrendView();
-        if (trendView == null) {
-            trendView = new TrendView(this);
-            mChartContainer.addTrendView(trendView);
-        }
-        trendView.clearData();
-        TrendView.Settings settings = new TrendView.Settings();
-        settings.setBaseLines(mProduct.getBaseline());
-        settings.setNumberScale(mProduct.getPriceDecimalScale());
-        settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
-        settings.setDisplayMarketTimes(mProduct.getDisplayMarketTimes());
-        settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
-        settings.setCalculateXAxisFromOpenMarketTime(true);
-        trendView.setSettings(settings);
+        setTrendView2Partial();
 
         FlashView flashView = mChartContainer.getFlashView();
         if (flashView == null) {
@@ -730,7 +759,9 @@ public class TradeActivity extends BaseActivity implements
                         TrendView trendView = mChartContainer.getTrendView();
                         if (trendView == null) return;
                         TrendView.Settings settings = trendView.getSettings();
-                        trendView.setDataList(TrendView.Util.createDataList(s, settings.getOpenMarketTimes()));
+                        mLocalTrendData.setRawData(s);
+                        List<TrendViewData> data = TrendView.Util.createDataList(s, settings.getOpenMarketTimes());
+                        trendView.setDataList(data);
                     }
                 }).fireSync();
     }
@@ -804,6 +835,10 @@ public class TradeActivity extends BaseActivity implements
                         mMenu.toggle();
                     } else {
                         mProduct = product;
+                        mLocalTrendData.setRawData(null);
+                        mLocalTrendData.setOpenMarketTime(mProduct.getOpenMarketTime());
+                        mLocalTrendData.setForeign(mProduct.isForeign());
+
                         mProductChanged = true;
                         mMenu.toggle();
                         mFullMarketData = null;

@@ -140,6 +140,21 @@ android {
             ]
         }
 
+        dl15 { // 黄金期货交易 djx
+            dimension 'app'
+            applicationId 'com.dajiexin.dl15'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://dl15.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "wHB1y4BOmx7ahzYgtjYO22",
+                    GETUI_APP_KEY   : "2VOwolOwb48CpAKq8gYgs7",
+                    GETUI_APP_SECRET: "CpNztvpMhj7dRj5tSq0jU9",
+                    PACKAGE_NAME    : applicationId,
+            ]
+        }
+
         tencent {
             dimension 'channel'
             manifestPlaceholders = [UMENG_CHANNEL: "TENCENT"]
@@ -153,6 +168,16 @@ android {
         others {
             dimension 'channel'
             manifestPlaceholders = [UMENG_CHANNEL: "OTHERS"]
+        }
+
+        sem {
+            dimension 'channel'
+            manifestPlaceholders = [UMENG_CHANNEL: "SEM"]
+        }
+
+        mumayi {
+            dimension 'channel'
+            manifestPlaceholders = [UMENG_CHANNEL: "MUMAYI"]
         }
 
         preinstall {
@@ -185,6 +210,7 @@ dependencies {
     yybdCompile project(path: ':umenglibrary', configuration: 'yybdRelease')
     yyqhbCompile project(path: ':umenglibrary', configuration: 'yyqhbRelease')
     dl9Compile project(path: ':umenglibrary', configuration: 'dl9Release')
+    dl15Compile project(path: ':umenglibrary', configuration: 'dl15Release')
 
 //    kdqnCompile project(path: ':umenglibrary', configuration: 'kdqnRelease')
 //    wyejyCompile project(path: ':umenglibrary', configuration: 'wyejyRelease')

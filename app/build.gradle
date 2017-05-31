@@ -98,8 +98,8 @@ android {
         yybd { // 原油宝典 -> 期货交易通 release
             dimension 'app'
             applicationId 'com.jnhyxx.yybd'
-            versionCode 27
-            versionName '1.2.10'
+            versionCode 30
+            versionName '1.3.0'
             buildConfigField('String', 'API_HOST', '\"http://gf5.dajiexin.com\"')
 
             manifestPlaceholders = [
@@ -122,6 +122,70 @@ android {
                     GETUI_APP_KEY   : "aJxHTBVy1gActQcuo4ASX7",
                     GETUI_APP_SECRET: "nqEj72mrVt9N6G91KOYUN",
                     PACKAGE_NAME    : applicationId,
+            ]
+        }
+
+        zy4 { // 贵金属期货宝 Djx
+            dimension 'app'
+            applicationId 'com.trade163.zy4'
+            versionCode 8
+            versionName '1.3.2'
+            buildConfigField('String', 'API_HOST', '\"http://gf3.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Xanw2jVyL76LxbKCZQkmP",
+                    GETUI_APP_KEY   : "oBs3zutahe9dWMttmNp6O5",
+                    GETUI_APP_SECRET: "2MsxzlLjS17vefeNmuNZy2",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "QIHU360"
+            ]
+        }
+
+        gf4 { // 外汇期货宝 Djx
+            dimension 'app'
+            applicationId 'com.dajiexin.gf4'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf4.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Usjdmgh3dA8KrjABoBGTA9",
+                    GETUI_APP_KEY   : "i9iH1DkArFAUvau00LBrE1",
+                    GETUI_APP_SECRET: "H2tCehTlST6odAvXxxjs65",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
+
+        gf8 { // 期货原油交易 Djx
+            dimension 'app'
+            applicationId 'com.dajiexin.gf8'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf8.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "EHcmH2ooY87hqxLrjbnN23",
+                    GETUI_APP_KEY   : "zPTsqKatqQ70wA9oSDldb9",
+                    GETUI_APP_SECRET: "iwQknkWxWa6zZaF0q54dGA",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
+            ]
+        }
+
+        gf10 { // 期货交易赚钱宝 Djx
+            dimension 'app'
+            applicationId 'com.dajiexin.gf10'
+            versionCode 1
+            versionName '1.0'
+            buildConfigField('String', 'API_HOST', '\"http://gf10.dajiexin.com\"')
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "Ct64W06xEI7NqthtlPImK",
+                    GETUI_APP_KEY   : "pDEB67qvF59jvtT3PMZaI",
+                    GETUI_APP_SECRET: "rOeOFWodpR8riX2DLRvPz7",
+                    PACKAGE_NAME    : applicationId,
+                    UMENG_CHANNEL   : "OTHERS"
             ]
         }
 
@@ -191,13 +255,13 @@ dependencies {
 //    hzh2Compile project(path: ':umenglibrary', configuration: 'hzh2Release')
 //
 //    gf2Compile project(path: ':umenglibrary', configuration: 'gf2Release')
-//    gf4Compile project(path: ':umenglibrary', configuration: 'gf4Release')
-//    gf8Compile project(path: ':umenglibrary', configuration: 'gf8Release')
-//    gf10Compile project(path: ':umenglibrary', configuration: 'gf10Release')
-//
+    gf4Compile project(path: ':umenglibrary', configuration: 'gf4Release')
+    gf8Compile project(path: ':umenglibrary', configuration: 'gf8Release')
+    gf10Compile project(path: ':umenglibrary', configuration: 'gf10Release')
+
 //    zy2Compile project(path: ':umenglibrary', configuration: 'zy2Release')
 //    zy3Compile project(path: ':umenglibrary', configuration: 'zy3Release')
-//    zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
+    zy4Compile project(path: ':umenglibrary', configuration: 'zy4Release')
 //    zy9Compile project(path: ':umenglibrary', configuration: 'zy9Release')
 
     compile project(':SlidingMenu')

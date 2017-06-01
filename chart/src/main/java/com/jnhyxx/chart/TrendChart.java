@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -402,6 +403,7 @@ public class TrendChart extends ChartView {
     private void updateFirstLastVisibleIndex(int indexOfXAxis) {
         mFirstVisibleIndex = Math.min(indexOfXAxis, mFirstVisibleIndex);
         mLastVisibleIndex = Math.max(indexOfXAxis, mLastVisibleIndex);
+        Log.d("TEST", "updateFirstLastVisibleIndex: " + mLastVisibleIndex);
     }
 
     public int getFirstVisibleIndex() {

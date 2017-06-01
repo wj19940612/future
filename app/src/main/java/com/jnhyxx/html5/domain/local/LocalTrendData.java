@@ -1,6 +1,7 @@
 package com.jnhyxx.html5.domain.local;
 
 import com.jnhyxx.chart.TrendView;
+import com.jnhyxx.chart.domain.TrendViewData;
 import com.johnz.kutils.DateUtil;
 
 public class LocalTrendData {
@@ -8,17 +9,17 @@ public class LocalTrendData {
     private static final int INTERVAL_HOURS = 6;
 
     private String rawData;
-    private boolean isForeign;
+    private TrendViewData lastData;
+
     private String openMarketTime;
     private String[] customOpenMarketTimeArray;
 
-    public LocalTrendData(String openMarketTime, boolean foreign) {
-        this.openMarketTime = openMarketTime;
-        this.isForeign = foreign;
+    public void setLastData(TrendViewData lastData) {
+        this.lastData = lastData;
     }
 
-    public void setForeign(boolean foreign) {
-        isForeign = foreign;
+    public LocalTrendData(String openMarketTime) {
+        this.openMarketTime = openMarketTime;
     }
 
     public void setOpenMarketTime(String openMarketTime) {
@@ -33,16 +34,18 @@ public class LocalTrendData {
         this.rawData = rawData;
     }
 
-    public String getOpenMarketTime(long currentTime) {
+    public String getOpenMarketTime() {
         customOpenMarketTimeArray = processOpenMarketTime();
-        return createOpenMarketTime(currentTime);
+        return createOpenMarketTime();
     }
 
-    private String createOpenMarketTime(long currentTime) {
-        for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
-            String curTime = DateUtil.format(currentTime, "HH:mm");
-            if (TrendView.Util.isBetweenTimes(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], curTime)) {
-                return customOpenMarketTimeArray[i] + ";" + customOpenMarketTimeArray[i + 1];
+    private String createOpenMarketTime() {
+        if (lastData != null) {
+            for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
+                String lastDataTime = DateUtil.format(lastData.getDate(), TrendViewData.DATE_FORMAT, "HH:mm");
+                if (TrendView.Util.isBetweenTimes(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], lastDataTime)) {
+                    return customOpenMarketTimeArray[i] + ";" + customOpenMarketTimeArray[i + 1];
+                }
             }
         }
         return "";
@@ -69,10 +72,10 @@ public class LocalTrendData {
         return newStartEnd;
     }
 
-    public String getDisplayMarketTimes(long currentTime) {
+    public String getDisplayMarketTimes() {
         if (customOpenMarketTimeArray != null && customOpenMarketTimeArray.length > 0) {
-            return createOpenMarketTime(currentTime);
+            return createOpenMarketTime();
         }
-        return getOpenMarketTime(currentTime);
+        return getOpenMarketTime();
     }
 }

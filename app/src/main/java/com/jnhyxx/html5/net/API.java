@@ -124,7 +124,7 @@ public class API extends APIBase {
          * @param phoneNum
          * @param password
          */
-        public static API login(String phoneNum, String password) {
+        public static API login(String phoneNum, String password, String channel) {
             try {
                 password = SecurityUtil.md5Encrypt(password);
                 Log.d(TAG, "登陆密码MD5加密" + password);
@@ -137,7 +137,8 @@ public class API extends APIBase {
                             .put("userPhone", phoneNum)
                             .put("userPass", password)
                             .put("deviceId", Preference.get().getPushClientId())
-                            .put("platform", 0));
+                            .put("platform", 0)
+                            .put("source", channel));
         }
 
         /**

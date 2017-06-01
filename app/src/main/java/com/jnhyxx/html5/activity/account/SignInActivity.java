@@ -30,6 +30,7 @@ import com.jnhyxx.html5.utils.StrFormatter;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.jnhyxx.html5.utils.ValidationWatcher;
 import com.jnhyxx.html5.view.CommonFailWarn;
+import com.johnz.kutils.AppInfo;
 import com.johnz.kutils.Launcher;
 import com.johnz.kutils.ViewUtil;
 
@@ -242,8 +243,8 @@ public class SignInActivity extends BaseActivity {
     private void signIn() {
         final String phoneNum = ViewUtil.getTextTrim(mPhoneNum).replaceAll(" ", "");
         String password = ViewUtil.getTextTrim(mPassword);
-        API.User.login(phoneNum, password).setTag(TAG)
-                .setIndeterminate(this)
+        API.User.login(phoneNum, password, AppInfo.getMetaData(this, AppInfo.Meta.UMENG_CHANNEL))
+                .setIndeterminate(this).setTag(TAG)
                 .setCallback(new Callback<Resp<JsonObject>>() {
                     @Override
                     public void onReceive(Resp<JsonObject> jsonObjectResp) {

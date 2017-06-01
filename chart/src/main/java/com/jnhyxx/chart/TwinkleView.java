@@ -10,6 +10,7 @@ public class TwinkleView extends TrendChart {
     public TwinkleView(Context context, TrendChart chart) {
         super(context);
         mTrendChart = chart;
+        setVisibleList(mTrendChart.getVisibleList());
     }
 
     @Override

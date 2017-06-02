@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.jnhyxx.chart.domain.PartialTrendHelper;
 import com.jnhyxx.chart.domain.TrendViewData;
 
 import java.text.ParseException;
@@ -56,6 +57,11 @@ public class TrendView extends FrameLayout {
     }
 
     public void setDataList(List<TrendViewData> dataList) {
+        Settings settings = getSettings();
+        if (settings != null && dataList != null && !dataList.isEmpty()) {
+            settings.setLastTrendData(dataList.get(dataList.size() - 1));
+        }
+
         mChart.setDataList(dataList);
         mTwinkleView.setDataList(dataList);
     }
@@ -215,6 +221,7 @@ public class TrendView extends FrameLayout {
         private String mDisplayMarketTimes;
         private boolean mCalculateXAxisFromOpenMarketTime;
         private boolean mXAxisRefresh;
+        private PartialTrendHelper mPartialTrendHelper;
 
         public Settings() {
             super();
@@ -227,13 +234,51 @@ public class TrendView extends FrameLayout {
 
         public void setOpenMarketTimes(String openMarketTimes) {
             mOpenMarketTimes = openMarketTimes;
+
+            if (isPartial()) {
+                mPartialTrendHelper.setOpenMarketTime(mOpenMarketTimes);
+            }
+        }
+
+        public boolean isPartial() {
+            return mPartialTrendHelper != null;
+        }
+
+        public void setLastTrendData(TrendViewData lastTrendData) {
+            if (isPartial()) {
+                mPartialTrendHelper.setLastTrendData(lastTrendData);
+            }
+        }
+
+        public void setPartialTrendHelper(PartialTrendHelper helper) {
+            mPartialTrendHelper = helper;
+
+            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
+                mPartialTrendHelper.setOpenMarketTime(mOpenMarketTimes);
+            }
+        }
+
+        public String[] getStandardOpenMarketTimes() {
+            String[] result = new String[0];
+
+            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
+                return mOpenMarketTimes.split(";");
+            }
+
+            return result;
         }
 
         public String[] getOpenMarketTimes() {
             String[] result = new String[0];
+
+            if (isPartial()) {
+                return mPartialTrendHelper.getPartialOpenMarketTime();
+            }
+
             if (!TextUtils.isEmpty(mOpenMarketTimes)) {
                 return mOpenMarketTimes.split(";");
             }
+
             return result;
         }
 
@@ -242,6 +287,10 @@ public class TrendView extends FrameLayout {
         }
 
         public String[] getDisplayMarketTimes() {
+            if (isPartial()) {
+                return mPartialTrendHelper.getDisplayMarketTimes();
+            }
+
             String[] result = new String[0];
             if (!TextUtils.isEmpty(mDisplayMarketTimes)) {
                 return mDisplayMarketTimes.split(";");

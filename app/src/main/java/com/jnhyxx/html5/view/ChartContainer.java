@@ -38,7 +38,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
     private static final int PADDING_IN_DP = 12;
 
     public static final int TAB_TREND = 0;
-    public static final int TAB_ALL_DAY = 1;
+    public static final int TAB_FULL_DAY = 1;
     public static final int TAB_FLASH = 2;
     public static final int TAB_PLATE = 3;
     public static final int TAB_KLINE = 4;
@@ -86,44 +86,55 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(trendView, 0, params);
+        mContainer.addView(trendView, TAB_TREND, params);
+    }
+
+    public void addFullDayTrendView(TrendView trendView) {
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mContainer.addView(trendView, TAB_FULL_DAY, params);
     }
 
     public void addFlashView(FlashView flashView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(flashView, 1, params);
+        mContainer.addView(flashView, TAB_FLASH, params);
     }
 
     public void addMarketDataView(MarketDataView marketDataView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(marketDataView, 2, params);
+        mContainer.addView(marketDataView, TAB_PLATE, params);
     }
 
     public void addKlineView(KlineView klineView) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        mContainer.addView(klineView, 3, params);
+        mContainer.addView(klineView, TAB_KLINE, params);
     }
 
     public TrendView getTrendView() {
-        return (TrendView) mContainer.getChildAt(0);
+        return (TrendView) mContainer.getChildAt(TAB_TREND);
+    }
+
+    public TrendView getFullDayTrendView() {
+        return (TrendView) mContainer.getChildAt(TAB_FULL_DAY);
     }
 
     public FlashView getFlashView() {
-        return (FlashView) mContainer.getChildAt(1);
+        return (FlashView) mContainer.getChildAt(TAB_FLASH);
     }
 
     public MarketDataView getMarketDataView() {
-        return (MarketDataView) mContainer.getChildAt(2);
+        return (MarketDataView) mContainer.getChildAt(TAB_PLATE);
     }
 
     public KlineView getKlineView() {
-        return (KlineView) mContainer.getChildAt(3);
+        return (KlineView) mContainer.getChildAt(TAB_KLINE);
     }
 
     public void showTrendView() {
@@ -175,9 +186,9 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.trend_chart);
-        mTabsLayout.addView(createTab(R.string.all_day), TAB_ALL_DAY, layoutParams);
+        mTabsLayout.addView(createTab(R.string.all_day), TAB_FULL_DAY, layoutParams);
 
-         layoutParams = new RelativeLayout.LayoutParams(
+        layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(paddingPx * 3, 0, 0, 0);
         layoutParams.addRule(RelativeLayout.RIGHT_OF, R.string.all_day);
@@ -243,10 +254,10 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 }
                 break;
             case R.string.all_day:
-                onTabClick(TAB_ALL_DAY);
+                onTabClick(TAB_FULL_DAY);
                 resetKlineTab();
                 if (mOnTabClickListener != null) {
-                    mOnTabClickListener.onClick(TAB_ALL_DAY);
+                    mOnTabClickListener.onClick(TAB_FULL_DAY);
                 }
                 break;
             case R.string.flash_chart:
@@ -291,7 +302,7 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
         TextView klineTab = (TextView) mTabsLayout.getChildAt(TAB_KLINE);
         klineTab.setText(R.string.kline_chart);
     }
-    
+
     private void onKlineClick(View v, int kline) {
         if (mPopupWindow.isShowing()) {
             mPopupWindow.dismiss();
@@ -356,12 +367,8 @@ public class ChartContainer extends LinearLayout implements View.OnClickListener
                 view.setVisibility(GONE);
             }
         }
-        if (pos < mTabsLayout.getChildCount() && mContainer.getChildCount() > 0) {
-            if (pos <= TAB_ALL_DAY) {
-                mContainer.getChildAt(0).setVisibility(VISIBLE);
-            } else {
-                mContainer.getChildAt(pos - 1).setVisibility(VISIBLE);
-            }
+        if (pos < mContainer.getChildCount()) {
+            mContainer.getChildAt(pos).setVisibility(VISIBLE);
         }
     }
 }

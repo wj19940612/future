@@ -159,6 +159,10 @@ public class FullMarketData implements Parcelable {
         return upLimitPrice;
     }
 
+    public long getUpTime() {
+        return upTime;
+    }
+
     @Override
     public String toString() {
         return "FullMarketData{" +

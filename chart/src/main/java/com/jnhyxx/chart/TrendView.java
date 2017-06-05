@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class TrendView extends FrameLayout {
@@ -57,22 +58,25 @@ public class TrendView extends FrameLayout {
     }
 
     public void setDataList(List<TrendViewData> dataList) {
-        Settings settings = getSettings();
-        if (settings != null && dataList != null && !dataList.isEmpty()) {
-            settings.setLastTrendData(dataList.get(dataList.size() - 1));
-        }
-
+        filterInvalidData(dataList);
         mChart.setDataList(dataList);
         mTwinkleView.setDataList(dataList);
+    }
+
+    private void filterInvalidData(List<TrendViewData> dataList) {
+        String[] openMarketTimes = getSettings().getOpenMarketTimes();
+        Iterator<TrendViewData> iterator = dataList.iterator();
+        while (iterator.hasNext()) {
+            TrendViewData data = iterator.next();
+            if (!TrendView.Util.isValidDate(data.getDate(), openMarketTimes)) {
+                iterator.remove();
+            }
+        }
     }
 
     public void setUnstableData(TrendViewData unstableData) {
         mChart.setUnstableData(unstableData);
         mTwinkleView.setUnstableData(unstableData);
-    }
-
-    public List<TrendViewData> getDataList() {
-        return mChart.getDataList();
     }
 
     public void clearData() {
@@ -109,7 +113,7 @@ public class TrendView extends FrameLayout {
             }
         }
 
-        public static List<TrendViewData> createDataList(String rawData, String[] openMarketTime) {
+        public static List<TrendViewData> createDataList(String rawData) {
             if (TextUtils.isEmpty(rawData)) return null;
 
             List<TrendViewData> result = new ArrayList<>();
@@ -125,8 +129,7 @@ public class TrendView extends FrameLayout {
                     String date = splitData[2];
                     start = end + 1;
                     // filter invalid data and repeated data based on data.date
-                    if (!isRepeatedDate(date, hashSet) && isValidDate(date, openMarketTime)
-                            && lastPrice != 0) {
+                    if (!isRepeatedDate(date, hashSet) && lastPrice != 0) {
                         TrendViewData validData = new TrendViewData(splitData[0], lastPrice, date);
                         result.add(validData);
                     }
@@ -244,9 +247,12 @@ public class TrendView extends FrameLayout {
             return mPartialTrendHelper != null;
         }
 
-        public void setLastTrendData(TrendViewData lastTrendData) {
+        public void updateLastTrendData(TrendViewData lastTrendData) {
             if (isPartial()) {
-                mPartialTrendHelper.setLastTrendData(lastTrendData);
+                TrendViewData oldLastData = mPartialTrendHelper.getLastTrendData();
+                if (oldLastData == null || lastTrendData.getDate().compareTo(oldLastData.getDate()) > 0) {
+                    mPartialTrendHelper.setLastTrendData(lastTrendData);
+                }
             }
         }
 

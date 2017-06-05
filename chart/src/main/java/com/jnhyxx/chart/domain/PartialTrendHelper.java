@@ -1,5 +1,7 @@
 package com.jnhyxx.chart.domain;
 
+import android.util.Log;
+
 import com.jnhyxx.chart.TrendView;
 
 import java.text.ParseException;
@@ -18,6 +20,10 @@ public class PartialTrendHelper {
         this.lastTrendData = lastData;
     }
 
+    public TrendViewData getLastTrendData() {
+        return lastTrendData;
+    }
+
     public void setOpenMarketTime(String openMarketTime) {
         this.openMarketTime = openMarketTime;
     }
@@ -28,6 +34,7 @@ public class PartialTrendHelper {
     }
 
     private String[] createPartialOpenMarketTime() {
+        Log.d("TEST", "createPartialOpenMarketTime: " + lastTrendData);
         if (lastTrendData != null) {
             String[] partialOpenMarketTimes = new String[2];
             for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {

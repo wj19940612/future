@@ -84,6 +84,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.jnhyxx.html5.R.id.lastPrice;
+
 public class TradeActivity extends BaseActivity implements
         PlaceOrderFragment.Callback, AgreementFragment.Callback, IHoldingOrderView<HoldingOrder> {
 
@@ -94,7 +96,7 @@ public class TradeActivity extends BaseActivity implements
     @BindView(R.id.priceChangeArea)
     RelativeLayout mPriceChangeArea;
 
-    @BindView(R.id.lastPrice)
+    @BindView(lastPrice)
     TextView mLastPrice;
     @BindView(R.id.priceChange)
     TextView mPriceChange;
@@ -151,6 +153,7 @@ public class TradeActivity extends BaseActivity implements
         public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
             updateFullMarketDataViews(data);
+
         }
     };
 
@@ -586,17 +589,16 @@ public class TradeActivity extends BaseActivity implements
         TrendView trendView = mChartContainer.getTrendView();
         TrendView fullDayTrendView = mChartContainer.getFullDayTrendView();
         if (trendView != null &&  fullDayTrendView != null) {
-            List<TrendViewData> dataList = trendView.getDataList();
-            if (dataList != null && dataList.size() > 0) {
-                TrendViewData lastData = dataList.get(dataList.size() - 1);
-                String date = DateUtil.addOneMinute(lastData.getDate(), TrendViewData.DATE_FORMAT);
-                TrendView.Settings settings = trendView.getSettings();
-                if (TrendView.Util.isValidDate(date, settings.getStandardOpenMarketTimes())) {
-                    float lastPrice = (float) data.getLastPrice();
-                    TrendViewData unstableData = new TrendViewData(lastData.getContractId(), lastPrice, date);
-                    trendView.setUnstableData(unstableData);
-                    fullDayTrendView.setUnstableData(unstableData);
-                }
+            TrendViewData lastData = new TrendViewData(
+                    data.getInstrumentId(),
+                    (float) data.getLastPrice(),
+                    DateUtil.format(data.getUpTime(), TrendViewData.DATE_FORMAT));
+
+            TrendView.Settings settings = trendView.getSettings();
+            if (TrendView.Util.isValidDate(lastData.getDate(), settings.getStandardOpenMarketTimes())) {
+                settings.updateLastTrendData(lastData);
+                trendView.setUnstableData(lastData);
+                fullDayTrendView.setUnstableData(lastData);
             }
         }
 
@@ -749,15 +751,15 @@ public class TradeActivity extends BaseActivity implements
                     @Override
                     public void onReceive(String s) {
                         TrendView trendView = mChartContainer.getTrendView();
-                        if (trendView == null) return;
                         TrendView.Settings settings = trendView.getSettings();
-                        List<TrendViewData> data = TrendView.Util.createDataList(s, settings.getStandardOpenMarketTimes());
+                        List<TrendViewData> data = TrendView.Util.createDataList(s);
+                        if (data != null && !data.isEmpty()) {
+                            settings.updateLastTrendData(data.get(data.size() - 1));
+                        }
                         trendView.setDataList(data);
 
                         trendView = mChartContainer.getFullDayTrendView();
-                        if (trendView == null) return;
-                        settings = trendView.getSettings();
-                        data = TrendView.Util.createDataList(s, settings.getStandardOpenMarketTimes());
+                        data = TrendView.Util.createDataList(s);
                         trendView.setDataList(data);
                     }
                 }).fireSync();

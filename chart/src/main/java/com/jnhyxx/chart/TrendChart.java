@@ -101,7 +101,6 @@ public class TrendChart extends ChartView {
     public void clearData() {
         mDataList = null;
         mUnstableData = null;
-        mVisibleList.clear();
         mFirstVisibleIndex = Integer.MAX_VALUE;
         mLastVisibleIndex = Integer.MIN_VALUE;
         redraw();
@@ -109,6 +108,7 @@ public class TrendChart extends ChartView {
 
     public void setDataList(List<TrendViewData> dataList) {
         mDataList = dataList;
+        mVisibleList.clear();
         redraw();
     }
 
@@ -291,12 +291,6 @@ public class TrendChart extends ChartView {
                     path.lineTo(chartX, chartY);
                 }
             }
-
-//            if (mUnstableData != null && mDataList.size() > 0) {
-//                chartX = getChartX(mUnstableData);
-//                chartY = getChartY(mUnstableData.getLastPrice());
-//                path.lineTo(chartX, chartY);
-//            }
 
             setRealTimeLinePaint(sPaint);
             canvas.drawPath(path, sPaint);

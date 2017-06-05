@@ -364,7 +364,7 @@ public class TradeActivity extends BaseActivity implements
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
 
-        startScheduleJob(60 * 1000, 60 * 1000);
+        startScheduleJob(30 * 1000, 30 * 1000);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -595,9 +595,12 @@ public class TradeActivity extends BaseActivity implements
                     DateUtil.format(data.getUpTime(), TrendViewData.DATE_FORMAT));
 
             TrendView.Settings settings = trendView.getSettings();
-            if (TrendView.Util.isValidDate(lastData.getDate(), settings.getStandardOpenMarketTimes())) {
-                settings.updateLastTrendData(lastData);
+            if (TrendView.Util.isValidDate(lastData.getDate(), settings.getOpenMarketTimes())) {
                 trendView.setUnstableData(lastData);
+            }
+
+            settings = fullDayTrendView.getSettings();
+            if (TrendView.Util.isValidDate(lastData.getDate(), settings.getOpenMarketTimes())) {
                 fullDayTrendView.setUnstableData(lastData);
             }
         }

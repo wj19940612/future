@@ -64,12 +64,14 @@ public class TrendView extends FrameLayout {
     }
 
     private void filterInvalidData(List<TrendViewData> dataList) {
-        String[] openMarketTimes = getSettings().getOpenMarketTimes();
-        Iterator<TrendViewData> iterator = dataList.iterator();
-        while (iterator.hasNext()) {
-            TrendViewData data = iterator.next();
-            if (!TrendView.Util.isValidDate(data.getDate(), openMarketTimes)) {
-                iterator.remove();
+        if (dataList != null) {
+            String[] openMarketTimes = getSettings().getOpenMarketTimes();
+            Iterator<TrendViewData> iterator = dataList.iterator();
+            while (iterator.hasNext()) {
+                TrendViewData data = iterator.next();
+                if (!TrendView.Util.isValidDate(data.getDate(), openMarketTimes)) {
+                    iterator.remove();
+                }
             }
         }
     }
@@ -262,16 +264,6 @@ public class TrendView extends FrameLayout {
             if (!TextUtils.isEmpty(mOpenMarketTimes)) {
                 mPartialTrendHelper.setOpenMarketTime(mOpenMarketTimes);
             }
-        }
-
-        public String[] getStandardOpenMarketTimes() {
-            String[] result = new String[0];
-
-            if (!TextUtils.isEmpty(mOpenMarketTimes)) {
-                return mOpenMarketTimes.split(";");
-            }
-
-            return result;
         }
 
         public String[] getOpenMarketTimes() {

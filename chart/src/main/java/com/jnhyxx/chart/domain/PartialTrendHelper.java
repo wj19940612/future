@@ -1,7 +1,5 @@
 package com.jnhyxx.chart.domain;
 
-import android.util.Log;
-
 import com.jnhyxx.chart.TrendView;
 
 import java.text.ParseException;
@@ -34,12 +32,11 @@ public class PartialTrendHelper {
     }
 
     private String[] createPartialOpenMarketTime() {
-        Log.d("TEST", "createPartialOpenMarketTime: " + lastTrendData);
         if (lastTrendData != null) {
             String[] partialOpenMarketTimes = new String[2];
             for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
                 String lastDataTime = format(lastTrendData.getDate(), TrendViewData.DATE_FORMAT, "HH:mm");
-                if (TrendView.Util.isBetweenTimes(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], lastDataTime)) {
+                if (TrendView.Util.isBetweenTimesClose(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], lastDataTime)) {
                     partialOpenMarketTimes[0] = customOpenMarketTimeArray[i];
                     partialOpenMarketTimes[1] = customOpenMarketTimeArray[i + 1];
                     return partialOpenMarketTimes;

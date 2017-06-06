@@ -146,14 +146,12 @@ public class TradeActivity extends BaseActivity implements
 
     private FullMarketData mFullMarketData;
     private ExchangeStatus mExchangeStatus;
-    private String mRawTrendData;
 
     private NettyHandler mNettyHandler = new NettyHandler<FullMarketData>() {
         @Override
         public void onReceiveData(FullMarketData data) {
             mFullMarketData = data;
             updateFullMarketDataViews(data);
-
         }
     };
 
@@ -167,6 +165,11 @@ public class TradeActivity extends BaseActivity implements
 
         updateFourMainPrices(data);
         updateChartView(data);
+
+        if (!mExchangeStatus.isTradeable()) {
+            updateExchangeStatusView();
+        }
+
         mHoldingOrderPresenter.setFullMarketData(data, mProduct.getVarietyId());
         updateBuyButtonsText(data);
     }
@@ -595,6 +598,7 @@ public class TradeActivity extends BaseActivity implements
                     DateUtil.format(data.getUpTime(), TrendViewData.DATE_FORMAT));
 
             TrendView.Settings settings = trendView.getSettings();
+            settings.updateLastTrendData(lastData);
             if (TrendView.Util.isValidDate(lastData.getDate(), settings.getOpenMarketTimes())) {
                 trendView.setUnstableData(lastData);
             }
@@ -688,9 +692,9 @@ public class TradeActivity extends BaseActivity implements
         TrendView.Settings settings = new TrendView.Settings();
         settings.setBaseLines(mProduct.getBaseline());
         settings.setNumberScale(mProduct.getPriceDecimalScale());
-        settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
         settings.setPartialTrendHelper(new PartialTrendHelper());
+        settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);
 
@@ -758,11 +762,16 @@ public class TradeActivity extends BaseActivity implements
                         List<TrendViewData> data = TrendView.Util.createDataList(s);
                         if (data != null && !data.isEmpty()) {
                             settings.updateLastTrendData(data.get(data.size() - 1));
+                            settings.setPreClosePrice(data.get(0).getLastPrice());
                         }
                         trendView.setDataList(data);
 
                         trendView = mChartContainer.getFullDayTrendView();
+                        settings = trendView.getSettings();
                         data = TrendView.Util.createDataList(s);
+                        if (data != null && !data.isEmpty()) {
+                            settings.setPreClosePrice(data.get(0).getLastPrice());
+                        }
                         trendView.setDataList(data);
                     }
                 }).fireSync();

@@ -297,7 +297,7 @@ public class TrendView extends FrameLayout {
         }
 
         public float getLimitUp() {
-            return getPreClosePrice() * mLimitUpPercent;
+            return getPreClosePrice() * mLimitUpPercent / 100f;
         }
 
         public void setCalculateXAxisFromOpenMarketTime(boolean value) {

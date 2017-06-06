@@ -10,7 +10,6 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -170,9 +169,10 @@ public class TrendChart extends ChartView {
 
     @Override
     protected void calculateBaseLines(float[] baselines) {
-        if (mDataList != null && mDataList.size() > 0) {
-            float max = Float.MIN_VALUE;
-            float min = Float.MAX_VALUE;
+        float max = Float.MIN_VALUE;
+        float min = Float.MAX_VALUE;
+
+        if (mDataList != null) {
             for (TrendViewData trendViewData : mDataList) {
                 if (max < trendViewData.getLastPrice()) {
                     max = trendViewData.getLastPrice();
@@ -181,37 +181,41 @@ public class TrendChart extends ChartView {
                     min = trendViewData.getLastPrice();
                 }
             }
+        }
 
-            if (mUnstableData != null) {
-                if (max < mUnstableData.getLastPrice()) {
-                    max = mUnstableData.getLastPrice();
-                }
-                if (min > mUnstableData.getLastPrice()) {
-                    min = mUnstableData.getLastPrice();
-                }
+        if (mUnstableData != null) {
+            if (max < mUnstableData.getLastPrice()) {
+                max = mUnstableData.getLastPrice();
+            }
+            if (min > mUnstableData.getLastPrice()) {
+                min = mUnstableData.getLastPrice();
             }
 
-            // the chart need a min height
-            double delta = new BigDecimal(max).subtract(new BigDecimal(min)).doubleValue();
-            float limitUp = mSettings.getLimitUp();
-            if (delta < limitUp) {
+            double diff = new BigDecimal(max).subtract(new BigDecimal(min)).doubleValue();
+            float limitUp = mSettings.getLimitUp(); // limit up: preClosePrice * 0.2%
+            if (diff < limitUp) {
                 max = new BigDecimal(min).add(new BigDecimal(limitUp)).floatValue();
             }
+        }
 
-            float pricePadding = (max - min) * 1.0f / (baselines.length - 1);
-            /** expand max ~ min to not let trend line touch top and bottom **/
-            max = max + pricePadding;
-            min = min - pricePadding;
+        if (max == Float.MIN_VALUE) { // there is no data
+            max = 0;
+            min = 0;
+        }
 
-            float priceRange = BigDecimal.valueOf(max).subtract(new BigDecimal(min))
-                    .divide(new BigDecimal(baselines.length - 1), RoundingMode.HALF_EVEN)
-                    .floatValue();
+        /** expand max ~ min to let trend line do not touch the top and the bottom **/
+        float priceExtra = (max - min) * 1.0f / (baselines.length - 1);
+        max = max + priceExtra;
+        min = min - priceExtra;
 
-            baselines[0] = max;
-            baselines[baselines.length - 1] = min;
-            for (int i = baselines.length - 2; i > 0; i--) {
-                baselines[i] = baselines[i + 1] + priceRange;
-            }
+        float priceRange = BigDecimal.valueOf(max).subtract(new BigDecimal(min))
+                .divide(new BigDecimal(baselines.length - 1), RoundingMode.HALF_EVEN)
+                .floatValue();
+
+        baselines[0] = max;
+        baselines[baselines.length - 1] = min;
+        for (int i = baselines.length - 2; i > 0; i--) {
+            baselines[i] = baselines[i + 1] + priceRange;
         }
     }
 
@@ -310,16 +314,19 @@ public class TrendChart extends ChartView {
                                     int left, int top, int width, int topPartHeight,
                                     int left2, int top2, int width1, int bottomPartHeight,
                                     Canvas canvas) {
-        if (mDataList != null && mDataList.size() > 0 && mUnstableData != null) {
-            // last point connect to unstable point
+        if (mUnstableData != null) {
             Path path = getPath();
-            TrendViewData lastData = mDataList.get(mDataList.size() - 1);
-            path.moveTo(getChartX(lastData), getChartY(lastData.getLastPrice()));
             float chartX = getChartX(mUnstableData);
             float chartY = getChartY(mUnstableData.getLastPrice());
-            path.lineTo(chartX, chartY);
-            setRealTimeLinePaint(sPaint);
-            canvas.drawPath(path, sPaint);
+
+            if (mDataList != null && mDataList.size() > 0) {
+                // last point connect to unstable point
+                TrendViewData lastData = mDataList.get(mDataList.size() - 1);
+                path.moveTo(getChartX(lastData), getChartY(lastData.getLastPrice()));
+                path.lineTo(chartX, chartY);
+                setRealTimeLinePaint(sPaint);
+                canvas.drawPath(path, sPaint);
+            }
 
             // dash line
             path = getPath();
@@ -355,20 +362,18 @@ public class TrendChart extends ChartView {
 
     @Override
     protected void drawTimeLine(int left, int top, int width, Canvas canvas) {
-        if (mDataList != null && mDataList.size() > 0) {
-            String[] displayMarketTimes = mSettings.getDisplayMarketTimes();
-            if (displayMarketTimes.length != 0) {
-                setDefaultTextPaint(sPaint);
-                float textY = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
-                for (int i = 0; i < displayMarketTimes.length; i++) {
-                    if (i == 0) {
-                        float textX = left + mTextMargin;
-                        canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
-                    } else {
-                        float textWidth = sPaint.measureText(displayMarketTimes[i]);
-                        float textX = getChartX(getIndexFromDate(displayMarketTimes[i])) - textWidth / 2;
-                        canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
-                    }
+        String[] displayMarketTimes = mSettings.getDisplayMarketTimes();
+        if (displayMarketTimes.length != 0) {
+            setDefaultTextPaint(sPaint);
+            float textY = top + mTextMargin + mFontHeight / 2 + mOffset4CenterText;
+            for (int i = 0; i < displayMarketTimes.length; i++) {
+                if (i == 0) {
+                    float textX = left + mTextMargin;
+                    canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
+                } else {
+                    float textWidth = sPaint.measureText(displayMarketTimes[i]);
+                    float textX = getChartX(getIndexFromDate(displayMarketTimes[i])) - textWidth / 2;
+                    canvas.drawText(displayMarketTimes[i], textX, textY, sPaint);
                 }
             }
         }
@@ -397,7 +402,6 @@ public class TrendChart extends ChartView {
     private void updateFirstLastVisibleIndex(int indexOfXAxis) {
         mFirstVisibleIndex = Math.min(indexOfXAxis, mFirstVisibleIndex);
         mLastVisibleIndex = Math.max(indexOfXAxis, mLastVisibleIndex);
-        Log.d("TEST", "updateFirstLastVisibleIndex: " + mLastVisibleIndex);
     }
 
     public int getFirstVisibleIndex() {

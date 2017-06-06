@@ -108,13 +108,11 @@ public class TrendChart extends ChartView {
     public void setDataList(List<TrendViewData> dataList) {
         mDataList = dataList;
         mVisibleList.clear();
+        mFirstVisibleIndex = Integer.MAX_VALUE;
+        mLastVisibleIndex = Integer.MIN_VALUE;
         redraw();
     }
-
-    public List<TrendViewData> getDataList() {
-        return mDataList;
-    }
-
+    
     public void setVisibleList(SparseArray<TrendViewData> visibleList) {
         mVisibleList = visibleList;
     }

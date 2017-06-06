@@ -163,6 +163,10 @@ public class FullMarketData implements Parcelable {
         return upTime;
     }
 
+    public void setUpTime(long upTime) {
+        this.upTime = upTime;
+    }
+
     @Override
     public String toString() {
         return "FullMarketData{" +

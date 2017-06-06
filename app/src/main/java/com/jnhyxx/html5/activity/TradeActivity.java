@@ -166,7 +166,7 @@ public class TradeActivity extends BaseActivity implements
         updateFourMainPrices(data);
         updateChartView(data);
 
-        if (!mExchangeStatus.isTradeable()) {
+        if (mExchangeStatus != null && !mExchangeStatus.isTradeable()) {
             updateExchangeStatusView();
         }
 
@@ -367,7 +367,7 @@ public class TradeActivity extends BaseActivity implements
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
 
-        startScheduleJob(30 * 1000, 30 * 1000);
+        startScheduleJob(60 * 1000, 60 * 1000);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
@@ -591,7 +591,7 @@ public class TradeActivity extends BaseActivity implements
     private void updateChartView(FullMarketData data) {
         TrendView trendView = mChartContainer.getTrendView();
         TrendView fullDayTrendView = mChartContainer.getFullDayTrendView();
-        if (trendView != null &&  fullDayTrendView != null) {
+        if (trendView != null && fullDayTrendView != null) {
             TrendViewData lastData = new TrendViewData(
                     data.getInstrumentId(),
                     (float) data.getLastPrice(),
@@ -693,7 +693,14 @@ public class TradeActivity extends BaseActivity implements
         settings.setBaseLines(mProduct.getBaseline());
         settings.setNumberScale(mProduct.getPriceDecimalScale());
         settings.setOpenMarketTimes(mProduct.getOpenMarketTime());
-        settings.setPartialTrendHelper(new PartialTrendHelper());
+        settings.setPartialTrendHelper(new PartialTrendHelper(new PartialTrendHelper.OnPartialOpenMarketTimeChangeListener() {
+            @Override
+            public void onChanged(String[] partialOpenMarketTime) {
+                TrendView view = mChartContainer.getTrendView();
+                view.getSettings().setCalculateXAxisFromOpenMarketTime(true);
+                requestTrendDataAndSet();
+            }
+        }));
         settings.setLimitUpPercent((float) mProduct.getLimitUpPercent());
         settings.setCalculateXAxisFromOpenMarketTime(true);
         trendView.setSettings(settings);

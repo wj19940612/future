@@ -13,6 +13,16 @@ public class PartialTrendHelper {
     private String openMarketTime;
     private String[] customOpenMarketTimeArray;
     private TrendViewData lastTrendData;
+    private String[] partialOpenMarketTime;
+    private OnPartialOpenMarketTimeChangeListener mListener;
+
+    public PartialTrendHelper(OnPartialOpenMarketTimeChangeListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnPartialOpenMarketTimeChangeListener {
+        void onChanged(String[] partialOpenMarketTime);
+    }
 
     public void setLastTrendData(TrendViewData lastData) {
         this.lastTrendData = lastData;
@@ -24,26 +34,39 @@ public class PartialTrendHelper {
 
     public void setOpenMarketTime(String openMarketTime) {
         this.openMarketTime = openMarketTime;
+        this.customOpenMarketTimeArray = processOpenMarketTime();
     }
 
     public String[] getPartialOpenMarketTime() {
-        customOpenMarketTimeArray = processOpenMarketTime();
-        return createPartialOpenMarketTime();
-    }
-
-    private String[] createPartialOpenMarketTime() {
-        if (lastTrendData != null) {
-            String[] partialOpenMarketTimes = new String[2];
-            for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
-                String lastDataTime = format(lastTrendData.getDate(), TrendViewData.DATE_FORMAT, "HH:mm");
-                if (TrendView.Util.isBetweenTimesClose(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], lastDataTime)) {
-                    partialOpenMarketTimes[0] = customOpenMarketTimeArray[i];
-                    partialOpenMarketTimes[1] = customOpenMarketTimeArray[i + 1];
-                    return partialOpenMarketTimes;
+        String[] latestPartialOpenMarketTime = createPartialOpenMarketTime();
+        if (partialOpenMarketTime == null) {
+            partialOpenMarketTime = latestPartialOpenMarketTime;
+        } else {
+            if (partialOpenMarketTime[0].compareTo(latestPartialOpenMarketTime[0]) != 0
+                    || partialOpenMarketTime[1].compareTo(latestPartialOpenMarketTime[1]) != 0) {
+                partialOpenMarketTime = latestPartialOpenMarketTime;
+                if (mListener != null) {
+                    mListener.onChanged(partialOpenMarketTime);
                 }
             }
         }
-        return new String[0];
+        return partialOpenMarketTime;
+    }
+
+    private String[] createPartialOpenMarketTime() {
+        String[] result = new String[0];
+        if (lastTrendData != null && customOpenMarketTimeArray != null) {
+            result = new String[2];
+            for (int i = 0; i < customOpenMarketTimeArray.length; i += 2) {
+                String lastDataTime = format(lastTrendData.getDate(), TrendViewData.DATE_FORMAT, "HH:mm");
+                if (TrendView.Util.isBetweenTimesClose(customOpenMarketTimeArray[i], customOpenMarketTimeArray[i + 1], lastDataTime)) {
+                    result[0] = customOpenMarketTimeArray[i];
+                    result[1] = customOpenMarketTimeArray[i + 1];
+                    return result;
+                }
+            }
+        }
+        return result;
     }
 
     private String[] processOpenMarketTime() {
@@ -68,10 +91,7 @@ public class PartialTrendHelper {
     }
 
     public String[] getDisplayMarketTimes() {
-        if (customOpenMarketTimeArray != null && customOpenMarketTimeArray.length > 0) {
-            return createPartialOpenMarketTime();
-        }
-        return getPartialOpenMarketTime();
+        return createPartialOpenMarketTime();
     }
 
     private String addMinutes(String date, int min, String format) {

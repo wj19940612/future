@@ -112,7 +112,7 @@ public class TrendChart extends ChartView {
         mLastVisibleIndex = Integer.MIN_VALUE;
         redraw();
     }
-    
+
     public void setVisibleList(SparseArray<TrendViewData> visibleList) {
         mVisibleList = visibleList;
     }

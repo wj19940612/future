@@ -367,13 +367,15 @@ public class TradeActivity extends BaseActivity implements
         updateQuestionMarker();
         updateExchangeStatusView(); // based on product
 
-        startScheduleJob(60 * 1000, 60 * 1000);
+        startScheduleJob(60 * 1000, 30 * 1000);
 
         NettyClient.getInstance().addNettyHandler(mNettyHandler);
         NettyClient.getInstance().start(mProduct.getContractsCode());
 
         mHoldingOrderPresenter.onResume();
         mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);
+
+        requestTrendDataAndSet();
     }
 
     @Override
@@ -754,9 +756,6 @@ public class TradeActivity extends BaseActivity implements
         klineView.setSettings(settings2);
 
         mChartContainer.showTrendView();
-
-        // request Trend Data
-        requestTrendDataAndSet();
     }
 
     private void requestTrendDataAndSet() {
@@ -829,6 +828,7 @@ public class TradeActivity extends BaseActivity implements
                     updateTopPartColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
                     updateExchangeStatusView(); // based on product
                     updateChartView(); // based on product
+                    requestTrendDataAndSet();
 
                     mHoldingOrderPresenter.clearData();
                     mHoldingOrderPresenter.loadHoldingOrderList(mProduct.getVarietyId(), mFundType);

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,15 +21,15 @@ import com.jnhyxx.html5.activity.BaseActivity;
 import com.jnhyxx.html5.utils.ToastUtil;
 import com.johnz.kutils.FileSystem;
 import com.johnz.kutils.ImageUtil;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class SaveImageActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String EXTRA_IMAGE_URL = "imageUrl";
+
+    private static final String PREFIX_BASE64_IMAGE = "data:image/png;base64";
 
     private Button mSaveImage;
     private Bitmap mBitmap;
@@ -47,24 +49,15 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
 
     private void processIntent(Intent intent) {
         String imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL);
-        if (!TextUtils.isEmpty(imageUrl)) {
+        if (!TextUtils.isEmpty(imageUrl) && imageUrl.contains(PREFIX_BASE64_IMAGE)) {
             new DownloadImageTask(this).execute(imageUrl);
         }
         mFileName = getFileName(imageUrl);
     }
 
     private String getFileName(String imageUrl) {
-        int lastEqualSignIndex = imageUrl.lastIndexOf("=");
-        if (lastEqualSignIndex != -1) {
-            return imageUrl.substring(lastEqualSignIndex + 1, imageUrl.length()) + ".jpg";
-        }
-
-        // For some urls which have the extensions like '.jpg', '.jpeg', '.png'
-        if (imageUrl.indexOf(".jpg") > -1
-                || imageUrl.indexOf(".jpeg") > -1
-                || imageUrl.indexOf(".png") > -1) {
-            int lastLeftSlashIndex = imageUrl.lastIndexOf("/");
-            return imageUrl.substring(lastLeftSlashIndex + 1, imageUrl.length());
+        if (!TextUtils.isEmpty(imageUrl) && imageUrl.length() > 6) {
+            return "QR" + imageUrl.substring(imageUrl.length() - 6) + ".jpg";
         }
 
         return "QR" + System.currentTimeMillis() + ".jpg";
@@ -81,12 +74,10 @@ public class SaveImageActivity extends BaseActivity implements View.OnClickListe
         @Override
         protected Bitmap doInBackground(String... params) {
             String url = params[0];
-            Bitmap bitmap = null;
-            try {
-                bitmap = Picasso.with(mWeakReference.get()).load(url).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            int beginIndex = url.indexOf(",") + 1;
+            String pureBase64Encoded = url.substring(beginIndex);
+            byte[] decodedBytes = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
             return bitmap;
 
         }

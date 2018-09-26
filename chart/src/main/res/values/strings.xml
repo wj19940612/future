@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">chart</string>
+
+    <string name="openPrice">开盘</string>
+    <string name="highestPrice">最高</string>
+    <string name="lowestPrice">最低</string>
+    <string name="closePrice">收盘</string>
+
+</resources>

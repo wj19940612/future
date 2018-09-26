@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/common_margin"
+              android:paddingRight="@dimen/common_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_available_balance"
+        android:layout_marginRight="12dp"
+        android:textColor="#CCCCCC"
+        android:textSize="12sp"/>
+
+    <com.jnhyxx.html5.view.autofit.AutofitTextView
+        android:id="@+id/availableBalance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/orderListBtn"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/blueAssist"
+        android:textSize="20sp"
+        tools:text="￥88888888.88"/>
+</LinearLayout>

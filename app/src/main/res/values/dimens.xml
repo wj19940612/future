@@ -1,5 +1,44 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Common -->
+    <dimen name="radius">3dp</dimen>
+    <dimen name="split_line_height">0.5dp</dimen>
+    <dimen name="button_radius">2dp</dimen>
+    <dimen name="one_key_close_radius">20dp</dimen>
+    <dimen name="toast_offset">150dp</dimen>
+
+    <!-- Trade page -->
+    <dimen name="sliding_menu_width">110dp</dimen>
+    <dimen name="sliding_shadow_width">15dp</dimen>
+    <dimen name="trade_footer_height">60dp</dimen>
+    <dimen name="empty_area_height">118dp</dimen>
+    <dimen name="market_status_area_height">77dp</dimen>
+    <dimen name="market_date_row_padding">14dp</dimen>
+    <!--目前大部分容器距离边界15dp-->
+    <dimen name="common_margin">15dp</dimen>
+
+    <dimen name="padding_ten">10dp</dimen>
+
+    <dimen name="player_height">180dp</dimen>
+
+    <dimen name="min_text_size">11sp</dimen>
+
+    <dimen name="user_head_size">45dp</dimen>
+    //直播互动界面用户的头像大小
+    <dimen name="live_user_head_size">30dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="find_pwd_auto_code_width">85dp</dimen>
+
+    <dimen name="live_teacher_head_size">39dp</dimen>
+    <dimen name="teacher_command_head_size">50dp</dimen>
+    <dimen name="mine_user_head_size">75dp</dimen>
+    <dimen name="country_flag_width">24dp</dimen>
+    <dimen name="country_flag_height">17dp</dimen>
+    <dimen name="trading_strategy_width">345dp</dimen>
+    <dimen name="trading_strategy_height">140dp</dimen>
 </resources>
+

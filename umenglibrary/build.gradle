@@ -1,0 +1,94 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '25.0.0'
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    publishNonDefault true
+
+    productFlavors {
+        origin {
+            manifestPlaceholders = [UMENG_APPKEY: "575ea73ee0f55a5a2f002e9e"]
+        }
+
+        yybd { // 原油宝典 -> 期货交易通
+            manifestPlaceholders = [UMENG_APPKEY: "57738c4267e58ea2d2002b12"]
+        }
+
+        kdqn { // 口袋期牛
+            manifestPlaceholders = [UMENG_APPKEY: "5874964fc62dca2a21001ba4"]
+        }
+
+        // dajiexin apks
+        yyqhb { // 原油期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58a404607f2c7405f0000d8c"]
+        }
+        wyejy { // 微赢e交易
+            manifestPlaceholders = [UMENG_APPKEY: "58a406827f2c74043b001408"]
+        }
+        hzh2 { // 恒指汇
+            manifestPlaceholders = [UMENG_APPKEY: "58a422d75312dd5724001448"]
+        }
+
+        gf2 { // 钱猫投资宝
+            manifestPlaceholders = [UMENG_APPKEY: "58a6be8504e2053aeb00078f"]
+        }
+        gf4 { // 外汇期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58fda0754544cb7d4f0016b6"]
+        }
+        gf8 { // 期货原油交易
+            manifestPlaceholders = [UMENG_APPKEY: "58fd9d42a325112614000a4a"]
+        }
+        gf10 { // 期货交易赚钱宝
+            manifestPlaceholders = [UMENG_APPKEY: "58fda15d99f0c71b8c000dd1"]
+        }
+
+        dl9 { // 掌上微交易
+            manifestPlaceholders = [UMENG_APPKEY: "591ee20f3eae2578b1000c9a"]
+        }
+
+        dl15 { // 黄金期货交易
+            manifestPlaceholders = [UMENG_APPKEY: "5927d5d94544cb2aeb0008b9"]
+        }
+
+        zy3 { // 金谷理财
+            manifestPlaceholders = [UMENG_APPKEY: "58412d07b27b0a2b4d00012a"]
+        }
+        zy2 { // 蓝鲸投资
+            manifestPlaceholders = [UMENG_APPKEY: "58412f3dc62dca356d00113e"]
+        }
+        zy4 { // 贵金属期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "58412feef29d9877880010db"]
+        }
+        zy9 { // 外汇期货宝
+            manifestPlaceholders = [UMENG_APPKEY: "5865bd1fa40fa33c9c000aef"]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile files('libs/SocialSDK_Sina.jar')
+    compile files('libs/SocialSDK_WeiXin_1.jar')
+    compile files('libs/SocialSDK_WeiXin_2.jar')
+    compile files('libs/weiboSDKCore_3.1.4.jar')
+    compile files('libs/umeng_social_sdk.jar')
+    compile files('libs/umeng-onlineconfig_v1.0.0.jar')
+}

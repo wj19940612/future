@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_expand_make_money"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context="com.jnhyxx.html5.activity.account.ExpandMakeMoneyActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:rightText="@string/account_expand_make_money_right_title"
+        app:rightTextSize="14dp"
+        app:rightVisible="true"
+        app:titleText="@string/account_expand_make_money_title" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/splitLineGrayLight" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyBrokerage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/account_expand_make_money_brokerage"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/account_expand_make_money_brokerage_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/accountExpandMakeMoneyBrokerage"
+            android:gravity="center_horizontal"
+            android:text="@string/account_expand_make_money_brokerage_number" />
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyBrokeragePickUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/holo_red_dark"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/account_expand_make_money_brokerage_pickup"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/splitLineGrayLight">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:gravity="center"
+                android:text="@string/account_expand_make_money_proxy_grade" />
+
+            <TextView
+                android:id="@+id/accountExpandMakeMoneyProxyGrade"
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="铜牌" />
+        </RelativeLayout>
+
+        <view
+            android:layout_width="1px"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="我的用户" />
+
+            <TextView
+                android:id="@+id/accountExpandMakeMoneyMineAccount"
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/zero" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/splitLineGrayLight">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:gravity="center"
+                android:text="@string/account_expand_make_money_brokerage_scale" />
+
+            <TextView
+                android:id="@+id/accountExpandMakeMoneyBrokerageScleNumber"
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="8%" />
+        </RelativeLayout>
+
+        <view
+            android:layout_width="1px"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/account_expand_make_money_exchange_account" />
+
+            <TextView
+                android:id="@+id/accountExpandMakeMoneyExchangeAccountNumber"
+                style="@style/expandMakeMoneyTextViewStyle"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="@string/zero" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/help_tv1"
+            style="@style/expandMakeMoneyTextViewStyle"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:text="@string/account_expand_make_money_two_dimensional_code" />
+
+        <ImageView
+            android:id="@+id/accountExpandMakeMoneyIvTwoDimensionalCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            style="@style/expandMakeMoneyTextViewStyle"
+            android:padding="10dp"
+            android:text="@string/account_expand_make_money_share_lianJie" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/splitLineGrayLight"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyTvShareWeb"
+            style="@style/expandMakeMoneyTextViewStyle"
+            android:padding="10dp"
+            android:text="@string/account_expand_make_money_share_web" />
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyTvShareWebCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_blue_inverse"
+            android:clickable="true"
+            android:padding="10dp"
+            android:text="@string/common_copy_text" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="@string/account_expand_make_money_invite_code" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/splitLineGrayLight"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyInviteCodeCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_blue_inverse"
+            android:clickable="true"
+            android:padding="10dp"
+            android:text="@string/common_copy_text" />
+
+        <TextView
+            android:id="@+id/accountExpandMakeMoneyInviteCode"
+            style="@style/expandMakeMoneyTextViewStyle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:padding="10dp"
+            android:text="9454545" />
+    </RelativeLayout>
+
+</LinearLayout>

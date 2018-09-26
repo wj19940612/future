@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/activity_about_us"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.AboutUsActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/about_us"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/versionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="#0E2947"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin">
+
+
+            <com.jnhyxx.html5.view.ExpandableLayout
+                android:id="@+id/companyInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:elBottomTxt="@string/account_about_us_company_info_child"
+                app:elLeftTxt="@string/account_about_us_company_info"/>
+
+            <include layout="@layout/split_line_gray_light"/>
+
+            <com.jnhyxx.html5.view.ExpandableLayout
+                android:id="@+id/managerTeam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:elBottomTxt="@string/account_about_us_manager_team_child"
+                app:elLeftTxt="@string/account_about_us_manager_team"/>
+
+            <include layout="@layout/split_line_gray_light"/>
+
+            <com.jnhyxx.html5.view.ExpandableLayout
+                android:id="@+id/companyCulture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:elBottomTxt="@string/account_about_us_company_culture_child"
+                app:elLeftTxt="@string/account_about_us_company_culture"/>
+
+            <include layout="@layout/split_line_gray_light"/>
+
+            <com.jnhyxx.html5.view.ExpandableLayout
+                android:id="@+id/collaborateCase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:elBottomTxt="@string/account_about_us_collaborate_case_child"
+                app:elLeftTxt="@string/account_about_us_collaborate_case"/>
+
+            <!--<include layout="@layout/split_line_gray_light"/>-->
+
+            <RelativeLayout
+                android:id="@+id/companyTelephone"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:layout_centerVertical="true"
+                    android:text="@string/account_about_us_company_telephone"/>
+
+                <TextView
+                    android:id="@+id/servicePhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/blueAssist"/>
+            </RelativeLayout>
+
+            <include layout="@layout/split_line_gray_light"/>
+
+            <RelativeLayout
+                android:id="@+id/serviceQq"
+                style="@style/AboutAsEntryRelativeStyle">
+
+                <TextView
+                    style="@style/AboutAsEntryLeftTextViewStyle"
+                    android:layout_centerVertical="true"
+                    android:text="@string/account_about_us_service_qq"/>
+
+                <TextView
+                    android:id="@+id/serViceQQ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/blueAssist"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

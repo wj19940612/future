@@ -1,4 +1,585 @@
 <resources>
-    <string name="app_name">恒运超盘手</string>
+    <string name="app_name">期货 TEST</string>
+
     <string name="install_qq_first">请先安装QQ</string>
+    <string name="android_web_agent">ANDROID_AGENT</string>
+
+    <!-- WebView network error -->
+    <string name="network_error_please_reload">网络连接失败 请重新加载</string>
+    <string name="refresh">刷新</string>
+
+
+    <!-- Network error  -->
+    <string name="network_error">网络异常</string>
+    <string name="network_time_out">网络超时</string>
+    <string name="json_parse_error">数据解析异常</string>
+    <string name="network_error_load_image">当前网络不可用，请检查你的网络设置</string>
+
+    <!-- WebView promotion -->
+    <string name="save_image">保存图片</string>
+    <string name="save_qrcode_to">二维码保存至%1$s</string>
+    <string name="save_qrcode_failure">二维码保存失败</string>
+    <string name="live_manager">平台管理条例</string>
+
+    <!-- Upgrade -->
+    <string name="version_upgrade">升级到新版本(%1$s)</string>
+    <string name="upgrade_now">立即升级</string>
+    <string name="download_failure">下载失败!</string>
+    <string name="downloading">正在下载: %1$s</string>
+    <string name="button_downloading">下载中</string>
+    <string name="download_start">开始下载</string>
+    <string name="download_stop">下载停止</string>
+    <string name="please_not_download_again">请勿重复下载</string>
+    <string name="download_complete">下载完成</string>
+    <string name="permission_granted_success">权限授予成功</string>
+
+
+    <!-- Important notification -->
+    <string name="i_get_it">我知道了</string>
+    <string name="check_detail">查看详情</string>
+
+
+    <!-- API -->
+    <string name="api_error_null">服务器空数据</string>
+    <string name="api_error_null_1">服务器空数据(1)</string>
+    <string name="api_error_timeout">网络请求超时</string>
+    <string name="api_error_network">网络异常</string>
+    <string name="api_error_parse">数据解析异常</string>
+    <string name="api_error_server">服务器异常</string>
+
+
+    <!-- Main -->
+    <string name="home">首页</string>
+    <string name="market">行情</string>
+    <string name="information">资讯</string>
+    <string name="mine">我的</string>
+    <string name="newbie_title">新手引导</string>
+
+    <string name="prompt_bankcard_not_be_bound">您尚未绑定提现银行卡，请通过充值绑定提现银行卡\n请先添加银行卡再进行提款</string>
+
+
+    <!-- Dialog -->
+    <string name="dialog_your_bankcard_info_is_not_complete">您银行卡信息填写不完整,去填写</string>
+    <string name="dialog_please_contact_services_to_unbind">请联系客服，解绑换卡</string>
+    <string name="dialog_unauthorized_name">您还未进行实名认证\n请先进行实名认证</string>
+    <string name="dialog_you_are_not_promoter_yet">您还不是我们的推广员,是否要成为我们的推广员</string>
+    <string name="You_have_not_binding_bank_cards">您还未绑定任何银行卡</string>
+    <string name="go_to_bind_bank_card">去绑卡</string>
+
+
+    <!-- Account -->
+    <string name="nickname_logged">您好 %1$s</string>
+    <string name="account_balance">账户余额(元)</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_in_has_space">登    录</string>
+    <string name="sign_up_free">注册</string>
+    <string name="sign_up_free_has_space">注    册</string>
+    <string name="message_center">消息中心</string>
+    <string name="fund_detail">资金明细</string>
+    <string name="now_is_not_has_fund_detail">暂无资金明细</string>
+    <string name="score_detail">金币明细</string>
+    <string name="now_is_not_has_score_detail">暂无金币明细</string>
+    <string name="personal_info">个人信息</string>
+    <string name="paid_to_promote">推广赚钱</string>
+    <string name="newbie_task">新手任务</string>
+    <string name="phone_number">手机号</string>
+    <string name="phone_number2">手机号码</string>
+    <string name="message_auth_code">短信验证</string>
+    <string name="password">密码</string>
+    <string name="promote_code">推广码</string>
+    <string name="obtain_auth_code">获取验证码</string>
+    <string name="obtain_auth_code_continue">重新获取</string>
+    <string name="read_and_agreed">  我已阅读并同意</string>
+    <string name="service_protocol">《服务协议》</string>
+    <string name="ok">确定</string>
+    <string name="ok_has_space">确    定</string>
+    <string name="cancel">取消</string>
+    <string name="resend_after_n_seconds">%1$ds</string>
+    <string name="please_input_phone_num">请输入手机号码</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="hine_please_input_new_password">请输入新的密码</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="recharge">充值</string>
+    <string name="newbie">新手</string>
+    <string name="withdraw">提现</string>
+    <string name="next_step">下一步</string>
+    <string name="please_contact_service_if_issues_happen">如果遇到问题,请在首页联系客服</string>
+    <string name="find_password">找回密码</string>
+    <string name="modify_password">修改密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="please_input_new_password">请输入新密码(6到20位数字英文)</string>
+    <string name="please_input_msg_auth_code">请输入验证码</string>
+    <string name="optional">没有可不填</string>
+    <string name="please_repeat_new_password">请确认新的密码</string>
+    <string name="exit">退出</string>
+    <string name="zero">0</string>
+    <string name="withdraw_log">提现记录</string>
+    <string name="withdraw_amount">提现金额</string>
+    <string name="yuan">元</string>
+    <string name="withdraw_bankcard">提现银行卡</string>
+    <string name="add_bankcard_right_now">马上添加银行卡</string>
+    <string name="profile">个人信息</string>
+    <string name="my_users">我的用户</string>
+    <string name="withdraw_hint">遇到任何问题，请联系首页客服</string>
+
+    <!--Settings-->
+    <string name="unfilled">未填写</string>
+    <string name="filled">已填写</string>
+    <string name="authorized">已认证</string>
+    <string name="un_authorized">未认证</string>
+    <string name="bound">已绑定</string>
+    <string name="unbound">未绑定</string>
+    <string name="nickname">昵称</string>
+    <string name="settings">设置</string>
+    <string name="binding_bank_card">绑定银行卡</string>
+    <string name="phone_authentication">手机认证</string>
+    <string name="logout">退出登录</string>
+    <string name="real_name_authorize">实名认证</string>
+    <string name="nick_name_can_be_modified_once_only">昵称只支持修改一次</string>
+    <string name="bankcard">银行卡</string>
+    <string name="phone_authorize">手机认证</string>
+    <string name="name">姓名</string>
+    <string name="please_input_real_name">请输入真实姓名</string>
+    <string name="identity_num">身份证号</string>
+    <string name="bankcard_num">银行卡号</string>
+    <string name="paying_bank">支付银行</string>
+    <string name="please_choose_bank">选择银行</string>
+    <string name="bank_reserved_phone_num">银行预留手机号码</string>
+    <string name="submit_to_auth">提交认证</string>
+    <string name="go_and_auth">去认证</string>
+    <string name="unbind">解绑</string>
+    <string name="recharge_amount">充值金额</string>
+    <string name="hint_recharge_amount">50元起充</string>
+    <string name="please_choose_payment">请选择支付方式</string>
+    <string name="payment">支付方式</string>
+    <string name="bankcard_payment">银行卡支付</string>
+    <string name="alipay_payment">支付宝支付</string>
+    <string name="wechat_payment">微信支付</string>
+    <string name="account_fund_is_covered_by_PA">账户资金安全由平安财险承保</string>
+    <string name="recharge_amount_should_larger_than_50">充值金额应大于50</string>
+    <string name="frozen_deposit">冻结保证金</string>
+    <string name="profit_loss_detail">收支明细</string>
+    <string name="there_is_no_trade_detail">暂无交易明细</string>
+    <string name="click_to_load_more">点击加载更多</string>
+    <string name="there_is_no_message_for_now">暂无任何消息</string>
+    <string name="system_message">系统消息</string>
+    <string name="now_is_not_has_system_message">暂无系统消息</string>
+    <string name="trade_remind">交易提醒</string>
+    <string name="now_is_not_has_trade_remind">暂无交易提醒</string>
+    <string name="now_is_not_support_recharge">平台近期进行充值维护,暂停充值业务,如有疑问请联系首页客服!</string>
+
+
+    <string name="take_phone_from_camera">拍照</string>
+    <string name="take_phone_from_phone">从手机相册选择</string>
+    <string name="take_phone_cancel">取  消</string>
+
+
+    <!-- 修改密码 Modify password-->
+    <string name="the_passwords_are_not_the_same">两次密码输入不一致</string>
+
+
+    <!-- Information -->
+    <string name="news_living">资讯直播</string>
+    <string name="market_analysing">行情分析</string>
+    <string name="industry_news">行业资讯</string>
+    <string name="there_is_no_info_for_now">暂无任何资讯</string>
+    <string name="comment_read_count">(%1$d)</string>
+    <string name="trade_hint">(以上建议仅供参考,风险自担)</string>
+    <string name="message_from">来源: %1$s</string>
+    <string name="message_details">资讯详情</string>
+
+    <string name="before_data">前值: %1$s</string>
+    <string name="expect_data">预期: %1$s</string>
+    <string name="real_data">实际: %1$s</string>
+
+
+    <!-- Home page -->
+    <string name="investor_course">投资者课堂</string>
+    <string name="market_close">休市</string>
+    <string name="holding_position">持仓中</string>
+    <string name="next_day">次日</string>
+    <string name="simulation">模拟交易</string>
+    <string name="invest_course">投资课堂</string>
+    <string name="live">直播</string>
+    <string name="contact_service">客服</string>
+    <string name="enter_right_now">立即进入</string>
+    <string name="there_is_no_data_for_now">暂无数据</string>
+    <string name="new_tag">NEW</string>
+    <string name="fund_security">资金安全</string>
+    <string name="risk_informed">风险告知</string>
+    <string name="cooperation_org">合作机构</string>
+    <string name="service_phone">客服热线：%1$s</string>
+    <string name="trade_access">交易由纽约商品交易所及上期所实盘对接</string>
+    <string name="cooperation_partner">合作伙伴：合作伙伴: 纽约商业交易所|芝加哥商品交易所|CME集团\n香港交易所|新加坡交易所|欧洲期货交易所</string>
+    <string name="holding_number">持仓 (%1$d)</string>
+    <string name="normalize_futures_rule">规范期市秩序，坚持理性投资</string>
+    <string name="futures_risk_tips_title">《证券期货交易风险提示》</string>
+    <string name="risk_evaluation">风险提示</string>
+
+    <!-- Order page -->
+    <string name="order">订单</string>
+    <string name="holding">持仓</string>
+    <string name="settlement">结算</string>
+    <string name="there_is_no_holding_position_records">暂无持仓记录</string>
+    <string name="there_is_no_settlements_records">暂无结算记录</string>
+    <string name="close_positions">平仓</string>
+    <string name="stop_loss_price">止损价</string>
+    <string name="stop_profit_price">止盈价</string>
+    <string name="stop_loss">止损</string>
+    <string name="stop_profit">止盈</string>
+    <string name="last_price">最新价</string>
+    <string name="buying">买处理中</string>
+    <string name="selling">卖处理中</string>
+    <string name="set_stop_profit_stop_loss">设置止盈止损</string>
+    <string name="confirm_setting">确认设置</string>
+    <string name="stop_range">( 范围 %1$s~%2$s )</string>
+    <string name="being_set_order_is_closed">该笔订单已触及风控线，已被系统%1$s平仓</string>
+    <string name="set_success">设置成功</string>
+
+
+    <!-- Order detail page -->
+    <string name="order_detail">订单详情</string>
+    <string name="settlement_loss_profit_unit">结算盈亏 (%1$s)</string>
+    <string name="order_info">订单信息</string>
+    <string name="buy_price">买入价</string>
+    <string name="contract_info">合约信息</string>
+    <string name="trade_variety">交易品种</string>
+    <string name="trade_quantity">交易数量</string>
+    <string name="trade_fee">交易综合费</string>
+    <string name="margin">保证金</string>
+    <string name="contract_deadline">合约到期时间</string>
+    <string name="buy_type">买入类型</string>
+    <string name="buy_time">买入时间</string>
+    <string name="sell_price">卖出价</string>
+    <string name="sell_type">卖出类型</string>
+    <string name="sell_time">卖出时间</string>
+    <string name="order_id">订单号</string>
+    <string name="time_up_sale">清仓卖出</string>
+    <string name="stop_profit_sale">止盈卖出</string>
+    <string name="stop_loss_sale">止损卖出</string>
+    <string name="market_price_sale">市价卖出</string>
+    <string name="market_price_buy">市价买入</string>
+    <string name="manually_sale">人工卖出</string>
+
+
+    <!-- Trade page -->
+    <string name="play_rule">玩法规则</string>
+    <string name="holding_position_total_profit_and_unit">持仓总收益 (%1$s)</string>
+    <string name="one_key_close_position">一键平仓</string>
+    <string name="current_available_balance">当前可用余额</string>
+    <string name="prompt_unlogin_unable_to_trade">您还未登录</string>
+    <string name="trend_chart">分时图</string>
+    <string name="all_day">全天</string>
+    <string name="kline_chart">K线图</string>
+    <string name="flash_chart">闪电图</string>
+    <string name="plate">盘口</string>
+    <string name="day_k_line">日K</string>
+    <string name="three_min_k">3分钟</string>
+    <string name="five_min_k">5分钟</string>
+    <string name="ten_min_k">10分钟</string>
+    <string name="thirty_min_k">30分钟</string>
+    <string name="sixty_min_k">60分钟</string>
+    <string name="buy_long">买涨</string>
+    <string name="sell_short">买跌</string>
+    <string name="buy_volume">买量</string>
+    <string name="sell_volume">卖量</string>
+    <string name="prompt_holding_position_time_to">持仓时间至 %1$s</string>
+    <string name="prompt_next_trade_time_is">下次交易时间 %1$s</string>
+    <string name="today_open">今开 %1$s</string>
+    <string name="pre_close">昨收 %1$s</string>
+    <string name="highest">最高 %1$s</string>
+    <string name="lowest">最低 %1$s</string>
+    <string name="gold">金币</string>
+    <string name="sell_order_submit_successfully">卖出委托提交成功</string>
+    <string name="there_is_no_more_data">没有更多数据了</string>
+
+    <!-- Trade page: place an order -->
+    <string name="touch_stop_loss">触发止损</string>
+    <string name="touch_stop_profit">触发止盈</string>
+    <string name="total_to_be_paid">合计支付</string>
+    <string name="last_bid_ask_price">最新买入价</string>
+    <string name="go_to_recharge">去充值</string>
+    <string name="place_an_order_again">再次下单</string>
+    <string name="prompt_holding_position_time_to_then_close">持仓时间至%1$s自动平仓</string>
+    <string name="currency_converter">汇率换算: %1$s</string>
+    <string name="confirm_buy_long">确定买涨</string>
+    <string name="confirm_sell_short">确定买跌</string>
+    <string name="today_position">今持仓</string>
+    <string name="pre_position">昨持仓</string>
+
+    <!-- Trade page: agree trade protocol -->
+    <string name="prompt_dear_user">尊敬的用户:
+        \n为了保障您的合法权益,请您务必在参与本平台商品期货实盘交易之前详细阅读并签署以下条款。</string>
+    <string name="unsigned">未签署</string>
+    <string name="trade_cooperation_agreement">《投资人与用户参与相关期货品种交易合作协议》</string>
+    <string name="risk_notices">《风险告知书》</string>
+    <string name="cooperation_agreement_title">合作协议</string>
+    <string name="risk_notices_title">风险告知书</string>
+
+    <!--我的界面 Mine -->
+    <string name="trade_detail">交易明细</string>
+    <string name="about_us">关于我们</string>
+    <string name="user_feedback">用户反馈</string>
+    <string name="no_logged">未登录</string>
+    <string name="mine_score">%1$s </string>
+    <string name="mine_balance">余额 (元)</string>
+    <string name="no_login">您尚未登录，请先登录</string>
+
+    <!-- 消息中心 Message center-->
+    <string name="message_center_info_title">消息详情</string>
+    <string name="trade_status">审核已经通过</string>
+    <string name="time">2016/12/12 12:12:06</string>
+
+    <!--我的界面/关于我们-->
+    <string name="account_about_us_app_version">%1$s V%2$s</string>
+    <string name="account_about_us_company_info">公司简介</string>
+    <string name="account_about_us_manager_team">管理团队</string>
+    <string name="account_about_us_company_culture">企业文化</string>
+    <string name="account_about_us_collaborate_case">合作案例</string>
+    <string name="account_about_us_company_telephone">联系电话</string>
+    <string name="account_about_us_service_qq">客服QQ</string>
+    <string name="account_about_us_company_info_child">深圳市达捷鑫科技有限公司，是一家集金融服务、软件开发、资产配置、国际外汇、原油、黄金、期货等金融产品于一体的高新技术金融服务公司。
+        \n目前，已与华东、华中、华南、华北等地区近60家企业达成战略合作协议，更是在浙江、山东、上海、北京等地设立分公司，业务遍布全国各地，已成为中国最有影响力的“以服务为导向，以创新为灵魂、以方便快捷为宗旨”的高新技术企业之一。
+        \n%1$s是深圳市达捷鑫科技有限公司旗下的金融创新产品，旨在为大众用户提供更加便捷、低成本的期货交易。无需下载，注册免开户，超低门槛玩美原油、恒指、沪金等国内外期货。</string>
+    <string name="account_about_us_manager_team_child">团队核心成员均来自于支付宝、网易等顶级互联网公司，以及在券商、投研机构等领域具有丰富的金融行业量化投资经验，并且在各自行业拥有多年管理经验的高端专业人士。</string>
+    <string name="account_about_us_company_culture_child">愿景
+                                \n让用户的每一分钱都变得更有价值
+                                \n定位
+                                \n专业、安全、便捷、可信赖的投资服务平台
+                                \n价值观
+                                \n快速、简约、严谨、创新</string>
+    <string name="account_about_us_collaborate_case_child">杭州盈投公司是一家专业的配资公司，以前使用HOMS做股票配资，使用鑫管家做期货配资，由于homs及鑫管家都无法使用，使业务陷入了停滞，大量客户面临流失的风险。
+\n在这种情况下，盈投公司找到了我们公司，定制了一套专属于盈投公司自己的配资交易系统，不仅完全取代了之前鑫管家等软件，而且由于系统风控非常强，放大了配资比例，获得了更高额的利润！这种方式用户也很喜欢，投资门槛很低，每天的交易量很大。
+\n一个网址即可展开业务，所有推广都在微信公众号。
+\n最终，盈投的月利润比以前翻了7-10倍！靠的就是系统的强大风控系统保障下提高了盈利模式。同时靠营销系统每个月客户数量都大了增长。
+\n盈投坦言，现在增长到500多个活跃用户，月利润500多万元。</string>
+
+
+    <!--我的界面/推广挣钱-->
+    <string name="account_expand_make_money_right_title">我的用户</string>
+    <string name="account_expand_make_money_title">推广挣钱</string>
+    <string name="account_expand_make_money_brokerage">可提佣金</string>
+    <string name="account_expand_make_money_brokerage_number">0.00</string>
+    <string name="account_expand_make_money_brokerage_pickup">提取</string>
+    <string name="account_expand_make_money_proxy_grade">代理等级</string>
+    <string name="account_expand_make_money_brokerage_scale">佣金比例</string>
+    <string name="account_expand_make_money_brokerage_scale_number">%1$d%</string>
+    <string name="account_expand_make_money_mine_account">我的用户</string>
+    <string name="account_expand_make_money_exchange_account">交易用户</string>
+    <string name="account_expand_make_money_two_dimensional_code">长按二维码保存图片，发送给好友</string>
+    <string name="account_expand_make_money_share_lianJie">分享您的专属链接</string>
+    <string name="account_expand_make_money_share_web">http://www.jnhyxx.com/?abc=9a4453</string>
+    <string name="account_expand_make_money_invite_code">您的邀请码</string>
+    <string name="common_copy_text">复制</string>
+
+
+    <!--登录界面-->
+    <string name="login_success">登录成功</string>
+    <!--注册界面-->
+    <string name="register_auth_code_fail">验证码错误</string>
+    <string name="register_succeed">注册成功</string>
+    <string name="register_code_image_hint">请输入动态验证码</string>
+    <string name="register_code_image">图片验证码</string>
+    <string name="register_get_image_code">获取图片验证码</string>
+    <string name="service_protocol_title">服务协议</string>
+
+    <!--交易明细-->
+    <string name="account_trade_detail_integral_remain">剩余金币</string>
+    <string name="account_trade_detail_margin_remain">剩余保证金(元)</string>
+    <string name="integral_frozen">冻结金币</string>
+    <string name="money_frozen">冻结保证金(元)</string>
+    <string name="remain_money">剩余资金(元)</string>
+    <string name="remain_money_number">%1$f</string>
+    <string name="remain_money_number_drop">%1$f元</string>
+    <string name="remain_money_number_sum">%1$f元</string>
+
+    <string name="common_phone_num_fail">手机格式错误，请输入正确的手机号码</string>
+
+    <!--实名认证-->
+    <string name="prompt_about_name_verify">一张身份证只能绑定一个账号,请填写本人真实信息，核实后将不可修改</string>
+    <string name="settings_identity_card_fail">身份证格式错误，请输入15位或18位身份证号码</string>
+    <string name="settings_identity_card_when_login">请先登录后再认证</string>
+    <string name="auth_name_write_success">实名认证填写成功</string>
+
+    <!--绑定银行卡-->
+    <string name="bind_bank_title">银行卡信息</string>
+    <string name="bind_bank_warn">持卡人必须与账户信息一致,信息不做其他用途</string>
+    <string name="bind_bank_bind">绑    定</string>
+    <string name="bing_bank_behind_warn">为保障账户资金安全,目前仅支持绑定一张银行卡,\n用户如需解绑换卡,请联系客服</string>
+    <string name="unBind_dialog_content">为了您账户的安全，解绑银行卡需本人拨打\n客服电话:  %1$s</string>
+    <string name="bind_bank_card_limit">单笔%1$d,单日%2$d</string>
+    <string name="bind_bank_is_empty">请选择支付银行</string>
+    <string name="no_bank_can_bind">暂时没有可供选择的银行</string>
+    <string name="bank_card_is_error">银行卡号格式错误，请输入正确的银行卡号</string>
+    <string name="bind_bank_hint">1.为了您的资金安全,只能绑定持卡人本人的银行卡 \n2.未成年人禁止交易</string>
+    <string name="cardHolder_real_name_hint">持卡人真实姓名</string>
+    <string name="whether_if_give_up_bind_bank_card">是否放弃绑定银行卡</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="bank_hint">为了您的账户资金安全,只能绑定持卡人\n本人的银行卡,获取更多帮助,请联系客\n服~</string>
+    <string name="bank_name">%1$s    (%2$s)</string>
+    <string name="once_recharge_limit">单笔限额%1$s元</string>
+    <string name="card_holder">持卡人</string>
+    <!--修改昵称-->
+    <string name="modify_nick_name">昵称</string>
+    <string name="modify_nick_name_title">修改昵称</string>
+    <string name="modify_nick_name_warn">昵称只能由中文、英文、数字组成,暂只支持修改一次。</string>
+    <string name="modify_nick_name_error_warn">昵称只能由中文、英文、数字组成</string>
+    <string name="modify_nick_name_hint">支持1~10个字符</string>
+    <string name="modify_nick_name_submit_warn">昵称不得包含特殊符号</string>
+    <string name="save">保    存</string>
+    <string name="bind_bank_card_name">%1$s    储蓄卡</string>
+
+
+    <!--充值、提现-->
+    <string name="warm_hint">温馨提示:</string>
+    <string name="add_bank_card">添加银行卡</string>
+    <string name="bank_name_card_number">%1$s (%2$s)</string>
+    <string name="withdraw_least_money_hint">可提现  %1$s  元</string>
+    <string name="recharge_least_money">充值金额≥50</string>
+    <string name="bank_card_pay">银行卡支付</string>
+    <string name="bank_card_pay_hint">无需开通网银</string>
+    <string name="aliPay_pay">支付宝</string>
+    <string name="wechat_pay">支付宝</string>
+    <string name="aliPay_pay_hint">手机支付,即时到账</string>
+    <string name="recharge_apply_limit">您的充值金额已超过1万元，请重新填写</string>
+    <string name="withdraw_once_least_limit">单次提现金额不能少于20元</string>
+    <string name="recharge_once_least_limit">单笔充值金额不能少于50元</string>
+    <string name="recharge_bank_apply_limit">充值金额已超过银行卡单笔限额</string>
+    <string name="install_alipay_first">请先安装支付宝</string>
+    <string name="hint_recharge">各银行间充值限额不同，建议大额充值分几次进行充值，每次充值小于3000元</string>
+    <string name="recharge_agree_payment">证券期货交易风险提示</string>
+    <string name="payment_service_agreement">支付服务协议</string>
+    <string name="withdraw_rule_hint">工作日2小时内到帐, 具体请看</string>
+    <string name="withdraw_rule_title">提现规则</string>
+    <string name="all_withdraw">全部提现</string>
+    <string name="withdraw_rule_content">1、交易用户提现免手续费，为防止恶意提现，每日提现申请最多2次，超过次日处理;\n\n
+2、为防止套现和洗钱，无交易用户提现需提供身份证和银行卡进行风控核实。若信息核实无误，会于7-15个工作日内处理，届时银行将收取2%的手续费（自理）最低2元;\n\n
+3、工作日（09:00-17:00）内提现1-2个小时内到账，周末及节假日提现顺延至下一个工作日处理。</string>
+
+
+    <!--提款记录-->
+    <string name="withdraw_record_title">提现记录</string>
+    <string name="withdraw_status_fail">失败</string>
+    <string name="withdraw_status_auditing">处理中</string>
+    <string name="withdraw_money">%1$s元</string>
+    <string name="withdraw_no_content">暂无提款记录</string>
+
+    <!--提现记录详情-->
+    <string name="withdraw_record_info_title">提现详情</string>
+    <string name="withdraw_record_apply_for">申请提现</string>
+    <string name="withdraw_record_detail">处理中</string>
+    <string name="withdraw_record_success">提现成功</string>
+    <string name="withdraw_record_fail">提现失败</string>
+    <string name="withdraw_record_number_hint">提现金额</string>
+    <string name="withdraw_record_number">%1$s  元</string>
+    <string name="withdraw_record_status">提现状态</string>
+    <string name="withdraw_record_real_account_hint">实际到账</string>
+    <string name="withdraw_record_real_account">%1$s  元</string>
+    <string name="withdraw_record_poundage_hint">手续费</string>
+    <string name="withdraw_record_poundage">%1$s  元</string>
+    <string name="withdraw_record_bank_hint">提现银行</string>
+    <string name="withdraw_record_bank">%1$s(尾号 %2$s)</string>
+    <string name="withdraw_record_time">提现时间</string>
+    <string name="withdraw_record_account_time">到账时间</string>
+    <string name="withdraw_start">处理中</string>
+    <string name="withdraw_audit_passing">审核通过</string>
+    <string name="withdraw_fail">提现失败</string>
+    <string name="withdraw_auditing">审核中</string>
+    <string name="transfer">转账中</string>
+    <string name="common_success">成功</string>
+    <string name="amount_to_the_account">到账金额</string>
+    <string name="the_account_to_the_bank">到账银行</string>
+    <!-- 金币模拟 Gold -->
+    <string name="available_gold">可用金币</string>
+    <string name="get_store">免费领金币</string>
+    <string name="choose_trade_variety">选择交易品种</string>
+    <string name="coming_soon">敬请期待</string>
+
+    <!--直播 live-->
+    <string name="live_right_title">交易</string>
+
+
+    <string name="live_program_dir">节目单</string>
+    <string name="live_interaction">互动</string>
+    <string name="live_teacher_guide">老师指导</string>
+    <string name="buffering">缓冲中</string>
+    <string name="live_teacher_good">擅长</string>
+    <string name="live_teacher_resume">简介</string>
+    <string name="live_type_manager">管理员</string>
+    <string name="live_type_teacher">老师</string>
+    <string name="live_type_mine">我</string>
+    <string name="You_have_been_banned_please_speak_later">您被禁言，请稍后发言</string>
+    <string name="live_time_is_not">非直播时间段，无法发言</string>
+    <string name="live_speak_send">发送</string>
+    <string name="there_is_no_chatting_record">暂无聊天记录</string>
+    <string name="there_is_no_teacher_advise">暂无老师指导</string>
+    <string name="live_teacher_order">老师指令:%1$s</string>
+
+    <!--闪电下单-->
+    <string name="open">开  启</string>
+    <string name="close">关  闭</string>
+    <string name="restart_open">重新设置</string>
+    <string name="lightning_orders_title">闪电下单</string>
+    <string name="lightning_orders_open">闪电下单已开启</string>
+    <string name="lightning_orders_close">闪电下单已关闭</string>
+    <string name="lightning_buy_long">闪电买涨</string>
+    <string name="lightning_buy_short">闪电买跌</string>
+    <string name="lightning_orders_status_run_out">您的闪电下单已失效</string>
+    <string name="lightning_orders_open_hint">一旦开启，点击即买</string>
+
+    <!--意见反馈-->
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_hint">多谢您给我们提供宝贵的意见或建议，请留下您的联系方式方便我们反馈给您结果</string>
+    <string name="feedback_user_phone">QQ、微信或手机号</string>
+    <string name="submit">提    交</string>
+    <string name="feedback_content_number">200</string>
+    <string name="feedback_submit_success">感谢您的反馈</string>
+
+
+    <!--个人信息界面-->
+    <string name="head_image">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="real_name">真实姓名</string>
+    <string name="submit_real_name_hint">请填写真实姓名</string>
+    <string name="is_already_real_name">已实名</string>
+    <string name="sex">性别</string>
+    <string name="boy">男</string>
+    <string name="woman">女</string>
+    <string name="location">所在地</string>
+    <string name="birthday">生日</string>
+    <string name="user_introduction">个人简介</string>
+    <string name="please_input_introduction">请输入简介</string>
+    <string name="use_clip_head_image">使用</string>
+    <string name="sd_is_not_useful">sd卡不可使用</string>
+    <string name="complete">完成</string>
+    <string name="complete_has_empty">完  成</string>
+    <string name="is_only_a_chinese_name">姓名只能是中文</string>
+
+    <!--品种自选-->
+    <string name="foreign_futures">国际期货</string>
+    <string name="domestic_futures">国内期货</string>
+    <string name="optional_futures">我的自选</string>
+    <string name="optional_notice">至少得有一个自选品种</string>
+    <string name="optional_title">自选</string>
+
+    <!--首页底部的三个页面-->
+    <string name="calendar_of_finance">  财经日历</string>
+    <string name="yesterday_the_profit_list">昨日盈利榜</string>
+    <string name="trading_strategy">  交易攻略</string>
+    <string name="ranking_list_top_hint">本排行榜表示上个正常交易日的数据</string>
+    <string name="trading_strategy_title">如何成为有规则的交易者并坚持你的优势?</string>
+    <string name="not_publish">未公布</string>
+    <string name="lido">利多    %1$s</string>
+    <string name="bad_news">利空    %1$s</string>
+
+    <string name="before_data_">前值: </string>
+    <string name="expect_data_">预期值: </string>
+    <string name="real_data_">公布值: </string>
+    <string name="not_strategy">暂无攻略</string>
+    <string name="not_finance_data">暂无财经消息</string>
+    <string name="less_affected">影响较小</string>
+
+    <string name="exchange_next_open_time">下次开市时间：%1$s</string>
 </resources>

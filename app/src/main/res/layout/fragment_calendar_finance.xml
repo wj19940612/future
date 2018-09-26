@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.jnhyxx.html5.view.WeekCalendarLayout
+        android:id="@+id/calendarWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:drawablePadding="16dp"
+        android:drawableTop="@drawable/image_no_record"
+        android:gravity="center_horizontal"
+        android:text="@string/there_is_no_data_for_now"
+        android:textColor="@color/emptyViewColor"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+</LinearLayout>
+

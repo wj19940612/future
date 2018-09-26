@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/splitBlockLight"
+    tools:context="com.jnhyxx.html5.activity.setting.SettingsActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/settings"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/nickname"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/blackPrimary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_height"
+        android:background="@color/splitLineGrayLight"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/realNameVerity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/real_name_authorize"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/blueAssist"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_height"
+        android:background="@color/splitLineGrayLight"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/bandingBankcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rowText="@string/binding_bank_card"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/blueAssist"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/split_line_height"
+        android:background="@color/splitLineGrayLight"/>
+
+    <com.jnhyxx.html5.view.IconTextRow
+        android:id="@+id/bindingPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:rightIcon="@drawable/ic_arrow"
+        app:rightIconVisibility="invisible"
+        app:rowText="@string/phone_authentication"
+        app:rowTextColor="@color/colorDisable"
+        app:subTextColor="@color/blackPrimary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_red_primary"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/logout"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+</LinearLayout>

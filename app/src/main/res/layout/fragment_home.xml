@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/bluePrimary"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:id="@+id/riskEvaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:drawableLeft="@drawable/ic_home_newcomer"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/risk_evaluation"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:text="首页"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/contactService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:drawableLeft="@drawable/ic_home_service"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/contact_service"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+    </android.support.v7.widget.Toolbar>
+
+    <com.jnhyxx.html5.view.MyNestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/splitBlockLight"
+            android:orientation="vertical">
+
+            <com.jnhyxx.html5.view.HomeBanner
+                android:id="@+id/homeBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.jnhyxx.html5.view.HomeHeader
+                android:id="@+id/homeHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/optionalForeignView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:divider="@drawable/divider_home_list"
+                android:dividerHeight="0.5dp"
+                android:nestedScrollingEnabled="false"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/optionalDomesticView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#ffffff"
+                android:divider="@drawable/divider_home_list"
+                android:dividerHeight="0.5dp"
+                android:nestedScrollingEnabled="false"/>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_line_division_fill"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/blueAssist"
+                app:tabMode="fixed"
+                app:tabPadding="@dimen/common_margin"
+                app:tabSelectedTextColor="@color/blueAssist"
+                app:tabTextColor="@color/blackPrimary"/>
+
+            <FrameLayout
+                android:id="@+id/replaceLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </com.jnhyxx.html5.view.MyNestedScrollView>
+</LinearLayout>

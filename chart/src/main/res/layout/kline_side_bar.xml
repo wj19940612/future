@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@color/colorPrimary"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/colorDisable"
+        android:textSize="10sp"
+        tools:text="2017/10/23\n14:53"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/openPrice"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"/>
+
+    <TextView
+        android:id="@+id/openPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/redPrimary"
+        android:textSize="15sp"
+        tools:text="51264"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/highestPrice"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"/>
+
+    <TextView
+        android:id="@+id/highestPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/redPrimary"
+        android:textSize="15sp"
+        tools:text="51264"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/lowestPrice"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"/>
+
+    <TextView
+        android:id="@+id/lowestPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/redPrimary"
+        android:textSize="15sp"
+        tools:text="51264"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/closePrice"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"/>
+
+    <TextView
+        android:id="@+id/closePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/redPrimary"
+        android:textSize="15sp"
+        tools:text="51264"/>
+</LinearLayout>

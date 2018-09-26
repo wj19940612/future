@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape>
+            <corners
+                android:bottomLeftRadius="@dimen/button_radius"
+                android:bottomRightRadius="0dp"
+                android:topLeftRadius="@dimen/button_radius"
+                android:topRightRadius="0dp"/>
+            <solid android:color="#7F358CF3"/>
+        </shape>
+    </item>
+
+    <item android:state_enabled="false">
+        <shape>
+            <corners
+                android:bottomLeftRadius="@dimen/button_radius"
+                android:bottomRightRadius="0dp"
+                android:topLeftRadius="@dimen/button_radius"
+                android:topRightRadius="0dp"/>
+            <solid android:color="@color/colorDisable"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <corners
+                android:bottomLeftRadius="@dimen/button_radius"
+                android:bottomRightRadius="0dp"
+                android:topLeftRadius="@dimen/button_radius"
+                android:topRightRadius="0dp"/>
+            <solid android:color="@color/blueAssist"/>
+        </shape>
+    </item>
+
+</selector>

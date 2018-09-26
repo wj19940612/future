@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.jnhyxx.html5.activity.account.WithdrawActivity">
+
+    <com.jnhyxx.html5.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backFeature="true"
+        app:titleText="@string/withdraw"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin"
+            android:paddingRight="@dimen/common_margin"
+            android:text="@string/withdraw_rule_hint"
+            android:textColor="@color/colorDisable"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/withdrawRule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/hint"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="@dimen/common_margin"
+            android:text="@string/withdraw_rule_title"
+            android:textColor="@color/blueAssist"/>
+
+        <com.jnhyxx.html5.view.CommonFailWarn
+            android:id="@+id/failWarn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_bank_bg"
+        android:padding="@dimen/common_margin">
+
+        <ImageView
+            android:id="@+id/bankCardIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_bank_zhaoshang"/>
+
+        <TextView
+            android:id="@+id/bankName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            tools:text="中国银行"/>
+
+        <TextView
+            android:id="@+id/withdrawRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_setting_bank_unwrap"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/withdraw_log"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bankcardInfoArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:background="@drawable/bg_withdraw_balance"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:paddingLeft="@dimen/common_margin"
+        android:paddingRight="@dimen/common_margin"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/withdrawAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_money"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/withdraw_least_money_hint"
+            android:inputType="numberDecimal"
+            android:textColor="@color/blackPrimary"
+            android:textColorHint="@color/grayHint"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/allWithdraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_withdraw"
+            android:textColor="@color/blueAssist"
+            android:textSize="11sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/confirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:layout_marginRight="@dimen/common_margin"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_blue"
+        android:clickable="true"
+        android:enabled="false"
+        android:gravity="center"
+        android:padding="13sp"
+        android:text="@string/next_step"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="@string/withdraw_hint"/>
+</LinearLayout>

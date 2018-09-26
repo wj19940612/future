@@ -6,5 +6,13 @@
     {
         "merged": "D:\\code\\hengyun\\livevideo\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
         "source": "D:\\code\\hengyun\\livevideo\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\livevideo\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\0a08a39cce1760fb61686d19937925386182c308\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\livevideo\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\0a08a39cce1760fb61686d19937925386182c308\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
     }
 ]

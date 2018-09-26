@@ -4,8 +4,24 @@
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_popup_exit.xml"
     },
     {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_slide_out_top.xml"
     },
     {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
@@ -14,6 +30,10 @@
     {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_popup_enter.xml"
     },
     {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
@@ -28,6 +48,18 @@
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_fade_in.xml"
     },
     {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_popup_exit.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_slide_out_top.xml"
     },
@@ -36,7 +68,15 @@
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
     },
     {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
         "merged": "D:\\code\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
         "source": "D:\\code\\hengyun\\kutils\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0\\res\\anim\\abc_popup_enter.xml"
+    },
+    {
+        "merged": "D:\\aaaa\\hengyun\\kutils\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\Administrator.MICROSO-EB3BEA8\\.android\\build-cache\\fbefa241eb93cdd0cbe06c3a5d1b122870e63048\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
     }
 ]
